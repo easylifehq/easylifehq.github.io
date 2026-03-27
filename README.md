@@ -1,18 +1,50 @@
-## Getting Started
+# Easy Life
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Easy Life is the umbrella brand for a growing suite of tools designed to remove day-to-day friction so ambitious people can focus on what actually matters.
 
-## Folder Structure
+The idea behind Easy Life is simple: too much time gets wasted on small, annoying tasks before real work even starts. Calls, follow-ups, reminders, lists, planning, and other low-value obligations quietly drain attention and momentum. Easy Life exists to organize and simplify those tasks.
 
-The workspace contains two folders by default, where:
+## Current products
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+### EasyPipeline
+A tool for tracking applications, contacts, follow-ups, and opportunities in one place.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+### EasyList
+A tool for clearing daily clutter such as reminders, errands, quick obligations, and mental overhead.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Purpose of this repository
 
-## Dependency Management
+This repository powers the main Easy Life landing page and brand homepage.
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+It is the central entry point for the Easy Life ecosystem and is meant to:
+
+- explain the mission
+- introduce the products
+- provide navigation into each tool
+- serve as the public-facing website for the brand
+
+## Brand direction
+
+Easy Life is built for people who want to spend less energy on meaningless tasks and more energy on execution, progress, and high-value work.
+
+Core idea:
+
+> Clear the noise. Focus on what matters.
+
+## Tech stack
+
+This site is built with:
+
+- HTML
+- CSS
+- JavaScript
+- GitHub Pages for hosting
+
+## Project structure
+
+```bash
+/
+├── index.html
+├── css/
+│   └── index.css
+└── README.md
