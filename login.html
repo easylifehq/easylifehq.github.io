@@ -1,0 +1,104 @@
+<!-- login.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyList | Login</title>
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-shell">
+      <div class="auth-left">
+        <a href="index.html" class="back-link">← Back to EasyList</a>
+
+        <div class="brand-lockup">
+          <div class="brand-mark">✓</div>
+          <div>
+            <p class="brand-kicker">Easy Life Product</p>
+            <h1>EasyList</h1>
+          </div>
+        </div>
+
+        <div class="auth-copy">
+          <p class="eyebrow">Clear the small stuff</p>
+          <h2>Handle life admin without letting it take over your brain.</h2>
+          <p class="subtext">
+            Track the annoying tasks, sort your week, and keep a clean record of
+            what got done — so your real focus stays available for bigger things.
+          </p>
+
+          <div class="auth-highlights">
+            <div class="highlight-card">
+              <strong>Weekly Planner</strong>
+              <span>Flexible 7-day view that feels usable.</span>
+            </div>
+            <div class="highlight-card">
+              <strong>Bulk Add Flow</strong>
+              <span>Add a bunch of tasks in one pass.</span>
+            </div>
+            <div class="highlight-card">
+              <strong>Knocked Out Today</strong>
+              <span>See progress without digging for it.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="auth-card">
+        <div class="auth-header">
+          <p class="eyebrow small">Welcome</p>
+          <h3>Get into EasyList</h3>
+          <p class="card-subtext">
+            Create your account or sign back in.
+          </p>
+        </div>
+
+        <div class="auth-tabs">
+          <button class="tab-btn active" id="showLoginBtn" type="button">Log In</button>
+          <button class="tab-btn" id="showSignupBtn" type="button">Sign Up</button>
+        </div>
+
+        <form id="loginForm" class="auth-form active" novalidate>
+          <label class="field">
+            <span>Email</span>
+            <input type="email" id="loginEmail" placeholder="you@example.com" required />
+          </label>
+
+          <label class="field">
+            <span>Password</span>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required />
+          </label>
+
+          <button type="submit" class="submit-btn">Log In</button>
+        </form>
+
+        <form id="signupForm" class="auth-form" novalidate>
+          <label class="field">
+            <span>Full Name</span>
+            <input type="text" id="signupName" placeholder="Your name" required />
+          </label>
+
+          <label class="field">
+            <span>Email</span>
+            <input type="email" id="signupEmail" placeholder="you@example.com" required />
+          </label>
+
+          <label class="field">
+            <span>Password</span>
+            <input type="password" id="signupPassword" placeholder="Create a password" required />
+          </label>
+
+          <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+
+        <p id="authMessage" class="auth-message" aria-live="polite"></p>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>
