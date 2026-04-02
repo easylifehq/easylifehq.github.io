@@ -33,9 +33,6 @@
 
           <div class="brand-dropdown-menu" id="brandDropdownMenu" hidden>
             <a href="../hub.html" class="brand-dropdown-link">Go to Hub</a>
-            <a href="dashboard.html" class="brand-dropdown-link">EasyList Dashboard</a>
-            <a href="add-tasks.html" class="brand-dropdown-link">EasyList Add Task</a>
-            <a href="archive.html" class="brand-dropdown-link">EasyList Archive</a>
             <a href="../easypipeline/dashboard.html" class="brand-dropdown-link">Open EasyPipeline</a>
           </div>
         </div>
@@ -112,65 +109,61 @@
         </form>
       </section>
 
-      <section class="add-tasks-lower-grid">
-        <section class="card quick-guide">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Quick Guide</p>
-              <h2>How to use this page</h2>
-            </div>
+    <section class="add-task-help-grid">
+      <article class="card help-card">
+        <p class="eyebrow">Quick Guide</p>
+        <h2>How to use this page</h2>
+
+        <div class="help-list">
+          <div class="help-item">
+            <h3>One row = one task</h3>
+            <p>Add a single clear task per row so your planner stays easy to scan.</p>
           </div>
 
-          <div class="guide-list">
-            <article class="guide-item">
-              <h3>One row = one task</h3>
-              <p>
-                Keep it simple. Add one thing per row so your dashboard stays clean.
-              </p>
-            </article>
-
-            <article class="guide-item">
-              <h3>Add rows only when needed</h3>
-              <p>
-                The page starts lighter now, so the first thing you see is the form itself.
-              </p>
-            </article>
-
-            <article class="guide-item">
-              <h3>Save in one shot</h3>
-              <p>
-                Everything you filled out saves together into your tasks collection.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section class="card preview-panel">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Preview Notes</p>
-              <h2>Task shape reminder</h2>
-            </div>
+          <div class="help-item">
+            <h3>Keep titles short</h3>
+            <p>Start with the action: call, email, return, clean, schedule, buy, submit.</p>
           </div>
 
-          <div class="preview-code">
-            <pre>{
-  title: "Call insurance",
-  dueDate: "2026-03-27",
-  notes: "Ask about deductible",
-  category: "Life Admin",
-  estimatedLength: 30,
-  recurring: false,
-  priorityTier: 3,
-  priorityLabel: "Golden Gator",
-  completed: false,
-  completedAt: null,
-  createdAt: serverTimestamp(),
-  updatedAt: serverTimestamp()
-}</pre>
+          <div class="help-item">
+            <h3>Use notes for context</h3>
+            <p>Put extra details in notes so the title stays clean on the dashboard.</p>
           </div>
-        </section>
-      </section>
+
+          <div class="help-item">
+            <h3>Be honest with priority</h3>
+            <p>Only mark things high priority when they actually deserve attention.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card help-card">
+        <p class="eyebrow">Examples</p>
+        <h2>Good task shapes</h2>
+
+        <div class="example-list">
+          <div class="example-item">
+            <strong>Call insurance about deductible</strong>
+            <span>Life Admin · Due today</span>
+          </div>
+
+          <div class="example-item">
+            <strong>Email professor about office hours</strong>
+            <span>School · Due tomorrow</span>
+          </div>
+
+          <div class="example-item">
+            <strong>Return Amazon package</strong>
+            <span>Errands · One-time</span>
+          </div>
+
+          <div class="example-item">
+            <strong>Plan groceries for the week</strong>
+            <span>Home · Recurring</span>
+          </div>
+        </div>
+      </article>
+    </section>
     </main>
   </div>
 

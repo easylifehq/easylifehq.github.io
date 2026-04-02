@@ -15,39 +15,53 @@
   <div class="app-shell">
     <header class="topbar">
       <div class="topbar-left">
-        <a href="index.html" class="brand-mark" aria-label="EasyList home">
-          <span class="brand-dot"></span>
-          <div class="brand-copy">
-            <p class="brand-kicker">Easy Life</p>
-            <h1>EasyList</h1>
-          </div>
-        </a>
+        <div class="brand-dropdown">
+          <button
+            type="button"
+            class="brand-menu-trigger"
+            id="brandMenuBtn"
+            aria-expanded="false"
+            aria-controls="brandDropdownMenu"
+          >
+            <span class="brand-mark">
+              <span class="brand-dot"></span>
+              <span class="brand-copy">
+                <span class="brand-kicker">Easy Life</span>
+                <span class="brand-title">EasyList</span>
+              </span>
+            </span>
+            <span class="brand-caret">▾</span>
+          </button>
 
-        <nav class="top-nav" aria-label="Primary navigation">
-          <a href="dashboard.html" class="nav-link">Dashboard</a>
-          <a href="add-tasks.html" class="nav-link">Add Tasks</a>
-          <a href="archive.html" class="nav-link active" aria-current="page">Archive</a>
-        </nav>
+          <div class="brand-dropdown-menu" id="brandDropdownMenu" hidden>
+            <a href="../hub.html" class="brand-dropdown-link">Go to Hub</a>
+            <a href="../easypipeline/dashboard.html" class="brand-dropdown-link">Open EasyPipeline</a>
+          </div>
+        </div>
       </div>
 
+      <nav class="topbar-center top-nav" aria-label="Primary navigation">
+        <a href="dashboard.html" class="nav-link active" aria-current="page">Dashboard</a>
+        <a href="add-tasks.html" class="nav-link">Add Task</a>
+        <a href="archive.html" class="nav-link">Archive</a>
+      </nav>
+
       <div class="topbar-right">
-        <div class="week-pill">
-          <span class="pill-label">History</span>
-          <span class="pill-value">Finished by week</span>
-          <button type="button" class="ghost-btn" id="logoutBtn">Log Out</button>
+        <div class="control-box">
+          <button
+            type="button"
+            class="theme-toggle compact-theme-toggle"
+            data-theme-toggle
+            aria-label="Toggle theme"
+          >
+            <span class="theme-toggle-label" data-theme-label>Classic Mode</span>
+            <span class="theme-toggle-hint" data-theme-hint>Candy Mode</span>
+          </button>
+
+          <button type="button" class="ghost-btn compact-logout-btn" id="logoutBtn">
+            Log Out
+          </button>
         </div>
-
-        <button
-          type="button"
-          class="theme-toggle"
-          data-theme-toggle
-          aria-label="Toggle theme"
-        >
-          <span class="theme-toggle-label" data-theme-label>Classic Mode</span>
-          <span class="theme-toggle-hint" data-theme-hint>Candy Mode</span>
-        </button>
-
-        <a href="add-tasks.html" class="primary-btn">+ Add Tasks</a>
       </div>
     </header>
 
