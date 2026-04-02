@@ -114,7 +114,7 @@ function getFriendlyResetMessage(errorCode) {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    window.location.replace("hub.html");
+    window.location.replace("dashboard.html");
   }
 });
 
@@ -160,11 +160,18 @@ authForm?.addEventListener("submit", async (event) => {
 
   try {
     if (mode === "signup") {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
       const user = userCredential.user;
 
       try {
-        await updateProfile(user, { displayName: name });
+        await updateProfile(user, {
+          displayName: name
+        });
       } catch (profileError) {
         console.error("Could not update display name:", profileError);
       }
@@ -173,16 +180,16 @@ authForm?.addEventListener("submit", async (event) => {
         name,
         email,
         createdAt: serverTimestamp()
-      }, { merge: true });
+      });
 
       setMessage("Account created successfully.", true);
-      window.location.replace("hub.html");
+      window.location.replace("dashboard.html");
       return;
     }
 
     await signInWithEmailAndPassword(auth, email, password);
     setMessage("Logged in successfully.", true);
-    window.location.replace("hub.html");
+    window.location.replace("dashboard.html");
   } catch (error) {
     console.error("Authentication failed:", error);
     setMessage(getFriendlyAuthMessage(error?.code, mode));

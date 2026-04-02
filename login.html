@@ -1,101 +1,56 @@
-<!-- login.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EasyList | Login</title>
+  <title>Pipeline | Login</title>
   <link rel="stylesheet" href="css/auth.css" />
 </head>
 <body>
-  <main class="auth-page">
-    <section class="auth-shell">
-      <div class="auth-left">
-        <a href="index.html" class="back-link">← Back to EasyList</a>
+  <main class="auth-page"> 
+    
+    <a href="hub.html" class="back-link">← Back to home</a>
 
-        <div class="brand-lockup">
-          <div class="brand-mark">✓</div>
-          <div>
-            <p class="brand-kicker">Easy Life Product</p>
-            <h1>EasyList</h1>
-          </div>
-        </div>
-
-        <div class="auth-copy">
-          <p class="eyebrow">Clear the small stuff</p>
-          <h2>Handle life admin without letting it take over your brain.</h2>
-          <p class="subtext">
-            Track the annoying tasks, sort your week, and keep a clean record of
-            what got done — so your real focus stays available for bigger things.
-          </p>
-
-          <div class="auth-highlights">
-            <div class="highlight-card">
-              <strong>Weekly Planner</strong>
-              <span>Flexible 7-day view that feels usable.</span>
-            </div>
-            <div class="highlight-card">
-              <strong>Bulk Add Flow</strong>
-              <span>Add a bunch of tasks in one pass.</span>
-            </div>
-            <div class="highlight-card">
-              <strong>Knocked Out Today</strong>
-              <span>See progress without digging for it.</span>
-            </div>
-          </div>
-        </div>
+    <section class="auth-card">
+      <div class="auth-header">
+        <p class="eyebrow">Pipeline</p>
+        <h1>Track applications without the mess</h1>
+        <p class="subtext">
+          Sign in to manage applications, contacts, follow-ups, and your pipeline.
+        </p>
       </div>
 
-      <section class="auth-card">
-        <div class="auth-header">
-          <p class="eyebrow small">Welcome</p>
-          <h3>Get into EasyList</h3>
-          <p class="card-subtext">
-            Create your account or sign back in.
-          </p>
+      <div class="auth-tabs">
+        <button class="tab-btn active" id="showLoginBtn" type="button">Log In</button>
+        <button class="tab-btn" id="showSignupBtn" type="button">Sign Up</button>
+      </div>
+
+      <p id="authMessage" class="auth-message"></p>
+
+      <form id="authForm" class="auth-form">
+        <div class="form-group" id="nameGroup" style="display: none;">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" placeholder="Spencer Colety" />
         </div>
 
-        <div class="auth-tabs">
-          <button class="tab-btn active" id="showLoginBtn" type="button">Log In</button>
-          <button class="tab-btn" id="showSignupBtn" type="button">Sign Up</button>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required />
         </div>
 
-        <form id="loginForm" class="auth-form active" novalidate>
-          <label class="field">
-            <span>Email</span>
-            <input type="email" id="loginEmail" placeholder="you@example.com" required />
-          </label>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required />
+        </div>
 
-          <label class="field">
-            <span>Password</span>
-            <input type="password" id="loginPassword" placeholder="Enter your password" required />
-          </label>
+        <button id="submitBtn" class="primary-btn" type="submit">Log In</button>
+      </form>
 
-          <button type="submit" class="submit-btn">Log In</button>
-        </form>
-
-        <form id="signupForm" class="auth-form" novalidate>
-          <label class="field">
-            <span>Full Name</span>
-            <input type="text" id="signupName" placeholder="Your name" required />
-          </label>
-
-          <label class="field">
-            <span>Email</span>
-            <input type="email" id="signupEmail" placeholder="you@example.com" required />
-          </label>
-
-          <label class="field">
-            <span>Password</span>
-            <input type="password" id="signupPassword" placeholder="Create a password" required />
-          </label>
-
-          <button type="submit" class="submit-btn">Create Account</button>
-        </form>
-
-        <p id="authMessage" class="auth-message" aria-live="polite"></p>
-      </section>
+      <div class="auth-actions">
+        <button id="forgotPasswordBtn" class="text-btn" type="button">
+          Forgot password?
+        </button>
+      </div>
     </section>
   </main>
 
