@@ -8,6 +8,6 @@ onAuthStateChanged(auth, (user) => {
   checked = true;
 
   if (!user) {
-    window.location.replace("https://easylifehq.github.io/login.html");
+    window.location.replace("../../login.html");
   }
 });
