@@ -471,19 +471,31 @@ body.drawer-open .drawer-backdrop {
 
 @media (max-width: 760px) {
   .topbar {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
-      "brand"
-      "controls"
-      "nav";
-    align-items: stretch;
+      "brand controls"
+      "nav nav";
+    align-items: center;
     gap: 0.65rem;
     padding: 0.7rem 0.85rem;
   }
 
-  .topbar-left,
+  .topbar-left {
+    grid-area: brand;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+
   .topbar-right {
-    justify-content: space-between;
+    grid-area: controls;
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .topbar-center {
+    grid-area: nav;
+    justify-self: stretch;
+    min-width: 0;
   }
 
   .brand-menu-trigger {
@@ -491,12 +503,15 @@ body.drawer-open .drawer-backdrop {
   }
 
   .control-box {
-    width: 100%;
-    justify-content: space-between;
+    width: auto;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    padding: 0.25rem;
   }
 
   .top-nav {
-    justify-content: flex-start;
+    width: 100%;
+    justify-content: center;
     overflow-x: auto;
     padding: 0.2rem;
   }
@@ -505,11 +520,38 @@ body.drawer-open .drawer-backdrop {
     white-space: nowrap;
     flex: 0 0 auto;
   }
+
+  .theme-toggle.compact-theme-toggle {
+    min-width: 104px;
+    min-height: 36px;
+    padding: 0.38rem 0.52rem;
+  }
+
+  .compact-logout-btn {
+    min-height: 36px;
+    padding: 0.58rem 0.72rem;
+  }
 }
 
 @media (max-width: 560px) {
   .topbar {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "brand"
+      "controls"
+      "nav";
+    align-items: stretch;
     padding: 0.65rem 0.75rem;
+  }
+
+  .topbar-left,
+  .topbar-right {
+    justify-content: space-between;
+  }
+
+  .control-box {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .brand-title {
@@ -522,11 +564,6 @@ body.drawer-open .drawer-backdrop {
 
   .brand-dropdown-menu {
     width: min(280px, calc(100vw - 1.5rem));
-  }
-
-  .control-box {
-    gap: 0.35rem;
-    padding: 0.25rem;
   }
 
   .theme-toggle.compact-theme-toggle {
@@ -543,8 +580,6 @@ body.drawer-open .drawer-backdrop {
   }
 
   .compact-logout-btn {
-    min-height: 36px;
-    padding: 0.58rem 0.72rem;
     font-size: 0.9rem;
   }
 }
