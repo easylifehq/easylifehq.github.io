@@ -103,6 +103,14 @@
   color: var(--text-muted);
 }
 
+.brand-dropdown {
+  position: relative;
+}
+
+.brand-dropdown-menu[hidden] {
+  display: none !important;
+}
+
 .brand-dropdown-menu {
   position: absolute;
   top: calc(100% + 0.6rem);
@@ -115,6 +123,7 @@
   box-shadow: var(--shadow-floating);
   display: grid;
   gap: 0.25rem;
+  z-index: 100;
 }
 
 .brand-dropdown-link {

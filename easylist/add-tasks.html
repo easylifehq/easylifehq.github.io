@@ -1,7 +1,5 @@
-<!-- add-tasks.html -->
-
 <!DOCTYPE html>
-<html lang="en" data-theme="classic">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,73 +13,72 @@
   <div class="app-shell">
     <header class="topbar">
       <div class="topbar-left">
-        <a href="index.html" class="brand-mark" aria-label="EasyList home">
-          <span class="brand-dot"></span>
-          <div class="brand-copy">
-            <p class="brand-kicker">Easy Life</p>
-            <h1>EasyList</h1>
-          </div>
-        </a>
+        <div class="brand-dropdown">
+          <button
+            type="button"
+            class="brand-menu-trigger"
+            id="brandMenuBtn"
+            aria-expanded="false"
+            aria-controls="brandDropdownMenu"
+          >
+            <span class="brand-mark">
+              <span class="brand-dot"></span>
+              <span class="brand-copy">
+                <span class="brand-kicker">Easy Life</span>
+                <span class="brand-title">EasyList</span>
+              </span>
+            </span>
+            <span class="brand-caret">▾</span>
+          </button>
 
-        <nav class="top-nav" aria-label="Primary navigation">
-          <a href="dashboard.html" class="nav-link">Dashboard</a>
-          <a href="add-tasks.html" class="nav-link active" aria-current="page">Add Tasks</a>
-          <a href="archive.html" class="nav-link">Archive</a>
-        </nav>
+          <div class="brand-dropdown-menu" id="brandDropdownMenu" hidden>
+            <a href="../hub.html" class="brand-dropdown-link">Go to Hub</a>
+            <a href="dashboard.html" class="brand-dropdown-link">EasyList Dashboard</a>
+            <a href="add-tasks.html" class="brand-dropdown-link">EasyList Add Task</a>
+            <a href="archive.html" class="brand-dropdown-link">EasyList Archive</a>
+            <a href="../easypipeline/dashboard.html" class="brand-dropdown-link">Open EasyPipeline</a>
+          </div>
+        </div>
       </div>
 
+      <nav class="topbar-center top-nav" aria-label="Primary navigation">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="add-tasks.html" class="nav-link active" aria-current="page">Add Task</a>
+        <a href="archive.html" class="nav-link">Archive</a>
+      </nav>
+
       <div class="topbar-right">
-        <div class="week-pill">
-          <span class="pill-label">Bulk Entry</span>
-          <span class="pill-value">One row per task</span>
+        <div class="control-box">
+          <button
+            type="button"
+            class="theme-toggle compact-theme-toggle"
+            data-theme-toggle
+            aria-label="Toggle theme"
+          >
+            <span class="theme-toggle-label" data-theme-label>Classic Mode</span>
+            <span class="theme-toggle-hint" data-theme-hint>Candy Mode</span>
+          </button>
+
+          <button type="button" class="ghost-btn compact-logout-btn" id="logoutBtn">
+            Log Out
+          </button>
         </div>
-
-        <button
-          type="button"
-          class="theme-toggle"
-          data-theme-toggle
-          aria-label="Toggle theme"
-        >
-          <span class="theme-toggle-label" data-theme-label>Classic Mode</span>
-          <span class="theme-toggle-hint" data-theme-hint>Candy Mode</span>
-        </button>
-
-        <a href="dashboard.html" class="ghost-btn">Back to Dashboard</a>
       </div>
     </header>
 
     <main class="page-layout add-tasks-layout">
-      <section class="page-hero card">
-        <div class="hero-copy">
-          <p class="eyebrow">Bulk Add</p>
-          <h2>Dump the clutter in fast.</h2>
-          <p class="hero-text">
-            Add the weird little tasks all at once, save them together, and let
-            EasyList sort the week out afterward.
-          </p>
-        </div>
-
-        <div class="hero-side">
-          <div class="hero-note">
-            <span class="hero-note-label">Priority Tiers</span>
-            <strong>Gentle Goose → Alpha Alligator</strong>
-          </div>
-          <div class="hero-note">
-            <span class="hero-note-label">Recurring</span>
-            <strong>Simple v1 toggle</strong>
-          </div>
-        </div>
-      </section>
-
       <section class="bulk-entry card">
         <form id="addTasksForm" novalidate>
-          <div class="section-heading">
+          <div class="section-heading add-tasks-heading">
             <div>
               <p class="eyebrow">Task Builder</p>
-              <h2>Add multiple tasks</h2>
+              <h1>Add tasks fast</h1>
+              <p class="builder-subtitle">
+                Start with one row, add more only when you need them.
+              </p>
             </div>
 
-            <div class="section-actions">
+            <div class="section-actions add-tasks-actions">
               <button type="button" class="ghost-btn" id="addTaskRowBtn">
                 + Add Another Row
               </button>
@@ -120,32 +117,29 @@
           <div class="section-heading">
             <div>
               <p class="eyebrow">Quick Guide</p>
-              <h2>How this page should feel</h2>
+              <h2>How to use this page</h2>
             </div>
           </div>
 
           <div class="guide-list">
             <article class="guide-item">
-              <h3>One row = one annoying task</h3>
+              <h3>One row = one task</h3>
               <p>
-                Keep it fast. This page is meant for dumping all the little
-                things crowding your brain in one pass.
+                Keep it simple. Add one thing per row so your dashboard stays clean.
               </p>
             </article>
 
             <article class="guide-item">
-              <h3>Save in a single shot</h3>
+              <h3>Add rows only when needed</h3>
               <p>
-                Rows turn into task objects and save into your Firestore tasks
-                collection together.
+                The page starts lighter now, so the first thing you see is the form itself.
               </p>
             </article>
 
             <article class="guide-item">
-              <h3>Recurring stays simple for now</h3>
+              <h3>Save in one shot</h3>
               <p>
-                v1 only needs a basic recurring flag. The smart recurring logic
-                can come later.
+                Everything you filled out saves together into your tasks collection.
               </p>
             </article>
           </div>
@@ -155,7 +149,7 @@
           <div class="section-heading">
             <div>
               <p class="eyebrow">Preview Notes</p>
-              <h2>Data shape reminder</h2>
+              <h2>Task shape reminder</h2>
             </div>
           </div>
 
@@ -181,7 +175,5 @@
   </div>
 
   <script type="module" src="js/add-tasks.js"></script>
-  
-
 </body>
 </html>

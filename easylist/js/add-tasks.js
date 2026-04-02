@@ -1,6 +1,12 @@
 // js/add-tasks.js
 
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import {
+  onAuthStateChanged,
+  signOut,
+  setPersistence,
+  browserLocalPersistence,
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
 import {
   addDoc,
   collection,
@@ -12,11 +18,9 @@ import { getPriorityMeta, toDateInputValue } from "./utils.js";
 import { initializeTheme, wireThemeControls } from "./theme.js";
 import { escapeHTML } from "./ui.js";
 
-import { setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-
 await setPersistence(auth, browserLocalPersistence);
 
-const DEFAULT_ROW_COUNT = 3;
+const DEFAULT_ROW_COUNT = 1;
 const DEFAULT_PRIORITY_TIER = 3;
 
 const elements = {
@@ -25,6 +29,9 @@ const elements = {
   saveBtn: document.getElementById("saveTasksBtn"),
   pageMessage: document.getElementById("addTasksMessage"),
   form: document.getElementById("addTasksForm"),
+  logoutBtn: document.getElementById("logoutBtn"),
+  brandMenuBtn: document.getElementById("brandMenuBtn"),
+  brandDropdownMenu: document.getElementById("brandDropdownMenu"),
 };
 
 const state = {
@@ -39,15 +46,23 @@ function init() {
   wireThemeControls();
   bindEvents();
   protectPage();
+  setupBrandMenu();
 }
 
 function bindEvents() {
   elements.addRowBtn?.addEventListener("click", handleAddRow);
   elements.form?.addEventListener("submit", handleSaveTasks);
+  elements.logoutBtn?.addEventListener("click", handleLogout);
 
   elements.rowsContainer?.addEventListener("click", handleRowActions);
   elements.rowsContainer?.addEventListener("input", handleRowInput);
   elements.rowsContainer?.addEventListener("change", handleRowInput);
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeBrandMenu();
+    }
+  });
 }
 
 function redirectToLogin() {
@@ -162,7 +177,12 @@ function createTaskRow(prefill = {}) {
       value="${escapeHTML(prefill.notes ?? "")}"
     />
 
-    <button type="button" class="ghost-btn row-delete-btn" data-action="remove-row" aria-label="Remove row">
+    <button
+      type="button"
+      class="ghost-btn row-delete-btn"
+      data-action="remove-row"
+      aria-label="Remove row"
+    >
       ✕
     </button>
   `;
@@ -309,12 +329,10 @@ async function handleSaveTasks(event) {
 
     const tasksRef = collection(db, "users", state.currentUser.uid, "tasks");
 
-    await Promise.all(
-      nonBlankRows.map((row) => addDoc(tasksRef, row.task))
-    );
+    await Promise.all(nonBlankRows.map((row) => addDoc(tasksRef, row.task)));
 
     showPageMessage(
-      `${nonBlankRows.length} task${nonBlankRows.length === 1 ? "" : "s"} saved. Board officially less annoying.`,
+      `${nonBlankRows.length} task${nonBlankRows.length === 1 ? "" : "s"} saved.`,
       "success"
     );
 
@@ -325,4 +343,49 @@ async function handleSaveTasks(event) {
   } finally {
     setSavingState(false);
   }
+}
+
+async function handleLogout() {
+  await signOut(auth);
+  redirectToLogin();
+}
+
+function openBrandMenu() {
+  if (!elements.brandDropdownMenu || !elements.brandMenuBtn) return;
+  elements.brandDropdownMenu.hidden = false;
+  elements.brandMenuBtn.setAttribute("aria-expanded", "true");
+}
+
+function closeBrandMenu() {
+  if (!elements.brandDropdownMenu || !elements.brandMenuBtn) return;
+  elements.brandDropdownMenu.hidden = true;
+  elements.brandMenuBtn.setAttribute("aria-expanded", "false");
+}
+
+function setupBrandMenu() {
+  if (!elements.brandMenuBtn || !elements.brandDropdownMenu) return;
+
+  closeBrandMenu();
+
+  elements.brandMenuBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const isOpen = !elements.brandDropdownMenu.hidden;
+
+    if (isOpen) {
+      closeBrandMenu();
+    } else {
+      openBrandMenu();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (
+      target instanceof Node &&
+      !elements.brandDropdownMenu.contains(target) &&
+      !elements.brandMenuBtn.contains(target)
+    ) {
+      closeBrandMenu();
+    }
+  });
 }
