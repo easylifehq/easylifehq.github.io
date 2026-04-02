@@ -10,25 +10,31 @@
     name="description"
     content="EasyList helps you clear annoying life and admin tasks so you can focus on what actually matters."
   />
-  <link rel="stylesheet" href="css/landing.css" />
-</head>
+  <link rel="stylesheet" href="../css/global-nav.css" />
+  <link rel="stylesheet" href="css/index.css" /></head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="index.html" class="brand">
+  <header class="site-header easylist-header">
+    <div class="container nav">
+      <a href="/index.html" class="brand">
         <span class="brand-mark">EL</span>
-        <span class="brand-text">
-          <span class="brand-top">Easy Life</span>
-          <span class="brand-bottom">EasyList</span>
+        <span class="brand-text-wrap">
+          <span class="brand-text">EasyLife</span>
+          <span class="brand-sub">EasyList</span>
         </span>
       </a>
 
-      <nav class="header-nav">
+      <nav class="nav-links">
+        <a href="/index.html">Home</a>
+        <a href="/easylist/index.html" class="active">EasyList</a>
+        <a href="/easypipeline/index.html">EasyPipeline</a>
         <a href="#features">Features</a>
         <a href="#how-it-works">How it works</a>
-        <a href="../login.html" class="nav-login">Log In</a>
-        <a href="../login.html?mode=signup" class="btn btn-primary">Get Started</a>
       </nav>
+
+      <div class="nav-actions">
+        <a href="/login.html" class="btn btn-secondary">Log In</a>
+        <a href="/login.html?mode=signup" class="btn btn-primary">Get Started</a>
+      </div>
     </div>
   </header>
 

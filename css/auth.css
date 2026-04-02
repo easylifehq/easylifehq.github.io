@@ -46,42 +46,54 @@ input {
 
 .auth-page {
   min-height: 100vh;
-  padding: 32px;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px 20px;
+}
+
+.auth-layout {
+  width: 100%;
+  max-width: 520px; /* THIS is the key fix */
+}
+
+.auth-panel {
+  width: 100%;
+}
+
+.auth-card {
+  position: relative;
 }
 
 .back-link {
-  top: 28px;
-  left: 32px;
-  font-size: 0.95rem;
+  position: absolute;
+  top: 18px;
+  left: 20px;
+
+  font-size: 0.9rem;
   color: var(--text-muted);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
+
+  opacity: 0.7;
   transition: 0.2s ease;
-  padding: 12px 0px 12px 0px;
 }
 
 .back-link:hover {
-  color: var(--text);
+  opacity: 1;
+  color: white;
   transform: translateX(-2px);
 }
 
 .auth-layout {
-  width: min(1120px, 100%);
+  width: 100%;
+  max-width: 1200px;
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 24px;
-  align-items: stretch;
+  gap: 32px;
 }
 
 .auth-panel {
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(16px);
-  box-shadow: var(--shadow);
+  width: 100%;
 }
 
 .auth-panel-copy {
@@ -96,10 +108,14 @@ input {
 .auth-card {
   width: 100%;
   border-radius: var(--radius-xl);
-  padding: 34px;
+  padding: 36px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .auth-header {
