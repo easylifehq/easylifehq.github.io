@@ -3,7 +3,10 @@
 import {
   onAuthStateChanged,
   signOut,
+  setPersistence,
+  browserLocalPersistence,
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
 import {
   collection,
   deleteDoc,
@@ -17,11 +20,8 @@ import { auth, db } from "./firebase-config.js";
 import { initializeTheme, wireThemeControls } from "./theme.js";
 import {
   buildMotivationData,
-  getCurrentWeek,
   getEnergyLabel,
   getPriorityMeta,
-  getWeekRangeLabel,
-  groupTasksByDay,
   isCompletedToday,
   normalizeTask,
 } from "./utils.js";
@@ -35,17 +35,21 @@ import {
   renderTaskCard,
 } from "./ui.js";
 
-import { setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-
 await setPersistence(auth, browserLocalPersistence);
+
+const VIEW_MODES = {
+  WEEK: "week",
+  TWO_WEEKS: "twoWeeks",
+  MONTH: "month",
+};
 
 const state = {
   uid: null,
   tasks: [],
   activeTasks: [],
   completedTodayTasks: [],
-  weekDays: getCurrentWeek(),
   selectedTask: null,
+  viewMode: VIEW_MODES.WEEK,
 };
 
 const elements = {
@@ -57,11 +61,16 @@ const elements = {
   openTaskCount: document.getElementById("openTaskCount"),
   todayCompleteCount: document.getElementById("todayCompleteCount"),
   energyLabel: document.getElementById("energyLabel"),
-  currentWeekLabel: document.getElementById("currentWeekLabel"),
-  jumpTodayBtn: document.getElementById("jumpTodayBtn"),
-  refreshWeekBtn: document.getElementById("refreshWeekBtn"),
   motivationPanel: document.getElementById("motivationPanel"),
+  momentumBody: document.getElementById("momentumBody"),
+  knockedOutChip: document.getElementById("knockedOutChip"),
   logoutBtn: document.getElementById("logoutBtn"),
+  plannerHeading: document.getElementById("plannerHeading"),
+  plannerSubtitle: document.getElementById("plannerSubtitle"),
+  refreshPlannerBtn: document.getElementById("refreshPlannerBtn"),
+  brandMenuBtn: document.getElementById("brandMenuBtn"),
+  brandDropdownMenu: document.getElementById("brandDropdownMenu"),
+  viewButtons: Array.from(document.querySelectorAll("[data-view-mode]")),
 };
 
 init();
@@ -72,8 +81,9 @@ function init() {
   setupPlannerEvents();
   setupCompletedEvents();
   setupDrawerEvents();
-  setupWeekButtons();
   setupTopbarActions();
+  setupViewSwitcher();
+  setupBrandMenu();
   initAuth();
 }
 
@@ -95,24 +105,175 @@ function splitTasks(tasks) {
   state.completedTodayTasks = tasks.filter((task) => isCompletedToday(task));
 }
 
-function updateWeekLabel() {
-  const valueEl = elements.currentWeekLabel?.querySelector(".pill-value");
-  if (valueEl) {
-    valueEl.textContent = getWeekRangeLabel(state.weekDays);
+function startOfDay(date) {
+  const next = new Date(date);
+  next.setHours(0, 0, 0, 0);
+  return next;
+}
+
+function addDays(date, amount) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + amount);
+  return next;
+}
+
+function isSameDay(a, b) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+function formatDayName(date) {
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+  }).format(date);
+}
+
+function formatDayDate(date) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+  }).format(date);
+}
+
+function formatMonthDayDate(date) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+  }).format(date);
+}
+
+function formatMonthTitle(date) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
+
+function getDayKeyFromDate(date) {
+  return startOfDay(date).toISOString().slice(0, 10);
+}
+
+function getTaskDayKey(task) {
+  if (!task?.dueDate) return null;
+
+  const due = new Date(task.dueDate);
+  if (Number.isNaN(due.getTime())) return null;
+
+  return getDayKeyFromDate(due);
+}
+
+function getPlannerMeta(mode) {
+  const today = startOfDay(new Date());
+
+  if (mode === VIEW_MODES.WEEK) {
+    const start = addDays(today, -1);
+    const days = Array.from({ length: 8 }, (_, index) => {
+      const date = addDays(start, index);
+      return {
+        key: getDayKeyFromDate(date),
+        date,
+        dayLabel: formatDayName(date),
+        dateLabel: formatDayDate(date),
+        isToday: isSameDay(date, today),
+        inCurrentMonth: true,
+      };
+    });
+
+    return {
+      heading: "Your next 8 days",
+      subtitle: "Yesterday through the next 6 days.",
+      days,
+      className: "week-view",
+    };
   }
+
+  if (mode === VIEW_MODES.TWO_WEEKS) {
+    const start = today;
+    const days = Array.from({ length: 14 }, (_, index) => {
+      const date = addDays(start, index);
+      return {
+        key: getDayKeyFromDate(date),
+        date,
+        dayLabel: formatDayName(date),
+        dateLabel: formatDayDate(date),
+        isToday: isSameDay(date, today),
+        inCurrentMonth: true,
+      };
+    });
+
+    return {
+      heading: "Next 2 weeks",
+      subtitle: "A wider look at what is coming up.",
+      days,
+      className: "two-week-view",
+    };
+  }
+
+  const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+  const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+  const gridStart = addDays(monthStart, -monthStart.getDay());
+  const gridEnd = addDays(monthEnd, 6 - monthEnd.getDay());
+
+  const days = [];
+  for (let cursor = new Date(gridStart); cursor <= gridEnd; cursor = addDays(cursor, 1)) {
+    days.push({
+      key: getDayKeyFromDate(cursor),
+      date: new Date(cursor),
+      dayLabel: formatDayName(cursor),
+      dateLabel: formatMonthDayDate(cursor),
+      isToday: isSameDay(cursor, today),
+      inCurrentMonth: cursor.getMonth() === today.getMonth(),
+    });
+  }
+
+  return {
+    heading: formatMonthTitle(today),
+    subtitle: "Full month view.",
+    days,
+    className: "month-view",
+  };
+}
+
+function groupTasksForPlanner(days) {
+  const grouped = Object.fromEntries(days.map((day) => [day.key, []]));
+
+  state.activeTasks.forEach((task) => {
+    const key = getTaskDayKey(task);
+    if (key && grouped[key]) {
+      grouped[key].push(task);
+    }
+  });
+
+  return grouped;
 }
 
 function renderPlanner() {
   if (!elements.plannerGrid) return;
 
-  const grouped = groupTasksByDay(state.activeTasks, state.weekDays);
+  const planner = getPlannerMeta(state.viewMode);
+  const grouped = groupTasksForPlanner(planner.days);
 
-  elements.plannerGrid.innerHTML = state.weekDays
+  elements.plannerGrid.className = `planner-grid ${planner.className}`;
+  elements.plannerHeading.textContent = planner.heading;
+  elements.plannerSubtitle.textContent = planner.subtitle;
+
+  elements.plannerGrid.innerHTML = planner.days
     .map((day) => {
       const tasks = grouped[day.key] || [];
+      const classes = [
+        "day-card",
+        day.isToday ? "today" : "",
+        !day.inCurrentMonth ? "outside-month" : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
 
       return `
-        <article class="day-card ${day.isToday ? "today" : ""}" data-day-key="${day.key}">
+        <article class="${classes}" data-day-key="${day.key}">
           <header class="day-card-header">
             <div>
               <p class="day-name">${day.dayLabel}</p>
@@ -157,7 +318,7 @@ function renderCompletedTodayList() {
   elements.completedTodayList.innerHTML = sorted.map(renderCompletedItem).join("");
 }
 
-function renderHeroStats() {
+function renderMomentumStats() {
   if (elements.openTaskCount) {
     elements.openTaskCount.textContent = String(state.activeTasks.length);
   }
@@ -170,14 +331,13 @@ function renderHeroStats() {
     elements.energyLabel.textContent = getEnergyLabel(state.completedTodayTasks.length);
   }
 
-  const knockedOutChip = document.getElementById("knockedOutChip");
-  if (knockedOutChip) {
-    knockedOutChip.textContent = `${state.completedTodayTasks.length} done`;
+  if (elements.knockedOutChip) {
+    elements.knockedOutChip.textContent = `${state.completedTodayTasks.length} done`;
   }
 }
 
 function renderMotivationPanel() {
-  if (!elements.motivationPanel) return;
+  if (!elements.momentumBody) return;
 
   const motivation = buildMotivationData(
     state.completedTodayTasks.length,
@@ -185,9 +345,12 @@ function renderMotivationPanel() {
     state.completedTodayTasks
   );
 
-  elements.motivationPanel.innerHTML = `
-    <p class="motivation-kicker">Today’s read</p>
-    <h3>${motivation.title}</h3>
+  const heading = elements.motivationPanel?.querySelector(".momentum-header h2");
+  if (heading) {
+    heading.textContent = motivation.title;
+  }
+
+  elements.momentumBody.innerHTML = `
     <p class="motivation-text">${motivation.body}</p>
 
     <div class="motivation-notes">
@@ -195,10 +358,12 @@ function renderMotivationPanel() {
         <span class="motivation-label">Best streak</span>
         <strong>${motivation.bestStreak}</strong>
       </article>
+
       <article class="motivation-card">
         <span class="motivation-label">Top category</span>
         <strong>${motivation.topCategory}</strong>
       </article>
+
       <article class="motivation-card">
         <span class="motivation-label">Current tone</span>
         <strong>${motivation.tone}</strong>
@@ -207,12 +372,20 @@ function renderMotivationPanel() {
   `;
 }
 
+function setActiveViewButton() {
+  elements.viewButtons.forEach((button) => {
+    const isActive = button.dataset.viewMode === state.viewMode;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+}
+
 function renderAll() {
-  updateWeekLabel();
   renderPlanner();
   renderCompletedTodayList();
-  renderHeroStats();
+  renderMomentumStats();
   renderMotivationPanel();
+  setActiveViewButton();
 }
 
 function findTaskById(taskId) {
@@ -288,7 +461,6 @@ async function deleteTask(taskId) {
 async function refreshDashboard() {
   if (!state.uid) return;
 
-  state.weekDays = getCurrentWeek();
   state.tasks = await loadTasks(state.uid);
   splitTasks(state.tasks);
   renderAll();
@@ -351,22 +523,8 @@ function setupDrawerEvents() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeDrawer(elements.taskDrawer);
+      closeBrandMenu();
     }
-  });
-}
-
-function setupWeekButtons() {
-  elements.refreshWeekBtn?.addEventListener("click", async () => {
-    await refreshDashboard();
-  });
-
-  elements.jumpTodayBtn?.addEventListener("click", () => {
-    const todayCard = elements.plannerGrid?.querySelector(".day-card.today");
-    todayCard?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "center",
-    });
   });
 }
 
@@ -375,10 +533,69 @@ function setupTopbarActions() {
     await signOut(auth);
     redirectToLogin();
   });
+
+  elements.refreshPlannerBtn?.addEventListener("click", async () => {
+    await refreshDashboard();
+  });
+}
+
+function setupViewSwitcher() {
+  elements.viewButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const nextMode = button.dataset.viewMode;
+      if (!nextMode || nextMode === state.viewMode) return;
+
+      state.viewMode = nextMode;
+      renderPlanner();
+      setActiveViewButton();
+    });
+  });
+}
+
+function openBrandMenu() {
+  elements.brandDropdownMenu.hidden = false;
+  elements.brandMenuBtn?.setAttribute("aria-expanded", "true");
+}
+
+function closeBrandMenu() {
+  elements.brandDropdownMenu.hidden = true;
+  elements.brandMenuBtn?.setAttribute("aria-expanded", "false");
+}
+
+function setupBrandMenu() {
+  if (!elements.brandMenuBtn || !elements.brandDropdownMenu) return;
+
+  closeBrandMenu();
+
+  elements.brandMenuBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const isOpen = !elements.brandDropdownMenu.hidden;
+
+    if (isOpen) {
+      closeBrandMenu();
+    } else {
+      openBrandMenu();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (
+      target instanceof Node &&
+      !elements.brandDropdownMenu.contains(target) &&
+      !elements.brandMenuBtn.contains(target)
+    ) {
+      closeBrandMenu();
+    }
+  });
 }
 
 function renderErrorState() {
   if (!elements.plannerGrid) return;
+
+  elements.plannerGrid.className = "planner-grid week-view";
+  elements.plannerHeading.textContent = "Could not load planner";
+  elements.plannerSubtitle.textContent = "Try refreshing the page.";
 
   elements.plannerGrid.innerHTML = `
     <article class="day-card">

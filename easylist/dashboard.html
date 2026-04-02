@@ -1,7 +1,5 @@
-<!-- dashboard.html -->
-
 <!DOCTYPE html>
-<html lang="en" data-theme="classic">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,91 +13,114 @@
   <div class="app-shell">
     <header class="topbar">
       <div class="topbar-left">
-        <a href="index.html" class="brand-mark" aria-label="EasyList home">
-          <span class="brand-dot"></span>
-          <div class="brand-copy">
-            <p class="brand-kicker">Easy Life</p>
-            <h1>EasyList</h1>
-          </div>
-        </a>
+        <div class="brand-dropdown">
+          <button
+            type="button"
+            class="brand-menu-trigger"
+            id="brandMenuBtn"
+            aria-expanded="false"
+            aria-controls="brandDropdownMenu"
+          >
+            <span class="brand-mark">
+              <span class="brand-dot"></span>
+              <span class="brand-copy">
+                <span class="brand-kicker">Easy Life</span>
+                <span class="brand-title">EasyList</span>
+              </span>
+            </span>
+            <span class="brand-caret">▾</span>
+          </button>
 
-        <nav class="top-nav" aria-label="Primary navigation">
-          <a href="dashboard.html" class="nav-link active" aria-current="page">Dashboard</a>
-          <a href="add-tasks.html" class="nav-link">Add Tasks</a>
-          <a href="archive.html" class="nav-link">Archive</a>
-        </nav>
+          <div class="brand-dropdown-menu" id="brandDropdownMenu" hidden>
+            <!-- Replace these with your real live URLs if needed -->
+            <a href="..//hub.html" class="brand-dropdown-link">Go to Hub</a>
+            <a href="dashboard.html" class="brand-dropdown-link">EasyList Dashboard</a>
+            <a href="add-tasks.html" class="brand-dropdown-link">EasyList Add Tasks</a>
+            <a href="archive.html" class="brand-dropdown-link">EasyList Archive</a>
+            <a href="../easypipeline/dashboard.html" class="brand-dropdown-link">Open EasyPipeline</a>
+          </div>
+        </div>
       </div>
 
+      <nav class="topbar-center top-nav" aria-label="Primary navigation">
+        <a href="dashboard.html" class="nav-link active" aria-current="page">Dashboard</a>
+        <a href="add-tasks.html" class="nav-link">Add Task</a>
+        <a href="archive.html" class="nav-link">Archive</a>
+      </nav>
+
       <div class="topbar-right">
-        <div class="week-pill" id="currentWeekLabel">
-          <span class="pill-label">This Week</span>
-          <span class="pill-value">Loading...</span>
-          <button type="button" class="ghost-btn" id="logoutBtn">Log Out</button>
+        <div class="control-box">
+          <button
+            type="button"
+            class="theme-toggle compact-theme-toggle"
+            data-theme-toggle
+            aria-label="Toggle theme"
+          >
+            <span class="theme-toggle-label" data-theme-label>Classic Mode</span>
+            <span class="theme-toggle-hint" data-theme-hint>Candy Mode</span>
+          </button>
+
+          <button type="button" class="ghost-btn compact-logout-btn" id="logoutBtn">
+            Log Out
+          </button>
         </div>
-
-        <button
-          type="button"
-          class="theme-toggle"
-          data-theme-toggle
-          aria-label="Toggle theme"
-        >
-          <span class="theme-toggle-label" data-theme-label>Classic Mode</span>
-          <span class="theme-toggle-hint" data-theme-hint>Candy Mode</span>
-        </button>
-
-        <a href="add-tasks.html" class="primary-btn">+ Add Tasks</a>
       </div>
     </header>
 
     <main class="page-layout dashboard-layout">
-      <section class="dashboard-hero card">
-        <div class="hero-copy">
-          <p class="eyebrow">Clear the clutter</p>
-          <h2>Handle the little stuff so your real work has room.</h2>
-          <p class="hero-text">
-            EasyList keeps the annoying life admin in one place so your week feels
-            lighter, cleaner, and easier to attack.
-          </p>
-        </div>
-
-        <div class="hero-stats">
-          <article class="mini-stat">
-            <span class="mini-stat-label">Open Tasks</span>
-            <strong id="openTaskCount">0</strong>
-          </article>
-          <article class="mini-stat">
-            <span class="mini-stat-label">Knocked Out Today</span>
-            <strong id="todayCompleteCount">0</strong>
-          </article>
-          <article class="mini-stat">
-            <span class="mini-stat-label">This Week’s Energy</span>
-            <strong id="energyLabel">Warmup Mode</strong>
-          </article>
-        </div>
-      </section>
-
-      <section class="planner-section">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Weekly Planner</p>
-            <h2>Your next 7 days</h2>
+      <section class="planner-shell card">
+        <div class="planner-toolbar">
+          <div class="planner-toolbar-copy">
+            <p class="eyebrow">Planner</p>
+            <h1 id="plannerHeading">Your next 8 days</h1>
+            <p class="planner-subtitle" id="plannerSubtitle">
+              Yesterday through the next 6 days.
+            </p>
           </div>
 
-          <div class="section-actions">
-            <button type="button" class="ghost-btn" id="jumpTodayBtn">Jump to Today</button>
-            <button type="button" class="ghost-btn" id="refreshWeekBtn">Refresh Week</button>
+          <div class="planner-toolbar-actions">
+            <div class="view-switcher" role="tablist" aria-label="Planner view">
+              <button
+                type="button"
+                class="view-btn active"
+                data-view-mode="week"
+                aria-pressed="true"
+              >
+                1 Week
+              </button>
+              <button
+                type="button"
+                class="view-btn"
+                data-view-mode="twoWeeks"
+                aria-pressed="false"
+              >
+                2 Weeks
+              </button>
+              <button
+                type="button"
+                class="view-btn"
+                data-view-mode="month"
+                aria-pressed="false"
+              >
+                Month
+              </button>
+            </div>
+
+            <button type="button" class="ghost-btn planner-refresh-btn" id="refreshPlannerBtn">
+              Refresh
+            </button>
           </div>
         </div>
 
-        <div class="planner-grid" id="plannerGrid"></div>
+        <div class="planner-grid week-view" id="plannerGrid"></div>
       </section>
 
       <section class="dashboard-lower-grid">
         <section class="card knocked-out-section">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Knocked Out Today</p>
-              <h2>Today’s handled list</h2>
+              <p class="eyebrow">Handled today</p>
+              <h2>What you already knocked out</h2>
             </div>
             <span class="section-chip" id="knockedOutChip">0 done</span>
           </div>
@@ -107,10 +128,32 @@
           <div id="completedTodayList"></div>
         </section>
 
-        <section class="card motivation-panel" id="motivationPanel">
-          <p class="motivation-kicker">Today’s read</p>
-          <h3>Loading the vibe...</h3>
-          <p class="motivation-text">Give it a second while EasyList checks the board.</p>
+        <section class="card momentum-panel" id="motivationPanel">
+          <div class="momentum-header">
+            <p class="eyebrow">Momentum</p>
+            <h2>Loading your board...</h2>
+          </div>
+
+          <div class="momentum-stat-grid">
+            <article class="momentum-stat">
+              <span class="momentum-stat-label">Open tasks</span>
+              <strong id="openTaskCount">0</strong>
+            </article>
+
+            <article class="momentum-stat">
+              <span class="momentum-stat-label">Done today</span>
+              <strong id="todayCompleteCount">0</strong>
+            </article>
+
+            <article class="momentum-stat momentum-stat-accent">
+              <span class="momentum-stat-label">Energy</span>
+              <strong id="energyLabel">Warmup Mode</strong>
+            </article>
+          </div>
+
+          <div class="momentum-body" id="momentumBody">
+            <p class="motivation-text">Give it a second while EasyList checks the board.</p>
+          </div>
         </section>
       </section>
     </main>
