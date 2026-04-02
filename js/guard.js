@@ -8,5 +8,5 @@ onAuthStateChanged(auth, (user) => {
   checked = true;
 
   if (!user) {
-    window.location.replace("https://easylifehq.com/login.html");  }
+    window.location.replace("login.html");  }
 });
