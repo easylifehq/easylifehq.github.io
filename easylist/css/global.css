@@ -210,6 +210,10 @@ code {
   display: none !important;
 }
 
+.brand-dropdown-menu[hidden] {
+  display: none !important;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
