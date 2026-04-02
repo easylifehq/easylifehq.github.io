@@ -183,13 +183,13 @@ authForm?.addEventListener("submit", async (event) => {
       });
 
       setMessage("Account created successfully.", true);
-      window.location.replace("dashboard.html");
+      window.location.replace("hub.html");
       return;
     }
 
     await signInWithEmailAndPassword(auth, email, password);
     setMessage("Logged in successfully.", true);
-    window.location.replace("dashboard.html");
+    window.location.replace("hub.html");
   } catch (error) {
     console.error("Authentication failed:", error);
     setMessage(getFriendlyAuthMessage(error?.code, mode));
