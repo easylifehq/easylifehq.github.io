@@ -54,7 +54,6 @@ input {
 }
 
 .back-link {
-  position: absolute;
   top: 28px;
   left: 32px;
   font-size: 0.95rem;
@@ -62,6 +61,7 @@ input {
   text-decoration: none;
   font-weight: 600;
   transition: 0.2s ease;
+  padding: 12px 0px 12px 0px;
 }
 
 .back-link:hover {
@@ -297,14 +297,15 @@ input {
 
 @media (max-width: 560px) {
   .auth-page {
+    position: relative;
     padding: 20px;
   }
 
   .back-link {
-    position: absolute; /* or fixed */
+    position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 10; /* makes sure it sits above the card */
+    z-index: 9999;
   }
 
   .auth-panel-copy,
