@@ -4,7 +4,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.0/firebase
 
 const firebaseConfig = {
   apiKey: "AIzaSyC1Pewjy3NhWJyx4stlY2JeWFXBS5-UFi0",
-  authDomain: "pipeline-2f422.firebaseapp.com",
+  authDomain: "easylifehq.com",
   projectId: "pipeline-2f422",
   storageBucket: "pipeline-2f422.firebasestorage.app",
   messagingSenderId: "421485108309",
