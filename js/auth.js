@@ -114,7 +114,7 @@ function getFriendlyResetMessage(errorCode) {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    window.location.replace("dashboard.html");
+    window.location.replace("hub.html");
   }
 });
 
