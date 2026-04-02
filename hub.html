@@ -4,42 +4,58 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EasyLife | Hub</title>
-  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="css/hub.css" />
 </head>
 <body>
-  <header class="app-header">
-    <div class="app-header-left">
-      <a href="hub.html" class="app-brand">EasyLife</a>
-    </div>
+  <div class="hub-shell">
+    <header class="hub-header">
+      <a href="hub.html" class="hub-brand">
+        <span class="brand-mark">EL</span>
+        <span class="brand-text">EasyLife</span>
+      </a>
 
-    <div class="app-header-right">
-      <button id="logoutBtn" class="logout-btn" type="button">Log Out</button>
-    </div>
-  </header>
-
-  <main class="dashboard-page">
-    <section class="hero">
-      <div>
-        <p class="eyebrow">Home Base</p>
-        <h1>Welcome to EasyLife</h1>
-        <p class="hero-subtext">
-          Pick your workspace and keep moving.
-        </p>
+      <div class="hub-header-actions">
+        <a class="header-link" href="index.html">Marketing site</a>
+        <button id="logoutBtn" class="logout-btn" type="button">Log Out</button>
       </div>
-    </section>
+    </header>
 
-    <section class="stats-grid">
-      <a class="stat-card" href="http://easylist.easylifehq.com/dashboard.html">
-        <p class="stat-label">EasyList</p>
-        <h2>Tasks</h2>
-      </a>
+    <main class="hub-main">
+      <section class="hub-hero">
+        <p class="eyebrow">Home Base</p>
+        <h1>Your tools, one home.</h1>
+        <p class="hub-subtext">
+          Jump into the workspace you need without bouncing between separate accounts or messy tabs.
+        </p>
+      </section>
 
-      <a class="stat-card" href="http://easypipeline.easylifehq.com/dashboard.html">
-        <p class="stat-label">EasyPipeline</p>
-        <h2>Applications</h2>
-      </a>
-    </section>
-  </main>
+      <section class="hub-grid">
+        <a class="hub-card" href="http://easylist.easylifehq.com/dashboard.html">
+          <div class="hub-card-top">
+            <span class="hub-icon">✓</span>
+            <span class="hub-tag">Planner</span>
+          </div>
+          <h2>EasyList</h2>
+          <p>
+            Organize your week, plan your tasks, and keep your life from turning into a pile of sticky notes.
+          </p>
+          <span class="hub-link">Open EasyList →</span>
+        </a>
+
+        <a class="hub-card featured" href="http://easypipeline.easylifehq.com/dashboard.html">
+          <div class="hub-card-top">
+            <span class="hub-icon">↗</span>
+            <span class="hub-tag">Career</span>
+          </div>
+          <h2>EasyPipeline</h2>
+          <p>
+            Track applications, interviews, follow-ups, and offers without losing the plot.
+          </p>
+          <span class="hub-link">Open EasyPipeline →</span>
+        </a>
+      </section>
+    </main>
+  </div>
 
   <script type="module" src="js/guard.js"></script>
   <script type="module">
@@ -50,7 +66,7 @@
 
     logoutBtn?.addEventListener("click", async () => {
       await signOut(auth);
-      window.location.href = "index.html";
+      window.location.href = "login.html";
     });
   </script>
 </body>
