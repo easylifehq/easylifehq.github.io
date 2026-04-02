@@ -1,0 +1,266 @@
+/* css/archive.css */
+
+.page-archive {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.archive-hero,
+.archive-summary,
+.archive-loading,
+.archive-empty,
+.archive-week {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl, 24px);
+  box-shadow: var(--shadow-md);
+}
+
+.archive-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.archive-hero-copy h1 {
+  margin: 0.35rem 0 0.65rem;
+  font-size: clamp(1.9rem, 3vw, 2.7rem);
+  line-height: 1.05;
+  color: var(--text);
+}
+
+.archive-subtext {
+  max-width: 780px;
+  margin: 0;
+  color: var(--muted-text);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.archive-hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.archive-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+}
+
+.summary-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.summary-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted-text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.summary-stat strong {
+  font-size: 1.35rem;
+  color: var(--text);
+}
+
+.archive-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.archive-loading,
+.archive-empty {
+  padding: 2rem;
+  text-align: center;
+}
+
+.archive-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.empty-icon {
+  font-size: 2rem;
+}
+
+.archive-empty h2 {
+  margin: 0;
+  color: var(--text);
+}
+
+.archive-empty p {
+  max-width: 460px;
+  margin: 0;
+  color: var(--muted-text);
+  line-height: 1.6;
+}
+
+.archive-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.archive-week {
+  overflow: hidden;
+}
+
+.archive-week-header {
+  width: 100%;
+  border: 0;
+  background: var(--surface);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.archive-week-header:hover {
+  background: var(--muted-surface);
+}
+
+.archive-week-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.archive-week-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.archive-week-subtitle {
+  font-size: 0.9rem;
+  color: var(--muted-text);
+}
+
+.archive-week-toggle {
+  font-size: 0.95rem;
+  color: var(--muted-text);
+  transition: transform 0.2s ease;
+}
+
+.archive-week.collapsed .archive-week-toggle {
+  transform: rotate(-90deg);
+}
+
+.archive-week-body {
+  padding: 0 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.archive-week.collapsed .archive-week-body {
+  display: none;
+}
+
+.archive-task {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--bg);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.archive-task-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.archive-task-title {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.archive-task-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.archive-task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  color: var(--muted-text);
+  font-size: 0.9rem;
+}
+
+.archive-meta-dot {
+  opacity: 0.55;
+}
+
+.archive-task-notes {
+  color: var(--muted-text);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .archive-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .archive-summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-archive {
+    padding: 1rem;
+  }
+
+  .archive-hero,
+  .archive-summary,
+  .archive-loading,
+  .archive-empty {
+    padding: 1rem;
+  }
+
+  .archive-week-header {
+    padding: 1rem;
+  }
+
+  .archive-week-body {
+    padding: 0 0.75rem 0.75rem;
+  }
+
+  .archive-task {
+    padding: 0.9rem;
+  }
+
+  .archive-task-top {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,109 @@
+<!-- archive.html -->
+
+<!DOCTYPE html>
+<html lang="en" data-theme="classic">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyList | Archive</title>
+
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/protected.css" />
+  <link rel="stylesheet" href="css/archive.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-left">
+        <a href="index.html" class="brand-mark" aria-label="EasyList home">
+          <span class="brand-dot"></span>
+          <div class="brand-copy">
+            <p class="brand-kicker">Easy Life</p>
+            <h1>EasyList</h1>
+          </div>
+        </a>
+
+        <nav class="top-nav" aria-label="Primary navigation">
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="add-tasks.html" class="nav-link">Add Tasks</a>
+          <a href="archive.html" class="nav-link active" aria-current="page">Archive</a>
+        </nav>
+      </div>
+
+      <div class="topbar-right">
+        <div class="week-pill">
+          <span class="pill-label">History</span>
+          <span class="pill-value">Finished by week</span>
+          <button type="button" class="ghost-btn" id="logoutBtn">Log Out</button>
+        </div>
+
+        <button
+          type="button"
+          class="theme-toggle"
+          data-theme-toggle
+          aria-label="Toggle theme"
+        >
+          <span class="theme-toggle-label" data-theme-label>Classic Mode</span>
+          <span class="theme-toggle-hint" data-theme-hint>Candy Mode</span>
+        </button>
+
+        <a href="add-tasks.html" class="primary-btn">+ Add Tasks</a>
+      </div>
+    </header>
+
+    <main class="page page-archive">
+      <section class="archive-hero card">
+        <div class="archive-hero-copy">
+          <p class="eyebrow">EasyList Archive</p>
+          <h1>Past wins, properly organized.</h1>
+          <p class="archive-subtext">
+            Every finished task gets logged here by the week you knocked it out,
+            so you can see what got handled and when it actually happened.
+          </p>
+        </div>
+
+        <div class="archive-hero-actions">
+          <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+          <a href="add-tasks.html" class="btn btn-primary">Add Tasks</a>
+        </div>
+      </section>
+
+      <section class="archive-summary card">
+        <div class="summary-stat">
+          <span class="summary-label">Completed tasks</span>
+          <strong id="completedCount">0</strong>
+        </div>
+
+        <div class="summary-stat">
+          <span class="summary-label">Archive weeks</span>
+          <strong id="weekCount">0</strong>
+        </div>
+
+        <div class="summary-stat">
+          <span class="summary-label">Latest knockout</span>
+          <strong id="latestCompletion">—</strong>
+        </div>
+      </section>
+
+      <section class="archive-content">
+        <div id="archiveLoading" class="archive-loading card">
+          Loading your archive...
+        </div>
+
+        <div id="archiveEmpty" class="archive-empty card hidden">
+          <div class="empty-icon">🗂️</div>
+          <h2>Nothing archived yet.</h2>
+          <p>
+            Knock out a few tasks and your wins will start stacking up here.
+          </p>
+          <a href="add-tasks.html" class="btn btn-primary">Add your first batch</a>
+        </div>
+
+        <div id="archiveList" class="archive-list hidden"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/archive.js"></script>
+</body>
+</html>

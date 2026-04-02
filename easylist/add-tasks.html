@@ -1,0 +1,187 @@
+<!-- add-tasks.html -->
+
+<!DOCTYPE html>
+<html lang="en" data-theme="classic">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyList | Add Tasks</title>
+
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/protected.css" />
+  <link rel="stylesheet" href="css/add-tasks.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-left">
+        <a href="index.html" class="brand-mark" aria-label="EasyList home">
+          <span class="brand-dot"></span>
+          <div class="brand-copy">
+            <p class="brand-kicker">Easy Life</p>
+            <h1>EasyList</h1>
+          </div>
+        </a>
+
+        <nav class="top-nav" aria-label="Primary navigation">
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="add-tasks.html" class="nav-link active" aria-current="page">Add Tasks</a>
+          <a href="archive.html" class="nav-link">Archive</a>
+        </nav>
+      </div>
+
+      <div class="topbar-right">
+        <div class="week-pill">
+          <span class="pill-label">Bulk Entry</span>
+          <span class="pill-value">One row per task</span>
+        </div>
+
+        <button
+          type="button"
+          class="theme-toggle"
+          data-theme-toggle
+          aria-label="Toggle theme"
+        >
+          <span class="theme-toggle-label" data-theme-label>Classic Mode</span>
+          <span class="theme-toggle-hint" data-theme-hint>Candy Mode</span>
+        </button>
+
+        <a href="dashboard.html" class="ghost-btn">Back to Dashboard</a>
+      </div>
+    </header>
+
+    <main class="page-layout add-tasks-layout">
+      <section class="page-hero card">
+        <div class="hero-copy">
+          <p class="eyebrow">Bulk Add</p>
+          <h2>Dump the clutter in fast.</h2>
+          <p class="hero-text">
+            Add the weird little tasks all at once, save them together, and let
+            EasyList sort the week out afterward.
+          </p>
+        </div>
+
+        <div class="hero-side">
+          <div class="hero-note">
+            <span class="hero-note-label">Priority Tiers</span>
+            <strong>Gentle Goose → Alpha Alligator</strong>
+          </div>
+          <div class="hero-note">
+            <span class="hero-note-label">Recurring</span>
+            <strong>Simple v1 toggle</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="bulk-entry card">
+        <form id="addTasksForm" novalidate>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Task Builder</p>
+              <h2>Add multiple tasks</h2>
+            </div>
+
+            <div class="section-actions">
+              <button type="button" class="ghost-btn" id="addTaskRowBtn">
+                + Add Another Row
+              </button>
+              <button type="submit" class="primary-btn" id="saveTasksBtn">
+                Save Tasks
+              </button>
+            </div>
+          </div>
+
+          <div
+            id="addTasksMessage"
+            class="page-message"
+            aria-live="polite"
+            role="status"
+          ></div>
+
+          <div class="bulk-table-shell">
+            <div class="bulk-table-head">
+              <span>Title</span>
+              <span>Due Date</span>
+              <span>Category</span>
+              <span>Est. Length</span>
+              <span>Priority</span>
+              <span>Recurring</span>
+              <span>Notes</span>
+              <span>Action</span>
+            </div>
+
+            <div class="bulk-rows" id="taskRows"></div>
+          </div>
+        </form>
+      </section>
+
+      <section class="add-tasks-lower-grid">
+        <section class="card quick-guide">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Quick Guide</p>
+              <h2>How this page should feel</h2>
+            </div>
+          </div>
+
+          <div class="guide-list">
+            <article class="guide-item">
+              <h3>One row = one annoying task</h3>
+              <p>
+                Keep it fast. This page is meant for dumping all the little
+                things crowding your brain in one pass.
+              </p>
+            </article>
+
+            <article class="guide-item">
+              <h3>Save in a single shot</h3>
+              <p>
+                Rows turn into task objects and save into your Firestore tasks
+                collection together.
+              </p>
+            </article>
+
+            <article class="guide-item">
+              <h3>Recurring stays simple for now</h3>
+              <p>
+                v1 only needs a basic recurring flag. The smart recurring logic
+                can come later.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="card preview-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Preview Notes</p>
+              <h2>Data shape reminder</h2>
+            </div>
+          </div>
+
+          <div class="preview-code">
+            <pre>{
+  title: "Call insurance",
+  dueDate: "2026-03-27",
+  notes: "Ask about deductible",
+  category: "Life Admin",
+  estimatedLength: 30,
+  recurring: false,
+  priorityTier: 3,
+  priorityLabel: "Golden Gator",
+  completed: false,
+  completedAt: null,
+  createdAt: serverTimestamp(),
+  updatedAt: serverTimestamp()
+}</pre>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/add-tasks.js"></script>
+  
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!-- dashboard.html -->
+
+<!DOCTYPE html>
+<html lang="en" data-theme="classic">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyList | Dashboard</title>
+
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/protected.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-left">
+        <a href="index.html" class="brand-mark" aria-label="EasyList home">
+          <span class="brand-dot"></span>
+          <div class="brand-copy">
+            <p class="brand-kicker">Easy Life</p>
+            <h1>EasyList</h1>
+          </div>
+        </a>
+
+        <nav class="top-nav" aria-label="Primary navigation">
+          <a href="dashboard.html" class="nav-link active" aria-current="page">Dashboard</a>
+          <a href="add-tasks.html" class="nav-link">Add Tasks</a>
+          <a href="archive.html" class="nav-link">Archive</a>
+        </nav>
+      </div>
+
+      <div class="topbar-right">
+        <div class="week-pill" id="currentWeekLabel">
+          <span class="pill-label">This Week</span>
+          <span class="pill-value">Loading...</span>
+          <button type="button" class="ghost-btn" id="logoutBtn">Log Out</button>
+        </div>
+
+        <button
+          type="button"
+          class="theme-toggle"
+          data-theme-toggle
+          aria-label="Toggle theme"
+        >
+          <span class="theme-toggle-label" data-theme-label>Classic Mode</span>
+          <span class="theme-toggle-hint" data-theme-hint>Candy Mode</span>
+        </button>
+
+        <a href="add-tasks.html" class="primary-btn">+ Add Tasks</a>
+      </div>
+    </header>
+
+    <main class="page-layout dashboard-layout">
+      <section class="dashboard-hero card">
+        <div class="hero-copy">
+          <p class="eyebrow">Clear the clutter</p>
+          <h2>Handle the little stuff so your real work has room.</h2>
+          <p class="hero-text">
+            EasyList keeps the annoying life admin in one place so your week feels
+            lighter, cleaner, and easier to attack.
+          </p>
+        </div>
+
+        <div class="hero-stats">
+          <article class="mini-stat">
+            <span class="mini-stat-label">Open Tasks</span>
+            <strong id="openTaskCount">0</strong>
+          </article>
+          <article class="mini-stat">
+            <span class="mini-stat-label">Knocked Out Today</span>
+            <strong id="todayCompleteCount">0</strong>
+          </article>
+          <article class="mini-stat">
+            <span class="mini-stat-label">This Week’s Energy</span>
+            <strong id="energyLabel">Warmup Mode</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="planner-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Weekly Planner</p>
+            <h2>Your next 7 days</h2>
+          </div>
+
+          <div class="section-actions">
+            <button type="button" class="ghost-btn" id="jumpTodayBtn">Jump to Today</button>
+            <button type="button" class="ghost-btn" id="refreshWeekBtn">Refresh Week</button>
+          </div>
+        </div>
+
+        <div class="planner-grid" id="plannerGrid"></div>
+      </section>
+
+      <section class="dashboard-lower-grid">
+        <section class="card knocked-out-section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Knocked Out Today</p>
+              <h2>Today’s handled list</h2>
+            </div>
+            <span class="section-chip" id="knockedOutChip">0 done</span>
+          </div>
+
+          <div id="completedTodayList"></div>
+        </section>
+
+        <section class="card motivation-panel" id="motivationPanel">
+          <p class="motivation-kicker">Today’s read</p>
+          <h3>Loading the vibe...</h3>
+          <p class="motivation-text">Give it a second while EasyList checks the board.</p>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <aside class="drawer-backdrop" id="drawerBackdrop"></aside>
+
+  <section class="task-drawer" id="taskDrawer" aria-hidden="true">
+    <header class="drawer-header">
+      <div>
+        <p class="eyebrow">Task details</p>
+        <h2>Edit task</h2>
+      </div>
+      <button type="button" class="icon-btn" id="closeDrawerBtn" aria-label="Close drawer">✕</button>
+    </header>
+
+    <div class="drawer-body">
+      <label class="field-group">
+        <span>Title</span>
+        <input type="text" data-field="title" />
+      </label>
+
+      <label class="field-group">
+        <span>Due Date</span>
+        <input type="date" data-field="dueDate" />
+      </label>
+
+      <label class="field-group">
+        <span>Category</span>
+        <input type="text" data-field="category" />
+      </label>
+
+      <label class="field-group">
+        <span>Estimated Length</span>
+        <input type="number" min="0" step="5" data-field="estimatedLength" />
+      </label>
+
+      <label class="field-group">
+        <span>Priority</span>
+        <select data-field="priorityTier">
+          <option value="1">Gentle Goose</option>
+          <option value="2">Bright Bunny</option>
+          <option value="3">Golden Gator</option>
+          <option value="4">Power Panda</option>
+          <option value="5">Alpha Alligator</option>
+        </select>
+      </label>
+
+      <label class="field-group">
+        <span>Notes</span>
+        <textarea rows="5" data-field="notes"></textarea>
+      </label>
+    </div>
+
+    <footer class="drawer-footer">
+      <button type="button" class="danger-btn" data-delete-task="">Delete</button>
+      <div class="drawer-actions">
+        <button type="button" class="ghost-btn" data-drawer-complete="">Mark Complete</button>
+        <button type="button" class="primary-btn" data-save-task="">Save Changes</button>
+      </div>
+    </footer>
+  </section>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

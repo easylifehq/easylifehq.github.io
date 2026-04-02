@@ -301,8 +301,10 @@ input {
   }
 
   .back-link {
+    position: absolute; /* or fixed */
     top: 20px;
     left: 20px;
+    z-index: 10; /* makes sure it sits above the card */
   }
 
   .auth-panel-copy,
