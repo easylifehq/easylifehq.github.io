@@ -11,6 +11,7 @@ type TaskCardProps = {
 export function TaskCard({ task, onEdit, onComplete, onReopen }: TaskCardProps) {
   const priority = getPriorityMeta(task.priorityTier, task.priorityLabel);
   const overdue = isOverdue(task);
+  const scheduledCount = task.linkedCalendarBlockIds.length;
 
   return (
     <article className={`task-card-vnext priority-tier-${priority.tier}${task.completed ? " completed" : ""}`}>
@@ -22,9 +23,10 @@ export function TaskCard({ task, onEdit, onComplete, onReopen }: TaskCardProps) 
           </div>
           <p>
             {task.category || "No category"}
-            {task.estimatedLength ? ` · ${task.estimatedLength} min` : ""}
-            {task.dueDate ? ` · ${formatDate(task.dueDate, true)}` : " · No due date"}
-            {overdue ? " · Overdue" : ""}
+            {task.estimatedLength ? ` | ${task.estimatedLength} min` : ""}
+            {task.dueDate ? ` | ${formatDate(task.dueDate, true)}` : " | No due date"}
+            {overdue ? " | Overdue" : ""}
+            {scheduledCount ? ` | In EasyCalendar (${scheduledCount})` : ""}
           </p>
           {task.notes ? <small>{task.notes}</small> : null}
         </div>

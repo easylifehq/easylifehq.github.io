@@ -2,6 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { EasyListProvider } from "@/features/easylist/EasyListContext";
 
 const links = [
+  { to: "/app/easylist/dashboard", label: "Dashboard" },
   { to: "/app/easylist/inbox", label: "Inbox" },
   { to: "/app/easylist/today", label: "Today" },
   { to: "/app/easylist/upcoming", label: "Upcoming" },
@@ -16,7 +17,7 @@ export function EasyListLayout() {
           <p className="eyebrow">EasyList</p>
           <h1>Your task system.</h1>
           <p>
-            Capture, sort, complete, and review the work that needs to get done.
+            Capture, sort, complete, and plan the work that needs to get done.
           </p>
         </header>
 

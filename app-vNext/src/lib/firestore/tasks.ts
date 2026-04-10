@@ -1,5 +1,7 @@
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -24,6 +26,7 @@ export type TaskRecord = {
   recurring: boolean;
   completed: boolean;
   completedAt: Date | null;
+  linkedCalendarBlockIds: string[];
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -59,6 +62,9 @@ export function normalizeTask(snapshot: QueryDocumentSnapshot<DocumentData>) {
     recurring: Boolean(data.recurring),
     completed: Boolean(data.completed),
     completedAt: toDate(data.completedAt),
+    linkedCalendarBlockIds: Array.isArray(data.linkedCalendarBlockIds)
+      ? data.linkedCalendarBlockIds.filter((value: unknown): value is string => typeof value === "string")
+      : [],
     createdAt: toDate(data.createdAt),
     updatedAt: toDate(data.updatedAt),
   } satisfies TaskRecord;
@@ -103,6 +109,7 @@ export async function createTask(userId: string, draft: TaskDraft) {
     recurring: Boolean(draft.recurring),
     completed: false,
     completedAt: null,
+    linkedCalendarBlockIds: [],
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -140,4 +147,18 @@ export async function reopenTask(userId: string, taskId: string) {
 
 export async function removeTask(userId: string, taskId: string) {
   await deleteDoc(doc(db, "users", userId, "tasks", taskId));
+}
+
+export async function addLinkedCalendarBlock(userId: string, taskId: string, blockId: string) {
+  await updateDoc(doc(db, "users", userId, "tasks", taskId), {
+    linkedCalendarBlockIds: arrayUnion(blockId),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function removeLinkedCalendarBlock(userId: string, taskId: string, blockId: string) {
+  await updateDoc(doc(db, "users", userId, "tasks", taskId), {
+    linkedCalendarBlockIds: arrayRemove(blockId),
+    updatedAt: serverTimestamp(),
+  });
 }

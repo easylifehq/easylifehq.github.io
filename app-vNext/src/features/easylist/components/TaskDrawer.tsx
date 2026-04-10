@@ -1,5 +1,13 @@
 import { useEffect, useState, type FormEvent } from "react";
+import type { PlanningState } from "@/lib/firestore/calendarTaskBlocks";
 import type { TaskDraft, TaskRecord } from "@/lib/firestore/tasks";
+import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
+import {
+  addMinutes,
+  combineDateAndTime,
+  toDateInputValue,
+  toTimeInputValue,
+} from "@/features/easycalendar/lib/calendarUtils";
 import {
   getEmptyTaskDraft,
   getPriorityMeta,
@@ -25,12 +33,29 @@ export function TaskDrawer({
   onComplete,
   onReopen,
 }: TaskDrawerProps) {
+  const { scheduleTask } = useEasyCalendar();
   const [draft, setDraft] = useState<TaskDraft>(getEmptyTaskDraft());
   const [isSaving, setIsSaving] = useState(false);
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [scheduleTime, setScheduleTime] = useState("09:00");
+  const [scheduleDuration, setScheduleDuration] = useState("30");
+  const [planningState, setPlanningState] = useState<PlanningState>("scheduled");
+  const [scheduleMessage, setScheduleMessage] = useState("");
+  const [isScheduling, setIsScheduling] = useState(false);
 
   useEffect(() => {
     if (task) {
       setDraft(taskToDraft(task));
+
+      const baseDate = task.dueDate ?? new Date();
+      const suggestedTime = new Date(baseDate);
+      suggestedTime.setHours(9, 0, 0, 0);
+
+      setScheduleDate(toDateInputValue(baseDate));
+      setScheduleTime(toTimeInputValue(suggestedTime));
+      setScheduleDuration(String(task.estimatedLength ?? 30));
+      setPlanningState(task.linkedCalendarBlockIds.length ? "accepted" : "scheduled");
+      setScheduleMessage("");
     }
   }, [task]);
 
@@ -53,6 +78,32 @@ export function TaskDrawer({
       onClose();
     } finally {
       setIsSaving(false);
+    }
+  }
+
+  async function handleSchedule() {
+    if (task.completed) return;
+
+    const startAt = combineDateAndTime(scheduleDate, scheduleTime);
+    const durationMinutes = Math.max(5, Number(scheduleDuration) || 30);
+    const endAt = addMinutes(startAt, durationMinutes);
+
+    if (!startAt || !endAt) {
+      setScheduleMessage("Pick a day and time before sending this to EasyCalendar.");
+      return;
+    }
+
+    setIsScheduling(true);
+    try {
+      await scheduleTask(task, {
+        startAt,
+        endAt,
+        planningState,
+        userAdjusted: true,
+      });
+      setScheduleMessage("Sent to EasyCalendar.");
+    } finally {
+      setIsScheduling(false);
     }
   }
 
@@ -168,6 +219,77 @@ export function TaskDrawer({
             </div>
           </div>
         </form>
+
+        <section className="drawer-link-card">
+          <div className="panel-header">
+            <p className="eyebrow">EasyCalendar</p>
+            <h2>Send this task to your calendar</h2>
+            <p>
+              Choose when you want to work on it. This creates a flexible linked
+              task block in EasyCalendar.
+            </p>
+          </div>
+
+          <div className="task-composer-grid">
+            <label className="field-stack">
+              <span>Day</span>
+              <input
+                type="date"
+                value={scheduleDate}
+                onChange={(event) => setScheduleDate(event.target.value)}
+              />
+            </label>
+
+            <label className="field-stack">
+              <span>Start time</span>
+              <input
+                type="time"
+                value={scheduleTime}
+                onChange={(event) => setScheduleTime(event.target.value)}
+              />
+            </label>
+
+            <label className="field-stack">
+              <span>Duration</span>
+              <input
+                type="number"
+                min="5"
+                step="5"
+                value={scheduleDuration}
+                onChange={(event) => setScheduleDuration(event.target.value)}
+              />
+            </label>
+
+            <label className="field-stack">
+              <span>State</span>
+              <select
+                value={planningState}
+                onChange={(event) => setPlanningState(event.target.value as PlanningState)}
+              >
+                <option value="suggested">Suggested</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="accepted">Accepted</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="drawer-link-footer">
+            <p className="helper-copy">
+              {task.linkedCalendarBlockIds.length
+                ? `Already linked ${task.linkedCalendarBlockIds.length} time(s).`
+                : "Not on the calendar yet."}
+            </p>
+            {scheduleMessage ? <p className="helper-copy">{scheduleMessage}</p> : null}
+            <button
+              type="button"
+              className="primary-button"
+              onClick={() => void handleSchedule()}
+              disabled={isScheduling || task.completed}
+            >
+              {isScheduling ? "Sending..." : "Send to EasyCalendar"}
+            </button>
+          </div>
+        </section>
       </aside>
     </>
   );
