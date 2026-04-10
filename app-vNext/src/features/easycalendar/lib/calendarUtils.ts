@@ -1,5 +1,14 @@
 import type { CalendarEventRecord } from "@/lib/firestore/calendarEvents";
 import type { CalendarTaskBlockRecord } from "@/lib/firestore/calendarTaskBlocks";
+import type { TaskRecord } from "@/lib/firestore/tasks";
+import {
+  getPriorityMeta,
+  isDueToday,
+  isDueTomorrow,
+  isOverdue,
+  sortActiveTasks,
+  startOfDay as startOfTaskDay,
+} from "@/features/easylist/lib/taskUtils";
 import {
   DEFAULT_CATEGORIES,
   type CategoryRecord,
@@ -17,6 +26,23 @@ export type CalendarDayItem = {
   allDay: boolean;
   isFlexible: boolean;
   isCompleted: boolean;
+};
+
+export type OpenTimeWindow = {
+  startAt: Date;
+  endAt: Date;
+  minutes: number;
+};
+
+export type PlannedTaskSuggestion = {
+  task: TaskRecord;
+  startAt: Date;
+  endAt: Date;
+};
+
+type RankedTaskCandidate = {
+  task: TaskRecord;
+  score: number;
 };
 
 export function startOfDay(date: Date) {
@@ -133,6 +159,10 @@ export function addMinutes(date: Date | null, minutes: number) {
   return new Date(date.getTime() + minutes * 60000);
 }
 
+function maxDate(left: Date, right: Date) {
+  return left.getTime() >= right.getTime() ? left : right;
+}
+
 export function getDurationMinutes(startAt: Date | null, endAt: Date | null) {
   if (!startAt || !endAt) return 0;
 
@@ -228,4 +258,180 @@ export function getScheduledMinutesForDay(
     );
 
   return fixedMinutes + taskMinutes;
+}
+
+export function getOpenTimeWindowsForDay(
+  date: Date,
+  events: CalendarEventRecord[],
+  taskBlocks: CalendarTaskBlockRecord[],
+  dayStartHour = 8,
+  dayEndHour = 20
+) {
+  const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate(), dayStartHour, 0, 0, 0);
+  const dayEnd = new Date(date.getFullYear(), date.getMonth(), date.getDate(), dayEndHour, 0, 0, 0);
+
+  const occupied = [
+    ...events
+      .filter((event) => isSameDay(event.startAt, date) && event.startAt && event.endAt)
+      .map((event) => ({ startAt: event.startAt as Date, endAt: event.endAt as Date })),
+    ...taskBlocks
+      .filter(
+        (taskBlock) =>
+          isSameDay(taskBlock.startAt, date) &&
+          taskBlock.startAt &&
+          taskBlock.endAt &&
+          !taskBlock.completed
+      )
+      .map((taskBlock) => ({ startAt: taskBlock.startAt as Date, endAt: taskBlock.endAt as Date })),
+  ].sort((left, right) => left.startAt.getTime() - right.startAt.getTime());
+
+  const windows: OpenTimeWindow[] = [];
+  let cursor = dayStart;
+
+  occupied.forEach((entry) => {
+    if (entry.startAt > cursor) {
+      const minutes = getDurationMinutes(cursor, entry.startAt);
+      if (minutes >= 15) {
+        windows.push({
+          startAt: new Date(cursor),
+          endAt: new Date(entry.startAt),
+          minutes,
+        });
+      }
+    }
+
+    cursor = maxDate(cursor, entry.endAt);
+  });
+
+  if (cursor < dayEnd) {
+    const minutes = getDurationMinutes(cursor, dayEnd);
+    if (minutes >= 15) {
+      windows.push({
+        startAt: new Date(cursor),
+        endAt: new Date(dayEnd),
+        minutes,
+      });
+    }
+  }
+
+  return windows;
+}
+
+export function buildPlanMyDaySuggestions(
+  date: Date,
+  tasks: TaskRecord[],
+  events: CalendarEventRecord[],
+  taskBlocks: CalendarTaskBlockRecord[]
+) {
+  const activeLinkedBlockIds = new Set(
+    taskBlocks.filter((taskBlock) => !taskBlock.completed).map((taskBlock) => taskBlock.id)
+  );
+
+  const candidateTasks = sortTasksForPlanning(
+    tasks.filter(
+      (task) =>
+        !task.completed &&
+        !task.linkedCalendarBlockIds.some((blockId) => activeLinkedBlockIds.has(blockId))
+    ),
+    date
+  );
+
+  const windows = getOpenTimeWindowsForDay(date, events, taskBlocks).map((window) => ({
+    ...window,
+    startAt: new Date(window.startAt),
+    endAt: new Date(window.endAt),
+  }));
+
+  const suggestions: PlannedTaskSuggestion[] = [];
+
+  candidateTasks.forEach((task) => {
+    if (suggestions.length >= 5) return;
+
+    const durationMinutes = Math.max(15, task.estimatedLength || 30);
+    const fittingWindow = [...windows]
+      .filter((window) => window.minutes >= durationMinutes)
+      .sort((left, right) => {
+        const leftWaste = left.minutes - durationMinutes;
+        const rightWaste = right.minutes - durationMinutes;
+        return leftWaste - rightWaste;
+      })[0];
+
+    if (!fittingWindow) return;
+
+    const startAt = new Date(fittingWindow.startAt);
+    const endAt = addMinutes(startAt, durationMinutes);
+
+    if (!endAt) return;
+
+    suggestions.push({
+      task,
+      startAt,
+      endAt,
+    });
+
+    fittingWindow.startAt = new Date(endAt);
+    fittingWindow.minutes = getDurationMinutes(fittingWindow.startAt, fittingWindow.endAt);
+  });
+
+  return {
+    windows,
+    suggestions,
+  };
+}
+
+function sortTasksForPlanning(tasks: TaskRecord[], date: Date) {
+  return tasks
+    .map((task) => ({
+      task,
+      score: getPlanningScore(task, date),
+    }))
+    .sort((left, right) => {
+      if (left.score !== right.score) {
+        return right.score - left.score;
+      }
+
+      const orderedTasks = sortActiveTasks([left.task, right.task]);
+      return orderedTasks[0]?.id === left.task.id ? -1 : 1;
+    })
+    .map((entry) => entry.task);
+}
+
+function getPlanningScore(task: TaskRecord, date: Date) {
+  let score = 0;
+
+  if (isOverdue(task)) {
+    score += 500;
+  } else if (isDueToday(task)) {
+    score += 320;
+  } else if (isDueTomorrow(task)) {
+    score += 220;
+  } else if (task.dueDate) {
+    const daysUntilDue = Math.max(
+      0,
+      Math.round(
+        (startOfTaskDay(task.dueDate).getTime() - startOfTaskDay(date).getTime()) / 86400000
+      )
+    );
+    score += Math.max(40, 160 - daysUntilDue * 18);
+  } else {
+    score -= 30;
+  }
+
+  const priorityRank = getPriorityMeta(task.priorityTier, task.priorityLabel).rank;
+  score += (6 - priorityRank) * 28;
+
+  const durationMinutes = Math.max(15, task.estimatedLength || 30);
+  if (durationMinutes <= 30) {
+    score += 36;
+  } else if (durationMinutes <= 60) {
+    score += 24;
+  } else if (durationMinutes <= 90) {
+    score += 12;
+  }
+
+  if (!task.dueDate && !task.estimatedLength) {
+    score -= 12;
+  }
+
+  return score;
 }

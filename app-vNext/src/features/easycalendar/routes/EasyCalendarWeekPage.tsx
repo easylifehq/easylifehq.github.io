@@ -1,6 +1,7 @@
-import type { CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { PageSection } from "@/components/ui/PageSection";
 import { CalendarComposer } from "@/features/easycalendar/components/CalendarComposer";
+import { CalendarTaskBlockDrawer } from "@/features/easycalendar/components/CalendarTaskBlockDrawer";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
   addDays,
@@ -12,13 +13,25 @@ import {
 } from "@/features/easycalendar/lib/calendarUtils";
 
 export function EasyCalendarWeekPage() {
-  const { categories, events, taskBlocks, isLoading, error } = useEasyCalendar();
+  const { categories, events, taskBlocks, tasks, isLoading, error } = useEasyCalendar();
+  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
   const weekStart = startOfWeek(new Date());
   const days = Array.from({ length: 7 }, (_, index) => addDays(weekStart, index));
   const totalMinutes = days.reduce(
     (sum, day) => sum + getScheduledMinutesForDay(day, events, taskBlocks),
     0
+  );
+  const selectedBlock = useMemo(
+    () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
+    [selectedBlockId, taskBlocks]
+  );
+  const selectedTask = useMemo(
+    () =>
+      selectedBlock
+        ? tasks.find((task) => task.id === selectedBlock.taskId) || null
+        : null,
+    [selectedBlock, tasks]
   );
 
   return (
@@ -79,19 +92,26 @@ export function EasyCalendarWeekPage() {
                 <div className="calendar-item-stack">
                   {items.length > 0 ? (
                     items.map((item) => (
-                      <article
+                      <button
                         key={`${item.kind}-${item.id}`}
+                        type="button"
+                        onClick={() => {
+                          if (item.kind === "task-block") {
+                            setSelectedBlockId(item.id);
+                          }
+                        }}
                         className={`calendar-block-vnext${item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
                         style={
                           {
                             "--calendar-block-color": item.color,
                           } as CSSProperties
                         }
+                        disabled={item.kind !== "task-block"}
                       >
                         <strong>{item.title}</strong>
                         <span>{item.helper}</span>
                         <small>{item.badge}</small>
-                      </article>
+                      </button>
                     ))
                   ) : (
                     <div className="empty-card-vnext planner-empty-card">
@@ -125,6 +145,13 @@ export function EasyCalendarWeekPage() {
           ))}
         </div>
       </PageSection>
+
+      <CalendarTaskBlockDrawer
+        block={selectedBlock}
+        task={selectedTask}
+        isOpen={Boolean(selectedBlock)}
+        onClose={() => setSelectedBlockId(null)}
+      />
     </>
   );
 }

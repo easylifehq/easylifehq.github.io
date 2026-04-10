@@ -17,6 +17,8 @@ import {
 } from "@/lib/firestore/calendarEvents";
 import {
   createCalendarTaskBlock,
+  markCalendarTaskBlocksActive,
+  markCalendarTaskBlocksComplete,
   removeCalendarTaskBlock,
   subscribeToCalendarTaskBlocks,
   updateCalendarTaskBlock,
@@ -33,7 +35,9 @@ import {
 } from "@/lib/firestore/categories";
 import {
   addLinkedCalendarBlock,
+  completeTask,
   removeLinkedCalendarBlock,
+  reopenTask,
   subscribeToTasks,
   type TaskRecord,
 } from "@/lib/firestore/tasks";
@@ -58,6 +62,8 @@ type EasyCalendarContextValue = {
     task: TaskRecord,
     draft: Pick<CalendarTaskBlockDraft, "startAt" | "endAt" | "planningState" | "userAdjusted">
   ) => Promise<void>;
+  completeTaskFromCalendar: (taskId: string) => Promise<void>;
+  reopenTaskFromCalendar: (taskId: string) => Promise<void>;
 };
 
 const EasyCalendarContext = createContext<EasyCalendarContextValue | undefined>(
@@ -220,6 +226,22 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         });
 
         await addLinkedCalendarBlock(user.uid, task.id, blockId);
+      },
+      completeTaskFromCalendar: async (taskId: string) => {
+        if (!user) return;
+        const matchingTask = tasks.find((task) => task.id === taskId);
+        await completeTask(user.uid, taskId);
+        if (matchingTask?.linkedCalendarBlockIds.length) {
+          await markCalendarTaskBlocksComplete(user.uid, matchingTask.linkedCalendarBlockIds);
+        }
+      },
+      reopenTaskFromCalendar: async (taskId: string) => {
+        if (!user) return;
+        const matchingTask = tasks.find((task) => task.id === taskId);
+        await reopenTask(user.uid, taskId);
+        if (matchingTask?.linkedCalendarBlockIds.length) {
+          await markCalendarTaskBlocksActive(user.uid, matchingTask.linkedCalendarBlockIds);
+        }
       },
     }),
     [

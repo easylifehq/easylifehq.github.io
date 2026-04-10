@@ -100,8 +100,8 @@ export function sortActiveTasks(tasks: TaskRecord[]) {
     const bDue = getTaskDay(b).getTime();
     if (aDue !== bDue) return aDue - bDue;
 
-    return getPriorityMeta(b.priorityTier, b.priorityLabel).rank -
-      getPriorityMeta(a.priorityTier, a.priorityLabel).rank;
+    return getPriorityMeta(a.priorityTier, a.priorityLabel).rank -
+      getPriorityMeta(b.priorityTier, b.priorityLabel).rank;
   });
 }
 
