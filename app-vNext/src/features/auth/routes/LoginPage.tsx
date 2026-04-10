@@ -60,7 +60,7 @@ export function LoginPage() {
   }
 
   return (
-    <main className="auth-page-vnext">
+    <main className="auth-page-vnext auth-page-shell">
       <section className="auth-card-vnext">
         <p className="eyebrow">Easy System</p>
         <h1>{title}</h1>

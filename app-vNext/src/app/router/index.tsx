@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthenticatedLayout } from "@/app/layouts/AuthenticatedLayout";
+import { MarketingLayout } from "@/app/layouts/MarketingLayout";
 import { AuthenticatedRoute } from "@/features/auth/AuthenticatedRoute";
 import { EasyCalendarLayout } from "@/features/easycalendar/layouts/EasyCalendarLayout";
 import { LoginPage } from "@/features/auth/routes/LoginPage";
@@ -12,13 +13,16 @@ import { EasyListInboxPage } from "@/features/easylist/routes/EasyListInboxPage"
 import { EasyListTodayPage } from "@/features/easylist/routes/EasyListTodayPage";
 import { EasyListUpcomingPage } from "@/features/easylist/routes/EasyListUpcomingPage";
 import { HQPage } from "@/features/hq/routes/HQPage";
+import { MarketingLandingPage } from "@/features/marketing/routes/MarketingLandingPage";
 import { SettingsPage } from "@/features/settings/routes/SettingsPage";
 
 export function AppRouter() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/app/hq" replace />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route element={<MarketingLayout />}>
+        <Route path="/" element={<MarketingLandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Route>
 
       <Route element={<AuthenticatedRoute />}>
         <Route path="/app" element={<AuthenticatedLayout />}>

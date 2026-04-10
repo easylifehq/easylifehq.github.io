@@ -53,6 +53,11 @@ a {
   grid-template-columns: 280px minmax(0, 1fr);
 }
 
+.app-shell-header {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+}
+
 .app-sidebar {
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -93,6 +98,179 @@ a {
 .brand-title {
   margin: 0.15rem 0 0;
   font-size: 1.15rem;
+}
+
+.site-brand,
+.site-header-inner,
+.site-header-actions,
+.app-header-main,
+.app-header-actions {
+  display: flex;
+  align-items: center;
+}
+
+.site-brand {
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.site-brand-title {
+  display: block;
+  font-size: 1rem;
+  color: #1f1a16;
+}
+
+.site-header,
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(18px);
+}
+
+.site-header {
+  padding: 0.9rem 1rem 0;
+}
+
+.site-header-inner,
+.app-header-main {
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-header-inner,
+.app-header {
+  background: rgba(255, 252, 247, 0.9);
+  border: 1px solid rgba(99, 76, 58, 0.12);
+  box-shadow: 0 12px 30px rgba(65, 43, 28, 0.08);
+}
+
+.site-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.85rem 1rem;
+  border-radius: 24px;
+}
+
+.site-nav-links,
+.app-top-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.site-nav-links {
+  flex-wrap: wrap;
+}
+
+.site-nav-link,
+.app-top-link {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 0.85rem;
+  border-radius: 999px;
+  color: #64584f;
+  font-weight: 700;
+}
+
+.site-nav-link:hover,
+.app-top-link:hover,
+.app-top-link.active {
+  background: #fff4eb;
+  color: #241d19;
+}
+
+.site-header-actions,
+.app-header-actions {
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.button-primary,
+.button-secondary {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  font-weight: 800;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.button-primary {
+  background: #c7723f;
+  color: white;
+  border: 1px solid #c7723f;
+}
+
+.button-secondary {
+  background: #fffdf9;
+  color: #5e5148;
+  border: 1px solid rgba(99, 76, 58, 0.12);
+}
+
+.products-menu {
+  position: relative;
+}
+
+.menu-trigger-button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid rgba(99, 76, 58, 0.12);
+  background: #fffdf9;
+  color: #5d5148;
+  font-weight: 700;
+}
+
+.menu-panel {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  right: 0;
+  width: min(320px, calc(100vw - 2rem));
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.6rem;
+  border-radius: 20px;
+  border: 1px solid rgba(99, 76, 58, 0.12);
+  background: rgba(255, 252, 247, 0.98);
+  box-shadow: 0 22px 44px rgba(65, 43, 28, 0.14);
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.menu-panel.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.menu-link-card {
+  display: grid;
+  gap: 0.18rem;
+  padding: 0.8rem 0.85rem;
+  border-radius: 14px;
+}
+
+.menu-link-card:hover {
+  background: #fff6ee;
+}
+
+.menu-link-card strong {
+  display: block;
+}
+
+.menu-link-card span {
+  color: #6b5f57;
+  font-size: 0.92rem;
 }
 
 .sidebar-nav {
@@ -138,6 +316,102 @@ a {
 
 .app-content {
   padding: 1.5rem;
+}
+
+.app-content-shell {
+  padding-top: 1rem;
+}
+
+.marketing-shell {
+  min-height: 100vh;
+}
+
+.marketing-content {
+  padding: 6.1rem 1rem 2rem;
+}
+
+.marketing-page {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1.4rem;
+}
+
+.marketing-hero,
+.marketing-section {
+  background: rgba(255, 252, 247, 0.92);
+  border: 1px solid rgba(99, 76, 58, 0.12);
+  border-radius: 28px;
+  box-shadow: 0 18px 44px rgba(65, 43, 28, 0.08);
+}
+
+.marketing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.8fr);
+  gap: 1rem;
+  padding: 1.4rem;
+}
+
+.marketing-hero-copy,
+.marketing-hero-card,
+.marketing-highlights {
+  display: grid;
+  gap: 1rem;
+}
+
+.marketing-hero-copy h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 4.3rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.marketing-hero-copy p:not(.eyebrow),
+.marketing-card p,
+.marketing-hero-card p {
+  margin: 0;
+  color: #665b54;
+}
+
+.marketing-hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.marketing-hero-card {
+  align-content: space-between;
+  padding: 1.1rem;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top right, rgba(199, 114, 63, 0.18), transparent 30%),
+    #fff8f2;
+  border: 1px solid rgba(199, 114, 63, 0.12);
+}
+
+.marketing-hero-card h2,
+.marketing-card h3 {
+  margin: 0;
+}
+
+.marketing-section {
+  padding: 1.35rem;
+}
+
+.marketing-card-grid,
+.marketing-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.marketing-card {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(99, 76, 58, 0.12);
+  background: #fffdf9;
 }
 
 .page-wrap {
@@ -219,6 +493,10 @@ a {
   display: grid;
   place-items: center;
   padding: 1rem;
+}
+
+.auth-page-shell {
+  min-height: calc(100vh - 6rem);
 }
 
 .loading-card,
@@ -1038,6 +1316,31 @@ button.calendar-detail-card:disabled {
     grid-template-columns: 1fr;
   }
 
+  .site-header-inner,
+  .app-header-main {
+    align-items: flex-start;
+  }
+
+  .site-nav-links {
+    display: none;
+  }
+
+  .app-top-nav {
+    overflow-x: auto;
+    padding-bottom: 0.15rem;
+    scrollbar-width: none;
+  }
+
+  .app-top-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .marketing-hero,
+  .marketing-card-grid,
+  .marketing-highlights {
+    grid-template-columns: 1fr;
+  }
+
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
@@ -1084,6 +1387,38 @@ button.calendar-detail-card:disabled {
 }
 
 @media (max-width: 560px) {
+  .site-header {
+    padding-inline: 0.75rem;
+  }
+
+  .site-header-inner,
+  .app-header {
+    border-radius: 20px;
+  }
+
+  .site-header-inner,
+  .app-header-main {
+    gap: 0.75rem;
+  }
+
+  .site-header-actions,
+  .app-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .button-primary,
+  .button-secondary,
+  .menu-trigger-button {
+    min-height: 42px;
+    padding-inline: 0.85rem;
+  }
+
+  .marketing-content {
+    padding-top: 5.8rem;
+    padding-inline: 0.75rem;
+  }
+
   .planner-grid-vnext.week-view,
   .planner-grid-vnext.two-week-view,
   .planner-grid-vnext.month-view {
