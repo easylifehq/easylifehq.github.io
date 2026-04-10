@@ -1,0 +1,401 @@
+.app-shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto minmax(140px, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.2rem;
+  background: rgba(245, 239, 232, 0.88);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+}
+
+.topbar-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.topbar-center {
+  justify-self: center;
+}
+
+.brand-dropdown {
+  position: relative;
+}
+
+.brand-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c7723f 0%, #a38bd7 100%);
+  box-shadow: 0 0 0 4px rgba(199, 114, 63, 0.1);
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.brand-kicker {
+  font-size: 0.63rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+}
+
+.brand-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+.brand-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  left: 0;
+  min-width: 220px;
+  padding: 0.45rem;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--paper-strong);
+  box-shadow: var(--shadow-card);
+  display: grid;
+  gap: 0.2rem;
+}
+
+.brand-dropdown-menu[hidden] {
+  display: none !important;
+}
+
+.brand-dropdown-link {
+  padding: 0.8rem 0.9rem;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.brand-dropdown-link:hover {
+  background: #f8f2ec;
+}
+
+.status-pill {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.workspace {
+  width: min(1400px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.1rem 0 2rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.sidebar,
+.editor-shell {
+  background: rgba(255, 253, 249, 0.84);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.sidebar {
+  padding: 1rem;
+  display: grid;
+  gap: 0.9rem;
+  order: 2;
+}
+
+.sidebar-header {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+.sidebar-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: -0.04em;
+}
+
+.sidebar-meta {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.notes-list {
+  display: grid;
+  gap: 0.7rem;
+  max-height: 260px;
+  overflow: auto;
+  padding-right: 0.1rem;
+}
+
+.note-list-item {
+  width: 100%;
+  text-align: left;
+  padding: 0.95rem;
+  border-radius: 18px;
+  border: 1px solid transparent;
+  background: #fff;
+}
+
+.note-list-item.active {
+  border-color: var(--line-strong);
+  background: #fff8f2;
+}
+
+.note-list-item h2 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: -0.03em;
+}
+
+.note-list-item p {
+  margin: 0.4rem 0 0;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.note-list-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.55rem;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.pin-badge {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.editor-shell {
+  padding: 1rem;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.9rem;
+  min-height: 56vh;
+  order: 1;
+}
+
+.editor-header {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.note-title-input {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-size: clamp(1.7rem, 8vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+.note-title-input:focus {
+  box-shadow: none;
+}
+
+.editor-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.toolbar-action,
+#turnIntoTaskBtn {
+  width: 100%;
+}
+
+.editor-meta-row {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.pin-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.pin-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.note-editor {
+  min-height: 52vh;
+  padding: 1.15rem 1rem;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--paper-strong);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  font-family: var(--font-doc);
+  font-size: 1.02rem;
+  line-height: 1.75;
+  outline: none;
+  overflow: auto;
+}
+
+.note-editor:empty::before {
+  content: attr(data-placeholder);
+  color: #b4a79c;
+}
+
+.note-editor h1,
+.note-editor h2,
+.note-editor h3 {
+  font-family: var(--font-ui);
+  line-height: 1.15;
+  margin: 1.1rem 0 0.7rem;
+}
+
+.note-editor h1 {
+  font-size: 1.7rem;
+}
+
+.note-editor h2 {
+  font-size: 1.32rem;
+}
+
+.note-editor p,
+.note-editor ul {
+  margin: 0 0 0.9rem;
+}
+
+.helper-row {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.helper-copy {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+@media (min-width: 980px) {
+  .workspace {
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 1.35rem;
+  }
+
+  .sidebar {
+    order: 1;
+    align-content: start;
+  }
+
+  .editor-shell {
+    order: 2;
+    padding: 1.2rem;
+    min-height: calc(100vh - 120px);
+  }
+
+  .notes-list {
+    max-height: calc(100vh - 250px);
+  }
+
+  .editor-actions {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .editor-actions > * {
+    width: auto;
+  }
+
+  .editor-meta-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .tags-input {
+    max-width: 420px;
+  }
+
+  .note-editor {
+    min-height: 520px;
+    padding: 2.25rem 2.4rem;
+    font-size: 1.08rem;
+  }
+
+  .helper-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    grid-template-columns: 1fr;
+    padding: 0.8rem;
+  }
+
+  .topbar-center,
+  .topbar-right {
+    justify-self: stretch;
+  }
+
+  .topbar-right > * {
+    width: 100%;
+  }
+
+  .workspace {
+    width: min(1400px, calc(100% - 1rem));
+    padding-top: 0.8rem;
+  }
+
+  .status-pill {
+    justify-content: center;
+  }
+}

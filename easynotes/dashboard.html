@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyNotes | Dashboard</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="brand-dropdown">
+          <button
+            type="button"
+            class="brand-menu-trigger"
+            id="brandMenuBtn"
+            aria-expanded="false"
+            aria-controls="brandDropdownMenu"
+          >
+            <span class="brand-mark">
+              <span class="brand-dot"></span>
+              <span class="brand-copy">
+                <span class="brand-kicker">Easy Life</span>
+                <span class="brand-title">EasyNotes</span>
+              </span>
+            </span>
+            <span class="brand-caret">v</span>
+          </button>
+
+          <div class="brand-dropdown-menu" id="brandDropdownMenu" hidden>
+            <a href="../hub.html" class="brand-dropdown-link">Go to Hub</a>
+            <a href="../easylist/dashboard.html" class="brand-dropdown-link">Open EasyList</a>
+            <a href="../easypipeline/dashboard.html" class="brand-dropdown-link">Open EasyPipeline</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="topbar-center">
+        <div class="status-pill" id="saveStatus">Everything saved</div>
+      </div>
+
+      <div class="topbar-right">
+        <button type="button" class="ghost-btn" id="logoutBtn">Log Out</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div>
+            <p class="eyebrow">Library</p>
+            <h1>Easy Notes</h1>
+          </div>
+          <button type="button" class="primary-btn" id="newNoteBtn">New Note</button>
+        </div>
+
+        <label class="search-shell">
+          <span class="sr-only">Search notes</span>
+          <input type="search" id="searchInput" placeholder="Search notes" />
+        </label>
+
+        <div class="sidebar-meta">
+          <span id="noteCountLabel">0 notes</span>
+        </div>
+
+        <div class="notes-list" id="notesList"></div>
+      </aside>
+
+      <section class="editor-shell">
+        <div class="editor-header">
+          <input type="text" id="noteTitleInput" class="note-title-input" placeholder="Untitled note" />
+
+          <div class="editor-actions">
+            <button type="button" class="ghost-btn toolbar-action" data-command="h1">Heading</button>
+            <button type="button" class="ghost-btn toolbar-action" data-command="h2">Subheading</button>
+            <button type="button" class="ghost-btn toolbar-action" data-command="ul">Bullets</button>
+            <button type="button" class="ghost-btn toolbar-action" data-command="check">Checklist</button>
+            <button type="button" class="ghost-btn toolbar-action" id="clearFormatBtn">Plain</button>
+            <button type="button" class="primary-btn" id="turnIntoTaskBtn">Turn Into Task</button>
+          </div>
+        </div>
+
+        <div class="editor-meta-row">
+          <input type="text" id="noteTagsInput" class="tags-input" placeholder="Tags: meeting, class, idea" />
+          <label class="pin-toggle">
+            <input type="checkbox" id="notePinnedInput" />
+            <span>Pin note</span>
+          </label>
+        </div>
+
+        <div
+          id="noteEditor"
+          class="note-editor"
+          contenteditable="true"
+          spellcheck="true"
+          data-placeholder="Start writing. Brain dumps, meeting notes, rough drafts, whatever you need to get out of your head."
+        ></div>
+
+        <div class="helper-row">
+          <p class="helper-copy">
+            Select a few lines and use <strong>Turn Into Task</strong> to send them into EasyList.
+          </p>
+          <button type="button" class="danger-btn" id="deleteNoteBtn">Delete Note</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

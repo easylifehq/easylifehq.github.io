@@ -1,0 +1,121 @@
+:root {
+  --bg: #f5efe8;
+  --paper: #fffdf9;
+  --paper-strong: #ffffff;
+  --ink: #231c18;
+  --ink-soft: #74675d;
+  --line: #e7ddd2;
+  --line-strong: #dbcab8;
+  --accent: #c7723f;
+  --shadow-soft: 0 12px 40px rgba(79, 54, 38, 0.08);
+  --shadow-card: 0 20px 50px rgba(79, 54, 38, 0.1);
+  --radius-lg: 24px;
+  --font-ui: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-doc: Georgia, "Times New Roman", serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(199, 114, 63, 0.08), transparent 24%),
+    linear-gradient(180deg, #f8f2eb 0%, var(--bg) 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0.85rem 0.95rem;
+  outline: none;
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--line-strong);
+  box-shadow: 0 0 0 4px rgba(199, 114, 63, 0.08);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
+
+.primary-btn,
+.ghost-btn,
+.danger-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.78rem 1rem;
+  border-radius: 14px;
+  font-weight: 700;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.16s ease;
+}
+
+.primary-btn:hover,
+.ghost-btn:hover,
+.danger-btn:hover {
+  transform: translateY(-1px);
+}
+
+.primary-btn {
+  color: white;
+  background: var(--accent);
+  box-shadow: var(--shadow-soft);
+}
+
+.ghost-btn {
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.danger-btn {
+  color: #9f4139;
+  background: #fff4f2;
+  border: 1px solid #f1d5d1;
+}
