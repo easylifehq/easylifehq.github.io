@@ -1,4 +1,5 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { AppWorkspaceHeader } from "@/components/navigation/AppWorkspaceHeader";
 import { EasyListProvider } from "@/features/easylist/EasyListContext";
 
 const links = [
@@ -13,25 +14,13 @@ export function EasyListLayout() {
   return (
     <EasyListProvider>
       <main className="page-wrap">
-        <header className="page-hero-vnext">
-          <p className="eyebrow">EasyList</p>
-          <h1>Your task system.</h1>
-          <p>
-            Capture, sort, complete, and plan the work that needs to get done.
-          </p>
-        </header>
-
-        <nav className="subnav" aria-label="EasyList navigation">
-          {links.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) => `subnav-link${isActive ? " active" : ""}`}
-            >
-              {link.label}
-            </NavLink>
-          ))}
-        </nav>
+        <AppWorkspaceHeader
+          appLabel="EasyList"
+          title="Your task system."
+          description="Capture, sort, complete, and plan the work that needs to get done."
+          currentAppHref="/app/easylist/dashboard"
+          links={links}
+        />
 
         <Outlet />
       </main>

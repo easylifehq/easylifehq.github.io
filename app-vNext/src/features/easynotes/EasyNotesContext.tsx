@@ -38,6 +38,18 @@ function normalizeLinesToTasks(text: string) {
     .slice(0, 12);
 }
 
+function sortNotes(notes: NoteRecord[]) {
+  return [...notes].sort((a, b) => {
+    if (a.pinned !== b.pinned) {
+      return Number(b.pinned) - Number(a.pinned);
+    }
+
+    const aTime = a.updatedAt?.getTime() || a.createdAt?.getTime() || 0;
+    const bTime = b.updatedAt?.getTime() || b.createdAt?.getTime() || 0;
+    return bTime - aTime;
+  });
+}
+
 export function EasyNotesProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [notes, setNotes] = useState<NoteRecord[]>([]);
@@ -55,17 +67,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
     const unsubscribe = subscribeToNotes(
       user.uid,
       (nextNotes) => {
-        const sorted = [...nextNotes].sort((a, b) => {
-          if (a.pinned !== b.pinned) {
-            return Number(b.pinned) - Number(a.pinned);
-          }
-
-          const aTime = a.updatedAt?.getTime() || a.createdAt?.getTime() || 0;
-          const bTime = b.updatedAt?.getTime() || b.createdAt?.getTime() || 0;
-          return bTime - aTime;
-        });
-
-        setNotes(sorted);
+        setNotes(sortNotes(nextNotes));
         setIsLoading(false);
         setError("");
       },
@@ -80,7 +82,27 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
 
   async function addNoteForUser() {
     if (!user) return null;
-    return createNote(user.uid);
+    const noteId = await createNote(user.uid);
+    const optimisticNote: NoteRecord = {
+      id: noteId,
+      title: "",
+      tags: [],
+      pinned: false,
+      bodyHtml: "",
+      bodyText: "",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    setNotes((current) => {
+      if (current.some((note) => note.id === noteId)) {
+        return current;
+      }
+
+      return sortNotes([optimisticNote, ...current]);
+    });
+
+    return noteId;
   }
 
   async function saveNoteForUser(noteId: string, draft: NoteDraft) {
@@ -91,6 +113,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   async function deleteNoteForUser(noteId: string) {
     if (!user) return;
     await removeNote(user.uid, noteId);
+    setNotes((current) => current.filter((note) => note.id !== noteId));
   }
 
   async function createTaskDraftsFromNote(payload: { noteTitle: string; text: string }) {

@@ -22,12 +22,12 @@ function buildFallbackDraft(payload: {
     "Hi,",
     "",
     `I wanted to follow up regarding ${payload.role} at ${payload.company}.`,
-    payload.customGoal || "I’m still very interested and would love to stay in touch.",
+    payload.customGoal || "I'm still very interested and would love to stay in touch.",
     payload.notes ? `Relevant context: ${payload.notes}` : "",
     payload.extraContext || "",
     "",
     payload.tone === "confident"
-      ? "I’d be glad to continue the conversation whenever helpful."
+      ? "I'd be glad to continue the conversation whenever helpful."
       : payload.tone === "concise"
         ? "Thanks again for your time."
         : "Thanks so much for your time and consideration.",
@@ -88,7 +88,11 @@ export function EasyPipelineEmailPage() {
 
   return (
     <div className="dashboard-grid">
-      <PageSection eyebrow="Generator" title="Email drafts" description="This React migration uses a built-in draft generator so the workflow still works without the old cloud endpoint.">
+      <PageSection
+        eyebrow="Generator"
+        title="Email drafts"
+        description="This React migration uses a built-in draft generator so the workflow still works without the old cloud endpoint."
+      >
         <form className="task-composer" onSubmit={handleGenerate}>
           <label className="field-stack">
             <span>Application</span>
@@ -128,11 +132,17 @@ export function EasyPipelineEmailPage() {
             <span>Extra context</span>
             <textarea value={extraContext} onChange={(event) => setExtraContext(event.target.value)} rows={4} />
           </label>
-          <button type="submit" className="primary-button">Generate draft</button>
+          <button type="submit" className="primary-button">
+            Generate draft
+          </button>
         </form>
       </PageSection>
 
-      <PageSection eyebrow="Output" title="Draft preview" description="Tweak the subject and body before saving the draft back to Firestore.">
+      <PageSection
+        eyebrow="Output"
+        title="Draft preview"
+        description="Tweak the subject and body before saving the draft back to Firestore."
+      >
         <div className="task-composer">
           <label className="field-stack">
             <span>Subject</span>

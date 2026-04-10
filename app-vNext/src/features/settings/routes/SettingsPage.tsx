@@ -1,13 +1,16 @@
+import { AppWorkspaceHeader } from "@/components/navigation/AppWorkspaceHeader";
 import { PageSection } from "@/components/ui/PageSection";
 
 export function SettingsPage() {
   return (
     <main className="page-wrap">
-      <header className="page-hero-vnext">
-        <p className="eyebrow">Settings</p>
-        <h1>App defaults</h1>
-        <p>Shared user preferences for week start, default duration, and future category management.</p>
-      </header>
+      <AppWorkspaceHeader
+        appLabel="Settings"
+        title="Shared defaults."
+        description="Preferences that shape the system across Easy apps."
+        currentAppHref="/app/settings"
+        compact
+      />
 
       <PageSection
         eyebrow="Defaults"

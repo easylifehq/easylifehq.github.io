@@ -32,3 +32,20 @@
 [2m11:29:58 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easypipeline/components/ApplicationDrawer.tsx[22m
 [2m11:29:58 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easycontacts/components/ContactDrawer.tsx[22m
 [2m11:29:58 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easycontacts/components/ContactDrawer.tsx[22m
+[2m11:44:28 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easynotes/routes/EasyNotesEditorPage.tsx[22m
+[2m11:45:07 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easynotes/routes/EasyNotesEditorPage.tsx[22m
+[2m11:45:08 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easypipeline/routes/EasyPipelineEmailPage.tsx[22m
+[2m11:45:50 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easynotes/EasyNotesContext.tsx[22m
+[2m11:45:50 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easypipeline/routes/EasyPipelineEmailPage.tsx[22m
+[2m11:45:50 AM[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/features/easynotes/EasyNotesContext.tsx[22m Could not Fast Refresh ("useEasyNotes" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m11:45:50 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easynotes/layouts/EasyNotesLayout.tsx, /src/features/easynotes/routes/EasyNotesLibraryPage.tsx, /src/features/easynotes/routes/EasyNotesEditorPage.tsx[22m
+[2m11:55:43 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/navigation/AppHeader.tsx[22m
+[2m11:55:43 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easylist/layouts/EasyListLayout.tsx[22m
+[2m11:55:43 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easycalendar/layouts/EasyCalendarLayout.tsx[22m
+[2m11:55:43 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easypipeline/layouts/EasyPipelineLayout.tsx[22m
+[2m11:55:43 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easycontacts/layouts/EasyContactsLayout.tsx[22m
+[2m11:55:43 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easynotes/layouts/EasyNotesLayout.tsx[22m
+[2m11:55:43 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/hq/routes/HQPage.tsx[22m
+[2m11:55:43 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/settings/routes/SettingsPage.tsx[22m
+[2m11:55:43 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easycontacts/layouts/EasyContactsLayout.tsx[22m
+[2m11:56:00 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles/globals.css[22m

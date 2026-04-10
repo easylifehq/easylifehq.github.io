@@ -467,6 +467,29 @@ a {
   padding: 1.35rem;
 }
 
+.workspace-hero {
+  padding: 1.15rem 1.2rem;
+}
+
+.workspace-hero.compact {
+  padding: 1rem 1.05rem;
+}
+
+.workspace-hero-top,
+.workspace-hero-actions {
+  display: flex;
+  align-items: flex-start;
+}
+
+.workspace-hero-top {
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.workspace-hero-actions {
+  justify-content: flex-end;
+}
+
 .page-hero-vnext h1,
 .panel-header h2,
 .auth-card-vnext h1 {
@@ -1580,16 +1603,6 @@ button.calendar-detail-card:disabled {
     display: none;
   }
 
-  .app-top-nav {
-    overflow-x: auto;
-    padding-bottom: 0.15rem;
-    scrollbar-width: none;
-  }
-
-  .app-top-nav::-webkit-scrollbar {
-    display: none;
-  }
-
   .marketing-hero,
   .marketing-card-grid,
   .marketing-highlights,
@@ -1675,6 +1688,16 @@ button.calendar-detail-card:disabled {
   .app-header-actions {
     width: 100%;
     justify-content: space-between;
+  }
+
+  .workspace-hero-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .workspace-hero-actions .products-menu,
+  .workspace-hero-actions .menu-trigger-button {
+    width: 100%;
   }
 
   .button-primary,

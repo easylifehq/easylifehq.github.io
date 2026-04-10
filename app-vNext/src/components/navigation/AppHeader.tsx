@@ -1,55 +1,7 @@
-import { NavLink } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { ProductsMenu, type ProductsMenuItem } from "@/components/navigation/ProductsMenu";
+import { ProductsMenu } from "@/components/navigation/ProductsMenu";
+import { appProductItems } from "@/components/navigation/appProducts";
 import { auth } from "@/lib/firebase/client";
-
-const appLinks = [
-  { to: "/app/hq", label: "EasyHQ" },
-  { to: "/app/easylist/dashboard", label: "EasyList" },
-  { to: "/app/easynotes", label: "EasyNotes" },
-  { to: "/app/easycalendar/day", label: "EasyCalendar" },
-  { to: "/app/easypipeline/dashboard", label: "EasyPipeline" },
-  { to: "/app/easycontacts", label: "EasyContacts" },
-  { to: "/app/settings", label: "Settings" },
-];
-
-const productItems: ProductsMenuItem[] = [
-  {
-    href: "/app/hq",
-    label: "EasyHQ",
-    description: "See your day at a glance.",
-  },
-  {
-    href: "/app/easylist/dashboard",
-    label: "EasyList",
-    description: "Capture and organize what needs doing.",
-  },
-  {
-    href: "/app/easynotes",
-    label: "EasyNotes",
-    description: "Keep quick notes, brain dumps, and meeting thoughts.",
-  },
-  {
-    href: "/app/easycalendar/day",
-    label: "EasyCalendar",
-    description: "Plan your time and manage task blocks.",
-  },
-  {
-    href: "/app/easypipeline/dashboard",
-    label: "EasyPipeline",
-    description: "Track applications, follow-ups, and momentum.",
-  },
-  {
-    href: "/app/easycontacts",
-    label: "EasyContacts",
-    description: "Manage networking contacts and follow-up dates.",
-  },
-  {
-    href: "/app/settings",
-    label: "Settings",
-    description: "Adjust account and app preferences.",
-  },
-];
 
 export function AppHeader() {
   return (
@@ -59,12 +11,12 @@ export function AppHeader() {
           <span className="brand-badge">EL</span>
           <div>
             <p className="brand-kicker">Easy System</p>
-            <strong className="site-brand-title">App vNext</strong>
+            <strong className="site-brand-title">Connected apps, one account</strong>
           </div>
         </div>
 
         <div className="app-header-actions">
-          <ProductsMenu items={productItems} />
+          <ProductsMenu items={appProductItems} label="Apps" />
           <button
             type="button"
             className="button-secondary"
@@ -76,18 +28,6 @@ export function AppHeader() {
           </button>
         </div>
       </div>
-
-      <nav className="app-top-nav" aria-label="App">
-        {appLinks.map((link) => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            className={({ isActive }) => `app-top-link${isActive ? " active" : ""}`}
-          >
-            {link.label}
-          </NavLink>
-        ))}
-      </nav>
     </header>
   );
 }

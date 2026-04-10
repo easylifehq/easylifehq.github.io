@@ -48,6 +48,7 @@ export function EasyNotesEditorPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const saveTimeoutRef = useRef<number | null>(null);
+  const hydratedNoteIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!note) return;
@@ -58,10 +59,12 @@ export function EasyNotesEditorPage() {
     setPinned(note.pinned);
     setSaveMessage("Saved");
     setTaskMessage("");
+    hydratedNoteIdRef.current = note.id;
   }, [note]);
 
   useEffect(() => {
     if (!note) return;
+    if (hydratedNoteIdRef.current !== note.id) return;
 
     setSaveMessage("Unsaved changes");
 
@@ -93,7 +96,7 @@ export function EasyNotesEditorPage() {
         <div className="panel-header">
           <p className="eyebrow">EasyNotes</p>
           <h2>Note not found</h2>
-          <p>This note may have been deleted or hasn’t synced yet.</p>
+          <p>This note may have been deleted or hasn&apos;t synced yet.</p>
         </div>
         <Link to="/app/easynotes" className="button-secondary">
           Back to notes

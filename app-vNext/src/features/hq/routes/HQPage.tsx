@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { AppWorkspaceHeader } from "@/components/navigation/AppWorkspaceHeader";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
@@ -26,15 +27,14 @@ export function HQPage() {
 
   return (
     <main className="page-wrap">
-      <header className="page-hero-vnext">
-        <p className="eyebrow">EasyHQ</p>
-        <h1>Your control center.</h1>
-        <p>
-          {formatLongDate(today)}. {openWindows.length
-            ? `You still have ${formatDuration(openMinutes)} open today.`
-            : "Your day is fully spoken for right now."}
-        </p>
-      </header>
+      <AppWorkspaceHeader
+        appLabel="EasyHQ"
+        title="Your control center."
+        description={`${formatLongDate(today)}. ${openWindows.length
+          ? `You still have ${formatDuration(openMinutes)} open today.`
+          : "Your day is fully spoken for right now."}`}
+        currentAppHref="/app/hq"
+      />
 
       {error ? <p className="error-copy">{error}</p> : null}
 

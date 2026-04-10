@@ -1,15 +1,18 @@
 import { Outlet } from "react-router-dom";
+import { AppWorkspaceHeader } from "@/components/navigation/AppWorkspaceHeader";
 import { EasyContactsProvider } from "@/features/easycontacts/EasyContactsContext";
 
 export function EasyContactsLayout() {
   return (
     <EasyContactsProvider>
       <main className="page-wrap">
-        <header className="page-hero-vnext">
-          <p className="eyebrow">EasyContacts</p>
-          <h1>Your relationship layer.</h1>
-          <p>Keep networking contacts, follow-up dates, and opportunity context in one shared place.</p>
-        </header>
+        <AppWorkspaceHeader
+          appLabel="EasyContacts"
+          title="Your relationship layer."
+          description="Keep networking contacts, follow-up dates, and opportunity context in one shared place."
+          currentAppHref="/app/easycontacts"
+          compact
+        />
         <Outlet />
       </main>
     </EasyContactsProvider>
