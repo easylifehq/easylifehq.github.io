@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
-import { AppWorkspaceHeader } from "@/components/navigation/AppWorkspaceHeader";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
   buildPlanMyDaySuggestions,
   formatDuration,
-  formatLongDate,
   formatTimeLabel,
   getOpenTimeWindowsForDay,
   startOfDay,
@@ -29,15 +27,6 @@ export function HQPage() {
 
   return (
     <main className="page-wrap app-theme app-theme-easyhq">
-      <AppWorkspaceHeader
-        appLabel="EasyHQ"
-        title="Your control center."
-        description={`${formatLongDate(today)}. ${openWindows.length
-          ? `You still have ${formatDuration(openMinutes)} open today.`
-          : "Your day is fully spoken for right now."}`}
-        currentAppHref="/app/hq"
-      />
-
       {error ? <p className="error-copy">{error}</p> : null}
 
       <div className="dashboard-grid">

@@ -12,8 +12,6 @@ import { EasyListLayout } from "@/features/easylist/layouts/EasyListLayout";
 import { EasyListArchivePage } from "@/features/easylist/routes/EasyListArchivePage";
 import { EasyListDashboardPage } from "@/features/easylist/routes/EasyListDashboardPage";
 import { EasyListInboxPage } from "@/features/easylist/routes/EasyListInboxPage";
-import { EasyListTodayPage } from "@/features/easylist/routes/EasyListTodayPage";
-import { EasyListUpcomingPage } from "@/features/easylist/routes/EasyListUpcomingPage";
 import { EasyNotesLayout } from "@/features/easynotes/layouts/EasyNotesLayout";
 import { EasyNotesEditorPage } from "@/features/easynotes/routes/EasyNotesEditorPage";
 import { EasyNotesLibraryPage } from "@/features/easynotes/routes/EasyNotesLibraryPage";
@@ -48,9 +46,10 @@ export function AppRouter() {
           <Route path="easylist" element={<EasyListLayout />}>
             <Route index element={<Navigate to="/app/easylist/dashboard" replace />} />
             <Route path="dashboard" element={<EasyListDashboardPage />} />
-            <Route path="inbox" element={<EasyListInboxPage />} />
-            <Route path="today" element={<EasyListTodayPage />} />
-            <Route path="upcoming" element={<EasyListUpcomingPage />} />
+            <Route path="add" element={<EasyListInboxPage />} />
+            <Route path="inbox" element={<Navigate to="/app/easylist/add" replace />} />
+            <Route path="today" element={<Navigate to="/app/easylist/dashboard" replace />} />
+            <Route path="upcoming" element={<Navigate to="/app/easylist/dashboard" replace />} />
             <Route path="archive" element={<EasyListArchivePage />} />
           </Route>
           <Route path="easycalendar" element={<EasyCalendarLayout />}>

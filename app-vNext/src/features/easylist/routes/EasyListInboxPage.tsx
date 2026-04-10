@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { PageSection } from "@/components/ui/PageSection";
-import { TaskCard } from "@/features/easylist/components/TaskCard";
 import { TaskComposer } from "@/features/easylist/components/TaskComposer";
 import { TaskDrawer } from "@/features/easylist/components/TaskDrawer";
 import { useEasyList } from "@/features/easylist/EasyListContext";
-import { sortActiveTasks, isCompletedToday } from "@/features/easylist/lib/taskUtils";
+import { TaskCard } from "@/features/easylist/components/TaskCard";
+import { isCompletedToday, sortActiveTasks } from "@/features/easylist/lib/taskUtils";
 import type { TaskRecord } from "@/lib/firestore/tasks";
 
 export function EasyListInboxPage() {
@@ -26,39 +26,20 @@ export function EasyListInboxPage() {
 
   return (
     <>
-      <div className="dashboard-grid">
-        <PageSection
-          eyebrow="Capture"
-          title="Add a task"
-          description="This is the first real EasyList workflow in React. It writes to the same Firebase task collection as the current app."
-        >
-          <TaskComposer onSubmit={addTask} />
-        </PageSection>
-
-        <PageSection eyebrow="Momentum" title="Board snapshot" description="A quick pulse check.">
-          <div className="stats-grid">
-            <article className="stat-card-vnext">
-              <span>Open tasks</span>
-              <strong>{activeTasks.length}</strong>
-            </article>
-            <article className="stat-card-vnext">
-              <span>Done today</span>
-              <strong>{completedToday.length}</strong>
-            </article>
-            <article className="stat-card-vnext">
-              <span>Search results</span>
-              <strong>{filteredTasks.length}</strong>
-            </article>
-          </div>
-        </PageSection>
-      </div>
+      <PageSection
+        eyebrow="Capture"
+        title="Add tasks fast"
+        description="Write each task into its own row, or drop a messy brain dump in and turn it into rows first."
+      >
+        <TaskComposer onSubmit={addTask} />
+      </PageSection>
 
       <PageSection
-        eyebrow="Inbox"
-        title="All active tasks"
-        description="Tasks without a due date are still considered active and will stay visible here."
+        eyebrow="Queue"
+        title="What is ready to work on"
+        description="As soon as you add it, it lands here with the rest of your active list."
       >
-        <div className="toolbar-row">
+        <div className="toolbar-row toolbar-row-compact">
           <input
             type="search"
             className="search-input"
@@ -66,6 +47,10 @@ export function EasyListInboxPage() {
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search title, notes, or category"
           />
+          <div className="pill-row">
+            <span className="info-pill">{activeTasks.length} open</span>
+            <span className="info-pill">{completedToday.length} done today</span>
+          </div>
         </div>
 
         {error ? <p className="error-copy">{error}</p> : null}

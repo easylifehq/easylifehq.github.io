@@ -1,4 +1,3 @@
-import { AppWorkspaceHeader } from "@/components/navigation/AppWorkspaceHeader";
 import { PageSection } from "@/components/ui/PageSection";
 import { useSettings } from "@/features/settings/SettingsContext";
 import type { ThemeMode, VisibleAppId } from "@/lib/firestore/settings";
@@ -68,14 +67,6 @@ export function SettingsPage() {
 
   return (
     <main className="page-wrap app-theme app-theme-settings">
-      <AppWorkspaceHeader
-        appLabel="Settings"
-        title="Shared defaults."
-        description="Choose the apps you want visible and the theme mode that should shape your workspace."
-        currentAppHref="/app/settings"
-        compact
-      />
-
       {error ? <p className="error-copy">{error}</p> : null}
 
       <div className="dashboard-grid">

@@ -12,13 +12,7 @@ export function EasyPipelineLayout() {
   return (
     <EasyPipelineProvider>
       <main className="page-wrap app-theme app-theme-easypipeline">
-        <AppWorkspaceHeader
-          appLabel="EasyPipeline"
-          title="Your application tracker."
-          description="Keep roles moving, follow up on time, and hold the whole search in one lane."
-          currentAppHref="/app/easypipeline/dashboard"
-          links={links}
-        />
+        <AppWorkspaceHeader appLabel="EasyPipeline" links={links} />
 
         <Outlet />
       </main>

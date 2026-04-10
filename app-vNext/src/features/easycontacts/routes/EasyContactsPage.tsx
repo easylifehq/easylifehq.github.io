@@ -42,6 +42,7 @@ export function EasyContactsPage() {
         .includes(term)
     );
   }, [contacts, search]);
+  const bubbleContacts = useMemo(() => filteredContacts.slice(0, 18), [filteredContacts]);
 
   async function handleAddContact(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -59,6 +60,31 @@ export function EasyContactsPage() {
           <article className="stat-card-vnext"><span>Follow-ups due</span><strong>{contacts.filter((contact) => isFollowUpNeeded(contact.nextFollowUpAt)).length}</strong></article>
           <article className="stat-card-vnext"><span>Active this month</span><strong>{contacts.filter((contact) => Boolean(contact.lastContactedAt)).length}</strong></article>
           <article className="stat-card-vnext"><span>Companies</span><strong>{new Set(contacts.map((contact) => contact.company).filter(Boolean)).size}</strong></article>
+        </div>
+      </PageSection>
+
+      <PageSection
+        eyebrow="View"
+        title="Contact map"
+        description="A quick bubble view so you can scan the people in your network without opening every card."
+      >
+        <div className="contacts-bubble-map" role="list" aria-label="Contact map">
+          {bubbleContacts.length ? (
+            bubbleContacts.map((contact, index) => (
+              <button
+                key={contact.id}
+                type="button"
+                role="listitem"
+                className={`contact-bubble contact-bubble-${(index % 5) + 1}`}
+                onClick={() => setSelectedContact(contact)}
+              >
+                <strong>{contact.fullName || "Unnamed"}</strong>
+                <span>{contact.company || contact.relationship || "Contact"}</span>
+              </button>
+            ))
+          ) : (
+            <div className="empty-card-vnext">No contacts to map yet.</div>
+          )}
         </div>
       </PageSection>
 
