@@ -40,6 +40,10 @@ This site is built with:
 - JavaScript
 - GitHub Pages for hosting
 
+The current codebase is in a static-site phase. The next application phase is planned as a shared React + Firebase app for EasyHQ, EasyList, and EasyCalendar.
+
+See [docs/easy-system-engineering-handoff.md](C:\Users\smcol\Documents\Spencer Colety\easylife\easylifehq.github.io\docs\easy-system-engineering-handoff.md) for the implementation handoff and migration plan.
+
 ## Project structure
 
 ```bash
