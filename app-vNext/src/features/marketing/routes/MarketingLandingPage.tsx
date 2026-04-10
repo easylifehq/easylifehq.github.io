@@ -69,6 +69,9 @@ export function MarketingLandingPage() {
               <p className="eyebrow">{card.eyebrow}</p>
               <h3>{card.title}</h3>
               <p>{card.description}</p>
+              <Link to={`/${card.id === "easyhq" ? "" : card.id}`} className="text-button marketing-inline-link">
+                {card.id === "easyhq" ? "See the system" : `Learn about ${card.eyebrow}`}
+              </Link>
             </article>
           ))}
         </div>

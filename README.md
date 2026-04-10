@@ -1,54 +1,63 @@
-# Easy Life
+# Easy System
 
-Easy Life is the umbrella brand for a growing suite of tools designed to remove day-to-day friction so ambitious people can focus on what actually matters.
+This repository now has two important layers:
 
-The idea behind Easy Life is simple: too much time gets wasted on small, annoying tasks before real work even starts. Calls, follow-ups, reminders, lists, planning, and other low-value obligations quietly drain attention and momentum. Easy Life exists to organize and simplify those tasks.
+- the live deployable site at the repo root
+- the React source app in [app-vNext](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\app-vNext)
 
-## Current products
+## What Deploys
 
-### EasyPipeline
-A tool for tracking applications, contacts, follow-ups, and opportunities in one place.
+The repo root is now the deploy target.
 
-### EasyList
-A tool for clearing daily clutter such as reminders, errands, quick obligations, and mental overhead.
+- [index.html](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\index.html) and [assets](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\assets) are the built React output
+- [404.html](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\404.html) is included for SPA route fallback
+- [CNAME](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\CNAME) is preserved for the custom domain
 
-## Purpose of this repository
+## Source App
 
-This repository powers the main Easy Life landing page and brand homepage.
+The editable React + Firebase app lives in:
 
-It is the central entry point for the Easy Life ecosystem and is meant to:
+- [app-vNext](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\app-vNext)
 
-- explain the mission
-- introduce the products
-- provide navigation into each tool
-- serve as the public-facing website for the brand
+That app now contains:
 
-## Brand direction
+- marketing pages
+- auth
+- EasyHQ
+- EasyList
+- EasyCalendar
+- EasyNotes
+- EasyPipeline
+- EasyContacts
 
-Easy Life is built for people who want to spend less energy on meaningless tasks and more energy on execution, progress, and high-value work.
-
-Core idea:
-
-> Clear the noise. Focus on what matters.
-
-## Tech stack
-
-This site is built with:
-
-- HTML
-- CSS
-- JavaScript
-- GitHub Pages for hosting
-
-The current codebase is in a static-site phase. The next application phase is planned as a shared React + Firebase app for EasyHQ, EasyList, and EasyCalendar.
-
-See [docs/easy-system-engineering-handoff.md](C:\Users\smcol\Documents\Spencer Colety\easylife\easylifehq.github.io\docs\easy-system-engineering-handoff.md) for the implementation handoff and migration plan.
-
-## Project structure
+To work on it locally:
 
 ```bash
-/
-├── index.html
-├── css/
-│   └── index.css
-└── README.md
+cd app-vNext
+npm run dev
+```
+
+To rebuild the deployable root files:
+
+```bash
+cd app-vNext
+npm run build
+```
+
+Then copy the fresh build output from [app-vNext/dist](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\app-vNext\dist) into the repo root.
+
+## Archived Static Site
+
+The old HTML/CSS/JS site has been preserved in:
+
+- [old-site](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\old-site)
+
+That folder is your backup in case you ever need to reference or recover the previous version.
+
+## Notes
+
+- The React app is now the main website version.
+- The old static version still exists only as an archive.
+- The current React production build succeeds locally.
+
+See [docs/easy-system-engineering-handoff.md](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\docs\easy-system-engineering-handoff.md) for the architecture and migration handoff.

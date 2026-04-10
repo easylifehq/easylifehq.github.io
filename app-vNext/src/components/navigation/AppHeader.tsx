@@ -6,7 +6,10 @@ import { auth } from "@/lib/firebase/client";
 const appLinks = [
   { to: "/app/hq", label: "EasyHQ" },
   { to: "/app/easylist/dashboard", label: "EasyList" },
+  { to: "/app/easynotes", label: "EasyNotes" },
   { to: "/app/easycalendar/day", label: "EasyCalendar" },
+  { to: "/app/easypipeline/dashboard", label: "EasyPipeline" },
+  { to: "/app/easycontacts", label: "EasyContacts" },
   { to: "/app/settings", label: "Settings" },
 ];
 
@@ -22,9 +25,24 @@ const productItems: ProductsMenuItem[] = [
     description: "Capture and organize what needs doing.",
   },
   {
+    href: "/app/easynotes",
+    label: "EasyNotes",
+    description: "Keep quick notes, brain dumps, and meeting thoughts.",
+  },
+  {
     href: "/app/easycalendar/day",
     label: "EasyCalendar",
     description: "Plan your time and manage task blocks.",
+  },
+  {
+    href: "/app/easypipeline/dashboard",
+    label: "EasyPipeline",
+    description: "Track applications, follow-ups, and momentum.",
+  },
+  {
+    href: "/app/easycontacts",
+    label: "EasyContacts",
+    description: "Manage networking contacts and follow-up dates.",
   },
   {
     href: "/app/settings",

@@ -1,34 +1,19 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ProductsMenu, type ProductsMenuItem } from "@/components/navigation/ProductsMenu";
-
-const marketingLinks = [
-  { href: "/#products", label: "Products" },
-  { href: "/#how-it-works", label: "How It Works" },
-  { href: "/#why-easy", label: "Why Easy" },
-];
-
-const productItems: ProductsMenuItem[] = [
-  {
-    href: "/#easyhq",
-    label: "EasyHQ",
-    description: "Your calm daily control center.",
-    isRoute: false,
-  },
-  {
-    href: "/#easylist",
-    label: "EasyList",
-    description: "Tasks, priorities, and brain dumps.",
-    isRoute: false,
-  },
-  {
-    href: "/#easycalendar",
-    label: "EasyCalendar",
-    description: "Time blocks, open windows, and planning.",
-    isRoute: false,
-  },
-];
+import { useLocation } from "react-router-dom";
+import {
+  getMarketingSectionLinks,
+  marketingProductItems,
+} from "@/components/navigation/marketingNavigation";
 
 export function MarketingHeader() {
+  const location = useLocation();
+  const marketingLinks = useMemo(
+    () => getMarketingSectionLinks(location.pathname),
+    [location.pathname]
+  );
+
   return (
     <header className="site-header">
       <div className="site-header-inner">
@@ -49,7 +34,7 @@ export function MarketingHeader() {
         </nav>
 
         <div className="site-header-actions">
-          <ProductsMenu items={productItems} />
+          <ProductsMenu items={marketingProductItems} />
           <Link to="/login" className="button-primary">
             Get Started
           </Link>

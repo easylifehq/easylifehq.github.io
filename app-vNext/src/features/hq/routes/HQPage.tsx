@@ -89,6 +89,14 @@ export function HQPage() {
               <strong>Plan My Day</strong>
               <p>Run the day-planning pass and turn open time into progress.</p>
             </Link>
+            <Link className="hq-link-card" to="/app/easynotes">
+              <strong>Open EasyNotes</strong>
+              <p>Jot down rough thoughts, meeting notes, and drafts for later.</p>
+            </Link>
+            <Link className="hq-link-card" to="/app/easypipeline/dashboard">
+              <strong>Open EasyPipeline</strong>
+              <p>Review applications, follow-ups, and job-search momentum.</p>
+            </Link>
           </div>
         </PageSection>
       </div>

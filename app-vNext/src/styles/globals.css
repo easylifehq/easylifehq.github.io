@@ -379,6 +379,12 @@ a {
   flex-wrap: wrap;
 }
 
+.marketing-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
 .marketing-hero-card {
   align-content: space-between;
   padding: 1.1rem;
@@ -396,6 +402,7 @@ a {
 
 .marketing-section {
   padding: 1.35rem;
+  scroll-margin-top: 7rem;
 }
 
 .marketing-card-grid,
@@ -414,9 +421,35 @@ a {
   background: #fffdf9;
 }
 
+.marketing-cta-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 22px;
+  background: #fff8f2;
+  border: 1px solid rgba(199, 114, 63, 0.12);
+}
+
+.marketing-cta-card p,
+.marketing-cta-card h2 {
+  margin: 0;
+}
+
+.marketing-inline-link {
+  width: fit-content;
+  margin-top: 0.2rem;
+}
+
 .page-wrap {
   display: grid;
   gap: 1.2rem;
+}
+
+.page-wrap-notes {
+  width: min(980px, 100%);
+  margin-inline: auto;
 }
 
 .page-hero-vnext,
@@ -580,6 +613,159 @@ a {
   color: #2a211d;
 }
 
+.notes-library-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: end;
+}
+
+.notes-search-field {
+  margin: 0;
+}
+
+.notes-library-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.note-card-vnext {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem 1rem 1.05rem;
+  border-radius: 24px;
+  background: rgba(255, 252, 247, 0.88);
+  border: 1px solid rgba(99, 76, 58, 0.1);
+  box-shadow: 0 16px 34px rgba(65, 43, 28, 0.06);
+}
+
+.note-card-top,
+.note-tag-row,
+.notes-editor-topbar,
+.notes-meta-row,
+.notes-editor-actions,
+.notes-pin-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.note-card-top,
+.notes-editor-topbar,
+.notes-editor-actions {
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.note-card-top p,
+.note-card-body {
+  margin: 0;
+  color: #6a5d53;
+}
+
+.note-card-body {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.note-tag-row {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip-pill,
+.note-pin-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.38rem 0.65rem;
+  border-radius: 999px;
+  background: #fff0e3;
+  color: #8d5b35;
+  font-size: 0.83rem;
+  font-weight: 700;
+}
+
+.notes-create-fab {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 999px;
+  background: #221d18;
+  color: white;
+  font-size: 2rem;
+  box-shadow: 0 18px 40px rgba(34, 29, 24, 0.22);
+}
+
+.notes-editor-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.notes-editor-page {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 28px;
+  background: rgba(255, 252, 247, 0.94);
+  border: 1px solid rgba(99, 76, 58, 0.1);
+  box-shadow: 0 16px 34px rgba(65, 43, 28, 0.08);
+}
+
+.notes-format-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.notes-title-field input,
+.notes-body-field textarea {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #201a16;
+}
+
+.notes-title-field input {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  padding: 0;
+}
+
+.notes-body-field textarea {
+  min-height: 58vh;
+  resize: vertical;
+  line-height: 1.7;
+  padding: 0;
+}
+
+.notes-body-field textarea:focus,
+.notes-title-field input:focus {
+  outline: none;
+}
+
+.notes-meta-row {
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.notes-pin-toggle {
+  gap: 0.5rem;
+  align-self: end;
+  color: #5d5148;
+  font-weight: 700;
+}
+
+.notes-editor-status {
+  color: #7b6f66;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
 .task-composer {
   display: grid;
   gap: 1rem;
@@ -597,7 +783,7 @@ a {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.9rem;
 }
 
@@ -1311,6 +1497,75 @@ button.calendar-detail-card:disabled {
   background: #fff8f2;
 }
 
+.pipeline-board-grid,
+.contacts-grid-vnext {
+  display: grid;
+  gap: 1rem;
+}
+
+.pipeline-board-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pipeline-column,
+.contact-card-vnext,
+.pipeline-card {
+  border-radius: 22px;
+  border: 1px solid rgba(99, 76, 58, 0.12);
+  background: #fffdf9;
+}
+
+.pipeline-column {
+  padding: 1rem;
+}
+
+.pipeline-column-header,
+.contact-card-top-vnext,
+.pipeline-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pipeline-card-stack {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 0.9rem;
+}
+
+.pipeline-card,
+.contact-card-vnext {
+  width: 100%;
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.95rem;
+  text-align: left;
+}
+
+.pipeline-card {
+  border-radius: 18px;
+}
+
+.contacts-grid-vnext {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.priority-high {
+  background: #ffe6dd;
+  color: #9b4129;
+}
+
+.priority-medium {
+  background: #fff0db;
+  color: #8d5c28;
+}
+
+.priority-low {
+  background: #edf7ea;
+  color: #3b6a40;
+}
+
 @media (max-width: 960px) {
   .app-shell-vnext {
     grid-template-columns: 1fr;
@@ -1337,7 +1592,8 @@ button.calendar-detail-card:disabled {
 
   .marketing-hero,
   .marketing-card-grid,
-  .marketing-highlights {
+  .marketing-highlights,
+  .marketing-cta-card {
     grid-template-columns: 1fr;
   }
 
@@ -1349,6 +1605,11 @@ button.calendar-detail-card:disabled {
   .stats-grid,
   .calendar-category-grid,
   .calendar-composer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pipeline-board-grid,
+  .contacts-grid-vnext {
     grid-template-columns: 1fr;
   }
 
@@ -1383,6 +1644,15 @@ button.calendar-detail-card:disabled {
   .hq-summary-grid,
   .hq-link-grid {
     grid-template-columns: 1fr;
+  }
+
+  .notes-library-toolbar,
+  .notes-meta-row,
+  .notes-editor-topbar,
+  .notes-editor-actions {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
@@ -1464,6 +1734,15 @@ button.calendar-detail-card:disabled {
   .calendar-day-actions .primary-button,
   .drawer-link-footer .primary-button,
   .calendar-form-card .primary-button {
+    width: 100%;
+  }
+
+  .notes-create-fab {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+
+  .page-wrap-notes {
     width: 100%;
   }
 }
