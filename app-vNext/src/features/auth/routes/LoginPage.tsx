@@ -19,7 +19,7 @@ export function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const title = useMemo(
-    () => (mode === "login" ? "Log in to Easy System" : "Create your Easy account"),
+    () => (mode === "login" ? "Log in to EasyLifeHQ" : "Create your EasyLifeHQ account"),
     [mode]
   );
 
@@ -62,10 +62,10 @@ export function LoginPage() {
   return (
     <main className="auth-page-vnext auth-page-shell">
       <section className="auth-card-vnext">
-        <p className="eyebrow">Easy System</p>
+        <p className="eyebrow">EasyLifeHQ</p>
         <h1>{title}</h1>
         <p className="auth-copy">
-          Shared login for EasyHQ, EasyList, and EasyCalendar.
+          Shared login for EasyHQ, EasyList, EasyCalendar, and the rest of your suite.
         </p>
 
         <div className="auth-toggle">

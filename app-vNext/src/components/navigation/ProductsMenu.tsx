@@ -13,6 +13,7 @@ type ProductsMenuProps = {
   label?: string;
   className?: string;
   panelClassName?: string;
+  showDescriptions?: boolean;
 };
 
 export function ProductsMenu({
@@ -20,6 +21,7 @@ export function ProductsMenu({
   label = "Products",
   className = "",
   panelClassName = "",
+  showDescriptions = false,
 }: ProductsMenuProps) {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +51,7 @@ export function ProductsMenu({
               onClick={() => setIsOpen(false)}
             >
               <strong>{item.label}</strong>
-              <span>{item.description}</span>
+              {showDescriptions ? <span>{item.description}</span> : null}
             </a>
           ) : (
             <Link
@@ -59,7 +61,7 @@ export function ProductsMenu({
               onClick={() => setIsOpen(false)}
             >
               <strong>{item.label}</strong>
-              <span>{item.description}</span>
+              {showDescriptions ? <span>{item.description}</span> : null}
             </Link>
           )
         )}

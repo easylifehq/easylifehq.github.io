@@ -43,10 +43,10 @@ export function MarketingLandingPage() {
     <main className="marketing-page">
       <section className="marketing-hero">
         <div className="marketing-hero-copy">
-          <p className="eyebrow">EasyLife</p>
+          <p className="eyebrow">EasyLifeHQ</p>
           <h1>Turn free time into real progress without making life feel cluttered.</h1>
           <p>
-            EasyLife connects tasks, time, notes, and your daily overview in one
+            EasyLifeHQ connects tasks, time, notes, and your daily overview in one
             calm system that stays usable on both desktop and mobile.
           </p>
 
@@ -73,7 +73,7 @@ export function MarketingLandingPage() {
       <section id="products" className="marketing-section">
         <div className="panel-header">
           <p className="eyebrow">Products</p>
-          <h2>The core Easy system</h2>
+          <h2>The core EasyLifeHQ apps</h2>
           <p>Each app has a clear job, so the system stays simple instead of turning into a mess.</p>
         </div>
 

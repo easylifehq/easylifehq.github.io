@@ -16,22 +16,17 @@ const themeOptions: Array<{
   {
     value: "candy",
     label: "Candy Mode",
-    description: "Brighter, sweeter colors with a lighter playful feel.",
-  },
-  {
-    value: "kirby",
-    label: "Kirby",
-    description: "Soft pink energy with warm rounded surfaces.",
+    description: "Bright pink, glossy, and pretty with a much sweeter atmosphere.",
   },
   {
     value: "gamer",
     label: "Gamer Mode",
-    description: "Sharper contrast and a punchier console-inspired vibe.",
+    description: "Dark, purple, and bolder with a moodier high-contrast feel.",
   },
   {
     value: "elvish",
     label: "Elvish",
-    description: "Forest-toned, calm, and a little more magical.",
+    description: "Gold, green, and magical like stepping into a forest world.",
   },
 ];
 

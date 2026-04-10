@@ -14,7 +14,7 @@ export function AppHeader() {
         <div className="site-brand">
           <span className="brand-badge">EL</span>
           <div>
-            <p className="brand-kicker">Easy System</p>
+            <p className="brand-kicker">EasyLifeHQ</p>
             <strong className="site-brand-title">Connected apps, one account</strong>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { doc, onSnapshot, serverTimestamp, setDoc, type DocumentData } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 
-export type ThemeMode = "classic" | "candy" | "kirby" | "gamer" | "elvish";
+export type ThemeMode = "classic" | "candy" | "gamer" | "elvish";
 export type VisibleAppId =
   | "easylist"
   | "easynotes"
@@ -40,7 +40,11 @@ function normalizeVisibleApps(value: unknown): VisibleAppId[] {
 }
 
 function normalizeThemeMode(value: unknown): ThemeMode {
-  const valid: ThemeMode[] = ["classic", "candy", "kirby", "gamer", "elvish"];
+  if (value === "kirby") {
+    return "candy";
+  }
+
+  const valid: ThemeMode[] = ["classic", "candy", "gamer", "elvish"];
   return valid.includes(value as ThemeMode) ? (value as ThemeMode) : "classic";
 }
 

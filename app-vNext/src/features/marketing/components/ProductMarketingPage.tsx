@@ -64,7 +64,7 @@ export function ProductMarketingPage({
         </div>
 
         <div className="marketing-hero-card">
-          <span className="info-pill">EasyLife product</span>
+          <span className="info-pill">EasyLifeHQ product</span>
           <h2>{heroCardTitle}</h2>
           <p>{heroCardBody}</p>
         </div>

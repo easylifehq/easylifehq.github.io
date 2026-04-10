@@ -35,6 +35,12 @@
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.18s ease;
   --shell-motion-panel: 0.24s ease;
+  --shell-page-text: #221d18;
+  --shell-heading-text: #1f1a16;
+  --shell-muted-text: #665b54;
+  --shell-page-overlay-1: rgba(199, 114, 63, 0.1);
+  --shell-page-overlay-2: rgba(141, 109, 215, 0.08);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.42);
 }
 
 *,
@@ -52,8 +58,10 @@ body,
 
 body {
   min-height: 100vh;
+  color: var(--shell-page-text);
   background:
-    radial-gradient(circle at top left, rgba(199, 114, 63, 0.1), transparent 28%),
+    radial-gradient(circle at top left, var(--shell-page-overlay-1), transparent 28%),
+    radial-gradient(circle at top right, var(--shell-page-overlay-2), transparent 26%),
     linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
 }
 
@@ -77,6 +85,11 @@ a {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
+  color: var(--shell-page-text);
+  background:
+    radial-gradient(circle at top left, var(--shell-page-overlay-1), transparent 26%),
+    radial-gradient(circle at top right, var(--shell-page-overlay-2), transparent 24%),
+    linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
 }
 
 .app-shell-header {
@@ -117,7 +130,7 @@ a {
   font-size: 0.78rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #9a6a47;
+  color: color-mix(in srgb, var(--shell-accent-strong) 76%, white 24%);
   font-weight: 800;
 }
 
@@ -143,7 +156,7 @@ a {
 .site-brand-title {
   display: block;
   font-size: 1rem;
-  color: #1f1a16;
+  color: var(--shell-heading-text);
 }
 
 .site-header,
@@ -197,7 +210,7 @@ a {
   justify-content: center;
   padding: 0.6rem 0.85rem;
   border-radius: 999px;
-  color: #64584f;
+  color: color-mix(in srgb, var(--shell-page-text) 72%, transparent);
   font-weight: 700;
 }
 
@@ -242,7 +255,7 @@ a {
 
 .button-secondary {
   background: var(--shell-input-bg);
-  color: #5e5148;
+  color: var(--shell-page-text);
   border: 1px solid var(--shell-card-border);
 }
 
@@ -259,7 +272,7 @@ a {
   border-radius: 14px;
   border: 1px solid var(--shell-card-border);
   background: var(--shell-input-bg);
-  color: #5d5148;
+  color: var(--shell-page-text);
   font-weight: 700;
 }
 
@@ -292,10 +305,13 @@ a {
   gap: 0.18rem;
   padding: 0.8rem 0.85rem;
   border-radius: 14px;
+  transition: background var(--shell-motion-fast), color var(--shell-motion-fast), transform var(--shell-motion-fast);
 }
 
 .menu-link-card:hover {
-  background: var(--shell-accent-soft);
+  background: color-mix(in srgb, var(--shell-accent-strong) 24%, var(--shell-card-bg) 76%);
+  color: var(--shell-page-text);
+  transform: translateY(-1px);
 }
 
 .menu-link-card strong {
@@ -303,7 +319,7 @@ a {
 }
 
 .menu-link-card span {
-  color: #6b5f57;
+  color: var(--shell-muted-text);
   font-size: 0.92rem;
 }
 
@@ -325,7 +341,7 @@ a {
 }
 
 .sidebar-link {
-  color: #5d5148;
+  color: color-mix(in srgb, var(--shell-page-text) 78%, transparent);
   font-weight: 700;
 }
 
@@ -405,7 +421,7 @@ a {
 .marketing-card p,
 .marketing-hero-card p {
   margin: 0;
-  color: #665b54;
+  color: var(--shell-muted-text);
 }
 
 .marketing-hero-actions {
@@ -487,12 +503,12 @@ a {
   --app-accent-soft: #fff2e7;
   --app-accent-border: rgba(199, 114, 63, 0.2);
   --app-accent-text: #8a5b38;
-  --app-panel-bg: rgba(255, 252, 247, 0.92);
-  --app-panel-border: rgba(99, 76, 58, 0.12);
-  --app-stat-bg: #fff8f2;
-  --app-stat-border: rgba(199, 114, 63, 0.14);
-  --app-chip-bg: #fff0e3;
-  --app-chip-text: #8d5b35;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 90%, transparent);
+  --app-panel-border: color-mix(in srgb, var(--shell-card-border) 72%, var(--app-accent) 28%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, var(--app-accent-soft) 18%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 70%, var(--app-accent) 30%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 80%, var(--app-accent-soft) 20%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 70%, var(--app-accent-text) 30%);
 }
 
 .app-theme-easyhq {
@@ -500,11 +516,11 @@ a {
   --app-accent-soft: #eef8f3;
   --app-accent-border: rgba(77, 127, 111, 0.2);
   --app-accent-text: #355b4f;
-  --app-panel-bg: rgba(248, 253, 250, 0.95);
-  --app-stat-bg: #f3faf6;
-  --app-stat-border: rgba(77, 127, 111, 0.14);
-  --app-chip-bg: #e5f3eb;
-  --app-chip-text: #355b4f;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 82%, #4d7f6f 18%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, #4d7f6f 18%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 64%, #4d7f6f 36%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 72%, #4d7f6f 28%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #355b4f 38%);
 }
 
 .app-theme-easylist {
@@ -512,11 +528,11 @@ a {
   --app-accent-soft: #fff1e7;
   --app-accent-border: rgba(208, 106, 56, 0.2);
   --app-accent-text: #8f4f2f;
-  --app-panel-bg: rgba(255, 251, 247, 0.95);
-  --app-stat-bg: #fff7f1;
-  --app-stat-border: rgba(208, 106, 56, 0.15);
-  --app-chip-bg: #ffe9dc;
-  --app-chip-text: #8f4f2f;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 82%, #d06a38 18%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, #d06a38 18%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 64%, #d06a38 36%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 72%, #d06a38 28%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #8f4f2f 38%);
 }
 
 .app-theme-easycalendar {
@@ -524,11 +540,11 @@ a {
   --app-accent-soft: #edf4ff;
   --app-accent-border: rgba(74, 125, 184, 0.2);
   --app-accent-text: #365b87;
-  --app-panel-bg: rgba(249, 252, 255, 0.95);
-  --app-stat-bg: #f3f8ff;
-  --app-stat-border: rgba(74, 125, 184, 0.14);
-  --app-chip-bg: #e5efff;
-  --app-chip-text: #365b87;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 82%, #4a7db8 18%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, #4a7db8 18%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 64%, #4a7db8 36%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 72%, #4a7db8 28%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #365b87 38%);
 }
 
 .app-theme-easynotes {
@@ -536,11 +552,11 @@ a {
   --app-accent-soft: #f6efe8;
   --app-accent-border: rgba(138, 102, 80, 0.2);
   --app-accent-text: #6e523f;
-  --app-panel-bg: rgba(255, 253, 249, 0.96);
-  --app-stat-bg: #fbf7f1;
-  --app-stat-border: rgba(138, 102, 80, 0.12);
-  --app-chip-bg: #efe4d8;
-  --app-chip-text: #6e523f;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 82%, #8a6650 18%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, #8a6650 18%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 64%, #8a6650 36%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 72%, #8a6650 28%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #6e523f 38%);
 }
 
 .app-theme-easypipeline {
@@ -548,11 +564,11 @@ a {
   --app-accent-soft: #f9efe8;
   --app-accent-border: rgba(160, 93, 63, 0.2);
   --app-accent-text: #7d4933;
-  --app-panel-bg: rgba(255, 251, 248, 0.95);
-  --app-stat-bg: #fcf5f0;
-  --app-stat-border: rgba(160, 93, 63, 0.14);
-  --app-chip-bg: #f4e4db;
-  --app-chip-text: #7d4933;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 82%, #a05d3f 18%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, #a05d3f 18%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 64%, #a05d3f 36%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 72%, #a05d3f 28%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #7d4933 38%);
 }
 
 .app-theme-easycontacts {
@@ -560,11 +576,11 @@ a {
   --app-accent-soft: #eef8f3;
   --app-accent-border: rgba(94, 138, 119, 0.2);
   --app-accent-text: #456857;
-  --app-panel-bg: rgba(248, 253, 250, 0.95);
-  --app-stat-bg: #f2faf6;
-  --app-stat-border: rgba(94, 138, 119, 0.14);
-  --app-chip-bg: #e4f2eb;
-  --app-chip-text: #456857;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 82%, #5e8a77 18%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, #5e8a77 18%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 64%, #5e8a77 36%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 72%, #5e8a77 28%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #456857 38%);
 }
 
 .app-theme-settings {
@@ -572,11 +588,11 @@ a {
   --app-accent-soft: #f1f0f8;
   --app-accent-border: rgba(109, 106, 127, 0.18);
   --app-accent-text: #545166;
-  --app-panel-bg: rgba(252, 252, 255, 0.95);
-  --app-stat-bg: #f5f5fb;
-  --app-stat-border: rgba(109, 106, 127, 0.13);
-  --app-chip-bg: #ebeaf5;
-  --app-chip-text: #545166;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 82%, #6d6a7f 18%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, #6d6a7f 18%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 64%, #6d6a7f 36%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 72%, #6d6a7f 28%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #545166 38%);
 }
 
 .page-wrap-notes {
@@ -789,120 +805,115 @@ a {
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.18s ease;
   --shell-motion-panel: 0.24s ease;
+  --shell-page-text: #221d18;
+  --shell-heading-text: #1f1a16;
+  --shell-muted-text: #665b54;
+  --shell-page-overlay-1: rgba(199, 114, 63, 0.1);
+  --shell-page-overlay-2: rgba(141, 109, 215, 0.08);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.42);
 }
 
 .shell-theme-candy {
-  --shell-accent: #f06fa8;
-  --shell-accent-strong: #c45486;
-  --shell-accent-soft: #ffeef6;
-  --shell-bg-top: #fff7fb;
-  --shell-bg-bottom: #fef0f7;
-  --shell-header-bg: rgba(255, 247, 252, 0.92);
-  --shell-header-border: rgba(240, 111, 168, 0.16);
-  --shell-button-bg: #f06fa8;
-  --shell-button-border: #f06fa8;
+  --shell-accent: #ff5fb2;
+  --shell-accent-strong: #d63f8d;
+  --shell-accent-soft: #ffe4f2;
+  --shell-bg-top: #ffdff1;
+  --shell-bg-bottom: #ffbfe1;
+  --shell-header-bg: rgba(255, 235, 246, 0.9);
+  --shell-header-border: rgba(214, 63, 141, 0.24);
+  --shell-button-bg: #ff4aa6;
+  --shell-button-border: #ff4aa6;
   --shell-button-text: #ffffff;
-  --shell-brand-gradient: linear-gradient(135deg, #f06fa8 0%, #ffbf69 100%);
-  --shell-card-bg: rgba(255, 247, 252, 0.92);
-  --shell-card-bg-soft: #fff3fa;
-  --shell-card-border: rgba(240, 111, 168, 0.16);
-  --shell-chip-bg: #ffe3f1;
-  --shell-chip-text: #b54d81;
-  --shell-input-bg: #fffafd;
-  --shell-input-border: rgba(240, 111, 168, 0.14);
-  --shell-drawer-bg: #fffafd;
+  --shell-brand-gradient: linear-gradient(135deg, #ff4aa6 0%, #ff8ed1 54%, #ffd768 100%);
+  --shell-card-bg: rgba(255, 241, 248, 0.9);
+  --shell-card-bg-soft: #ffe8f4;
+  --shell-card-border: rgba(214, 63, 141, 0.2);
+  --shell-chip-bg: #ffd3ea;
+  --shell-chip-text: #a12568;
+  --shell-input-bg: rgba(255, 248, 252, 0.96);
+  --shell-input-border: rgba(214, 63, 141, 0.18);
+  --shell-drawer-bg: #fff4fa;
   --shell-body-font: "Trebuchet MS", "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shell-display-font: "Verdana", "Trebuchet MS", "Aptos Display", sans-serif;
-  --shell-card-radius: 28px;
-  --shell-card-shadow: 0 20px 48px rgba(240, 111, 168, 0.14);
+  --shell-card-radius: 30px;
+  --shell-card-shadow: 0 24px 58px rgba(221, 62, 144, 0.22);
   --shell-hover-lift: translateY(-3px) scale(1.01);
+  --shell-page-text: #5d1f45;
+  --shell-heading-text: #471535;
+  --shell-muted-text: #8f4971;
+  --shell-page-overlay-1: rgba(255, 82, 171, 0.38);
+  --shell-page-overlay-2: rgba(255, 214, 107, 0.26);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.3);
   --shell-motion-fast: 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   --shell-motion-panel: 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.shell-theme-kirby {
-  --shell-accent: #ff7db6;
-  --shell-accent-strong: #c85f8e;
-  --shell-accent-soft: #fff1f7;
-  --shell-bg-top: #fff8fb;
-  --shell-bg-bottom: #fff1f6;
-  --shell-header-bg: rgba(255, 248, 252, 0.94);
-  --shell-header-border: rgba(255, 125, 182, 0.16);
-  --shell-button-bg: #ff7db6;
-  --shell-button-border: #ff7db6;
-  --shell-button-text: #ffffff;
-  --shell-brand-gradient: linear-gradient(135deg, #ff7db6 0%, #ffa7d1 100%);
-  --shell-card-bg: rgba(255, 246, 251, 0.94);
-  --shell-card-bg-soft: #fff0f7;
-  --shell-card-border: rgba(255, 125, 182, 0.16);
-  --shell-chip-bg: #ffe0ef;
-  --shell-chip-text: #c85f8e;
-  --shell-input-bg: #fffafd;
-  --shell-input-border: rgba(255, 125, 182, 0.14);
-  --shell-drawer-bg: #fffafd;
-  --shell-body-font: "Verdana", "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --shell-display-font: "Trebuchet MS", "Verdana", "Aptos Display", sans-serif;
-  --shell-card-radius: 30px;
-  --shell-card-shadow: 0 22px 50px rgba(255, 125, 182, 0.14);
-  --shell-hover-lift: translateY(-4px) scale(1.015);
-  --shell-motion-fast: 0.22s cubic-bezier(0.2, 0.9, 0.2, 1);
-  --shell-motion-panel: 0.3s cubic-bezier(0.2, 0.9, 0.2, 1);
-}
-
 .shell-theme-gamer {
-  --shell-accent: #3fd17a;
-  --shell-accent-strong: #2d9d5b;
-  --shell-accent-soft: #ecfff4;
-  --shell-bg-top: #f3fff8;
-  --shell-bg-bottom: #eaf7ef;
-  --shell-header-bg: rgba(248, 255, 251, 0.94);
-  --shell-header-border: rgba(63, 209, 122, 0.17);
-  --shell-button-bg: #1d2d25;
-  --shell-button-border: #1d2d25;
-  --shell-button-text: #dfffe9;
-  --shell-brand-gradient: linear-gradient(135deg, #3fd17a 0%, #1d2d25 100%);
-  --shell-card-bg: rgba(242, 255, 247, 0.94);
-  --shell-card-bg-soft: #ebfff2;
-  --shell-card-border: rgba(63, 209, 122, 0.18);
-  --shell-chip-bg: #dff9e7;
-  --shell-chip-text: #25744a;
-  --shell-input-bg: #f7fffa;
-  --shell-input-border: rgba(63, 209, 122, 0.16);
-  --shell-drawer-bg: #f8fffb;
+  --shell-accent: #9b5cff;
+  --shell-accent-strong: #6e31d8;
+  --shell-accent-soft: #251637;
+  --shell-bg-top: #12091c;
+  --shell-bg-bottom: #05010e;
+  --shell-header-bg: rgba(17, 10, 31, 0.86);
+  --shell-header-border: rgba(155, 92, 255, 0.34);
+  --shell-button-bg: #8b46ff;
+  --shell-button-border: #8b46ff;
+  --shell-button-text: #f7f1ff;
+  --shell-brand-gradient: linear-gradient(135deg, #8b46ff 0%, #3a1771 58%, #171122 100%);
+  --shell-card-bg: rgba(22, 14, 37, 0.88);
+  --shell-card-bg-soft: #1b112f;
+  --shell-card-border: rgba(155, 92, 255, 0.24);
+  --shell-chip-bg: #2b1946;
+  --shell-chip-text: #d7c2ff;
+  --shell-input-bg: rgba(19, 12, 31, 0.95);
+  --shell-input-border: rgba(155, 92, 255, 0.3);
+  --shell-drawer-bg: #130c22;
   --shell-body-font: "Consolas", "Aptos", "Segoe UI", ui-monospace, monospace;
   --shell-display-font: "Arial Black", "Segoe UI Black", "Aptos Display", sans-serif;
-  --shell-card-radius: 18px;
-  --shell-card-shadow: 0 18px 40px rgba(20, 43, 27, 0.18);
+  --shell-card-radius: 20px;
+  --shell-card-shadow: 0 24px 60px rgba(3, 1, 10, 0.5);
   --shell-hover-lift: translateY(-2px) scale(1.008);
+  --shell-page-text: #f3ebff;
+  --shell-heading-text: #fbf7ff;
+  --shell-muted-text: #cbb8eb;
+  --shell-page-overlay-1: rgba(139, 70, 255, 0.28);
+  --shell-page-overlay-2: rgba(74, 31, 140, 0.34);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.04);
   --shell-motion-fast: 0.14s cubic-bezier(0.2, 0.8, 0.2, 1);
   --shell-motion-panel: 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .shell-theme-elvish {
-  --shell-accent: #5f8b73;
-  --shell-accent-strong: #466956;
-  --shell-accent-soft: #eef8f2;
-  --shell-bg-top: #f5fbf7;
-  --shell-bg-bottom: #edf5f0;
-  --shell-header-bg: rgba(248, 253, 250, 0.94);
-  --shell-header-border: rgba(95, 139, 115, 0.16);
-  --shell-button-bg: #5f8b73;
-  --shell-button-border: #5f8b73;
-  --shell-button-text: #ffffff;
-  --shell-brand-gradient: linear-gradient(135deg, #5f8b73 0%, #a8c3a9 100%);
-  --shell-card-bg: rgba(246, 252, 248, 0.94);
-  --shell-card-bg-soft: #f0f8f2;
-  --shell-card-border: rgba(95, 139, 115, 0.16);
-  --shell-chip-bg: #e2f0e6;
-  --shell-chip-text: #466956;
-  --shell-input-bg: #fbfefb;
-  --shell-input-border: rgba(95, 139, 115, 0.14);
-  --shell-drawer-bg: #fbfefb;
+  --shell-accent: #c8a84f;
+  --shell-accent-strong: #8d7531;
+  --shell-accent-soft: #203325;
+  --shell-bg-top: #0d1b14;
+  --shell-bg-bottom: #13261b;
+  --shell-header-bg: rgba(16, 34, 23, 0.84);
+  --shell-header-border: rgba(200, 168, 79, 0.28);
+  --shell-button-bg: #b8963f;
+  --shell-button-border: #b8963f;
+  --shell-button-text: #fff8e2;
+  --shell-brand-gradient: linear-gradient(135deg, #b8963f 0%, #365b3f 52%, #173223 100%);
+  --shell-card-bg: rgba(19, 38, 27, 0.88);
+  --shell-card-bg-soft: #173224;
+  --shell-card-border: rgba(200, 168, 79, 0.2);
+  --shell-chip-bg: #24402c;
+  --shell-chip-text: #f3de9c;
+  --shell-input-bg: rgba(18, 33, 24, 0.95);
+  --shell-input-border: rgba(200, 168, 79, 0.26);
+  --shell-drawer-bg: #14251b;
   --shell-body-font: "Georgia", "Aptos", "Segoe UI", serif;
   --shell-display-font: "Palatino Linotype", "Book Antiqua", "Georgia", serif;
   --shell-card-radius: 26px;
-  --shell-card-shadow: 0 20px 46px rgba(71, 105, 86, 0.11);
+  --shell-card-shadow: 0 24px 54px rgba(4, 14, 9, 0.42);
   --shell-hover-lift: translateY(-3px);
+  --shell-page-text: #f5efd5;
+  --shell-heading-text: #fff8e4;
+  --shell-muted-text: #d7c79c;
+  --shell-page-overlay-1: rgba(200, 168, 79, 0.18);
+  --shell-page-overlay-2: rgba(73, 118, 71, 0.24);
+  --shell-page-overlay-3: rgba(255, 241, 194, 0.04);
   --shell-motion-fast: 0.24s ease;
   --shell-motion-panel: 0.32s ease;
 }
@@ -1947,6 +1958,61 @@ button.calendar-detail-card:disabled {
 .settings-toggle-row input {
   width: 20px;
   height: 20px;
+}
+
+.app-shell-vnext.shell-theme-gamer .page-hero-vnext h1,
+.app-shell-vnext.shell-theme-gamer .panel-header h2,
+.app-shell-vnext.shell-theme-gamer .workspace-hero h1,
+.app-shell-vnext.shell-theme-gamer .task-card-title-row h3,
+.app-shell-vnext.shell-theme-gamer .calendar-status-card strong,
+.app-shell-vnext.shell-theme-gamer .hq-link-card strong,
+.app-shell-vnext.shell-theme-gamer .hq-list-card strong,
+.app-shell-vnext.shell-theme-gamer .settings-choice-card strong,
+.app-shell-vnext.shell-theme-elvish .page-hero-vnext h1,
+.app-shell-vnext.shell-theme-elvish .panel-header h2,
+.app-shell-vnext.shell-theme-elvish .workspace-hero h1,
+.app-shell-vnext.shell-theme-elvish .task-card-title-row h3,
+.app-shell-vnext.shell-theme-elvish .calendar-status-card strong,
+.app-shell-vnext.shell-theme-elvish .hq-link-card strong,
+.app-shell-vnext.shell-theme-elvish .hq-list-card strong,
+.app-shell-vnext.shell-theme-elvish .settings-choice-card strong {
+  color: var(--shell-heading-text);
+}
+
+.app-shell-vnext.shell-theme-gamer .page-hero-vnext p,
+.app-shell-vnext.shell-theme-gamer .panel-header p,
+.app-shell-vnext.shell-theme-gamer .workspace-hero p,
+.app-shell-vnext.shell-theme-gamer .task-card-copy p,
+.app-shell-vnext.shell-theme-gamer .task-card-copy small,
+.app-shell-vnext.shell-theme-gamer .calendar-status-card p,
+.app-shell-vnext.shell-theme-gamer .hq-link-card p,
+.app-shell-vnext.shell-theme-gamer .hq-list-card p,
+.app-shell-vnext.shell-theme-gamer .settings-choice-card p,
+.app-shell-vnext.shell-theme-gamer .settings-toggle-row p,
+.app-shell-vnext.shell-theme-elvish .page-hero-vnext p,
+.app-shell-vnext.shell-theme-elvish .panel-header p,
+.app-shell-vnext.shell-theme-elvish .workspace-hero p,
+.app-shell-vnext.shell-theme-elvish .task-card-copy p,
+.app-shell-vnext.shell-theme-elvish .task-card-copy small,
+.app-shell-vnext.shell-theme-elvish .calendar-status-card p,
+.app-shell-vnext.shell-theme-elvish .hq-link-card p,
+.app-shell-vnext.shell-theme-elvish .hq-list-card p,
+.app-shell-vnext.shell-theme-elvish .settings-choice-card p,
+.app-shell-vnext.shell-theme-elvish .settings-toggle-row p {
+  color: var(--shell-muted-text);
+}
+
+.app-shell-vnext.shell-theme-gamer input,
+.app-shell-vnext.shell-theme-gamer textarea,
+.app-shell-vnext.shell-theme-gamer select,
+.app-shell-vnext.shell-theme-gamer .search-input,
+.app-shell-vnext.shell-theme-elvish input,
+.app-shell-vnext.shell-theme-elvish textarea,
+.app-shell-vnext.shell-theme-elvish select,
+.app-shell-vnext.shell-theme-elvish .search-input {
+  color: var(--shell-page-text);
+  background: var(--shell-input-bg);
+  border-color: var(--shell-input-border);
 }
 
 @media (max-width: 960px) {
