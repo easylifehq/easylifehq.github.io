@@ -16,6 +16,7 @@ export type CalendarDayItem = {
   helper: string;
   allDay: boolean;
   isFlexible: boolean;
+  isCompleted: boolean;
 };
 
 export function startOfDay(date: Date) {
@@ -177,6 +178,7 @@ export function getItemsForDay(
           : `${formatTimeLabel(event.startAt)} - ${formatTimeLabel(event.endAt)}`,
         allDay: event.allDay,
         isFlexible: false,
+        isCompleted: false,
       };
     });
 
@@ -192,10 +194,13 @@ export function getItemsForDay(
         endAt: taskBlock.endAt,
         kind: "task-block",
         color: category.color,
-        badge: taskBlock.planningState,
-        helper: `${formatTimeLabel(taskBlock.startAt)} - ${formatTimeLabel(taskBlock.endAt)}`,
+        badge: taskBlock.completed ? "completed" : taskBlock.planningState,
+        helper: taskBlock.completed
+          ? `Completed | ${formatTimeLabel(taskBlock.startAt)} - ${formatTimeLabel(taskBlock.endAt)}`
+          : `${formatTimeLabel(taskBlock.startAt)} - ${formatTimeLabel(taskBlock.endAt)}`,
         allDay: false,
         isFlexible: true,
+        isCompleted: taskBlock.completed,
       };
     });
 
@@ -216,7 +221,7 @@ export function getScheduledMinutesForDay(
     .reduce((total, event) => total + getDurationMinutes(event.startAt, event.endAt), 0);
 
   const taskMinutes = taskBlocks
-    .filter((taskBlock) => isSameDay(taskBlock.startAt, date))
+    .filter((taskBlock) => isSameDay(taskBlock.startAt, date) && !taskBlock.completed)
     .reduce(
       (total, taskBlock) => total + getDurationMinutes(taskBlock.startAt, taskBlock.endAt),
       0

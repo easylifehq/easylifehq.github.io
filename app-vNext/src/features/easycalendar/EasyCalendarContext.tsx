@@ -202,7 +202,10 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         if (!user) return;
         await removeCategory(user.uid, categoryId);
       },
-      scheduleTask: async (task: TaskRecord, draft) => {
+      scheduleTask: async (
+        task: TaskRecord,
+        draft: Pick<CalendarTaskBlockDraft, "startAt" | "endAt" | "planningState" | "userAdjusted">
+      ) => {
         if (!user) return;
 
         const blockId = await createCalendarTaskBlock(user.uid, {

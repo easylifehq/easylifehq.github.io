@@ -23,7 +23,7 @@ export function EasyCalendarDayPage() {
       <PageSection
         eyebrow="Day View"
         title={formatLongDate(today)}
-        description="Today’s commitments and flexible work blocks, pulled live from Firestore."
+        description="Today's commitments and flexible work blocks, pulled live from Firestore."
       >
         {error ? <p className="error-copy">{error}</p> : null}
         <div className="stats-grid">
@@ -47,7 +47,7 @@ export function EasyCalendarDayPage() {
         title="Today timeline"
         description="This is the live day-level base the planning engine will build on."
       >
-        {isLoading ? <p className="helper-copy">Loading today&apos;s schedule...</p> : null}
+        {isLoading ? <p className="helper-copy">Loading today's schedule...</p> : null}
         {isOverloaded ? (
           <div className="calendar-warning-card">
             <strong>This day looks overloaded.</strong>
@@ -63,7 +63,7 @@ export function EasyCalendarDayPage() {
             items.map((item) => (
               <article
                 key={`${item.kind}-${item.id}`}
-                className={`calendar-detail-card${item.isFlexible ? " flexible" : " fixed"}`}
+                className={`calendar-detail-card${item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
                 style={
                   {
                     "--calendar-block-color": item.color,

@@ -60,7 +60,8 @@ export function TaskDrawer({
   }, [task]);
 
   if (!task) return null;
-  const taskId = task.id;
+  const currentTask = task;
+  const taskId = currentTask.id;
 
   async function handleSave(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -82,7 +83,7 @@ export function TaskDrawer({
   }
 
   async function handleSchedule() {
-    if (task.completed) return;
+    if (currentTask.completed) return;
 
     const startAt = combineDateAndTime(scheduleDate, scheduleTime);
     const durationMinutes = Math.max(5, Number(scheduleDuration) || 30);
@@ -95,7 +96,7 @@ export function TaskDrawer({
 
     setIsScheduling(true);
     try {
-      await scheduleTask(task, {
+      await scheduleTask(currentTask, {
         startAt,
         endAt,
         planningState,
@@ -203,7 +204,7 @@ export function TaskDrawer({
             </button>
 
             <div className="drawer-actions-right">
-              {task.completed ? (
+              {currentTask.completed ? (
                 <button type="button" className="ghost-button" onClick={() => void onReopen(taskId).then(onClose)}>
                   Reopen
                 </button>
@@ -275,8 +276,8 @@ export function TaskDrawer({
 
           <div className="drawer-link-footer">
             <p className="helper-copy">
-              {task.linkedCalendarBlockIds.length
-                ? `Already linked ${task.linkedCalendarBlockIds.length} time(s).`
+              {currentTask.linkedCalendarBlockIds.length
+                ? `Already linked ${currentTask.linkedCalendarBlockIds.length} time(s).`
                 : "Not on the calendar yet."}
             </p>
             {scheduleMessage ? <p className="helper-copy">{scheduleMessage}</p> : null}
@@ -284,7 +285,7 @@ export function TaskDrawer({
               type="button"
               className="primary-button"
               onClick={() => void handleSchedule()}
-              disabled={isScheduling || task.completed}
+              disabled={isScheduling || currentTask.completed}
             >
               {isScheduling ? "Sending..." : "Send to EasyCalendar"}
             </button>

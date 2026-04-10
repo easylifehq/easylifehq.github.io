@@ -15,6 +15,10 @@ import {
   type TaskDraft,
   type TaskRecord,
 } from "@/lib/firestore/tasks";
+import {
+  markCalendarTaskBlocksActive,
+  markCalendarTaskBlocksComplete,
+} from "@/lib/firestore/calendarTaskBlocks";
 import { useAuth } from "@/features/auth/AuthContext";
 
 type EasyListContextValue = {
@@ -72,12 +76,20 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
 
   async function markCompleteForUser(taskId: string) {
     if (!user) return;
+    const task = tasks.find((entry) => entry.id === taskId);
     await completeTask(user.uid, taskId);
+    if (task?.linkedCalendarBlockIds.length) {
+      await markCalendarTaskBlocksComplete(user.uid, task.linkedCalendarBlockIds);
+    }
   }
 
   async function markActiveForUser(taskId: string) {
     if (!user) return;
+    const task = tasks.find((entry) => entry.id === taskId);
     await reopenTask(user.uid, taskId);
+    if (task?.linkedCalendarBlockIds.length) {
+      await markCalendarTaskBlocksActive(user.uid, task.linkedCalendarBlockIds);
+    }
   }
 
   async function deleteTaskForUser(taskId: string) {

@@ -720,6 +720,31 @@ a {
   font-weight: 700;
 }
 
+.calendar-composer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.calendar-form-card,
+.drawer-link-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(99, 76, 58, 0.12);
+  background: #fffdf9;
+}
+
+.drawer-link-card {
+  margin-top: 1rem;
+}
+
+.drawer-link-footer {
+  display: grid;
+  gap: 0.75rem;
+}
+
 .calendar-week-grid,
 .calendar-category-grid,
 .calendar-detail-stack,
@@ -849,6 +874,23 @@ a {
   color: #875a38;
 }
 
+.calendar-block-vnext.completed,
+.calendar-detail-card.completed {
+  opacity: 0.58;
+  border-style: solid;
+}
+
+.calendar-block-vnext.completed::before,
+.calendar-detail-card.completed::before {
+  opacity: 0.08;
+}
+
+.calendar-block-vnext.completed small,
+.calendar-detail-card.completed span {
+  background: #eef2ee;
+  color: #526154;
+}
+
 .calendar-category-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -911,7 +953,8 @@ a {
 
   .task-composer-grid,
   .stats-grid,
-  .calendar-category-grid {
+  .calendar-category-grid,
+  .calendar-composer-grid {
     grid-template-columns: 1fr;
   }
 

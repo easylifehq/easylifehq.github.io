@@ -6,6 +6,7 @@ import {
   onSnapshot,
   serverTimestamp,
   updateDoc,
+  writeBatch,
   type DocumentData,
   type QueryDocumentSnapshot,
   type QuerySnapshot,
@@ -24,6 +25,8 @@ export type CalendarTaskBlockRecord = {
   isFlexible: boolean;
   planningState: PlanningState;
   userAdjusted: boolean;
+  completed: boolean;
+  completedAt: Date | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -69,6 +72,8 @@ export function normalizeCalendarTaskBlock(
     isFlexible: data.isFlexible !== false,
     planningState: (data.planningState || "suggested") as PlanningState,
     userAdjusted: Boolean(data.userAdjusted),
+    completed: Boolean(data.completed),
+    completedAt: toDate(data.completedAt),
     createdAt: toDate(data.createdAt),
     updatedAt: toDate(data.updatedAt),
   } satisfies CalendarTaskBlockRecord;
@@ -103,6 +108,8 @@ export async function createCalendarTaskBlock(
     isFlexible: draft.isFlexible !== false,
     planningState: draft.planningState || "suggested",
     userAdjusted: Boolean(draft.userAdjusted),
+    completed: false,
+    completedAt: null,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -130,4 +137,36 @@ export async function updateCalendarTaskBlock(
 
 export async function removeCalendarTaskBlock(userId: string, blockId: string) {
   await deleteDoc(doc(db, "users", userId, "calendarTaskBlocks", blockId));
+}
+
+export async function markCalendarTaskBlocksComplete(userId: string, blockIds: string[]) {
+  if (!blockIds.length) return;
+
+  const batch = writeBatch(db);
+
+  blockIds.forEach((blockId) => {
+    batch.update(doc(db, "users", userId, "calendarTaskBlocks", blockId), {
+      completed: true,
+      completedAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+  });
+
+  await batch.commit();
+}
+
+export async function markCalendarTaskBlocksActive(userId: string, blockIds: string[]) {
+  if (!blockIds.length) return;
+
+  const batch = writeBatch(db);
+
+  blockIds.forEach((blockId) => {
+    batch.update(doc(db, "users", userId, "calendarTaskBlocks", blockId), {
+      completed: false,
+      completedAt: null,
+      updatedAt: serverTimestamp(),
+    });
+  });
+
+  await batch.commit();
 }

@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { PageSection } from "@/components/ui/PageSection";
+import { CalendarComposer } from "@/features/easycalendar/components/CalendarComposer";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
   addDays,
@@ -22,6 +23,14 @@ export function EasyCalendarWeekPage() {
 
   return (
     <>
+      <PageSection
+        eyebrow="Capture"
+        title="Add to your calendar"
+        description="Create fixed events here or pull an active EasyList task straight into a flexible calendar block."
+      >
+        <CalendarComposer />
+      </PageSection>
+
       <PageSection
         eyebrow="Week View"
         title="Live calendar foundation"
@@ -72,7 +81,7 @@ export function EasyCalendarWeekPage() {
                     items.map((item) => (
                       <article
                         key={`${item.kind}-${item.id}`}
-                        className={`calendar-block-vnext${item.isFlexible ? " flexible" : " fixed"}`}
+                        className={`calendar-block-vnext${item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
                         style={
                           {
                             "--calendar-block-color": item.color,
