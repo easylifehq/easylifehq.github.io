@@ -9,6 +9,17 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --shell-accent: #c7723f;
+  --shell-accent-strong: #9e552d;
+  --shell-accent-soft: #fff4eb;
+  --shell-bg-top: #f8f3ed;
+  --shell-bg-bottom: #f4efe9;
+  --shell-header-bg: rgba(255, 252, 247, 0.9);
+  --shell-header-border: rgba(99, 76, 58, 0.12);
+  --shell-button-bg: #c7723f;
+  --shell-button-border: #c7723f;
+  --shell-button-text: #ffffff;
+  --shell-brand-gradient: linear-gradient(135deg, #c7723f 0%, #8d6dd7 100%);
 }
 
 *,
@@ -28,7 +39,7 @@ body {
   min-height: 100vh;
   background:
     radial-gradient(circle at top left, rgba(199, 114, 63, 0.1), transparent 28%),
-    linear-gradient(180deg, #f8f3ed 0%, #f4efe9 100%);
+    linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
 }
 
 button,
@@ -80,7 +91,7 @@ a {
   display: grid;
   place-items: center;
   border-radius: 14px;
-  background: linear-gradient(135deg, #c7723f 0%, #8d6dd7 100%);
+  background: var(--shell-brand-gradient);
   color: white;
   font-weight: 800;
 }
@@ -140,8 +151,8 @@ a {
 
 .site-header-inner,
 .app-header {
-  background: rgba(255, 252, 247, 0.9);
-  border: 1px solid rgba(99, 76, 58, 0.12);
+  background: var(--shell-header-bg);
+  border: 1px solid var(--shell-header-border);
   box-shadow: 0 12px 30px rgba(65, 43, 28, 0.08);
 }
 
@@ -178,7 +189,7 @@ a {
 .site-nav-link:hover,
 .app-top-link:hover,
 .app-top-link.active {
-  background: #fff4eb;
+  background: var(--shell-accent-soft);
   color: #241d19;
 }
 
@@ -201,9 +212,9 @@ a {
 }
 
 .button-primary {
-  background: #c7723f;
-  color: white;
-  border: 1px solid #c7723f;
+  background: var(--shell-button-bg);
+  color: var(--shell-button-text);
+  border: 1px solid var(--shell-button-border);
 }
 
 .button-secondary {
@@ -447,6 +458,103 @@ a {
   gap: 1.2rem;
 }
 
+.app-theme {
+  --app-accent: #c7723f;
+  --app-accent-soft: #fff2e7;
+  --app-accent-border: rgba(199, 114, 63, 0.2);
+  --app-accent-text: #8a5b38;
+  --app-panel-bg: rgba(255, 252, 247, 0.92);
+  --app-panel-border: rgba(99, 76, 58, 0.12);
+  --app-stat-bg: #fff8f2;
+  --app-stat-border: rgba(199, 114, 63, 0.14);
+  --app-chip-bg: #fff0e3;
+  --app-chip-text: #8d5b35;
+}
+
+.app-theme-easyhq {
+  --app-accent: #4d7f6f;
+  --app-accent-soft: #eef8f3;
+  --app-accent-border: rgba(77, 127, 111, 0.2);
+  --app-accent-text: #355b4f;
+  --app-panel-bg: rgba(248, 253, 250, 0.95);
+  --app-stat-bg: #f3faf6;
+  --app-stat-border: rgba(77, 127, 111, 0.14);
+  --app-chip-bg: #e5f3eb;
+  --app-chip-text: #355b4f;
+}
+
+.app-theme-easylist {
+  --app-accent: #d06a38;
+  --app-accent-soft: #fff1e7;
+  --app-accent-border: rgba(208, 106, 56, 0.2);
+  --app-accent-text: #8f4f2f;
+  --app-panel-bg: rgba(255, 251, 247, 0.95);
+  --app-stat-bg: #fff7f1;
+  --app-stat-border: rgba(208, 106, 56, 0.15);
+  --app-chip-bg: #ffe9dc;
+  --app-chip-text: #8f4f2f;
+}
+
+.app-theme-easycalendar {
+  --app-accent: #4a7db8;
+  --app-accent-soft: #edf4ff;
+  --app-accent-border: rgba(74, 125, 184, 0.2);
+  --app-accent-text: #365b87;
+  --app-panel-bg: rgba(249, 252, 255, 0.95);
+  --app-stat-bg: #f3f8ff;
+  --app-stat-border: rgba(74, 125, 184, 0.14);
+  --app-chip-bg: #e5efff;
+  --app-chip-text: #365b87;
+}
+
+.app-theme-easynotes {
+  --app-accent: #8a6650;
+  --app-accent-soft: #f6efe8;
+  --app-accent-border: rgba(138, 102, 80, 0.2);
+  --app-accent-text: #6e523f;
+  --app-panel-bg: rgba(255, 253, 249, 0.96);
+  --app-stat-bg: #fbf7f1;
+  --app-stat-border: rgba(138, 102, 80, 0.12);
+  --app-chip-bg: #efe4d8;
+  --app-chip-text: #6e523f;
+}
+
+.app-theme-easypipeline {
+  --app-accent: #a05d3f;
+  --app-accent-soft: #f9efe8;
+  --app-accent-border: rgba(160, 93, 63, 0.2);
+  --app-accent-text: #7d4933;
+  --app-panel-bg: rgba(255, 251, 248, 0.95);
+  --app-stat-bg: #fcf5f0;
+  --app-stat-border: rgba(160, 93, 63, 0.14);
+  --app-chip-bg: #f4e4db;
+  --app-chip-text: #7d4933;
+}
+
+.app-theme-easycontacts {
+  --app-accent: #5e8a77;
+  --app-accent-soft: #eef8f3;
+  --app-accent-border: rgba(94, 138, 119, 0.2);
+  --app-accent-text: #456857;
+  --app-panel-bg: rgba(248, 253, 250, 0.95);
+  --app-stat-bg: #f2faf6;
+  --app-stat-border: rgba(94, 138, 119, 0.14);
+  --app-chip-bg: #e4f2eb;
+  --app-chip-text: #456857;
+}
+
+.app-theme-settings {
+  --app-accent: #6d6a7f;
+  --app-accent-soft: #f1f0f8;
+  --app-accent-border: rgba(109, 106, 127, 0.18);
+  --app-accent-text: #545166;
+  --app-panel-bg: rgba(252, 252, 255, 0.95);
+  --app-stat-bg: #f5f5fb;
+  --app-stat-border: rgba(109, 106, 127, 0.13);
+  --app-chip-bg: #ebeaf5;
+  --app-chip-text: #545166;
+}
+
 .page-wrap-notes {
   width: min(980px, 100%);
   margin-inline: auto;
@@ -456,8 +564,8 @@ a {
 .panel-section,
 .loading-card,
 .auth-card-vnext {
-  background: rgba(255, 252, 247, 0.92);
-  border: 1px solid rgba(99, 76, 58, 0.12);
+  background: var(--app-panel-bg, rgba(255, 252, 247, 0.92));
+  border: 1px solid var(--app-panel-border, rgba(99, 76, 58, 0.12));
   border-radius: 24px;
   box-shadow: 0 18px 44px rgba(65, 43, 28, 0.08);
 }
@@ -469,6 +577,19 @@ a {
 
 .workspace-hero {
   padding: 1.15rem 1.2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.workspace-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto -12% -42% auto;
+  width: 280px;
+  height: 280px;
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--app-accent-soft, #fff2e7) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .workspace-hero.compact {
@@ -503,6 +624,10 @@ a {
 .auth-copy,
 .helper-copy {
   color: #695f57;
+}
+
+.app-theme .eyebrow {
+  color: var(--app-accent-text, #9a6a47);
 }
 
 .panel-header {
@@ -608,8 +733,78 @@ a {
   padding: 0;
   background: transparent;
   border: 0;
-  color: #8a5b38;
+  color: var(--shell-accent-strong);
   font-weight: 700;
+}
+
+.shell-theme-classic {
+  --shell-accent: #c7723f;
+  --shell-accent-strong: #9e552d;
+  --shell-accent-soft: #fff4eb;
+  --shell-bg-top: #f8f3ed;
+  --shell-bg-bottom: #f4efe9;
+  --shell-header-bg: rgba(255, 252, 247, 0.9);
+  --shell-header-border: rgba(99, 76, 58, 0.12);
+  --shell-button-bg: #c7723f;
+  --shell-button-border: #c7723f;
+  --shell-button-text: #ffffff;
+  --shell-brand-gradient: linear-gradient(135deg, #c7723f 0%, #8d6dd7 100%);
+}
+
+.shell-theme-candy {
+  --shell-accent: #f06fa8;
+  --shell-accent-strong: #c45486;
+  --shell-accent-soft: #ffeef6;
+  --shell-bg-top: #fff7fb;
+  --shell-bg-bottom: #fef0f7;
+  --shell-header-bg: rgba(255, 247, 252, 0.92);
+  --shell-header-border: rgba(240, 111, 168, 0.16);
+  --shell-button-bg: #f06fa8;
+  --shell-button-border: #f06fa8;
+  --shell-button-text: #ffffff;
+  --shell-brand-gradient: linear-gradient(135deg, #f06fa8 0%, #ffbf69 100%);
+}
+
+.shell-theme-kirby {
+  --shell-accent: #ff7db6;
+  --shell-accent-strong: #c85f8e;
+  --shell-accent-soft: #fff1f7;
+  --shell-bg-top: #fff8fb;
+  --shell-bg-bottom: #fff1f6;
+  --shell-header-bg: rgba(255, 248, 252, 0.94);
+  --shell-header-border: rgba(255, 125, 182, 0.16);
+  --shell-button-bg: #ff7db6;
+  --shell-button-border: #ff7db6;
+  --shell-button-text: #ffffff;
+  --shell-brand-gradient: linear-gradient(135deg, #ff7db6 0%, #ffa7d1 100%);
+}
+
+.shell-theme-gamer {
+  --shell-accent: #3fd17a;
+  --shell-accent-strong: #2d9d5b;
+  --shell-accent-soft: #ecfff4;
+  --shell-bg-top: #f3fff8;
+  --shell-bg-bottom: #eaf7ef;
+  --shell-header-bg: rgba(248, 255, 251, 0.94);
+  --shell-header-border: rgba(63, 209, 122, 0.17);
+  --shell-button-bg: #1d2d25;
+  --shell-button-border: #1d2d25;
+  --shell-button-text: #dfffe9;
+  --shell-brand-gradient: linear-gradient(135deg, #3fd17a 0%, #1d2d25 100%);
+}
+
+.shell-theme-elvish {
+  --shell-accent: #5f8b73;
+  --shell-accent-strong: #466956;
+  --shell-accent-soft: #eef8f2;
+  --shell-bg-top: #f5fbf7;
+  --shell-bg-bottom: #edf5f0;
+  --shell-header-bg: rgba(248, 253, 250, 0.94);
+  --shell-header-border: rgba(95, 139, 115, 0.16);
+  --shell-button-bg: #5f8b73;
+  --shell-button-border: #5f8b73;
+  --shell-button-text: #ffffff;
+  --shell-brand-gradient: linear-gradient(135deg, #5f8b73 0%, #a8c3a9 100%);
 }
 
 .subnav {
@@ -624,16 +819,16 @@ a {
   min-height: 40px;
   padding: 0.65rem 0.85rem;
   border-radius: 999px;
-  border: 1px solid rgba(99, 76, 58, 0.12);
-  background: rgba(255, 252, 247, 0.92);
+  border: 1px solid var(--app-panel-border, rgba(99, 76, 58, 0.12));
+  background: var(--app-panel-bg, rgba(255, 252, 247, 0.92));
   color: #6a5e55;
   font-weight: 700;
 }
 
 .subnav-link.active {
-  background: #fff2e7;
-  border-color: rgba(199, 114, 63, 0.2);
-  color: #2a211d;
+  background: var(--app-accent-soft, #fff2e7);
+  border-color: var(--app-accent-border, rgba(199, 114, 63, 0.2));
+  color: var(--app-accent-text, #2a211d);
 }
 
 .notes-library-toolbar {
@@ -704,8 +899,8 @@ a {
   align-items: center;
   padding: 0.38rem 0.65rem;
   border-radius: 999px;
-  background: #fff0e3;
-  color: #8d5b35;
+  background: var(--app-chip-bg, #fff0e3);
+  color: var(--app-chip-text, #8d5b35);
   font-size: 0.83rem;
   font-weight: 700;
 }
@@ -815,8 +1010,8 @@ a {
   gap: 0.3rem;
   padding: 1rem;
   border-radius: 18px;
-  background: #fff8f2;
-  border: 1px solid rgba(199, 114, 63, 0.14);
+  background: var(--app-stat-bg, #fff8f2);
+  border: 1px solid var(--app-stat-border, rgba(199, 114, 63, 0.14));
 }
 
 .stat-card-vnext span {
@@ -1589,6 +1784,56 @@ button.calendar-detail-card:disabled {
   color: #3b6a40;
 }
 
+.settings-option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.settings-choice-card,
+.settings-toggle-row {
+  border-radius: 20px;
+  border: 1px solid var(--app-panel-border, rgba(99, 76, 58, 0.12));
+  background: var(--app-panel-bg, rgba(255, 252, 247, 0.92));
+}
+
+.settings-choice-card {
+  width: 100%;
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem;
+  text-align: left;
+}
+
+.settings-choice-card.active {
+  background: var(--app-accent-soft, #fff2e7);
+  border-color: var(--app-accent-border, rgba(199, 114, 63, 0.2));
+}
+
+.settings-choice-card p,
+.settings-toggle-row p {
+  margin: 0;
+  color: #6d6158;
+}
+
+.settings-toggle-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.settings-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem 1rem;
+}
+
+.settings-toggle-row input {
+  width: 20px;
+  height: 20px;
+}
+
 @media (max-width: 960px) {
   .app-shell-vnext {
     grid-template-columns: 1fr;
@@ -1617,7 +1862,8 @@ button.calendar-detail-card:disabled {
   .task-composer-grid,
   .stats-grid,
   .calendar-category-grid,
-  .calendar-composer-grid {
+  .calendar-composer-grid,
+  .settings-option-grid {
     grid-template-columns: 1fr;
   }
 

@@ -11,7 +11,7 @@ const links = [
 export function EasyPipelineLayout() {
   return (
     <EasyPipelineProvider>
-      <main className="page-wrap">
+      <main className="page-wrap app-theme app-theme-easypipeline">
         <AppWorkspaceHeader
           appLabel="EasyPipeline"
           title="Your application tracker."

@@ -5,7 +5,7 @@ import { EasyNotesProvider } from "@/features/easynotes/EasyNotesContext";
 export function EasyNotesLayout() {
   return (
     <EasyNotesProvider>
-      <main className="page-wrap page-wrap-notes">
+      <main className="page-wrap page-wrap-notes app-theme app-theme-easynotes">
         <AppWorkspaceHeader
           appLabel="EasyNotes"
           title="Your note shelf."

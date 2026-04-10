@@ -8,7 +8,7 @@ const links = [
 
 export function EasyCalendarLayout() {
   return (
-    <main className="page-wrap">
+    <main className="page-wrap app-theme app-theme-easycalendar">
       <AppWorkspaceHeader
         appLabel="EasyCalendar"
         title="Your time system."

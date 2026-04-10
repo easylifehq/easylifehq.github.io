@@ -13,7 +13,7 @@ const links = [
 export function EasyListLayout() {
   return (
     <EasyListProvider>
-      <main className="page-wrap">
+      <main className="page-wrap app-theme app-theme-easylist">
         <AppWorkspaceHeader
           appLabel="EasyList"
           title="Your task system."

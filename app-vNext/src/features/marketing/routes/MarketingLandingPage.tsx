@@ -22,6 +22,20 @@ const productCards = [
     description:
       "See fixed commitments, flexible task blocks, and the open windows where progress actually fits.",
   },
+  {
+    id: "easynotes",
+    eyebrow: "EasyNotes",
+    title: "The thought capture space.",
+    description:
+      "Write quickly, keep it simple, and turn rough notes into task drafts when you are ready.",
+  },
+  {
+    id: "easypipeline",
+    eyebrow: "EasyPipeline",
+    title: "The momentum tracker.",
+    description:
+      "Keep applications, follow-ups, and career movement organized without muddying the rest of your system.",
+  },
 ];
 
 export function MarketingLandingPage() {
@@ -50,8 +64,8 @@ export function MarketingLandingPage() {
           <span className="info-pill">Mobile-first where it matters</span>
           <h2>One ecosystem. Clearer days.</h2>
           <p>
-            EasyList tracks what matters, EasyCalendar finds when it fits, and
-            EasyHQ keeps the whole picture understandable.
+            EasyList, EasyCalendar, EasyNotes, EasyPipeline, and EasyHQ each do
+            one job well, then stay connected so the whole system still feels simple.
           </p>
         </div>
       </section>
@@ -86,15 +100,15 @@ export function MarketingLandingPage() {
         <div className="marketing-card-grid">
           <article className="marketing-card">
             <h3>1. Capture it</h3>
-            <p>Drop tasks, notes, and rough thoughts into EasyList and EasyNotes without overthinking structure.</p>
+            <p>Drop tasks, notes, and rough thoughts into the right app without forcing everything into one giant workspace.</p>
           </article>
           <article className="marketing-card">
             <h3>2. Plan it</h3>
             <p>Use EasyCalendar to place what matters into open time without confusing soft plans with fixed commitments.</p>
           </article>
           <article className="marketing-card">
-            <h3>3. See the whole day</h3>
-            <p>EasyHQ gives you the next few things to care about and whether your day still has room.</p>
+            <h3>3. Stay connected</h3>
+            <p>EasyHQ ties the suite together so you can jump between apps without losing the shape of your day.</p>
           </article>
         </div>
       </section>
@@ -108,11 +122,11 @@ export function MarketingLandingPage() {
         <div className="marketing-highlights">
           <div className="mini-panel-vnext">
             <span>Clear roles</span>
-            <strong>Tasks stay in EasyList. Time stays in EasyCalendar.</strong>
+            <strong>Each app has a clear job instead of becoming one bloated all-in-one tool.</strong>
           </div>
           <div className="mini-panel-vnext">
-            <span>Smarter planning</span>
-            <strong>Open windows become suggested work time instead of dead space.</strong>
+            <span>Connected ecosystem</span>
+            <strong>One login, shared context, and fast switching between apps.</strong>
           </div>
           <div className="mini-panel-vnext">
             <span>Calm design</span>

@@ -5,7 +5,7 @@ import { EasyContactsProvider } from "@/features/easycontacts/EasyContactsContex
 export function EasyContactsLayout() {
   return (
     <EasyContactsProvider>
-      <main className="page-wrap">
+      <main className="page-wrap app-theme app-theme-easycontacts">
         <AppWorkspaceHeader
           appLabel="EasyContacts"
           title="Your relationship layer."

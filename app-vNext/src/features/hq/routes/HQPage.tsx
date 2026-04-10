@@ -11,9 +11,11 @@ import {
   startOfDay,
 } from "@/features/easycalendar/lib/calendarUtils";
 import { formatDate, isCompletedToday, sortActiveTasks } from "@/features/easylist/lib/taskUtils";
+import { useSettings } from "@/features/settings/SettingsContext";
 
 export function HQPage() {
   const { events, taskBlocks, tasks, isLoading, error } = useEasyCalendar();
+  const { isAppVisible } = useSettings();
   const today = startOfDay(new Date());
   const todayEvents = events
     .filter((event) => event.startAt && startOfDay(event.startAt).getTime() === today.getTime())
@@ -26,7 +28,7 @@ export function HQPage() {
   const planPreview = buildPlanMyDaySuggestions(today, tasks, events, taskBlocks).suggestions.slice(0, 3);
 
   return (
-    <main className="page-wrap">
+    <main className="page-wrap app-theme app-theme-easyhq">
       <AppWorkspaceHeader
         appLabel="EasyHQ"
         title="Your control center."
@@ -77,26 +79,42 @@ export function HQPage() {
           description="Jump straight into the workspace you need."
         >
           <div className="hq-link-grid">
-            <Link className="hq-link-card" to="/app/easylist/dashboard">
-              <strong>Open EasyList</strong>
-              <p>Review priorities, inbox, and what still needs to get done.</p>
-            </Link>
-            <Link className="hq-link-card" to="/app/easycalendar/day">
-              <strong>Open EasyCalendar</strong>
-              <p>See today, move blocks, and adjust your schedule fast.</p>
-            </Link>
-            <Link className="hq-link-card" to="/app/easycalendar/day">
-              <strong>Plan My Day</strong>
-              <p>Run the day-planning pass and turn open time into progress.</p>
-            </Link>
-            <Link className="hq-link-card" to="/app/easynotes">
-              <strong>Open EasyNotes</strong>
-              <p>Jot down rough thoughts, meeting notes, and drafts for later.</p>
-            </Link>
-            <Link className="hq-link-card" to="/app/easypipeline/dashboard">
-              <strong>Open EasyPipeline</strong>
-              <p>Review applications, follow-ups, and job-search momentum.</p>
-            </Link>
+            {isAppVisible("easylist") ? (
+              <Link className="hq-link-card" to="/app/easylist/dashboard">
+                <strong>Open EasyList</strong>
+                <p>Review priorities, inbox, and what still needs to get done.</p>
+              </Link>
+            ) : null}
+            {isAppVisible("easycalendar") ? (
+              <Link className="hq-link-card" to="/app/easycalendar/day">
+                <strong>Open EasyCalendar</strong>
+                <p>See today, move blocks, and adjust your schedule fast.</p>
+              </Link>
+            ) : null}
+            {isAppVisible("easycalendar") ? (
+              <Link className="hq-link-card" to="/app/easycalendar/day">
+                <strong>Plan My Day</strong>
+                <p>Run the day-planning pass and turn open time into progress.</p>
+              </Link>
+            ) : null}
+            {isAppVisible("easynotes") ? (
+              <Link className="hq-link-card" to="/app/easynotes">
+                <strong>Open EasyNotes</strong>
+                <p>Jot down rough thoughts, meeting notes, and drafts for later.</p>
+              </Link>
+            ) : null}
+            {isAppVisible("easypipeline") ? (
+              <Link className="hq-link-card" to="/app/easypipeline/dashboard">
+                <strong>Open EasyPipeline</strong>
+                <p>Review applications, follow-ups, and job-search momentum.</p>
+              </Link>
+            ) : null}
+            {isAppVisible("easycontacts") ? (
+              <Link className="hq-link-card" to="/app/easycontacts">
+                <strong>Open EasyContacts</strong>
+                <p>Keep track of people, follow-ups, and networking context.</p>
+              </Link>
+            ) : null}
           </div>
         </PageSection>
       </div>

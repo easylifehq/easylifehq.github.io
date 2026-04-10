@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { ProductsMenu } from "@/components/navigation/ProductsMenu";
 import { appProductItems } from "@/components/navigation/appProducts";
+import { useSettings } from "@/features/settings/SettingsContext";
 
 type WorkspaceLink = {
   to: string;
@@ -24,7 +25,10 @@ export function AppWorkspaceHeader({
   links = [],
   compact = false,
 }: AppWorkspaceHeaderProps) {
-  const switcherItems = appProductItems.filter((item) => item.href !== currentAppHref);
+  const { isAppVisible } = useSettings();
+  const switcherItems = appProductItems.filter(
+    (item) => item.href !== currentAppHref && (!item.appId || isAppVisible(item.appId))
+  );
 
   return (
     <>
