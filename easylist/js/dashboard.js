@@ -157,10 +157,14 @@ function getDayKeyFromDate(date) {
 }
 
 function getTaskDayKey(task) {
-  if (!task?.dueDate) return null;
+  if (!task?.dueDate) {
+    return getDayKeyFromDate(new Date());
+  }
 
   const due = new Date(task.dueDate);
-  if (Number.isNaN(due.getTime())) return null;
+  if (Number.isNaN(due.getTime())) {
+    return getDayKeyFromDate(new Date());
+  }
 
   return getDayKeyFromDate(due);
 }

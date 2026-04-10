@@ -28,6 +28,11 @@ const elements = {
   addRowBtn: document.getElementById("addTaskRowBtn"),
   saveBtn: document.getElementById("saveTasksBtn"),
   pageMessage: document.getElementById("addTasksMessage"),
+  draftAssistMessage: document.getElementById("draftAssistMessage"),
+  draftInput: document.getElementById("draftInput"),
+  analyzeDraftBtn: document.getElementById("analyzeDraftBtn"),
+  addAllDraftsBtn: document.getElementById("addAllDraftsBtn"),
+  draftSuggestions: document.getElementById("draftSuggestions"),
   form: document.getElementById("addTasksForm"),
   logoutBtn: document.getElementById("logoutBtn"),
   brandMenuBtn: document.getElementById("brandMenuBtn"),
@@ -36,6 +41,7 @@ const elements = {
 
 const state = {
   currentUser: null,
+  draftSuggestions: [],
   isSaving: false,
 };
 
@@ -44,6 +50,7 @@ init();
 function init() {
   initializeTheme();
   wireThemeControls();
+  renderDraftSuggestions();
   bindEvents();
   protectPage();
   setupBrandMenu();
@@ -51,12 +58,16 @@ function init() {
 
 function bindEvents() {
   elements.addRowBtn?.addEventListener("click", handleAddRow);
+  elements.analyzeDraftBtn?.addEventListener("click", handleAnalyzeDraft);
+  elements.addAllDraftsBtn?.addEventListener("click", handleAddAllDrafts);
   elements.form?.addEventListener("submit", handleSaveTasks);
   elements.logoutBtn?.addEventListener("click", handleLogout);
 
   elements.rowsContainer?.addEventListener("click", handleRowActions);
   elements.rowsContainer?.addEventListener("input", handleRowInput);
   elements.rowsContainer?.addEventListener("change", handleRowInput);
+  elements.draftInput?.addEventListener("input", clearDraftAssistMessage);
+  elements.draftSuggestions?.addEventListener("click", handleDraftSuggestionActions);
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
@@ -78,9 +89,11 @@ function protectPage() {
 
     state.currentUser = user;
 
-    if (elements.rowsContainer && !elements.rowsContainer.children.length) {
+  if (elements.rowsContainer && !elements.rowsContainer.children.length) {
       renderInitialRows();
     }
+
+    renderDraftSuggestions();
   });
 }
 
@@ -96,6 +109,18 @@ function renderInitialRows() {
 function handleAddRow() {
   addTaskRow();
   clearPageMessage();
+}
+
+function handleDraftSuggestionActions(event) {
+  const addBtn = event.target.closest("[data-action='add-draft']");
+  if (!addBtn) return;
+
+  const draftIndex = Number(addBtn.dataset.index);
+  const draft = state.draftSuggestions[draftIndex];
+  if (!draft) return;
+
+  addTaskRow(draft);
+  showDraftAssistMessage(`Added "${draft.title}" to the builder.`, "success");
 }
 
 function addTaskRow(prefill = {}) {
@@ -137,45 +162,66 @@ function createTaskRow(prefill = {}) {
   row.dataset.rowId = crypto.randomUUID();
 
   row.innerHTML = `
-    <input
-      type="text"
-      data-field="title"
-      placeholder="Call insurance"
-      value="${escapeHTML(prefill.title ?? "")}"
-    />
+    <label class="task-field">
+      <span class="task-field-label">Title</span>
+      <input
+        type="text"
+        data-field="title"
+        placeholder="Call insurance"
+        value="${escapeHTML(prefill.title ?? "")}"
+      />
+    </label>
 
-    <input
-      type="date"
-      data-field="dueDate"
-      value="${escapeHTML(prefill.dueDate ?? toDateInputValue(new Date()))}"
-    />
+    <label class="task-field">
+      <span class="task-field-label">Due Date</span>
+      <input
+        type="date"
+        data-field="dueDate"
+        value="${escapeHTML(prefill.dueDate ?? "")}"
+      />
+    </label>
 
-    <input
-      type="text"
-      data-field="category"
-      placeholder="Life Admin"
-      value="${escapeHTML(prefill.category ?? "")}"
-    />
+    <label class="task-field">
+      <span class="task-field-label">Category</span>
+      <input
+        type="text"
+        data-field="category"
+        placeholder="Life Admin"
+        value="${escapeHTML(prefill.category ?? "")}"
+      />
+    </label>
 
-    <select data-field="estimatedLength">
-      ${getEstimatedLengthOptions(String(prefill.estimatedLength ?? ""))}
-    </select>
+    <label class="task-field">
+      <span class="task-field-label">Est. Length</span>
+      <select data-field="estimatedLength">
+        ${getEstimatedLengthOptions(String(prefill.estimatedLength ?? ""))}
+      </select>
+    </label>
 
-    <select data-field="priorityTier">
-      ${getPriorityOptions(Number(prefill.priorityTier ?? DEFAULT_PRIORITY_TIER))}
-    </select>
+    <label class="task-field">
+      <span class="task-field-label">Priority</span>
+      <select data-field="priorityTier">
+        ${getPriorityOptions(Number(prefill.priorityTier ?? DEFAULT_PRIORITY_TIER))}
+      </select>
+    </label>
 
-    <select data-field="recurring">
-      <option value="false" ${prefill.recurring ? "" : "selected"}>One-time</option>
-      <option value="true" ${prefill.recurring ? "selected" : ""}>Recurring</option>
-    </select>
+    <label class="task-field">
+      <span class="task-field-label">Recurring</span>
+      <select data-field="recurring">
+        <option value="false" ${prefill.recurring ? "" : "selected"}>One-time</option>
+        <option value="true" ${prefill.recurring ? "selected" : ""}>Recurring</option>
+      </select>
+    </label>
 
-    <input
-      type="text"
-      data-field="notes"
-      placeholder="Ask about deductible"
-      value="${escapeHTML(prefill.notes ?? "")}"
-    />
+    <label class="task-field">
+      <span class="task-field-label">Notes</span>
+      <input
+        type="text"
+        data-field="notes"
+        placeholder="Ask about deductible"
+        value="${escapeHTML(prefill.notes ?? "")}"
+      />
+    </label>
 
     <button
       type="button"
@@ -188,6 +234,125 @@ function createTaskRow(prefill = {}) {
   `;
 
   return row;
+}
+
+function startOfDay(dateInput = new Date()) {
+  const date = new Date(dateInput);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
+function addDays(dateInput, days) {
+  const date = new Date(dateInput);
+  date.setDate(date.getDate() + days);
+  return date;
+}
+
+function getNextWeekday(targetDay) {
+  const today = startOfDay(new Date());
+  const todayDay = today.getDay();
+  let distance = (targetDay - todayDay + 7) % 7;
+
+  if (distance === 0) {
+    distance = 7;
+  }
+
+  return addDays(today, distance);
+}
+
+function extractDueDate(text) {
+  const lower = text.toLowerCase();
+  const today = startOfDay(new Date());
+
+  if (/\btoday\b/.test(lower)) return toDateInputValue(today);
+  if (/\btomorrow\b/.test(lower)) return toDateInputValue(addDays(today, 1));
+  if (/\bthis weekend\b/.test(lower)) return toDateInputValue(getNextWeekday(6));
+  if (/\bnext week\b/.test(lower)) return toDateInputValue(addDays(today, 7));
+
+  const weekdayMatchers = [
+    { pattern: /\bmonday\b/, day: 1 },
+    { pattern: /\btuesday\b/, day: 2 },
+    { pattern: /\bwednesday\b/, day: 3 },
+    { pattern: /\bthursday\b/, day: 4 },
+    { pattern: /\bfriday\b/, day: 5 },
+    { pattern: /\bsaturday\b/, day: 6 },
+    { pattern: /\bsunday\b/, day: 0 },
+  ];
+
+  const match = weekdayMatchers.find((item) => item.pattern.test(lower));
+  return match ? toDateInputValue(getNextWeekday(match.day)) : "";
+}
+
+function inferCategory(text) {
+  const lower = text.toLowerCase();
+
+  if (/(professor|class|assignment|school|study|exam|campus)/.test(lower)) return "School";
+  if (/(grocer|laundry|clean|kitchen|home|apartment|roommate|dinner|cook)/.test(lower)) return "Home";
+  if (/(job|resume|recruiter|application|interview|linkedin)/.test(lower)) return "Career";
+  if (/(email|call|insurance|bank|doctor|dentist|lease|landlord|form|follow up)/.test(lower)) {
+    return "Life Admin";
+  }
+
+  return "";
+}
+
+function inferPriorityTier(text) {
+  const lower = text.toLowerCase();
+
+  if (/(asap|urgent|important|deadline|immediately|today)/.test(lower)) return 4;
+  if (/(soon|follow up|this week|tomorrow)/.test(lower)) return 3;
+  return DEFAULT_PRIORITY_TIER;
+}
+
+function cleanDraftTitle(text) {
+  return text
+    .replace(/\b(today|tomorrow|this weekend|next week)\b/gi, "")
+    .replace(/\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/^[\-\*\d\.\)\]]+\s*/, "")
+    .trim()
+    .replace(/^[a-z]/, (letter) => letter.toUpperCase());
+}
+
+function splitDraftInput(text) {
+  const normalized = text.replace(/\r/g, "").trim();
+  if (!normalized) return [];
+
+  const lines = normalized
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length > 1) {
+    return lines;
+  }
+
+  return normalized
+    .split(/(?:;|(?<=[.!?])\s+(?=[A-Z0-9]))/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function buildDraftSuggestions(text) {
+  return splitDraftInput(text)
+    .map((chunk) => {
+      const title = cleanDraftTitle(chunk);
+      if (!title) return null;
+
+      const priorityTier = inferPriorityTier(chunk);
+
+      return {
+        title,
+        dueDate: extractDueDate(chunk),
+        category: inferCategory(chunk),
+        estimatedLength: "",
+        priorityTier,
+        recurring: false,
+        notes: "",
+        originalText: chunk,
+      };
+    })
+    .filter(Boolean);
 }
 
 function handleRowActions(event) {
@@ -207,6 +372,67 @@ function handleRowActions(event) {
 
 function handleRowInput() {
   clearPageMessage();
+}
+
+function showDraftAssistMessage(message, stateName = "") {
+  if (!elements.draftAssistMessage) return;
+
+  elements.draftAssistMessage.textContent = message;
+  if (stateName) {
+    elements.draftAssistMessage.dataset.state = stateName;
+  } else {
+    delete elements.draftAssistMessage.dataset.state;
+  }
+}
+
+function clearDraftAssistMessage() {
+  showDraftAssistMessage("");
+}
+
+function renderDraftSuggestions() {
+  if (!elements.draftSuggestions) return;
+
+  if (!state.draftSuggestions.length) {
+    elements.draftSuggestions.innerHTML = `
+      <div class="draft-empty">
+        Paste a few lines above and EasyList will draft rows you can review before adding.
+      </div>
+    `;
+    return;
+  }
+
+  elements.draftSuggestions.innerHTML = state.draftSuggestions
+    .map((draft, index) => {
+      const meta = [];
+      if (draft.dueDate) meta.push(`Due ${escapeHTML(draft.dueDate)}`);
+      if (draft.category) meta.push(escapeHTML(draft.category));
+      meta.push(escapeHTML(getPriorityMeta(draft.priorityTier).label));
+
+      return `
+        <article class="draft-card">
+          <div class="draft-card-top">
+            <div>
+              <h3>${escapeHTML(draft.title)}</h3>
+              <p>${escapeHTML(draft.originalText)}</p>
+            </div>
+
+            <button
+              type="button"
+              class="ghost-btn"
+              data-action="add-draft"
+              data-index="${index}"
+            >
+              Add Row
+            </button>
+          </div>
+
+          <div class="draft-meta">
+            ${meta.map((item) => `<span>${item}</span>`).join("")}
+          </div>
+        </article>
+      `;
+    })
+    .join("");
 }
 
 function getFieldValue(row, field) {
@@ -287,6 +513,43 @@ function showPageMessage(message, stateName = "") {
 
 function clearPageMessage() {
   showPageMessage("");
+}
+
+function handleAnalyzeDraft() {
+  const input = elements.draftInput?.value.trim() || "";
+
+  if (!input) {
+    state.draftSuggestions = [];
+    renderDraftSuggestions();
+    showDraftAssistMessage("Paste some text first so EasyList has something to analyze.", "error");
+    return;
+  }
+
+  state.draftSuggestions = buildDraftSuggestions(input);
+  renderDraftSuggestions();
+
+  if (!state.draftSuggestions.length) {
+    showDraftAssistMessage("Could not turn that into draft rows yet. Try one task or thought per line.", "error");
+    return;
+  }
+
+  showDraftAssistMessage(
+    `${state.draftSuggestions.length} draft row${state.draftSuggestions.length === 1 ? "" : "s"} ready to review.`,
+    "success"
+  );
+}
+
+function handleAddAllDrafts() {
+  if (!state.draftSuggestions.length) {
+    showDraftAssistMessage("Analyze some text first, then add the drafts you want.", "error");
+    return;
+  }
+
+  state.draftSuggestions.forEach((draft) => addTaskRow(draft));
+  showDraftAssistMessage(
+    `${state.draftSuggestions.length} draft row${state.draftSuggestions.length === 1 ? "" : "s"} added to the builder.`,
+    "success"
+  );
 }
 
 function setSavingState(isSaving) {

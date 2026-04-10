@@ -8,7 +8,8 @@
 
 .bulk-entry,
 .quick-guide,
-.preview-panel {
+.preview-panel,
+.draft-assist {
   padding: 1.2rem;
 }
 
@@ -99,6 +100,21 @@
   box-shadow: var(--card-glow);
 }
 
+.task-field {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.task-field-label {
+  display: none;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-soft);
+}
+
 .task-row:focus-within {
   border-color: var(--border-strong);
   box-shadow:
@@ -186,6 +202,85 @@
   color: #d64545;
 }
 
+.draft-assist {
+  display: grid;
+  gap: 1rem;
+}
+
+.draft-actions {
+  justify-content: flex-end;
+}
+
+.draft-input-shell textarea {
+  min-height: 160px;
+  background: var(--surface-strong);
+}
+
+.draft-suggestions {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.draft-empty {
+  padding: 1rem;
+  border-radius: 18px;
+  border: 1px dashed var(--border);
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--surface-muted) 84%, transparent);
+}
+
+.draft-card {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface) 88%, transparent),
+      color-mix(in srgb, var(--surface-muted) 88%, transparent)
+    );
+}
+
+.draft-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.draft-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.draft-card p {
+  margin: 0.35rem 0 0;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.draft-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.draft-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0.38rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
 @media (max-width: 1280px) {
   .bulk-table-head,
   .task-row {
@@ -202,7 +297,8 @@
 @media (max-width: 760px) {
   .bulk-entry,
   .quick-guide,
-  .preview-panel {
+  .preview-panel,
+  .draft-assist {
     padding: 1rem;
   }
 
@@ -216,6 +312,14 @@
   }
 
   .add-tasks-actions > * {
+    flex: 1 1 auto;
+  }
+
+  .draft-actions {
+    width: 100%;
+  }
+
+  .draft-actions > * {
     flex: 1 1 auto;
   }
 
@@ -289,13 +393,8 @@
     padding: 1rem;
   }
 
-  .task-row::before {
-    content: "Task Row";
-    font-size: 0.72rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--text-soft);
+  .task-field-label {
+    display: block;
   }
 
   .task-row input,
@@ -307,6 +406,10 @@
   .row-delete-btn {
     height: 46px;
     border-radius: 14px;
+  }
+
+  .draft-card-top {
+    flex-direction: column;
   }
 }
 

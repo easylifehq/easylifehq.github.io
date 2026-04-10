@@ -109,6 +109,36 @@
         </form>
       </section>
 
+      <section class="draft-assist card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Text Draft Assistant</p>
+            <h2>Paste a brain dump and turn it into draft rows</h2>
+            <p class="builder-subtitle">
+              Drop in messy notes, meeting follow-ups, or a rough list. EasyList will break it
+              into suggested tasks you can add to the builder.
+            </p>
+          </div>
+
+          <div class="section-actions draft-actions">
+            <button type="button" class="ghost-btn" id="analyzeDraftBtn">Analyze Text</button>
+            <button type="button" class="primary-btn" id="addAllDraftsBtn">Add All Drafts</button>
+          </div>
+        </div>
+
+        <label class="draft-input-shell">
+          <span class="sr-only">Task draft input</span>
+          <textarea
+            id="draftInput"
+            rows="7"
+            placeholder="Example:&#10;Call dentist tomorrow&#10;Email professor about office hours&#10;Pick up groceries this weekend&#10;Follow up with landlord about lease"
+          ></textarea>
+        </label>
+
+        <div id="draftAssistMessage" class="page-message" aria-live="polite" role="status"></div>
+        <div id="draftSuggestions" class="draft-suggestions"></div>
+      </section>
+
     <section class="add-task-help-grid">
       <article class="card help-card">
         <p class="eyebrow">Quick Guide</p>
