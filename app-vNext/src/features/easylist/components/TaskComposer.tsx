@@ -156,6 +156,9 @@ function cleanTaskTitle(text: string) {
     .replace(/^\s*(?:[-*+]|[0-9]+[.)])\s*/, "")
     .replace(/^\s*\[[ xX]\]\s*/, "")
     .replace(/^\s*\[[^[\]]{2,24}\]\s*/, "")
+    .replace(/^\s*(?:I\s+)?(?:also\s+)?(?:probably\s+)?(?:really\s+)?(?:need|have|should)\s+to\s+/i, "")
+    .replace(/^\s*(?:I\s+)?(?:also\s+)?(?:probably\s+)?should\s+/i, "")
+    .replace(/^\s*(?:and\s+)?(?:also\s+)?(?:maybe|probably)\s+/i, "")
     .replace(/\b(?:due|by)\s+(?:today|tonight|tomorrow|tmrw|tmr|next week|this weekend|sun(?:day)?|mon(?:day)?|tues?(?:day)?|wed(?:nesday)?|thu(?:rs)?(?:day)?|fri(?:day)?|sat(?:urday)?|\d{1,2}[/-]\d{1,2}(?:[/-]\d{2,4})?|20\d{2}-\d{1,2}-\d{1,2})\b/gi, "")
     .replace(/\b\d+(?:\.\d+)?\s*(?:hours?|hrs?|h|minutes?|mins?|min|m)\b/gi, "")
     .replace(/\b(?:urgent|asap|important|high priority|low priority|p[1-5]|priority [1-5])\b/gi, "")
@@ -166,10 +169,31 @@ function cleanTaskTitle(text: string) {
     .trim();
 }
 
+const ACTION_START_PATTERN =
+  /\b(?:email|text|call|send|follow up|update|make|buy|clean|study|finish|start|schedule|review|submit|pick|get|write|read|pay|book|plan|prepare|organize|check|create|draft)\b/i;
+
+function hasActionIntent(text: string) {
+  const lower = text.toLowerCase();
+  return (
+    ACTION_START_PATTERN.test(lower) ||
+    /\b(?:need|needs|needed|have|should|remember|forgot|forgetting)\s+(?:to\s+)?\w+/i.test(lower)
+  );
+}
+
+function removeIntroFluff(text: string) {
+  const actionMatch = text.match(
+    /\b(?:I\s+(?:also\s+)?(?:probably\s+|maybe\s+|really\s+)?(?:need|have)\s+to|I\s+(?:also\s+)?(?:probably\s+|maybe\s+)?should|(?:email|text|call|send|follow up|update|make|buy|clean|study|finish|start|schedule|review|submit|pick|get|write|read|pay|book|plan|prepare|organize|check|create|draft)\b)/i
+  );
+
+  return actionMatch && actionMatch.index !== undefined ? text.slice(actionMatch.index).trim() : text.trim();
+}
+
 function splitBrainDumpIntoCandidates(text: string) {
   const normalized = text
     .replace(/\r/g, "\n")
     .replace(/[\u2022\u2013\u2014]/g, "-")
+    .replace(/\.\s+(?=I\s+(?:also\s+)?(?:probably\s+|maybe\s+|really\s+)?(?:need|have)\s+to\b)/gi, "\n")
+    .replace(/\.\s+(?=I\s+(?:also\s+)?(?:probably\s+|maybe\s+)?should\b)/gi, "\n")
     .replace(/\b(?:and\s+)?I\s+should\s+/gi, "\n")
     .replace(/\b(?:and\s+)?I\s+(?:also\s+)?(?:really\s+)?need\s+to\s+/gi, "\n")
     .replace(/\b(?:and\s+)?I\s+(?:probably\s+|maybe\s+)?need\s+to\s+/gi, "\n")
@@ -188,11 +212,12 @@ function splitBrainDumpIntoCandidates(text: string) {
 
   return firstPass.flatMap((line) => {
     if (/^\s*(?:[-*+]|[0-9]+[.)])\s+/.test(line)) return [line];
-    if (line.length < 90) return [line];
+    if (line.length < 90) return [removeIntroFluff(line)];
 
     return line
-      .split(/(?<=[.!?])\s+(?=(?:remember|call|email|text|finish|start|make|buy|schedule|send|review|clean|update|work|do|get|pick|submit)\b)/i)
+      .split(/(?<=[.!?])\s+|,\s+(?=(?:and\s+)?(?:email|text|call|send|follow up|update|make|buy|clean|study|finish|start|schedule|review|submit|pick|get|write|read|pay|book|plan|prepare|organize|check|create|draft)\b)/i)
       .map((candidate) => candidate.trim())
+      .map(removeIntroFluff)
       .filter(Boolean);
   });
 }
@@ -212,7 +237,7 @@ function parseBrainDump(text: string): TaskRowDraft[] {
 
       const [main, ...noteParts] = line.split(/\s+\|\s+|\s+-\s+/);
       const title = cleanTaskTitle(main || line);
-      if (!title) return accumulator;
+      if (!title || !hasActionIntent(line) || title.length > 140) return accumulator;
 
       const notes = noteParts.join(" - ").trim();
 
