@@ -170,7 +170,15 @@ function splitBrainDumpIntoCandidates(text: string) {
   const normalized = text
     .replace(/\r/g, "\n")
     .replace(/[\u2022\u2013\u2014]/g, "-")
+    .replace(/\b(?:and\s+)?I\s+should\s+/gi, "\n")
+    .replace(/\b(?:and\s+)?I\s+(?:also\s+)?(?:really\s+)?need\s+to\s+/gi, "\n")
+    .replace(/\b(?:and\s+)?I\s+(?:probably\s+|maybe\s+)?need\s+to\s+/gi, "\n")
+    .replace(/\b(?:and\s+)?I\s+(?:probably\s+|maybe\s+)?have\s+to\s+/gi, "\n")
+    .replace(/\b(?:and\s+)?maybe\s+/gi, "\n")
+    .replace(/\bAt home I need to\s+/gi, "\n")
     .replace(/\s+and then\s+/gi, "\n")
+    .replace(/,\s+(?=(?:email|text|call|send|follow up|update|make|buy|clean|study|finish|start|schedule|review|submit|pick|get)\b)/gi, "\n")
+    .replace(/,\s+and\s+(?=(?:email|text|call|send|follow up|update|make|buy|clean|study|finish|start|schedule|review|submit|pick|get)\b)/gi, "\n")
     .replace(/\s*;\s*/g, "\n");
 
   const firstPass = normalized

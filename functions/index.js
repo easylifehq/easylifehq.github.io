@@ -184,7 +184,11 @@ exports.analyzeTaskBrainDump = onRequest(
       const responseBody = await openAiResponse.json();
 
       if (!openAiResponse.ok) {
-        logger.error("OpenAI task analysis failed", responseBody);
+        logger.error("OpenAI task analysis failed", {
+          status: openAiResponse.status,
+          code: responseBody?.error?.code || "unknown",
+          type: responseBody?.error?.type || "unknown",
+        });
         response.status(502).json({ error: "OpenAI could not analyze that brain dump." });
         return;
       }
