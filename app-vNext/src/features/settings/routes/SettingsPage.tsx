@@ -59,6 +59,16 @@ const appVisibilityOptions: Array<{
     label: "EasyContacts",
     description: "Networking and relationship tracking.",
   },
+  {
+    id: "easyprojects",
+    label: "EasyProjects",
+    description: "Projects, sections, milestones, and synced project tasks.",
+  },
+  {
+    id: "easyworkout",
+    label: "EasyWorkout",
+    description: "Workout routines, logging, and strength progress.",
+  },
 ];
 
 export function SettingsPage() {

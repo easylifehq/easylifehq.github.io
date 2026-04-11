@@ -7,7 +7,9 @@ export type VisibleAppId =
   | "easynotes"
   | "easycalendar"
   | "easypipeline"
-  | "easycontacts";
+  | "easycontacts"
+  | "easyprojects"
+  | "easyworkout";
 
 export type UserShellSettings = {
   themeMode: ThemeMode;
@@ -16,7 +18,15 @@ export type UserShellSettings = {
 
 export const defaultShellSettings: UserShellSettings = {
   themeMode: "classic",
-  visibleApps: ["easylist", "easynotes", "easycalendar", "easypipeline", "easycontacts"],
+  visibleApps: [
+    "easylist",
+    "easynotes",
+    "easycalendar",
+    "easypipeline",
+    "easycontacts",
+    "easyprojects",
+    "easyworkout",
+  ],
 };
 
 function normalizeVisibleApps(value: unknown): VisibleAppId[] {
@@ -26,6 +36,8 @@ function normalizeVisibleApps(value: unknown): VisibleAppId[] {
     "easycalendar",
     "easypipeline",
     "easycontacts",
+    "easyprojects",
+    "easyworkout",
   ];
 
   if (!Array.isArray(value)) {

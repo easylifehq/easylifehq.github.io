@@ -1,78 +1,201 @@
+import { lazy, Suspense, type ComponentType } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthenticatedLayout } from "@/app/layouts/AuthenticatedLayout";
 import { MarketingLayout } from "@/app/layouts/MarketingLayout";
 import { AuthenticatedRoute } from "@/features/auth/AuthenticatedRoute";
-import { EasyCalendarLayout } from "@/features/easycalendar/layouts/EasyCalendarLayout";
-import { LoginPage } from "@/features/auth/routes/LoginPage";
-import { EasyCalendarDayPage } from "@/features/easycalendar/routes/EasyCalendarDayPage";
-import { EasyCalendarWeekPage } from "@/features/easycalendar/routes/EasyCalendarWeekPage";
-import { EasyContactsLayout } from "@/features/easycontacts/layouts/EasyContactsLayout";
-import { EasyContactsPage } from "@/features/easycontacts/routes/EasyContactsPage";
-import { EasyListLayout } from "@/features/easylist/layouts/EasyListLayout";
-import { EasyListArchivePage } from "@/features/easylist/routes/EasyListArchivePage";
-import { EasyListDashboardPage } from "@/features/easylist/routes/EasyListDashboardPage";
-import { EasyListInboxPage } from "@/features/easylist/routes/EasyListInboxPage";
-import { EasyNotesLayout } from "@/features/easynotes/layouts/EasyNotesLayout";
-import { EasyNotesEditorPage } from "@/features/easynotes/routes/EasyNotesEditorPage";
-import { EasyNotesLibraryPage } from "@/features/easynotes/routes/EasyNotesLibraryPage";
-import { EasyPipelineLayout } from "@/features/easypipeline/layouts/EasyPipelineLayout";
-import { EasyPipelineDashboardPage } from "@/features/easypipeline/routes/EasyPipelineDashboardPage";
-import { EasyPipelineEmailPage } from "@/features/easypipeline/routes/EasyPipelineEmailPage";
-import { EasyPipelineStatsPage } from "@/features/easypipeline/routes/EasyPipelineStatsPage";
-import { HQPage } from "@/features/hq/routes/HQPage";
-import { EasyCalendarMarketingPage } from "@/features/marketing/routes/EasyCalendarMarketingPage";
-import { EasyListMarketingPage } from "@/features/marketing/routes/EasyListMarketingPage";
-import { EasyNotesMarketingPage } from "@/features/marketing/routes/EasyNotesMarketingPage";
-import { EasyPipelineMarketingPage } from "@/features/marketing/routes/EasyPipelineMarketingPage";
-import { MarketingLandingPage } from "@/features/marketing/routes/MarketingLandingPage";
-import { SettingsPage } from "@/features/settings/routes/SettingsPage";
+
+function lazyNamed<TModule extends Record<string, ComponentType>>(
+  importer: () => Promise<TModule>,
+  exportName: keyof TModule
+) {
+  return lazy(() => importer().then((module) => ({ default: module[exportName] })));
+}
+
+const LoginPage = lazyNamed(
+  () => import("@/features/auth/routes/LoginPage"),
+  "LoginPage"
+);
+const EasyCalendarLayout = lazyNamed(
+  () => import("@/features/easycalendar/layouts/EasyCalendarLayout"),
+  "EasyCalendarLayout"
+);
+const EasyCalendarDayPage = lazyNamed(
+  () => import("@/features/easycalendar/routes/EasyCalendarDayPage"),
+  "EasyCalendarDayPage"
+);
+const EasyCalendarWeekPage = lazyNamed(
+  () => import("@/features/easycalendar/routes/EasyCalendarWeekPage"),
+  "EasyCalendarWeekPage"
+);
+const EasyContactsLayout = lazyNamed(
+  () => import("@/features/easycontacts/layouts/EasyContactsLayout"),
+  "EasyContactsLayout"
+);
+const EasyContactsPage = lazyNamed(
+  () => import("@/features/easycontacts/routes/EasyContactsPage"),
+  "EasyContactsPage"
+);
+const EasyProjectsLayout = lazyNamed(
+  () => import("@/features/easyprojects/layouts/EasyProjectsLayout"),
+  "EasyProjectsLayout"
+);
+const EasyProjectsHomePage = lazyNamed(
+  () => import("@/features/easyprojects/routes/EasyProjectsHomePage"),
+  "EasyProjectsHomePage"
+);
+const EasyProjectDetailPage = lazyNamed(
+  () => import("@/features/easyprojects/routes/EasyProjectDetailPage"),
+  "EasyProjectDetailPage"
+);
+const EasyProjectsTimelinePage = lazyNamed(
+  () => import("@/features/easyprojects/routes/EasyProjectsTimelinePage"),
+  "EasyProjectsTimelinePage"
+);
+const EasyListLayout = lazyNamed(
+  () => import("@/features/easylist/layouts/EasyListLayout"),
+  "EasyListLayout"
+);
+const EasyListArchivePage = lazyNamed(
+  () => import("@/features/easylist/routes/EasyListArchivePage"),
+  "EasyListArchivePage"
+);
+const EasyListDashboardPage = lazyNamed(
+  () => import("@/features/easylist/routes/EasyListDashboardPage"),
+  "EasyListDashboardPage"
+);
+const EasyListInboxPage = lazyNamed(
+  () => import("@/features/easylist/routes/EasyListInboxPage"),
+  "EasyListInboxPage"
+);
+const EasyNotesLayout = lazyNamed(
+  () => import("@/features/easynotes/layouts/EasyNotesLayout"),
+  "EasyNotesLayout"
+);
+const EasyNotesEditorPage = lazyNamed(
+  () => import("@/features/easynotes/routes/EasyNotesEditorPage"),
+  "EasyNotesEditorPage"
+);
+const EasyNotesLibraryPage = lazyNamed(
+  () => import("@/features/easynotes/routes/EasyNotesLibraryPage"),
+  "EasyNotesLibraryPage"
+);
+const EasyPipelineLayout = lazyNamed(
+  () => import("@/features/easypipeline/layouts/EasyPipelineLayout"),
+  "EasyPipelineLayout"
+);
+const EasyPipelineDashboardPage = lazyNamed(
+  () => import("@/features/easypipeline/routes/EasyPipelineDashboardPage"),
+  "EasyPipelineDashboardPage"
+);
+const EasyPipelineEmailPage = lazyNamed(
+  () => import("@/features/easypipeline/routes/EasyPipelineEmailPage"),
+  "EasyPipelineEmailPage"
+);
+const EasyPipelineStatsPage = lazyNamed(
+  () => import("@/features/easypipeline/routes/EasyPipelineStatsPage"),
+  "EasyPipelineStatsPage"
+);
+const EasyWorkoutLayout = lazyNamed(
+  () => import("@/features/easyworkout/layouts/EasyWorkoutLayout"),
+  "EasyWorkoutLayout"
+);
+const EasyWorkoutDashboardPage = lazyNamed(
+  () => import("@/features/easyworkout/routes/EasyWorkoutDashboardPage"),
+  "EasyWorkoutDashboardPage"
+);
+const EasyWorkoutRoutinesPage = lazyNamed(
+  () => import("@/features/easyworkout/routes/EasyWorkoutRoutinesPage"),
+  "EasyWorkoutRoutinesPage"
+);
+const EasyWorkoutLogPage = lazyNamed(
+  () => import("@/features/easyworkout/routes/EasyWorkoutLogPage"),
+  "EasyWorkoutLogPage"
+);
+const HQPage = lazyNamed(() => import("@/features/hq/routes/HQPage"), "HQPage");
+const EasyCalendarMarketingPage = lazyNamed(
+  () => import("@/features/marketing/routes/EasyCalendarMarketingPage"),
+  "EasyCalendarMarketingPage"
+);
+const EasyListMarketingPage = lazyNamed(
+  () => import("@/features/marketing/routes/EasyListMarketingPage"),
+  "EasyListMarketingPage"
+);
+const EasyNotesMarketingPage = lazyNamed(
+  () => import("@/features/marketing/routes/EasyNotesMarketingPage"),
+  "EasyNotesMarketingPage"
+);
+const EasyPipelineMarketingPage = lazyNamed(
+  () => import("@/features/marketing/routes/EasyPipelineMarketingPage"),
+  "EasyPipelineMarketingPage"
+);
+const MarketingLandingPage = lazyNamed(
+  () => import("@/features/marketing/routes/MarketingLandingPage"),
+  "MarketingLandingPage"
+);
+const SettingsPage = lazyNamed(
+  () => import("@/features/settings/routes/SettingsPage"),
+  "SettingsPage"
+);
 
 export function AppRouter() {
   return (
-    <Routes>
-      <Route element={<MarketingLayout />}>
-        <Route path="/" element={<MarketingLandingPage />} />
-        <Route path="/easylist" element={<EasyListMarketingPage />} />
-        <Route path="/easynotes" element={<EasyNotesMarketingPage />} />
-        <Route path="/easycalendar" element={<EasyCalendarMarketingPage />} />
-        <Route path="/easypipeline" element={<EasyPipelineMarketingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-      </Route>
-
-      <Route element={<AuthenticatedRoute />}>
-        <Route path="/app" element={<AuthenticatedLayout />}>
-          <Route index element={<Navigate to="/app/hq" replace />} />
-          <Route path="hq" element={<HQPage />} />
-          <Route path="easylist" element={<EasyListLayout />}>
-            <Route index element={<Navigate to="/app/easylist/dashboard" replace />} />
-            <Route path="dashboard" element={<EasyListDashboardPage />} />
-            <Route path="add" element={<EasyListInboxPage />} />
-            <Route path="inbox" element={<Navigate to="/app/easylist/add" replace />} />
-            <Route path="today" element={<Navigate to="/app/easylist/dashboard" replace />} />
-            <Route path="upcoming" element={<Navigate to="/app/easylist/dashboard" replace />} />
-            <Route path="archive" element={<EasyListArchivePage />} />
-          </Route>
-          <Route path="easycalendar" element={<EasyCalendarLayout />}>
-            <Route index element={<Navigate to="/app/easycalendar/week" replace />} />
-            <Route path="week" element={<EasyCalendarWeekPage />} />
-            <Route path="day" element={<EasyCalendarDayPage />} />
-          </Route>
-          <Route path="easynotes" element={<EasyNotesLayout />}>
-            <Route index element={<EasyNotesLibraryPage />} />
-            <Route path=":noteId" element={<EasyNotesEditorPage />} />
-          </Route>
-          <Route path="easypipeline" element={<EasyPipelineLayout />}>
-            <Route index element={<Navigate to="/app/easypipeline/dashboard" replace />} />
-            <Route path="dashboard" element={<EasyPipelineDashboardPage />} />
-            <Route path="stats" element={<EasyPipelineStatsPage />} />
-            <Route path="email" element={<EasyPipelineEmailPage />} />
-          </Route>
-          <Route path="easycontacts" element={<EasyContactsLayout />}>
-            <Route index element={<EasyContactsPage />} />
-          </Route>
-          <Route path="settings" element={<SettingsPage />} />
+    <Suspense fallback={<div className="page-wrap">Loading EasyLifeHQ...</div>}>
+      <Routes>
+        <Route element={<MarketingLayout />}>
+          <Route path="/" element={<MarketingLandingPage />} />
+          <Route path="/easylist" element={<EasyListMarketingPage />} />
+          <Route path="/easynotes" element={<EasyNotesMarketingPage />} />
+          <Route path="/easycalendar" element={<EasyCalendarMarketingPage />} />
+          <Route path="/easypipeline" element={<EasyPipelineMarketingPage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Route>
-      </Route>
-    </Routes>
+
+        <Route element={<AuthenticatedRoute />}>
+          <Route path="/app" element={<AuthenticatedLayout />}>
+            <Route index element={<Navigate to="/app/hq" replace />} />
+            <Route path="hq" element={<HQPage />} />
+            <Route path="easylist" element={<EasyListLayout />}>
+              <Route index element={<Navigate to="/app/easylist/dashboard" replace />} />
+              <Route path="dashboard" element={<EasyListDashboardPage />} />
+              <Route path="add" element={<EasyListInboxPage />} />
+              <Route path="inbox" element={<Navigate to="/app/easylist/add" replace />} />
+              <Route path="today" element={<Navigate to="/app/easylist/dashboard" replace />} />
+              <Route path="upcoming" element={<Navigate to="/app/easylist/dashboard" replace />} />
+              <Route path="archive" element={<EasyListArchivePage />} />
+            </Route>
+            <Route path="easycalendar" element={<EasyCalendarLayout />}>
+              <Route index element={<Navigate to="/app/easycalendar/week" replace />} />
+              <Route path="week" element={<EasyCalendarWeekPage />} />
+              <Route path="day" element={<EasyCalendarDayPage />} />
+            </Route>
+            <Route path="easynotes" element={<EasyNotesLayout />}>
+              <Route index element={<EasyNotesLibraryPage />} />
+              <Route path=":noteId" element={<EasyNotesEditorPage />} />
+            </Route>
+            <Route path="easypipeline" element={<EasyPipelineLayout />}>
+              <Route index element={<Navigate to="/app/easypipeline/dashboard" replace />} />
+              <Route path="dashboard" element={<EasyPipelineDashboardPage />} />
+              <Route path="stats" element={<EasyPipelineStatsPage />} />
+              <Route path="email" element={<EasyPipelineEmailPage />} />
+            </Route>
+            <Route path="easycontacts" element={<EasyContactsLayout />}>
+              <Route index element={<EasyContactsPage />} />
+            </Route>
+            <Route path="easyprojects" element={<EasyProjectsLayout />}>
+              <Route index element={<EasyProjectsHomePage />} />
+              <Route path=":projectId" element={<EasyProjectDetailPage />} />
+              <Route path=":projectId/timeline" element={<EasyProjectsTimelinePage />} />
+            </Route>
+            <Route path="easyworkout" element={<EasyWorkoutLayout />}>
+              <Route index element={<Navigate to="/app/easyworkout/dashboard" replace />} />
+              <Route path="dashboard" element={<EasyWorkoutDashboardPage />} />
+              <Route path="routines" element={<EasyWorkoutRoutinesPage />} />
+              <Route path="log" element={<EasyWorkoutLogPage />} />
+            </Route>
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }

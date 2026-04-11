@@ -98,7 +98,7 @@ export type TaskDraft = {
 };
 
 export async function createTask(userId: string, draft: TaskDraft) {
-  await addDoc(getTasksCollection(userId), {
+  const reference = await addDoc(getTasksCollection(userId), {
     title: draft.title,
     notes: draft.notes,
     category: draft.category,
@@ -113,6 +113,8 @@ export async function createTask(userId: string, draft: TaskDraft) {
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
+
+  return reference.id;
 }
 
 export async function updateTask(userId: string, taskId: string, draft: TaskDraft) {

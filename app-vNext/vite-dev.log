@@ -112,3 +112,15 @@
 [2m1:00:28 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles/globals.css[22m
 [2m1:00:45 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles/globals.css[22m
 [2m1:01:01 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easylist/components/TaskComposer.tsx[22m
+[2m1:07:31 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/settings/routes/SettingsPage.tsx[22m
+[2m1:07:45 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/app/router/index.tsx[22m
+[2m1:07:55 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/app/router/index.tsx[22m
+[2m1:11:16 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/easycalendar/EasyCalendarContext.tsx, /src/features/easylist/EasyListContext.tsx, /src/features/easynotes/EasyNotesContext.tsx[22m
+[2m1:21:27 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles/globals.css[22m
+[2m1:21:43 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/styles/globals.css[22m
+[2m1:21:59 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/navigation/AppHeader.tsx[22m
+[2m1:22:40 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/features/hq/routes/HQPage.tsx[22m
+[2m6:14:06 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/app/router/index.tsx[22m
+[2m6:17:12 PM[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[2m6:17:12 PM[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[2m6:17:12 PM[22m [36m[1m[vite][22m[39m server restarted.

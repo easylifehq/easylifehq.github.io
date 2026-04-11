@@ -620,6 +620,30 @@ a {
   --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #456857 38%);
 }
 
+.app-theme-easyprojects {
+  --app-accent: #5d7ca8;
+  --app-accent-soft: #eef3fb;
+  --app-accent-border: rgba(93, 124, 168, 0.22);
+  --app-accent-text: #435d82;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 82%, #5d7ca8 18%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, #5d7ca8 18%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 64%, #5d7ca8 36%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 72%, #5d7ca8 28%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #435d82 38%);
+}
+
+.app-theme-easyworkout {
+  --app-accent: #b55c33;
+  --app-accent-soft: #fbf0ea;
+  --app-accent-border: rgba(181, 92, 51, 0.22);
+  --app-accent-text: #814124;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 82%, #b55c33 18%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, #b55c33 18%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 64%, #b55c33 36%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 72%, #b55c33 28%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #814124 38%);
+}
+
 .app-theme-settings {
   --app-accent: #6d6a7f;
   --app-accent-soft: #f1f0f8;
@@ -1217,6 +1241,14 @@ a {
 .task-row-actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.task-row-grid-workout {
+  grid-template-columns: 80px 120px 140px minmax(180px, 1fr);
+}
+
+.routine-exercise-card {
+  overflow: hidden;
 }
 
 .task-composer-grid {
@@ -2218,6 +2250,10 @@ button.calendar-detail-card:disabled {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .task-row-grid-workout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .task-row-grid-header {
     display: none;
   }
@@ -2397,6 +2433,10 @@ button.calendar-detail-card:disabled {
   }
 
   .task-row-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .task-row-grid-workout {
     grid-template-columns: 1fr;
   }
 

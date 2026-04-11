@@ -42,6 +42,18 @@ export const appProductItems: AppProductItem[] = [
     description: "Manage networking contacts and follow-up dates.",
   },
   {
+    appId: "easyprojects",
+    href: "/app/easyprojects",
+    label: "EasyProjects",
+    description: "Break big goals into sections, tasks, and progress.",
+  },
+  {
+    appId: "easyworkout",
+    href: "/app/easyworkout/dashboard",
+    label: "EasyWorkout",
+    description: "Track routines, sets, and progress without the clutter.",
+  },
+  {
     href: "/app/settings",
     label: "Settings",
     description: "Adjust account and app preferences.",

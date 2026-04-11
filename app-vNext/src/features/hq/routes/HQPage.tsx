@@ -104,6 +104,18 @@ export function HQPage() {
                 <p>Keep track of people, follow-ups, and networking context.</p>
               </Link>
             ) : null}
+            {isAppVisible("easyprojects") ? (
+              <Link className="hq-link-card" to="/app/easyprojects">
+                <strong>Open EasyProjects</strong>
+                <p>Break larger goals into sections, synced tasks, and milestones.</p>
+              </Link>
+            ) : null}
+            {isAppVisible("easyworkout") ? (
+              <Link className="hq-link-card" to="/app/easyworkout/dashboard">
+                <strong>Open EasyWorkout</strong>
+                <p>Log today&apos;s lifts fast and see the last weight you hit.</p>
+              </Link>
+            ) : null}
           </div>
         </PageSection>
       </div>

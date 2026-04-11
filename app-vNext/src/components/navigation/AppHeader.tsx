@@ -17,6 +17,8 @@ export function AppHeader() {
     if (pathname.startsWith("/app/easynotes")) return "EasyNotes";
     if (pathname.startsWith("/app/easypipeline")) return "EasyPipeline";
     if (pathname.startsWith("/app/easycontacts")) return "EasyContacts";
+    if (pathname.startsWith("/app/easyprojects")) return "EasyProjects";
+    if (pathname.startsWith("/app/easyworkout")) return "EasyWorkout";
     if (pathname.startsWith("/app/settings")) return "Settings";
     return "EasyHQ";
   }, [location.pathname]);
