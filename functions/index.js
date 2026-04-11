@@ -20,11 +20,13 @@ const taskRowsSchema = {
         properties: {
           title: {
             type: "string",
-            description: "A concise action-oriented task title.",
+            description:
+              "A concise action-oriented task title, ideally 3-9 words, starting with a verb when natural. Do not include due dates, priority words, or long backstory.",
           },
           category: {
             type: "string",
-            description: "Short category like School, Work, Gym, Personal, Social, or blank if unclear.",
+            description:
+              "Short category like School, Work, Gym, Personal, Social, Finance, Home, Health, or blank if unclear.",
           },
           dueDate: {
             type: ["string", "null"],
@@ -41,7 +43,8 @@ const taskRowsSchema = {
           },
           notes: {
             type: "string",
-            description: "Extra context from the brain dump that should not be lost.",
+            description:
+              "Short extra context from the brain dump that should not be lost, especially names, constraints, or why the task matters.",
           },
         },
         required: ["title", "category", "dueDate", "estimatedLength", "priorityTier", "notes"],
@@ -74,6 +77,23 @@ function normalizeRow(row) {
     notes: String(row.notes || "").trim(),
   };
 }
+
+const taskExtractionInstructions = [
+  "You are the EasyList task extraction editor.",
+  "The user may ramble in one huge paragraph. Your job is to find the actionable tasks hiding inside it and turn them into clean editable rows.",
+  "Create one row per real action the user can do. Split separate actions even if they are in the same sentence.",
+  "Do not create tasks for feelings, background, explanations, or vague worries unless there is a clear action. Put useful context in notes instead.",
+  "Do not over-split a single task into tiny fragments. For example, 'email Sam about the meeting' is one task, not separate email and meeting tasks.",
+  "Rewrite messy phrasing into a clear task title while preserving the user's intent.",
+  "If the user says they need to remember, figure out what the thing to do is and title that as the task.",
+  "Infer categories from context, not just hashtags. School/work/gym/home/personal/social/finance/health are all acceptable.",
+  "Infer due dates only when the text clearly implies them. Convert relative dates using the current date. If unclear, use null.",
+  "Infer estimatedLength only from explicit or strongly implied durations. If unclear, use null.",
+  "Use priorityTier 1 only for urgent/asap/critical/must-do-today items; 2 for important or soon; 3 for normal; 4 for backlog/nice-to-have; 5 for someday/low.",
+  "Remove duplicates and combine repeated mentions into the clearest single row.",
+  "Keep notes short. Notes should help the user remember context, not repeat the title.",
+  "Return no more than 20 rows, prioritizing the most actionable or time-sensitive tasks.",
+].join(" ");
 
 exports.analyzeTaskBrainDump = onRequest(
   {
@@ -137,12 +157,17 @@ exports.analyzeTaskBrainDump = onRequest(
           input: [
             {
               role: "system",
-              content:
-                "You convert messy brain dumps into task rows for EasyList. Preserve intent, split separate actions into separate tasks, infer dates and durations only when the text supports them, and return only schema-valid JSON.",
+              content: taskExtractionInstructions,
             },
             {
               role: "user",
-              content: `Today is ${currentDate}. Turn this brain dump into editable task rows:\n\n${brainDump}`,
+              content: [
+                `Current date: ${currentDate}.`,
+                "Turn this messy brain dump into EasyList task rows.",
+                "Prefer useful task extraction over line-by-line parsing.",
+                "Brain dump:",
+                brainDump,
+              ].join("\n\n"),
             },
           ],
           text: {

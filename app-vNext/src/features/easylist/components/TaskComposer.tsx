@@ -387,7 +387,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
             value={brainDump}
             onChange={(event) => setBrainDump(event.target.value)}
             rows={5}
-            placeholder="Drop a messy list here. Example: email professor tomorrow 20 min urgent #school"
+            placeholder="Ramble here. Example: I need to email my professor tomorrow because the assignment is late, probably study bio for 45 minutes before Thursday, and sometime this weekend I should buy groceries and clean the apartment."
           />
         </label>
 
@@ -401,7 +401,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
             {isAnalyzing ? "Analyzing..." : "AI Analyze Into Rows"}
           </button>
           <span className="helper-copy">
-            {analysisMessage || "Uses OpenAI when configured, with local analysis as a fallback."}
+            {analysisMessage || "Paste a messy paragraph. AI will pull out editable task rows."}
           </span>
         </div>
       </div>
