@@ -1,6 +1,7 @@
 import { useMemo, useState, type FormEvent } from "react";
 import type { TaskDraft } from "@/lib/firestore/tasks";
 import { getPriorityMeta } from "@/features/easylist/lib/taskUtils";
+import { auth } from "@/lib/firebase/client";
 
 type TaskComposerProps = {
   onSubmit: (draft: TaskDraft) => Promise<void>;
@@ -14,6 +15,15 @@ type TaskRowDraft = {
   estimatedLength: string;
   priorityTier: 1 | 2 | 3 | 4 | 5;
   notes: string;
+};
+
+type AiTaskRow = {
+  title: string;
+  category?: string;
+  dueDate?: string | null;
+  estimatedLength?: number | null;
+  priorityTier?: number;
+  notes?: string;
 };
 
 const EMPTY_ROW = (): TaskRowDraft => ({
@@ -43,26 +53,234 @@ function buildTaskDraft(row: TaskRowDraft): TaskDraft | null {
   };
 }
 
-function parseBrainDump(text: string): TaskRowDraft[] {
+function toDateInputValue(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function addDays(date: Date, days: number) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+function parseWeekdayDueDate(text: string, now: Date) {
+  const weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+  const match = text.toLowerCase().match(/\b(next\s+)?(sun|mon|tues?|wed|thu(?:rs)?|fri|sat)(?:day)?\b/);
+  if (!match) return "";
+
+  const dayPrefix = match[2];
+  const targetIndex = weekdays.findIndex((weekday) => weekday.startsWith(dayPrefix.replace(/^tues?$/, "tue").replace(/^thu(?:rs)?$/, "thu")));
+  if (targetIndex < 0) return "";
+
+  const currentIndex = now.getDay();
+  let daysUntil = (targetIndex - currentIndex + 7) % 7;
+  if (daysUntil === 0 || match[1]) {
+    daysUntil += 7;
+  }
+
+  return toDateInputValue(addDays(now, daysUntil));
+}
+
+function parseDueDate(text: string, now = new Date()) {
+  const lower = text.toLowerCase();
+  const isoMatch = lower.match(/\b(20\d{2})-(\d{1,2})-(\d{1,2})\b/);
+  if (isoMatch) {
+    const parsed = new Date(Number(isoMatch[1]), Number(isoMatch[2]) - 1, Number(isoMatch[3]));
+    return Number.isNaN(parsed.getTime()) ? "" : toDateInputValue(parsed);
+  }
+
+  const slashMatch = lower.match(/\b(\d{1,2})[/-](\d{1,2})(?:[/-](\d{2,4}))?\b/);
+  if (slashMatch) {
+    const year = slashMatch[3]
+      ? Number(slashMatch[3].length === 2 ? `20${slashMatch[3]}` : slashMatch[3])
+      : now.getFullYear();
+    const parsed = new Date(year, Number(slashMatch[1]) - 1, Number(slashMatch[2]));
+    return Number.isNaN(parsed.getTime()) ? "" : toDateInputValue(parsed);
+  }
+
+  if (/\b(today|tonight|eod)\b/.test(lower)) return toDateInputValue(now);
+  if (/\b(tomorrow|tmrw|tmr)\b/.test(lower)) return toDateInputValue(addDays(now, 1));
+  if (/\bnext week\b/.test(lower)) return toDateInputValue(addDays(now, 7));
+  if (/\bthis weekend\b/.test(lower)) {
+    const daysUntilSaturday = (6 - now.getDay() + 7) % 7 || 7;
+    return toDateInputValue(addDays(now, daysUntilSaturday));
+  }
+
+  return parseWeekdayDueDate(lower, now);
+}
+
+function parseDurationMinutes(text: string) {
+  const hourMatch = text.match(/\b(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h)\b/i);
+  if (hourMatch) {
+    return String(Math.round(Number(hourMatch[1]) * 60));
+  }
+
+  const minuteMatch = text.match(/\b(\d+)\s*(?:minutes?|mins?|min|m)\b/i);
+  return minuteMatch ? minuteMatch[1] : "";
+}
+
+function parsePriorityTier(text: string): 1 | 2 | 3 | 4 | 5 {
+  const lower = text.toLowerCase();
+  if (/\b(urgent|asap|emergency|critical|highest|p1|priority 1|must do)\b/.test(lower)) return 1;
+  if (/\b(high|important|soon|p2|priority 2)\b/.test(lower)) return 2;
+  if (/\b(low|whenever|someday|eventually|p5|priority 5)\b/.test(lower)) return 5;
+  if (/\b(backlog|nice to have|p4|priority 4)\b/.test(lower)) return 4;
+  return 3;
+}
+
+function parseCategory(text: string, fallback = "") {
+  const tagMatch = text.match(/#([a-z][\w-]*)/i);
+  if (tagMatch) return tagMatch[1].replace(/[-_]/g, " ");
+
+  const bracketMatch = text.match(/^\s*\[([^[\]]{2,24})\]\s*/);
+  if (bracketMatch) return bracketMatch[1].trim();
+
+  const categoryMatch = text.match(/\b(?:category|cat|project|area)\s*[:=]\s*([a-z][\w -]{1,24})/i);
+  if (categoryMatch) return categoryMatch[1].trim();
+
+  const lower = text.toLowerCase();
+  if (/\b(class|homework|assignment|professor|exam|study|school)\b/.test(lower)) return "School";
+  if (/\b(work|client|boss|meeting|email|slack|application|resume|interview)\b/.test(lower)) return "Work";
+  if (/\b(gym|lift|workout|run|cardio|legs|push|pull)\b/.test(lower)) return "Gym";
+  if (/\b(groceries|errand|pharmacy|laundry|clean|dishes|apartment)\b/.test(lower)) return "Personal";
+  if (/\b(call|text|friend|family|dinner|hangout)\b/.test(lower)) return "Social";
+
+  return fallback;
+}
+
+function cleanTaskTitle(text: string) {
   return text
-    .split(/\r?\n/)
-    .map((line) => line.replace(/^\s*[-*]?\s*(\[[ xX]\])?\s*/, "").trim())
-    .filter(Boolean)
-    .slice(0, 10)
-    .map((line) => {
-      const [title, notes = ""] = line.split(/\s+[|:-]\s+/, 2);
+    .replace(/^\s*(?:[-*+]|[0-9]+[.)])\s*/, "")
+    .replace(/^\s*\[[ xX]\]\s*/, "")
+    .replace(/^\s*\[[^[\]]{2,24}\]\s*/, "")
+    .replace(/\b(?:due|by)\s+(?:today|tonight|tomorrow|tmrw|tmr|next week|this weekend|sun(?:day)?|mon(?:day)?|tues?(?:day)?|wed(?:nesday)?|thu(?:rs)?(?:day)?|fri(?:day)?|sat(?:urday)?|\d{1,2}[/-]\d{1,2}(?:[/-]\d{2,4})?|20\d{2}-\d{1,2}-\d{1,2})\b/gi, "")
+    .replace(/\b\d+(?:\.\d+)?\s*(?:hours?|hrs?|h|minutes?|mins?|min|m)\b/gi, "")
+    .replace(/\b(?:urgent|asap|important|high priority|low priority|p[1-5]|priority [1-5])\b/gi, "")
+    .replace(/\b(?:category|cat|project|area)\s*[:=]\s*[a-z][\w -]{1,24}/gi, "")
+    .replace(/#([a-z][\w-]*)/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([,.;:!?])/g, "$1")
+    .trim();
+}
+
+function splitBrainDumpIntoCandidates(text: string) {
+  const normalized = text
+    .replace(/\r/g, "\n")
+    .replace(/[\u2022\u2013\u2014]/g, "-")
+    .replace(/\s+and then\s+/gi, "\n")
+    .replace(/\s*;\s*/g, "\n");
+
+  const firstPass = normalized
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  return firstPass.flatMap((line) => {
+    if (/^\s*(?:[-*+]|[0-9]+[.)])\s+/.test(line)) return [line];
+    if (line.length < 90) return [line];
+
+    return line
+      .split(/(?<=[.!?])\s+(?=(?:remember|call|email|text|finish|start|make|buy|schedule|send|review|clean|update|work|do|get|pick|submit)\b)/i)
+      .map((candidate) => candidate.trim())
+      .filter(Boolean);
+  });
+}
+
+function parseBrainDump(text: string): TaskRowDraft[] {
+  let contextCategory = "";
+
+  return splitBrainDumpIntoCandidates(text)
+    .reduce<TaskRowDraft[]>((accumulator, rawLine) => {
+      const line = rawLine.replace(/^\s*[-*+]?\s*(\[[ xX]\])?\s*/, "").trim();
+      const looksLikeHeading = /:$/.test(line) && line.split(/\s+/).length <= 5;
+
+      if (looksLikeHeading) {
+        contextCategory = line.replace(/:$/, "").trim();
+        return accumulator;
+      }
+
+      const [main, ...noteParts] = line.split(/\s+\|\s+|\s+-\s+/);
+      const title = cleanTaskTitle(main || line);
+      if (!title) return accumulator;
+
+      const notes = noteParts.join(" - ").trim();
+
+      accumulator.push({
+        ...EMPTY_ROW(),
+        title,
+        category: parseCategory(line, contextCategory),
+        dueDate: parseDueDate(line),
+        estimatedLength: parseDurationMinutes(line),
+        priorityTier: parsePriorityTier(line),
+        notes,
+      });
+
+      return accumulator;
+    }, [])
+    .slice(0, 20);
+}
+
+function normalizeAiTaskRows(rows: AiTaskRow[]): TaskRowDraft[] {
+  return rows
+    .map((row) => {
+      const priorityTier = Number(row.priorityTier);
+
       return {
         ...EMPTY_ROW(),
-        title: title.trim(),
-        notes: notes.trim(),
+        title: String(row.title || "").trim(),
+        category: String(row.category || "").trim(),
+        dueDate: typeof row.dueDate === "string" ? row.dueDate : "",
+        estimatedLength:
+          typeof row.estimatedLength === "number" && row.estimatedLength > 0
+            ? String(row.estimatedLength)
+            : "",
+        priorityTier: ([1, 2, 3, 4, 5].includes(priorityTier) ? priorityTier : 3) as 1 | 2 | 3 | 4 | 5,
+        notes: String(row.notes || "").trim(),
       };
-    });
+    })
+    .filter((row) => row.title)
+    .slice(0, 20);
+}
+
+async function analyzeBrainDumpWithAi(brainDump: string) {
+  const endpoint = import.meta.env.VITE_TASK_ANALYZER_URL;
+  const user = auth.currentUser;
+
+  if (!endpoint || !user) {
+    return null;
+  }
+
+  const token = await user.getIdToken();
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      brainDump,
+      currentDate: toDateInputValue(new Date()),
+    }),
+  });
+
+  const payload = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    throw new Error(payload?.error || "AI task analysis failed.");
+  }
+
+  return normalizeAiTaskRows(Array.isArray(payload?.rows) ? payload.rows : []);
 }
 
 export function TaskComposer({ onSubmit }: TaskComposerProps) {
   const [rows, setRows] = useState<TaskRowDraft[]>([EMPTY_ROW(), EMPTY_ROW(), EMPTY_ROW()]);
   const [brainDump, setBrainDump] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisMessage, setAnalysisMessage] = useState("");
   const readyCount = useMemo(
     () => rows.filter((row) => row.title.trim()).length,
     [rows]
@@ -95,8 +313,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
     });
   }
 
-  function handleBrainDumpToRows() {
-    const parsedRows = parseBrainDump(brainDump);
+  function mergeParsedRows(parsedRows: TaskRowDraft[]) {
     if (!parsedRows.length) {
       return;
     }
@@ -112,6 +329,34 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
         ...Array.from({ length: Math.max(neededPadding, 1) }, () => EMPTY_ROW()),
       ];
     });
+  }
+
+  async function handleBrainDumpToRows() {
+    if (!brainDump.trim()) return;
+
+    setIsAnalyzing(true);
+    setAnalysisMessage("");
+
+    try {
+      const aiRows = await analyzeBrainDumpWithAi(brainDump);
+      const parsedRows = aiRows?.length ? aiRows : parseBrainDump(brainDump);
+      mergeParsedRows(parsedRows);
+      setAnalysisMessage(
+        aiRows?.length
+          ? "AI turned this into editable rows."
+          : "Used local analysis. Add the AI endpoint to unlock deeper parsing."
+      );
+    } catch (error) {
+      const parsedRows = parseBrainDump(brainDump);
+      mergeParsedRows(parsedRows);
+      setAnalysisMessage(
+        error instanceof Error
+          ? `${error.message} Used local analysis instead.`
+          : "Used local analysis instead."
+      );
+    } finally {
+      setIsAnalyzing(false);
+    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -142,7 +387,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
             value={brainDump}
             onChange={(event) => setBrainDump(event.target.value)}
             rows={5}
-            placeholder="Drop a messy list here and turn it into task rows."
+            placeholder="Drop a messy list here. Example: email professor tomorrow 20 min urgent #school"
           />
         </label>
 
@@ -151,10 +396,13 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
             type="button"
             className="button-secondary"
             onClick={handleBrainDumpToRows}
+            disabled={isAnalyzing || !brainDump.trim()}
           >
-            Turn Into Rows
+            {isAnalyzing ? "Analyzing..." : "AI Analyze Into Rows"}
           </button>
-          <span className="helper-copy">One line per task works best.</span>
+          <span className="helper-copy">
+            {analysisMessage || "Uses OpenAI when configured, with local analysis as a fallback."}
+          </span>
         </div>
       </div>
 

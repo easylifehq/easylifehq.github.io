@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+app-vNext/.env.local
+app-vNext/.env.*.local
+functions/.env
+functions/.env.*
+!functions/.env.example
+functions/.secret.local
+functions/node_modules/
+app-vNext/node_modules/
+app-vNext/dist/
+*.tsbuildinfo
+vite-dev.log
+vite-dev.err.log
