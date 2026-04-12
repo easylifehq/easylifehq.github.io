@@ -70,6 +70,11 @@ const EasyCalendarContext = createContext<EasyCalendarContextValue | undefined>(
   undefined
 );
 
+function isVisualQaMode() {
+  if (!import.meta.env.DEV) return false;
+  return new URLSearchParams(window.location.search).get("visualQa") === "1";
+}
+
 export function EasyCalendarProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [categories, setCategories] = useState<CategoryRecord[]>([]);
@@ -83,6 +88,19 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (isVisualQaMode()) {
+      setCategories([]);
+      setEvents([]);
+      setTaskBlocks([]);
+      setTasks([]);
+      setCategoriesLoading(false);
+      setEventsLoading(false);
+      setTaskBlocksLoading(false);
+      setTasksLoading(false);
+      setError("");
+      return;
+    }
+
     if (!user) {
       setCategories([]);
       setEvents([]);

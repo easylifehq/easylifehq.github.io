@@ -17,6 +17,37 @@ import {
   type VisibleAppId,
 } from "@/lib/firestore/settings";
 
+const visualQaExperimentalFeatures: ExperimentalFeatureId[] = [
+  "smartTaskEntry",
+  "notesFocusEditor",
+  "mobileAppSheet",
+  "dailyReview",
+  "inboxCapture",
+  "overdueTriage",
+  "notesProcessor",
+  "startHere",
+  "gymMode",
+];
+
+function getVisualQaSettings(): UserShellSettings | null {
+  if (!import.meta.env.DEV) return null;
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("visualQa") !== "1") return null;
+
+  const theme = params.get("theme");
+  const themeMode: ThemeMode =
+    theme === "candy" || theme === "gamer" || theme === "elvish" || theme === "classic"
+      ? theme
+      : "classic";
+
+  return {
+    ...defaultShellSettings,
+    themeMode,
+    experimentalFeatures: visualQaExperimentalFeatures,
+  };
+}
+
 type SettingsContextValue = {
   settings: UserShellSettings;
   isLoading: boolean;
@@ -37,6 +68,13 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const visualQaSettings = getVisualQaSettings();
+    if (visualQaSettings) {
+      setSettings(visualQaSettings);
+      setIsLoading(false);
+      return;
+    }
+
     if (!user) {
       setSettings(defaultShellSettings);
       setIsLoading(false);

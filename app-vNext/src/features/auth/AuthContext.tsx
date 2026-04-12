@@ -26,6 +26,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const isVisualQa = import.meta.env.DEV && new URLSearchParams(window.location.search).get("visualQa") === "1";
+    if (isVisualQa) {
+      setUser({ uid: "visual-qa" } as User);
+      setIsLoading(false);
+      return;
+    }
+
     void setPersistence(auth, browserLocalPersistence);
 
     const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
