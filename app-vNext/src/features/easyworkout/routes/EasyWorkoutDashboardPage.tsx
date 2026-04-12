@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
+import { useSettings } from "@/features/settings/SettingsContext";
 
 function getSessionVolume(session: ReturnType<typeof useEasyWorkout>["sessions"][number]) {
   return session.exercises.reduce(
@@ -13,6 +14,7 @@ function getSessionVolume(session: ReturnType<typeof useEasyWorkout>["sessions"]
 
 export function EasyWorkoutDashboardPage() {
   const { sessions, routines, isLoading, error, deleteSession } = useEasyWorkout();
+  const { isExperimentalFeatureEnabled } = useSettings();
   const recentSessions = sessions.slice(0, 4);
   const weeklySessions = sessions.filter((session) => {
     if (!session.performedOn) return false;
@@ -45,6 +47,14 @@ export function EasyWorkoutDashboardPage() {
   )
     .sort((left, right) => right.weight - left.weight)
     .slice(0, 5);
+  const totalVolume = sessions.reduce((sum, session) => sum + getSessionVolume(session), 0);
+  const muscleGroups = sessions.reduce<Record<string, number>>((accumulator, session) => {
+    session.exercises.forEach((exercise) => {
+      accumulator[exercise.muscleGroup || "Other"] = (accumulator[exercise.muscleGroup || "Other"] || 0) + 1;
+    });
+    return accumulator;
+  }, {});
+  const mostHitMuscle = Object.entries(muscleGroups).sort((left, right) => right[1] - left[1])[0];
 
   return (
     <>
@@ -82,8 +92,49 @@ export function EasyWorkoutDashboardPage() {
             <strong>Log a workout</strong>
             <p>Enter sets fast and see the last weight you hit for each lift.</p>
           </Link>
+          {isExperimentalFeatureEnabled("gymMode") ? (
+            <Link className="hq-link-card gym-mode-card" to="/app/easyworkout/log?gymMode=1">
+              <strong>Activate Gym Mode</strong>
+              <p>Open the faster in-gym logger with larger controls and last-time suggestions.</p>
+            </Link>
+          ) : null}
         </div>
       </PageSection>
+
+      {isExperimentalFeatureEnabled("gymMode") ? (
+        <PageSection
+          eyebrow="Experimental"
+          title="Long-term training read"
+          description="A compact view of consistency, volume, and what you are hitting most."
+        >
+          <div className="stats-grid">
+            <article className="stat-card-vnext">
+              <span>Total volume</span>
+              <strong>{totalVolume.toLocaleString()}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Stacks saved</span>
+              <strong>{routines.length}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Most hit</span>
+              <strong>{mostHitMuscle?.[0] || "None yet"}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Recent PR pool</span>
+              <strong>{topLifts.length}</strong>
+            </article>
+          </div>
+          <div className="hq-link-grid">
+            {routines.slice(0, 4).map((routine) => (
+              <Link key={routine.id} className="hq-link-card" to={`/app/easyworkout/log?routineId=${routine.id}&gymMode=1`}>
+                <strong>{routine.name}</strong>
+                <p>{routine.exercises.length} exercise stack. Launch without editing the saved stack.</p>
+              </Link>
+            ))}
+          </div>
+        </PageSection>
+      ) : null}
 
       <div className="dashboard-grid">
         <PageSection

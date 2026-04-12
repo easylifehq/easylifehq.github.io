@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { defaultWorkoutExercises, useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
+import { useSettings } from "@/features/settings/SettingsContext";
 import type { WorkoutExerciseLogRecord, WorkoutSetRecord } from "@/lib/firestore/workoutSessions";
 
 const emptySet = (): WorkoutSetRecord => ({ reps: 8, weight: 0, notes: "" });
@@ -16,6 +17,8 @@ const emptyExerciseLog = (): WorkoutExerciseLogRecord => ({
 export function EasyWorkoutLogPage() {
   const [searchParams] = useSearchParams();
   const routineId = searchParams.get("routineId");
+  const gymMode = searchParams.get("gymMode") === "1";
+  const { isExperimentalFeatureEnabled } = useSettings();
   const { routines, exercises, sessions, addSession, error } = useEasyWorkout();
   const [selectedRoutineId, setSelectedRoutineId] = useState(routineId || "");
   const [performedOn, setPerformedOn] = useState(new Date().toISOString().split("T")[0]);
@@ -87,6 +90,8 @@ export function EasyWorkoutLogPage() {
     [sessions]
   );
 
+  const isGymModeActive = gymMode && isExperimentalFeatureEnabled("gymMode");
+
   function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogRecord>) {
     setExerciseLogs((current) =>
       current.map((exercise, exerciseIndex) =>
@@ -108,6 +113,18 @@ export function EasyWorkoutLogPage() {
           : exercise
       )
     );
+  }
+
+  function fillFromLastTime(exerciseIndex: number) {
+    const exercise = exerciseLogs[exerciseIndex];
+    const previous = previousByExercise[exercise.exerciseName];
+    if (!previous) return;
+
+    updateExerciseLog(exerciseIndex, {
+      sets: exercise.sets.map((set, index) =>
+        index === 0 ? { ...set, reps: previous.reps, weight: previous.weight } : set
+      ),
+    });
   }
 
   async function handleSaveSession(event: React.FormEvent<HTMLFormElement>) {
@@ -145,12 +162,12 @@ export function EasyWorkoutLogPage() {
   return (
     <PageSection
       eyebrow="Logging mode"
-      title="Log workout"
-      description="Keep it moving, see the last weight you hit, and save the session without digging through old notes."
+      title={isGymModeActive ? "Gym Mode" : "Log workout"}
+      description={isGymModeActive ? "Big taps, last-time hints, and only the fields you need while you are lifting." : "Keep it moving, see the last weight you hit, and save the session without digging through old notes."}
     >
       {error ? <p className="error-copy">{error}</p> : null}
       <form className="task-composer" onSubmit={handleSaveSession}>
-        <div className="task-composer-grid">
+        <div className={`task-composer-grid${isGymModeActive ? " gym-mode-meta" : ""}`}>
           <label className="field-stack">
             <span>Routine</span>
             <select
@@ -186,7 +203,7 @@ export function EasyWorkoutLogPage() {
           {exerciseLogs.map((exercise, exerciseIndex) => {
             const previous = previousByExercise[exercise.exerciseName];
             return (
-              <article key={`${exercise.exerciseName}-${exerciseIndex}`} className="panel-section">
+              <article key={`${exercise.exerciseName}-${exerciseIndex}`} className={`panel-section${isGymModeActive ? " gym-exercise-card" : ""}`}>
                 <div className="panel-header">
                   <p className="eyebrow">Exercise {exerciseIndex + 1}</p>
                   <h2>{exercise.exerciseName || "Pick a lift"}</h2>
@@ -196,6 +213,14 @@ export function EasyWorkoutLogPage() {
                       : "No logged history yet for this exercise."}
                   </p>
                 </div>
+                {isGymModeActive && previous ? (
+                  <div className="calendar-info-card gym-suggestion">
+                    <strong>Suggested working set: {previous.weight} lbs x {previous.reps}</strong>
+                    <button type="button" className="primary-button compact-button" onClick={() => fillFromLastTime(exerciseIndex)}>
+                      Fill first set
+                    </button>
+                  </div>
+                ) : null}
 
                 <div className="task-composer-grid">
                   <label className="field-stack">
@@ -223,7 +248,7 @@ export function EasyWorkoutLogPage() {
 
                 <div className="task-list-vnext">
                   {exercise.sets.map((set, setIndex) => (
-                    <div key={`${exercise.exerciseName}-${setIndex}`} className="task-row-card">
+                    <div key={`${exercise.exerciseName}-${setIndex}`} className={`task-row-card${isGymModeActive ? " gym-set-row" : ""}`}>
                       <div className="task-row-grid task-row-grid-workout">
                         <label className="field-stack task-row-field">
                           <span>Set</span>
@@ -250,6 +275,15 @@ export function EasyWorkoutLogPage() {
                   <button type="button" className="button-secondary" onClick={() => updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, emptySet()] })}>
                     Add set
                   </button>
+                  {isGymModeActive && exercise.sets.length ? (
+                    <button
+                      type="button"
+                      className="button-secondary"
+                      onClick={() => updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, { ...exercise.sets[exercise.sets.length - 1] }] })}
+                    >
+                      Copy previous set
+                    </button>
+                  ) : null}
                   <button type="button" className="ghost-button" onClick={() => setExerciseLogs((current) => current.length === 1 ? [emptyExerciseLog()] : current.filter((_, index) => index !== exerciseIndex))}>
                     Remove exercise
                   </button>

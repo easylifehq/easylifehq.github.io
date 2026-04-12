@@ -11,9 +11,21 @@ export type VisibleAppId =
   | "easyprojects"
   | "easyworkout";
 
+export type ExperimentalFeatureId =
+  | "smartTaskEntry"
+  | "notesFocusEditor"
+  | "mobileAppSheet"
+  | "dailyReview"
+  | "inboxCapture"
+  | "overdueTriage"
+  | "notesProcessor"
+  | "startHere"
+  | "gymMode";
+
 export type UserShellSettings = {
   themeMode: ThemeMode;
   visibleApps: VisibleAppId[];
+  experimentalFeatures: ExperimentalFeatureId[];
 };
 
 export const defaultShellSettings: UserShellSettings = {
@@ -27,28 +39,51 @@ export const defaultShellSettings: UserShellSettings = {
     "easyprojects",
     "easyworkout",
   ],
+  experimentalFeatures: [],
 };
 
-function normalizeVisibleApps(value: unknown): VisibleAppId[] {
-  const valid: VisibleAppId[] = [
-    "easylist",
-    "easynotes",
-    "easycalendar",
-    "easypipeline",
-    "easycontacts",
-    "easyprojects",
-    "easyworkout",
-  ];
+const validVisibleApps: VisibleAppId[] = [
+  "easylist",
+  "easynotes",
+  "easycalendar",
+  "easypipeline",
+  "easycontacts",
+  "easyprojects",
+  "easyworkout",
+];
 
+const validExperimentalFeatures: ExperimentalFeatureId[] = [
+  "smartTaskEntry",
+  "notesFocusEditor",
+  "mobileAppSheet",
+  "dailyReview",
+  "inboxCapture",
+  "overdueTriage",
+  "notesProcessor",
+  "startHere",
+  "gymMode",
+];
+
+function normalizeVisibleApps(value: unknown): VisibleAppId[] {
   if (!Array.isArray(value)) {
     return defaultShellSettings.visibleApps;
   }
 
   const filtered = value.filter((entry): entry is VisibleAppId =>
-    valid.includes(entry as VisibleAppId)
+    validVisibleApps.includes(entry as VisibleAppId)
   );
 
   return filtered.length ? filtered : defaultShellSettings.visibleApps;
+}
+
+function normalizeExperimentalFeatures(value: unknown): ExperimentalFeatureId[] {
+  if (!Array.isArray(value)) {
+    return defaultShellSettings.experimentalFeatures;
+  }
+
+  return value.filter((entry): entry is ExperimentalFeatureId =>
+    validExperimentalFeatures.includes(entry as ExperimentalFeatureId)
+  );
 }
 
 function normalizeThemeMode(value: unknown): ThemeMode {
@@ -68,6 +103,7 @@ export function normalizeShellSettings(data: DocumentData | undefined): UserShel
   return {
     themeMode: normalizeThemeMode(data?.themeMode),
     visibleApps: normalizeVisibleApps(data?.visibleApps),
+    experimentalFeatures: normalizeExperimentalFeatures(data?.experimentalFeatures),
   };
 }
 
@@ -93,6 +129,7 @@ export async function saveShellSettings(userId: string, settings: UserShellSetti
     {
       themeMode: settings.themeMode,
       visibleApps: settings.visibleApps,
+      experimentalFeatures: settings.experimentalFeatures,
       updatedAt: serverTimestamp(),
     },
     { merge: true }

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
@@ -9,21 +10,102 @@ import {
   startOfDay,
 } from "@/features/easycalendar/lib/calendarUtils";
 import { formatDate, isCompletedToday, sortActiveTasks } from "@/features/easylist/lib/taskUtils";
+import { useAuth } from "@/features/auth/AuthContext";
 import { useSettings } from "@/features/settings/SettingsContext";
+import { subscribeToApplications, type ApplicationRecord } from "@/lib/firestore/applications";
+import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
+
+function toDateKey(date: Date) {
+  return date.toISOString().split("T")[0];
+}
+
+function isSameDate(left: Date | null, right: Date) {
+  return Boolean(left && startOfDay(left).getTime() === startOfDay(right).getTime());
+}
 
 export function HQPage() {
+  const { user } = useAuth();
   const { events, taskBlocks, tasks, isLoading, error } = useEasyCalendar();
-  const { isAppVisible } = useSettings();
+  const { isAppVisible, isExperimentalFeatureEnabled } = useSettings();
+  const [applications, setApplications] = useState<ApplicationRecord[]>([]);
+  const [workoutSessions, setWorkoutSessions] = useState<WorkoutSessionRecord[]>([]);
   const today = startOfDay(new Date());
+  const todayKey = toDateKey(today);
+
+  useEffect(() => {
+    if (!user || !isExperimentalFeatureEnabled("dailyReview")) {
+      setApplications([]);
+      setWorkoutSessions([]);
+      return;
+    }
+
+    const unsubscribeApps = subscribeToApplications(user.uid, setApplications);
+    const unsubscribeWorkouts = subscribeToWorkoutSessions(user.uid, setWorkoutSessions);
+    return () => {
+      unsubscribeApps();
+      unsubscribeWorkouts();
+    };
+  }, [user, isExperimentalFeatureEnabled]);
+
   const todayEvents = events
     .filter((event) => event.startAt && startOfDay(event.startAt).getTime() === today.getTime())
     .sort((left, right) => (left.startAt?.getTime() || 0) - (right.startAt?.getTime() || 0));
   const nextEvents = todayEvents.slice(0, 3);
   const topTasks = sortActiveTasks(tasks.filter((task) => !task.completed)).slice(0, 3);
+  const dueTodayTasks = sortActiveTasks(tasks.filter((task) => !task.completed && isSameDate(task.dueDate, today)));
+  const overdueTasks = sortActiveTasks(tasks.filter((task) => !task.completed && task.dueDate && startOfDay(task.dueDate).getTime() < today.getTime()));
   const openWindows = getOpenTimeWindowsForDay(today, events, taskBlocks);
   const openMinutes = openWindows.reduce((sum, window) => sum + window.minutes, 0);
   const completedTodayCount = tasks.filter(isCompletedToday).length;
   const planPreview = buildPlanMyDaySuggestions(today, tasks, events, taskBlocks).suggestions.slice(0, 3);
+  const followUpsDueToday = applications.filter((app) => app.nextFollowUp && app.nextFollowUp <= todayKey && app.status !== "archived");
+  const weeklyWorkouts = workoutSessions.filter((session) => {
+    const performed = new Date(`${session.performedOn}T00:00:00`);
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+    return session.performedOn && performed >= sevenDaysAgo;
+  });
+  const mostUrgent = overdueTasks[0] || dueTodayTasks[0] || followUpsDueToday[0] || null;
+  const mostUrgentLabel =
+    overdueTasks[0]?.title ||
+    dueTodayTasks[0]?.title ||
+    (followUpsDueToday[0] ? `${followUpsDueToday[0].company || followUpsDueToday[0].title} follow-up` : "");
+  const quickWin = sortActiveTasks(tasks.filter((task) => !task.completed && (task.estimatedLength || 999) <= 20))[0] || null;
+  const startHere = useMemo(() => {
+    if (overdueTasks.length || dueTodayTasks.length) {
+      return {
+        label: "Start in EasyList",
+        reason: `${overdueTasks.length + dueTodayTasks.length} task${overdueTasks.length + dueTodayTasks.length === 1 ? "" : "s"} need attention.`,
+        to: "/app/easylist/dashboard",
+      };
+    }
+    if (followUpsDueToday.length) {
+      return {
+        label: "Start in EasyPipeline",
+        reason: `${followUpsDueToday.length} follow-up${followUpsDueToday.length === 1 ? "" : "s"} due today.`,
+        to: "/app/easypipeline/dashboard",
+      };
+    }
+    if (openWindows.length >= 3) {
+      return {
+        label: "Start in EasyCalendar",
+        reason: "You have open room that could use a light plan.",
+        to: "/app/easycalendar/day",
+      };
+    }
+    if (!weeklyWorkouts.length) {
+      return {
+        label: "Start in EasyWorkout",
+        reason: "No workouts are logged this week yet.",
+        to: "/app/easyworkout/dashboard",
+      };
+    }
+    return {
+      label: "Start in EasyNotes",
+      reason: "Everything looks calm, so a quick brain dump is a good next move.",
+      to: "/app/easynotes",
+    };
+  }, [dueTodayTasks.length, followUpsDueToday.length, openWindows.length, overdueTasks.length, weeklyWorkouts.length]);
 
   return (
     <main className="page-wrap app-theme app-theme-easyhq">
@@ -119,6 +201,75 @@ export function HQPage() {
           </div>
         </PageSection>
       </div>
+
+      {isExperimentalFeatureEnabled("dailyReview") ? (
+        <PageSection
+          eyebrow="Experimental"
+          title="Daily Review"
+          description="A quick read on what kind of day you are walking into."
+        >
+          <div className="daily-review-grid">
+            <article className="stat-card-vnext">
+              <span>Due now</span>
+              <strong>{dueTodayTasks.length}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Behind</span>
+              <strong>{overdueTasks.length}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Finished</span>
+              <strong>{completedTodayCount}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Open room</span>
+              <strong>{formatDuration(openMinutes)}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Events today</span>
+              <strong>{todayEvents.length}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Follow-ups</span>
+              <strong>{followUpsDueToday.length}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Workouts this week</span>
+              <strong>{weeklyWorkouts.length}</strong>
+            </article>
+          </div>
+          <div className="dashboard-grid daily-review-followup">
+            <article className="mini-panel-vnext">
+              <span>Read</span>
+              <strong>
+                {overdueTasks.length
+                  ? "A few things need recovery, but this is fixable."
+                  : dueTodayTasks.length > 4
+                    ? "Today is loaded. Keep the plan simple."
+                    : "The day looks calm enough to steer intentionally."}
+              </strong>
+            </article>
+            <article className="mini-panel-vnext">
+              <span>Most urgent</span>
+              <strong>{mostUrgent ? mostUrgentLabel : "Nothing is shouting right now."}</strong>
+            </article>
+            <article className="mini-panel-vnext">
+              <span>Quick win</span>
+              <strong>{quickWin ? quickWin.title : "No tiny task is waiting."}</strong>
+            </article>
+            {isExperimentalFeatureEnabled("startHere") ? (
+              <article className="mini-panel-vnext start-here-card">
+                <span>Start Here</span>
+                <strong>{startHere.label}</strong>
+                <p>{startHere.reason}</p>
+                <Link to={startHere.to} className="primary-button compact-button">
+                  Go there
+                </Link>
+              </article>
+            ) : null}
+          </div>
+        </PageSection>
+      ) : null}
 
       <div className="dashboard-grid">
         <PageSection

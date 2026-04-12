@@ -1,6 +1,10 @@
 import { PageSection } from "@/components/ui/PageSection";
 import { useSettings } from "@/features/settings/SettingsContext";
-import type { ThemeMode, VisibleAppId } from "@/lib/firestore/settings";
+import type {
+  ExperimentalFeatureId,
+  ThemeMode,
+  VisibleAppId,
+} from "@/lib/firestore/settings";
 
 const themeOptions: Array<{
   value: ThemeMode;
@@ -71,9 +75,69 @@ const appVisibilityOptions: Array<{
   },
 ];
 
+const experimentalFeatureOptions: Array<{
+  id: ExperimentalFeatureId;
+  label: string;
+  description: string;
+}> = [
+  {
+    id: "smartTaskEntry",
+    label: "Smart task entry",
+    description: "Try faster task capture and parsing ideas before they become standard.",
+  },
+  {
+    id: "notesFocusEditor",
+    label: "Notes focus editor",
+    description: "Try a more minimal writing-first EasyNotes editor.",
+  },
+  {
+    id: "mobileAppSheet",
+    label: "Mobile app switcher sheet",
+    description: "Try the newer mobile Apps menu and sheet behavior.",
+  },
+  {
+    id: "dailyReview",
+    label: "Daily Review",
+    description: "Add a compact intelligence panel to EasyHQ for today’s load and wins.",
+  },
+  {
+    id: "startHere",
+    label: "Start Here",
+    description: "Let EasyHQ recommend the best app to open first.",
+  },
+  {
+    id: "inboxCapture",
+    label: "Inbox capture",
+    description: "Use a global quick-capture button for messy thoughts before sorting them.",
+  },
+  {
+    id: "overdueTriage",
+    label: "Overdue triage",
+    description: "Try a cleanup panel for overdue tasks in EasyList.",
+  },
+  {
+    id: "notesProcessor",
+    label: "Notes processor",
+    description: "Extract likely tasks and follow-ups from notes before creating anything.",
+  },
+  {
+    id: "gymMode",
+    label: "Gym Mode",
+    description: "Try faster workout logging, stack launchers, and long-term training stats.",
+  },
+];
+
 export function SettingsPage() {
-  const { settings, isLoading, error, setThemeMode, toggleVisibleApp, isAppVisible } =
-    useSettings();
+  const {
+    settings,
+    isLoading,
+    error,
+    setThemeMode,
+    toggleVisibleApp,
+    isAppVisible,
+    toggleExperimentalFeature,
+    isExperimentalFeatureEnabled,
+  } = useSettings();
 
   return (
     <main className="page-wrap app-theme app-theme-settings">
@@ -124,6 +188,28 @@ export function SettingsPage() {
           </div>
         </PageSection>
       </div>
+
+      <PageSection
+        eyebrow="Labs"
+        title="Experimental features"
+        description="Try newer ideas early. Turn any of these off if they get in your way."
+      >
+        <div className="settings-toggle-list">
+          {experimentalFeatureOptions.map((feature) => (
+            <label key={feature.id} className="settings-toggle-row settings-toggle-row-experimental">
+              <div>
+                <strong>{feature.label}</strong>
+                <p>{feature.description}</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={isExperimentalFeatureEnabled(feature.id)}
+                onChange={() => void toggleExperimentalFeature(feature.id)}
+              />
+            </label>
+          ))}
+        </div>
+      </PageSection>
 
       <PageSection
         eyebrow="What stays"

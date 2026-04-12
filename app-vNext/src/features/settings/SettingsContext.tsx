@@ -11,6 +11,7 @@ import {
   defaultShellSettings,
   saveShellSettings,
   subscribeToShellSettings,
+  type ExperimentalFeatureId,
   type ThemeMode,
   type UserShellSettings,
   type VisibleAppId,
@@ -23,6 +24,8 @@ type SettingsContextValue = {
   setThemeMode: (themeMode: ThemeMode) => Promise<void>;
   toggleVisibleApp: (appId: VisibleAppId) => Promise<void>;
   isAppVisible: (appId: VisibleAppId) => boolean;
+  toggleExperimentalFeature: (featureId: ExperimentalFeatureId) => Promise<void>;
+  isExperimentalFeatureEnabled: (featureId: ExperimentalFeatureId) => boolean;
 };
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
@@ -79,6 +82,18 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     });
   }
 
+  async function toggleExperimentalFeature(featureId: ExperimentalFeatureId) {
+    const isEnabled = settings.experimentalFeatures.includes(featureId);
+    const nextExperimentalFeatures = isEnabled
+      ? settings.experimentalFeatures.filter((entry) => entry !== featureId)
+      : [...settings.experimentalFeatures, featureId];
+
+    await persist({
+      ...settings,
+      experimentalFeatures: nextExperimentalFeatures,
+    });
+  }
+
   const value = useMemo(
     () => ({
       settings,
@@ -86,7 +101,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       error,
       setThemeMode,
       toggleVisibleApp,
+      toggleExperimentalFeature,
       isAppVisible: (appId: VisibleAppId) => settings.visibleApps.includes(appId),
+      isExperimentalFeatureEnabled: (featureId: ExperimentalFeatureId) =>
+        settings.experimentalFeatures.includes(featureId),
     }),
     [settings, isLoading, error]
   );

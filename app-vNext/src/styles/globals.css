@@ -2374,6 +2374,148 @@ button.calendar-detail-card:disabled {
   padding: 0.95rem 1rem;
 }
 
+.settings-toggle-row-experimental {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--app-accent) 14%, transparent), transparent 42%),
+    var(--ui-bg-card, var(--app-panel-bg, rgba(255, 252, 247, 0.92)));
+}
+
+.capture-fab {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 55;
+  min-height: 48px;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--ui-border-strong, var(--shell-button-border));
+  background: var(--ui-button-primary-bg, var(--shell-button-bg));
+  color: var(--ui-button-primary-text, var(--shell-button-text));
+  font-weight: 800;
+  box-shadow: var(--shell-card-shadow);
+}
+
+.capture-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(10, 8, 6, 0.42);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--shell-motion-fast);
+}
+
+.capture-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.capture-modal {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  z-index: 100;
+  width: min(620px, calc(100vw - 2rem));
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border-radius: 18px;
+  border: 1px solid var(--ui-border-strong, var(--shell-card-border));
+  background: var(--ui-bg-card-elevated, var(--shell-card-bg));
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 1rem);
+  transition: opacity var(--shell-motion-fast), transform var(--shell-motion-fast);
+}
+
+.capture-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.capture-header,
+.processor-suggestion,
+.gym-suggestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.capture-header h2,
+.notes-processor-panel h3 {
+  margin: 0.15rem 0 0;
+}
+
+.capture-suggestion,
+.notes-processor-panel {
+  padding: 0.85rem;
+  border-radius: 12px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-empty, var(--shell-card-bg-soft));
+  color: var(--ui-text-secondary, var(--shell-page-text));
+}
+
+.daily-review-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.daily-review-followup {
+  margin-top: 0.9rem;
+}
+
+.start-here-card p {
+  margin: 0;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.triage-card {
+  align-items: center;
+}
+
+.triage-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+.notes-editor-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.notes-processor-panel {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.processor-suggestion {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.gym-mode-card {
+  border-color: var(--ui-border-strong, var(--shell-card-border));
+}
+
+.gym-exercise-card {
+  border-radius: 16px;
+}
+
+.gym-suggestion {
+  margin-bottom: 0.8rem;
+}
+
+.gym-set-row input {
+  min-height: 48px;
+  font-size: 1.05rem;
+}
+
 .settings-toggle-row input {
   width: 20px;
   height: 20px;
@@ -2541,6 +2683,10 @@ button.calendar-detail-card:disabled {
     grid-template-columns: 1fr;
   }
 
+  .daily-review-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .task-composer-grid,
   .stats-grid,
   .calendar-category-grid,
@@ -2580,6 +2726,14 @@ button.calendar-detail-card:disabled {
   .drawer-actions-vnext {
     grid-template-columns: 1fr;
     display: grid;
+  }
+
+  .triage-actions,
+  .capture-header,
+  .processor-suggestion,
+  .gym-suggestion {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .drawer-actions-right {
@@ -2699,6 +2853,26 @@ button.calendar-detail-card:disabled {
 
   .app-content-shell {
     padding-top: 0.65rem;
+  }
+
+  .capture-fab {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+
+  .capture-modal {
+    inset: auto 0 0;
+    width: 100vw;
+    border-radius: 20px 20px 0 0;
+    transform: translateY(100%);
+  }
+
+  .capture-modal.open {
+    transform: translateY(0);
+  }
+
+  .daily-review-grid {
+    grid-template-columns: 1fr;
   }
 
   .page-wrap {
