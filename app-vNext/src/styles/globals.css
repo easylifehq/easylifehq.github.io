@@ -362,6 +362,7 @@ a {
   position: absolute;
   top: calc(100% + 0.55rem);
   right: 0;
+  z-index: 60;
   width: min(320px, calc(100vw - 2rem));
   display: grid;
   gap: 0.45rem;
@@ -374,6 +375,11 @@ a {
   transform: translateY(-6px);
   pointer-events: none;
   transition: opacity var(--shell-motion-fast), transform var(--shell-motion-fast);
+}
+
+.menu-backdrop,
+.menu-panel-header {
+  display: none;
 }
 
 .menu-panel.open {
@@ -1265,27 +1271,29 @@ textarea::placeholder {
 
 .notes-editor-shell {
   display: grid;
-  gap: 1rem;
+  gap: 0.55rem;
+  min-width: 0;
 }
 
 .notes-editor-shell-immersive {
-  width: min(900px, 100%);
+  width: min(1120px, 100%);
   margin: 0 auto;
 }
 
 .notes-editor-page {
   display: grid;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: calc(var(--shell-card-radius) + 4px);
-  background: var(--ui-bg-card-elevated, color-mix(in srgb, var(--shell-card-bg) 88%, white 12%));
-  border: 1px solid var(--ui-border-strong, var(--app-panel-border, rgba(99, 76, 58, 0.1)));
-  box-shadow: var(--shell-card-shadow);
+  gap: 0.65rem;
+  padding: 0.75rem 0.25rem 1rem;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  min-width: 0;
 }
 
 .notes-editor-page-immersive {
-  min-height: calc(100vh - 9rem);
-  padding: 1.25rem 1.2rem 1.4rem;
+  min-height: calc(100vh - 8rem);
+  padding: 0.5rem 0 1rem;
 }
 
 .notes-format-bar {
@@ -1303,20 +1311,21 @@ textarea::placeholder {
 }
 
 .notes-title-field input {
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-size: 2.4rem;
   font-weight: 800;
-  padding: 0;
+  padding: 0.35rem 0.2rem;
   font-family: var(--shell-display-font);
 }
 
 .notes-body-field textarea {
-  min-height: 58vh;
+  min-height: calc(100vh - 17rem);
   resize: vertical;
   line-height: 1.7;
-  padding: 0.9rem;
-  border-radius: 16px;
-  background: var(--ui-bg-input, transparent);
-  border-color: var(--ui-border-subtle, transparent);
+  padding: 0.6rem 0.2rem 1rem;
+  border-radius: 0;
+  background: transparent;
+  border-color: transparent;
+  max-width: 100%;
 }
 
 .notes-body-field textarea:focus,
@@ -1345,6 +1354,7 @@ textarea::placeholder {
 .notes-delete-button {
   width: fit-content;
   justify-self: end;
+  opacity: 0.78;
 }
 
 .task-composer {
@@ -1355,11 +1365,12 @@ textarea::placeholder {
 .brain-dump-card,
 .task-rows-shell {
   display: grid;
-  gap: 0.85rem;
-  padding: 1rem;
-  border-radius: 20px;
+  gap: 0.55rem;
+  padding: 0.7rem;
+  border-radius: 12px;
   border: 1px solid var(--app-panel-border, rgba(99, 76, 58, 0.12));
   background: var(--app-panel-bg, rgba(255, 252, 247, 0.92));
+  overflow-x: auto;
 }
 
 .brain-dump-card textarea {
@@ -1401,8 +1412,9 @@ textarea::placeholder {
 }
 
 .task-row-grid-header {
-  padding: 0 0.15rem;
-  color: var(--shell-muted-text);
+  min-width: 920px;
+  padding: 0 0.35rem;
+  color: var(--ui-text-muted, var(--shell-muted-text));
   font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.05em;
@@ -1410,10 +1422,11 @@ textarea::placeholder {
 }
 
 .task-row-card {
+  min-width: 920px;
   padding: 0.55rem;
-  border-radius: 14px;
-  border: 1px solid var(--app-stat-border, rgba(99, 76, 58, 0.12));
-  background: var(--ui-bg-card, var(--shell-input-bg));
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  background: var(--ui-bg-card-elevated, var(--shell-input-bg));
 }
 
 .task-row-card .field-stack {
@@ -2173,10 +2186,18 @@ button.calendar-detail-card:disabled {
   display: block;
 }
 
+.hq-link-card strong {
+  color: var(--ui-text-primary, #241d19);
+}
+
 .hq-link-card p,
 .hq-list-card p {
   margin: 0;
   color: var(--ui-text-muted, #6f6057);
+}
+
+.hq-link-card p {
+  color: var(--ui-text-secondary, #4b4038);
 }
 
 .hq-link-card:hover {
@@ -2456,16 +2477,53 @@ button.calendar-detail-card:disabled {
     align-items: flex-start;
   }
 
-  .task-row-card .field-stack span {
-    position: static;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    clip: auto;
+  .menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: block;
+    border: 0;
+    background: rgba(10, 8, 6, 0.42);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--shell-motion-fast);
   }
 
-  .task-row-card {
-    padding: 0.85rem;
+  .menu-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .menu-panel {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 80;
+    width: 100vw;
+    max-height: min(78vh, 620px);
+    overflow-y: auto;
+    padding: 0.75rem;
+    border-radius: 22px 22px 0 0;
+    border-width: 1px 0 0;
+    transform: translateY(100%);
+  }
+
+  .menu-panel.open {
+    transform: translateY(0);
+  }
+
+  .menu-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.25rem 0.15rem 0.55rem;
+    color: var(--ui-text-primary, var(--shell-page-text));
+  }
+
+  .menu-link-card {
+    padding: 0.78rem 0.8rem;
+    border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+    background: var(--ui-bg-card, var(--shell-card-bg-soft));
   }
 
   .site-nav-links {
@@ -2497,7 +2555,7 @@ button.calendar-detail-card:disabled {
   }
 
   .task-row-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(180px, 1.55fr) minmax(112px, 0.9fr) 126px 96px 140px minmax(220px, 1.45fr) 92px;
   }
 
   .task-row-grid-workout {
@@ -2505,7 +2563,7 @@ button.calendar-detail-card:disabled {
   }
 
   .task-row-grid-header {
-    display: none;
+    display: grid;
   }
 
   .planner-grid-vnext.week-view,
@@ -2542,7 +2600,6 @@ button.calendar-detail-card:disabled {
   }
 
   .notes-library-toolbar,
-  .notes-editor-topbar,
   .notes-editor-actions {
     grid-template-columns: 1fr;
     flex-direction: column;
@@ -2631,9 +2688,27 @@ button.calendar-detail-card:disabled {
   .button-primary,
   .button-secondary,
   .menu-trigger-button {
-    min-height: 42px;
+    min-height: 38px;
     padding-inline: 0.65rem;
     font-size: 0.8rem;
+  }
+
+  .app-content {
+    padding: 0.8rem;
+  }
+
+  .app-content-shell {
+    padding-top: 0.65rem;
+  }
+
+  .page-wrap {
+    gap: 0.85rem;
+  }
+
+  .page-hero-vnext,
+  .panel-section {
+    padding: 0.85rem;
+    border-radius: 18px;
   }
 
   .site-header .button-primary {
@@ -2768,7 +2843,7 @@ button.calendar-detail-card:disabled {
   }
 
   .task-row-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(180px, 1.55fr) minmax(112px, 0.9fr) 126px 96px 140px minmax(220px, 1.45fr) 92px;
   }
 
   .task-row-grid-workout {
@@ -2776,9 +2851,25 @@ button.calendar-detail-card:disabled {
   }
 
   .notes-editor-page-immersive {
-    min-height: calc(100vh - 3rem);
-    padding: 0.9rem 0.85rem 1.1rem;
-    border-radius: 26px;
+    min-height: calc(100vh - 7rem);
+    padding: 0.25rem 0 0.7rem;
+    border-radius: 0;
+  }
+
+  .notes-editor-shell-immersive {
+    width: 100%;
+  }
+
+  .notes-editor-topbar {
+    gap: 0.45rem;
+  }
+
+  .notes-title-field input {
+    font-size: 1.85rem;
+  }
+
+  .notes-body-field textarea {
+    min-height: calc(100vh - 15rem);
   }
 
   .contacts-bubble-map {

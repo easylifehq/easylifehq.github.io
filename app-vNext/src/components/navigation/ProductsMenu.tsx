@@ -30,6 +30,26 @@ export function ProductsMenu({
     setIsOpen(false);
   }, [location.pathname, location.hash]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    }
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen]);
+
   return (
     <div className={`products-menu${className ? ` ${className}` : ""}`}>
       <button
@@ -41,7 +61,20 @@ export function ProductsMenu({
         {label}
       </button>
 
+      <button
+        type="button"
+        className={`menu-backdrop${isOpen ? " open" : ""}`}
+        aria-label="Close apps menu"
+        onClick={() => setIsOpen(false)}
+      />
+
       <div className={`menu-panel${isOpen ? " open" : ""}${panelClassName ? ` ${panelClassName}` : ""}`}>
+        <div className="menu-panel-header">
+          <strong>{label}</strong>
+          <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)}>
+            Close
+          </button>
+        </div>
         {items.map((item) =>
           item.isRoute === false ? (
             <a
