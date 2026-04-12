@@ -20,6 +20,7 @@ export type ExperimentalFeatureId =
   | "overdueTriage"
   | "notesProcessor"
   | "startHere"
+  | "projectPlanner"
   | "gymMode";
 
 export type UserShellSettings = {
@@ -34,10 +35,6 @@ export const defaultShellSettings: UserShellSettings = {
     "easylist",
     "easynotes",
     "easycalendar",
-    "easypipeline",
-    "easycontacts",
-    "easyprojects",
-    "easyworkout",
   ],
   experimentalFeatures: [],
 };
@@ -61,6 +58,7 @@ const validExperimentalFeatures: ExperimentalFeatureId[] = [
   "overdueTriage",
   "notesProcessor",
   "startHere",
+  "projectPlanner",
   "gymMode",
 ];
 

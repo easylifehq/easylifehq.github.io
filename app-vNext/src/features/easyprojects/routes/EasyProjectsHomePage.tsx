@@ -2,15 +2,39 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyProjects } from "@/features/easyprojects/EasyProjectsContext";
+import { requestProjectPlan, type AiProjectPlan } from "@/features/easyprojects/lib/projectAiPlanner";
+import { getPriorityMeta } from "@/features/easylist/lib/taskUtils";
+import { useSettings } from "@/features/settings/SettingsContext";
 import type { ProjectStatus } from "@/lib/firestore/projects";
 
 export function EasyProjectsHomePage() {
-  const { projects, sections, links, tasks, addProject, saveProject, deleteProject, error, isLoading } = useEasyProjects();
+  const {
+    projects,
+    sections,
+    links,
+    tasks,
+    addProject,
+    saveProject,
+    deleteProject,
+    addSection,
+    addProjectTask,
+    error,
+    isLoading,
+  } = useEasyProjects();
+  const { isExperimentalFeatureEnabled } = useSettings();
+  const isProjectPlannerEnabled = isExperimentalFeatureEnabled("projectPlanner");
   const [editingProjectId, setEditingProjectId] = useState("");
   const [editingTitle, setEditingTitle] = useState("");
   const [editingDescription, setEditingDescription] = useState("");
   const [editingTargetDate, setEditingTargetDate] = useState("");
   const [editingStatus, setEditingStatus] = useState<ProjectStatus>("active");
+  const [plannerTitle, setPlannerTitle] = useState("");
+  const [plannerDescription, setPlannerDescription] = useState("");
+  const [plannerTargetDate, setPlannerTargetDate] = useState("");
+  const [aiPlan, setAiPlan] = useState<AiProjectPlan | null>(null);
+  const [plannerMessage, setPlannerMessage] = useState("");
+  const [isPlanning, setIsPlanning] = useState(false);
+  const [isCreatingPlan, setIsCreatingPlan] = useState(false);
 
   async function handleAddProject(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,6 +48,89 @@ export function EasyProjectsHomePage() {
       status: "active",
     });
     event.currentTarget.reset();
+  }
+
+  async function handlePlanProject(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!plannerTitle.trim() && !plannerDescription.trim()) return;
+
+    setIsPlanning(true);
+    setPlannerMessage("");
+
+    try {
+      const nextPlan = await requestProjectPlan({
+        title: plannerTitle,
+        description: plannerDescription,
+        targetDate: plannerTargetDate,
+      });
+      setAiPlan(nextPlan);
+      setPlannerMessage("Review the plan, then create it when it feels right.");
+    } catch (nextError) {
+      setPlannerMessage(nextError instanceof Error ? nextError.message : "AI project planning failed.");
+    } finally {
+      setIsPlanning(false);
+    }
+  }
+
+  async function handleCreateAiPlan() {
+    if (!aiPlan || (!plannerTitle.trim() && !plannerDescription.trim())) return;
+
+    setIsCreatingPlan(true);
+    setPlannerMessage("");
+
+    try {
+      const projectId = await addProject({
+        title: plannerTitle.trim() || "AI planned project",
+        description: [plannerDescription.trim(), aiPlan.summary.trim()].filter(Boolean).join("\n\n"),
+        targetDate: plannerTargetDate,
+        status: "active",
+      });
+
+      if (!projectId) {
+        throw new Error("Could not create the project yet.");
+      }
+
+      for (const [sectionIndex, section] of aiPlan.sections.entries()) {
+        const sectionId = await addSection({
+          projectId,
+          title: section.title,
+          order: sectionIndex + 1,
+        });
+
+        if (!sectionId) continue;
+
+        for (const [taskIndex, task] of section.tasks.entries()) {
+          await addProjectTask({
+            task: {
+              title: task.title,
+              notes: task.notes,
+              category: plannerTitle.trim() || "Project",
+              dueDate: task.dueDate,
+              estimatedLength: task.estimatedLength,
+              priorityTier: task.priorityTier,
+              priorityLabel: getPriorityMeta(task.priorityTier).label,
+              recurring: false,
+            },
+            link: {
+              projectId,
+              sectionId,
+              order: taskIndex + 1,
+              parentLabel: section.title,
+            },
+          });
+        }
+      }
+
+      setPlannerMessage("Project plan created. Open it below to refine the details.");
+      setAiPlan(null);
+      setPlannerTitle("");
+      setPlannerDescription("");
+      setPlannerTargetDate("");
+    } catch (nextError) {
+      setPlannerMessage(nextError instanceof Error ? nextError.message : "Could not create the project plan.");
+    } finally {
+      setIsCreatingPlan(false);
+    }
   }
 
   function startEditingProject(projectId: string) {
@@ -55,6 +162,112 @@ export function EasyProjectsHomePage() {
   return (
     <>
       <div className="dashboard-grid">
+        {isProjectPlannerEnabled ? (
+          <PageSection
+            eyebrow="Experimental"
+            title="Plan a project from a rough idea"
+            description="Describe what you want to finish and EasyProjects will draft sections, due dates, and linked tasks for review."
+          >
+            <form className="project-ai-planner" onSubmit={handlePlanProject}>
+              <div className="task-composer-grid">
+                <label className="field-stack">
+                  <span>Project idea</span>
+                  <input
+                    value={plannerTitle}
+                    onChange={(event) => setPlannerTitle(event.target.value)}
+                    placeholder="Launch portfolio refresh"
+                  />
+                </label>
+                <label className="field-stack">
+                  <span>Target date</span>
+                  <input
+                    type="date"
+                    value={plannerTargetDate}
+                    onChange={(event) => setPlannerTargetDate(event.target.value)}
+                  />
+                </label>
+                <label className="field-stack field-stack-wide">
+                  <span>What should the plan account for?</span>
+                  <textarea
+                    rows={4}
+                    value={plannerDescription}
+                    onChange={(event) => setPlannerDescription(event.target.value)}
+                    placeholder="Add constraints, deliverables, class deadlines, materials, people involved, or what done looks like."
+                  />
+                </label>
+              </div>
+
+              <div className="task-composer-actions">
+                <button
+                  type="submit"
+                  className="primary-button"
+                  disabled={isPlanning || (!plannerTitle.trim() && !plannerDescription.trim())}
+                >
+                  {isPlanning ? "Planning..." : "Generate plan"}
+                </button>
+                {aiPlan ? (
+                  <button type="button" className="button-secondary" onClick={() => setAiPlan(null)}>
+                    Clear preview
+                  </button>
+                ) : null}
+              </div>
+            </form>
+
+            {plannerMessage ? <p className="helper-copy">{plannerMessage}</p> : null}
+
+            {aiPlan ? (
+              <div className="project-ai-preview">
+                <div className="project-ai-preview-header">
+                  <div>
+                    <p className="eyebrow">Draft plan</p>
+                    <h3>{aiPlan.summary || "A structured project plan is ready."}</h3>
+                  </div>
+                  <button
+                    type="button"
+                    className="primary-button compact-button"
+                    onClick={() => void handleCreateAiPlan()}
+                    disabled={isCreatingPlan}
+                  >
+                    {isCreatingPlan ? "Creating..." : "Create project plan"}
+                  </button>
+                </div>
+
+                {aiPlan.risks.length ? (
+                  <div className="pill-row">
+                    {aiPlan.risks.map((risk) => (
+                      <span key={risk} className="info-pill">{risk}</span>
+                    ))}
+                  </div>
+                ) : null}
+
+                <div className="project-ai-section-list">
+                  {aiPlan.sections.map((section) => (
+                    <article key={section.title} className="project-ai-section-card">
+                      <div className="task-card-title-row">
+                        <h4>{section.title}</h4>
+                        {section.suggestedDueDate ? <span className="priority-pill-vnext">Due {section.suggestedDueDate}</span> : null}
+                      </div>
+                      {section.goal ? <p>{section.goal}</p> : null}
+                      <ul>
+                        {section.tasks.map((task) => (
+                          <li key={`${section.title}-${task.title}`}>
+                            <span>{task.title}</span>
+                            <small>
+                              {getPriorityMeta(task.priorityTier).label}
+                              {task.estimatedLength ? ` | ${task.estimatedLength} min` : ""}
+                              {task.dueDate ? ` | ${task.dueDate}` : ""}
+                            </small>
+                          </li>
+                        ))}
+                      </ul>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </PageSection>
+        ) : null}
+
         <PageSection
           eyebrow="Create"
           title="New project"

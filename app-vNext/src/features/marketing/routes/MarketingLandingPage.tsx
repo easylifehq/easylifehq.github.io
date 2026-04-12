@@ -36,6 +36,27 @@ const productCards = [
     description:
       "Keep applications, follow-ups, and career movement organized without muddying the rest of your system.",
   },
+  {
+    id: "easyprojects",
+    eyebrow: "EasyProjects",
+    title: "The project planning layer.",
+    description:
+      "Turn rough goals into sections, linked tasks, target dates, and practical next steps.",
+  },
+  {
+    id: "easycontacts",
+    eyebrow: "EasyContacts",
+    title: "The relationship memory.",
+    description:
+      "Keep people, context, and follow-up reminders close to the work they support.",
+  },
+  {
+    id: "easyworkout",
+    eyebrow: "EasyWorkout",
+    title: "The training tracker.",
+    description:
+      "Log workouts, reuse routines, and keep gym progress from disappearing between sessions.",
+  },
 ];
 
 export function MarketingLandingPage() {
@@ -44,10 +65,10 @@ export function MarketingLandingPage() {
       <section className="marketing-hero">
         <div className="marketing-hero-copy">
           <p className="eyebrow">EasyLifeHQ</p>
-          <h1>Turn free time into real progress without making life feel cluttered.</h1>
+          <h1>A calmer operating system for real life.</h1>
           <p>
-            EasyLifeHQ connects tasks, time, notes, and your daily overview in one
-            calm system that stays usable on both desktop and mobile.
+            EasyLifeHQ connects tasks, time, notes, projects, follow-ups, contacts,
+            and workouts in one suite that stays soft, fast, and usable.
           </p>
 
           <div className="marketing-hero-actions">
@@ -61,11 +82,11 @@ export function MarketingLandingPage() {
         </div>
 
         <div className="marketing-hero-card">
-          <span className="info-pill">Mobile-first where it matters</span>
-          <h2>One ecosystem. Clearer days.</h2>
+          <span className="info-pill">Smarter without getting loud</span>
+          <h2>Start with the core. Add the rest when it helps.</h2>
           <p>
-            EasyList, EasyCalendar, EasyNotes, EasyPipeline, and EasyHQ each do
-            one job well, then stay connected so the whole system still feels simple.
+            The first view stays focused on List, Notes, and Calendar. The full suite is
+            ready when projects, pipelines, contacts, and workouts need their own space.
           </p>
         </div>
       </section>
@@ -73,7 +94,7 @@ export function MarketingLandingPage() {
       <section id="products" className="marketing-section">
         <div className="panel-header">
           <p className="eyebrow">Products</p>
-          <h2>The core EasyLifeHQ apps</h2>
+          <h2>The EasyLifeHQ suite</h2>
           <p>Each app has a clear job, so the system stays simple instead of turning into a mess.</p>
         </div>
 
@@ -83,9 +104,15 @@ export function MarketingLandingPage() {
               <p className="eyebrow">{card.eyebrow}</p>
               <h3>{card.title}</h3>
               <p>{card.description}</p>
-              <Link to={`/${card.id === "easyhq" ? "" : card.id}`} className="text-button marketing-inline-link">
-                {card.id === "easyhq" ? "See the system" : `Learn about ${card.eyebrow}`}
-              </Link>
+              {["easyhq", "easylist", "easycalendar", "easynotes", "easypipeline"].includes(card.id) ? (
+                <Link to={`/${card.id === "easyhq" ? "" : card.id}`} className="text-button marketing-inline-link">
+                  {card.id === "easyhq" ? "See the system" : `Learn about ${card.eyebrow}`}
+                </Link>
+              ) : (
+                <Link to="/login" className="text-button marketing-inline-link">
+                  Open {card.eyebrow}
+                </Link>
+              )}
             </article>
           ))}
         </div>
@@ -104,7 +131,7 @@ export function MarketingLandingPage() {
           </article>
           <article className="marketing-card">
             <h3>2. Plan it</h3>
-            <p>Use EasyCalendar to place what matters into open time without confusing soft plans with fixed commitments.</p>
+            <p>Use EasyCalendar and EasyProjects to turn rough intent into real time, sections, and next steps.</p>
           </article>
           <article className="marketing-card">
             <h3>3. Stay connected</h3>
@@ -121,16 +148,16 @@ export function MarketingLandingPage() {
 
         <div className="marketing-highlights">
           <div className="mini-panel-vnext">
-            <span>Clear roles</span>
-            <strong>Each app has a clear job instead of becoming one bloated all-in-one tool.</strong>
+            <span>Core first</span>
+            <strong>New accounts start with the essentials, then can turn on more apps when they are useful.</strong>
           </div>
           <div className="mini-panel-vnext">
             <span>Connected ecosystem</span>
-            <strong>One login, shared context, and fast switching between apps.</strong>
+            <strong>One login, shared context, and fast switching between the parts of life that need attention.</strong>
           </div>
           <div className="mini-panel-vnext">
-            <span>Calm design</span>
-            <strong>Minimal enough to think clearly, warm enough to keep using.</strong>
+            <span>Helpful intelligence</span>
+            <strong>AI assists with capture and planning, but the final call stays with the user.</strong>
           </div>
         </div>
       </section>

@@ -92,7 +92,7 @@ const experimentalFeatureOptions: Array<{
   id: ExperimentalFeatureId;
   label: string;
   description: string;
-  category: "HQ" | "Capture" | "Planning" | "Notes" | "Workout";
+  category: "HQ" | "Capture" | "Planning" | "Projects" | "Notes" | "Workout";
   status: "Preview" | "Early" | "Polish";
   showsUp: string;
 }> = [
@@ -137,6 +137,14 @@ const experimentalFeatureOptions: Array<{
     showsUp: "EasyList dashboard",
   },
   {
+    id: "projectPlanner",
+    label: "Project Planner AI",
+    description: "Drafts project sections, due dates, and linked task suggestions from a rough goal.",
+    category: "Projects",
+    status: "Early",
+    showsUp: "EasyProjects",
+  },
+  {
     id: "notesFocusEditor",
     label: "Notes Focus Editor",
     description: "Uses a calmer writing surface with less chrome when editing a note.",
@@ -170,7 +178,7 @@ const experimentalFeatureOptions: Array<{
   },
 ];
 
-const experimentGroups = ["HQ", "Capture", "Planning", "Notes", "Workout"] as const;
+const experimentGroups = ["HQ", "Capture", "Planning", "Projects", "Notes", "Workout"] as const;
 
 export function SettingsPage() {
   const {

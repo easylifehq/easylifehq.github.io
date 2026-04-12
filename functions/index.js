@@ -54,6 +54,81 @@ const taskRowsSchema = {
   required: ["rows"],
 };
 
+const projectPlanSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    summary: {
+      type: "string",
+      description: "A short, practical 1-2 sentence summary of the project plan.",
+    },
+    risks: {
+      type: "array",
+      maxItems: 5,
+      items: { type: "string" },
+      description: "Short risk, constraint, or decision notes the user should know before starting.",
+    },
+    sections: {
+      type: "array",
+      minItems: 2,
+      maxItems: 6,
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          title: {
+            type: "string",
+            description: "A clear project phase or workstream title.",
+          },
+          goal: {
+            type: "string",
+            description: "A short explanation of what this section accomplishes.",
+          },
+          suggestedDueDate: {
+            type: ["string", "null"],
+            description: "Suggested section due date in YYYY-MM-DD format, or null if no target date is available.",
+          },
+          tasks: {
+            type: "array",
+            minItems: 2,
+            maxItems: 8,
+            items: {
+              type: "object",
+              additionalProperties: false,
+              properties: {
+                title: {
+                  type: "string",
+                  description: "A concise action-oriented task title.",
+                },
+                notes: {
+                  type: "string",
+                  description: "Short context, acceptance detail, or suggestion for the task.",
+                },
+                dueDate: {
+                  type: ["string", "null"],
+                  description: "Suggested task due date in YYYY-MM-DD format, or null.",
+                },
+                estimatedLength: {
+                  type: ["integer", "null"],
+                  description: "Estimated minutes for the task, or null.",
+                },
+                priorityTier: {
+                  type: "integer",
+                  enum: [1, 2, 3, 4, 5],
+                  description: "1 is highest urgency and 5 is lowest urgency.",
+                },
+              },
+              required: ["title", "notes", "dueDate", "estimatedLength", "priorityTier"],
+            },
+          },
+        },
+        required: ["title", "goal", "suggestedDueDate", "tasks"],
+      },
+    },
+  },
+  required: ["summary", "risks", "sections"],
+};
+
 function readOutputText(responseBody) {
   if (typeof responseBody.output_text === "string") {
     return responseBody.output_text;
@@ -78,6 +153,35 @@ function normalizeRow(row) {
   };
 }
 
+function normalizeProjectTask(task) {
+  return {
+    title: String(task.title || "").trim(),
+    notes: String(task.notes || "").trim(),
+    dueDate: typeof task.dueDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(task.dueDate) ? task.dueDate : null,
+    estimatedLength:
+      Number.isInteger(task.estimatedLength) && task.estimatedLength > 0
+        ? Math.min(task.estimatedLength, 1440)
+        : null,
+    priorityTier: [1, 2, 3, 4, 5].includes(Number(task.priorityTier)) ? Number(task.priorityTier) : 3,
+  };
+}
+
+function normalizeProjectSection(section) {
+  const tasks = Array.isArray(section.tasks)
+    ? section.tasks.map(normalizeProjectTask).filter((task) => task.title).slice(0, 8)
+    : [];
+
+  return {
+    title: String(section.title || "").trim(),
+    goal: String(section.goal || "").trim(),
+    suggestedDueDate:
+      typeof section.suggestedDueDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(section.suggestedDueDate)
+        ? section.suggestedDueDate
+        : null,
+    tasks,
+  };
+}
+
 const taskExtractionInstructions = [
   "You are the EasyList task extraction editor.",
   "The user may ramble in one huge paragraph. Your job is to find the actionable tasks hiding inside it and turn them into clean editable rows.",
@@ -93,6 +197,20 @@ const taskExtractionInstructions = [
   "Remove duplicates and combine repeated mentions into the clearest single row.",
   "Keep notes short. Notes should help the user remember context, not repeat the title.",
   "Return no more than 20 rows, prioritizing the most actionable or time-sensitive tasks.",
+].join(" ");
+
+const projectPlanningInstructions = [
+  "You are the EasyProjects planning assistant.",
+  "Create a practical, editable project plan from the user's goal, description, and optional target date.",
+  "The output will be reviewed by the user before anything is created, so make it useful but not overbearing.",
+  "Organize the plan into 2-6 sections or phases. Each section should have 2-8 concrete tasks.",
+  "Task titles should be action-oriented and short enough to scan in a project board.",
+  "Use notes for acceptance details, constraints, or helpful suggestions. Keep notes concise.",
+  "If a target date is provided, spread due dates realistically between the current date and target date.",
+  "If no target date is provided, use null for due dates unless the user provided a clear date.",
+  "Prefer realistic sequencing: discovery, decisions, creation, review, polish, launch, and follow-up when they fit.",
+  "Include risks only when they help the user start smarter. Do not manufacture scary warnings.",
+  "Do not create vague filler tasks like 'work on project'. Make every task something the user can act on.",
 ].join(" ");
 
 exports.analyzeTaskBrainDump = onRequest(
@@ -202,6 +320,126 @@ exports.analyzeTaskBrainDump = onRequest(
     } catch (error) {
       logger.error("Task analysis request failed", error);
       response.status(500).json({ error: "Task analysis failed. Try again in a moment." });
+    }
+  }
+);
+
+exports.planProjectWithAi = onRequest(
+  {
+    cors: true,
+    secrets: [openAiApiKey],
+    timeoutSeconds: 60,
+    memory: "256MiB",
+  },
+  async (request, response) => {
+    if (request.method === "OPTIONS") {
+      response.status(204).send("");
+      return;
+    }
+
+    if (request.method !== "POST") {
+      response.status(405).json({ error: "Use POST." });
+      return;
+    }
+
+    const authHeader = request.get("authorization") || "";
+    const token = authHeader.startsWith("Bearer ") ? authHeader.slice("Bearer ".length) : "";
+
+    if (!token) {
+      response.status(401).json({ error: "Sign in before using AI project planning." });
+      return;
+    }
+
+    try {
+      await admin.auth().verifyIdToken(token);
+    } catch (error) {
+      logger.warn("Rejected unauthenticated project planning request", error);
+      response.status(401).json({ error: "Your session could not be verified." });
+      return;
+    }
+
+    const title = String(request.body?.title || "").trim();
+    const description = String(request.body?.description || "").trim();
+    const targetDate = String(request.body?.targetDate || "").trim();
+    const currentDate = String(request.body?.currentDate || new Date().toISOString().slice(0, 10));
+
+    if (!title && !description) {
+      response.status(400).json({ error: "Add a project title or description first." });
+      return;
+    }
+
+    if (`${title}\n${description}`.length > 10000) {
+      response.status(413).json({ error: "Project details are too long. Keep them under 10,000 characters." });
+      return;
+    }
+
+    const apiKey = openAiApiKey.value();
+    const model = process.env.OPENAI_MODEL || "gpt-5-mini";
+
+    try {
+      const openAiResponse = await fetch("https://api.openai.com/v1/responses", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model,
+          input: [
+            {
+              role: "system",
+              content: projectPlanningInstructions,
+            },
+            {
+              role: "user",
+              content: [
+                `Current date: ${currentDate}.`,
+                targetDate ? `Target date: ${targetDate}.` : "Target date: not provided.",
+                "Create an EasyProjects plan with sections and editable task suggestions.",
+                `Project title: ${title || "Untitled project"}`,
+                "Project description:",
+                description || "No extra description provided.",
+              ].join("\n\n"),
+            },
+          ],
+          text: {
+            format: {
+              type: "json_schema",
+              name: "easyprojects_project_plan",
+              strict: true,
+              schema: projectPlanSchema,
+            },
+          },
+        }),
+      });
+
+      const responseBody = await openAiResponse.json();
+
+      if (!openAiResponse.ok) {
+        logger.error("OpenAI project planning failed", {
+          status: openAiResponse.status,
+          code: responseBody?.error?.code || "unknown",
+          type: responseBody?.error?.type || "unknown",
+        });
+        response.status(502).json({ error: "OpenAI could not plan that project." });
+        return;
+      }
+
+      const parsed = JSON.parse(readOutputText(responseBody));
+      const sections = Array.isArray(parsed.sections)
+        ? parsed.sections.map(normalizeProjectSection).filter((section) => section.title && section.tasks.length).slice(0, 6)
+        : [];
+
+      response.status(200).json({
+        summary: String(parsed.summary || "").trim(),
+        risks: Array.isArray(parsed.risks)
+          ? parsed.risks.map((risk) => String(risk || "").trim()).filter(Boolean).slice(0, 5)
+          : [],
+        sections,
+      });
+    } catch (error) {
+      logger.error("Project planning request failed", error);
+      response.status(500).json({ error: "Project planning failed. Try again in a moment." });
     }
   }
 );

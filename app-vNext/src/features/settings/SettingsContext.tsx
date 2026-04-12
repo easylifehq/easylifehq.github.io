@@ -26,6 +26,7 @@ const visualQaExperimentalFeatures: ExperimentalFeatureId[] = [
   "overdueTriage",
   "notesProcessor",
   "startHere",
+  "projectPlanner",
   "gymMode",
 ];
 
