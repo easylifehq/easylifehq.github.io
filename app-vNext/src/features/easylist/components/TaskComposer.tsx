@@ -311,6 +311,7 @@ async function analyzeBrainDumpWithAi(brainDump: string) {
 export function TaskComposer({ onSubmit }: TaskComposerProps) {
   const [rows, setRows] = useState<TaskRowDraft[]>([EMPTY_ROW(), EMPTY_ROW(), EMPTY_ROW()]);
   const [brainDump, setBrainDump] = useState("");
+  const [mergeMode, setMergeMode] = useState<"replace" | "append">("replace");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisMessage, setAnalysisMessage] = useState("");
@@ -346,8 +347,16 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
     });
   }
 
-  function mergeParsedRows(parsedRows: TaskRowDraft[]) {
+  function applyParsedRows(parsedRows: TaskRowDraft[]) {
     if (!parsedRows.length) {
+      return;
+    }
+
+    if (mergeMode === "replace") {
+      setRows([
+        ...parsedRows,
+        ...Array.from({ length: Math.max(1, 3 - parsedRows.length) }, () => EMPTY_ROW()),
+      ]);
       return;
     }
 
@@ -373,18 +382,18 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
     try {
       const aiRows = await analyzeBrainDumpWithAi(brainDump);
       const parsedRows = aiRows?.length ? aiRows : parseBrainDump(brainDump);
-      mergeParsedRows(parsedRows);
+      applyParsedRows(parsedRows);
       setAnalysisMessage(
         aiRows?.length
           ? "AI turned this into editable rows."
-          : "Used local analysis. Add the AI endpoint to unlock deeper parsing."
+          : "AI was unavailable, so local analysis created editable rows."
       );
     } catch (error) {
       const parsedRows = parseBrainDump(brainDump);
-      mergeParsedRows(parsedRows);
+      applyParsedRows(parsedRows);
       setAnalysisMessage(
         error instanceof Error
-          ? `${error.message} Used local analysis instead.`
+          ? `${error.message} Local analysis created editable rows instead.`
           : "Used local analysis instead."
       );
     } finally {
@@ -425,16 +434,41 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
         </label>
 
         <div className="brain-dump-actions">
+          <div className="brain-dump-mode-toggle" aria-label="Brain dump row behavior">
+            <button
+              type="button"
+              className={`toggle-button${mergeMode === "replace" ? " active" : ""}`}
+              onClick={() => setMergeMode("replace")}
+            >
+              Replace rows
+            </button>
+            <button
+              type="button"
+              className={`toggle-button${mergeMode === "append" ? " active" : ""}`}
+              onClick={() => setMergeMode("append")}
+            >
+              Add to existing
+            </button>
+          </div>
           <button
             type="button"
             className="button-secondary"
             onClick={handleBrainDumpToRows}
             disabled={isAnalyzing || !brainDump.trim()}
           >
-            {isAnalyzing ? "Analyzing..." : "AI Analyze Into Rows"}
+            {isAnalyzing ? (
+              <>
+                <span className="button-spinner" aria-hidden="true" />
+                Reading your brain dump...
+              </>
+            ) : (
+              "AI Analyze Into Rows"
+            )}
           </button>
           <span className="helper-copy">
-            {analysisMessage || "Paste a messy paragraph. AI will pull out editable task rows."}
+            {isAnalyzing
+              ? "AI is finding the actual tasks and turning them into rows."
+              : analysisMessage || "Paste a messy paragraph. AI will pull out editable task rows."}
           </span>
         </div>
       </div>
@@ -447,7 +481,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
           <span>Minutes</span>
           <span>Priority</span>
           <span>Notes</span>
-          <span>Row</span>
+          <span>Actions</span>
         </div>
 
         {rows.map((row, index) => (
