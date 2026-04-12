@@ -50,6 +50,25 @@ function sortNotes(notes: NoteRecord[]) {
   });
 }
 
+function isVisualQaMode() {
+  if (!import.meta.env.DEV) return false;
+  return new URLSearchParams(window.location.search).get("visualQa") === "1";
+}
+
+const visualQaNotes: NoteRecord[] = [
+  {
+    id: "visual-note",
+    title: "Launch notes and next actions",
+    tags: ["inbox", "planning"],
+    pinned: true,
+    bodyHtml: "",
+    bodyText:
+      "Review the EasyLife polish pass\nFollow up on deployment notes\nSchedule a final mobile QA check\nDraft a short product update",
+    createdAt: new Date("2026-04-12T09:00:00"),
+    updatedAt: new Date("2026-04-12T10:30:00"),
+  },
+];
+
 export function EasyNotesProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [notes, setNotes] = useState<NoteRecord[]>([]);
@@ -57,6 +76,13 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (isVisualQaMode()) {
+      setNotes(visualQaNotes);
+      setIsLoading(false);
+      setError("");
+      return;
+    }
+
     if (!user) {
       setNotes([]);
       setIsLoading(false);

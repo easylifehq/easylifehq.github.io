@@ -75,6 +75,11 @@ type EasyProjectsContextValue = {
 
 const EasyProjectsContext = createContext<EasyProjectsContextValue | undefined>(undefined);
 
+function isVisualQaMode() {
+  if (!import.meta.env.DEV) return false;
+  return new URLSearchParams(window.location.search).get("visualQa") === "1";
+}
+
 export function EasyProjectsProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
@@ -88,6 +93,100 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
   const [tasksLoading, setTasksLoading] = useState(true);
 
   useEffect(() => {
+    if (isVisualQaMode()) {
+      setProjects([
+        {
+          id: "visual-project",
+          title: "EasyLife polish launch",
+          description: "A seeded QA project for checking detail and timeline layouts without Firestore data.",
+          targetDate: "2026-04-18",
+          status: "active",
+          createdAt: new Date("2026-04-12T09:00:00"),
+          updatedAt: new Date("2026-04-12T11:00:00"),
+        },
+      ]);
+      setSections([
+        {
+          id: "visual-section-1",
+          projectId: "visual-project",
+          title: "Ship polish",
+          order: 1,
+          createdAt: new Date("2026-04-12T09:05:00"),
+          updatedAt: new Date("2026-04-12T09:05:00"),
+        },
+        {
+          id: "visual-section-2",
+          projectId: "visual-project",
+          title: "Follow-up",
+          order: 2,
+          createdAt: new Date("2026-04-12T09:10:00"),
+          updatedAt: new Date("2026-04-12T09:10:00"),
+        },
+      ]);
+      setLinks([
+        {
+          id: "visual-link-1",
+          projectId: "visual-project",
+          sectionId: "visual-section-1",
+          taskId: "visual-task-1",
+          order: 1,
+          parentLabel: "Ship polish",
+          createdAt: new Date("2026-04-12T09:15:00"),
+          updatedAt: new Date("2026-04-12T09:15:00"),
+        },
+        {
+          id: "visual-link-2",
+          projectId: "visual-project",
+          sectionId: "visual-section-2",
+          taskId: "visual-task-2",
+          order: 2,
+          parentLabel: "Follow-up",
+          createdAt: new Date("2026-04-12T09:20:00"),
+          updatedAt: new Date("2026-04-12T09:20:00"),
+        },
+      ]);
+      setTasks([
+        {
+          id: "visual-task-1",
+          title: "Verify Settings labs in the deployed build",
+          notes: "Seeded visual QA task",
+          category: "EasyLife",
+          estimatedLength: 20,
+          priorityTier: 2,
+          priorityLabel: "High",
+          dueDate: new Date("2026-04-12T12:00:00"),
+          recurring: false,
+          completed: false,
+          completedAt: null,
+          linkedCalendarBlockIds: [],
+          createdAt: new Date("2026-04-12T09:20:00"),
+          updatedAt: new Date("2026-04-12T09:20:00"),
+        },
+        {
+          id: "visual-task-2",
+          title: "Write down the next cleanup ideas",
+          notes: "Seeded visual QA task",
+          category: "EasyLife",
+          estimatedLength: 15,
+          priorityTier: 3,
+          priorityLabel: "Medium",
+          dueDate: null,
+          recurring: false,
+          completed: false,
+          completedAt: null,
+          linkedCalendarBlockIds: [],
+          createdAt: new Date("2026-04-12T09:25:00"),
+          updatedAt: new Date("2026-04-12T09:25:00"),
+        },
+      ]);
+      setProjectsLoading(false);
+      setSectionsLoading(false);
+      setLinksLoading(false);
+      setTasksLoading(false);
+      setError("");
+      return;
+    }
+
     if (!user) {
       setProjects([]);
       setSections([]);

@@ -2383,6 +2383,72 @@ button.calendar-detail-card:disabled {
   gap: 0.9rem;
 }
 
+.settings-page {
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.settings-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.settings-status-grid,
+.settings-layout-grid,
+.settings-labs-summary,
+.settings-baseline-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.settings-status-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.settings-status-card,
+.settings-labs-summary article {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.9rem;
+  border-radius: 14px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-card-elevated, var(--shell-card-bg));
+  box-shadow: 0 12px 28px rgba(34, 29, 24, 0.08);
+}
+
+.settings-status-card span,
+.settings-labs-summary span,
+.settings-card-topline,
+.settings-lab-group-header span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.settings-status-card strong,
+.settings-labs-summary strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 1.05rem;
+}
+
+.settings-status-card p,
+.settings-labs-summary p,
+.settings-baseline-grid p {
+  margin: 0;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.settings-layout-grid {
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  align-items: start;
+}
+
 .settings-choice-card,
 .settings-toggle-row {
   border-radius: 20px;
@@ -2397,6 +2463,35 @@ button.calendar-detail-card:disabled {
   gap: 0.45rem;
   padding: 1rem;
   text-align: left;
+}
+
+.settings-theme-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.settings-theme-card::before {
+  content: "";
+  width: 3.2rem;
+  height: 0.32rem;
+  border-radius: 999px;
+  background: var(--app-accent, var(--shell-accent));
+}
+
+.settings-theme-classic::before {
+  background: linear-gradient(90deg, #c7723f, #8d6dd7);
+}
+
+.settings-theme-candy::before {
+  background: linear-gradient(90deg, #e5488d, #f5a3c8);
+}
+
+.settings-theme-gamer::before {
+  background: linear-gradient(90deg, #8b5cf6, #22d3ee);
+}
+
+.settings-theme-elvish::before {
+  background: linear-gradient(90deg, #c9a34a, #2f9a73);
 }
 
 .settings-choice-card > *,
@@ -2416,6 +2511,30 @@ button.calendar-detail-card:disabled {
   color: var(--ui-text-muted, #6d6158);
 }
 
+.settings-card-topline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  letter-spacing: 0.06em;
+}
+
+.settings-state-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.45rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-pill-bg, var(--shell-chip-bg));
+  color: var(--ui-pill-text, var(--shell-chip-text));
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .settings-toggle-list {
   display: grid;
   gap: 0.85rem;
@@ -2429,10 +2548,51 @@ button.calendar-detail-card:disabled {
   padding: 0.95rem 1rem;
 }
 
+.settings-toggle-row.active {
+  border-color: var(--ui-border-strong, var(--shell-card-border));
+  background: var(--ui-bg-card-elevated, var(--shell-card-bg));
+  box-shadow: 0 10px 28px rgba(34, 29, 24, 0.07);
+}
+
 .settings-toggle-row-experimental {
   background:
     linear-gradient(90deg, color-mix(in srgb, var(--app-accent) 14%, transparent), transparent 42%),
     var(--ui-bg-card, var(--app-panel-bg, rgba(255, 252, 247, 0.92)));
+}
+
+.settings-labs-summary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.settings-labs-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.settings-lab-group {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0.85rem;
+  border-radius: 16px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: color-mix(in srgb, var(--ui-bg-section) 86%, transparent);
+}
+
+.settings-lab-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.settings-lab-group-header .eyebrow {
+  margin: 0;
+}
+
+.settings-baseline-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .capture-fab {
@@ -2746,8 +2906,16 @@ button.calendar-detail-card:disabled {
   .stats-grid,
   .calendar-category-grid,
   .calendar-composer-grid,
+  .settings-hero,
+  .settings-layout-grid,
+  .settings-labs-summary,
+  .settings-baseline-grid,
   .settings-option-grid {
     grid-template-columns: 1fr;
+  }
+
+  .settings-status-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .pipeline-board-grid,
@@ -2968,6 +3136,14 @@ button.calendar-detail-card:disabled {
 
   .daily-review-grid {
     grid-template-columns: 1fr;
+  }
+
+  .settings-status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-toggle-row {
+    align-items: flex-start;
   }
 
   .page-wrap {
