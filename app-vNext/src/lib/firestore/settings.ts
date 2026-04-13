@@ -35,6 +35,7 @@ export const defaultShellSettings: UserShellSettings = {
     "easylist",
     "easynotes",
     "easycalendar",
+    "easyworkout",
   ],
   experimentalFeatures: [],
 };

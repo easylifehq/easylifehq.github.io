@@ -47,44 +47,44 @@ const appVisibilityOptions: Array<{
   {
     id: "easylist",
     label: "EasyList",
-    description: "Tasks, due dates, priorities, and bulk entry.",
-    home: "Tasks",
+    description: "Core: quick task capture and the main list.",
+    home: "Core",
   },
   {
     id: "easynotes",
     label: "EasyNotes",
-    description: "Notes, brain dumps, drafts, and action extraction.",
-    home: "Writing",
+    description: "Core: fast notes and rough thoughts.",
+    home: "Core",
   },
   {
     id: "easycalendar",
     label: "EasyCalendar",
-    description: "Time planning, fixed events, and task blocks.",
-    home: "Schedule",
-  },
-  {
-    id: "easypipeline",
-    label: "EasyPipeline",
-    description: "Applications, follow-ups, drafts, and job-search momentum.",
-    home: "Career",
-  },
-  {
-    id: "easycontacts",
-    label: "EasyContacts",
-    description: "People, relationship reminders, and networking context.",
-    home: "People",
-  },
-  {
-    id: "easyprojects",
-    label: "EasyProjects",
-    description: "Projects, sections, milestones, and synced project tasks.",
-    home: "Projects",
+    description: "Core: today, fixed events, and time blocks.",
+    home: "Core",
   },
   {
     id: "easyworkout",
     label: "EasyWorkout",
-    description: "Workout routines, logging, and strength progress.",
-    home: "Fitness",
+    description: "Core: fast workout logging, with stats as a bonus.",
+    home: "Core",
+  },
+  {
+    id: "easypipeline",
+    label: "EasyPipeline",
+    description: "Optional: applications, follow-ups, and job-search momentum.",
+    home: "Optional",
+  },
+  {
+    id: "easycontacts",
+    label: "EasyContacts",
+    description: "Optional: people, relationship reminders, and networking context.",
+    home: "Optional",
+  },
+  {
+    id: "easyprojects",
+    label: "EasyProjects",
+    description: "Optional: sections, milestones, synced tasks, and AI planning.",
+    home: "Optional",
   },
 ];
 
@@ -219,7 +219,7 @@ export function SettingsPage() {
           <article className="settings-status-card">
             <span>Visible apps</span>
             <strong>{enabledApps.length} of {appVisibilityOptions.length}</strong>
-            <p>EasyHQ and Settings always stay on.</p>
+            <p>Start with core apps, then add optional tools later.</p>
           </article>
           <article className="settings-status-card">
             <span>Experimental</span>
@@ -259,7 +259,7 @@ export function SettingsPage() {
         <PageSection
           eyebrow="Suite"
           title="Visible apps"
-          description="Hide apps you are not using right now without removing their data."
+          description="Keep the core visible. Hide optional apps until you actually want that extra layer."
         >
           {isLoading ? <p className="helper-copy">Loading your preferences...</p> : null}
 
@@ -290,8 +290,8 @@ export function SettingsPage() {
 
       <PageSection
         eyebrow="Labs"
-        title="Experimental features"
-        description="Turn newer ideas on one at a time. They are designed to be useful, but easy to back out of."
+          title="Experimental features"
+        description="Leave these off while learning the app. Turn them on one at a time when the core feels comfortable."
       >
         <div className="settings-labs-summary">
           <article>

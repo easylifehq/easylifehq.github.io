@@ -27,6 +27,7 @@ export function HQPage() {
   const { user } = useAuth();
   const { events, taskBlocks, tasks, isLoading, error } = useEasyCalendar();
   const { isAppVisible, isExperimentalFeatureEnabled } = useSettings();
+  const showPlanningPreview = isExperimentalFeatureEnabled("dailyReview");
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [workoutSessions, setWorkoutSessions] = useState<WorkoutSessionRecord[]>([]);
   const today = startOfDay(new Date());
@@ -97,7 +98,7 @@ export function HQPage() {
       return {
         label: "Start in EasyWorkout",
         reason: "No workouts are logged this week yet.",
-        to: "/app/easyworkout/dashboard",
+        to: "/app/easyworkout/log",
       };
     }
     return {
@@ -167,8 +168,8 @@ export function HQPage() {
               <strong>{openWindows.length >= 3 ? "Flexible" : openWindows.length >= 1 ? "Structured" : "Packed"}</strong>
             </article>
             <article className="mini-panel-vnext">
-              <span>Suggested plan</span>
-              <strong>{planPreview.length} task{planPreview.length === 1 ? "" : "s"} ready</strong>
+              <span>Open tasks</span>
+              <strong>{topTasks.length} ready</strong>
             </article>
           </div>
         </PageSection>
@@ -180,18 +181,18 @@ export function HQPage() {
         >
           <div className="hq-link-grid">
             {isAppVisible("easylist") ? (
-              <Link className="hq-link-card" to="/app/easylist/dashboard">
-                <strong>Open EasyList</strong>
-                <p>Review priorities, inbox, and what still needs to get done.</p>
+              <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
+                <strong>Add tasks</strong>
+                <p>Dump what is on your mind and turn it into a clean list.</p>
               </Link>
             ) : null}
             {isAppVisible("easycalendar") ? (
               <Link className="hq-link-card" to="/app/easycalendar/day">
-                <strong>Open EasyCalendar</strong>
+                <strong>See today</strong>
                 <p>See today, move blocks, and adjust your schedule fast.</p>
               </Link>
             ) : null}
-            {isAppVisible("easycalendar") ? (
+            {showPlanningPreview && isAppVisible("easycalendar") ? (
               <Link className="hq-link-card" to="/app/easycalendar/day">
                 <strong>Plan My Day</strong>
                 <p>Run the day-planning pass and turn open time into progress.</p>
@@ -199,7 +200,7 @@ export function HQPage() {
             ) : null}
             {isAppVisible("easynotes") ? (
               <Link className="hq-link-card" to="/app/easynotes">
-                <strong>Open EasyNotes</strong>
+                <strong>Create or open notes</strong>
                 <p>Jot down rough thoughts, meeting notes, and drafts for later.</p>
               </Link>
             ) : null}
@@ -222,8 +223,8 @@ export function HQPage() {
               </Link>
             ) : null}
             {isAppVisible("easyworkout") ? (
-              <Link className="hq-link-card" to="/app/easyworkout/dashboard">
-                <strong>Open EasyWorkout</strong>
+              <Link className="hq-link-card" to="/app/easyworkout/log">
+                <strong>Log a workout</strong>
                 <p>Log today&apos;s lifts fast and see the last weight you hit.</p>
               </Link>
             ) : null}
@@ -300,6 +301,8 @@ export function HQPage() {
         </PageSection>
       ) : null}
 
+      {showPlanningPreview ? (
+        <>
       <div className="dashboard-grid">
         <PageSection
           eyebrow="Next up"
@@ -370,6 +373,8 @@ export function HQPage() {
           )}
         </div>
       </PageSection>
+        </>
+      ) : null}
     </main>
   );
 }

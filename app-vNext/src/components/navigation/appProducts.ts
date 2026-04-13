@@ -13,9 +13,9 @@ export const appProductItems: AppProductItem[] = [
   },
   {
     appId: "easylist",
-    href: "/app/easylist/dashboard",
+    href: "/app/easylist/add",
     label: "EasyList",
-    description: "Capture and organize what needs doing.",
+    description: "Add tasks first; sorting can happen later.",
   },
   {
     appId: "easynotes",
@@ -27,7 +27,7 @@ export const appProductItems: AppProductItem[] = [
     appId: "easycalendar",
     href: "/app/easycalendar/day",
     label: "EasyCalendar",
-    description: "Plan your time and manage task blocks.",
+    description: "See today and place work into time.",
   },
   {
     appId: "easypipeline",
