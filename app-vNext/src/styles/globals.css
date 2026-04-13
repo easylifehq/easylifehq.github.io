@@ -879,6 +879,26 @@ a {
   font-weight: 700;
 }
 
+.inline-action-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-empty, var(--shell-card-bg-soft));
+}
+
+.inline-action-card strong,
+.inline-action-card p {
+  margin: 0;
+}
+
+.inline-action-card p {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
 .centered-state,
 .auth-page-vnext {
   min-height: 100dvh;
@@ -3109,6 +3129,7 @@ button.calendar-detail-card:disabled {
 
   .task-composer-grid,
   .stats-grid,
+  .inline-action-card,
   .project-ai-preview-header,
   .project-ai-section-card li,
   .calendar-category-grid,

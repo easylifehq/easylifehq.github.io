@@ -15,6 +15,7 @@ import {
 export function EasyCalendarWeekPage() {
   const { categories, events, taskBlocks, tasks, isLoading, error, addCategory, saveCategory } = useEasyCalendar();
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [showComposer, setShowComposer] = useState(false);
 
   const weekStart = startOfWeek(new Date());
   const days = Array.from({ length: 7 }, (_, index) => addDays(weekStart, index));
@@ -109,8 +110,17 @@ export function EasyCalendarWeekPage() {
         </div>
       </PageSection>
 
-      <PageSection eyebrow="Capture" title="Add to calendar">
-        <CalendarComposer />
+      <PageSection eyebrow="Advanced" title="Scheduling tools">
+        <div className="inline-action-card">
+          <div>
+            <strong>Add events and task blocks</strong>
+            <p>Use the plus button for quick events. Open this when you want the full scheduler.</p>
+          </div>
+          <button type="button" className="button-secondary" onClick={() => setShowComposer((current) => !current)}>
+            {showComposer ? "Hide tools" : "Open tools"}
+          </button>
+        </div>
+        {showComposer ? <CalendarComposer /> : null}
       </PageSection>
 
       <PageSection eyebrow="Categories" title="Tags">
