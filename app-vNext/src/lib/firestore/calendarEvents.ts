@@ -102,7 +102,7 @@ export async function createCalendarEvent(
   userId: string,
   draft: CalendarEventDraft
 ) {
-  await addDoc(getCalendarEventsCollection(userId), {
+  const reference = await addDoc(getCalendarEventsCollection(userId), {
     title: draft.title,
     description: draft.description,
     categoryId: draft.categoryId || null,
@@ -115,6 +115,8 @@ export async function createCalendarEvent(
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
+
+  return reference.id;
 }
 
 export async function updateCalendarEvent(

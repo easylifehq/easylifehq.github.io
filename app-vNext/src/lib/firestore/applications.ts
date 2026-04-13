@@ -188,11 +188,13 @@ export function subscribeToGeneratedDrafts(
 }
 
 export async function createApplication(userId: string, draft: ApplicationDraft) {
-  await addDoc(getApplicationsCollection(userId), {
+  const reference = await addDoc(getApplicationsCollection(userId), {
     ...draft,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
+
+  return reference.id;
 }
 
 export async function updateApplication(userId: string, applicationId: string, draft: ApplicationDraft) {

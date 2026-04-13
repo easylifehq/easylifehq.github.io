@@ -2861,6 +2861,14 @@ button.calendar-detail-card:disabled {
   gap: 0.75rem;
 }
 
+.capture-detail-grid-three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.capture-detail-grid-four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .capture-header h2,
 .notes-processor-panel h3 {
   margin: 0.15rem 0 0;
@@ -2873,6 +2881,13 @@ button.calendar-detail-card:disabled {
   border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
   background: var(--ui-bg-empty, var(--shell-card-bg-soft));
   color: var(--ui-text-secondary, var(--shell-page-text));
+}
+
+.capture-success-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
 .daily-review-grid {
@@ -3189,6 +3204,11 @@ button.calendar-detail-card:disabled {
 
   .capture-detail-grid {
     grid-template-columns: 1fr;
+  }
+
+  .capture-success-card {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .drawer-actions-right {

@@ -1,14 +1,46 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { createApplication, type ApplicationDraft } from "@/lib/firestore/applications";
-import { createCalendarEvent } from "@/lib/firestore/calendarEvents";
+import {
+  createApplication,
+  type ApplicationDraft,
+  type ApplicationPriority,
+} from "@/lib/firestore/applications";
+import { createCalendarEvent, type CalendarEventType } from "@/lib/firestore/calendarEvents";
 import { createContact, type ContactDraft } from "@/lib/firestore/contacts";
 import { createNote, updateNote } from "@/lib/firestore/notes";
-import { createProject, type ProjectDraft } from "@/lib/firestore/projects";
+import { createProject, type ProjectDraft, type ProjectStatus } from "@/lib/firestore/projects";
 import { createTask } from "@/lib/firestore/tasks";
 import { auth } from "@/lib/firebase/client";
 
 type CaptureMode = "task" | "note" | "event" | "application" | "contact" | "project" | "workout";
+
+type QuickAddDetails = {
+  company: string;
+  role: string;
+  email: string;
+  followUp: string;
+  priority: ApplicationPriority;
+  projectStatus: ProjectStatus;
+  notes: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  eventType: CalendarEventType;
+};
+
+const defaultDetails: QuickAddDetails = {
+  company: "",
+  role: "",
+  email: "",
+  followUp: "",
+  priority: "medium",
+  projectStatus: "active",
+  notes: "",
+  date: "",
+  startTime: "09:00",
+  endTime: "10:00",
+  eventType: "other",
+};
 
 function detectCaptureType(value: string) {
   const text = value.toLowerCase();
@@ -36,8 +68,8 @@ export function UniversalCapture() {
   const [mode, setMode] = useState<CaptureMode>("task");
   const [text, setText] = useState("");
   const [message, setMessage] = useState("");
-  const [secondary, setSecondary] = useState("");
-  const [date, setDate] = useState("");
+  const [details, setDetails] = useState<QuickAddDetails>(defaultDetails);
+  const [openTarget, setOpenTarget] = useState<{ to: string; label: string } | null>(null);
   const suggestion = useMemo(() => detectCaptureType(text), [text]);
   const screenAction = useMemo(() => {
     if (location.pathname.startsWith("/app/easypipeline")) {
@@ -64,21 +96,45 @@ export function UniversalCapture() {
   function openCapture() {
     setMode(screenAction.mode);
     setMessage("");
+    setOpenTarget(null);
     setIsOpen(true);
   }
 
   function resetFields(nextMessage: string) {
     setText("");
-    setSecondary("");
-    setDate("");
+    setDetails(defaultDetails);
     setMessage(nextMessage);
   }
+
+  useEffect(() => {
+    function handleShortcut(event: KeyboardEvent) {
+      const target = event.target as HTMLElement | null;
+      const isTyping =
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.tagName === "SELECT" ||
+        target?.isContentEditable;
+
+      if (isTyping) return;
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        openCapture();
+      }
+      if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key === "+") {
+        event.preventDefault();
+        openCapture();
+      }
+    }
+
+    window.addEventListener("keydown", handleShortcut);
+    return () => window.removeEventListener("keydown", handleShortcut);
+  }, [screenAction.mode]);
 
   async function saveAsTask() {
     const user = auth.currentUser;
     if (!user || !text.trim()) return;
 
-    await createTask(user.uid, {
+    const taskId = await createTask(user.uid, {
       title: text.trim().slice(0, 140),
       notes: text.trim(),
       category: suggestion === "follow-up" ? "Follow-up" : "Inbox",
@@ -88,6 +144,7 @@ export function UniversalCapture() {
       dueDate: null,
       recurring: false,
     });
+    setOpenTarget({ to: `/app/easylist/dashboard`, label: "Open task list" });
     resetFields("Saved as a task.");
   }
 
@@ -102,6 +159,7 @@ export function UniversalCapture() {
       pinned: false,
       bodyText: text.trim(),
     });
+    setOpenTarget({ to: `/app/easynotes/${noteId}`, label: "Open note" });
     resetFields("Saved as a note.");
   }
 
@@ -120,20 +178,21 @@ export function UniversalCapture() {
     }
     if (mode === "application") {
       const draft: ApplicationDraft = {
-        company: secondary.trim(),
+        company: details.company.trim(),
         title,
         status: "need_to_apply",
-        priority: "medium",
+        priority: details.priority,
         offerResponse: "",
         dateApplied: "",
-        nextFollowUp: date,
+        nextFollowUp: details.followUp,
         location: "",
         link: "",
-        notes: "",
+        notes: details.notes.trim(),
         contactName: "",
         contactEmail: "",
       };
-      await createApplication(user.uid, draft);
+      const applicationId = await createApplication(user.uid, draft);
+      setOpenTarget({ to: `/app/easypipeline/dashboard?application=${applicationId}`, label: "Open board" });
       resetFields("Application added.");
       return;
     }
@@ -141,49 +200,55 @@ export function UniversalCapture() {
       const draft: ContactDraft = {
         fullName: title,
         relationship: "",
-        company: secondary.trim(),
-        role: "",
-        email: "",
+        company: details.company.trim(),
+        role: details.role.trim(),
+        email: details.email.trim(),
         phone: "",
         linkedinUrl: "",
         source: "",
         status: "warm",
         relatedOpportunityIds: [],
         lastContactedAt: "",
-        nextFollowUpAt: date,
-        notes: "",
+        nextFollowUpAt: details.followUp,
+        notes: details.notes.trim(),
         archived: false,
       };
-      await createContact(user.uid, draft);
+      const contactId = await createContact(user.uid, draft);
+      setOpenTarget({ to: `/app/easycontacts?contact=${contactId}`, label: "Open contacts" });
       resetFields("Contact added.");
       return;
     }
     if (mode === "project") {
       const draft: ProjectDraft = {
         title,
-        description: secondary.trim(),
-        targetDate: date,
-        status: "active",
+        description: details.notes.trim(),
+        targetDate: details.date,
+        status: details.projectStatus,
       };
-      await createProject(user.uid, draft);
+      const projectId = await createProject(user.uid, draft);
+      setOpenTarget({ to: `/app/easyprojects/${projectId}`, label: "Open project" });
       resetFields("Project added.");
       return;
     }
     if (mode === "event") {
-      const eventDate = date ? new Date(`${date}T09:00:00`) : new Date();
-      const endAt = new Date(eventDate);
-      endAt.setHours(endAt.getHours() + 1);
+      const dateValue = details.date || new Date().toISOString().split("T")[0];
+      const eventDate = new Date(`${dateValue}T${details.startTime || "09:00"}:00`);
+      const endAt = new Date(`${dateValue}T${details.endTime || "10:00"}:00`);
+      if (endAt <= eventDate) {
+        endAt.setHours(eventDate.getHours() + 1);
+      }
       await createCalendarEvent(user.uid, {
         title,
-        description: secondary.trim(),
+        description: details.notes.trim(),
         categoryId: null,
         startAt: eventDate,
         endAt,
         allDay: false,
         isRecurring: false,
         recurrenceRule: null,
-        eventType: "other",
+        eventType: details.eventType,
       });
+      setOpenTarget({ to: `/app/easycalendar/day`, label: "Open calendar" });
       resetFields("Event added.");
     }
   }
@@ -243,19 +308,100 @@ export function UniversalCapture() {
           />
         </label>
 
-        {mode === "application" || mode === "contact" || mode === "project" || mode === "event" ? (
-          <div className="capture-detail-grid">
+        {mode === "application" ? (
+          <div className="capture-detail-grid capture-detail-grid-three">
             <label className="field-stack">
-              <span>{mode === "application" ? "Company" : mode === "contact" ? "Company" : mode === "project" ? "Notes" : "Details"}</span>
+              <span>Company</span>
               <input
-                value={secondary}
-                onChange={(event) => setSecondary(event.target.value)}
-                placeholder={mode === "project" ? "Optional project notes" : "Optional"}
+                value={details.company}
+                onChange={(event) => setDetails((current) => ({ ...current, company: event.target.value }))}
+                placeholder="Company"
               />
             </label>
             <label className="field-stack">
-              <span>{mode === "application" || mode === "contact" ? "Follow-up" : mode === "project" ? "Target date" : "Date"}</span>
-              <input type="date" value={date} onChange={(event) => setDate(event.target.value)} />
+              <span>Follow-up</span>
+              <input type="date" value={details.followUp} onChange={(event) => setDetails((current) => ({ ...current, followUp: event.target.value }))} />
+            </label>
+            <label className="field-stack">
+              <span>Priority</span>
+              <select value={details.priority} onChange={(event) => setDetails((current) => ({ ...current, priority: event.target.value as ApplicationPriority }))}>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </label>
+          </div>
+        ) : null}
+
+        {mode === "contact" ? (
+          <div className="capture-detail-grid capture-detail-grid-three">
+            <label className="field-stack">
+              <span>Company</span>
+              <input value={details.company} onChange={(event) => setDetails((current) => ({ ...current, company: event.target.value }))} />
+            </label>
+            <label className="field-stack">
+              <span>Role</span>
+              <input value={details.role} onChange={(event) => setDetails((current) => ({ ...current, role: event.target.value }))} />
+            </label>
+            <label className="field-stack">
+              <span>Email</span>
+              <input type="email" value={details.email} onChange={(event) => setDetails((current) => ({ ...current, email: event.target.value }))} />
+            </label>
+            <label className="field-stack">
+              <span>Follow-up</span>
+              <input type="date" value={details.followUp} onChange={(event) => setDetails((current) => ({ ...current, followUp: event.target.value }))} />
+            </label>
+          </div>
+        ) : null}
+
+        {mode === "project" ? (
+          <div className="capture-detail-grid">
+            <label className="field-stack">
+              <span>Target date</span>
+              <input type="date" value={details.date} onChange={(event) => setDetails((current) => ({ ...current, date: event.target.value }))} />
+            </label>
+            <label className="field-stack">
+              <span>Status</span>
+              <select value={details.projectStatus} onChange={(event) => setDetails((current) => ({ ...current, projectStatus: event.target.value as ProjectStatus }))}>
+                <option value="active">Active</option>
+                <option value="paused">Paused</option>
+                <option value="completed">Completed</option>
+              </select>
+            </label>
+            <label className="field-stack field-stack-wide">
+              <span>Notes</span>
+              <textarea rows={3} value={details.notes} onChange={(event) => setDetails((current) => ({ ...current, notes: event.target.value }))} />
+            </label>
+          </div>
+        ) : null}
+
+        {mode === "event" ? (
+          <div className="capture-detail-grid capture-detail-grid-four">
+            <label className="field-stack">
+              <span>Date</span>
+              <input type="date" value={details.date} onChange={(event) => setDetails((current) => ({ ...current, date: event.target.value }))} />
+            </label>
+            <label className="field-stack">
+              <span>Start</span>
+              <input type="time" value={details.startTime} onChange={(event) => setDetails((current) => ({ ...current, startTime: event.target.value }))} />
+            </label>
+            <label className="field-stack">
+              <span>End</span>
+              <input type="time" value={details.endTime} onChange={(event) => setDetails((current) => ({ ...current, endTime: event.target.value }))} />
+            </label>
+            <label className="field-stack">
+              <span>Type</span>
+              <select value={details.eventType} onChange={(event) => setDetails((current) => ({ ...current, eventType: event.target.value as CalendarEventType }))}>
+                <option value="class">Class</option>
+                <option value="work">Work</option>
+                <option value="appointment">Appointment</option>
+                <option value="personal">Personal</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+            <label className="field-stack field-stack-wide">
+              <span>Details</span>
+              <textarea rows={3} value={details.notes} onChange={(event) => setDetails((current) => ({ ...current, notes: event.target.value }))} />
             </label>
           </div>
         ) : null}
@@ -288,7 +434,16 @@ export function UniversalCapture() {
             {screenAction.label}
           </Link>
         </div>
-        {message ? <div className="calendar-info-card">{message}</div> : null}
+        {message ? (
+          <div className="calendar-info-card capture-success-card">
+            <span>{message}</span>
+            {openTarget ? (
+              <Link className="button-secondary compact-button" to={openTarget.to} onClick={() => setIsOpen(false)}>
+                {openTarget.label}
+              </Link>
+            ) : null}
+          </div>
+        ) : null}
       </section>
     </>
   );

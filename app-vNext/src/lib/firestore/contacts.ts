@@ -99,11 +99,13 @@ export function subscribeToContacts(
 }
 
 export async function createContact(userId: string, draft: ContactDraft) {
-  await addDoc(getContactsCollection(userId), {
+  const reference = await addDoc(getContactsCollection(userId), {
     ...draft,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
+
+  return reference.id;
 }
 
 export async function updateContact(userId: string, contactId: string, draft: ContactDraft) {
