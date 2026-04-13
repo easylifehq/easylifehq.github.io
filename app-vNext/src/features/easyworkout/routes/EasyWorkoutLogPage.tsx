@@ -25,6 +25,7 @@ export function EasyWorkoutLogPage() {
   const [durationMinutes, setDurationMinutes] = useState("");
   const [sessionNotes, setSessionNotes] = useState("");
   const [exerciseLogs, setExerciseLogs] = useState<WorkoutExerciseLogRecord[]>([emptyExerciseLog()]);
+  const [workoutPaste, setWorkoutPaste] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
 
   const selectedRoutine = useMemo(
@@ -127,6 +128,57 @@ export function EasyWorkoutLogPage() {
     });
   }
 
+  function parseWorkoutPaste() {
+    const parsed = workoutPaste
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const cleaned = line.replace(/^\s*(?:[-*+]|[0-9]+[.)])\s*/, "");
+        const compactMatch = cleaned.match(/^(.+?)\s+(\d+)\s*(?:x|by|for|@)\s*(\d+(?:\.\d+)?)\s*(?:lb|lbs|pounds?)?$/i);
+        const wordsMatch = cleaned.match(/^(.+?)\s+(\d+)\s*(?:reps?)?\s*(?:at|@|x|with)?\s*(\d+(?:\.\d+)?)\s*(?:lb|lbs|pounds?)?$/i);
+        const match = compactMatch || wordsMatch;
+
+        if (!match) {
+          return {
+            ...emptyExerciseLog(),
+            exerciseName: cleaned,
+          };
+        }
+
+        const exerciseName = match[1].trim();
+        const builtIn = defaultWorkoutExercises.find(
+          (exercise) => exercise.name.toLowerCase() === exerciseName.toLowerCase()
+        );
+        const saved = exercises.find(
+          (exercise) => exercise.name.toLowerCase() === exerciseName.toLowerCase()
+        );
+
+        return {
+          exerciseId: saved?.id || null,
+          exerciseName,
+          muscleGroup: saved?.muscleGroup || builtIn?.muscleGroup || "",
+          notes: "",
+          sets: [
+            {
+              reps: Number(match[2]) || 0,
+              weight: Number(match[3]) || 0,
+              notes: "",
+            },
+          ],
+        };
+      });
+
+    if (!parsed.length) {
+      setSaveMessage("Paste at least one exercise line first.");
+      return;
+    }
+
+    setExerciseLogs(parsed);
+    setWorkoutPaste("");
+    setSaveMessage("Workout notes turned into editable sets.");
+  }
+
   async function handleSaveSession(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const cleanedExercises = exerciseLogs
@@ -167,6 +219,24 @@ export function EasyWorkoutLogPage() {
     >
       {error ? <p className="error-copy">{error}</p> : null}
       <form className="task-composer" onSubmit={handleSaveSession}>
+        <div className="workout-quick-paste">
+          <label className="field-stack">
+            <span>Paste from notes</span>
+            <textarea
+              rows={4}
+              value={workoutPaste}
+              onChange={(event) => setWorkoutPaste(event.target.value)}
+              placeholder={"Bench press 8x135\nLat pulldown 10x110\nSquat 5x185"}
+            />
+          </label>
+          <div className="task-composer-actions">
+            <button type="button" className="button-secondary" onClick={parseWorkoutPaste} disabled={!workoutPaste.trim()}>
+              Turn into sets
+            </button>
+            <span className="helper-copy">Use one line per exercise. Reps and weight can be written like 8x135 or 8 reps at 135.</span>
+          </div>
+        </div>
+
         <div className={`task-composer-grid${isGymModeActive ? " gym-mode-meta" : ""}`}>
           <label className="field-stack">
             <span>Routine</span>

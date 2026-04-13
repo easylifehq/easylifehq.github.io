@@ -312,7 +312,7 @@ a {
   align-items: center;
   justify-content: center;
   padding: 0.8rem 1rem;
-  border-radius: 14px;
+  border-radius: 8px;
   font-weight: 800;
   transition: background var(--shell-motion-fast), border-color var(--shell-motion-fast), transform var(--shell-motion-fast), box-shadow var(--shell-motion-fast);
 }
@@ -363,7 +363,7 @@ a {
   align-items: center;
   justify-content: center;
   padding: 0.8rem 0.95rem;
-  border-radius: 14px;
+  border-radius: 8px;
   border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
   background: var(--ui-bg-tab-inactive, var(--shell-input-bg));
   color: var(--ui-text-secondary, var(--shell-page-text));
@@ -386,7 +386,7 @@ a {
   display: grid;
   gap: 0.45rem;
   padding: 0.6rem;
-  border-radius: 20px;
+  border-radius: 8px;
   border: 1px solid var(--shell-card-border);
   background: color-mix(in srgb, var(--shell-card-bg) 92%, white 8%);
   box-shadow: 0 22px 44px rgba(65, 43, 28, 0.14);
@@ -411,7 +411,7 @@ a {
   display: grid;
   gap: 0.18rem;
   padding: 0.8rem 0.85rem;
-  border-radius: 14px;
+  border-radius: 8px;
   transition: background var(--shell-motion-fast), color var(--shell-motion-fast), transform var(--shell-motion-fast);
 }
 
@@ -1611,6 +1611,15 @@ textarea::placeholder {
   white-space: nowrap;
 }
 
+.workout-quick-paste {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.9rem;
+  border: 1px solid var(--app-border-strong);
+  border-radius: 8px;
+  background: var(--app-card-elevated);
+}
+
 .stat-card-vnext {
   display: grid;
   gap: 0.3rem;
@@ -2296,9 +2305,15 @@ button.calendar-detail-card:disabled {
 }
 
 .hq-summary-grid,
-.hq-link-grid {
+.hq-link-grid,
+.onboarding-steps-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-top: 1rem;
+}
+
+.onboarding-steps-grid {
+  display: grid;
+  gap: 0.9rem;
 }
 
 .hq-link-card,
@@ -2306,9 +2321,15 @@ button.calendar-detail-card:disabled {
   display: grid;
   gap: 0.35rem;
   padding: 0.85rem;
-  border-radius: 18px;
+  border-radius: 8px;
   border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
   background: var(--ui-bg-card-elevated, #fffdf9);
+}
+
+.hq-link-card-primary {
+  border-color: var(--ui-border-strong, rgba(199, 114, 63, 0.24));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 14%, transparent), transparent 58%),
+    var(--ui-bg-card-elevated, #fffdf9);
 }
 
 .hq-link-card strong,
@@ -2918,7 +2939,7 @@ button.calendar-detail-card:disabled {
     align-items: flex-start;
   }
 
-  .experiment-mobile-app-sheet .menu-backdrop {
+  .menu-backdrop {
     position: fixed;
     inset: 0;
     z-index: 70;
@@ -2930,12 +2951,12 @@ button.calendar-detail-card:disabled {
     transition: opacity var(--shell-motion-fast);
   }
 
-  .experiment-mobile-app-sheet .menu-backdrop.open {
+  .menu-backdrop.open {
     opacity: 1;
     pointer-events: auto;
   }
 
-  .experiment-mobile-app-sheet .menu-panel {
+  .menu-panel {
     position: fixed;
     inset: auto 0 0;
     z-index: 80;
@@ -2943,16 +2964,19 @@ button.calendar-detail-card:disabled {
     max-height: min(78vh, 620px);
     overflow-y: auto;
     padding: 0.75rem;
-    border-radius: 22px 22px 0 0;
+    border-radius: 8px 8px 0 0;
     border-width: 1px 0 0;
     transform: translateY(100%);
+    opacity: 1;
+    pointer-events: none;
   }
 
-  .experiment-mobile-app-sheet .menu-panel.open {
+  .menu-panel.open {
     transform: translateY(0);
+    pointer-events: auto;
   }
 
-  .experiment-mobile-app-sheet .menu-panel-header {
+  .menu-panel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -2961,7 +2985,7 @@ button.calendar-detail-card:disabled {
     color: var(--ui-text-primary, var(--shell-page-text));
   }
 
-  .experiment-mobile-app-sheet .menu-link-card {
+  .menu-link-card {
     padding: 0.78rem 0.8rem;
     border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
     background: var(--ui-bg-card, var(--shell-card-bg-soft));
@@ -3066,7 +3090,8 @@ button.calendar-detail-card:disabled {
   }
 
   .hq-summary-grid,
-  .hq-link-grid {
+  .hq-link-grid,
+  .onboarding-steps-grid {
     grid-template-columns: 1fr;
   }
 
@@ -3179,10 +3204,10 @@ button.calendar-detail-card:disabled {
   }
 
   .app-header-actions .menu-panel {
-    left: auto;
+    left: 0;
     right: 0;
-    width: min(18rem, calc(100vw - 1.5rem));
-    min-width: 0;
+    width: 100vw;
+    min-width: 100vw;
   }
 
   .button-primary,

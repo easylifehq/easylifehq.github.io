@@ -84,6 +84,10 @@ export function EasyWorkoutDashboardPage() {
         </div>
 
         <div className="hq-link-grid">
+          <Link className="hq-link-card hq-link-card-primary" to="/app/easyworkout/log">
+            <strong>Start logging now</strong>
+            <p>Paste your workout notes or enter the first exercise and set right away.</p>
+          </Link>
           <Link className="hq-link-card" to="/app/easyworkout/routines">
             <strong>Build a routine</strong>
             <p>Set up your Push, Pull, Legs, or any custom split.</p>

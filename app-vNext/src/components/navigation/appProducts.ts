@@ -49,9 +49,9 @@ export const appProductItems: AppProductItem[] = [
   },
   {
     appId: "easyworkout",
-    href: "/app/easyworkout/dashboard",
+    href: "/app/easyworkout/log",
     label: "EasyWorkout",
-    description: "Track routines, sets, and progress without the clutter.",
+    description: "Log sets fast; routines and stats are there when you want them.",
   },
   {
     href: "/app/settings",

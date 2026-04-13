@@ -111,6 +111,35 @@ export function HQPage() {
     <main className="page-wrap app-theme app-theme-easyhq">
       {error ? <p className="error-copy">{error}</p> : null}
 
+      <PageSection
+        eyebrow="Start simple"
+        title="Use the core first"
+        description="EasyLife works best when you start with capture, then add planning and extra apps only when they help."
+      >
+        <div className="onboarding-steps-grid">
+          <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
+            <span className="info-pill">1</span>
+            <strong>Add what is on your mind</strong>
+            <p>Use EasyList as the main place to dump tasks quickly.</p>
+          </Link>
+          <Link className="hq-link-card" to="/app/easynotes">
+            <span className="info-pill">2</span>
+            <strong>Write messy thoughts</strong>
+            <p>Use EasyNotes for anything that is not ready to become a task yet.</p>
+          </Link>
+          <Link className="hq-link-card" to="/app/easycalendar/day">
+            <span className="info-pill">3</span>
+            <strong>Put work into time</strong>
+            <p>Use EasyCalendar when a task needs a real spot in the day.</p>
+          </Link>
+          <Link className="hq-link-card" to="/app/settings">
+            <span className="info-pill">Later</span>
+            <strong>Turn on more apps</strong>
+            <p>Projects, pipeline, contacts, workout, and labs can stay hidden until you want them.</p>
+          </Link>
+        </div>
+      </PageSection>
+
       <div className="dashboard-grid">
         <PageSection
           eyebrow="Today"
