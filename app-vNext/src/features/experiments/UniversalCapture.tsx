@@ -267,14 +267,20 @@ export function UniversalCapture() {
         ) : null}
 
         <div className="task-composer-actions">
-          <button
-            type="button"
-            className="primary-button"
-            onClick={() => void saveContextItem()}
-            disabled={!text.trim() || mode === "workout"}
-          >
-            Save {mode}
-          </button>
+          {mode === "workout" ? (
+            <Link className="primary-button" to="/app/easyworkout/log" onClick={() => setIsOpen(false)}>
+              Open logger
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="primary-button"
+              onClick={() => void saveContextItem()}
+              disabled={!text.trim()}
+            >
+              Save {mode}
+            </button>
+          )}
           <button type="button" className="button-secondary" onClick={() => void saveAsNote()} disabled={!text.trim()}>
             Save as note
           </button>

@@ -2,24 +2,7 @@ import { useMemo, useState } from "react";
 import { PageSection } from "@/components/ui/PageSection";
 import { ContactDrawer } from "@/features/easycontacts/components/ContactDrawer";
 import { useEasyContacts } from "@/features/easycontacts/EasyContactsContext";
-import type { ContactDraft, ContactRecord } from "@/lib/firestore/contacts";
-
-const emptyDraft: ContactDraft = {
-  fullName: "",
-  relationship: "",
-  company: "",
-  role: "",
-  email: "",
-  phone: "",
-  linkedinUrl: "",
-  source: "",
-  status: "active",
-  relatedOpportunityIds: [],
-  lastContactedAt: "",
-  nextFollowUpAt: "",
-  notes: "",
-  archived: false,
-};
+import type { ContactRecord } from "@/lib/firestore/contacts";
 
 function isFollowUpNeeded(value: string) {
   if (!value) return false;
@@ -27,8 +10,7 @@ function isFollowUpNeeded(value: string) {
 }
 
 export function EasyContactsPage() {
-  const { contacts, isLoading, error, addContact, saveContact, archiveCurrentContact } = useEasyContacts();
-  const [draft, setDraft] = useState<ContactDraft>(emptyDraft);
+  const { contacts, isLoading, error, saveContact, archiveCurrentContact } = useEasyContacts();
   const [search, setSearch] = useState("");
   const [selectedContact, setSelectedContact] = useState<ContactRecord | null>(null);
   const filteredContacts = useMemo(() => {
@@ -43,12 +25,6 @@ export function EasyContactsPage() {
     );
   }, [contacts, search]);
   const bubbleContacts = useMemo(() => filteredContacts.slice(0, 18), [filteredContacts]);
-
-  async function handleAddContact(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    await addContact(draft);
-    setDraft(emptyDraft);
-  }
 
   return (
     <>
@@ -86,34 +62,6 @@ export function EasyContactsPage() {
             <div className="empty-card-vnext">No contacts to map yet.</div>
           )}
         </div>
-      </PageSection>
-
-      <PageSection eyebrow="Add" title="Capture a contact" description="Keep it lightweight up front and edit deeper detail later.">
-        <form className="task-composer" onSubmit={handleAddContact}>
-          <div className="task-composer-grid">
-            <label className="field-stack">
-              <span>Name</span>
-              <input value={draft.fullName} onChange={(event) => setDraft((current) => ({ ...current, fullName: event.target.value }))} required />
-            </label>
-            <label className="field-stack">
-              <span>Relationship</span>
-              <input value={draft.relationship} onChange={(event) => setDraft((current) => ({ ...current, relationship: event.target.value }))} />
-            </label>
-            <label className="field-stack">
-              <span>Company</span>
-              <input value={draft.company} onChange={(event) => setDraft((current) => ({ ...current, company: event.target.value }))} />
-            </label>
-            <label className="field-stack">
-              <span>Role</span>
-              <input value={draft.role} onChange={(event) => setDraft((current) => ({ ...current, role: event.target.value }))} />
-            </label>
-            <label className="field-stack field-stack-wide">
-              <span>Notes</span>
-              <textarea value={draft.notes} onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))} rows={4} />
-            </label>
-          </div>
-          <button type="submit" className="primary-button">Add contact</button>
-        </form>
       </PageSection>
 
       <PageSection eyebrow="Browse" title="Your network" description="Tap a card to edit contact details or archive it.">

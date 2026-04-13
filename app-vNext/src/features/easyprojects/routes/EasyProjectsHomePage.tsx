@@ -36,20 +36,6 @@ export function EasyProjectsHomePage() {
   const [isPlanning, setIsPlanning] = useState(false);
   const [isCreatingPlan, setIsCreatingPlan] = useState(false);
 
-  async function handleAddProject(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const title = String(form.get("title") || "").trim();
-    if (!title) return;
-    await addProject({
-      title,
-      description: String(form.get("description") || "").trim(),
-      targetDate: String(form.get("targetDate") || ""),
-      status: "active",
-    });
-    event.currentTarget.reset();
-  }
-
   async function handlePlanProject(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!plannerTitle.trim() && !plannerDescription.trim()) return;
@@ -161,6 +147,8 @@ export function EasyProjectsHomePage() {
 
   return (
     <>
+      {error ? <p className="error-copy">{error}</p> : null}
+
       <div className="dashboard-grid">
         {isProjectPlannerEnabled ? (
           <PageSection
@@ -267,31 +255,6 @@ export function EasyProjectsHomePage() {
             ) : null}
           </PageSection>
         ) : null}
-
-        <PageSection
-          eyebrow="Create"
-          title="New project"
-          description="Set the goal first, then break it into sections and tasks."
-        >
-          {error ? <p className="error-copy">{error}</p> : null}
-          <form className="task-composer" onSubmit={handleAddProject}>
-            <div className="task-composer-grid">
-              <label className="field-stack">
-                <span>Project title</span>
-                <input name="title" placeholder="Launch portfolio refresh" />
-              </label>
-              <label className="field-stack">
-                <span>Target date</span>
-                <input name="targetDate" type="date" />
-              </label>
-              <label className="field-stack field-stack-wide">
-                <span>Description</span>
-                <textarea name="description" rows={4} placeholder="What this project is for and what done looks like." />
-              </label>
-            </div>
-            <button type="submit" className="primary-button">Create project</button>
-          </form>
-        </PageSection>
 
         <PageSection
           eyebrow="Summary"
