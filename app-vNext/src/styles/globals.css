@@ -2942,7 +2942,7 @@ button.calendar-detail-card:disabled {
   .menu-backdrop {
     position: fixed;
     inset: 0;
-    z-index: 70;
+    z-index: 900;
     display: block;
     border: 0;
     background: rgba(10, 8, 6, 0.42);
@@ -2959,8 +2959,10 @@ button.calendar-detail-card:disabled {
   .menu-panel {
     position: fixed;
     inset: auto 0 0;
-    z-index: 80;
-    width: 100vw;
+    z-index: 910;
+    width: 100dvw;
+    min-width: 100dvw;
+    max-width: 100dvw;
     max-height: min(78vh, 620px);
     overflow-y: auto;
     padding: 0.75rem;
@@ -2969,6 +2971,16 @@ button.calendar-detail-card:disabled {
     transform: translateY(100%);
     opacity: 1;
     pointer-events: none;
+  }
+
+  .app-header-actions .menu-panel {
+    position: fixed;
+    inset: auto 0 0;
+    left: 0;
+    right: 0;
+    width: 100dvw;
+    min-width: 100dvw;
+    max-width: 100dvw;
   }
 
   .menu-panel.open {
@@ -3118,7 +3130,7 @@ button.calendar-detail-card:disabled {
   .app-header {
     border-radius: 20px;
     max-width: 100%;
-    overflow: clip;
+    overflow: visible;
   }
 
   .site-header-inner {
@@ -3206,8 +3218,9 @@ button.calendar-detail-card:disabled {
   .app-header-actions .menu-panel {
     left: 0;
     right: 0;
-    width: 100vw;
-    min-width: 100vw;
+    width: 100dvw;
+    min-width: 100dvw;
+    max-width: 100dvw;
   }
 
   .button-primary,
