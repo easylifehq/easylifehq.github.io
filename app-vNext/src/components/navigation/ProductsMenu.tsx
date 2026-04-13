@@ -21,7 +21,6 @@ export function ProductsMenu({
   label = "Products",
   className = "",
   panelClassName = "",
-  showDescriptions = false,
 }: ProductsMenuProps) {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -49,6 +48,15 @@ export function ProductsMenu({
       window.removeEventListener("keydown", handleEscape);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsOpen(false);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className={`products-menu${className ? ` ${className}` : ""}`}>
@@ -84,7 +92,6 @@ export function ProductsMenu({
               onClick={() => setIsOpen(false)}
             >
               <strong>{item.label}</strong>
-              {showDescriptions ? <span>{item.description}</span> : null}
             </a>
           ) : (
             <Link
@@ -94,7 +101,6 @@ export function ProductsMenu({
               onClick={() => setIsOpen(false)}
             >
               <strong>{item.label}</strong>
-              {showDescriptions ? <span>{item.description}</span> : null}
             </Link>
           )
         )}

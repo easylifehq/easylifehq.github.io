@@ -23,6 +23,7 @@ export function EasyNotesEditorPage() {
   const { notes, isLoading, saveNote, deleteNote } = useEasyNotes();
   const { isExperimentalFeatureEnabled } = useSettings();
   const note = useMemo(() => notes.find((entry) => entry.id === noteId) || null, [notes, noteId]);
+  const activeNoteId = note?.id || "";
   const [title, setTitle] = useState("");
   const [bodyText, setBodyText] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
@@ -31,31 +32,57 @@ export function EasyNotesEditorPage() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const saveTimeoutRef = useRef<number | null>(null);
   const hydratedNoteIdRef = useRef<string | null>(null);
+  const noteMetaRef = useRef({ tags: [] as string[], pinned: false });
+  const lastSavedDraftRef = useRef({ noteId: "", title: "", bodyText: "" });
 
   useEffect(() => {
     if (!note) return;
+
+    noteMetaRef.current = {
+      tags: note.tags,
+      pinned: note.pinned,
+    };
+
+    if (hydratedNoteIdRef.current === note.id) return;
 
     setTitle(note.title);
     setBodyText(note.bodyText);
     setSaveMessage("");
     hydratedNoteIdRef.current = note.id;
+    lastSavedDraftRef.current = {
+      noteId: note.id,
+      title: note.title,
+      bodyText: note.bodyText,
+    };
   }, [note]);
 
   useEffect(() => {
-    if (!note) return;
-    if (hydratedNoteIdRef.current !== note.id) return;
+    if (!activeNoteId) return;
+    if (hydratedNoteIdRef.current !== activeNoteId) return;
+    if (
+      lastSavedDraftRef.current.noteId === activeNoteId &&
+      lastSavedDraftRef.current.title === title &&
+      lastSavedDraftRef.current.bodyText === bodyText
+    ) {
+      return;
+    }
 
     if (saveTimeoutRef.current) {
       window.clearTimeout(saveTimeoutRef.current);
     }
 
     saveTimeoutRef.current = window.setTimeout(() => {
-      void saveNote(note.id, {
+      void saveNote(activeNoteId, {
         title: title.trim(),
-        tags: note.tags,
-        pinned: note.pinned,
+        tags: noteMetaRef.current.tags,
+        pinned: noteMetaRef.current.pinned,
         bodyText,
       }).then(() => {
+        lastSavedDraftRef.current = {
+          noteId: activeNoteId,
+          title,
+          bodyText,
+        };
         setSaveMessage("");
       });
     }, 700);
@@ -65,7 +92,7 @@ export function EasyNotesEditorPage() {
         window.clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [title, bodyText, note, saveNote]);
+  }, [title, bodyText, activeNoteId, saveNote]);
 
   if (!isLoading && !note) {
     return (
