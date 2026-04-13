@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { PageSection } from "@/components/ui/PageSection";
 import { ApplicationDrawer } from "@/features/easypipeline/components/ApplicationDrawer";
 import { useEasyPipeline } from "@/features/easypipeline/EasyPipelineContext";
-import type { ApplicationDraft, ApplicationRecord, ApplicationStatus } from "@/lib/firestore/applications";
+import type { ApplicationRecord, ApplicationStatus } from "@/lib/firestore/applications";
 
 const statusOrder: Array<{ key: ApplicationStatus; label: string }> = [
   { key: "need_to_apply", label: "Need to Apply" },
@@ -13,21 +13,6 @@ const statusOrder: Array<{ key: ApplicationStatus; label: string }> = [
   { key: "archived", label: "Archived" },
 ];
 
-const emptyDraft: ApplicationDraft = {
-  company: "",
-  title: "",
-  status: "need_to_apply",
-  priority: "medium",
-  offerResponse: "",
-  dateApplied: "",
-  nextFollowUp: "",
-  location: "",
-  link: "",
-  notes: "",
-  contactName: "",
-  contactEmail: "",
-};
-
 function isFollowUpDue(nextFollowUp: string) {
   if (!nextFollowUp) return false;
   const today = new Date().toISOString().split("T")[0];
@@ -35,9 +20,8 @@ function isFollowUpDue(nextFollowUp: string) {
 }
 
 export function EasyPipelineDashboardPage() {
-  const { applications, isLoading, error, addApplication, saveApplication, deleteApplication } =
+  const { applications, isLoading, error, saveApplication, deleteApplication } =
     useEasyPipeline();
-  const [draft, setDraft] = useState<ApplicationDraft>(emptyDraft);
   const [selectedApplication, setSelectedApplication] = useState<ApplicationRecord | null>(null);
   const grouped = useMemo(
     () =>
@@ -49,12 +33,6 @@ export function EasyPipelineDashboardPage() {
     [applications]
   );
   const followUpsDue = applications.filter((application) => isFollowUpDue(application.nextFollowUp)).length;
-
-  async function handleAddApplication(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    await addApplication(draft);
-    setDraft(emptyDraft);
-  }
 
   return (
     <>
@@ -100,88 +78,6 @@ export function EasyPipelineDashboardPage() {
             </section>
           ))}
         </div>
-      </PageSection>
-
-      <PageSection
-        eyebrow="Add"
-        title="New application"
-      >
-        <form className="task-composer" onSubmit={handleAddApplication}>
-          <div className="task-composer-grid">
-            <label className="field-stack">
-              <span>Company</span>
-              <input
-                value={draft.company}
-                onChange={(event) => setDraft((current) => ({ ...current, company: event.target.value }))}
-                required
-              />
-            </label>
-            <label className="field-stack">
-              <span>Role</span>
-              <input
-                value={draft.title}
-                onChange={(event) => setDraft((current) => ({ ...current, title: event.target.value }))}
-                required
-              />
-            </label>
-            <label className="field-stack">
-              <span>Status</span>
-              <select
-                value={draft.status}
-                onChange={(event) =>
-                  setDraft((current) => ({ ...current, status: event.target.value as ApplicationStatus }))
-                }
-              >
-                {statusOrder.map((status) => (
-                  <option key={status.key} value={status.key}>
-                    {status.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="field-stack">
-              <span>Priority</span>
-              <select
-                value={draft.priority}
-                onChange={(event) =>
-                  setDraft((current) => ({ ...current, priority: event.target.value as ApplicationDraft["priority"] }))
-                }
-              >
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
-              </select>
-            </label>
-            <label className="field-stack">
-              <span>Date applied</span>
-              <input
-                type="date"
-                value={draft.dateApplied}
-                onChange={(event) => setDraft((current) => ({ ...current, dateApplied: event.target.value }))}
-              />
-            </label>
-            <label className="field-stack">
-              <span>Next follow-up</span>
-              <input
-                type="date"
-                value={draft.nextFollowUp}
-                onChange={(event) => setDraft((current) => ({ ...current, nextFollowUp: event.target.value }))}
-              />
-            </label>
-            <label className="field-stack field-stack-wide">
-              <span>Notes</span>
-              <textarea
-                value={draft.notes}
-                onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))}
-                rows={3}
-              />
-            </label>
-          </div>
-
-          <button type="submit" className="primary-button">
-            Add application
-          </button>
-        </form>
       </PageSection>
 
       <ApplicationDrawer
