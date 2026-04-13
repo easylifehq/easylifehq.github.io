@@ -58,37 +58,53 @@ export function EasyPipelineDashboardPage() {
 
   return (
     <>
-      <PageSection
-        eyebrow="Momentum"
-        title="Pipeline board"
-        description="Track applications by stage, keep follow-ups visible, and edit details without leaving the board."
-      >
+      <PageSection eyebrow="Pipeline" title="Board">
         {error ? <p className="error-copy">{error}</p> : null}
+        {followUpsDue ? <p className="helper-copy">{followUpsDue} follow-up{followUpsDue === 1 ? "" : "s"} due.</p> : null}
+      </PageSection>
 
-        <div className="stats-grid">
-          <article className="stat-card-vnext">
-            <span>Total applications</span>
-            <strong>{applications.length}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Follow-ups due</span>
-            <strong>{followUpsDue}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Interviewing</span>
-            <strong>{applications.filter((application) => application.status === "interviewing").length}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Offers</span>
-            <strong>{applications.filter((application) => application.status === "offer").length}</strong>
-          </article>
+      <PageSection eyebrow="Board" title="Status lanes">
+        {isLoading ? <p className="helper-copy">Loading applications...</p> : null}
+
+        <div className="pipeline-board-grid">
+          {grouped.map((group) => (
+            <section key={group.key} className="pipeline-column">
+              <header className="pipeline-column-header">
+                <strong>{group.label}</strong>
+                <span>{group.items.length}</span>
+              </header>
+
+              <div className="pipeline-card-stack">
+                {group.items.length ? (
+                  group.items.map((application) => (
+                    <button
+                      key={application.id}
+                      type="button"
+                      className="pipeline-card"
+                      onClick={() => setSelectedApplication(application)}
+                    >
+                      <div>
+                        <strong>{application.title || "Untitled role"}</strong>
+                        <p>{application.company || "Unknown company"}</p>
+                      </div>
+                      <div className="pipeline-card-meta">
+                        <span className={`chip-pill priority-${application.priority}`}>{application.priority}</span>
+                        {application.nextFollowUp ? <span className="chip-pill">{application.nextFollowUp}</span> : null}
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <div className="empty-card-vnext">Nothing here yet.</div>
+                )}
+              </div>
+            </section>
+          ))}
         </div>
       </PageSection>
 
       <PageSection
         eyebrow="Add"
-        title="Capture a new application"
-        description="Keep this fast on mobile, then fill in more detail later from the board."
+        title="New application"
       >
         <form className="task-composer" onSubmit={handleAddApplication}>
           <div className="task-composer-grid">
@@ -157,7 +173,7 @@ export function EasyPipelineDashboardPage() {
               <textarea
                 value={draft.notes}
                 onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))}
-                rows={4}
+                rows={3}
               />
             </label>
           </div>
@@ -166,49 +182,6 @@ export function EasyPipelineDashboardPage() {
             Add application
           </button>
         </form>
-      </PageSection>
-
-      <PageSection
-        eyebrow="Board"
-        title="Status lanes"
-        description="Tap any application to update details or archive it."
-      >
-        {isLoading ? <p className="helper-copy">Loading applications...</p> : null}
-
-        <div className="pipeline-board-grid">
-          {grouped.map((group) => (
-            <section key={group.key} className="pipeline-column">
-              <header className="pipeline-column-header">
-                <strong>{group.label}</strong>
-                <span>{group.items.length}</span>
-              </header>
-
-              <div className="pipeline-card-stack">
-                {group.items.length ? (
-                  group.items.map((application) => (
-                    <button
-                      key={application.id}
-                      type="button"
-                      className="pipeline-card"
-                      onClick={() => setSelectedApplication(application)}
-                    >
-                      <div>
-                        <strong>{application.title || "Untitled role"}</strong>
-                        <p>{application.company || "Unknown company"}</p>
-                      </div>
-                      <div className="pipeline-card-meta">
-                        <span className={`chip-pill priority-${application.priority}`}>{application.priority}</span>
-                        {application.nextFollowUp ? <span className="chip-pill">{application.nextFollowUp}</span> : null}
-                      </div>
-                    </button>
-                  ))
-                ) : (
-                  <div className="empty-card-vnext">Nothing here yet.</div>
-                )}
-              </div>
-            </section>
-          ))}
-        </div>
       </PageSection>
 
       <ApplicationDrawer

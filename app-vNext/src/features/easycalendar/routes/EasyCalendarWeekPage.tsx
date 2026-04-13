@@ -13,7 +13,7 @@ import {
 } from "@/features/easycalendar/lib/calendarUtils";
 
 export function EasyCalendarWeekPage() {
-  const { categories, events, taskBlocks, tasks, isLoading, error } = useEasyCalendar();
+  const { categories, events, taskBlocks, tasks, isLoading, error, addCategory, saveCategory } = useEasyCalendar();
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
   const weekStart = startOfWeek(new Date());
@@ -36,19 +36,7 @@ export function EasyCalendarWeekPage() {
 
   return (
     <>
-      <PageSection
-        eyebrow="Capture"
-        title="Add to your calendar"
-        description="Create fixed events here or pull an active EasyList task straight into a flexible calendar block."
-      >
-        <CalendarComposer />
-      </PageSection>
-
-      <PageSection
-        eyebrow="Week View"
-        title="Live calendar foundation"
-        description="This route is now connected to your real Firestore calendar data."
-      >
+      <PageSection eyebrow="Week" title="Calendar">
         {error ? <p className="error-copy">{error}</p> : null}
         <div className="stats-grid">
           <article className="stat-card-vnext">
@@ -66,11 +54,7 @@ export function EasyCalendarWeekPage() {
         </div>
       </PageSection>
 
-      <PageSection
-        eyebrow="This Week"
-        title="Week timeline"
-        description="Fixed events stay solid. Task blocks stay softer so they read as flexible."
-      >
+      <PageSection eyebrow="This Week" title="Week timeline">
         {isLoading ? <p className="helper-copy">Loading your calendar...</p> : null}
         <div className="calendar-week-grid">
           {days.map((day) => {
@@ -125,21 +109,40 @@ export function EasyCalendarWeekPage() {
         </div>
       </PageSection>
 
-      <PageSection
-        eyebrow="Categories"
-        title="Color system"
-        description="These colors are what the calendar will use for full event and task blocks."
-      >
+      <PageSection eyebrow="Capture" title="Add to calendar">
+        <CalendarComposer />
+      </PageSection>
+
+      <PageSection eyebrow="Categories" title="Tags">
         <div className="calendar-category-grid">
           {categories.map((category) => (
             <article key={category.id} className="calendar-category-card">
-              <span
+              <label
                 className="calendar-category-swatch"
                 style={{ backgroundColor: category.color }}
-              />
+                aria-label={`Change ${category.name} color`}
+              >
+                <input
+                  type="color"
+                  value={category.color}
+                  onChange={(event) => {
+                    const draft = {
+                      name: category.name,
+                      color: event.target.value,
+                      type: category.type,
+                      isDefault: false,
+                    };
+
+                    if (category.isDefault) {
+                      void addCategory(draft);
+                    } else {
+                      void saveCategory(category.id, draft);
+                    }
+                  }}
+                />
+              </label>
               <div>
                 <strong>{category.name}</strong>
-                <p>{category.type || "custom"}</p>
               </div>
             </article>
           ))}

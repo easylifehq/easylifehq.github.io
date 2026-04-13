@@ -1,5 +1,6 @@
 import { PageSection } from "@/components/ui/PageSection";
 import { useSettings } from "@/features/settings/SettingsContext";
+import { auth } from "@/lib/firebase/client";
 import type {
   ExperimentalFeatureId,
   ThemeMode,
@@ -206,9 +207,6 @@ export function SettingsPage() {
         <div className="panel-header">
           <p className="eyebrow">Control Center</p>
           <h1>Settings</h1>
-          <p>
-            Tune how EasyLife looks, which apps stay visible, and which experimental tools are allowed into your day.
-          </p>
         </div>
         <div className="settings-status-grid">
           <article className="settings-status-card">
@@ -229,12 +227,19 @@ export function SettingsPage() {
         </div>
       </section>
 
+      <nav className="settings-side-nav" aria-label="Settings sections">
+        <a href="#customize">Customize</a>
+        <a href="#apps">Apps</a>
+        <a href="#experiments">Experimental</a>
+        <a href="#account">User info</a>
+      </nav>
+
       <div className="settings-layout-grid">
         <PageSection
           eyebrow="Appearance"
           title="Theme mode"
-          description="Choose the personality of the suite. Readability stays the priority in every mode."
         >
+          <div id="customize" className="settings-anchor" />
           <div className="settings-option-grid">
             {themeOptions.map((option) => (
               <button
@@ -259,8 +264,8 @@ export function SettingsPage() {
         <PageSection
           eyebrow="Suite"
           title="Visible apps"
-          description="Keep the core visible. Hide optional apps until you actually want that extra layer."
         >
+          <div id="apps" className="settings-anchor" />
           {isLoading ? <p className="helper-copy">Loading your preferences...</p> : null}
 
           <div className="settings-toggle-list settings-app-list">
@@ -291,8 +296,8 @@ export function SettingsPage() {
       <PageSection
         eyebrow="Labs"
           title="Experimental features"
-        description="Leave these off while learning the app. Turn them on one at a time when the core feels comfortable."
       >
+        <div id="experiments" className="settings-anchor" />
         <div className="settings-labs-summary">
           <article>
             <span>Recommended first</span>
@@ -353,25 +358,27 @@ export function SettingsPage() {
       </PageSection>
 
       <PageSection
-        eyebrow="Baseline"
-        title="Always available"
-        description="These stay pinned so you can always get home and recover your setup."
+        eyebrow="Account"
+        title="User info"
       >
+        <div id="account" className="settings-anchor" />
         <div className="settings-baseline-grid">
           <article className="mini-panel-vnext">
-            <span>Home base</span>
-            <strong>EasyHQ</strong>
-            <p>Your launcher, daily read, and suite overview.</p>
+            <span>Email</span>
+            <strong>{auth.currentUser?.email || "Signed in"}</strong>
+            <p>Your EasyLife account.</p>
           </article>
           <article className="mini-panel-vnext">
-            <span>Control center</span>
-            <strong>Settings</strong>
-            <p>The place to change themes, app visibility, and labs.</p>
+            <span>Version</span>
+            <strong>3.0.1</strong>
+            <p>Desktop cleanup release.</p>
           </article>
           <article className="mini-panel-vnext">
-            <span>Data safety</span>
-            <strong>Switches hide UI only</strong>
-            <p>Visibility and lab toggles do not delete your app data.</p>
+            <span>Session</span>
+            <strong>Log out</strong>
+            <button type="button" className="button-secondary compact-button" onClick={() => void auth.signOut()}>
+              Log out
+            </button>
           </article>
         </div>
       </PageSection>

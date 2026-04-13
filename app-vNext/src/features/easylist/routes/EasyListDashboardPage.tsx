@@ -81,9 +81,8 @@ export function EasyListDashboardPage() {
   return (
     <>
       <PageSection
-        eyebrow="Dashboard"
+        eyebrow="Tasks"
         title="Task list"
-        description="Everything active in one quick list so you can jump straight into work."
       >
         <div className="toolbar-row toolbar-row-compact">
           <input
@@ -121,7 +120,6 @@ export function EasyListDashboardPage() {
         <PageSection
           eyebrow="Experimental"
           title="Overdue Review"
-          description="Clean up overdue tasks without the shame spiral. Pick the next honest move."
         >
           <div className="task-list-vnext">
             {overdueTasks.slice(0, 6).map((task) => (

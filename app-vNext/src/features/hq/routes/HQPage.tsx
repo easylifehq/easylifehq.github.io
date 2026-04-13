@@ -115,28 +115,23 @@ export function HQPage() {
       <PageSection
         eyebrow="Start simple"
         title="Use the core first"
-        description="EasyLife works best when you start with capture, then add planning and extra apps only when they help."
       >
         <div className="onboarding-steps-grid">
           <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
             <span className="info-pill">1</span>
             <strong>Add what is on your mind</strong>
-            <p>Use EasyList as the main place to dump tasks quickly.</p>
           </Link>
           <Link className="hq-link-card" to="/app/easynotes">
             <span className="info-pill">2</span>
             <strong>Write messy thoughts</strong>
-            <p>Use EasyNotes for anything that is not ready to become a task yet.</p>
           </Link>
           <Link className="hq-link-card" to="/app/easycalendar/day">
             <span className="info-pill">3</span>
             <strong>Put work into time</strong>
-            <p>Use EasyCalendar when a task needs a real spot in the day.</p>
           </Link>
           <Link className="hq-link-card" to="/app/settings">
             <span className="info-pill">Later</span>
             <strong>Turn on more apps</strong>
-            <p>Projects, pipeline, contacts, workout, and labs can stay hidden until you want them.</p>
           </Link>
         </div>
       </PageSection>
@@ -145,7 +140,6 @@ export function HQPage() {
         <PageSection
           eyebrow="Today"
           title="Daily snapshot"
-          description="A quick read on what is fixed, what matters, and how much room you still have."
         >
           <div className="stats-grid">
             <article className="stat-card-vnext">
@@ -177,55 +171,46 @@ export function HQPage() {
         <PageSection
           eyebrow="Launch"
           title="Quick entry points"
-          description="Jump straight into the workspace you need."
         >
           <div className="hq-link-grid">
             {isAppVisible("easylist") ? (
               <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
                 <strong>Add tasks</strong>
-                <p>Dump what is on your mind and turn it into a clean list.</p>
               </Link>
             ) : null}
             {isAppVisible("easycalendar") ? (
               <Link className="hq-link-card" to="/app/easycalendar/day">
                 <strong>See today</strong>
-                <p>See today, move blocks, and adjust your schedule fast.</p>
               </Link>
             ) : null}
             {showPlanningPreview && isAppVisible("easycalendar") ? (
               <Link className="hq-link-card" to="/app/easycalendar/day">
                 <strong>Plan My Day</strong>
-                <p>Run the day-planning pass and turn open time into progress.</p>
               </Link>
             ) : null}
             {isAppVisible("easynotes") ? (
               <Link className="hq-link-card" to="/app/easynotes">
                 <strong>Create or open notes</strong>
-                <p>Jot down rough thoughts, meeting notes, and drafts for later.</p>
               </Link>
             ) : null}
             {isAppVisible("easypipeline") ? (
               <Link className="hq-link-card" to="/app/easypipeline/dashboard">
                 <strong>Open EasyPipeline</strong>
-                <p>Review applications, follow-ups, and job-search momentum.</p>
               </Link>
             ) : null}
             {isAppVisible("easycontacts") ? (
               <Link className="hq-link-card" to="/app/easycontacts">
                 <strong>Open EasyContacts</strong>
-                <p>Keep track of people, follow-ups, and networking context.</p>
               </Link>
             ) : null}
             {isAppVisible("easyprojects") ? (
               <Link className="hq-link-card" to="/app/easyprojects">
                 <strong>Open EasyProjects</strong>
-                <p>Break larger goals into sections, synced tasks, and milestones.</p>
               </Link>
             ) : null}
             {isAppVisible("easyworkout") ? (
               <Link className="hq-link-card" to="/app/easyworkout/log">
                 <strong>Log a workout</strong>
-                <p>Log today&apos;s lifts fast and see the last weight you hit.</p>
               </Link>
             ) : null}
           </div>
@@ -236,7 +221,6 @@ export function HQPage() {
         <PageSection
           eyebrow="Experimental"
           title="Daily Review"
-          description="A quick read on what kind of day you are walking into."
         >
           <div className="daily-review-grid">
             <article className="stat-card-vnext">
@@ -307,7 +291,6 @@ export function HQPage() {
         <PageSection
           eyebrow="Next up"
           title="Fixed events"
-          description="The next commitments on today’s calendar."
         >
           {isLoading ? <p className="helper-copy">Loading today&apos;s events...</p> : null}
           <div className="hq-list">
@@ -331,7 +314,6 @@ export function HQPage() {
         <PageSection
           eyebrow="Focus"
           title="Top tasks"
-          description="The tasks most worth caring about today."
         >
           <div className="hq-list">
             {topTasks.length ? (
@@ -354,7 +336,6 @@ export function HQPage() {
       <PageSection
         eyebrow="Preview"
         title="What Plan My Day would place"
-        description="A quick preview of the tasks the planner wants to fit into your remaining open windows."
       >
         <div className="hq-list">
           {planPreview.length ? (

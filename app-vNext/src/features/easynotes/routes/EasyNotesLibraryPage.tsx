@@ -39,8 +39,7 @@ export function EasyNotesLibraryPage() {
     <>
       <PageSection
         eyebrow="EasyNotes"
-        title="Your note shelf"
-        description="Brain dumps, meeting notes, and rough ideas in one calm mobile-first space."
+        title="Notes"
       >
         <div className="notes-library-toolbar">
           <label className="field-stack notes-search-field">
@@ -66,10 +65,7 @@ export function EasyNotesLibraryPage() {
           {!isLoading && filteredNotes.length === 0 ? (
             <div className="empty-card-vnext notes-empty-card">
               <strong>No notes yet</strong>
-              <p className="helper-copy">
-                Start a note for meeting thoughts, a quick brain dump, or anything you
-                want to turn into tasks later.
-              </p>
+              <p className="helper-copy">Create your first note.</p>
             </div>
           ) : null}
 

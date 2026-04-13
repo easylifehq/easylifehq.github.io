@@ -1,10 +1,8 @@
-import { signOut } from "firebase/auth";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { ProductsMenu } from "@/components/navigation/ProductsMenu";
 import { appProductItems } from "@/components/navigation/appProducts";
 import { useSettings } from "@/features/settings/SettingsContext";
-import { auth } from "@/lib/firebase/client";
 
 export function AppHeader() {
   const location = useLocation();
@@ -37,16 +35,7 @@ export function AppHeader() {
         </div>
 
         <div className="app-header-actions">
-          <ProductsMenu items={visibleItems} label="Apps" showDescriptions />
-          <button
-            type="button"
-            className="button-secondary"
-            onClick={() => {
-              void signOut(auth);
-            }}
-          >
-            Log Out
-          </button>
+          <ProductsMenu items={visibleItems} label="Apps" />
         </div>
       </div>
     </header>

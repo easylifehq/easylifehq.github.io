@@ -3,7 +3,7 @@ import { AppWorkspaceHeader } from "@/components/navigation/AppWorkspaceHeader";
 import { EasyPipelineProvider } from "@/features/easypipeline/EasyPipelineContext";
 
 const links = [
-  { to: "/app/easypipeline/dashboard", label: "Dashboard" },
+  { to: "/app/easypipeline/dashboard", label: "Board" },
   { to: "/app/easypipeline/stats", label: "Stats" },
   { to: "/app/easypipeline/email", label: "Email Drafts" },
 ];

@@ -25,7 +25,7 @@ export function AuthenticatedLayout() {
         <div className="app-content app-content-shell">
           <Outlet />
         </div>
-        {isExperimentalFeatureEnabled("inboxCapture") ? <UniversalCapture /> : null}
+        <UniversalCapture />
       </div>
     </EasyCalendarProvider>
   );

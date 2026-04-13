@@ -25,7 +25,7 @@ export function EasyNotesEditorPage() {
   const note = useMemo(() => notes.find((entry) => entry.id === noteId) || null, [notes, noteId]);
   const [title, setTitle] = useState("");
   const [bodyText, setBodyText] = useState("");
-  const [saveMessage, setSaveMessage] = useState("Saved");
+  const [saveMessage, setSaveMessage] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [processorMessage, setProcessorMessage] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -37,15 +37,13 @@ export function EasyNotesEditorPage() {
 
     setTitle(note.title);
     setBodyText(note.bodyText);
-    setSaveMessage("Saved");
+    setSaveMessage("");
     hydratedNoteIdRef.current = note.id;
   }, [note]);
 
   useEffect(() => {
     if (!note) return;
     if (hydratedNoteIdRef.current !== note.id) return;
-
-    setSaveMessage("Unsaved changes");
 
     if (saveTimeoutRef.current) {
       window.clearTimeout(saveTimeoutRef.current);
@@ -58,7 +56,7 @@ export function EasyNotesEditorPage() {
         pinned: note.pinned,
         bodyText,
       }).then(() => {
-        setSaveMessage("Everything saved");
+        setSaveMessage("");
       });
     }, 700);
 
@@ -131,7 +129,7 @@ export function EasyNotesEditorPage() {
               Process note
             </button>
           ) : null}
-          <span>{saveMessage}</span>
+          {saveMessage ? <span>{saveMessage}</span> : null}
         </div>
       </div>
 

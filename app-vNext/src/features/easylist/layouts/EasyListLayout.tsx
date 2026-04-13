@@ -3,7 +3,7 @@ import { AppWorkspaceHeader } from "@/components/navigation/AppWorkspaceHeader";
 import { EasyListProvider } from "@/features/easylist/EasyListContext";
 
 const links = [
-  { to: "/app/easylist/dashboard", label: "Dashboard" },
+  { to: "/app/easylist/dashboard", label: "To-do list" },
   { to: "/app/easylist/add", label: "Add Tasks" },
   { to: "/app/easylist/archive", label: "Archive" },
 ];

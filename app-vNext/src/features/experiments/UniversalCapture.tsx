@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { createNote, updateNote } from "@/lib/firestore/notes";
 import { createTask } from "@/lib/firestore/tasks";
 import { auth } from "@/lib/firebase/client";
@@ -25,10 +25,29 @@ function detectCaptureType(value: string) {
 }
 
 export function UniversalCapture() {
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [text, setText] = useState("");
   const [message, setMessage] = useState("");
   const suggestion = useMemo(() => detectCaptureType(text), [text]);
+  const screenAction = useMemo(() => {
+    if (location.pathname.startsWith("/app/easypipeline")) {
+      return { label: "Add application", to: "/app/easypipeline/dashboard", hint: "Pipeline" };
+    }
+    if (location.pathname.startsWith("/app/easyprojects")) {
+      return { label: "Open projects", to: "/app/easyprojects", hint: "Projects" };
+    }
+    if (location.pathname.startsWith("/app/easyworkout")) {
+      return { label: "Log workout", to: "/app/easyworkout/log", hint: "Workout" };
+    }
+    if (location.pathname.startsWith("/app/easynotes")) {
+      return { label: "Create note", to: "/app/easynotes", hint: "Notes" };
+    }
+    if (location.pathname.startsWith("/app/easycalendar")) {
+      return { label: "Add event", to: "/app/easycalendar/day", hint: "Calendar" };
+    }
+    return { label: "Open Add Tasks", to: "/app/easylist/add", hint: "Tasks" };
+  }, [location.pathname]);
 
   async function saveAsTask() {
     const user = auth.currentUser;
@@ -73,8 +92,8 @@ export function UniversalCapture() {
       <section className={`capture-modal${isOpen ? " open" : ""}`} aria-hidden={!isOpen}>
         <div className="capture-header">
           <div>
-            <p className="eyebrow">Inbox</p>
-            <h2>Capture now, sort later</h2>
+            <p className="eyebrow">{screenAction.hint}</p>
+            <h2>Quick add</h2>
           </div>
           <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)}>
             Close
@@ -89,7 +108,7 @@ export function UniversalCapture() {
               setText(event.target.value);
               setMessage("");
             }}
-            placeholder="Messy thought, task, event idea, follow-up, workout idea..."
+            placeholder="Type anything..."
             rows={5}
           />
         </label>
@@ -107,8 +126,8 @@ export function UniversalCapture() {
           <button type="button" className="button-secondary" onClick={() => void saveAsNote()} disabled={!text.trim()}>
             Save as note
           </button>
-          <Link className="ghost-button" to="/app/easylist/add" onClick={() => setIsOpen(false)}>
-            Open Add Tasks
+          <Link className="ghost-button" to={screenAction.to} onClick={() => setIsOpen(false)}>
+            {screenAction.label}
           </Link>
         </div>
         {message ? <div className="calendar-info-card">{message}</div> : null}
