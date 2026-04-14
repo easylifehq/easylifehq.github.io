@@ -2890,6 +2890,30 @@ button.calendar-detail-card:disabled {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.capture-category-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+
+.capture-category-chip {
+  min-height: 28px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-empty, var(--shell-card-bg-soft));
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.capture-category-chip:hover,
+.capture-category-chip:focus-visible {
+  border-color: var(--ui-border-strong, var(--shell-card-border));
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
 .capture-header h2,
 .notes-processor-panel h3 {
   margin: 0.15rem 0 0;

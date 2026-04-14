@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 import { Link, useLocation } from "react-router-dom";
 import {
   createApplication,
@@ -9,7 +10,7 @@ import { createCalendarEvent, type CalendarEventType } from "@/lib/firestore/cal
 import { createContact, type ContactDraft } from "@/lib/firestore/contacts";
 import { createNote, updateNote } from "@/lib/firestore/notes";
 import { createProject, type ProjectDraft, type ProjectStatus } from "@/lib/firestore/projects";
-import { createTask } from "@/lib/firestore/tasks";
+import { createTask, subscribeToTasks, type TaskRecord } from "@/lib/firestore/tasks";
 import { auth } from "@/lib/firebase/client";
 
 type CaptureMode = "task" | "note" | "event" | "application" | "contact" | "project" | "workout";
@@ -91,6 +92,30 @@ function formatTimeInput(date: Date) {
   return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
 }
 
+const weekdays = [
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+];
+
+function parseClockTime(hourValue: string, minuteValue = "0", meridiem = "") {
+  let hour = Number(hourValue);
+  const minute = Number(minuteValue);
+  const normalizedMeridiem = meridiem.toLowerCase();
+
+  if (normalizedMeridiem === "pm" && hour < 12) hour += 12;
+  if (normalizedMeridiem === "am" && hour === 12) hour = 0;
+  if (!normalizedMeridiem && hour >= 1 && hour <= 7) hour += 12;
+
+  const date = new Date();
+  date.setHours(hour, minute, 0, 0);
+  return date;
+}
+
 function parseEventDetails(value: string) {
   const text = value.toLowerCase();
   const updates: Partial<Pick<QuickAddDetails, "date" | "startTime" | "endTime" | "eventType">> = {};
@@ -103,18 +128,39 @@ function parseEventDetails(value: string) {
     updates.date = formatDateInput(date);
   }
 
-  const timeMatch = text.match(/\b(?:at\s*)?(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/);
-  if (timeMatch) {
-    let hour = Number(timeMatch[1]);
-    const minute = Number(timeMatch[2] ?? "0");
-    const meridiem = timeMatch[3];
+  const nextWeekdayMatch = text.match(/\bnext\s+(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/);
+  const plainWeekdayMatch = text.match(/\b(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/);
+  const weekday = nextWeekdayMatch?.[1] ?? plainWeekdayMatch?.[1];
+  if (weekday) {
+    const targetDay = weekdays.indexOf(weekday);
+    const daysAhead = (targetDay - date.getDay() + 7) % 7 || 7;
+    date.setDate(date.getDate() + daysAhead);
+    updates.date = formatDateInput(date);
+  }
 
-    if (meridiem === "pm" && hour < 12) hour += 12;
-    if (meridiem === "am" && hour === 12) hour = 0;
-    if (!meridiem && hour >= 1 && hour <= 7) hour += 12;
+  const slashDateMatch = text.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/);
+  if (slashDateMatch) {
+    const year = slashDateMatch[3]
+      ? Number(slashDateMatch[3].length === 2 ? `20${slashDateMatch[3]}` : slashDateMatch[3])
+      : date.getFullYear();
+    const explicitDate = new Date(year, Number(slashDateMatch[1]) - 1, Number(slashDateMatch[2]));
+    updates.date = formatDateInput(explicitDate);
+  }
 
-    const start = new Date();
-    start.setHours(hour, minute, 0, 0);
+  const textWithoutDateShorthand = text.replace(/\b\d{1,2}\/\d{1,2}(?:\/\d{2,4})?\b/g, "");
+  const timeRangeMatch = textWithoutDateShorthand.match(/\b(?:from\s*)?(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\s*(?:-|to|until)\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/);
+  const timeMatch = textWithoutDateShorthand.match(/\b(?:at\s*)?(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/);
+  if (timeRangeMatch) {
+    const endMeridiem = timeRangeMatch[6] || timeRangeMatch[3] || "";
+    const start = parseClockTime(timeRangeMatch[1], timeRangeMatch[2] ?? "0", timeRangeMatch[3] || endMeridiem);
+    const end = parseClockTime(timeRangeMatch[4], timeRangeMatch[5] ?? "0", endMeridiem);
+    if (end <= start) {
+      end.setDate(end.getDate() + 1);
+    }
+    updates.startTime = formatTimeInput(start);
+    updates.endTime = formatTimeInput(end);
+  } else if (timeMatch) {
+    const start = parseClockTime(timeMatch[1], timeMatch[2] ?? "0", timeMatch[3] ?? "");
     const end = new Date(start);
     end.setHours(start.getHours() + 1);
     updates.startTime = formatTimeInput(start);
@@ -139,8 +185,22 @@ export function UniversalCapture() {
   const [text, setText] = useState("");
   const [message, setMessage] = useState("");
   const [details, setDetails] = useState<QuickAddDetails>(defaultDetails);
+  const [tasks, setTasks] = useState<TaskRecord[]>([]);
   const [openTarget, setOpenTarget] = useState<{ to: string; label: string } | null>(null);
   const suggestion = useMemo(() => detectCaptureType(text), [text]);
+  const recentCategories = useMemo(() => {
+    const categoryCounts = new Map<string, number>();
+    tasks.forEach((task) => {
+      const category = task.category.trim();
+      if (!category) return;
+      categoryCounts.set(category, (categoryCounts.get(category) ?? 0) + 1);
+    });
+
+    return Array.from(categoryCounts.entries())
+      .sort((first, second) => second[1] - first[1] || first[0].localeCompare(second[0]))
+      .slice(0, 5)
+      .map(([category]) => category);
+  }, [tasks]);
   const screenAction = useMemo(() => {
     if (location.pathname.startsWith("/app/easypipeline")) {
       return { mode: "application" as CaptureMode, label: "Add application", to: "/app/easypipeline/dashboard", hint: "Pipeline" };
@@ -202,6 +262,23 @@ export function UniversalCapture() {
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
   }, [screenAction.mode]);
+
+  useEffect(() => {
+    let unsubscribeTasks: (() => void) | undefined;
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      unsubscribeTasks?.();
+      if (!user) {
+        setTasks([]);
+        return;
+      }
+      unsubscribeTasks = subscribeToTasks(user.uid, setTasks, () => setTasks([]));
+    });
+
+    return () => {
+      unsubscribeTasks?.();
+      unsubscribeAuth();
+    };
+  }, []);
 
   async function saveAsTask(options: { addAnother?: boolean } = {}) {
     const user = auth.currentUser;
@@ -424,6 +501,20 @@ export function UniversalCapture() {
                 onChange={(event) => setDetails((current) => ({ ...current, taskCategory: event.target.value }))}
                 placeholder="Inbox"
               />
+              {recentCategories.length ? (
+                <div className="capture-category-row" aria-label="Recent task categories">
+                  {recentCategories.map((category) => (
+                    <button
+                      key={category}
+                      type="button"
+                      className="capture-category-chip"
+                      onClick={() => setDetails((current) => ({ ...current, taskCategory: category }))}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </label>
             <label className="field-stack">
               <span>Due</span>
