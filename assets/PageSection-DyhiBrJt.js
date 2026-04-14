@@ -1,1 +1,0 @@
-import{j as e}from"./vendor-react-RNguiUzr.js";function c({eyebrow:s,title:l,description:n,children:a}){return e.jsxs("section",{className:"panel-section",children:[e.jsxs("header",{className:"panel-header",children:[s?e.jsx("p",{className:"eyebrow",children:s}):null,e.jsx("h2",{children:l}),n?e.jsx("p",{children:n}):null]}),a]})}export{c as P};

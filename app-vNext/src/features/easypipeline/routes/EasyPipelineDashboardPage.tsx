@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { ApplicationDrawer } from "@/features/easypipeline/components/ApplicationDrawer";
 import { useEasyPipeline } from "@/features/easypipeline/EasyPipelineContext";
@@ -22,7 +23,9 @@ function isFollowUpDue(nextFollowUp: string) {
 export function EasyPipelineDashboardPage() {
   const { applications, isLoading, error, saveApplication, deleteApplication } =
     useEasyPipeline();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedApplication, setSelectedApplication] = useState<ApplicationRecord | null>(null);
+  const applicationParam = searchParams.get("application");
   const grouped = useMemo(
     () =>
       statusOrder.map(({ key, label }) => ({
@@ -33,6 +36,22 @@ export function EasyPipelineDashboardPage() {
     [applications]
   );
   const followUpsDue = applications.filter((application) => isFollowUpDue(application.nextFollowUp)).length;
+
+  useEffect(() => {
+    if (!applicationParam) return;
+    const matchingApplication = applications.find((application) => application.id === applicationParam);
+    if (matchingApplication) {
+      setSelectedApplication(matchingApplication);
+    }
+  }, [applicationParam, applications]);
+
+  function closeApplicationDrawer() {
+    setSelectedApplication(null);
+    if (!applicationParam) return;
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("application");
+    setSearchParams(nextParams, { replace: true });
+  }
 
   return (
     <>
@@ -83,7 +102,7 @@ export function EasyPipelineDashboardPage() {
       <ApplicationDrawer
         application={selectedApplication}
         isOpen={Boolean(selectedApplication)}
-        onClose={() => setSelectedApplication(null)}
+        onClose={closeApplicationDrawer}
         onSave={saveApplication}
         onDelete={deleteApplication}
       />

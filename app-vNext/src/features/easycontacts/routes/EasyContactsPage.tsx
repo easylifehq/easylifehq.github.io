@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { ContactDrawer } from "@/features/easycontacts/components/ContactDrawer";
 import { useEasyContacts } from "@/features/easycontacts/EasyContactsContext";
@@ -11,8 +12,10 @@ function isFollowUpNeeded(value: string) {
 
 export function EasyContactsPage() {
   const { contacts, isLoading, error, saveContact, archiveCurrentContact } = useEasyContacts();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
   const [selectedContact, setSelectedContact] = useState<ContactRecord | null>(null);
+  const contactParam = searchParams.get("contact");
   const filteredContacts = useMemo(() => {
     const term = search.trim().toLowerCase();
     if (!term) return contacts;
@@ -25,6 +28,22 @@ export function EasyContactsPage() {
     );
   }, [contacts, search]);
   const bubbleContacts = useMemo(() => filteredContacts.slice(0, 18), [filteredContacts]);
+
+  useEffect(() => {
+    if (!contactParam) return;
+    const matchingContact = contacts.find((contact) => contact.id === contactParam);
+    if (matchingContact) {
+      setSelectedContact(matchingContact);
+    }
+  }, [contactParam, contacts]);
+
+  function closeContactDrawer() {
+    setSelectedContact(null);
+    if (!contactParam) return;
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("contact");
+    setSearchParams(nextParams, { replace: true });
+  }
 
   return (
     <>
@@ -88,7 +107,7 @@ export function EasyContactsPage() {
       <ContactDrawer
         contact={selectedContact}
         isOpen={Boolean(selectedContact)}
-        onClose={() => setSelectedContact(null)}
+        onClose={closeContactDrawer}
         onSave={saveContact}
         onArchive={archiveCurrentContact}
       />

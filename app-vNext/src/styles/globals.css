@@ -2834,6 +2834,25 @@ button.calendar-detail-card:disabled {
   gap: 1rem;
 }
 
+.capture-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.command-hint {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-input, var(--shell-input-bg));
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
 .capture-mode-row {
   display: flex;
   flex-wrap: wrap;
@@ -3396,6 +3415,10 @@ button.calendar-detail-card:disabled {
 
   .capture-modal.open {
     transform: translateY(0);
+  }
+
+  .command-hint {
+    display: none;
   }
 
   .daily-review-grid {

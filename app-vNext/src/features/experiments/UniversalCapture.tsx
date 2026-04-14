@@ -19,6 +19,10 @@ type QuickAddDetails = {
   role: string;
   email: string;
   followUp: string;
+  taskCategory: string;
+  taskDueDate: string;
+  taskMinutes: string;
+  taskPriority: 1 | 2 | 3 | 4 | 5;
   priority: ApplicationPriority;
   projectStatus: ProjectStatus;
   notes: string;
@@ -33,6 +37,10 @@ const defaultDetails: QuickAddDetails = {
   role: "",
   email: "",
   followUp: "",
+  taskCategory: "",
+  taskDueDate: "",
+  taskMinutes: "",
+  taskPriority: 3,
   priority: "medium",
   projectStatus: "active",
   notes: "",
@@ -60,6 +68,68 @@ function detectCaptureType(value: string) {
     return "note";
   }
   return "task";
+}
+
+function priorityLabel(priority: 1 | 2 | 3 | 4 | 5) {
+  return {
+    1: "Urgent",
+    2: "High",
+    3: "Medium",
+    4: "Low",
+    5: "Someday",
+  }[priority];
+}
+
+function formatDateInput(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatTimeInput(date: Date) {
+  return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+}
+
+function parseEventDetails(value: string) {
+  const text = value.toLowerCase();
+  const updates: Partial<Pick<QuickAddDetails, "date" | "startTime" | "endTime" | "eventType">> = {};
+  const date = new Date();
+
+  if (/\btomorrow\b/.test(text)) {
+    date.setDate(date.getDate() + 1);
+    updates.date = formatDateInput(date);
+  } else if (/\btoday\b/.test(text)) {
+    updates.date = formatDateInput(date);
+  }
+
+  const timeMatch = text.match(/\b(?:at\s*)?(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/);
+  if (timeMatch) {
+    let hour = Number(timeMatch[1]);
+    const minute = Number(timeMatch[2] ?? "0");
+    const meridiem = timeMatch[3];
+
+    if (meridiem === "pm" && hour < 12) hour += 12;
+    if (meridiem === "am" && hour === 12) hour = 0;
+    if (!meridiem && hour >= 1 && hour <= 7) hour += 12;
+
+    const start = new Date();
+    start.setHours(hour, minute, 0, 0);
+    const end = new Date(start);
+    end.setHours(start.getHours() + 1);
+    updates.startTime = formatTimeInput(start);
+    updates.endTime = formatTimeInput(end);
+  }
+
+  if (/\b(dentist|doctor|appointment)\b/.test(text)) {
+    updates.eventType = "appointment";
+  } else if (/\b(class|lecture|lab)\b/.test(text)) {
+    updates.eventType = "class";
+  } else if (/\b(work|shift|meeting)\b/.test(text)) {
+    updates.eventType = "work";
+  }
+
+  return updates;
 }
 
 export function UniversalCapture() {
@@ -100,10 +170,13 @@ export function UniversalCapture() {
     setIsOpen(true);
   }
 
-  function resetFields(nextMessage: string) {
+  function resetFields(nextMessage: string, options: { keepOpenTarget?: boolean } = {}) {
     setText("");
     setDetails(defaultDetails);
     setMessage(nextMessage);
+    if (!options.keepOpenTarget) {
+      setOpenTarget(null);
+    }
   }
 
   useEffect(() => {
@@ -130,25 +203,30 @@ export function UniversalCapture() {
     return () => window.removeEventListener("keydown", handleShortcut);
   }, [screenAction.mode]);
 
-  async function saveAsTask() {
+  async function saveAsTask(options: { addAnother?: boolean } = {}) {
     const user = auth.currentUser;
     if (!user || !text.trim()) return;
+    const minutes = Number(details.taskMinutes);
+    const inferredPriority = suggestion === "follow-up" ? 2 : 3;
+    const priorityTier = details.taskPriority || inferredPriority;
 
-    const taskId = await createTask(user.uid, {
+    await createTask(user.uid, {
       title: text.trim().slice(0, 140),
       notes: text.trim(),
-      category: suggestion === "follow-up" ? "Follow-up" : "Inbox",
-      estimatedLength: null,
-      priorityTier: suggestion === "follow-up" ? 2 : 3,
-      priorityLabel: suggestion === "follow-up" ? "High" : "Medium",
-      dueDate: null,
+      category: details.taskCategory.trim() || (suggestion === "follow-up" ? "Follow-up" : "Inbox"),
+      estimatedLength: Number.isFinite(minutes) && minutes > 0 ? minutes : null,
+      priorityTier,
+      priorityLabel: priorityLabel(priorityTier),
+      dueDate: details.taskDueDate || null,
       recurring: false,
     });
-    setOpenTarget({ to: `/app/easylist/dashboard`, label: "Open task list" });
-    resetFields("Saved as a task.");
+    if (!options.addAnother) {
+      setOpenTarget({ to: `/app/easylist/dashboard`, label: "Open task list" });
+    }
+    resetFields(options.addAnother ? "Task saved. Add the next one." : "Saved as a task.", { keepOpenTarget: !options.addAnother });
   }
 
-  async function saveAsNote() {
+  async function saveAsNote(options: { addAnother?: boolean } = {}) {
     const user = auth.currentUser;
     if (!user || !text.trim()) return;
 
@@ -159,21 +237,23 @@ export function UniversalCapture() {
       pinned: false,
       bodyText: text.trim(),
     });
-    setOpenTarget({ to: `/app/easynotes/${noteId}`, label: "Open note" });
-    resetFields("Saved as a note.");
+    if (!options.addAnother) {
+      setOpenTarget({ to: `/app/easynotes/${noteId}`, label: "Open note" });
+    }
+    resetFields(options.addAnother ? "Note saved. Add the next one." : "Saved as a note.", { keepOpenTarget: !options.addAnother });
   }
 
-  async function saveContextItem() {
+  async function saveContextItem(options: { addAnother?: boolean } = {}) {
     const user = auth.currentUser;
     if (!user || !text.trim()) return;
     const title = text.trim();
 
     if (mode === "task") {
-      await saveAsTask();
+      await saveAsTask(options);
       return;
     }
     if (mode === "note") {
-      await saveAsNote();
+      await saveAsNote(options);
       return;
     }
     if (mode === "application") {
@@ -192,8 +272,10 @@ export function UniversalCapture() {
         contactEmail: "",
       };
       const applicationId = await createApplication(user.uid, draft);
-      setOpenTarget({ to: `/app/easypipeline/dashboard?application=${applicationId}`, label: "Open board" });
-      resetFields("Application added.");
+      if (!options.addAnother) {
+        setOpenTarget({ to: `/app/easypipeline/dashboard?application=${applicationId}`, label: "Open board" });
+      }
+      resetFields(options.addAnother ? "Application added. Add the next one." : "Application added.", { keepOpenTarget: !options.addAnother });
       return;
     }
     if (mode === "contact") {
@@ -214,8 +296,10 @@ export function UniversalCapture() {
         archived: false,
       };
       const contactId = await createContact(user.uid, draft);
-      setOpenTarget({ to: `/app/easycontacts?contact=${contactId}`, label: "Open contacts" });
-      resetFields("Contact added.");
+      if (!options.addAnother) {
+        setOpenTarget({ to: `/app/easycontacts?contact=${contactId}`, label: "Open contacts" });
+      }
+      resetFields(options.addAnother ? "Contact added. Add the next one." : "Contact added.", { keepOpenTarget: !options.addAnother });
       return;
     }
     if (mode === "project") {
@@ -226,8 +310,10 @@ export function UniversalCapture() {
         status: details.projectStatus,
       };
       const projectId = await createProject(user.uid, draft);
-      setOpenTarget({ to: `/app/easyprojects/${projectId}`, label: "Open project" });
-      resetFields("Project added.");
+      if (!options.addAnother) {
+        setOpenTarget({ to: `/app/easyprojects/${projectId}`, label: "Open project" });
+      }
+      resetFields(options.addAnother ? "Project added. Add the next one." : "Project added.", { keepOpenTarget: !options.addAnother });
       return;
     }
     if (mode === "event") {
@@ -248,8 +334,10 @@ export function UniversalCapture() {
         recurrenceRule: null,
         eventType: details.eventType,
       });
-      setOpenTarget({ to: `/app/easycalendar/day`, label: "Open calendar" });
-      resetFields("Event added.");
+      if (!options.addAnother) {
+        setOpenTarget({ to: `/app/easycalendar/day`, label: "Open calendar" });
+      }
+      resetFields(options.addAnother ? "Event added. Add the next one." : "Event added.", { keepOpenTarget: !options.addAnother });
     }
   }
 
@@ -260,15 +348,27 @@ export function UniversalCapture() {
       </button>
 
       <div className={`capture-backdrop${isOpen ? " open" : ""}`} onClick={() => setIsOpen(false)} />
-      <section className={`capture-modal${isOpen ? " open" : ""}`} aria-hidden={!isOpen}>
+      <section
+        className={`capture-modal${isOpen ? " open" : ""}`}
+        aria-hidden={!isOpen}
+        onKeyDown={(event) => {
+          if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+            event.preventDefault();
+            void saveContextItem();
+          }
+        }}
+      >
         <div className="capture-header">
           <div>
             <p className="eyebrow">{screenAction.hint}</p>
             <h2>Quick add</h2>
           </div>
-          <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)}>
-            Close
-          </button>
+          <div className="capture-header-actions">
+            <span className="command-hint">Ctrl K</span>
+            <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)}>
+              Close
+            </button>
+          </div>
         </div>
 
         <div className="capture-mode-row" role="tablist" aria-label="Quick add type">
@@ -300,13 +400,61 @@ export function UniversalCapture() {
           <textarea
             value={text}
             onChange={(event) => {
-              setText(event.target.value);
+              const nextValue = event.target.value;
+              setText(nextValue);
+              if (mode === "event") {
+                const parsedDetails = parseEventDetails(nextValue);
+                if (Object.keys(parsedDetails).length) {
+                  setDetails((current) => ({ ...current, ...parsedDetails }));
+                }
+              }
               setMessage("");
             }}
             placeholder="Type anything..."
             rows={5}
           />
         </label>
+
+        {mode === "task" ? (
+          <div className="capture-detail-grid capture-detail-grid-four">
+            <label className="field-stack">
+              <span>Category</span>
+              <input
+                value={details.taskCategory}
+                onChange={(event) => setDetails((current) => ({ ...current, taskCategory: event.target.value }))}
+                placeholder="Inbox"
+              />
+            </label>
+            <label className="field-stack">
+              <span>Due</span>
+              <input type="date" value={details.taskDueDate} onChange={(event) => setDetails((current) => ({ ...current, taskDueDate: event.target.value }))} />
+            </label>
+            <label className="field-stack">
+              <span>Minutes</span>
+              <input
+                type="number"
+                min="1"
+                inputMode="numeric"
+                value={details.taskMinutes}
+                onChange={(event) => setDetails((current) => ({ ...current, taskMinutes: event.target.value }))}
+                placeholder="15"
+              />
+            </label>
+            <label className="field-stack">
+              <span>Priority</span>
+              <select
+                value={details.taskPriority}
+                onChange={(event) => setDetails((current) => ({ ...current, taskPriority: Number(event.target.value) as 1 | 2 | 3 | 4 | 5 }))}
+              >
+                <option value={1}>Urgent</option>
+                <option value={2}>High</option>
+                <option value={3}>Medium</option>
+                <option value={4}>Low</option>
+                <option value={5}>Someday</option>
+              </select>
+            </label>
+          </div>
+        ) : null}
 
         {mode === "application" ? (
           <div className="capture-detail-grid capture-detail-grid-three">
@@ -427,6 +575,11 @@ export function UniversalCapture() {
               Save {mode}
             </button>
           )}
+          {mode !== "workout" ? (
+            <button type="button" className="button-secondary" onClick={() => void saveContextItem({ addAnother: true })} disabled={!text.trim()}>
+              Save and add another
+            </button>
+          ) : null}
           <button type="button" className="button-secondary" onClick={() => void saveAsNote()} disabled={!text.trim()}>
             Save as note
           </button>
