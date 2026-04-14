@@ -207,6 +207,10 @@ a {
   color: var(--ui-text-muted, var(--shell-muted-text));
   font-size: 0.88rem;
   font-weight: 700;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .site-header,
@@ -279,7 +283,7 @@ a {
 
 .app-header-main {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   padding: 0.75rem 1.15rem;
   min-width: 0;
@@ -301,8 +305,8 @@ a {
 .app-header-actions .menu-panel {
   left: 0;
   right: auto;
-  width: 100%;
-  min-width: 100%;
+  width: min(320px, calc(100vw - 2rem));
+  min-width: min(260px, calc(100vw - 2rem));
 }
 
 .button-primary,
@@ -412,6 +416,7 @@ a {
 .menu-link-card {
   display: grid;
   gap: 0.1rem;
+  min-width: 0;
   padding: 0.58rem 0.7rem;
   border-radius: 8px;
   transition: background var(--shell-motion-fast), color var(--shell-motion-fast), transform var(--shell-motion-fast);
@@ -425,6 +430,9 @@ a {
 
 .menu-link-card strong {
   display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.2;
 }
 
 .menu-link-card span {
@@ -3487,6 +3495,10 @@ button.calendar-detail-card:disabled {
     background: var(--ui-bg-card, var(--shell-card-bg-soft));
   }
 
+  .menu-link-card strong {
+    font-size: 0.95rem;
+  }
+
   .site-nav-links {
     display: none;
   }
@@ -3652,7 +3664,7 @@ button.calendar-detail-card:disabled {
   }
 
   .app-header-main {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     padding: 0.65rem;
   }
@@ -3710,11 +3722,11 @@ button.calendar-detail-card:disabled {
   }
 
   .app-header-actions .menu-panel {
-    left: 0;
+    left: auto;
     right: 0;
-    width: 100dvw;
-    min-width: 100dvw;
-    max-width: 100dvw;
+    width: min(280px, calc(100vw - 1.25rem));
+    min-width: min(240px, calc(100vw - 1.25rem));
+    max-width: calc(100vw - 1.25rem);
   }
 
   .button-primary,
@@ -3751,7 +3763,10 @@ button.calendar-detail-card:disabled {
 
   .capture-modal {
     inset: auto 0 0;
-    width: 100vw;
+    width: 100%;
+    max-width: 100vw;
+    max-height: min(86vh, 720px);
+    overflow-y: auto;
     border-radius: 20px 20px 0 0;
     transform: translateY(100%);
   }
