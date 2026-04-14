@@ -394,8 +394,8 @@ export function SettingsPage() {
           </article>
           <article className="mini-panel-vnext">
             <span>Version</span>
-            <strong>3.0.1</strong>
-            <p>Desktop cleanup release.</p>
+            <strong>3.1.5</strong>
+            <p>Current patch.</p>
           </article>
           <article className="mini-panel-vnext">
             <span>Session</span>
