@@ -1,7 +1,15 @@
 import { doc, onSnapshot, serverTimestamp, setDoc, type DocumentData } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 
-export type ThemeMode = "classic" | "candy" | "gamer" | "elvish";
+export type ThemeMode =
+  | "classic"
+  | "candy"
+  | "gamer"
+  | "elvish"
+  | "aurora"
+  | "studio"
+  | "sunrise"
+  | "midnightGarden";
 export type VisibleAppId =
   | "easylist"
   | "easynotes"
@@ -90,7 +98,16 @@ function normalizeThemeMode(value: unknown): ThemeMode {
     return "candy";
   }
 
-  const valid: ThemeMode[] = ["classic", "candy", "gamer", "elvish"];
+  const valid: ThemeMode[] = [
+    "classic",
+    "candy",
+    "gamer",
+    "elvish",
+    "aurora",
+    "studio",
+    "sunrise",
+    "midnightGarden",
+  ];
   return valid.includes(value as ThemeMode) ? (value as ThemeMode) : "classic";
 }
 

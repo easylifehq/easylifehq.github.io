@@ -38,7 +38,14 @@ function getVisualQaSettings(): UserShellSettings | null {
 
   const theme = params.get("theme");
   const themeMode: ThemeMode =
-    theme === "candy" || theme === "gamer" || theme === "elvish" || theme === "classic"
+    theme === "candy" ||
+    theme === "gamer" ||
+    theme === "elvish" ||
+    theme === "classic" ||
+    theme === "aurora" ||
+    theme === "studio" ||
+    theme === "sunrise" ||
+    theme === "midnightGarden"
       ? theme
       : "classic";
 

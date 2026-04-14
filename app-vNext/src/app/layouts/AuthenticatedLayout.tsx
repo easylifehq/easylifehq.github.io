@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { AppHeader } from "@/components/navigation/AppHeader";
+import { SiteFooter } from "@/components/navigation/SiteFooter";
 import { EasyCalendarProvider } from "@/features/easycalendar/EasyCalendarContext";
 import { UniversalCapture } from "@/features/experiments/UniversalCapture";
 import { useSettings } from "@/features/settings/SettingsContext";
@@ -24,6 +25,7 @@ export function AuthenticatedLayout() {
         {isDistractionFreeRoute ? null : <AppHeader />}
         <div className="app-content app-content-shell">
           <Outlet />
+          <SiteFooter />
         </div>
         <UniversalCapture />
       </div>

@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { MarketingHeader } from "@/components/navigation/MarketingHeader";
+import { SiteFooter } from "@/components/navigation/SiteFooter";
 
 export function MarketingLayout() {
   return (
@@ -7,6 +8,7 @@ export function MarketingLayout() {
       <MarketingHeader />
       <div className="marketing-content">
         <Outlet />
+        <SiteFooter />
       </div>
     </div>
   );

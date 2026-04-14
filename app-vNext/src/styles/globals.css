@@ -619,6 +619,29 @@ a {
   margin-top: 0.2rem;
 }
 
+.site-footer {
+  width: min(1180px, 100%);
+  margin: 1.5rem auto 0;
+  padding: 0.85rem 0.25rem calc(0.5rem + env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: center;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.82rem;
+}
+
+.site-footer a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 750;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 38%, transparent);
+}
+
+.site-footer a:hover,
+.site-footer a:focus-visible {
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  border-bottom-color: currentColor;
+}
+
 .page-wrap {
   display: grid;
   gap: 1rem;
@@ -988,58 +1011,58 @@ textarea::placeholder {
 }
 
 .shell-theme-classic {
-  --shell-accent: #3f6f73;
-  --shell-accent-strong: #2f575b;
-  --shell-accent-soft: #e9f3f2;
-  --shell-bg-top: #f7f4ef;
-  --shell-bg-bottom: #ece7df;
-  --shell-header-bg: rgba(252, 249, 243, 0.92);
-  --shell-header-border: rgba(68, 86, 86, 0.16);
-  --shell-button-bg: #3f6f73;
-  --shell-button-border: #3f6f73;
+  --shell-accent: #346ea8;
+  --shell-accent-strong: #245782;
+  --shell-accent-soft: #e9f2fb;
+  --shell-bg-top: #f8fafc;
+  --shell-bg-bottom: #edf1f5;
+  --shell-header-bg: rgba(255, 255, 255, 0.94);
+  --shell-header-border: rgba(50, 69, 88, 0.14);
+  --shell-button-bg: #346ea8;
+  --shell-button-border: #346ea8;
   --shell-button-text: #ffffff;
-  --shell-brand-gradient: linear-gradient(135deg, #3f6f73 0%, #7c6f5a 100%);
-  --shell-card-bg: rgba(252, 249, 243, 0.94);
-  --shell-card-bg-soft: #f6f0e7;
-  --shell-card-border: rgba(68, 86, 86, 0.16);
-  --shell-chip-bg: #e8f1ee;
-  --shell-chip-text: #315b5f;
-  --shell-input-bg: #fffdf8;
-  --shell-input-border: rgba(68, 86, 86, 0.18);
-  --shell-drawer-bg: #fffdf8;
+  --shell-brand-gradient: linear-gradient(135deg, #346ea8 0%, #2f4052 100%);
+  --shell-card-bg: rgba(255, 255, 255, 0.96);
+  --shell-card-bg-soft: #f1f5f9;
+  --shell-card-border: rgba(50, 69, 88, 0.16);
+  --shell-chip-bg: #e6eef7;
+  --shell-chip-text: #23547f;
+  --shell-input-bg: #ffffff;
+  --shell-input-border: rgba(50, 69, 88, 0.18);
+  --shell-drawer-bg: #ffffff;
   --shell-body-font: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shell-display-font: "Aptos Display", "Trebuchet MS", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --shell-card-radius: 24px;
-  --shell-card-shadow: 0 18px 44px rgba(65, 43, 28, 0.08);
+  --shell-card-radius: 16px;
+  --shell-card-shadow: 0 18px 44px rgba(47, 64, 82, 0.09);
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.18s ease;
   --shell-motion-panel: 0.24s ease;
-  --shell-page-text: #221d18;
-  --shell-heading-text: #1f1a16;
-  --shell-muted-text: #665b54;
-  --shell-page-overlay-1: rgba(63, 111, 115, 0.1);
-  --shell-page-overlay-2: rgba(124, 111, 90, 0.08);
-  --shell-page-overlay-3: rgba(255, 255, 255, 0.42);
-  --ui-bg-page: #ece7df;
-  --ui-bg-section: rgba(252, 249, 243, 0.94);
-  --ui-bg-card: #f6f0e7;
-  --ui-bg-card-elevated: #fffdf8;
+  --shell-page-text: #202833;
+  --shell-heading-text: #151c25;
+  --shell-muted-text: #5d6876;
+  --shell-page-overlay-1: rgba(52, 110, 168, 0.08);
+  --shell-page-overlay-2: rgba(47, 64, 82, 0.06);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.52);
+  --ui-bg-page: #edf1f5;
+  --ui-bg-section: rgba(255, 255, 255, 0.96);
+  --ui-bg-card: #f3f6fa;
+  --ui-bg-card-elevated: #ffffff;
   --ui-bg-input: #ffffff;
-  --ui-bg-empty: #f0eee7;
-  --ui-bg-tab-active: #fffdf8;
-  --ui-bg-tab-inactive: rgba(238, 233, 224, 0.9);
-  --ui-border-subtle: rgba(68, 86, 86, 0.2);
-  --ui-border-strong: rgba(68, 86, 86, 0.38);
-  --ui-text-primary: #221d18;
-  --ui-text-secondary: #483c34;
-  --ui-text-muted: #625247;
-  --ui-text-placeholder: #746257;
-  --ui-pill-bg: #e8f1ee;
-  --ui-pill-text: #315b5f;
-  --ui-button-primary-bg: #3f6f73;
+  --ui-bg-empty: #e8eef5;
+  --ui-bg-tab-active: #ffffff;
+  --ui-bg-tab-inactive: #e7edf4;
+  --ui-border-subtle: rgba(50, 69, 88, 0.2);
+  --ui-border-strong: rgba(50, 69, 88, 0.38);
+  --ui-text-primary: #202833;
+  --ui-text-secondary: #394858;
+  --ui-text-muted: #586777;
+  --ui-text-placeholder: #697887;
+  --ui-pill-bg: #e6eef7;
+  --ui-pill-text: #23547f;
+  --ui-button-primary-bg: #346ea8;
   --ui-button-primary-text: #ffffff;
-  --ui-button-secondary-bg: #fffdf9;
-  --ui-button-secondary-text: #342a22;
+  --ui-button-secondary-bg: #ffffff;
+  --ui-button-secondary-text: #283747;
 }
 
 .shell-theme-candy {
@@ -1205,6 +1228,226 @@ textarea::placeholder {
   --ui-button-primary-text: #172315;
   --ui-button-secondary-bg: #1d3726;
   --ui-button-secondary-text: #f5e8bd;
+}
+
+.shell-theme-aurora {
+  --shell-accent: #7dded2;
+  --shell-accent-strong: #45b8ad;
+  --shell-accent-soft: #173337;
+  --shell-bg-top: #071117;
+  --shell-bg-bottom: #101322;
+  --shell-header-bg: rgba(9, 20, 28, 0.88);
+  --shell-header-border: rgba(125, 222, 210, 0.26);
+  --shell-button-bg: #7dded2;
+  --shell-button-border: #7dded2;
+  --shell-button-text: #071417;
+  --shell-brand-gradient: linear-gradient(135deg, #7dded2 0%, #9fb7ff 48%, #f0a7c8 100%);
+  --shell-card-bg: rgba(14, 30, 41, 0.9);
+  --shell-card-bg-soft: #13283a;
+  --shell-card-border: rgba(159, 183, 255, 0.24);
+  --shell-chip-bg: #183646;
+  --shell-chip-text: #c8fff7;
+  --shell-input-bg: #091923;
+  --shell-input-border: rgba(125, 222, 210, 0.28);
+  --shell-drawer-bg: #0c1c27;
+  --shell-body-font: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --shell-display-font: "Aptos Display", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --shell-card-radius: 22px;
+  --shell-card-shadow: 0 24px 62px rgba(1, 8, 14, 0.46);
+  --shell-hover-lift: translateY(-2px);
+  --shell-motion-fast: 0.2s ease;
+  --shell-motion-panel: 0.28s ease;
+  --shell-page-text: #edfaff;
+  --shell-heading-text: #f7fdff;
+  --shell-muted-text: #b7d8e0;
+  --shell-page-overlay-1: rgba(125, 222, 210, 0.18);
+  --shell-page-overlay-2: rgba(159, 183, 255, 0.16);
+  --shell-page-overlay-3: rgba(240, 167, 200, 0.1);
+  --ui-bg-page: #071117;
+  --ui-bg-section: #0e1e29;
+  --ui-bg-card: #13283a;
+  --ui-bg-card-elevated: #183248;
+  --ui-bg-input: #091923;
+  --ui-bg-empty: #102532;
+  --ui-bg-tab-active: #1c3d51;
+  --ui-bg-tab-inactive: #0d202d;
+  --ui-border-subtle: rgba(154, 207, 232, 0.26);
+  --ui-border-strong: rgba(198, 235, 255, 0.46);
+  --ui-text-primary: #f1fbff;
+  --ui-text-secondary: #d7f0f5;
+  --ui-text-muted: #b9d9e1;
+  --ui-text-placeholder: #aacbd4;
+  --ui-pill-bg: #1a3d4a;
+  --ui-pill-text: #d7fff8;
+  --ui-button-primary-bg: #7dded2;
+  --ui-button-primary-text: #071417;
+  --ui-button-secondary-bg: #13283a;
+  --ui-button-secondary-text: #e9fbff;
+}
+
+.shell-theme-studio {
+  --shell-accent: #245cff;
+  --shell-accent-strong: #173fbd;
+  --shell-accent-soft: #e9efff;
+  --shell-bg-top: #f7f8fb;
+  --shell-bg-bottom: #e9edf3;
+  --shell-header-bg: rgba(255, 255, 255, 0.96);
+  --shell-header-border: rgba(32, 39, 52, 0.14);
+  --shell-button-bg: #245cff;
+  --shell-button-border: #245cff;
+  --shell-button-text: #ffffff;
+  --shell-brand-gradient: linear-gradient(135deg, #111827 0%, #245cff 100%);
+  --shell-card-bg: rgba(255, 255, 255, 0.96);
+  --shell-card-bg-soft: #f0f3f8;
+  --shell-card-border: rgba(32, 39, 52, 0.16);
+  --shell-chip-bg: #e7edff;
+  --shell-chip-text: #173fbd;
+  --shell-input-bg: #ffffff;
+  --shell-input-border: rgba(32, 39, 52, 0.18);
+  --shell-drawer-bg: #ffffff;
+  --shell-body-font: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --shell-display-font: "Aptos Display", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --shell-card-radius: 12px;
+  --shell-card-shadow: 0 18px 44px rgba(15, 23, 42, 0.1);
+  --shell-hover-lift: translateY(-1px);
+  --shell-motion-fast: 0.16s ease;
+  --shell-motion-panel: 0.22s ease;
+  --shell-page-text: #18202c;
+  --shell-heading-text: #0f172a;
+  --shell-muted-text: #586274;
+  --shell-page-overlay-1: rgba(36, 92, 255, 0.08);
+  --shell-page-overlay-2: rgba(15, 23, 42, 0.04);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.56);
+  --ui-bg-page: #e9edf3;
+  --ui-bg-section: #ffffff;
+  --ui-bg-card: #f3f5f9;
+  --ui-bg-card-elevated: #ffffff;
+  --ui-bg-input: #ffffff;
+  --ui-bg-empty: #edf1f7;
+  --ui-bg-tab-active: #ffffff;
+  --ui-bg-tab-inactive: #e8edf5;
+  --ui-border-subtle: rgba(32, 39, 52, 0.2);
+  --ui-border-strong: rgba(32, 39, 52, 0.38);
+  --ui-text-primary: #18202c;
+  --ui-text-secondary: #354154;
+  --ui-text-muted: #586274;
+  --ui-text-placeholder: #6b7688;
+  --ui-pill-bg: #e7edff;
+  --ui-pill-text: #173fbd;
+  --ui-button-primary-bg: #245cff;
+  --ui-button-primary-text: #ffffff;
+  --ui-button-secondary-bg: #ffffff;
+  --ui-button-secondary-text: #1c2736;
+}
+
+.shell-theme-sunrise {
+  --shell-accent: #e15845;
+  --shell-accent-strong: #b7382c;
+  --shell-accent-soft: #ffe9df;
+  --shell-bg-top: #fff4df;
+  --shell-bg-bottom: #ffd5c2;
+  --shell-header-bg: rgba(255, 248, 236, 0.94);
+  --shell-header-border: rgba(183, 56, 44, 0.18);
+  --shell-button-bg: #d94735;
+  --shell-button-border: #d94735;
+  --shell-button-text: #ffffff;
+  --shell-brand-gradient: linear-gradient(135deg, #e15845 0%, #f5a34d 48%, #61a8d8 100%);
+  --shell-card-bg: rgba(255, 249, 239, 0.95);
+  --shell-card-bg-soft: #ffe9dc;
+  --shell-card-border: rgba(183, 56, 44, 0.18);
+  --shell-chip-bg: #ffdfcf;
+  --shell-chip-text: #923129;
+  --shell-input-bg: #fffdfa;
+  --shell-input-border: rgba(183, 56, 44, 0.2);
+  --shell-drawer-bg: #fff8ed;
+  --shell-body-font: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --shell-display-font: "Trebuchet MS", "Aptos Display", "Segoe UI", sans-serif;
+  --shell-card-radius: 20px;
+  --shell-card-shadow: 0 22px 50px rgba(183, 74, 42, 0.16);
+  --shell-hover-lift: translateY(-2px);
+  --shell-motion-fast: 0.2s ease;
+  --shell-motion-panel: 0.26s ease;
+  --shell-page-text: #47251f;
+  --shell-heading-text: #331713;
+  --shell-muted-text: #765249;
+  --shell-page-overlay-1: rgba(225, 88, 69, 0.14);
+  --shell-page-overlay-2: rgba(97, 168, 216, 0.14);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.38);
+  --ui-bg-page: #ffd8c7;
+  --ui-bg-section: rgba(255, 249, 239, 0.96);
+  --ui-bg-card: #ffe9dc;
+  --ui-bg-card-elevated: #fffdfa;
+  --ui-bg-input: #ffffff;
+  --ui-bg-empty: #ffe1d0;
+  --ui-bg-tab-active: #fffdfa;
+  --ui-bg-tab-inactive: #ffdccc;
+  --ui-border-subtle: rgba(133, 61, 51, 0.22);
+  --ui-border-strong: rgba(101, 45, 39, 0.4);
+  --ui-text-primary: #47251f;
+  --ui-text-secondary: #623a32;
+  --ui-text-muted: #765249;
+  --ui-text-placeholder: #8a6258;
+  --ui-pill-bg: #ffdfcf;
+  --ui-pill-text: #923129;
+  --ui-button-primary-bg: #d94735;
+  --ui-button-primary-text: #ffffff;
+  --ui-button-secondary-bg: #fffdfa;
+  --ui-button-secondary-text: #4f2821;
+}
+
+.shell-theme-midnightGarden {
+  --shell-accent: #a9b8ff;
+  --shell-accent-strong: #7f8be0;
+  --shell-accent-soft: #1b2632;
+  --shell-bg-top: #07100d;
+  --shell-bg-bottom: #101526;
+  --shell-header-bg: rgba(8, 17, 15, 0.88);
+  --shell-header-border: rgba(169, 184, 255, 0.24);
+  --shell-button-bg: #a9b8ff;
+  --shell-button-border: #a9b8ff;
+  --shell-button-text: #09100f;
+  --shell-brand-gradient: linear-gradient(135deg, #a9b8ff 0%, #7cc9a1 50%, #32264f 100%);
+  --shell-card-bg: rgba(13, 27, 25, 0.9);
+  --shell-card-bg-soft: #142421;
+  --shell-card-border: rgba(169, 184, 255, 0.22);
+  --shell-chip-bg: #1b3330;
+  --shell-chip-text: #d8e0ff;
+  --shell-input-bg: #0a1816;
+  --shell-input-border: rgba(169, 184, 255, 0.28);
+  --shell-drawer-bg: #0d1b19;
+  --shell-body-font: "Georgia", "Aptos", "Segoe UI", serif;
+  --shell-display-font: "Palatino Linotype", "Georgia", serif;
+  --shell-card-radius: 22px;
+  --shell-card-shadow: 0 24px 58px rgba(2, 8, 7, 0.48);
+  --shell-hover-lift: translateY(-2px);
+  --shell-motion-fast: 0.22s ease;
+  --shell-motion-panel: 0.3s ease;
+  --shell-page-text: #eef7f2;
+  --shell-heading-text: #f8fffb;
+  --shell-muted-text: #bfd3ca;
+  --shell-page-overlay-1: rgba(124, 201, 161, 0.16);
+  --shell-page-overlay-2: rgba(169, 184, 255, 0.14);
+  --shell-page-overlay-3: rgba(232, 207, 255, 0.06);
+  --ui-bg-page: #07100d;
+  --ui-bg-section: #0d1b19;
+  --ui-bg-card: #142421;
+  --ui-bg-card-elevated: #1b2f2b;
+  --ui-bg-input: #0a1816;
+  --ui-bg-empty: #10211f;
+  --ui-bg-tab-active: #243a35;
+  --ui-bg-tab-inactive: #0d1d1a;
+  --ui-border-subtle: rgba(179, 199, 235, 0.26);
+  --ui-border-strong: rgba(220, 230, 255, 0.46);
+  --ui-text-primary: #f3fbf6;
+  --ui-text-secondary: #deece6;
+  --ui-text-muted: #c1d6cd;
+  --ui-text-placeholder: #b0c8be;
+  --ui-pill-bg: #1e3a35;
+  --ui-pill-text: #dfe5ff;
+  --ui-button-primary-bg: #a9b8ff;
+  --ui-button-primary-text: #09100f;
+  --ui-button-secondary-bg: #142421;
+  --ui-button-secondary-text: #ecf7f2;
 }
 
 .subnav {
@@ -2606,7 +2849,7 @@ button.calendar-detail-card:disabled {
 }
 
 .settings-theme-classic::before {
-  background: linear-gradient(90deg, #c7723f, #8d6dd7);
+  background: linear-gradient(90deg, #346ea8, #2f4052);
 }
 
 .settings-theme-candy::before {
@@ -2619,6 +2862,22 @@ button.calendar-detail-card:disabled {
 
 .settings-theme-elvish::before {
   background: linear-gradient(90deg, #c9a34a, #2f9a73);
+}
+
+.settings-theme-aurora::before {
+  background: linear-gradient(90deg, #7dded2, #9fb7ff, #f0a7c8);
+}
+
+.settings-theme-studio::before {
+  background: linear-gradient(90deg, #111827, #245cff);
+}
+
+.settings-theme-sunrise::before {
+  background: linear-gradient(90deg, #e15845, #f5a34d, #61a8d8);
+}
+
+.settings-theme-midnightGarden::before {
+  background: linear-gradient(90deg, #a9b8ff, #7cc9a1, #32264f);
 }
 
 .settings-choice-card > *,
@@ -3013,7 +3272,23 @@ button.calendar-detail-card:disabled {
 .app-shell-vnext.shell-theme-elvish .calendar-status-card strong,
 .app-shell-vnext.shell-theme-elvish .hq-link-card strong,
 .app-shell-vnext.shell-theme-elvish .hq-list-card strong,
-.app-shell-vnext.shell-theme-elvish .settings-choice-card strong {
+.app-shell-vnext.shell-theme-elvish .settings-choice-card strong,
+.app-shell-vnext.shell-theme-aurora .page-hero-vnext h1,
+.app-shell-vnext.shell-theme-aurora .panel-header h2,
+.app-shell-vnext.shell-theme-aurora .workspace-hero h1,
+.app-shell-vnext.shell-theme-aurora .task-card-title-row h3,
+.app-shell-vnext.shell-theme-aurora .calendar-status-card strong,
+.app-shell-vnext.shell-theme-aurora .hq-link-card strong,
+.app-shell-vnext.shell-theme-aurora .hq-list-card strong,
+.app-shell-vnext.shell-theme-aurora .settings-choice-card strong,
+.app-shell-vnext.shell-theme-midnightGarden .page-hero-vnext h1,
+.app-shell-vnext.shell-theme-midnightGarden .panel-header h2,
+.app-shell-vnext.shell-theme-midnightGarden .workspace-hero h1,
+.app-shell-vnext.shell-theme-midnightGarden .task-card-title-row h3,
+.app-shell-vnext.shell-theme-midnightGarden .calendar-status-card strong,
+.app-shell-vnext.shell-theme-midnightGarden .hq-link-card strong,
+.app-shell-vnext.shell-theme-midnightGarden .hq-list-card strong,
+.app-shell-vnext.shell-theme-midnightGarden .settings-choice-card strong {
   color: var(--shell-heading-text);
 }
 
@@ -3036,7 +3311,27 @@ button.calendar-detail-card:disabled {
 .app-shell-vnext.shell-theme-elvish .hq-link-card p,
 .app-shell-vnext.shell-theme-elvish .hq-list-card p,
 .app-shell-vnext.shell-theme-elvish .settings-choice-card p,
-.app-shell-vnext.shell-theme-elvish .settings-toggle-row p {
+.app-shell-vnext.shell-theme-elvish .settings-toggle-row p,
+.app-shell-vnext.shell-theme-aurora .page-hero-vnext p,
+.app-shell-vnext.shell-theme-aurora .panel-header p,
+.app-shell-vnext.shell-theme-aurora .workspace-hero p,
+.app-shell-vnext.shell-theme-aurora .task-card-copy p,
+.app-shell-vnext.shell-theme-aurora .task-card-copy small,
+.app-shell-vnext.shell-theme-aurora .calendar-status-card p,
+.app-shell-vnext.shell-theme-aurora .hq-link-card p,
+.app-shell-vnext.shell-theme-aurora .hq-list-card p,
+.app-shell-vnext.shell-theme-aurora .settings-choice-card p,
+.app-shell-vnext.shell-theme-aurora .settings-toggle-row p,
+.app-shell-vnext.shell-theme-midnightGarden .page-hero-vnext p,
+.app-shell-vnext.shell-theme-midnightGarden .panel-header p,
+.app-shell-vnext.shell-theme-midnightGarden .workspace-hero p,
+.app-shell-vnext.shell-theme-midnightGarden .task-card-copy p,
+.app-shell-vnext.shell-theme-midnightGarden .task-card-copy small,
+.app-shell-vnext.shell-theme-midnightGarden .calendar-status-card p,
+.app-shell-vnext.shell-theme-midnightGarden .hq-link-card p,
+.app-shell-vnext.shell-theme-midnightGarden .hq-list-card p,
+.app-shell-vnext.shell-theme-midnightGarden .settings-choice-card p,
+.app-shell-vnext.shell-theme-midnightGarden .settings-toggle-row p {
   color: var(--shell-muted-text);
 }
 
@@ -3047,7 +3342,15 @@ button.calendar-detail-card:disabled {
 .app-shell-vnext.shell-theme-elvish input,
 .app-shell-vnext.shell-theme-elvish textarea,
 .app-shell-vnext.shell-theme-elvish select,
-.app-shell-vnext.shell-theme-elvish .search-input {
+.app-shell-vnext.shell-theme-elvish .search-input,
+.app-shell-vnext.shell-theme-aurora input,
+.app-shell-vnext.shell-theme-aurora textarea,
+.app-shell-vnext.shell-theme-aurora select,
+.app-shell-vnext.shell-theme-aurora .search-input,
+.app-shell-vnext.shell-theme-midnightGarden input,
+.app-shell-vnext.shell-theme-midnightGarden textarea,
+.app-shell-vnext.shell-theme-midnightGarden select,
+.app-shell-vnext.shell-theme-midnightGarden .search-input {
   color: var(--ui-text-primary, var(--shell-page-text));
   background: var(--ui-bg-input, var(--shell-input-bg));
   border-color: var(--ui-border-subtle, var(--shell-input-border));
@@ -3055,15 +3358,23 @@ button.calendar-detail-card:disabled {
 
 .app-shell-vnext.shell-theme-gamer .empty-card-vnext,
 .app-shell-vnext.shell-theme-elvish .empty-card-vnext,
+.app-shell-vnext.shell-theme-aurora .empty-card-vnext,
+.app-shell-vnext.shell-theme-midnightGarden .empty-card-vnext,
 .app-shell-vnext.shell-theme-gamer .calendar-info-card,
 .app-shell-vnext.shell-theme-elvish .calendar-info-card,
+.app-shell-vnext.shell-theme-aurora .calendar-info-card,
+.app-shell-vnext.shell-theme-midnightGarden .calendar-info-card,
 .app-shell-vnext.shell-theme-gamer .calendar-status-card,
-.app-shell-vnext.shell-theme-elvish .calendar-status-card {
+.app-shell-vnext.shell-theme-elvish .calendar-status-card,
+.app-shell-vnext.shell-theme-aurora .calendar-status-card,
+.app-shell-vnext.shell-theme-midnightGarden .calendar-status-card {
   color: var(--ui-text-secondary);
 }
 
 .app-shell-vnext.shell-theme-gamer .menu-panel,
-.app-shell-vnext.shell-theme-elvish .menu-panel {
+.app-shell-vnext.shell-theme-elvish .menu-panel,
+.app-shell-vnext.shell-theme-aurora .menu-panel,
+.app-shell-vnext.shell-theme-midnightGarden .menu-panel {
   background: var(--ui-bg-card-elevated);
   border-color: var(--ui-border-strong);
 }
@@ -3072,15 +3383,23 @@ button.calendar-detail-card:disabled {
 .app-shell-vnext.shell-theme-elvish .priority-high,
 .app-shell-vnext.shell-theme-gamer .priority-medium,
 .app-shell-vnext.shell-theme-elvish .priority-medium,
+.app-shell-vnext.shell-theme-aurora .priority-medium,
+.app-shell-vnext.shell-theme-midnightGarden .priority-medium,
 .app-shell-vnext.shell-theme-gamer .priority-low,
-.app-shell-vnext.shell-theme-elvish .priority-low {
+.app-shell-vnext.shell-theme-elvish .priority-low,
+.app-shell-vnext.shell-theme-aurora .priority-high,
+.app-shell-vnext.shell-theme-midnightGarden .priority-high,
+.app-shell-vnext.shell-theme-aurora .priority-low,
+.app-shell-vnext.shell-theme-midnightGarden .priority-low {
   background: var(--ui-pill-bg);
   color: var(--ui-pill-text);
   border: 1px solid var(--ui-border-subtle);
 }
 
 .app-shell-vnext.shell-theme-gamer .danger-button,
-.app-shell-vnext.shell-theme-elvish .danger-button {
+.app-shell-vnext.shell-theme-elvish .danger-button,
+.app-shell-vnext.shell-theme-aurora .danger-button,
+.app-shell-vnext.shell-theme-midnightGarden .danger-button {
   background: color-mix(in srgb, var(--ui-bg-card) 82%, #7f1d1d 18%);
   color: #ffd4d4;
   border-color: rgba(255, 150, 150, 0.34);

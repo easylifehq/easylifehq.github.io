@@ -15,9 +15,9 @@ const themeOptions: Array<{
 }> = [
   {
     value: "classic",
-    label: "Classic",
-    description: "Clean, balanced, and easiest to read for everyday planning.",
-    tone: "Warm neutral",
+    label: "Classic Notebook",
+    description: "Crisp paper, graphite text, and calm blue accents for everyday planning.",
+    tone: "Notebook",
   },
   {
     value: "candy",
@@ -36,6 +36,30 @@ const themeOptions: Array<{
     label: "Elvish",
     description: "Rich forest tones, gold accents, and a polished magical feel.",
     tone: "Enchanted",
+  },
+  {
+    value: "aurora",
+    label: "Aurora",
+    description: "A premium dark theme with mint, ice-blue, and soft rose accents.",
+    tone: "Northern lights",
+  },
+  {
+    value: "studio",
+    label: "Studio",
+    description: "Clean white surfaces, graphite text, and cobalt accents for a professional feel.",
+    tone: "Professional",
+  },
+  {
+    value: "sunrise",
+    label: "Sunrise",
+    description: "Warm coral, sky blue, and gentle yellow accents without losing readability.",
+    tone: "Bright",
+  },
+  {
+    value: "midnightGarden",
+    label: "Midnight Garden",
+    description: "Deep green-black surfaces with lavender and moonlit blue accents.",
+    tone: "Botanical dark",
   },
 ];
 
