@@ -394,7 +394,7 @@ export function SettingsPage() {
           </article>
           <article className="mini-panel-vnext">
             <span>Version</span>
-            <strong>3.1.5</strong>
+            <strong>3.1.6</strong>
             <p>Current patch.</p>
           </article>
           <article className="mini-panel-vnext">

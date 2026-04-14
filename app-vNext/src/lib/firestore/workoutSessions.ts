@@ -3,8 +3,11 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDocs,
   onSnapshot,
+  query,
   serverTimestamp,
+  where,
   updateDoc,
   type DocumentData,
   type QueryDocumentSnapshot,
@@ -104,6 +107,59 @@ export async function createWorkoutSession(userId: string, draft: WorkoutSession
   });
 
   return reference.id;
+}
+
+export async function addSetToDailyWorkoutSession(
+  userId: string,
+  performedOn: string,
+  exercise: WorkoutExerciseLogRecord
+) {
+  const sessionsQuery = query(
+    getWorkoutSessionsCollection(userId),
+    where("performedOn", "==", performedOn)
+  );
+  const snapshot = await getDocs(sessionsQuery);
+  const existingSession = snapshot.docs
+    .map(normalizeSession)
+    .find((session) => session.routineName === "Quick Add" || session.routineName === "Gym Log");
+
+  if (!existingSession) {
+    return createWorkoutSession(userId, {
+      routineId: null,
+      routineName: "Quick Add",
+      performedOn,
+      durationMinutes: null,
+      notes: "",
+      exercises: [exercise],
+    });
+  }
+
+  const exerciseIndex = existingSession.exercises.findIndex(
+    (entry) => entry.exerciseName.toLowerCase() === exercise.exerciseName.toLowerCase()
+  );
+  const exercises = [...existingSession.exercises];
+
+  if (exerciseIndex >= 0) {
+    const existingExercise = exercises[exerciseIndex];
+    exercises[exerciseIndex] = {
+      ...existingExercise,
+      sets: [...existingExercise.sets, ...exercise.sets],
+      notes: existingExercise.notes || exercise.notes,
+    };
+  } else {
+    exercises.push(exercise);
+  }
+
+  await updateWorkoutSession(userId, existingSession.id, {
+    routineId: existingSession.routineId,
+    routineName: existingSession.routineName || "Quick Add",
+    performedOn: existingSession.performedOn,
+    durationMinutes: existingSession.durationMinutes,
+    notes: existingSession.notes,
+    exercises,
+  });
+
+  return existingSession.id;
 }
 
 export async function updateWorkoutSession(

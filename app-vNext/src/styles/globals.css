@@ -3807,11 +3807,41 @@ button.calendar-detail-card:disabled {
     max-height: min(86vh, 720px);
     overflow-y: auto;
     border-radius: 20px 20px 0 0;
+    padding-top: 2.6rem;
     transform: translateY(100%);
   }
 
   .capture-modal.open {
     transform: translateY(0);
+  }
+
+  .capture-modal .capture-header {
+    align-items: flex-start;
+    flex-direction: row;
+    padding-right: 3.25rem;
+  }
+
+  .capture-modal .capture-header-actions {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+  }
+
+  .capture-modal .capture-header-actions .ghost-button {
+    width: 2.5rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    overflow: hidden;
+    font-size: 0;
+    border-radius: 999px;
+  }
+
+  .capture-modal .capture-header-actions .ghost-button::after {
+    content: "×";
+    font-size: 1.25rem;
+    line-height: 1;
   }
 
   .command-hint {

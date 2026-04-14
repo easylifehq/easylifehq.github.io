@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import type { TaskDraft } from "@/lib/firestore/tasks";
 import { getPriorityMeta } from "@/features/easylist/lib/taskUtils";
 import { auth } from "@/lib/firebase/client";
@@ -35,6 +35,8 @@ const EMPTY_ROW = (): TaskRowDraft => ({
   priorityTier: 3,
   notes: "",
 });
+
+const BRAIN_DUMP_DRAFT_KEY = "easylife.easylist.brainDumpDraft";
 
 function buildTaskDraft(row: TaskRowDraft): TaskDraft | null {
   if (!row.title.trim()) {
@@ -320,6 +322,22 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
     [rows]
   );
 
+  useEffect(() => {
+    const savedBrainDump = window.localStorage.getItem(BRAIN_DUMP_DRAFT_KEY);
+    if (savedBrainDump) {
+      setBrainDump(savedBrainDump);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (brainDump.trim()) {
+      window.localStorage.setItem(BRAIN_DUMP_DRAFT_KEY, brainDump);
+      return;
+    }
+
+    window.localStorage.removeItem(BRAIN_DUMP_DRAFT_KEY);
+  }, [brainDump]);
+
   function updateRow(rowId: string, field: keyof TaskRowDraft, value: string | number) {
     setRows((current) =>
       current.map((row) =>
@@ -415,6 +433,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
 
       setRows([EMPTY_ROW(), EMPTY_ROW(), EMPTY_ROW()]);
       setBrainDump("");
+      window.localStorage.removeItem(BRAIN_DUMP_DRAFT_KEY);
     } finally {
       setIsSubmitting(false);
     }

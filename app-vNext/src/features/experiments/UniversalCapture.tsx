@@ -11,9 +11,22 @@ import { createContact, type ContactDraft } from "@/lib/firestore/contacts";
 import { createNote, updateNote } from "@/lib/firestore/notes";
 import { createProject, type ProjectDraft, type ProjectStatus } from "@/lib/firestore/projects";
 import { createTask, subscribeToTasks, type TaskRecord } from "@/lib/firestore/tasks";
+import { addSetToDailyWorkoutSession } from "@/lib/firestore/workoutSessions";
 import { auth } from "@/lib/firebase/client";
+import { useSettings } from "@/features/settings/SettingsContext";
+import type { VisibleAppId } from "@/lib/firestore/settings";
 
 type CaptureMode = "task" | "note" | "event" | "application" | "contact" | "project" | "workout";
+
+const captureModeAppMap: Partial<Record<CaptureMode, VisibleAppId>> = {
+  task: "easylist",
+  note: "easynotes",
+  event: "easycalendar",
+  application: "easypipeline",
+  contact: "easycontacts",
+  project: "easyprojects",
+  workout: "easyworkout",
+};
 
 type QuickAddDetails = {
   company: string;
@@ -50,6 +63,8 @@ const defaultDetails: QuickAddDetails = {
   endTime: "10:00",
   eventType: "other",
 };
+
+const QUICK_ADD_DRAFT_KEY = "easylife.quickAddDraft";
 
 function detectCaptureType(value: string) {
   const text = value.toLowerCase();
@@ -178,8 +193,36 @@ function parseEventDetails(value: string) {
   return updates;
 }
 
+function parseWorkoutSet(value: string) {
+  const text = value.trim();
+  const setMatch = text.match(/\b(\d{1,3})\s*(?:reps?|x|@)\s*(\d{1,4}(?:\.\d+)?)?\s*(?:lbs?|lb|pounds?)?\b/i);
+  const compactMatch = text.match(/\b(\d{1,4}(?:\.\d+)?)\s*x\s*(\d{1,3})\b/i);
+  const weightMatch = text.match(/\b(\d{1,4}(?:\.\d+)?)\s*(?:lbs?|lb|pounds?)\b/i);
+  const reps = setMatch ? Number(setMatch[1]) : compactMatch ? Number(compactMatch[2]) : 0;
+  const weight = setMatch?.[2]
+    ? Number(setMatch[2])
+    : compactMatch
+      ? Number(compactMatch[1])
+      : weightMatch
+        ? Number(weightMatch[1])
+        : 0;
+  const exerciseName = text
+    .replace(/\b\d{1,4}(?:\.\d+)?\s*x\s*\d{1,3}\b/gi, "")
+    .replace(/\b\d{1,3}\s*(?:reps?|x|@)\s*\d{0,4}(?:\.\d+)?\s*(?:lbs?|lb|pounds?)?\b/gi, "")
+    .replace(/\b\d{1,4}(?:\.\d+)?\s*(?:lbs?|lb|pounds?)\b/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+  return {
+    exerciseName: exerciseName || "Quick set",
+    reps: Number.isFinite(reps) && reps > 0 ? reps : 0,
+    weight: Number.isFinite(weight) && weight > 0 ? weight : 0,
+  };
+}
+
 export function UniversalCapture() {
   const location = useLocation();
+  const { isAppVisible } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<CaptureMode>("task");
   const [text, setText] = useState("");
@@ -222,9 +265,65 @@ export function UniversalCapture() {
     }
     return { mode: "task" as CaptureMode, label: "Open Add Tasks", to: "/app/easylist/add", hint: "Tasks" };
   }, [location.pathname]);
+  const captureModes = useMemo(
+    () =>
+      [
+        ["task", "Task"],
+        ["note", "Note"],
+        ["event", "Event"],
+        ["application", "Application"],
+        ["contact", "Contact"],
+        ["project", "Project"],
+        ["workout", "Set"],
+      ].filter(([value]) => {
+        const appId = captureModeAppMap[value as CaptureMode];
+        return !appId || isAppVisible(appId);
+      }) as Array<[CaptureMode, string]>,
+    [isAppVisible]
+  );
+
+  useEffect(() => {
+    const savedDraft = window.localStorage.getItem(QUICK_ADD_DRAFT_KEY);
+    if (!savedDraft) return;
+
+    try {
+      const parsed = JSON.parse(savedDraft) as {
+        mode?: CaptureMode;
+        text?: string;
+        details?: Partial<QuickAddDetails>;
+      };
+      if (parsed.mode) setMode(parsed.mode);
+      if (typeof parsed.text === "string") setText(parsed.text);
+      if (parsed.details) setDetails((current) => ({ ...current, ...parsed.details }));
+    } catch {
+      window.localStorage.removeItem(QUICK_ADD_DRAFT_KEY);
+    }
+  }, []);
+
+  useEffect(() => {
+    const hasDraft =
+      text.trim() ||
+      Object.entries(details).some(
+        ([key, value]) => String(value || "") !== String(defaultDetails[key as keyof QuickAddDetails] || "")
+      );
+    if (!hasDraft) {
+      window.localStorage.removeItem(QUICK_ADD_DRAFT_KEY);
+      return;
+    }
+
+    window.localStorage.setItem(
+      QUICK_ADD_DRAFT_KEY,
+      JSON.stringify({
+        mode,
+        text,
+        details,
+      })
+    );
+  }, [details, mode, text]);
 
   function openCapture() {
-    setMode(screenAction.mode);
+    const appId = captureModeAppMap[screenAction.mode];
+    setMode(!appId || isAppVisible(appId) ? screenAction.mode : captureModes[0]?.[0] ?? "task");
     setMessage("");
     setOpenTarget(null);
     setIsOpen(true);
@@ -234,6 +333,7 @@ export function UniversalCapture() {
     setText("");
     setDetails(defaultDetails);
     setMessage(nextMessage);
+    window.localStorage.removeItem(QUICK_ADD_DRAFT_KEY);
     if (!options.keepOpenTarget) {
       setOpenTarget(null);
     }
@@ -261,7 +361,7 @@ export function UniversalCapture() {
 
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
-  }, [screenAction.mode]);
+  }, [captureModes, isAppVisible, screenAction.mode]);
 
   useEffect(() => {
     let unsubscribeTasks: (() => void) | undefined;
@@ -394,7 +494,7 @@ export function UniversalCapture() {
       return;
     }
     if (mode === "event") {
-      const dateValue = details.date || new Date().toISOString().split("T")[0];
+      const dateValue = details.date || formatDateInput(new Date());
       const eventDate = new Date(`${dateValue}T${details.startTime || "09:00"}:00`);
       const endAt = new Date(`${dateValue}T${details.endTime || "10:00"}:00`);
       if (endAt <= eventDate) {
@@ -415,6 +515,29 @@ export function UniversalCapture() {
         setOpenTarget({ to: `/app/easycalendar/day`, label: "Open calendar" });
       }
       resetFields(options.addAnother ? "Event added. Add the next one." : "Event added.", { keepOpenTarget: !options.addAnother });
+      return;
+    }
+    if (mode === "workout") {
+      const dateValue = details.date || formatDateInput(new Date());
+      const parsedSet = parseWorkoutSet(title);
+      const sessionId = await addSetToDailyWorkoutSession(user.uid, dateValue, {
+        exerciseId: null,
+        exerciseName: parsedSet.exerciseName,
+        muscleGroup: "",
+        notes: details.notes.trim(),
+        sets: [
+          {
+            reps: parsedSet.reps,
+            weight: parsedSet.weight,
+            notes: details.notes.trim(),
+          },
+        ],
+      });
+      if (!options.addAnother) {
+        setOpenTarget({ to: `/app/easyworkout/log`, label: "Open workout" });
+      }
+      resetFields(options.addAnother ? "Set added. Add the next one." : "Set added.", { keepOpenTarget: !options.addAnother });
+      return sessionId;
     }
   }
 
@@ -449,15 +572,7 @@ export function UniversalCapture() {
         </div>
 
         <div className="capture-mode-row" role="tablist" aria-label="Quick add type">
-          {[
-            ["task", "Task"],
-            ["note", "Note"],
-            ["event", "Event"],
-            ["application", "Application"],
-            ["contact", "Contact"],
-            ["project", "Project"],
-            ["workout", "Workout"],
-          ].map(([value, label]) => (
+          {captureModes.map(([value, label]) => (
             <button
               key={value}
               type="button"
@@ -473,7 +588,7 @@ export function UniversalCapture() {
         </div>
 
         <label className="field-stack">
-          <span>{mode === "application" ? "Role" : mode === "contact" ? "Name" : mode === "event" ? "Event" : mode === "project" ? "Project" : "What is on your mind?"}</span>
+          <span>{mode === "application" ? "Role" : mode === "contact" ? "Name" : mode === "event" ? "Event" : mode === "project" ? "Project" : mode === "workout" ? "Exercise and set" : "What is on your mind?"}</span>
           <textarea
             value={text}
             onChange={(event) => {
@@ -487,7 +602,7 @@ export function UniversalCapture() {
               }
               setMessage("");
             }}
-            placeholder="Type anything..."
+            placeholder={mode === "workout" ? "Bench press 135 x 8" : "Type anything..."}
             rows={5}
           />
         </label>
@@ -645,6 +760,19 @@ export function UniversalCapture() {
           </div>
         ) : null}
 
+        {mode === "workout" ? (
+          <div className="capture-detail-grid">
+            <label className="field-stack">
+              <span>Date</span>
+              <input type="date" value={details.date} onChange={(event) => setDetails((current) => ({ ...current, date: event.target.value }))} />
+            </label>
+            <label className="field-stack field-stack-wide">
+              <span>Notes</span>
+              <textarea rows={3} value={details.notes} onChange={(event) => setDetails((current) => ({ ...current, notes: event.target.value }))} />
+            </label>
+          </div>
+        ) : null}
+
         {text.trim() ? (
           <div className="capture-suggestion">
             This looks like a <strong>{suggestion}</strong>.
@@ -652,25 +780,17 @@ export function UniversalCapture() {
         ) : null}
 
         <div className="task-composer-actions">
-          {mode === "workout" ? (
-            <Link className="primary-button" to="/app/easyworkout/log" onClick={() => setIsOpen(false)}>
-              Open logger
-            </Link>
-          ) : (
-            <button
-              type="button"
-              className="primary-button"
-              onClick={() => void saveContextItem()}
-              disabled={!text.trim()}
-            >
-              Save {mode}
-            </button>
-          )}
-          {mode !== "workout" ? (
-            <button type="button" className="button-secondary" onClick={() => void saveContextItem({ addAnother: true })} disabled={!text.trim()}>
-              Save and add another
-            </button>
-          ) : null}
+          <button
+            type="button"
+            className="primary-button"
+            onClick={() => void saveContextItem()}
+            disabled={!text.trim()}
+          >
+            {mode === "workout" ? "Add set" : `Save ${mode}`}
+          </button>
+          <button type="button" className="button-secondary" onClick={() => void saveContextItem({ addAnother: true })} disabled={!text.trim()}>
+            {mode === "workout" ? "Add set and another" : "Save and add another"}
+          </button>
           <button type="button" className="button-secondary" onClick={() => void saveAsNote()} disabled={!text.trim()}>
             Save as note
           </button>

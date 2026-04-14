@@ -42,6 +42,17 @@ function toDate(value: unknown) {
     return (value as { toDate: () => Date }).toDate();
   }
 
+  if (typeof value === "string") {
+    const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (dateOnlyMatch) {
+      return new Date(
+        Number(dateOnlyMatch[1]),
+        Number(dateOnlyMatch[2]) - 1,
+        Number(dateOnlyMatch[3])
+      );
+    }
+  }
+
   const parsed = new Date(String(value));
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
