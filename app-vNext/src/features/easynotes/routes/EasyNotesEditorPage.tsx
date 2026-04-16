@@ -20,12 +20,13 @@ function extractActionSuggestions(value: string) {
 export function EasyNotesEditorPage() {
   const navigate = useNavigate();
   const { noteId = "" } = useParams();
-  const { notes, isLoading, saveNote, deleteNote } = useEasyNotes();
+  const { notes, folders, isLoading, saveNote, deleteNote } = useEasyNotes();
   const { isExperimentalFeatureEnabled } = useSettings();
   const note = useMemo(() => notes.find((entry) => entry.id === noteId) || null, [notes, noteId]);
   const activeNoteId = note?.id || "";
   const [title, setTitle] = useState("");
   const [bodyText, setBodyText] = useState("");
+  const [folderId, setFolderId] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [processorMessage, setProcessorMessage] = useState("");
@@ -33,7 +34,7 @@ export function EasyNotesEditorPage() {
   const saveTimeoutRef = useRef<number | null>(null);
   const hydratedNoteIdRef = useRef<string | null>(null);
   const noteMetaRef = useRef({ tags: [] as string[], pinned: false });
-  const lastSavedDraftRef = useRef({ noteId: "", title: "", bodyText: "" });
+  const lastSavedDraftRef = useRef({ noteId: "", title: "", bodyText: "", folderId: "" });
 
   useEffect(() => {
     if (!note) return;
@@ -47,12 +48,14 @@ export function EasyNotesEditorPage() {
 
     setTitle(note.title);
     setBodyText(note.bodyText);
+    setFolderId(note.folderId);
     setSaveMessage("");
     hydratedNoteIdRef.current = note.id;
     lastSavedDraftRef.current = {
       noteId: note.id,
       title: note.title,
       bodyText: note.bodyText,
+      folderId: note.folderId,
     };
   }, [note]);
 
@@ -62,7 +65,8 @@ export function EasyNotesEditorPage() {
     if (
       lastSavedDraftRef.current.noteId === activeNoteId &&
       lastSavedDraftRef.current.title === title &&
-      lastSavedDraftRef.current.bodyText === bodyText
+      lastSavedDraftRef.current.bodyText === bodyText &&
+      lastSavedDraftRef.current.folderId === folderId
     ) {
       return;
     }
@@ -75,6 +79,7 @@ export function EasyNotesEditorPage() {
       void saveNote(activeNoteId, {
         title: title.trim(),
         tags: noteMetaRef.current.tags,
+        folderId,
         pinned: noteMetaRef.current.pinned,
         bodyText,
       }).then(() => {
@@ -82,6 +87,7 @@ export function EasyNotesEditorPage() {
           noteId: activeNoteId,
           title,
           bodyText,
+          folderId,
         };
         setSaveMessage("");
       });
@@ -92,7 +98,7 @@ export function EasyNotesEditorPage() {
         window.clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [title, bodyText, activeNoteId, saveNote]);
+  }, [title, bodyText, folderId, activeNoteId, saveNote]);
 
   if (!isLoading && !note) {
     return (
@@ -170,6 +176,18 @@ export function EasyNotesEditorPage() {
           />
         </label>
 
+        <label className="field-stack notes-editor-folder-field">
+          <span>Folder</span>
+          <select value={folderId} onChange={(event) => setFolderId(event.target.value)}>
+            <option value="">No folder</option>
+            {folders.map((folder) => (
+              <option key={folder.id} value={folder.id}>
+                {folder.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
         <label className="notes-body-field">
           <textarea
             value={bodyText}
@@ -185,7 +203,7 @@ export function EasyNotesEditorPage() {
           onClick={() => void handleDelete()}
           disabled={isDeleting}
         >
-          {isDeleting ? "Deleting..." : "Delete note"}
+          {isDeleting ? "Moving..." : "Move to recently deleted"}
         </button>
 
         {isExperimentalFeatureEnabled("notesProcessor") && (processorMessage || suggestions.length) ? (

@@ -411,6 +411,7 @@ export function UniversalCapture() {
     await updateNote(user.uid, noteId, {
       title: text.trim().split(/\s+/).slice(0, 8).join(" "),
       tags: ["inbox"],
+      folderId: "",
       pinned: false,
       bodyText: text.trim(),
     });

@@ -1537,6 +1537,41 @@ textarea::placeholder {
   align-items: end;
 }
 
+.notes-toolbar-actions,
+.notes-trash-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.notes-control-center {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: end;
+  margin-top: 1rem;
+}
+
+.notes-bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.notes-bulk-bar select {
+  min-height: 40px;
+  width: min(220px, 100%);
+}
+
+.notes-control-helper {
+  margin: 0 0 0.45rem;
+  align-self: end;
+  text-align: right;
+}
+
 .notes-search-field {
   margin: 0;
 }
@@ -1556,6 +1591,30 @@ textarea::placeholder {
   border: 1px solid var(--ui-border-subtle, var(--app-panel-border, rgba(99, 76, 58, 0.1)));
   box-shadow: var(--shell-card-shadow);
   transition: transform var(--shell-motion-fast), box-shadow var(--shell-motion-fast), border-color var(--shell-motion-fast);
+}
+
+.note-card-trash {
+  opacity: 0.92;
+}
+
+.note-card-selectable {
+  position: relative;
+}
+
+.note-card-link {
+  display: grid;
+  gap: 0.8rem;
+  color: inherit;
+}
+
+.notes-select-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: fit-content;
+  color: var(--ui-text-muted, #6a5d53);
+  font-size: 0.85rem;
+  font-weight: 800;
 }
 
 .note-card-vnext:hover,
@@ -1713,6 +1772,14 @@ textarea::placeholder {
   width: fit-content;
   justify-self: end;
   opacity: 0.78;
+}
+
+.notes-editor-folder-field {
+  max-width: 280px;
+}
+
+.notes-trash-actions {
+  justify-content: flex-end;
 }
 
 .task-composer {
@@ -3657,6 +3724,25 @@ button.calendar-detail-card:disabled {
     grid-template-columns: 1fr;
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .notes-toolbar-actions,
+  .notes-trash-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .notes-control-center {
+    grid-template-columns: 1fr;
+  }
+
+  .notes-bulk-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .notes-control-helper {
+    text-align: left;
   }
 
   .task-row-actions {

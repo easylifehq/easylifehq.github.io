@@ -79,6 +79,10 @@ const EasyNotesLibraryPage = lazyNamed(
   () => import("@/features/easynotes/routes/EasyNotesLibraryPage"),
   "EasyNotesLibraryPage"
 );
+const EasyNotesTrashPage = lazyNamed(
+  () => import("@/features/easynotes/routes/EasyNotesTrashPage"),
+  "EasyNotesTrashPage"
+);
 const EasyPipelineLayout = lazyNamed(
   () => import("@/features/easypipeline/layouts/EasyPipelineLayout"),
   "EasyPipelineLayout"
@@ -170,6 +174,7 @@ export function AppRouter() {
             </Route>
             <Route path="easynotes" element={<EasyNotesLayout />}>
               <Route index element={<EasyNotesLibraryPage />} />
+              <Route path="trash" element={<EasyNotesTrashPage />} />
               <Route path=":noteId" element={<EasyNotesEditorPage />} />
             </Route>
             <Route path="easypipeline" element={<EasyPipelineLayout />}>

@@ -8,10 +8,17 @@ import {
 } from "react";
 import {
   createNote,
+  createNoteFolder,
+  moveNotesToFolder,
   removeNote,
+  restoreNote,
+  softDeleteNote,
+  softDeleteNotes,
+  subscribeToNoteFolders,
   subscribeToNotes,
   updateNote,
   type NoteDraft,
+  type NoteFolderRecord,
   type NoteRecord,
 } from "@/lib/firestore/notes";
 import { createTask, type TaskDraft } from "@/lib/firestore/tasks";
@@ -19,11 +26,19 @@ import { useAuth } from "@/features/auth/AuthContext";
 
 type EasyNotesContextValue = {
   notes: NoteRecord[];
+  deletedNotes: NoteRecord[];
+  folders: NoteFolderRecord[];
   isLoading: boolean;
   error: string;
   addNote: () => Promise<string | null>;
+  addFolder: (name: string) => Promise<string | null>;
   saveNote: (noteId: string, draft: NoteDraft) => Promise<void>;
   deleteNote: (noteId: string) => Promise<void>;
+  deleteNotes: (noteIds: string[]) => Promise<void>;
+  moveNotesToFolder: (noteIds: string[], folderId: string) => Promise<void>;
+  cleanUpEmptyNotes: () => Promise<number>;
+  restoreNote: (noteId: string) => Promise<void>;
+  permanentlyDeleteNote: (noteId: string) => Promise<void>;
   createTaskDraftsFromText: (payload: { noteTitle: string; text: string }) => Promise<number>;
 };
 
@@ -50,6 +65,14 @@ function sortNotes(notes: NoteRecord[]) {
   });
 }
 
+function sortFolders(folders: NoteFolderRecord[]) {
+  return [...folders].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function isEmptyUntitledNote(note: NoteRecord) {
+  return !note.title.trim() && !note.bodyText.trim() && note.tags.length === 0 && !note.folderId;
+}
+
 function isVisualQaMode() {
   if (!import.meta.env.DEV) return false;
   return new URLSearchParams(window.location.search).get("visualQa") === "1";
@@ -60,24 +83,30 @@ const visualQaNotes: NoteRecord[] = [
     id: "visual-note",
     title: "Launch notes and next actions",
     tags: ["inbox", "planning"],
+    folderId: "",
     pinned: true,
     bodyHtml: "",
     bodyText:
       "Review the EasyLife polish pass\nFollow up on deployment notes\nSchedule a final mobile QA check\nDraft a short product update",
     createdAt: new Date("2026-04-12T09:00:00"),
     updatedAt: new Date("2026-04-12T10:30:00"),
+    deletedAt: null,
   },
 ];
 
 export function EasyNotesProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [notes, setNotes] = useState<NoteRecord[]>([]);
+  const [deletedNotes, setDeletedNotes] = useState<NoteRecord[]>([]);
+  const [folders, setFolders] = useState<NoteFolderRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (isVisualQaMode()) {
       setNotes(visualQaNotes);
+      setDeletedNotes([]);
+      setFolders([]);
       setIsLoading(false);
       setError("");
       return;
@@ -85,15 +114,18 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
 
     if (!user) {
       setNotes([]);
+      setDeletedNotes([]);
+      setFolders([]);
       setIsLoading(false);
       return;
     }
 
     setIsLoading(true);
-    const unsubscribe = subscribeToNotes(
+    const unsubscribeNotes = subscribeToNotes(
       user.uid,
       (nextNotes) => {
-        setNotes(sortNotes(nextNotes));
+        setNotes(sortNotes(nextNotes.filter((note) => !note.deletedAt)));
+        setDeletedNotes(sortNotes(nextNotes.filter((note) => note.deletedAt)));
         setIsLoading(false);
         setError("");
       },
@@ -103,7 +135,20 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    return unsubscribe;
+    const unsubscribeFolders = subscribeToNoteFolders(
+      user.uid,
+      (nextFolders) => {
+        setFolders(sortFolders(nextFolders));
+      },
+      (nextError) => {
+        setError(nextError.message);
+      }
+    );
+
+    return () => {
+      unsubscribeNotes();
+      unsubscribeFolders();
+    };
   }, [user]);
 
   async function addNoteForUser() {
@@ -113,11 +158,13 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       id: noteId,
       title: "",
       tags: [],
+      folderId: "",
       pinned: false,
       bodyHtml: "",
       bodyText: "",
       createdAt: new Date(),
       updatedAt: new Date(),
+      deletedAt: null,
     };
 
     setNotes((current) => {
@@ -131,6 +178,23 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
     return noteId;
   }
 
+  async function addFolderForUser(name: string) {
+    if (!user) return null;
+    const trimmedName = name.trim();
+    if (!trimmedName) return null;
+
+    const folderId = await createNoteFolder(user.uid, trimmedName);
+    const optimisticFolder: NoteFolderRecord = {
+      id: folderId,
+      name: trimmedName,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    setFolders((current) => sortFolders([...current, optimisticFolder]));
+    return folderId;
+  }
+
   async function saveNoteForUser(noteId: string, draft: NoteDraft) {
     if (!user) return;
     await updateNote(user.uid, noteId, draft);
@@ -138,8 +202,44 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
 
   async function deleteNoteForUser(noteId: string) {
     if (!user) return;
-    await removeNote(user.uid, noteId);
+    await softDeleteNote(user.uid, noteId);
     setNotes((current) => current.filter((note) => note.id !== noteId));
+  }
+
+  async function deleteNotesForUser(noteIds: string[]) {
+    if (!user || !noteIds.length) return;
+    await softDeleteNotes(user.uid, noteIds);
+    setNotes((current) => current.filter((note) => !noteIds.includes(note.id)));
+  }
+
+  async function moveNotesToFolderForUser(noteIds: string[], folderId: string) {
+    if (!user || !noteIds.length) return;
+    await moveNotesToFolder(user.uid, noteIds, folderId);
+    setNotes((current) =>
+      sortNotes(current.map((note) => (noteIds.includes(note.id) ? { ...note, folderId } : note)))
+    );
+  }
+
+  async function cleanUpEmptyNotesForUser() {
+    if (!user) return 0;
+    const emptyNoteIds = notes.filter(isEmptyUntitledNote).map((note) => note.id);
+    if (!emptyNoteIds.length) return 0;
+
+    await softDeleteNotes(user.uid, emptyNoteIds);
+    setNotes((current) => current.filter((note) => !emptyNoteIds.includes(note.id)));
+    return emptyNoteIds.length;
+  }
+
+  async function restoreNoteForUser(noteId: string) {
+    if (!user) return;
+    await restoreNote(user.uid, noteId);
+    setDeletedNotes((current) => current.filter((note) => note.id !== noteId));
+  }
+
+  async function permanentlyDeleteNoteForUser(noteId: string) {
+    if (!user) return;
+    await removeNote(user.uid, noteId);
+    setDeletedNotes((current) => current.filter((note) => note.id !== noteId));
   }
 
   async function createTaskDraftsFromNote(payload: { noteTitle: string; text: string }) {
@@ -166,14 +266,22 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       notes,
+      deletedNotes,
+      folders,
       isLoading,
       error,
       addNote: addNoteForUser,
+      addFolder: addFolderForUser,
       saveNote: saveNoteForUser,
       deleteNote: deleteNoteForUser,
+      deleteNotes: deleteNotesForUser,
+      moveNotesToFolder: moveNotesToFolderForUser,
+      cleanUpEmptyNotes: cleanUpEmptyNotesForUser,
+      restoreNote: restoreNoteForUser,
+      permanentlyDeleteNote: permanentlyDeleteNoteForUser,
       createTaskDraftsFromText: createTaskDraftsFromNote,
     }),
-    [notes, isLoading, error]
+    [notes, deletedNotes, folders, isLoading, error]
   );
 
   return <EasyNotesContext.Provider value={value}>{children}</EasyNotesContext.Provider>;

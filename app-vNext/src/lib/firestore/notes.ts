@@ -16,18 +16,28 @@ export type NoteRecord = {
   id: string;
   title: string;
   tags: string[];
+  folderId: string;
   pinned: boolean;
   bodyHtml: string;
   bodyText: string;
   createdAt: Date | null;
   updatedAt: Date | null;
+  deletedAt: Date | null;
 };
 
 export type NoteDraft = {
   title: string;
   tags: string[];
+  folderId: string;
   pinned: boolean;
   bodyText: string;
+};
+
+export type NoteFolderRecord = {
+  id: string;
+  name: string;
+  createdAt: Date | null;
+  updatedAt: Date | null;
 };
 
 function toDate(value: unknown) {
@@ -71,16 +81,33 @@ function normalizeNote(snapshot: QueryDocumentSnapshot<DocumentData>) {
     tags: Array.isArray(data.tags)
       ? data.tags.filter((value: unknown): value is string => typeof value === "string")
       : [],
+    folderId: typeof data.folderId === "string" ? data.folderId : "",
     pinned: Boolean(data.pinned),
     bodyHtml: data.bodyHtml || "",
     bodyText: data.bodyText || "",
     createdAt: toDate(data.createdAt),
     updatedAt: toDate(data.updatedAt),
+    deletedAt: toDate(data.deletedAt),
   } satisfies NoteRecord;
+}
+
+function normalizeFolder(snapshot: QueryDocumentSnapshot<DocumentData>) {
+  const data = snapshot.data();
+
+  return {
+    id: snapshot.id,
+    name: data.name || "",
+    createdAt: toDate(data.createdAt),
+    updatedAt: toDate(data.updatedAt),
+  } satisfies NoteFolderRecord;
 }
 
 function getNotesCollection(userId: string) {
   return collection(db, "users", userId, "notes");
+}
+
+function getNoteFoldersCollection(userId: string) {
+  return collection(db, "users", userId, "noteFolders");
 }
 
 export function subscribeToNotes(
@@ -99,13 +126,41 @@ export function subscribeToNotes(
   );
 }
 
+export function subscribeToNoteFolders(
+  userId: string,
+  callback: (folders: NoteFolderRecord[]) => void,
+  onError?: (error: Error) => void
+) {
+  return onSnapshot(
+    getNoteFoldersCollection(userId),
+    (snapshot: QuerySnapshot<DocumentData>) => {
+      callback(snapshot.docs.map(normalizeFolder));
+    },
+    (error) => {
+      onError?.(error);
+    }
+  );
+}
+
+export async function createNoteFolder(userId: string, name: string) {
+  const folderRef = await addDoc(getNoteFoldersCollection(userId), {
+    name: name.trim(),
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+
+  return folderRef.id;
+}
+
 export async function createNote(userId: string) {
   const noteRef = await addDoc(getNotesCollection(userId), {
     title: "",
     tags: [],
+    folderId: "",
     pinned: false,
     bodyHtml: "",
     bodyText: "",
+    deletedAt: null,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -117,6 +172,7 @@ export async function updateNote(userId: string, noteId: string, draft: NoteDraf
   await updateDoc(doc(db, "users", userId, "notes", noteId), {
     title: draft.title,
     tags: draft.tags,
+    folderId: draft.folderId,
     pinned: draft.pinned,
     bodyText: draft.bodyText,
     bodyHtml: textToHtml(draft.bodyText),
@@ -124,6 +180,35 @@ export async function updateNote(userId: string, noteId: string, draft: NoteDraf
   });
 }
 
+export async function moveNotesToFolder(userId: string, noteIds: string[], folderId: string) {
+  await Promise.all(
+    noteIds.map((noteId) =>
+      updateDoc(doc(db, "users", userId, "notes", noteId), {
+        folderId,
+        updatedAt: serverTimestamp(),
+      })
+    )
+  );
+}
+
 export async function removeNote(userId: string, noteId: string) {
   await deleteDoc(doc(db, "users", userId, "notes", noteId));
+}
+
+export async function softDeleteNotes(userId: string, noteIds: string[]) {
+  await Promise.all(noteIds.map((noteId) => softDeleteNote(userId, noteId)));
+}
+
+export async function softDeleteNote(userId: string, noteId: string) {
+  await updateDoc(doc(db, "users", userId, "notes", noteId), {
+    deletedAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function restoreNote(userId: string, noteId: string) {
+  await updateDoc(doc(db, "users", userId, "notes", noteId), {
+    deletedAt: null,
+    updatedAt: serverTimestamp(),
+  });
 }
