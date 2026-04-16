@@ -152,6 +152,17 @@ export async function createNoteFolder(userId: string, name: string) {
   return folderRef.id;
 }
 
+export async function updateNoteFolder(userId: string, folderId: string, name: string) {
+  await updateDoc(doc(db, "users", userId, "noteFolders", folderId), {
+    name: name.trim(),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function deleteNoteFolder(userId: string, folderId: string) {
+  await deleteDoc(doc(db, "users", userId, "noteFolders", folderId));
+}
+
 export async function createNote(userId: string) {
   const noteRef = await addDoc(getNotesCollection(userId), {
     title: "",
@@ -195,6 +206,10 @@ export async function removeNote(userId: string, noteId: string) {
   await deleteDoc(doc(db, "users", userId, "notes", noteId));
 }
 
+export async function removeNotes(userId: string, noteIds: string[]) {
+  await Promise.all(noteIds.map((noteId) => removeNote(userId, noteId)));
+}
+
 export async function softDeleteNotes(userId: string, noteIds: string[]) {
   await Promise.all(noteIds.map((noteId) => softDeleteNote(userId, noteId)));
 }
@@ -211,4 +226,8 @@ export async function restoreNote(userId: string, noteId: string) {
     deletedAt: null,
     updatedAt: serverTimestamp(),
   });
+}
+
+export async function restoreNotes(userId: string, noteIds: string[]) {
+  await Promise.all(noteIds.map((noteId) => restoreNote(userId, noteId)));
 }

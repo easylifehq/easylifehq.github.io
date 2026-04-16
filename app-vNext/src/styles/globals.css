@@ -1601,10 +1601,36 @@ textarea::placeholder {
   position: relative;
 }
 
+.note-card-selected {
+  border-color: var(--shell-accent);
+  box-shadow: 0 16px 38px color-mix(in srgb, var(--shell-accent) 20%, transparent);
+}
+
 .note-card-link {
   display: grid;
   gap: 0.8rem;
   color: inherit;
+}
+
+.note-card-badges {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.note-folder-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.65rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 8px;
+  background: var(--ui-button-secondary-bg, var(--shell-input-bg));
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  color: var(--ui-button-secondary-text, var(--shell-page-text));
+  font-size: 0.78rem;
+  font-weight: 900;
 }
 
 .notes-select-row {
@@ -1780,6 +1806,10 @@ textarea::placeholder {
 
 .notes-trash-actions {
   justify-content: flex-end;
+}
+
+.notes-trash-bulk-bar {
+  margin-top: 1rem;
 }
 
 .task-composer {

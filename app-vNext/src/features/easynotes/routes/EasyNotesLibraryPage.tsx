@@ -21,6 +21,8 @@ export function EasyNotesLibraryPage() {
     folders,
     addNote,
     addFolder,
+    renameFolder,
+    deleteFolder,
     deleteNotes,
     moveNotesToFolder,
     cleanUpEmptyNotes,
@@ -32,6 +34,11 @@ export function EasyNotesLibraryPage() {
   const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
   const [bulkFolderId, setBulkFolderId] = useState("");
   const [cleanupMessage, setCleanupMessage] = useState("");
+
+  const folderNameById = useMemo(
+    () => new Map(folders.map((folder) => [folder.id, folder.name])),
+    [folders]
+  );
 
   const filteredNotes = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -62,6 +69,28 @@ export function EasyNotesLibraryPage() {
     }
   }
 
+  async function handleRenameFolder() {
+    if (!selectedFolderId) return;
+    const currentFolder = folders.find((folder) => folder.id === selectedFolderId);
+    const folderName = window.prompt("Folder name", currentFolder?.name || "");
+    if (!folderName?.trim()) return;
+
+    await renameFolder(selectedFolderId, folderName);
+  }
+
+  async function handleDeleteFolder() {
+    if (!selectedFolderId) return;
+    const currentFolder = folders.find((folder) => folder.id === selectedFolderId);
+    const confirmed = window.confirm(
+      `Delete ${currentFolder?.name || "this folder"}? Notes inside it will move to No folder.`
+    );
+    if (!confirmed) return;
+
+    await deleteFolder(selectedFolderId);
+    setSelectedFolderId("");
+    setSelectedNoteIds([]);
+  }
+
   function toggleSelectedNote(noteId: string) {
     setSelectedNoteIds((current) =>
       current.includes(noteId) ? current.filter((id) => id !== noteId) : [...current, noteId]
@@ -77,8 +106,17 @@ export function EasyNotesLibraryPage() {
 
   async function handleBulkDelete() {
     if (!selectedNoteIds.length) return;
+    const confirmed = window.confirm(
+      `Move ${selectedNoteIds.length} selected note${selectedNoteIds.length === 1 ? "" : "s"} to Recently deleted?`
+    );
+    if (!confirmed) return;
+
     await deleteNotes(selectedNoteIds);
     setSelectedNoteIds([]);
+  }
+
+  function handleSelectVisible() {
+    setSelectedNoteIds(filteredNotes.map((note) => note.id));
   }
 
   async function handleCleanup() {
@@ -166,9 +204,26 @@ export function EasyNotesLibraryPage() {
               </button>
             </div>
           ) : (
-            <p className="helper-copy notes-control-helper">
-              Select notes to move them into folders or send them to Recently deleted.
-            </p>
+            <div className="notes-bulk-bar">
+              {selectedFolderId ? (
+                <>
+                  <button type="button" className="ghost-button compact-button" onClick={() => void handleRenameFolder()}>
+                    Rename folder
+                  </button>
+                  <button type="button" className="ghost-button compact-button" onClick={() => void handleDeleteFolder()}>
+                    Delete folder
+                  </button>
+                </>
+              ) : null}
+              <button
+                type="button"
+                className="ghost-button compact-button"
+                onClick={handleSelectVisible}
+                disabled={!filteredNotes.length}
+              >
+                Select visible
+              </button>
+            </div>
           )}
         </div>
 
@@ -186,7 +241,10 @@ export function EasyNotesLibraryPage() {
           ) : null}
 
           {filteredNotes.map((note) => (
-            <article key={note.id} className="note-card-vnext note-card-selectable">
+            <article
+              key={note.id}
+              className={`note-card-vnext note-card-selectable${selectedNoteIds.includes(note.id) ? " note-card-selected" : ""}`}
+            >
               <label className="notes-select-row">
                 <input
                   type="checkbox"
@@ -201,7 +259,12 @@ export function EasyNotesLibraryPage() {
                   <strong>{note.title.trim() || "Untitled note"}</strong>
                   <p>{formatDate(note.updatedAt || note.createdAt)}</p>
                 </div>
-                {note.pinned ? <span className="note-pin-badge">Pinned</span> : null}
+                <div className="note-card-badges">
+                  {note.folderId && folderNameById.get(note.folderId) ? (
+                    <span className="note-folder-badge">{folderNameById.get(note.folderId)}</span>
+                  ) : null}
+                  {note.pinned ? <span className="note-pin-badge">Pinned</span> : null}
+                </div>
               </div>
 
               <p className="note-card-body">{note.bodyText.trim() || "No content yet."}</p>

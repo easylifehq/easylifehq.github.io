@@ -9,13 +9,17 @@ import {
 import {
   createNote,
   createNoteFolder,
+  deleteNoteFolder,
   moveNotesToFolder,
   removeNote,
+  removeNotes,
   restoreNote,
+  restoreNotes,
   softDeleteNote,
   softDeleteNotes,
   subscribeToNoteFolders,
   subscribeToNotes,
+  updateNoteFolder,
   updateNote,
   type NoteDraft,
   type NoteFolderRecord,
@@ -32,13 +36,17 @@ type EasyNotesContextValue = {
   error: string;
   addNote: () => Promise<string | null>;
   addFolder: (name: string) => Promise<string | null>;
+  renameFolder: (folderId: string, name: string) => Promise<void>;
+  deleteFolder: (folderId: string) => Promise<void>;
   saveNote: (noteId: string, draft: NoteDraft) => Promise<void>;
   deleteNote: (noteId: string) => Promise<void>;
   deleteNotes: (noteIds: string[]) => Promise<void>;
   moveNotesToFolder: (noteIds: string[], folderId: string) => Promise<void>;
   cleanUpEmptyNotes: () => Promise<number>;
   restoreNote: (noteId: string) => Promise<void>;
+  restoreNotes: (noteIds: string[]) => Promise<void>;
   permanentlyDeleteNote: (noteId: string) => Promise<void>;
+  permanentlyDeleteNotes: (noteIds: string[]) => Promise<void>;
   createTaskDraftsFromText: (payload: { noteTitle: string; text: string }) => Promise<number>;
 };
 
@@ -195,6 +203,29 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
     return folderId;
   }
 
+  async function renameFolderForUser(folderId: string, name: string) {
+    if (!user) return;
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
+
+    await updateNoteFolder(user.uid, folderId, trimmedName);
+    setFolders((current) =>
+      sortFolders(current.map((folder) => (folder.id === folderId ? { ...folder, name: trimmedName } : folder)))
+    );
+  }
+
+  async function deleteFolderForUser(folderId: string) {
+    if (!user) return;
+    await Promise.all([
+      deleteNoteFolder(user.uid, folderId),
+      moveNotesToFolder(user.uid, notes.filter((note) => note.folderId === folderId).map((note) => note.id), ""),
+    ]);
+    setFolders((current) => current.filter((folder) => folder.id !== folderId));
+    setNotes((current) =>
+      sortNotes(current.map((note) => (note.folderId === folderId ? { ...note, folderId: "" } : note)))
+    );
+  }
+
   async function saveNoteForUser(noteId: string, draft: NoteDraft) {
     if (!user) return;
     await updateNote(user.uid, noteId, draft);
@@ -236,10 +267,22 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
     setDeletedNotes((current) => current.filter((note) => note.id !== noteId));
   }
 
+  async function restoreNotesForUser(noteIds: string[]) {
+    if (!user || !noteIds.length) return;
+    await restoreNotes(user.uid, noteIds);
+    setDeletedNotes((current) => current.filter((note) => !noteIds.includes(note.id)));
+  }
+
   async function permanentlyDeleteNoteForUser(noteId: string) {
     if (!user) return;
     await removeNote(user.uid, noteId);
     setDeletedNotes((current) => current.filter((note) => note.id !== noteId));
+  }
+
+  async function permanentlyDeleteNotesForUser(noteIds: string[]) {
+    if (!user || !noteIds.length) return;
+    await removeNotes(user.uid, noteIds);
+    setDeletedNotes((current) => current.filter((note) => !noteIds.includes(note.id)));
   }
 
   async function createTaskDraftsFromNote(payload: { noteTitle: string; text: string }) {
@@ -272,13 +315,17 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       error,
       addNote: addNoteForUser,
       addFolder: addFolderForUser,
+      renameFolder: renameFolderForUser,
+      deleteFolder: deleteFolderForUser,
       saveNote: saveNoteForUser,
       deleteNote: deleteNoteForUser,
       deleteNotes: deleteNotesForUser,
       moveNotesToFolder: moveNotesToFolderForUser,
       cleanUpEmptyNotes: cleanUpEmptyNotesForUser,
       restoreNote: restoreNoteForUser,
+      restoreNotes: restoreNotesForUser,
       permanentlyDeleteNote: permanentlyDeleteNoteForUser,
+      permanentlyDeleteNotes: permanentlyDeleteNotesForUser,
       createTaskDraftsFromText: createTaskDraftsFromNote,
     }),
     [notes, deletedNotes, folders, isLoading, error]

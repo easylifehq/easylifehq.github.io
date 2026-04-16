@@ -15,9 +15,18 @@ function formatDate(value: Date | null) {
 }
 
 export function EasyNotesTrashPage() {
-  const { deletedNotes, isLoading, error, restoreNote, permanentlyDeleteNote } = useEasyNotes();
+  const {
+    deletedNotes,
+    isLoading,
+    error,
+    restoreNote,
+    restoreNotes,
+    permanentlyDeleteNote,
+    permanentlyDeleteNotes,
+  } = useEasyNotes();
   const [busyNoteId, setBusyNoteId] = useState("");
   const [search, setSearch] = useState("");
+  const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
 
   const filteredNotes = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -27,6 +36,12 @@ export function EasyNotesTrashPage() {
       [note.title, note.bodyText, ...note.tags].join(" ").toLowerCase().includes(term)
     );
   }, [deletedNotes, search]);
+
+  function toggleSelectedNote(noteId: string) {
+    setSelectedNoteIds((current) =>
+      current.includes(noteId) ? current.filter((id) => id !== noteId) : [...current, noteId]
+    );
+  }
 
   async function handleRestore(noteId: string) {
     setBusyNoteId(noteId);
@@ -43,6 +58,23 @@ export function EasyNotesTrashPage() {
     setBusyNoteId("");
   }
 
+  async function handleRestoreSelected() {
+    if (!selectedNoteIds.length) return;
+    await restoreNotes(selectedNoteIds);
+    setSelectedNoteIds([]);
+  }
+
+  async function handlePermanentDeleteSelected() {
+    if (!selectedNoteIds.length) return;
+    const confirmed = window.confirm(
+      `Permanently delete ${selectedNoteIds.length} selected note${selectedNoteIds.length === 1 ? "" : "s"}? This cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    await permanentlyDeleteNotes(selectedNoteIds);
+    setSelectedNoteIds([]);
+  }
+
   return (
     <PageSection eyebrow="EasyNotes" title="Recently deleted">
       <div className="notes-library-toolbar">
@@ -56,12 +88,43 @@ export function EasyNotesTrashPage() {
           />
         </label>
 
-        <Link to="/app/easynotes" className="button-secondary">
-          Back to notes
-        </Link>
+        <div className="notes-toolbar-actions">
+          <button
+            type="button"
+            className="button-secondary"
+            onClick={() => setSelectedNoteIds(filteredNotes.map((note) => note.id))}
+            disabled={!filteredNotes.length}
+          >
+            Select visible
+          </button>
+          <Link to="/app/easynotes" className="button-secondary">
+            Back to notes
+          </Link>
+        </div>
       </div>
 
       {error ? <p className="error-copy">{error}</p> : null}
+
+      {selectedNoteIds.length ? (
+        <div className="notes-bulk-bar notes-trash-bulk-bar">
+          <strong>
+            {selectedNoteIds.length} selected
+          </strong>
+          <button type="button" className="primary-button compact-button" onClick={() => void handleRestoreSelected()}>
+            Restore selected
+          </button>
+          <button
+            type="button"
+            className="ghost-button compact-button"
+            onClick={() => void handlePermanentDeleteSelected()}
+          >
+            Delete forever
+          </button>
+          <button type="button" className="ghost-button compact-button" onClick={() => setSelectedNoteIds([])}>
+            Clear
+          </button>
+        </div>
+      ) : null}
 
       <div className="notes-library-grid">
         {isLoading ? <p className="helper-copy">Loading deleted notes...</p> : null}
@@ -74,7 +137,18 @@ export function EasyNotesTrashPage() {
         ) : null}
 
         {filteredNotes.map((note) => (
-          <article key={note.id} className="note-card-vnext note-card-trash">
+          <article
+            key={note.id}
+            className={`note-card-vnext note-card-trash note-card-selectable${selectedNoteIds.includes(note.id) ? " note-card-selected" : ""}`}
+          >
+            <label className="notes-select-row">
+              <input
+                type="checkbox"
+                checked={selectedNoteIds.includes(note.id)}
+                onChange={() => toggleSelectedNote(note.id)}
+              />
+              <span>Select</span>
+            </label>
             <div className="note-card-top">
               <div>
                 <strong>{note.title.trim() || "Untitled note"}</strong>
