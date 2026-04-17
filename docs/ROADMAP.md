@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.6.0`
-- Current planning target: `3.6.0` EasyStatistics Hub
-- Next feature target: `3.7.0` EasyProject and Pipeline Routing
+- App package version: `3.7.0`
+- Current planning target: `3.7.0` EasyProject and Pipeline Routing
+- Next feature target: `3.8.0` AI Assistance Layer
 
 ## Working Rules
 
@@ -82,7 +82,7 @@ Goal: Minimize the time between having a thought and saving it.
 
 ### 3.5.0 EasyWorkout Redesign
 
-Status: In Progress
+Status: Done
 
 Goal: Separate passive workout logging from active workout mode.
 
@@ -112,15 +112,15 @@ Goal: Keep statistics fun without making primary pages feel cramped.
 
 ### 3.7.0 EasyProject and Pipeline Routing
 
-Status: Planned
+Status: In Progress
 
 Goal: Let tasks and notes move into larger workflows when they belong there.
 
-- Tasks can be sent to EasyProject.
-- Tasks can be sent to EasyPipeline.
+- Done: Tasks can be sent to EasyProject.
+- Done: Tasks can be sent to EasyPipeline.
 - Notes can create project-ready task groups.
-- Applicable tasks offer a clear send-to-project or send-to-pipeline action.
-- Routing preserves the original source note or task context.
+- Done: Applicable tasks offer a clear send-to-project or send-to-pipeline action.
+- Done: Routing preserves the original source task context.
 
 ### 3.8.0 AI Assistance Layer
 

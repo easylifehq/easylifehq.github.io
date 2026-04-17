@@ -2,6 +2,11 @@ import { useEffect, useState, type FormEvent } from "react";
 import type { PlanningState } from "@/lib/firestore/calendarTaskBlocks";
 import type { TaskDraft, TaskRecord } from "@/lib/firestore/tasks";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
+import { auth } from "@/lib/firebase/client";
+import { createApplication } from "@/lib/firestore/applications";
+import { createProject } from "@/lib/firestore/projects";
+import { createProjectSection } from "@/lib/firestore/projectSections";
+import { createProjectTaskLink } from "@/lib/firestore/projectTaskLinks";
 import {
   addMinutes,
   combineDateAndTime,
@@ -44,6 +49,8 @@ export function TaskDrawer({
   const [planningState, setPlanningState] = useState<PlanningState>("scheduled");
   const [scheduleMessage, setScheduleMessage] = useState("");
   const [isScheduling, setIsScheduling] = useState(false);
+  const [routingMessage, setRoutingMessage] = useState("");
+  const [isRouting, setIsRouting] = useState(false);
 
   useEffect(() => {
     if (task) {
@@ -58,6 +65,7 @@ export function TaskDrawer({
       setScheduleDuration(String(task.estimatedLength ?? 30));
       setPlanningState(task.linkedCalendarBlockIds.length ? "accepted" : "scheduled");
       setScheduleMessage("");
+      setRoutingMessage("");
     }
   }, [task]);
 
@@ -107,6 +115,69 @@ export function TaskDrawer({
       setScheduleMessage("Sent to EasyCalendar.");
     } finally {
       setIsScheduling(false);
+    }
+  }
+
+  async function handleSendToProject() {
+    const user = auth.currentUser;
+    if (!user || isRouting) return;
+
+    setIsRouting(true);
+    try {
+      const projectId = await createProject(user.uid, {
+        title: currentTask.title || "Untitled project",
+        description: [
+          "Created from EasyList.",
+          currentTask.notes ? `Source task notes: ${currentTask.notes}` : "",
+        ].filter(Boolean).join("\n\n"),
+        targetDate: currentTask.dueDate ? toDateInputValue(currentTask.dueDate) : "",
+        status: "active",
+      });
+      const sectionId = await createProjectSection(user.uid, {
+        projectId,
+        title: "Next steps",
+        order: 1,
+      });
+      await createProjectTaskLink(user.uid, {
+        projectId,
+        sectionId,
+        taskId: currentTask.id,
+        order: 1,
+        parentLabel: "Routed from EasyList",
+      });
+      setRoutingMessage("Sent to EasyProjects with the original task linked.");
+    } finally {
+      setIsRouting(false);
+    }
+  }
+
+  async function handleSendToPipeline() {
+    const user = auth.currentUser;
+    if (!user || isRouting) return;
+
+    setIsRouting(true);
+    try {
+      await createApplication(user.uid, {
+        company: currentTask.category || "Pipeline item",
+        title: currentTask.title || "Untitled follow-up",
+        status: "follow_up",
+        priority: currentTask.priorityTier <= 4 ? "high" : currentTask.priorityTier >= 8 ? "low" : "medium",
+        offerResponse: "",
+        dateApplied: "",
+        nextFollowUp: currentTask.dueDate ? toDateInputValue(currentTask.dueDate) : "",
+        location: "",
+        link: "",
+        notes: [
+          "Created from EasyList task.",
+          currentTask.notes,
+          `Source task id: ${currentTask.id}`,
+        ].filter(Boolean).join("\n\n"),
+        contactName: "",
+        contactEmail: "",
+      });
+      setRoutingMessage("Sent to EasyPipeline as a follow-up item.");
+    } finally {
+      setIsRouting(false);
     }
   }
 
@@ -292,6 +363,37 @@ export function TaskDrawer({
               {isScheduling ? "Sending..." : "Send to EasyCalendar"}
             </button>
           </div>
+        </section>
+
+        <section className="drawer-link-card">
+          <div className="panel-header">
+            <p className="eyebrow">Routing</p>
+            <h2>Send this task into a bigger workflow</h2>
+            <p>
+              Keep the source task intact while creating the project or pipeline
+              context around it.
+            </p>
+          </div>
+
+          <div className="drawer-actions-vnext">
+            <button
+              type="button"
+              className="button-secondary"
+              onClick={() => void handleSendToProject()}
+              disabled={isRouting}
+            >
+              Send to EasyProjects
+            </button>
+            <button
+              type="button"
+              className="button-secondary"
+              onClick={() => void handleSendToPipeline()}
+              disabled={isRouting}
+            >
+              Send to EasyPipeline
+            </button>
+          </div>
+          {routingMessage ? <p className="helper-copy">{routingMessage}</p> : null}
         </section>
       </aside>
     </>

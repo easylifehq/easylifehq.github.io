@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.7.0
+
+### Added
+
+- Added manual EasyList task routing to EasyProjects from the task drawer.
+- Added manual EasyList task routing to EasyPipeline from the task drawer.
+- Routed items preserve source task context in project or pipeline notes.
+
 ## 3.6.0
 
 ### Added
