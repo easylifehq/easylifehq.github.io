@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import type { PriorityTier, TaskDraft } from "@/lib/firestore/tasks";
 import { getPriorityMeta, normalizePriorityTier, PRIORITY_TIERS } from "@/features/easylist/lib/taskUtils";
 import { auth } from "@/lib/firebase/client";
@@ -322,6 +322,7 @@ async function analyzeBrainDumpWithAi(brainDump: string) {
 }
 
 export function TaskComposer({ onSubmit }: TaskComposerProps) {
+  const firstTaskInputRef = useRef<HTMLInputElement | null>(null);
   const [rows, setRows] = useState<TaskRowDraft[]>([EMPTY_ROW(), EMPTY_ROW(), EMPTY_ROW()]);
   const [brainDump, setBrainDump] = useState("");
   const [mergeMode, setMergeMode] = useState<"replace" | "append">("replace");
@@ -338,6 +339,8 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
     if (savedBrainDump) {
       setBrainDump(savedBrainDump);
     }
+
+    window.setTimeout(() => firstTaskInputRef.current?.focus(), 0);
   }, []);
 
   useEffect(() => {
@@ -519,6 +522,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
             <label className="field-stack task-row-field">
               <span>Task</span>
               <input
+                ref={index === 0 ? firstTaskInputRef : undefined}
                 type="text"
                 value={row.title}
                 onChange={(event) => updateRow(row.id, "title", event.target.value)}

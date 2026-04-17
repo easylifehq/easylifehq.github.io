@@ -12,10 +12,12 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 - Added a Resume writing action to EasyNotes that opens the most recently edited note.
 - Added a Make tasks button in the EasyNotes editor so note lines can be sent to EasyList quickly.
+- Added a direct blank-note route so HQ and EasyNotes can open a fresh writing pad immediately.
 
 ### Changed
 
 - EasyNotes-created tasks now use the current 1-10 urgency scale labels.
+- EasyList now focuses the first task row when the add-task page opens.
 
 ## 3.3.0
 

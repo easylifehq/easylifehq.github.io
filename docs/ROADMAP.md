@@ -71,6 +71,8 @@ Status: In Progress
 Goal: Minimize the time between having a thought and saving it.
 
 - Started: Creating a blank note, task, workout, event, or project item takes the fewest practical clicks.
+- Done: EasyNotes has a direct blank-note route for one-click writing from HQ and the notes library.
+- Done: EasyList focuses the first task row when the add-task page opens.
 - Done: Returning to EasyNotes offers a Resume writing action for the previously open note.
 - Done: EasyNotes has a button to make tasks from a note.
 - Done: EasyNotes can transform note lines into a series of tasks.

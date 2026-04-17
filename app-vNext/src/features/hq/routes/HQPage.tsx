@@ -121,7 +121,7 @@ export function HQPage() {
             <span className="info-pill">1</span>
             <strong>Add what is on your mind</strong>
           </Link>
-          <Link className="hq-link-card" to="/app/easynotes">
+          <Link className="hq-link-card" to="/app/easynotes/new">
             <span className="info-pill">2</span>
             <strong>Write messy thoughts</strong>
           </Link>
@@ -189,8 +189,8 @@ export function HQPage() {
               </Link>
             ) : null}
             {isAppVisible("easynotes") ? (
-              <Link className="hq-link-card" to="/app/easynotes">
-                <strong>Create or open notes</strong>
+              <Link className="hq-link-card" to="/app/easynotes/new">
+                <strong>Blank note</strong>
               </Link>
             ) : null}
             {isAppVisible("easypipeline") ? (

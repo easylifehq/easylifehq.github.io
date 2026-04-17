@@ -168,9 +168,9 @@ export function EasyNotesLibraryPage() {
             <Link to="/app/easynotes/trash" className="button-secondary">
               Recently deleted
             </Link>
-            <button type="button" className="primary-button" onClick={() => void handleCreateNote()}>
-              Create Note
-            </button>
+            <Link to="/app/easynotes/new" className="primary-button">
+              Blank note
+            </Link>
           </div>
         </div>
 
