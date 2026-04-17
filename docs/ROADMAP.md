@@ -219,6 +219,7 @@ Goal: Make sure the productivity core is stable before expanding the suite.
 - Done: Run a focused QA pass on EasyList, EasyCalendar, EasyNotes, EasyWorkout, EasyProjects, EasyPipeline, and EasyStatistics.
 - Done: Fix small regressions before adding new lifestyle apps.
 - Done: Hold `4.0.0` until the current product core has been tested in real use.
+- Done: Add a manual QA checklist for the full 3.x productivity core.
 
 ### 4.0.0 Suite Expansion
 

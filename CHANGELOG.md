@@ -14,6 +14,7 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 - Mobile task and calendar drawers now use dynamic viewport height and safer sticky headers.
 - The mobile capture close control now uses a clean text glyph.
 - The roadmap now pauses 4.0.0 expansion until the 3.x product core has been tested in real use.
+- Added a 3.x manual QA checklist for testing the full productivity core before 4.0.0 work resumes.
 
 ## 3.13.0
 
