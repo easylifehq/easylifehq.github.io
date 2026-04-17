@@ -17,7 +17,8 @@ export type VisibleAppId =
   | "easypipeline"
   | "easycontacts"
   | "easyprojects"
-  | "easyworkout";
+  | "easyworkout"
+  | "easystatistics";
 
 export type ExperimentalFeatureId =
   | "smartTaskEntry"
@@ -45,6 +46,7 @@ export const defaultShellSettings: UserShellSettings = {
     "easynotes",
     "easycalendar",
     "easyworkout",
+    "easystatistics",
   ],
   experimentalFeatures: [],
   calendarWakeTime: "08:00",
@@ -58,6 +60,7 @@ const validVisibleApps: VisibleAppId[] = [
   "easycontacts",
   "easyprojects",
   "easyworkout",
+  "easystatistics",
 ];
 
 const validExperimentalFeatures: ExperimentalFeatureId[] = [

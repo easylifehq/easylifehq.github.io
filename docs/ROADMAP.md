@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.5.1`
-- Current planning target: `3.5.1` EasyWorkout Polish
-- Next feature target: `3.6.0` EasyStatistics Hub
+- App package version: `3.6.0`
+- Current planning target: `3.6.0` EasyStatistics Hub
+- Next feature target: `3.7.0` EasyProject and Pipeline Routing
 
 ## Working Rules
 
@@ -100,14 +100,14 @@ Goal: Separate passive workout logging from active workout mode.
 
 ### 3.6.0 EasyStatistics Hub
 
-Status: Planned
+Status: In Progress
 
 Goal: Keep statistics fun without making primary pages feel cramped.
 
-- EasyStatistics becomes the main analytics page.
-- Primary app pages show only light, useful summary stats.
-- EasyStatistics has an overall dashboard.
-- EasyStatistics has deeper per-app views for tasks, calendar, notes, workouts, projects, and pipeline.
+- Done: EasyStatistics becomes the main analytics page.
+- Started: Primary app pages show only light, useful summary stats.
+- Done: EasyStatistics has an overall dashboard.
+- Started: EasyStatistics has deeper per-app views for tasks, calendar, notes, workouts, projects, and pipeline.
 - Statistics loading does not bog down the main app experience.
 
 ### 3.7.0 EasyProject and Pipeline Routing

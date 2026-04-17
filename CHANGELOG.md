@@ -6,6 +6,18 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.6.0
+
+### Added
+
+- Added EasyStatistics as a dedicated progress hub.
+- Added weekly overview stats for completed tasks, planned calendar work, fixed events, and workouts.
+- Added EasyStatistics to app navigation and Settings visibility controls.
+
+### Changed
+
+- Moved the version display in Settings forward to the current app version.
+
 ## 3.5.1
 
 ### Changed

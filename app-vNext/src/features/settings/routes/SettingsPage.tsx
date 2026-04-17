@@ -94,6 +94,12 @@ const appVisibilityOptions: Array<{
     home: "Core",
   },
   {
+    id: "easystatistics",
+    label: "EasyStatistics",
+    description: "Core: progress, trends, and deeper cross-app stats.",
+    home: "Core",
+  },
+  {
     id: "easypipeline",
     label: "EasyPipeline",
     description: "Optional: applications, follow-ups, and job-search momentum.",
@@ -477,7 +483,7 @@ export function SettingsPage() {
           </article>
           <article className="mini-panel-vnext">
             <span>Version</span>
-            <strong>3.3.0</strong>
+            <strong>3.6.0</strong>
             <p>Current patch.</p>
           </article>
           <article className="mini-panel-vnext">

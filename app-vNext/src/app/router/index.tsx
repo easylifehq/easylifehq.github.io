@@ -123,6 +123,10 @@ const EasyWorkoutLogPage = lazyNamed(
   () => import("@/features/easyworkout/routes/EasyWorkoutLogPage"),
   "EasyWorkoutLogPage"
 );
+const EasyStatisticsPage = lazyNamed(
+  () => import("@/features/easystatistics/routes/EasyStatisticsPage"),
+  "EasyStatisticsPage"
+);
 const HQPage = lazyNamed(() => import("@/features/hq/routes/HQPage"), "HQPage");
 const EasyCalendarMarketingPage = lazyNamed(
   () => import("@/features/marketing/routes/EasyCalendarMarketingPage"),
@@ -207,6 +211,7 @@ export function AppRouter() {
               <Route path="routines" element={<EasyWorkoutRoutinesPage />} />
               <Route path="log" element={<EasyWorkoutLogPage />} />
             </Route>
+            <Route path="easystatistics" element={<EasyStatisticsPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
         </Route>

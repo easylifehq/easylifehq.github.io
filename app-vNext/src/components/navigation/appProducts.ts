@@ -54,6 +54,12 @@ export const appProductItems: AppProductItem[] = [
     description: "Workout",
   },
   {
+    appId: "easystatistics",
+    href: "/app/easystatistics",
+    label: "EasyStatistics",
+    description: "Stats",
+  },
+  {
     href: "/app/settings",
     label: "Settings",
     description: "Settings",
