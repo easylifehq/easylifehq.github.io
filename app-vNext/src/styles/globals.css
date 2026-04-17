@@ -2541,6 +2541,53 @@ textarea::placeholder {
   margin-top: 1rem;
 }
 
+.routing-suggestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--ui-bg-card, #ffffff) 88%, #d7e5df 12%);
+}
+
+.routing-suggestion.project {
+  background: color-mix(in srgb, var(--ui-bg-card, #ffffff) 86%, #d2e1f1 14%);
+}
+
+.routing-suggestion.pipeline {
+  background: color-mix(in srgb, var(--ui-bg-card, #ffffff) 86%, #f0d8c6 14%);
+}
+
+.routing-suggestion.calm {
+  background: var(--ui-bg-soft, rgba(255, 255, 255, 0.5));
+}
+
+.routing-suggestion h3,
+.routing-suggestion p {
+  margin: 0;
+}
+
+.routing-suggestion h3 {
+  color: var(--app-text);
+  font-size: 1rem;
+}
+
+.routing-suggestion p {
+  color: var(--app-text-secondary);
+}
+
+.routing-suggestion span {
+  display: inline-flex;
+  margin-bottom: 0.25rem;
+  color: var(--app-text-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
 .drawer-link-footer {
   display: grid;
   gap: 0.75rem;
@@ -4018,6 +4065,7 @@ button.calendar-detail-card:disabled {
 
   .triage-actions,
   .capture-header,
+  .routing-suggestion,
   .processor-suggestion,
   .gym-suggestion {
     align-items: stretch;

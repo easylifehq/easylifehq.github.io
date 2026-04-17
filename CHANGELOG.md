@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.13.0
+
+### Added
+
+- EasyList task details now suggest whether a task belongs in EasyProjects or EasyPipeline.
+- Routing suggestions explain the signal and require a user-confirmed send action.
+- Tasks without a strong routing signal now get calm guidance to stay in EasyList for now.
+
 ## 3.12.0
 
 ### Changed

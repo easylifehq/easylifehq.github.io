@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.12.0`
-- Current planning target: `3.12.0` EasyWorkout Polish
-- Next feature target: `3.13.0` AI Routing Suggestions
+- App package version: `3.13.0`
+- Current planning target: `3.13.0` AI Routing Suggestions
+- Next feature target: `3.14.0` Final 3.x Stability Sweep
 - Next major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
 
 ## Working Rules
@@ -199,14 +199,14 @@ Goal: Finish the workout quality-of-life details after the main Start Workout mo
 
 ### 3.13.0 AI Routing Suggestions
 
-Status: Planned
+Status: Done
 
 Goal: Let AI suggest where an item belongs without silently moving anything.
 
-- AI can suggest whether a task belongs in EasyProject.
-- AI can suggest whether a task belongs in EasyPipeline.
-- AI can scan current task, note, and calendar context when appropriate.
-- AI suggestions stay confirm-before-action.
+- Done: AI can suggest whether a task belongs in EasyProject.
+- Done: AI can suggest whether a task belongs in EasyPipeline.
+- Done: AI can scan current task context when appropriate.
+- Done: AI suggestions stay confirm-before-action.
 
 ### 3.14.0 Final 3.x Stability Sweep
 

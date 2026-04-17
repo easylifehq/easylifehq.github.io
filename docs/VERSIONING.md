@@ -4,9 +4,9 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `3.12.0`
-- Next patch target: `3.12.1`
-- Next feature target: `3.13.0`
+- Current app version: `3.13.0`
+- Next patch target: `3.13.1`
+- Next feature target: `3.14.0`
 
 ## What To Update
 
@@ -53,3 +53,8 @@ Before finishing a release batch:
 6. `3.6.0` EasyStatistics Hub.
 7. `3.7.0` EasyProject and Pipeline Routing.
 8. `3.8.0` AI Assistance Layer.
+9. `3.9.0` Calendar Recurrence and Category Customization.
+10. `3.10.0` Settings Navigation Split.
+11. `3.11.0` Notes Library Organization.
+12. `3.12.0` EasyWorkout Polish.
+13. `3.13.0` AI Routing Suggestions.

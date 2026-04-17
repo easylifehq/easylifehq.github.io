@@ -31,6 +31,85 @@ type TaskDrawerProps = {
   onReopen: (taskId: string) => Promise<void>;
 };
 
+type RoutingSuggestion = {
+  destination: "project" | "pipeline";
+  confidence: "strong" | "light";
+  label: string;
+  reason: string;
+};
+
+function includesAny(text: string, words: string[]) {
+  return words.some((word) => text.includes(word));
+}
+
+function getRoutingSuggestion(task: TaskRecord): RoutingSuggestion | null {
+  const searchableText = [
+    task.title,
+    task.category,
+    task.notes,
+  ].join(" ").toLowerCase();
+
+  const pipelineSignals = [
+    "application",
+    "apply",
+    "interview",
+    "resume",
+    "cover letter",
+    "job",
+    "career",
+    "company",
+    "recruiter",
+    "follow up",
+    "follow-up",
+    "offer",
+    "linkedin",
+  ];
+  const projectSignals = [
+    "project",
+    "build",
+    "launch",
+    "plan",
+    "outline",
+    "research",
+    "draft",
+    "organize",
+    "redesign",
+    "study plan",
+    "multi-step",
+    "milestone",
+  ];
+
+  const looksPipeline = includesAny(searchableText, pipelineSignals);
+  const looksProject =
+    includesAny(searchableText, projectSignals) ||
+    Boolean(task.estimatedLength && task.estimatedLength >= 90) ||
+    task.priorityTier <= 3;
+
+  if (looksPipeline) {
+    return {
+      destination: "pipeline",
+      confidence: includesAny(searchableText, ["interview", "application", "resume", "company", "recruiter"])
+        ? "strong"
+        : "light",
+      label: "Send to EasyPipeline?",
+      reason: "This reads like an application, interview, or follow-up item.",
+    };
+  }
+
+  if (looksProject) {
+    return {
+      destination: "project",
+      confidence: task.priorityTier <= 3 || Boolean(task.estimatedLength && task.estimatedLength >= 120)
+        ? "strong"
+        : "light",
+      label: "Send to EasyProjects?",
+      reason: "This looks like it may need steps, context, or a longer work session.",
+    };
+  }
+
+  return null;
+}
+
 export function TaskDrawer({
   task,
   isOpen,
@@ -94,6 +173,7 @@ export function TaskDrawer({
   if (!task) return null;
   const currentTask = task;
   const taskId = currentTask.id;
+  const routingSuggestion = getRoutingSuggestion(currentTask);
 
   async function handleSave(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -407,6 +487,40 @@ export function TaskDrawer({
               context around it.
             </p>
           </div>
+
+          {routingSuggestion ? (
+            <div className={`routing-suggestion ${routingSuggestion.destination}`}>
+              <div>
+                <span>{routingSuggestion.confidence === "strong" ? "Strong suggestion" : "Light suggestion"}</span>
+                <h3>{routingSuggestion.label}</h3>
+                <p>{routingSuggestion.reason}</p>
+              </div>
+              <button
+                type="button"
+                className="primary-button"
+                onClick={() =>
+                  void (routingSuggestion.destination === "project"
+                    ? handleSendToProject()
+                    : handleSendToPipeline())
+                }
+                disabled={isRouting}
+              >
+                {isRouting
+                  ? "Sending..."
+                  : routingSuggestion.destination === "project"
+                    ? "Send to EasyProjects"
+                    : "Send to EasyPipeline"}
+              </button>
+            </div>
+          ) : (
+            <div className="routing-suggestion calm">
+              <div>
+                <span>No loud signal</span>
+                <h3>Keep it in EasyList for now.</h3>
+                <p>You can still route it manually if this turns into something bigger.</p>
+              </div>
+            </div>
+          )}
 
           <div className="task-composer-grid">
             <label className="field-stack">
