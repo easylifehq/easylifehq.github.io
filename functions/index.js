@@ -38,8 +38,8 @@ const taskRowsSchema = {
           },
           priorityTier: {
             type: "integer",
-            enum: [1, 2, 3, 4, 5],
-            description: "1 is highest urgency and 5 is lowest urgency.",
+            enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            description: "1 is highest urgency and 10 is lowest urgency.",
           },
           notes: {
             type: "string",
@@ -114,8 +114,8 @@ const projectPlanSchema = {
                 },
                 priorityTier: {
                   type: "integer",
-                  enum: [1, 2, 3, 4, 5],
-                  description: "1 is highest urgency and 5 is lowest urgency.",
+                  enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                  description: "1 is highest urgency and 10 is lowest urgency.",
                 },
               },
               required: ["title", "notes", "dueDate", "estimatedLength", "priorityTier"],
@@ -148,7 +148,9 @@ function normalizeRow(row) {
     dueDate: typeof row.dueDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(row.dueDate) ? row.dueDate : null,
     estimatedLength:
       Number.isInteger(row.estimatedLength) && row.estimatedLength > 0 ? Math.min(row.estimatedLength, 1440) : null,
-    priorityTier: [1, 2, 3, 4, 5].includes(Number(row.priorityTier)) ? Number(row.priorityTier) : 3,
+    priorityTier: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(Number(row.priorityTier))
+      ? Number(row.priorityTier)
+      : 5,
     notes: String(row.notes || "").trim(),
   };
 }
@@ -162,7 +164,9 @@ function normalizeProjectTask(task) {
       Number.isInteger(task.estimatedLength) && task.estimatedLength > 0
         ? Math.min(task.estimatedLength, 1440)
         : null,
-    priorityTier: [1, 2, 3, 4, 5].includes(Number(task.priorityTier)) ? Number(task.priorityTier) : 3,
+    priorityTier: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(Number(task.priorityTier))
+      ? Number(task.priorityTier)
+      : 5,
   };
 }
 
@@ -193,7 +197,8 @@ const taskExtractionInstructions = [
   "Infer categories from context, not just hashtags. School/work/gym/home/personal/social/finance/health are all acceptable.",
   "Infer due dates only when the text clearly implies them. Convert relative dates using the current date. If unclear, use null.",
   "Infer estimatedLength only from explicit or strongly implied durations. If unclear, use null.",
-  "Use priorityTier 1 only for urgent/asap/critical/must-do-today items; 2 for important or soon; 3 for normal; 4 for backlog/nice-to-have; 5 for someday/low.",
+  "Use the EasyList 1-10 urgency scale: 1 should've been done yesterday/emergency, 2 hair-on-fire urgent, 3 do next, 4 very important, 5 important, 6 normal, 7 soon-ish, 8 when there's room, 9 low simmer, 10 nice to have one day.",
+  "If the user mentions a clear date phrase, return the date in dueDate so the app can show it for review before anything is saved.",
   "Remove duplicates and combine repeated mentions into the clearest single row.",
   "Keep notes short. Notes should help the user remember context, not repeat the title.",
   "Return no more than 20 rows, prioritizing the most actionable or time-sensitive tasks.",
@@ -208,6 +213,7 @@ const projectPlanningInstructions = [
   "Use notes for acceptance details, constraints, or helpful suggestions. Keep notes concise.",
   "If a target date is provided, spread due dates realistically between the current date and target date.",
   "If no target date is provided, use null for due dates unless the user provided a clear date.",
+  "Use the EasyList 1-10 urgency scale for generated tasks: 1 emergency, 5 important, 6 normal, and 10 someday/nice-to-have.",
   "Prefer realistic sequencing: discovery, decisions, creation, review, polish, launch, and follow-up when they fit.",
   "Include risks only when they help the user start smarter. Do not manufacture scary warnings.",
   "Do not create vague filler tasks like 'work on project'. Make every task something the user can act on.",

@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.8.0
+
+### Changed
+
+- Updated AI task extraction and project planning to use the full EasyList 1-10 urgency scale.
+- EasyList brain-dump analysis now calls out detected due-date suggestions before tasks are saved.
+- AI task analysis copy now reinforces that generated rows are editable and confirm-before-action.
+
 ## 3.7.1
 
 ### Changed

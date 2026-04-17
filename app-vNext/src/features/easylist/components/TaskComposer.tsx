@@ -321,6 +321,22 @@ async function analyzeBrainDumpWithAi(brainDump: string) {
   return normalizeAiTaskRows(Array.isArray(payload?.rows) ? payload.rows : []);
 }
 
+function buildAnalysisMessage(parsedRows: TaskRowDraft[], source: "ai" | "local") {
+  const dueDateCount = parsedRows.filter((row) => row.dueDate).length;
+  const intro =
+    source === "ai"
+      ? "AI turned this into editable rows."
+      : "AI was unavailable, so local analysis created editable rows.";
+
+  if (!dueDateCount) {
+    return `${intro} Review them before saving.`;
+  }
+
+  return `${intro} Found ${dueDateCount} date suggestion${
+    dueDateCount === 1 ? "" : "s"
+  }; check the Due column before saving.`;
+}
+
 export function TaskComposer({ onSubmit }: TaskComposerProps) {
   const firstTaskInputRef = useRef<HTMLInputElement | null>(null);
   const [rows, setRows] = useState<TaskRowDraft[]>([EMPTY_ROW(), EMPTY_ROW(), EMPTY_ROW()]);
@@ -415,18 +431,15 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
       const aiRows = await analyzeBrainDumpWithAi(brainDump);
       const parsedRows = aiRows?.length ? aiRows : parseBrainDump(brainDump);
       applyParsedRows(parsedRows);
-      setAnalysisMessage(
-        aiRows?.length
-          ? "AI turned this into editable rows."
-          : "AI was unavailable, so local analysis created editable rows."
-      );
+      setAnalysisMessage(buildAnalysisMessage(parsedRows, aiRows?.length ? "ai" : "local"));
     } catch (error) {
       const parsedRows = parseBrainDump(brainDump);
       applyParsedRows(parsedRows);
+      const fallbackMessage = buildAnalysisMessage(parsedRows, "local");
       setAnalysisMessage(
         error instanceof Error
-          ? `${error.message} Local analysis created editable rows instead.`
-          : "Used local analysis instead."
+          ? `${error.message} ${fallbackMessage}`
+          : fallbackMessage
       );
     } finally {
       setIsAnalyzing(false);
@@ -500,8 +513,8 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
           </button>
           <span className="helper-copy">
             {isAnalyzing
-              ? "AI is finding the actual tasks and turning them into rows."
-              : analysisMessage || "Paste a messy paragraph. AI will pull out editable task rows."}
+              ? "AI is finding the actual tasks, dates, estimates, and urgency levels."
+              : analysisMessage || "Paste a messy paragraph. AI will pull out editable task rows for you to approve."}
           </span>
         </div>
       </div>

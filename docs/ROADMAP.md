@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.7.1`
-- Current planning target: `3.7.1` EasyProject and Pipeline Routing Polish
-- Next feature target: `3.8.0` AI Assistance Layer
+- App package version: `3.8.0`
+- Current planning target: `3.8.0` AI Assistance Layer
+- Next feature target: `3.9.0` Calendar Recurrence and Category Customization
 
 ## Working Rules
 
@@ -112,7 +112,7 @@ Goal: Keep statistics fun without making primary pages feel cramped.
 
 ### 3.7.0 EasyProject and Pipeline Routing
 
-Status: In Progress
+Status: Done
 
 Goal: Let tasks and notes move into larger workflows when they belong there.
 
@@ -125,16 +125,17 @@ Goal: Let tasks and notes move into larger workflows when they belong there.
 
 ### 3.8.0 AI Assistance Layer
 
-Status: Planned
+Status: In Progress
 
 Goal: Add helpful suggestions after the manual systems are stable.
 
 - AI scans current notes, tasks, and calendar data when appropriate.
-- AI detects date phrases like "prep for exam on Tuesday."
+- Done: AI detects date phrases like "prep for exam on Tuesday" in EasyList brain dumps.
+- Started: AI date suggestions stay editable and visible before tasks are saved.
 - AI asks whether detected dates should become calendar events.
-- AI can break notes into suggested tasks.
+- Done: AI can break notes or brain dumps into suggested tasks.
 - AI can suggest whether an item belongs in EasyProject or EasyPipeline.
-- AI suggestions are confirm-before-action, never automatic silent changes.
+- Started: AI suggestions are confirm-before-action, never automatic silent changes.
 
 ## Backlog by Area
 
