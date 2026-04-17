@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEasyNotes } from "@/features/easynotes/EasyNotesContext";
 import { useSettings } from "@/features/settings/SettingsContext";
-import { createTask } from "@/lib/firestore/tasks";
-import { auth } from "@/lib/firebase/client";
+
+const lastOpenNoteStorageKey = "easynotes:lastOpenNoteId";
 
 function extractActionSuggestions(value: string) {
   return value
@@ -20,7 +20,7 @@ function extractActionSuggestions(value: string) {
 export function EasyNotesEditorPage() {
   const navigate = useNavigate();
   const { noteId = "" } = useParams();
-  const { notes, folders, isLoading, saveNote, deleteNote } = useEasyNotes();
+  const { notes, folders, isLoading, saveNote, deleteNote, createTaskDraftsFromText } = useEasyNotes();
   const { isExperimentalFeatureEnabled } = useSettings();
   const note = useMemo(() => notes.find((entry) => entry.id === noteId) || null, [notes, noteId]);
   const activeNoteId = note?.id || "";
@@ -31,6 +31,7 @@ export function EasyNotesEditorPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [processorMessage, setProcessorMessage] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [isCreatingTasks, setIsCreatingTasks] = useState(false);
   const saveTimeoutRef = useRef<number | null>(null);
   const hydratedNoteIdRef = useRef<string | null>(null);
   const noteMetaRef = useRef({ tags: [] as string[], pinned: false });
@@ -58,6 +59,11 @@ export function EasyNotesEditorPage() {
       folderId: note.folderId,
     };
   }, [note]);
+
+  useEffect(() => {
+    if (!activeNoteId) return;
+    window.localStorage.setItem(lastOpenNoteStorageKey, activeNoteId);
+  }, [activeNoteId]);
 
   useEffect(() => {
     if (!activeNoteId) return;
@@ -132,22 +138,20 @@ export function EasyNotesEditorPage() {
     );
   }
 
-  async function createSuggestedTask(title: string) {
-    const user = auth.currentUser;
-    if (!user) return;
-
-    await createTask(user.uid, {
-      title,
-      notes: `Extracted from note: ${title || note?.title || "Untitled note"}`,
-      category: "Notes",
-      estimatedLength: null,
-      priorityTier: 3,
-      priorityLabel: "Medium",
-      dueDate: null,
-      recurring: false,
+  async function handleCreateTasksFromNote() {
+    if (!note || isCreatingTasks) return;
+    setIsCreatingTasks(true);
+    const count = await createTaskDraftsFromText({
+      noteTitle: title || note.title,
+      text: suggestions.length ? suggestions.join("\n") : bodyText,
     });
-    setSuggestions((current) => current.filter((entry) => entry !== title));
-    setProcessorMessage("Task created. Nothing else was auto-created.");
+    setIsCreatingTasks(false);
+    setSuggestions([]);
+    setProcessorMessage(
+      count
+        ? `${count} task${count === 1 ? "" : "s"} sent to EasyList.`
+        : "Write each task on its own line, then try again."
+    );
   }
 
   return (
@@ -162,6 +166,14 @@ export function EasyNotesEditorPage() {
               Process note
             </button>
           ) : null}
+          <button
+            type="button"
+            className="primary-button compact-button"
+            onClick={() => void handleCreateTasksFromNote()}
+            disabled={isCreatingTasks || !bodyText.trim()}
+          >
+            {isCreatingTasks ? "Sending..." : "Make tasks"}
+          </button>
           {saveMessage ? <span>{saveMessage}</span> : null}
         </div>
       </div>
@@ -217,9 +229,7 @@ export function EasyNotesEditorPage() {
               {suggestions.map((suggestion) => (
                 <article key={suggestion} className="mini-panel-vnext processor-suggestion">
                   <strong>{suggestion}</strong>
-                  <button type="button" className="primary-button compact-button" onClick={() => void createSuggestedTask(suggestion)}>
-                    Create task
-                  </button>
+                  <span className="helper-copy">Ready for EasyList</span>
                 </article>
               ))}
             </div>

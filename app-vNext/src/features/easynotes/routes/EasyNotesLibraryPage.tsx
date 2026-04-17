@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyNotes } from "@/features/easynotes/EasyNotesContext";
 
+const lastOpenNoteStorageKey = "easynotes:lastOpenNoteId";
+
 function formatDate(value: Date | null) {
   if (!value) return "Just now";
 
@@ -34,6 +36,7 @@ export function EasyNotesLibraryPage() {
   const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
   const [bulkFolderId, setBulkFolderId] = useState("");
   const [cleanupMessage, setCleanupMessage] = useState("");
+  const [lastOpenNoteId] = useState(() => window.localStorage.getItem(lastOpenNoteStorageKey) || "");
 
   const folderNameById = useMemo(
     () => new Map(folders.map((folder) => [folder.id, folder.name])),
@@ -51,6 +54,11 @@ export function EasyNotesLibraryPage() {
       return matchesFolder && matchesSearch;
     });
   }, [notes, search, selectedFolderId]);
+
+  const lastOpenNote = useMemo(
+    () => notes.find((note) => note.id === lastOpenNoteId) || notes[0] || null,
+    [notes, lastOpenNoteId]
+  );
 
   async function handleCreateNote() {
     const noteId = await addNote();
@@ -146,6 +154,11 @@ export function EasyNotesLibraryPage() {
           </label>
 
           <div className="notes-toolbar-actions">
+            {lastOpenNote ? (
+              <Link to={`/app/easynotes/${lastOpenNote.id}`} className="primary-button">
+                Resume writing
+              </Link>
+            ) : null}
             <button type="button" className="button-secondary" onClick={() => void handleCreateFolder()}>
               New folder
             </button>

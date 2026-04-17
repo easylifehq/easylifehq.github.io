@@ -296,8 +296,8 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       notes: `Drafted from EasyNotes: ${payload.noteTitle || "Untitled note"}`,
       category: "EasyNotes",
       estimatedLength: null,
-      priorityTier: 3,
-      priorityLabel: "Golden Gator",
+      priorityTier: 5,
+      priorityLabel: "Important",
       dueDate: null,
       recurring: false,
     }));

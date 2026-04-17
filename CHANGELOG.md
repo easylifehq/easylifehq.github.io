@@ -6,6 +6,17 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.4.0
+
+### Added
+
+- Added a Resume writing action to EasyNotes that opens the most recently edited note.
+- Added a Make tasks button in the EasyNotes editor so note lines can be sent to EasyList quickly.
+
+### Changed
+
+- EasyNotes-created tasks now use the current 1-10 urgency scale labels.
+
 ## 3.3.0
 
 ### Added

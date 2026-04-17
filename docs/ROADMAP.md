@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.3.0`
+- App package version: `3.4.0`
 - Current planning target: `3.4.0` Fast Capture and Notes Integration
-- Next feature target: `3.4.0` Fast Capture and Notes Integration
+- Next feature target: `3.5.0` EasyWorkout Redesign
 
 ## Working Rules
 
@@ -66,15 +66,15 @@ Goal: Give Calendar a clearer structure and move customization into organized se
 
 ### 3.4.0 Fast Capture and Notes Integration
 
-Status: Planned
+Status: In Progress
 
 Goal: Minimize the time between having a thought and saving it.
 
-- Creating a blank note, task, workout, event, or project item takes the fewest practical clicks.
-- Returning to EasyNotes restores the previously open note.
-- EasyNotes has a button to make a task from a note.
-- EasyNotes can transform a note into a series of tasks.
-- Notes can send generated tasks to EasyList.
+- Started: Creating a blank note, task, workout, event, or project item takes the fewest practical clicks.
+- Done: Returning to EasyNotes offers a Resume writing action for the previously open note.
+- Done: EasyNotes has a button to make tasks from a note.
+- Done: EasyNotes can transform note lines into a series of tasks.
+- Done: Notes can send generated tasks to EasyList.
 - Tasks can be routed to EasyProject, EasyPipeline, or Calendar when applicable.
 - Untitled empty notes can be cleaned up safely on a recurring basis or via a maintenance action.
 
