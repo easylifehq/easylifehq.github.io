@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.7.1
+
+### Changed
+
+- EasyList task routing can now send a task to an existing EasyProject and section.
+- EasyProject routing still offers a quick-create project fallback when no existing project is selected.
+
 ## 3.7.0
 
 ### Added

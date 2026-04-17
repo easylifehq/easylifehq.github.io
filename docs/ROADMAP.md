@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.7.0`
-- Current planning target: `3.7.0` EasyProject and Pipeline Routing
+- App package version: `3.7.1`
+- Current planning target: `3.7.1` EasyProject and Pipeline Routing Polish
 - Next feature target: `3.8.0` AI Assistance Layer
 
 ## Working Rules
@@ -118,6 +118,7 @@ Goal: Let tasks and notes move into larger workflows when they belong there.
 
 - Done: Tasks can be sent to EasyProject.
 - Done: Tasks can be sent to EasyPipeline.
+- Done: Tasks can be sent to an existing EasyProject and section.
 - Notes can create project-ready task groups.
 - Done: Applicable tasks offer a clear send-to-project or send-to-pipeline action.
 - Done: Routing preserves the original source task context.

@@ -4,8 +4,8 @@ import type { TaskDraft, TaskRecord } from "@/lib/firestore/tasks";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import { auth } from "@/lib/firebase/client";
 import { createApplication } from "@/lib/firestore/applications";
-import { createProject } from "@/lib/firestore/projects";
-import { createProjectSection } from "@/lib/firestore/projectSections";
+import { createProject, subscribeToProjects, type ProjectRecord } from "@/lib/firestore/projects";
+import { createProjectSection, subscribeToProjectSections, type ProjectSectionRecord } from "@/lib/firestore/projectSections";
 import { createProjectTaskLink } from "@/lib/firestore/projectTaskLinks";
 import {
   addMinutes,
@@ -51,6 +51,26 @@ export function TaskDrawer({
   const [isScheduling, setIsScheduling] = useState(false);
   const [routingMessage, setRoutingMessage] = useState("");
   const [isRouting, setIsRouting] = useState(false);
+  const [projects, setProjects] = useState<ProjectRecord[]>([]);
+  const [sections, setSections] = useState<ProjectSectionRecord[]>([]);
+  const [targetProjectId, setTargetProjectId] = useState("__new");
+  const [targetSectionId, setTargetSectionId] = useState("");
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (!user || !isOpen) {
+      setProjects([]);
+      setSections([]);
+      return;
+    }
+
+    const unsubscribeProjects = subscribeToProjects(user.uid, setProjects);
+    const unsubscribeSections = subscribeToProjectSections(user.uid, setSections);
+    return () => {
+      unsubscribeProjects();
+      unsubscribeSections();
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (task) {
@@ -66,6 +86,8 @@ export function TaskDrawer({
       setPlanningState(task.linkedCalendarBlockIds.length ? "accepted" : "scheduled");
       setScheduleMessage("");
       setRoutingMessage("");
+      setTargetProjectId("__new");
+      setTargetSectionId("");
     }
   }, [task]);
 
@@ -124,28 +146,39 @@ export function TaskDrawer({
 
     setIsRouting(true);
     try {
-      const projectId = await createProject(user.uid, {
-        title: currentTask.title || "Untitled project",
-        description: [
-          "Created from EasyList.",
-          currentTask.notes ? `Source task notes: ${currentTask.notes}` : "",
-        ].filter(Boolean).join("\n\n"),
-        targetDate: currentTask.dueDate ? toDateInputValue(currentTask.dueDate) : "",
-        status: "active",
-      });
-      const sectionId = await createProjectSection(user.uid, {
-        projectId,
-        title: "Next steps",
-        order: 1,
-      });
+      const projectId =
+        targetProjectId === "__new"
+          ? await createProject(user.uid, {
+              title: currentTask.title || "Untitled project",
+              description: [
+                "Created from EasyList.",
+                currentTask.notes ? `Source task notes: ${currentTask.notes}` : "",
+              ].filter(Boolean).join("\n\n"),
+              targetDate: currentTask.dueDate ? toDateInputValue(currentTask.dueDate) : "",
+              status: "active",
+            })
+          : targetProjectId;
+      const matchingSections = sections.filter((section) => section.projectId === projectId);
+      const sectionId =
+        targetSectionId && matchingSections.some((section) => section.id === targetSectionId)
+          ? targetSectionId
+          : await createProjectSection(user.uid, {
+              projectId,
+              title: "Routed tasks",
+              order: matchingSections.length + 1,
+            });
       await createProjectTaskLink(user.uid, {
         projectId,
         sectionId,
         taskId: currentTask.id,
-        order: 1,
+        order: matchingSections.length + 1,
         parentLabel: "Routed from EasyList",
       });
-      setRoutingMessage("Sent to EasyProjects with the original task linked.");
+      setRoutingMessage(
+        targetProjectId === "__new"
+          ? "Created an EasyProject and linked the original task."
+          : "Linked the original task to the selected EasyProject."
+      );
     } finally {
       setIsRouting(false);
     }
@@ -373,6 +406,45 @@ export function TaskDrawer({
               Keep the source task intact while creating the project or pipeline
               context around it.
             </p>
+          </div>
+
+          <div className="task-composer-grid">
+            <label className="field-stack">
+              <span>Project</span>
+              <select
+                value={targetProjectId}
+                onChange={(event) => {
+                  setTargetProjectId(event.target.value);
+                  setTargetSectionId("");
+                }}
+              >
+                <option value="__new">Create a new project from this task</option>
+                {projects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.title || "Untitled project"}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            {targetProjectId !== "__new" ? (
+              <label className="field-stack">
+                <span>Section</span>
+                <select
+                  value={targetSectionId}
+                  onChange={(event) => setTargetSectionId(event.target.value)}
+                >
+                  <option value="">Create a Routed tasks section</option>
+                  {sections
+                    .filter((section) => section.projectId === targetProjectId)
+                    .map((section) => (
+                      <option key={section.id} value={section.id}>
+                        {section.title || "Untitled section"}
+                      </option>
+                    ))}
+                </select>
+              </label>
+            ) : null}
           </div>
 
           <div className="drawer-actions-vnext">
