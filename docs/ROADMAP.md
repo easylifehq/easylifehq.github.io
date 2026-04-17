@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.5.0`
-- Current planning target: `3.5.0` EasyWorkout Redesign
+- App package version: `3.5.1`
+- Current planning target: `3.5.1` EasyWorkout Polish
 - Next feature target: `3.6.0` EasyStatistics Hub
 
 ## Working Rules

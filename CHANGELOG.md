@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.5.1
+
+### Changed
+
+- EasyWorkout Start Workout now focuses the first exercise field when the page opens.
+- Simplified EasyWorkout dashboard actions by removing the duplicate regular logging card.
+
 ## 3.5.0
 
 ### Added

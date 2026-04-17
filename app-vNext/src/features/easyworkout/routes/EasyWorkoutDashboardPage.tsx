@@ -96,10 +96,6 @@ export function EasyWorkoutDashboardPage() {
             <strong>Build a routine</strong>
             <p>Set up your Push, Pull, Legs, or any custom split.</p>
           </Link>
-          <Link className="hq-link-card" to="/app/easyworkout/log">
-            <strong>Log a workout</strong>
-            <p>Enter sets fast and see the last weight you hit for each lift.</p>
-          </Link>
           {isExperimentalFeatureEnabled("gymMode") ? (
             <Link className="hq-link-card gym-mode-card" to="/app/easyworkout/log?gymMode=1">
               <strong>Activate Gym Mode</strong>

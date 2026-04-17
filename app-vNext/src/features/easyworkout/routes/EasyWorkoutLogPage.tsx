@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { defaultWorkoutExercises, useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
@@ -16,6 +16,7 @@ const emptyExerciseLog = (): WorkoutExerciseLogRecord => ({
 const startingWorkoutLogs = () => Array.from({ length: 5 }, () => emptyExerciseLog());
 
 export function EasyWorkoutLogPage() {
+  const firstExerciseInputRef = useRef<HTMLInputElement | null>(null);
   const [searchParams] = useSearchParams();
   const routineId = searchParams.get("routineId");
   const gymMode = searchParams.get("gymMode") === "1";
@@ -85,6 +86,11 @@ export function EasyWorkoutLogPage() {
 
   const isGymModeActive = gymMode && isExperimentalFeatureEnabled("gymMode");
   const isFocusedWorkoutMode = workoutMode || isGymModeActive;
+
+  useEffect(() => {
+    if (!isFocusedWorkoutMode) return;
+    window.setTimeout(() => firstExerciseInputRef.current?.focus(), 0);
+  }, [isFocusedWorkoutMode]);
 
   function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogRecord>) {
     setExerciseLogs((current) =>
@@ -299,6 +305,7 @@ export function EasyWorkoutLogPage() {
                   <label className="field-stack">
                     <span>Exercise</span>
                     <input
+                      ref={exerciseIndex === 0 ? firstExerciseInputRef : undefined}
                       value={exercise.exerciseName}
                       onChange={(event) => {
                         const match = exercises.find((entry) => entry.name === event.target.value);
