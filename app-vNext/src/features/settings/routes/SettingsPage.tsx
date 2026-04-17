@@ -1,5 +1,6 @@
 import { PageSection } from "@/components/ui/PageSection";
 import { useState } from "react";
+import { APP_VERSION } from "@/config/appVersion";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { auth } from "@/lib/firebase/client";
 import type {
@@ -577,7 +578,7 @@ export function SettingsPage() {
           </article>
           <article className="mini-panel-vnext">
             <span>Version</span>
-            <strong>3.10.0</strong>
+            <strong>{APP_VERSION}</strong>
             <p>Current release.</p>
           </article>
           <article className="mini-panel-vnext">

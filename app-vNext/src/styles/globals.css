@@ -2461,7 +2461,10 @@ textarea::placeholder {
   right: 0;
   width: min(460px, 100%);
   height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
   padding: 1.1rem;
+  padding-top: calc(1.1rem + env(safe-area-inset-top, 0px));
   padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   background: var(--shell-drawer-bg);
   border-left: 1px solid var(--shell-card-border);
@@ -2483,7 +2486,7 @@ textarea::placeholder {
   gap: 1rem;
   margin-bottom: 1rem;
   position: sticky;
-  top: -1.1rem;
+  top: 0;
   z-index: 2;
   padding: 0.25rem 0 0.75rem;
   background: linear-gradient(180deg, var(--shell-drawer-bg) 82%, rgba(255, 253, 249, 0));
@@ -4315,7 +4318,7 @@ button.calendar-detail-card:disabled {
   }
 
   .capture-modal .capture-header-actions .ghost-button::after {
-    content: "×";
+    content: "x";
     font-size: 1.25rem;
     line-height: 1;
   }
@@ -4465,11 +4468,12 @@ button.calendar-detail-card:disabled {
   .task-drawer-vnext {
     width: 100%;
     padding: 0.9rem;
+    padding-top: calc(0.9rem + env(safe-area-inset-top, 0px));
     padding-bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
   }
 
   .drawer-header-vnext {
-    top: -0.9rem;
+    top: 0;
   }
 
   .calendar-day-actions .primary-button,

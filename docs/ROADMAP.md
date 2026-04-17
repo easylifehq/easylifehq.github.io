@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.13.0`
-- Current planning target: `3.13.0` AI Routing Suggestions
-- Next feature target: `3.14.0` Final 3.x Stability Sweep
-- Next major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
+- App package version: `3.14.0`
+- Current planning target: `3.14.0` Final 3.x Stability Sweep
+- Next feature target: Held while the `3.x` product core is tested in real use
+- Future major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
 
 ## Working Rules
 
@@ -210,18 +210,19 @@ Goal: Let AI suggest where an item belongs without silently moving anything.
 
 ### 3.14.0 Final 3.x Stability Sweep
 
-Status: Planned
+Status: Done
 
 Goal: Make sure the productivity core is stable before expanding the suite.
 
-- Check mobile drawers, popups, and Safari browser chrome behavior across the main apps.
-- Verify version numbers, changelog entries, roadmap state, and deploy assets are synchronized.
-- Run a focused QA pass on EasyList, EasyCalendar, EasyNotes, EasyWorkout, EasyProjects, EasyPipeline, and EasyStatistics.
-- Fix small regressions before adding new lifestyle apps.
+- Done: Check mobile drawers, popups, and Safari browser chrome behavior across the main apps.
+- Done: Verify version numbers, changelog entries, roadmap state, and deploy assets are synchronized.
+- Done: Run a focused QA pass on EasyList, EasyCalendar, EasyNotes, EasyWorkout, EasyProjects, EasyPipeline, and EasyStatistics.
+- Done: Fix small regressions before adding new lifestyle apps.
+- Done: Hold `4.0.0` until the current product core has been tested in real use.
 
 ### 4.0.0 Suite Expansion
 
-Status: Planned
+Status: Held
 
 Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun apps without weakening the core system.
 
@@ -241,7 +242,7 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 - Preserve user context when switching tabs across every app.
 - Continue reducing minimum clicks to write, log, or capture.
 - Keep mobile overlays checked as new drawers and sheets are added.
-- Prepare navigation and settings for EasyDrinks and EasyGames in `4.0.0`.
+- Prepare navigation and settings for EasyDrinks and EasyGames once the `4.0.0` hold lifts.
 
 ### EasyList
 
@@ -274,18 +275,17 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 ### EasyProject and EasyPipeline
 
 - Improve note-to-project task groups after real use.
-- Add AI routing suggestions in `3.13.0`.
 - Keep source context preserved whenever items move between apps.
 
 ### AI Backend
 
-- Add context scanning in `3.13.0`.
-- Suggest project or pipeline routing in `3.13.0`.
+- Deepen context scanning after the `3.x` product core has been tested.
+- Keep tuning project and pipeline routing suggestions based on real use.
 - Keep all AI actions review-first and reversible.
 
 ### EasyDrinks
 
-- Build the EasyDrinks MVP in `4.0.0`.
+- Build the EasyDrinks MVP when the `4.0.0` hold lifts.
 - Add fast drink capture.
 - Add saved favorite drinks.
 - Add ingredients, notes, rating, tags, and date fields.
@@ -293,7 +293,7 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 
 ### EasyGames
 
-- Build the EasyGames MVP in `4.0.0`.
+- Build the EasyGames MVP when the `4.0.0` hold lifts.
 - Add a games dashboard.
 - Add one or two lightweight built-in games.
 - Add simple favorites or stats if they do not slow down the MVP.
