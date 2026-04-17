@@ -1,5 +1,6 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { PageSection } from "@/components/ui/PageSection";
+import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
 import { CalendarTaskBlockDrawer } from "@/features/easycalendar/components/CalendarTaskBlockDrawer";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
@@ -25,6 +26,7 @@ export function EasyCalendarDayPage() {
     scheduleTask,
   } = useEasyCalendar();
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [planMessage, setPlanMessage] = useState("");
   const [isPlanning, setIsPlanning] = useState(false);
   const today = startOfDay(new Date());
@@ -40,6 +42,10 @@ export function EasyCalendarDayPage() {
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
     [selectedBlockId, taskBlocks]
+  );
+  const selectedEvent = useMemo(
+    () => events.find((calendarEvent) => calendarEvent.id === selectedEventId) || null,
+    [selectedEventId, events]
   );
   const selectedTask = useMemo(
     () =>
@@ -172,6 +178,8 @@ export function EasyCalendarDayPage() {
                 onClick={() => {
                   if (item.kind === "task-block") {
                     setSelectedBlockId(item.id);
+                  } else {
+                    setSelectedEventId(item.id);
                   }
                 }}
                 className={`calendar-detail-card${item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
@@ -180,7 +188,6 @@ export function EasyCalendarDayPage() {
                     "--calendar-block-color": item.color,
                   } as CSSProperties
                 }
-                disabled={item.kind !== "task-block"}
               >
                 <div>
                   <strong>{item.title}</strong>
@@ -204,6 +211,11 @@ export function EasyCalendarDayPage() {
         task={selectedTask}
         isOpen={Boolean(selectedBlock)}
         onClose={() => setSelectedBlockId(null)}
+      />
+      <CalendarEventDrawer
+        event={selectedEvent}
+        isOpen={Boolean(selectedEvent)}
+        onClose={() => setSelectedEventId(null)}
       />
     </>
   );

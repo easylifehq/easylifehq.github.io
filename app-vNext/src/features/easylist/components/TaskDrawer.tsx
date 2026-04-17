@@ -151,7 +151,7 @@ export function TaskDrawer({
           </label>
 
           <label className="field-stack">
-            <span>Duration</span>
+            <span>Duration (minutes)</span>
             <input
               type="number"
               min="0"
@@ -251,7 +251,7 @@ export function TaskDrawer({
             </label>
 
             <label className="field-stack">
-              <span>Duration</span>
+              <span>Duration (minutes)</span>
               <input
                 type="number"
                 min="5"

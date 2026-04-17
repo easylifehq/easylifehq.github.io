@@ -193,7 +193,7 @@ export function EasyNotesEditorPage() {
             value={bodyText}
             onChange={(event) => setBodyText(event.target.value)}
             placeholder="Start writing..."
-            rows={28}
+            rows={Math.max(28, bodyText.split(/\r?\n/).length + 4)}
           />
         </label>
 

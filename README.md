@@ -61,3 +61,9 @@ That folder is your backup in case you ever need to reference or recover the pre
 - The current React production build succeeds locally.
 
 See [docs/easy-system-engineering-handoff.md](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\docs\easy-system-engineering-handoff.md) for the architecture and migration handoff.
+
+## Planning
+
+- [Roadmap](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\docs\ROADMAP.md) tracks planned EasyLife work by release and app area.
+- [Changelog](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\CHANGELOG.md) tracks user-facing changes by app version.
+- [Versioning](C:\Users\smcol\Documents\Spencer%20Colety\easylife\easylifehq.github.io\docs\VERSIONING.md) explains when and how to update version numbers.

@@ -1,6 +1,7 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { PageSection } from "@/components/ui/PageSection";
 import { CalendarComposer } from "@/features/easycalendar/components/CalendarComposer";
+import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
 import { CalendarTaskBlockDrawer } from "@/features/easycalendar/components/CalendarTaskBlockDrawer";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
@@ -15,6 +16,7 @@ import {
 export function EasyCalendarWeekPage() {
   const { categories, events, taskBlocks, tasks, isLoading, error, addCategory, saveCategory } = useEasyCalendar();
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [showComposer, setShowComposer] = useState(false);
 
   const weekStart = startOfWeek(new Date());
@@ -26,6 +28,10 @@ export function EasyCalendarWeekPage() {
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
     [selectedBlockId, taskBlocks]
+  );
+  const selectedEvent = useMemo(
+    () => events.find((calendarEvent) => calendarEvent.id === selectedEventId) || null,
+    [selectedEventId, events]
   );
   const selectedTask = useMemo(
     () =>
@@ -83,6 +89,8 @@ export function EasyCalendarWeekPage() {
                         onClick={() => {
                           if (item.kind === "task-block") {
                             setSelectedBlockId(item.id);
+                          } else {
+                            setSelectedEventId(item.id);
                           }
                         }}
                         className={`calendar-block-vnext${item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
@@ -91,7 +99,6 @@ export function EasyCalendarWeekPage() {
                             "--calendar-block-color": item.color,
                           } as CSSProperties
                         }
-                        disabled={item.kind !== "task-block"}
                       >
                         <strong>{item.title}</strong>
                         <span>{item.helper}</span>
@@ -164,6 +171,11 @@ export function EasyCalendarWeekPage() {
         task={selectedTask}
         isOpen={Boolean(selectedBlock)}
         onClose={() => setSelectedBlockId(null)}
+      />
+      <CalendarEventDrawer
+        event={selectedEvent}
+        isOpen={Boolean(selectedEvent)}
+        onClose={() => setSelectedEventId(null)}
       />
     </>
   );

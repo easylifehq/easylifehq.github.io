@@ -260,7 +260,7 @@ export function EasyWorkoutLogPage() {
             <input type="date" value={performedOn} onChange={(event) => setPerformedOn(event.target.value)} />
           </label>
           <label className="field-stack">
-            <span>Duration (min)</span>
+            <span>Duration (minutes)</span>
             <input type="number" min="0" value={durationMinutes} onChange={(event) => setDurationMinutes(event.target.value)} placeholder="75" />
           </label>
           <label className="field-stack field-stack-wide">
@@ -296,7 +296,6 @@ export function EasyWorkoutLogPage() {
                   <label className="field-stack">
                     <span>Exercise</span>
                     <input
-                      list="easyworkout-log-exercises"
                       value={exercise.exerciseName}
                       onChange={(event) => {
                         const match = exercises.find((entry) => entry.name === event.target.value);
@@ -362,12 +361,6 @@ export function EasyWorkoutLogPage() {
             );
           })}
         </div>
-
-        <datalist id="easyworkout-log-exercises">
-          {allExerciseOptions.map((exercise) => (
-            <option key={exercise.name} value={exercise.name} />
-          ))}
-        </datalist>
 
         <div className="task-composer-actions">
           <button type="button" className="button-secondary" onClick={() => setExerciseLogs((current) => [...current, emptyExerciseLog()])}>

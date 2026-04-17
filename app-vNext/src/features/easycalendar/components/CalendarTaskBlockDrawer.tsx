@@ -146,7 +146,7 @@ export function CalendarTaskBlockDrawer({
             </label>
 
             <label className="field-stack">
-              <span>Duration</span>
+              <span>Duration (minutes)</span>
               <input
                 type="number"
                 min="5"

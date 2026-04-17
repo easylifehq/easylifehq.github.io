@@ -50,8 +50,13 @@ export function CalendarComposer() {
     const startAt = combineDateAndTime(eventDate, eventStartTime);
     const endAt = combineDateAndTime(eventDate, eventEndTime);
 
-    if (!eventTitle.trim() || !startAt || !endAt || endAt <= startAt) {
-      setEventStatus("Add a title and a real time range.");
+    if (!eventTitle.trim()) {
+      setEventStatus("Add a title before saving this event.");
+      return;
+    }
+
+    if (!startAt || !endAt || endAt <= startAt) {
+      setEventStatus("End time must be after the start time.");
       return;
     }
 
@@ -126,7 +131,7 @@ export function CalendarComposer() {
           </label>
 
           <label className="field-stack">
-            <span>Type</span>
+            <span>Type of event</span>
             <select
               value={eventType}
               onChange={(event) => setEventType(event.target.value as CalendarEventType)}
@@ -140,7 +145,7 @@ export function CalendarComposer() {
           </label>
 
           <label className="field-stack">
-            <span>Category</span>
+            <span>Category color</span>
             <select
               value={eventCategory}
               onChange={(event) => setEventCategory(event.target.value)}
@@ -247,7 +252,7 @@ export function CalendarComposer() {
           </label>
 
           <label className="field-stack">
-            <span>Duration</span>
+            <span>Duration (minutes)</span>
             <input
               type="number"
               min="5"
