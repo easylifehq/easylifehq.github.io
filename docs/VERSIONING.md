@@ -4,9 +4,9 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `3.11.0`
-- Next patch target: `3.11.1`
-- Next feature target: `3.12.0`
+- Current app version: `3.12.0`
+- Next patch target: `3.12.1`
+- Next feature target: `3.13.0`
 
 ## What To Update
 

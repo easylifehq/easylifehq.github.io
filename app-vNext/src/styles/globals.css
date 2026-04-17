@@ -2048,6 +2048,25 @@ textarea::placeholder {
   background: var(--app-card-elevated);
 }
 
+.workout-mode-quick-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-card, var(--shell-input-bg));
+}
+
+.workout-mode-quick-actions p {
+  margin: 0.2rem 0 0;
+}
+
+.workout-exercise-list {
+  gap: 0.75rem;
+}
+
 .stat-card-vnext {
   display: grid;
   gap: 0.3rem;
@@ -3638,8 +3657,20 @@ button.calendar-detail-card:disabled {
   border-radius: 16px;
 }
 
+.workout-mode-card {
+  padding: 0.9rem;
+}
+
+.workout-mode-card .panel-header {
+  margin-bottom: 0.55rem;
+}
+
 .gym-suggestion {
   margin-bottom: 0.8rem;
+}
+
+.workout-set-row {
+  padding: 0.45rem;
 }
 
 .gym-set-row input {
@@ -4004,6 +4035,15 @@ button.calendar-detail-card:disabled {
 
   .drawer-actions-right {
     flex-direction: column;
+  }
+
+  .workout-mode-quick-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .workout-mode-card {
+    padding: 0.7rem;
   }
 
   .toolbar-row .search-input {

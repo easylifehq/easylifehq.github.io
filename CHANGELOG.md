@@ -6,6 +6,15 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.12.0
+
+### Changed
+
+- EasyWorkout focused workout mode now starts with six compact exercise boxes.
+- Focused workouts now include quick actions to add three exercise boxes or clear unused blank boxes.
+- Old workout import copy is clearer and stays out of focused workout mode.
+- Active workout cards and set rows are tighter on mobile.
+
 ## 3.11.0
 
 ### Added

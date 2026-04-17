@@ -4,9 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.11.0`
-- Current planning target: `3.11.0` Notes Library Organization
-- Next feature target: `3.12.0` EasyWorkout Polish
+- App package version: `3.12.0`
+- Current planning target: `3.12.0` EasyWorkout Polish
+- Next feature target: `3.13.0` AI Routing Suggestions
+- Next major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
 
 ## Working Rules
 
@@ -187,14 +188,14 @@ Goal: Make EasyNotes feel more like a usable notes library instead of a flat pil
 
 ### 3.12.0 EasyWorkout Polish
 
-Status: Planned
+Status: Done
 
 Goal: Finish the workout quality-of-life details after the main Start Workout mode is stable.
 
-- Tighten active workout mobile spacing.
-- Make add/remove exercise boxes faster during a workout.
-- Improve old workout import placement and copy.
-- Add sensible defaults for starting exercise count.
+- Done: Tighten active workout mobile spacing.
+- Done: Make add/remove exercise boxes faster during a workout.
+- Done: Improve old workout import placement and copy.
+- Done: Add sensible defaults for starting exercise count.
 
 ### 3.13.0 AI Routing Suggestions
 
@@ -207,6 +208,32 @@ Goal: Let AI suggest where an item belongs without silently moving anything.
 - AI can scan current task, note, and calendar context when appropriate.
 - AI suggestions stay confirm-before-action.
 
+### 3.14.0 Final 3.x Stability Sweep
+
+Status: Planned
+
+Goal: Make sure the productivity core is stable before expanding the suite.
+
+- Check mobile drawers, popups, and Safari browser chrome behavior across the main apps.
+- Verify version numbers, changelog entries, roadmap state, and deploy assets are synchronized.
+- Run a focused QA pass on EasyList, EasyCalendar, EasyNotes, EasyWorkout, EasyProjects, EasyPipeline, and EasyStatistics.
+- Fix small regressions before adding new lifestyle apps.
+
+### 4.0.0 Suite Expansion
+
+Status: Planned
+
+Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun apps without weakening the core system.
+
+- Add EasyDrinks as a quick drink journal and recipe app.
+- EasyDrinks can save drink name, ingredients, notes, rating, tags, date, and favorite status.
+- EasyDrinks supports broad drink types such as cocktails, mocktails, coffee, smoothies, and protein shakes.
+- Add EasyGames as a small games hub.
+- EasyGames launches with one or two lightweight built-in games instead of a giant game library.
+- EasyGames tracks simple play stats or favorites where useful.
+- Add EasyDrinks and EasyGames to navigation, app visibility settings, theme styling, roadmap, changelog, and versioning.
+- Keep both apps MVP-sized for 4.0.0, then deepen them in later 4.x releases.
+
 ## Backlog by Area
 
 ### Global and Mobile
@@ -214,6 +241,7 @@ Goal: Let AI suggest where an item belongs without silently moving anything.
 - Preserve user context when switching tabs across every app.
 - Continue reducing minimum clicks to write, log, or capture.
 - Keep mobile overlays checked as new drawers and sheets are added.
+- Prepare navigation and settings for EasyDrinks and EasyGames in `4.0.0`.
 
 ### EasyList
 
@@ -235,8 +263,7 @@ Goal: Let AI suggest where an item belongs without silently moving anything.
 
 ### EasyWorkout
 
-- Finish workout polish in `3.12.0`.
-- Keep active workout logging compact on mobile.
+- Keep active workout logging compact on mobile as new controls are added.
 - Add workout settings when Settings app sections become deeper pages.
 
 ### EasyStatistics
@@ -255,3 +282,18 @@ Goal: Let AI suggest where an item belongs without silently moving anything.
 - Add context scanning in `3.13.0`.
 - Suggest project or pipeline routing in `3.13.0`.
 - Keep all AI actions review-first and reversible.
+
+### EasyDrinks
+
+- Build the EasyDrinks MVP in `4.0.0`.
+- Add fast drink capture.
+- Add saved favorite drinks.
+- Add ingredients, notes, rating, tags, and date fields.
+- Keep any alcohol-related copy neutral and responsible.
+
+### EasyGames
+
+- Build the EasyGames MVP in `4.0.0`.
+- Add a games dashboard.
+- Add one or two lightweight built-in games.
+- Add simple favorites or stats if they do not slow down the MVP.

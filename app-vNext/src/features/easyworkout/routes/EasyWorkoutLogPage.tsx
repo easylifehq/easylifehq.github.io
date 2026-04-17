@@ -13,7 +13,8 @@ const emptyExerciseLog = (): WorkoutExerciseLogRecord => ({
   notes: "",
   sets: [emptySet()],
 });
-const startingWorkoutLogs = () => Array.from({ length: 5 }, () => emptyExerciseLog());
+const focusedWorkoutExerciseCount = 6;
+const startingWorkoutLogs = () => Array.from({ length: focusedWorkoutExerciseCount }, () => emptyExerciseLog());
 
 export function EasyWorkoutLogPage() {
   const firstExerciseInputRef = useRef<HTMLInputElement | null>(null);
@@ -57,7 +58,7 @@ export function EasyWorkoutLogPage() {
               notes: "",
             })),
           }))
-        : [emptyExerciseLog()]
+        : workoutMode ? startingWorkoutLogs() : [emptyExerciseLog()]
     );
   }, [selectedRoutine, workoutMode]);
 
@@ -124,6 +125,27 @@ export function EasyWorkoutLogPage() {
       sets: exercise.sets.map((set, index) =>
         index === 0 ? { ...set, reps: previous.reps, weight: previous.weight } : set
       ),
+    });
+  }
+
+  function addExerciseBoxes(count = 1) {
+    setExerciseLogs((current) => [
+      ...current,
+      ...Array.from({ length: count }, () => emptyExerciseLog()),
+    ]);
+  }
+
+  function removeBlankExerciseBoxes() {
+    setExerciseLogs((current) => {
+      const filled = current.filter(
+        (exercise) =>
+          exercise.exerciseName.trim() ||
+          exercise.muscleGroup.trim() ||
+          exercise.notes.trim() ||
+          exercise.sets.some((set) => set.reps > 0 || set.weight > 0 || set.notes.trim())
+      );
+
+      return filled.length ? filled : [emptyExerciseLog()];
     });
   }
 
@@ -225,7 +247,7 @@ export function EasyWorkoutLogPage() {
         {!isFocusedWorkoutMode ? (
         <div className="workout-quick-paste">
           <label className="field-stack">
-            <span>Paste from notes</span>
+            <span>Import old workout notes</span>
             <textarea
               rows={4}
               value={workoutPaste}
@@ -237,7 +259,7 @@ export function EasyWorkoutLogPage() {
             <button type="button" className="button-secondary" onClick={parseWorkoutPaste} disabled={!workoutPaste.trim()}>
               Turn into sets
             </button>
-            <span className="helper-copy">Use one line per exercise. Reps and weight can be written like 8x135 or 8 reps at 135.</span>
+            <span className="helper-copy">For old workouts only. Use one line per exercise, like 8x135 or 8 reps at 135.</span>
           </div>
         </div>
         ) : null}
@@ -278,7 +300,24 @@ export function EasyWorkoutLogPage() {
           </label>
         </div>
 
-        <div className="task-list-vnext">
+        {isFocusedWorkoutMode ? (
+          <div className="workout-mode-quick-actions">
+            <div>
+              <strong>{exerciseLogs.length} exercise boxes ready</strong>
+              <p className="helper-copy">Start typing, add a few more, or clear empty boxes when the workout tightens up.</p>
+            </div>
+            <div className="drawer-actions-right">
+              <button type="button" className="button-secondary compact-button" onClick={() => addExerciseBoxes(3)}>
+                Add 3 boxes
+              </button>
+              <button type="button" className="ghost-button compact-button" onClick={removeBlankExerciseBoxes}>
+                Clear blank boxes
+              </button>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="task-list-vnext workout-exercise-list">
           {exerciseLogs.map((exercise, exerciseIndex) => {
             const previous = previousByExercise[exercise.exerciseName];
             return (
@@ -377,7 +416,7 @@ export function EasyWorkoutLogPage() {
         </div>
 
         <div className="task-composer-actions">
-          <button type="button" className="button-secondary" onClick={() => setExerciseLogs((current) => [...current, emptyExerciseLog()])}>
+          <button type="button" className="button-secondary" onClick={() => addExerciseBoxes()}>
             Add exercise
           </button>
           <button type="submit" className="primary-button">Save workout</button>
