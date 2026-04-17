@@ -2,9 +2,11 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import type { PriorityTier, TaskDraft } from "@/lib/firestore/tasks";
 import { getPriorityMeta, normalizePriorityTier, PRIORITY_TIERS } from "@/features/easylist/lib/taskUtils";
 import { auth } from "@/lib/firebase/client";
+import { addLinkedCalendarBlock } from "@/lib/firestore/tasks";
+import { createCalendarTaskBlock } from "@/lib/firestore/calendarTaskBlocks";
 
 type TaskComposerProps = {
-  onSubmit: (draft: TaskDraft) => Promise<void>;
+  onSubmit: (draft: TaskDraft) => Promise<string | null | void>;
 };
 
 type TaskRowDraft = {
@@ -66,6 +68,17 @@ function addDays(date: Date, days: number) {
   const next = new Date(date);
   next.setDate(next.getDate() + days);
   return next;
+}
+
+function parseDateInputValue(value: string) {
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return null;
+
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), 9, 0, 0, 0);
+}
+
+function addMinutes(date: Date, minutes: number) {
+  return new Date(date.getTime() + minutes * 60 * 1000);
 }
 
 function parseWeekdayDueDate(text: string, now: Date) {
@@ -345,8 +358,13 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisMessage, setAnalysisMessage] = useState("");
+  const [createCalendarSuggestions, setCreateCalendarSuggestions] = useState(false);
   const readyCount = useMemo(
     () => rows.filter((row) => row.title.trim()).length,
+    [rows]
+  );
+  const suggestedDueDateCount = useMemo(
+    () => rows.filter((row) => row.title.trim() && row.dueDate).length,
     [rows]
   );
 
@@ -421,6 +439,28 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
     });
   }
 
+  async function createSuggestedCalendarBlock(taskId: string, draft: TaskDraft) {
+    const user = auth.currentUser;
+    if (!user || !draft.dueDate) return;
+
+    const startAt = parseDateInputValue(draft.dueDate);
+    if (!startAt) return;
+
+    const durationMinutes = Math.max(5, draft.estimatedLength || 30);
+    const blockId = await createCalendarTaskBlock(user.uid, {
+      taskId,
+      titleSnapshot: draft.title || "Untitled task",
+      categoryId: draft.category.trim() || null,
+      startAt,
+      endAt: addMinutes(startAt, durationMinutes),
+      isFlexible: true,
+      planningState: "suggested",
+      userAdjusted: false,
+    });
+
+    await addLinkedCalendarBlock(user.uid, taskId, blockId);
+  }
+
   async function handleBrainDumpToRows() {
     if (!brainDump.trim()) return;
 
@@ -455,11 +495,15 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
 
     try {
       for (const draft of drafts) {
-        await onSubmit(draft);
+        const taskId = await onSubmit(draft);
+        if (createCalendarSuggestions && taskId && draft.dueDate) {
+          await createSuggestedCalendarBlock(taskId, draft);
+        }
       }
 
       setRows([EMPTY_ROW(), EMPTY_ROW(), EMPTY_ROW()]);
       setBrainDump("");
+      setCreateCalendarSuggestions(false);
       window.localStorage.removeItem(BRAIN_DUMP_DRAFT_KEY);
     } finally {
       setIsSubmitting(false);
@@ -614,6 +658,19 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
       </div>
 
       <div className="task-composer-actions">
+        {suggestedDueDateCount ? (
+          <label className="inline-check">
+            <input
+              type="checkbox"
+              checked={createCalendarSuggestions}
+              onChange={(event) => setCreateCalendarSuggestions(event.target.checked)}
+            />
+            <span>
+              Create suggested EasyCalendar blocks for {suggestedDueDateCount} task
+              {suggestedDueDateCount === 1 ? "" : "s"} with due dates.
+            </span>
+          </label>
+        ) : null}
         <button type="button" className="button-secondary" onClick={addBlankRow}>
           Add Row
         </button>

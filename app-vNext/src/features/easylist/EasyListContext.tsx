@@ -25,7 +25,7 @@ type EasyListContextValue = {
   tasks: TaskRecord[];
   isLoading: boolean;
   error: string;
-  addTask: (draft: TaskDraft) => Promise<void>;
+  addTask: (draft: TaskDraft) => Promise<string | null>;
   saveTask: (taskId: string, draft: TaskDraft) => Promise<void>;
   markComplete: (taskId: string) => Promise<void>;
   markActive: (taskId: string) => Promise<void>;
@@ -65,8 +65,8 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   async function addTaskFromDraft(draft: TaskDraft) {
-    if (!user) return;
-    await createTask(user.uid, draft);
+    if (!user) return null;
+    return createTask(user.uid, draft);
   }
 
   async function saveTaskFromDraft(taskId: string, draft: TaskDraft) {

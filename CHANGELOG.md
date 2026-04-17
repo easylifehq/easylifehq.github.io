@@ -6,6 +6,16 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.8.1
+
+### Added
+
+- EasyList can now create suggested EasyCalendar task blocks for newly added tasks with due dates when the user opts in.
+
+### Changed
+
+- EasyList task creation now preserves the created task id so follow-up actions can link back cleanly.
+
 ## 3.8.0
 
 ### Changed

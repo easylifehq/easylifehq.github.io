@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.8.0`
-- Current planning target: `3.8.0` AI Assistance Layer
+- App package version: `3.8.1`
+- Current planning target: `3.8.1` AI Calendar Suggestion Polish
 - Next feature target: `3.9.0` Calendar Recurrence and Category Customization
 
 ## Working Rules
@@ -125,17 +125,17 @@ Goal: Let tasks and notes move into larger workflows when they belong there.
 
 ### 3.8.0 AI Assistance Layer
 
-Status: In Progress
+Status: Done
 
 Goal: Add helpful suggestions after the manual systems are stable.
 
 - AI scans current notes, tasks, and calendar data when appropriate.
 - Done: AI detects date phrases like "prep for exam on Tuesday" in EasyList brain dumps.
-- Started: AI date suggestions stay editable and visible before tasks are saved.
-- AI asks whether detected dates should become calendar events.
+- Done: AI date suggestions stay editable and visible before tasks are saved.
+- Done: AI asks whether detected dates should become suggested EasyCalendar task blocks.
 - Done: AI can break notes or brain dumps into suggested tasks.
 - AI can suggest whether an item belongs in EasyProject or EasyPipeline.
-- Started: AI suggestions are confirm-before-action, never automatic silent changes.
+- Done: AI suggestions are confirm-before-action, never automatic silent changes.
 
 ## Backlog by Area
 
