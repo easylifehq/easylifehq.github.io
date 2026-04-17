@@ -6,6 +6,19 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.2.0
+
+### Added
+
+- Added deadline-only task items to EasyCalendar day and week views when an EasyList task has a due date but no active scheduled work block.
+- Added scannable task metadata chips for deadline, estimate, planned calendar blocks, and category.
+- Added a lightweight completion animation for task cards.
+
+### Changed
+
+- Changed EasyList urgency from a 1-5 scale to a 1-10 scale, from "Should've been done yesterday" to "Nice to have one day".
+- Improved local brain-dump parsing so urgent language like "tomorrow", "forgot about", or "yesterday" maps to the highest urgency tiers.
+
 ## 3.1.7
 
 ### Added

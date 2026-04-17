@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import type { TaskDraft } from "@/lib/firestore/tasks";
-import { getPriorityMeta } from "@/features/easylist/lib/taskUtils";
+import type { PriorityTier, TaskDraft } from "@/lib/firestore/tasks";
+import { getPriorityMeta, normalizePriorityTier, PRIORITY_TIERS } from "@/features/easylist/lib/taskUtils";
 import { auth } from "@/lib/firebase/client";
 
 type TaskComposerProps = {
@@ -13,7 +13,7 @@ type TaskRowDraft = {
   category: string;
   dueDate: string;
   estimatedLength: string;
-  priorityTier: 1 | 2 | 3 | 4 | 5;
+  priorityTier: PriorityTier;
   notes: string;
 };
 
@@ -32,7 +32,7 @@ const EMPTY_ROW = (): TaskRowDraft => ({
   category: "",
   dueDate: "",
   estimatedLength: "",
-  priorityTier: 3,
+  priorityTier: 5,
   notes: "",
 });
 
@@ -124,13 +124,24 @@ function parseDurationMinutes(text: string) {
   return minuteMatch ? minuteMatch[1] : "";
 }
 
-function parsePriorityTier(text: string): 1 | 2 | 3 | 4 | 5 {
+function parsePriorityTier(text: string): PriorityTier {
   const lower = text.toLowerCase();
-  if (/\b(urgent|asap|emergency|critical|highest|p1|priority 1|must do)\b/.test(lower)) return 1;
-  if (/\b(high|important|soon|p2|priority 2)\b/.test(lower)) return 2;
-  if (/\b(low|whenever|someday|eventually|p5|priority 5)\b/.test(lower)) return 5;
-  if (/\b(backlog|nice to have|p4|priority 4)\b/.test(lower)) return 4;
-  return 3;
+  const numericMatch = lower.match(/\b(?:p|priority\s*)?(10|[1-9])\b/);
+  if (numericMatch && /\b(?:p|priority)\s*(?:10|[1-9])\b/.test(lower)) {
+    return normalizePriorityTier(numericMatch[1]);
+  }
+
+  if (/\b(yesterday|forgot about|emergency|critical|highest|must do)\b/.test(lower)) return 1;
+  if (/\b(urgent|asap|hair on fire|tmr|tmrw|tomorrow)\b/.test(lower)) return 2;
+  if (/\b(do next|right after|next up|p3|priority 3)\b/.test(lower)) return 3;
+  if (/\b(very important|high priority|p4|priority 4)\b/.test(lower)) return 4;
+  if (/\b(important|soon|p5|priority 5)\b/.test(lower)) return 5;
+  if (/\b(normal|p6|priority 6)\b/.test(lower)) return 6;
+  if (/\b(soon-ish|soonish|p7|priority 7)\b/.test(lower)) return 7;
+  if (/\b(when there'?s room|when i have room|p8|priority 8)\b/.test(lower)) return 8;
+  if (/\b(low simmer|low|whenever|p9|priority 9)\b/.test(lower)) return 9;
+  if (/\b(nice to have one day|nice to have|someday|eventually|p10|priority 10)\b/.test(lower)) return 10;
+  return 5;
 }
 
 function parseCategory(text: string, fallback = "") {
@@ -163,7 +174,7 @@ function cleanTaskTitle(text: string) {
     .replace(/^\s*(?:and\s+)?(?:also\s+)?(?:maybe|probably)\s+/i, "")
     .replace(/\b(?:due|by)\s+(?:today|tonight|tomorrow|tmrw|tmr|next week|this weekend|sun(?:day)?|mon(?:day)?|tues?(?:day)?|wed(?:nesday)?|thu(?:rs)?(?:day)?|fri(?:day)?|sat(?:urday)?|\d{1,2}[/-]\d{1,2}(?:[/-]\d{2,4})?|20\d{2}-\d{1,2}-\d{1,2})\b/gi, "")
     .replace(/\b\d+(?:\.\d+)?\s*(?:hours?|hrs?|h|minutes?|mins?|min|m)\b/gi, "")
-    .replace(/\b(?:urgent|asap|important|high priority|low priority|p[1-5]|priority [1-5])\b/gi, "")
+    .replace(/\b(?:urgent|asap|important|high priority|low priority|p(?:10|[1-9])|priority (?:10|[1-9]))\b/gi, "")
     .replace(/\b(?:category|cat|project|area)\s*[:=]\s*[a-z][\w -]{1,24}/gi, "")
     .replace(/#([a-z][\w-]*)/gi, "")
     .replace(/\s{2,}/g, " ")
@@ -272,7 +283,7 @@ function normalizeAiTaskRows(rows: AiTaskRow[]): TaskRowDraft[] {
           typeof row.estimatedLength === "number" && row.estimatedLength > 0
             ? String(row.estimatedLength)
             : "",
-        priorityTier: ([1, 2, 3, 4, 5].includes(priorityTier) ? priorityTier : 3) as 1 | 2 | 3 | 4 | 5,
+        priorityTier: normalizePriorityTier(priorityTier),
         notes: String(row.notes || "").trim(),
       };
     })
@@ -554,9 +565,9 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
                   updateRow(row.id, "priorityTier", Number(event.target.value))
                 }
               >
-                {[1, 2, 3, 4, 5].map((tier) => (
+                {PRIORITY_TIERS.map((tier) => (
                   <option key={tier} value={tier}>
-                    {getPriorityMeta(tier).label}
+                    {tier}. {getPriorityMeta(tier).label}
                   </option>
                 ))}
               </select>

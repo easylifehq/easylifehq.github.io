@@ -30,7 +30,7 @@ export function EasyCalendarDayPage() {
   const [planMessage, setPlanMessage] = useState("");
   const [isPlanning, setIsPlanning] = useState(false);
   const today = startOfDay(new Date());
-  const items = getItemsForDay(today, events, taskBlocks, categories);
+  const items = getItemsForDay(today, events, taskBlocks, categories, tasks);
   const scheduledMinutes = getScheduledMinutesForDay(today, events, taskBlocks);
   const fixedEventCount = items.filter((item) => item.kind === "event").length;
   const taskBlockCount = items.filter((item) => item.kind === "task-block").length;
@@ -178,16 +178,17 @@ export function EasyCalendarDayPage() {
                 onClick={() => {
                   if (item.kind === "task-block") {
                     setSelectedBlockId(item.id);
-                  } else {
+                  } else if (item.kind === "event") {
                     setSelectedEventId(item.id);
                   }
                 }}
-                className={`calendar-detail-card${item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
+                className={`calendar-detail-card${item.kind === "deadline" ? " deadline" : item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
                 style={
                   {
                     "--calendar-block-color": item.color,
                   } as CSSProperties
                 }
+                disabled={item.kind === "deadline"}
               >
                 <div>
                   <strong>{item.title}</strong>

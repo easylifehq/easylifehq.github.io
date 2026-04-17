@@ -19,7 +19,7 @@ export type CalendarDayItem = {
   title: string;
   startAt: Date | null;
   endAt: Date | null;
-  kind: "event" | "task-block";
+  kind: "event" | "task-block" | "deadline";
   color: string;
   badge: string;
   helper: string;
@@ -188,7 +188,8 @@ export function getItemsForDay(
   date: Date,
   events: CalendarEventRecord[],
   taskBlocks: CalendarTaskBlockRecord[],
-  categories: CategoryRecord[]
+  categories: CategoryRecord[],
+  tasks: TaskRecord[] = []
 ) {
   const eventItems: CalendarDayItem[] = events
     .filter((event) => isSameDay(event.startAt, date))
@@ -234,7 +235,42 @@ export function getItemsForDay(
       };
     });
 
-  return [...eventItems, ...taskBlockItems].sort((left, right) => {
+  const scheduledTaskIds = new Set(
+    taskBlocks
+      .filter((taskBlock) => !taskBlock.completed)
+      .map((taskBlock) => taskBlock.taskId)
+  );
+
+  const deadlineItems: CalendarDayItem[] = tasks
+    .filter(
+      (task) =>
+        !task.completed &&
+        task.dueDate &&
+        isSameDay(task.dueDate, date) &&
+        !scheduledTaskIds.has(task.id)
+    )
+    .map((task) => {
+      const category = getCategoryForKey(categories, task.category);
+      const priority = getPriorityMeta(task.priorityTier, task.priorityLabel);
+
+      return {
+        id: task.id,
+        title: task.title || "Untitled task",
+        startAt: task.dueDate,
+        endAt: task.dueDate,
+        kind: "deadline",
+        color: category.color,
+        badge: "deadline",
+        helper: `${priority.label}${task.estimatedLength ? ` | ${task.estimatedLength} min` : ""}`,
+        allDay: true,
+        isFlexible: false,
+        isCompleted: false,
+      };
+    });
+
+  return [...eventItems, ...taskBlockItems, ...deadlineItems].sort((left, right) => {
+    if (left.kind === "deadline" && right.kind !== "deadline") return 1;
+    if (left.kind !== "deadline" && right.kind === "deadline") return -1;
     const leftTime = left.startAt?.getTime() || 0;
     const rightTime = right.startAt?.getTime() || 0;
     return leftTime - rightTime;

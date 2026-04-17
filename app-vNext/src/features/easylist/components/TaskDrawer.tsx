@@ -11,6 +11,8 @@ import {
 import {
   getEmptyTaskDraft,
   getPriorityMeta,
+  normalizePriorityTier,
+  PRIORITY_TIERS,
   taskToDraft,
 } from "@/features/easylist/lib/taskUtils";
 
@@ -173,13 +175,13 @@ export function TaskDrawer({
               onChange={(event) =>
                 setDraft((current) => ({
                   ...current,
-                  priorityTier: Number(event.target.value) as 1 | 2 | 3 | 4 | 5,
+                  priorityTier: normalizePriorityTier(event.target.value),
                 }))
               }
             >
-              {[1, 2, 3, 4, 5].map((tier) => (
+              {PRIORITY_TIERS.map((tier) => (
                 <option key={tier} value={tier}>
-                  {getPriorityMeta(tier).label}
+                  {tier}. {getPriorityMeta(tier).label}
                 </option>
               ))}
             </select>

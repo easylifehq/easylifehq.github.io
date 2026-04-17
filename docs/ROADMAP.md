@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.1.7`
-- Current planning target: `3.2.0` Task and Calendar Foundation
-- Next feature target: `3.2.0` Task and Calendar Foundation
+- App package version: `3.2.0`
+- Current planning target: `3.3.0` Calendar and Settings Upgrade
+- Next feature target: `3.3.0` Calendar and Settings Upgrade
 
 ## Working Rules
 
@@ -35,17 +35,17 @@ Goal: Remove the bugs and interaction issues that make the current app feel unre
 
 ### 3.2.0 Task and Calendar Foundation
 
-Status: Planned
+Status: Done
 
 Goal: Make EasyList and EasyCalendar understandable together.
 
-- Tasks support separate planned work time and deadline/event date.
-- Calendar shows planned work blocks differently from deadlines.
-- Task time can be split into multiple work blocks.
-- EasyList ranking labels become plain-language urgency levels.
-- To-do list is faster to scan and check off.
-- Completed tasks get a lightweight satisfying archive animation.
-- Add-task flow is simplified so the queue does not crowd the creation area.
+- Done: Tasks use due date as the deadline and linked EasyCalendar blocks as planned work time.
+- Done: Calendar shows planned work blocks differently from deadline-only task items.
+- Done: Task time can be split into multiple work blocks by sending the same task to EasyCalendar more than once.
+- Done: EasyList ranking became a plain-language 1-10 urgency scale.
+- Done: To-do list cards are faster to scan with metadata chips.
+- Done: Completed tasks get a lightweight satisfying archive animation.
+- Done in `3.1.7`: Add-task flow is simplified so the queue does not crowd the creation area.
 
 ### 3.3.0 Calendar and Settings Upgrade
 

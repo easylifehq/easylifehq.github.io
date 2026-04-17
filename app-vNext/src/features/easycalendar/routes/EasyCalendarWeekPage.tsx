@@ -65,7 +65,7 @@ export function EasyCalendarWeekPage() {
         {isLoading ? <p className="helper-copy">Loading your calendar...</p> : null}
         <div className="calendar-week-grid">
           {days.map((day) => {
-            const items = getItemsForDay(day, events, taskBlocks, categories);
+            const items = getItemsForDay(day, events, taskBlocks, categories, tasks);
             const scheduledMinutes = getScheduledMinutesForDay(day, events, taskBlocks);
 
             return (
@@ -89,16 +89,17 @@ export function EasyCalendarWeekPage() {
                         onClick={() => {
                           if (item.kind === "task-block") {
                             setSelectedBlockId(item.id);
-                          } else {
+                          } else if (item.kind === "event") {
                             setSelectedEventId(item.id);
                           }
                         }}
-                        className={`calendar-block-vnext${item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
+                        className={`calendar-block-vnext${item.kind === "deadline" ? " deadline" : item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
                         style={
                           {
                             "--calendar-block-color": item.color,
                           } as CSSProperties
                         }
+                        disabled={item.kind === "deadline"}
                       >
                         <strong>{item.title}</strong>
                         <span>{item.helper}</span>

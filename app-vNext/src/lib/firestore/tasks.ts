@@ -14,13 +14,15 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 
+export type PriorityTier = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+
 export type TaskRecord = {
   id: string;
   title: string;
   notes: string;
   category: string;
   estimatedLength: number | null;
-  priorityTier: 1 | 2 | 3 | 4 | 5;
+  priorityTier: PriorityTier;
   priorityLabel: string;
   dueDate: Date | null;
   recurring: boolean;
@@ -67,7 +69,7 @@ export function normalizeTask(snapshot: QueryDocumentSnapshot<DocumentData>) {
     category: data.category || "",
     estimatedLength:
       typeof data.estimatedLength === "number" ? data.estimatedLength : null,
-    priorityTier: (Number(data.priorityTier) || 3) as 1 | 2 | 3 | 4 | 5,
+    priorityTier: normalizePriorityTier(data.priorityTier),
     priorityLabel: data.priorityLabel || "",
     dueDate: toDate(data.dueDate),
     recurring: Boolean(data.recurring),
@@ -102,7 +104,7 @@ export type TaskDraft = {
   notes: string;
   category: string;
   estimatedLength: number | null;
-  priorityTier: 1 | 2 | 3 | 4 | 5;
+  priorityTier: PriorityTier;
   priorityLabel: string;
   dueDate: string | null;
   recurring?: boolean;
@@ -126,6 +128,15 @@ export async function createTask(userId: string, draft: TaskDraft) {
   });
 
   return reference.id;
+}
+
+function normalizePriorityTier(value: unknown): PriorityTier {
+  const tier = Math.round(Number(value));
+  if (tier >= 1 && tier <= 10) {
+    return tier as PriorityTier;
+  }
+
+  return 5;
 }
 
 export async function updateTask(userId: string, taskId: string, draft: TaskDraft) {

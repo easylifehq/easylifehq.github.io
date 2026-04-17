@@ -1,5 +1,5 @@
 import type { TaskRecord } from "@/lib/firestore/tasks";
-import { formatDate, getPriorityMeta, isOverdue } from "@/features/easylist/lib/taskUtils";
+import { formatDate, getPriorityMeta, isDueToday, isOverdue } from "@/features/easylist/lib/taskUtils";
 
 type TaskCardProps = {
   task: TaskRecord;
@@ -11,7 +11,15 @@ type TaskCardProps = {
 export function TaskCard({ task, onEdit, onComplete, onReopen }: TaskCardProps) {
   const priority = getPriorityMeta(task.priorityTier, task.priorityLabel);
   const overdue = isOverdue(task);
+  const dueToday = isDueToday(task);
   const scheduledCount = task.linkedCalendarBlockIds.length;
+  const dueLabel = overdue
+    ? "Overdue"
+    : dueToday
+      ? "Due today"
+      : task.dueDate
+        ? `Due ${formatDate(task.dueDate, true)}`
+        : "No deadline";
 
   return (
     <article className={`task-card-vnext priority-tier-${priority.tier}${task.completed ? " completed" : ""}`}>
@@ -21,13 +29,12 @@ export function TaskCard({ task, onEdit, onComplete, onReopen }: TaskCardProps) 
             <h3>{task.title || "Untitled task"}</h3>
             <span className="priority-pill-vnext">{priority.label}</span>
           </div>
-          <p>
-            {task.category || "No category"}
-            {task.estimatedLength ? ` | ${task.estimatedLength} min` : ""}
-            {task.dueDate ? ` | ${formatDate(task.dueDate, true)}` : " | No due date"}
-            {overdue ? " | Overdue" : ""}
-            {scheduledCount ? ` | In EasyCalendar (${scheduledCount})` : ""}
-          </p>
+          <div className="task-meta-row">
+            <span className={overdue ? "task-meta-chip urgent" : "task-meta-chip"}>{dueLabel}</span>
+            <span className="task-meta-chip">{task.estimatedLength ? `${task.estimatedLength} min` : "No time estimate"}</span>
+            {scheduledCount ? <span className="task-meta-chip scheduled">Planned {scheduledCount}x</span> : null}
+            <span className="task-meta-chip">{task.category || "No category"}</span>
+          </div>
           {task.notes ? <small>{task.notes}</small> : null}
         </div>
       </button>

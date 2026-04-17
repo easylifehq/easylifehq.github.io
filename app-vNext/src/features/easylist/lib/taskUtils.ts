@@ -1,21 +1,37 @@
-import type { TaskDraft, TaskRecord } from "@/lib/firestore/tasks";
+import type { PriorityTier, TaskDraft, TaskRecord } from "@/lib/firestore/tasks";
 
-const PRIORITY_LABELS: Record<1 | 2 | 3 | 4 | 5, string> = {
-  1: "Gentle Goose",
-  2: "Bright Bunny",
-  3: "Golden Gator",
-  4: "Power Panda",
-  5: "Alpha Alligator",
+export const PRIORITY_TIERS: PriorityTier[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const PRIORITY_LABELS: Record<PriorityTier, string> = {
+  1: "Should've been done yesterday",
+  2: "Hair on fire",
+  3: "Do next",
+  4: "Very important",
+  5: "Important",
+  6: "Normal",
+  7: "Soon-ish",
+  8: "When there's room",
+  9: "Low simmer",
+  10: "Nice to have one day",
 };
 
 export function getPriorityMeta(priorityTier: number, priorityLabel = "") {
-  const tier = (Number(priorityTier) || 3) as 1 | 2 | 3 | 4 | 5;
+  const tier = normalizePriorityTier(priorityTier);
 
   return {
     tier,
     label: priorityLabel || PRIORITY_LABELS[tier],
     rank: tier,
   };
+}
+
+export function normalizePriorityTier(value: unknown): PriorityTier {
+  const tier = Math.round(Number(value));
+  if (tier >= 1 && tier <= 10) {
+    return tier as PriorityTier;
+  }
+
+  return 5;
 }
 
 export function startOfDay(dateInput = new Date()) {
@@ -341,7 +357,7 @@ export function taskToDraft(task: TaskRecord): TaskDraft {
     notes: task.notes,
     category: task.category,
     estimatedLength: task.estimatedLength,
-    priorityTier: task.priorityTier,
+    priorityTier: normalizePriorityTier(task.priorityTier),
     priorityLabel: task.priorityLabel || PRIORITY_LABELS[task.priorityTier],
     dueDate: task.dueDate ? toDateInputValue(task.dueDate) : null,
     recurring: task.recurring,

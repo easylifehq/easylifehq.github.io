@@ -2082,11 +2082,12 @@ textarea::placeholder {
   border-radius: 20px;
   border: 1px solid var(--ui-border-subtle, var(--app-panel-border, rgba(99, 76, 58, 0.12)));
   background: var(--ui-bg-card-elevated, var(--shell-input-bg));
-  transition: transform var(--shell-motion-fast), box-shadow var(--shell-motion-fast), border-color var(--shell-motion-fast);
+  transition: transform var(--shell-motion-fast), box-shadow var(--shell-motion-fast), border-color var(--shell-motion-fast), opacity var(--shell-motion-fast);
 }
 
 .task-card-vnext.completed {
   background: color-mix(in srgb, var(--ui-bg-card) 86%, var(--ui-pill-bg) 14%);
+  animation: task-archive-pop 0.34s ease both;
 }
 
 .task-card-main {
@@ -2108,12 +2109,57 @@ textarea::placeholder {
   font-size: 1.05rem;
 }
 
-.task-card-copy p,
 .task-card-copy small {
   display: block;
   margin: 0.35rem 0 0;
   color: var(--ui-text-muted, #6c6058);
   line-height: 1.5;
+}
+
+.task-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.task-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0.24rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  background: var(--ui-bg-card, #fff8f2);
+  color: var(--ui-text-muted, #6c6058);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.task-meta-chip.urgent {
+  background: color-mix(in srgb, #b42318 12%, var(--ui-bg-card) 88%);
+  color: #7a1f17;
+  border-color: color-mix(in srgb, #b42318 24%, transparent);
+}
+
+.task-meta-chip.scheduled {
+  background: color-mix(in srgb, var(--app-accent) 12%, var(--ui-bg-card) 88%);
+  color: var(--app-accent-text);
+}
+
+@keyframes task-archive-pop {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  55% {
+    opacity: 0.86;
+    transform: translateX(10px) scale(0.985);
+  }
+  100% {
+    opacity: 0.72;
+    transform: translateX(0) scale(0.99);
+  }
 }
 
 .priority-pill-vnext {
@@ -2606,6 +2652,23 @@ button.calendar-detail-card:disabled {
 .calendar-detail-card.flexible span {
   background: var(--ui-pill-bg, #fff8f0);
   color: var(--ui-pill-text, #875a38);
+}
+
+.calendar-block-vnext.deadline,
+.calendar-detail-card.deadline {
+  border: 1px solid color-mix(in srgb, #b42318 28%, var(--ui-border-subtle));
+}
+
+.calendar-block-vnext.deadline::before,
+.calendar-detail-card.deadline::before {
+  opacity: 0.1;
+  background: #b42318;
+}
+
+.calendar-block-vnext.deadline small,
+.calendar-detail-card.deadline span {
+  background: color-mix(in srgb, #b42318 12%, var(--ui-bg-card) 88%);
+  color: #7a1f17;
 }
 
 .calendar-block-vnext.completed,
