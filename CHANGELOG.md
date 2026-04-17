@@ -6,6 +6,20 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.3.0
+
+### Added
+
+- Added a real EasyCalendar month view.
+- Added an hour-by-hour EasyCalendar day layout.
+- Added calendar wakeup time to Settings and persisted it with user shell settings.
+- Added in-calendar Day, View week, and View month controls above the day timeline.
+- Added app-specific settings cards for EasyCalendar, EasyList, EasyNotes, and EasyWorkout.
+
+### Changed
+
+- EasyCalendar day planning now uses the user's wakeup time as the start of the visible day.
+
 ## 3.2.0
 
 ### Added

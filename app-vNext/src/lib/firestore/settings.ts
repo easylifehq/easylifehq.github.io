@@ -35,6 +35,7 @@ export type UserShellSettings = {
   themeMode: ThemeMode;
   visibleApps: VisibleAppId[];
   experimentalFeatures: ExperimentalFeatureId[];
+  calendarWakeTime: string;
 };
 
 export const defaultShellSettings: UserShellSettings = {
@@ -46,6 +47,7 @@ export const defaultShellSettings: UserShellSettings = {
     "easyworkout",
   ],
   experimentalFeatures: [],
+  calendarWakeTime: "08:00",
 };
 
 const validVisibleApps: VisibleAppId[] = [
@@ -111,6 +113,11 @@ function normalizeThemeMode(value: unknown): ThemeMode {
   return valid.includes(value as ThemeMode) ? (value as ThemeMode) : "classic";
 }
 
+function normalizeTimeInput(value: unknown, fallback: string) {
+  if (typeof value !== "string") return fallback;
+  return /^\d{2}:\d{2}$/.test(value) ? value : fallback;
+}
+
 export function getShellSettingsDoc(userId: string) {
   return doc(db, "users", userId, "appPreferences", "shell");
 }
@@ -120,6 +127,7 @@ export function normalizeShellSettings(data: DocumentData | undefined): UserShel
     themeMode: normalizeThemeMode(data?.themeMode),
     visibleApps: normalizeVisibleApps(data?.visibleApps),
     experimentalFeatures: normalizeExperimentalFeatures(data?.experimentalFeatures),
+    calendarWakeTime: normalizeTimeInput(data?.calendarWakeTime, defaultShellSettings.calendarWakeTime),
   };
 }
 
@@ -146,6 +154,7 @@ export async function saveShellSettings(userId: string, settings: UserShellSetti
       themeMode: settings.themeMode,
       visibleApps: settings.visibleApps,
       experimentalFeatures: settings.experimentalFeatures,
+      calendarWakeTime: settings.calendarWakeTime,
       updatedAt: serverTimestamp(),
     },
     { merge: true }

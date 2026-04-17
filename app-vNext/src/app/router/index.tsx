@@ -27,6 +27,10 @@ const EasyCalendarWeekPage = lazyNamed(
   () => import("@/features/easycalendar/routes/EasyCalendarWeekPage"),
   "EasyCalendarWeekPage"
 );
+const EasyCalendarMonthPage = lazyNamed(
+  () => import("@/features/easycalendar/routes/EasyCalendarMonthPage"),
+  "EasyCalendarMonthPage"
+);
 const EasyContactsLayout = lazyNamed(
   () => import("@/features/easycontacts/layouts/EasyContactsLayout"),
   "EasyContactsLayout"
@@ -171,6 +175,7 @@ export function AppRouter() {
               <Route index element={<Navigate to="/app/easycalendar/week" replace />} />
               <Route path="week" element={<EasyCalendarWeekPage />} />
               <Route path="day" element={<EasyCalendarDayPage />} />
+              <Route path="month" element={<EasyCalendarMonthPage />} />
             </Route>
             <Route path="easynotes" element={<EasyNotesLayout />}>
               <Route index element={<EasyNotesLibraryPage />} />

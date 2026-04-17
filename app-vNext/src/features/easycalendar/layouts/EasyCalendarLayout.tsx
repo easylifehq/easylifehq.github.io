@@ -4,7 +4,7 @@ import { AppWorkspaceHeader } from "@/components/navigation/AppWorkspaceHeader";
 const links = [
   { to: "/app/easycalendar/day", label: "Day" },
   { to: "/app/easycalendar/week", label: "Week" },
-  { to: "/app/easycalendar/week", label: "Month" },
+  { to: "/app/easycalendar/month", label: "Month" },
 ];
 
 export function EasyCalendarLayout() {

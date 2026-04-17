@@ -123,6 +123,20 @@ export function formatTimeLabel(date: Date | null) {
   }).format(date);
 }
 
+export function getHourFromTimeInput(value: string, fallbackHour = 8) {
+  const [hours] = value.split(":").map(Number);
+  return Number.isFinite(hours) && hours >= 0 && hours <= 23 ? hours : fallbackHour;
+}
+
+export function buildHourlySlots(date: Date, startHour = 8, count = 14) {
+  return Array.from({ length: count }, (_, index) => {
+    const startAt = new Date(date.getFullYear(), date.getMonth(), date.getDate(), startHour + index, 0, 0, 0);
+    const endAt = new Date(date.getFullYear(), date.getMonth(), date.getDate(), startHour + index + 1, 0, 0, 0);
+
+    return { startAt, endAt };
+  });
+}
+
 export function toDateInputValue(date: Date | null) {
   if (!date) return "";
 

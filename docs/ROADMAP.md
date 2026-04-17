@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.2.0`
-- Current planning target: `3.3.0` Calendar and Settings Upgrade
-- Next feature target: `3.3.0` Calendar and Settings Upgrade
+- App package version: `3.3.0`
+- Current planning target: `3.4.0` Fast Capture and Notes Integration
+- Next feature target: `3.4.0` Fast Capture and Notes Integration
 
 ## Working Rules
 
@@ -49,19 +49,20 @@ Goal: Make EasyList and EasyCalendar understandable together.
 
 ### 3.3.0 Calendar and Settings Upgrade
 
-Status: Planned
+Status: Partially Done
 
 Goal: Give Calendar a clearer structure and move customization into organized settings.
 
-- Day view uses an hour-by-hour layout.
-- Day, week, and month views can be switched from the calendar screen.
-- Unnecessary calendar header tabs are removed or consolidated.
+- Done: Day view uses an hour-by-hour layout.
+- Done: Day, week, and month views can be switched from the calendar screen.
+- Next: Unnecessary calendar header tabs are removed or consolidated.
 - Repeating events support classes and other recurring obligations.
-- Wakeup time can be edited by the user.
+- Done: Wakeup time can be edited by the user in Settings.
 - Users can create custom categories.
 - Users can customize category colors for tasks, school, and personal categories.
-- Settings are split into app-specific pages.
-- Settings navigation works well on mobile.
+- Started: Settings includes a dedicated Calendar section and app-specific settings cards.
+- Next: Settings are split into app-specific pages.
+- Next: Settings navigation works well on mobile.
 
 ### 3.4.0 Fast Capture and Notes Integration
 

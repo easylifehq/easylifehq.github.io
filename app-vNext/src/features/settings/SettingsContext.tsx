@@ -65,6 +65,7 @@ type SettingsContextValue = {
   isAppVisible: (appId: VisibleAppId) => boolean;
   toggleExperimentalFeature: (featureId: ExperimentalFeatureId) => Promise<void>;
   isExperimentalFeatureEnabled: (featureId: ExperimentalFeatureId) => boolean;
+  setCalendarWakeTime: (wakeTime: string) => Promise<void>;
 };
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
@@ -140,6 +141,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     });
   }
 
+  async function setCalendarWakeTime(calendarWakeTime: string) {
+    await persist({ ...settings, calendarWakeTime });
+  }
+
   const value = useMemo(
     () => ({
       settings,
@@ -148,6 +153,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setThemeMode,
       toggleVisibleApp,
       toggleExperimentalFeature,
+      setCalendarWakeTime,
       isAppVisible: (appId: VisibleAppId) => settings.visibleApps.includes(appId),
       isExperimentalFeatureEnabled: (featureId: ExperimentalFeatureId) =>
         settings.experimentalFeatures.includes(featureId),

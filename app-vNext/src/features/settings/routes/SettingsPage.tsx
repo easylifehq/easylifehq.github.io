@@ -205,6 +205,43 @@ const experimentalFeatureOptions: Array<{
 
 const experimentGroups = ["HQ", "Capture", "Planning", "Projects", "Notes", "Workout"] as const;
 
+const pageSettingsSections: Array<{
+  id: string;
+  label: string;
+  title: string;
+  description: string;
+  status: string;
+}> = [
+  {
+    id: "calendar",
+    label: "Calendar",
+    title: "EasyCalendar",
+    description: "Wakeup time, day layout, categories, recurring classes, and calendar defaults belong here.",
+    status: "Started",
+  },
+  {
+    id: "list",
+    label: "List",
+    title: "EasyList",
+    description: "Urgency scale, quick-add defaults, archive behavior, and task display controls will live here.",
+    status: "Next",
+  },
+  {
+    id: "notes",
+    label: "Notes",
+    title: "EasyNotes",
+    description: "Open-note behavior, untitled note cleanup, folders, and note-to-task defaults will live here.",
+    status: "Next",
+  },
+  {
+    id: "workout",
+    label: "Workout",
+    title: "EasyWorkout",
+    description: "Workout mode defaults, exercise box counts, and logging preferences will live here.",
+    status: "Next",
+  },
+];
+
 export function SettingsPage() {
   const {
     settings,
@@ -215,6 +252,7 @@ export function SettingsPage() {
     isAppVisible,
     toggleExperimentalFeature,
     isExperimentalFeatureEnabled,
+    setCalendarWakeTime,
   } = useSettings();
 
   const enabledApps = appVisibilityOptions.filter((app) => isAppVisible(app.id));
@@ -254,6 +292,8 @@ export function SettingsPage() {
       <nav className="settings-side-nav" aria-label="Settings sections">
         <a href="#customize">Customize</a>
         <a href="#apps">Apps</a>
+        <a href="#calendar">Calendar</a>
+        <a href="#page-settings">Page settings</a>
         <a href="#experiments">Experimental</a>
         <a href="#account">User info</a>
       </nav>
@@ -281,6 +321,49 @@ export function SettingsPage() {
                 <strong>{option.label}</strong>
                 <p>{option.description}</p>
               </button>
+            ))}
+          </div>
+        </PageSection>
+
+        <PageSection
+          eyebrow="Calendar"
+          title="Day setup"
+        >
+          <div id="calendar" className="settings-anchor" />
+          <div className="settings-toggle-list">
+            <label className="settings-toggle-row active">
+              <div>
+                <span className="settings-card-topline">
+                  <span>EasyCalendar</span>
+                  <span className="settings-state-pill">Day view</span>
+                </span>
+                <strong>Wakeup time</strong>
+                <p>Your calendar day starts here when building the hour-by-hour view.</p>
+              </div>
+              <input
+                type="time"
+                value={settings.calendarWakeTime}
+                onChange={(event) => void setCalendarWakeTime(event.target.value)}
+              />
+            </label>
+          </div>
+        </PageSection>
+
+        <PageSection
+          eyebrow="Page controls"
+          title="App-specific settings"
+        >
+          <div id="page-settings" className="settings-anchor" />
+          <div className="settings-page-section-list">
+            {pageSettingsSections.map((section) => (
+              <article key={section.id} className={`settings-page-section-card settings-page-section-${section.id}`}>
+                <span className="settings-card-topline">
+                  <span>{section.label}</span>
+                  <span className="settings-state-pill">{section.status}</span>
+                </span>
+                <strong>{section.title}</strong>
+                <p>{section.description}</p>
+              </article>
             ))}
           </div>
         </PageSection>
@@ -394,7 +477,7 @@ export function SettingsPage() {
           </article>
           <article className="mini-panel-vnext">
             <span>Version</span>
-            <strong>3.1.6</strong>
+            <strong>3.3.0</strong>
             <p>Current patch.</p>
           </article>
           <article className="mini-panel-vnext">
