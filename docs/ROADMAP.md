@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.9.0`
-- Current planning target: `3.9.0` Calendar Recurrence and Category Customization
-- Next feature target: `3.10.0` Settings Navigation Split
+- App package version: `3.10.0`
+- Current planning target: `3.10.0` Settings Navigation Split
+- Next feature target: `3.11.0` Notes Library Organization
 
 ## Working Rules
 
@@ -61,8 +61,8 @@ Goal: Give Calendar a clearer structure and move customization into organized se
 - Done: Users can create custom categories.
 - Done: Users can customize category colors for tasks, school, and personal categories.
 - Started: Settings includes a dedicated Calendar section and app-specific settings cards.
-- Next: Settings are split into app-specific pages.
-- Next: Settings navigation works well on mobile.
+- Started: Settings are split into focused sections for each major settings area.
+- Done: Settings navigation works well on mobile.
 
 ### 3.4.0 Fast Capture and Notes Integration
 

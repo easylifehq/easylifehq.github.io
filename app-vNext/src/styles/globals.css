@@ -3165,7 +3165,7 @@ button.calendar-detail-card:disabled {
 }
 
 .settings-layout-grid {
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
 }
 
@@ -3310,8 +3310,7 @@ button.calendar-detail-card:disabled {
   position: sticky;
   top: 5.25rem;
   z-index: 5;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 0.45rem;
   padding: 0.55rem;
   border-radius: 8px;
@@ -3320,19 +3319,65 @@ button.calendar-detail-card:disabled {
   box-shadow: 0 10px 28px rgba(34, 29, 24, 0.08);
 }
 
-.settings-side-nav a {
-  min-height: 34px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0.42rem 0.7rem;
-  border-radius: 8px;
-  color: var(--ui-text-secondary, var(--shell-page-text));
-  font-weight: 800;
+.settings-section-shell {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.28fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
 }
 
-.settings-side-nav a:hover {
+.settings-section-content {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.settings-section-heading {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-card, var(--shell-input-bg));
+}
+
+.settings-section-heading h2,
+.settings-section-heading p {
+  margin: 0;
+}
+
+.settings-section-heading p:not(.eyebrow) {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.settings-side-nav button {
+  min-height: 50px;
+  display: grid;
+  gap: 0.15rem;
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.settings-side-nav button span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.73rem;
+  text-transform: uppercase;
+}
+
+.settings-side-nav button:hover,
+.settings-side-nav button.active {
   background: var(--ui-bg-tab-active, var(--shell-input-bg));
   color: var(--ui-text-primary, var(--shell-page-text));
+}
+
+.settings-mobile-nav {
+  display: none;
 }
 
 .settings-anchor {
@@ -3889,6 +3934,18 @@ button.calendar-detail-card:disabled {
 
   .settings-status-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .settings-section-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-side-nav {
+    display: none;
+  }
+
+  .settings-mobile-nav {
+    display: grid;
   }
 
   .pipeline-board-grid,

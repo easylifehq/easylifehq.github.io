@@ -1,4 +1,5 @@
 import { PageSection } from "@/components/ui/PageSection";
+import { useState } from "react";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { auth } from "@/lib/firebase/client";
 import type {
@@ -211,6 +212,58 @@ const experimentalFeatureOptions: Array<{
 
 const experimentGroups = ["HQ", "Capture", "Planning", "Projects", "Notes", "Workout"] as const;
 
+type SettingsSectionId =
+  | "customize"
+  | "apps"
+  | "calendar"
+  | "page-settings"
+  | "experiments"
+  | "account";
+
+const settingsSections: Array<{
+  id: SettingsSectionId;
+  label: string;
+  eyebrow: string;
+  description: string;
+}> = [
+  {
+    id: "customize",
+    label: "Customize",
+    eyebrow: "Appearance",
+    description: "Theme, tone, and the overall feel of the app.",
+  },
+  {
+    id: "apps",
+    label: "Apps",
+    eyebrow: "Suite",
+    description: "Choose which apps show up in your workspace.",
+  },
+  {
+    id: "calendar",
+    label: "Calendar",
+    eyebrow: "EasyCalendar",
+    description: "Wakeup time and calendar-specific defaults.",
+  },
+  {
+    id: "page-settings",
+    label: "Pages",
+    eyebrow: "Page Controls",
+    description: "The future home for each app's own settings page.",
+  },
+  {
+    id: "experiments",
+    label: "Labs",
+    eyebrow: "Experimental",
+    description: "Preview features that can be switched on or off.",
+  },
+  {
+    id: "account",
+    label: "Account",
+    eyebrow: "User Info",
+    description: "Account, version, and session controls.",
+  },
+];
+
 const pageSettingsSections: Array<{
   id: string;
   label: string;
@@ -249,6 +302,7 @@ const pageSettingsSections: Array<{
 ];
 
 export function SettingsPage() {
+  const [activeSection, setActiveSection] = useState<SettingsSectionId>("customize");
   const {
     settings,
     isLoading,
@@ -266,6 +320,8 @@ export function SettingsPage() {
     isExperimentalFeatureEnabled(feature.id)
   );
   const activeTheme = themeOptions.find((theme) => theme.value === settings.themeMode) || themeOptions[0];
+  const activeSectionConfig =
+    settingsSections.find((section) => section.id === activeSection) || settingsSections[0];
 
   return (
     <main className="page-wrap app-theme app-theme-settings settings-page">
@@ -295,16 +351,44 @@ export function SettingsPage() {
         </div>
       </section>
 
-      <nav className="settings-side-nav" aria-label="Settings sections">
-        <a href="#customize">Customize</a>
-        <a href="#apps">Apps</a>
-        <a href="#calendar">Calendar</a>
-        <a href="#page-settings">Page settings</a>
-        <a href="#experiments">Experimental</a>
-        <a href="#account">User info</a>
-      </nav>
+      <section className="settings-section-shell">
+        <nav className="settings-side-nav" aria-label="Settings sections">
+          {settingsSections.map((section) => (
+            <button
+              key={section.id}
+              type="button"
+              className={activeSection === section.id ? "active" : ""}
+              onClick={() => setActiveSection(section.id)}
+            >
+              <span>{section.eyebrow}</span>
+              <strong>{section.label}</strong>
+            </button>
+          ))}
+        </nav>
+
+        <label className="settings-mobile-nav field-stack">
+          <span>Settings section</span>
+          <select
+            value={activeSection}
+            onChange={(event) => setActiveSection(event.target.value as SettingsSectionId)}
+          >
+            {settingsSections.map((section) => (
+              <option key={section.id} value={section.id}>
+                {section.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <div className="settings-section-content">
+          <div className="settings-section-heading">
+            <p className="eyebrow">{activeSectionConfig.eyebrow}</p>
+            <h2>{activeSectionConfig.label}</h2>
+            <p>{activeSectionConfig.description}</p>
+          </div>
 
       <div className="settings-layout-grid">
+        {activeSection === "customize" ? (
         <PageSection
           eyebrow="Appearance"
           title="Theme mode"
@@ -330,7 +414,9 @@ export function SettingsPage() {
             ))}
           </div>
         </PageSection>
+        ) : null}
 
+        {activeSection === "calendar" ? (
         <PageSection
           eyebrow="Calendar"
           title="Day setup"
@@ -354,7 +440,9 @@ export function SettingsPage() {
             </label>
           </div>
         </PageSection>
+        ) : null}
 
+        {activeSection === "page-settings" ? (
         <PageSection
           eyebrow="Page controls"
           title="App-specific settings"
@@ -373,7 +461,9 @@ export function SettingsPage() {
             ))}
           </div>
         </PageSection>
+        ) : null}
 
+        {activeSection === "apps" ? (
         <PageSection
           eyebrow="Suite"
           title="Visible apps"
@@ -404,8 +494,10 @@ export function SettingsPage() {
             })}
           </div>
         </PageSection>
+        ) : null}
       </div>
 
+      {activeSection === "experiments" ? (
       <PageSection
         eyebrow="Labs"
           title="Experimental features"
@@ -469,7 +561,9 @@ export function SettingsPage() {
           ))}
         </div>
       </PageSection>
+      ) : null}
 
+      {activeSection === "account" ? (
       <PageSection
         eyebrow="Account"
         title="User info"
@@ -483,8 +577,8 @@ export function SettingsPage() {
           </article>
           <article className="mini-panel-vnext">
             <span>Version</span>
-            <strong>3.6.0</strong>
-            <p>Current patch.</p>
+            <strong>3.10.0</strong>
+            <p>Current release.</p>
           </article>
           <article className="mini-panel-vnext">
             <span>Session</span>
@@ -495,6 +589,9 @@ export function SettingsPage() {
           </article>
         </div>
       </PageSection>
+      ) : null}
+        </div>
+      </section>
     </main>
   );
 }

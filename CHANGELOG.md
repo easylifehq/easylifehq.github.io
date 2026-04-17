@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.10.0
+
+### Changed
+
+- Settings now uses a sectioned control center with a sidebar on desktop and a section picker on mobile.
+- Settings sections now show one focused area at a time for appearance, apps, calendar, page controls, labs, and account.
+- Updated the Settings version display for the current release.
+
 ## 3.9.0
 
 ### Added
