@@ -2743,6 +2743,19 @@ button.calendar-detail-card:disabled {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.calendar-category-form {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 110px auto;
+  gap: 0.85rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.calendar-category-form input[type="color"] {
+  min-height: 46px;
+  padding: 0.25rem;
+}
+
 .calendar-category-card {
   display: flex;
   align-items: center;

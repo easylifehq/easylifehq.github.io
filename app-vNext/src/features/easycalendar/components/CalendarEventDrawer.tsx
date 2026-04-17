@@ -17,6 +17,12 @@ const EVENT_TYPES: CalendarEventType[] = [
   "personal",
   "other",
 ];
+const RECURRENCE_OPTIONS = [
+  { value: "", label: "Does not repeat" },
+  { value: "FREQ=DAILY", label: "Daily" },
+  { value: "FREQ=WEEKLY", label: "Weekly" },
+  { value: "FREQ=MONTHLY", label: "Monthly" },
+];
 
 type CalendarEventDrawerProps = {
   event: CalendarEventRecord | null;
@@ -37,6 +43,7 @@ export function CalendarEventDrawer({
   const [eventDate, setEventDate] = useState("");
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("10:00");
+  const [recurrenceRule, setRecurrenceRule] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
@@ -50,6 +57,7 @@ export function CalendarEventDrawer({
     setEventDate(toDateInputValue(event.startAt));
     setStartTime(toTimeInputValue(event.startAt) || "09:00");
     setEndTime(toTimeInputValue(event.endAt) || "10:00");
+    setRecurrenceRule(event.recurrenceRule || "");
     setStatusMessage("");
   }, [event]);
 
@@ -81,8 +89,8 @@ export function CalendarEventDrawer({
         startAt,
         endAt,
         allDay: currentEvent.allDay,
-        isRecurring: currentEvent.isRecurring,
-        recurrenceRule: currentEvent.recurrenceRule,
+        isRecurring: Boolean(recurrenceRule),
+        recurrenceRule: recurrenceRule || null,
         eventType,
       });
       setStatusMessage("Event updated.");
@@ -148,6 +156,17 @@ export function CalendarEventDrawer({
               </select>
             </label>
 
+            <label className="field-stack">
+              <span>Repeat</span>
+              <select value={recurrenceRule} onChange={(changeEvent) => setRecurrenceRule(changeEvent.target.value)}>
+                {RECURRENCE_OPTIONS.map((option) => (
+                  <option key={option.value || "none"} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
             <label className="field-stack field-stack-wide">
               <span>Category color</span>
               <select value={categoryId} onChange={(changeEvent) => setCategoryId(changeEvent.target.value)}>
@@ -183,4 +202,3 @@ export function CalendarEventDrawer({
     </>
   );
 }
-

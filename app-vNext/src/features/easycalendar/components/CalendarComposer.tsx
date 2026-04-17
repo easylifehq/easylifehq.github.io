@@ -18,6 +18,12 @@ const EVENT_TYPES: CalendarEventType[] = [
 ];
 
 const PLANNING_STATES: PlanningState[] = ["suggested", "scheduled", "accepted"];
+const RECURRENCE_OPTIONS = [
+  { value: "", label: "Does not repeat" },
+  { value: "FREQ=DAILY", label: "Daily" },
+  { value: "FREQ=WEEKLY", label: "Weekly" },
+  { value: "FREQ=MONTHLY", label: "Monthly" },
+];
 
 export function CalendarComposer() {
   const { categories, tasks, addEvent, scheduleTask } = useEasyCalendar();
@@ -31,6 +37,7 @@ export function CalendarComposer() {
   const [eventDate, setEventDate] = useState(todayValue);
   const [eventStartTime, setEventStartTime] = useState("09:00");
   const [eventEndTime, setEventEndTime] = useState("10:00");
+  const [eventRecurrenceRule, setEventRecurrenceRule] = useState("");
   const [eventStatus, setEventStatus] = useState("");
   const [isSavingEvent, setIsSavingEvent] = useState(false);
 
@@ -69,14 +76,15 @@ export function CalendarComposer() {
         startAt,
         endAt,
         allDay: false,
-        isRecurring: false,
-        recurrenceRule: null,
+        isRecurring: Boolean(eventRecurrenceRule),
+        recurrenceRule: eventRecurrenceRule || null,
         eventType,
       });
       setEventTitle("");
       setEventDescription("");
       setEventCategory("");
       setEventType("appointment");
+      setEventRecurrenceRule("");
       setEventStatus("Event added.");
     } finally {
       setIsSavingEvent(false);
@@ -184,6 +192,20 @@ export function CalendarComposer() {
               value={eventEndTime}
               onChange={(event) => setEventEndTime(event.target.value)}
             />
+          </label>
+
+          <label className="field-stack">
+            <span>Repeat</span>
+            <select
+              value={eventRecurrenceRule}
+              onChange={(event) => setEventRecurrenceRule(event.target.value)}
+            >
+              {RECURRENCE_OPTIONS.map((option) => (
+                <option key={option.value || "none"} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="field-stack field-stack-wide">

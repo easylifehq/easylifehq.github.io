@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.9.0
+
+### Added
+
+- EasyCalendar fixed events can now repeat daily, weekly, or monthly.
+- EasyCalendar day, week, and month views now show recurring event occurrences.
+- EasyCalendar category tools can now create custom categories with user-selected colors.
+
 ## 3.8.1
 
 ### Added

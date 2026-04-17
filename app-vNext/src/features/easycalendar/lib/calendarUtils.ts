@@ -173,6 +173,60 @@ export function addMinutes(date: Date | null, minutes: number) {
   return new Date(date.getTime() + minutes * 60000);
 }
 
+function getRecurringEventOccurrence(event: CalendarEventRecord, date: Date) {
+  if (!event.startAt || !event.endAt) return null;
+  if (isSameDay(event.startAt, date)) {
+    return {
+      startAt: event.startAt,
+      endAt: event.endAt,
+    };
+  }
+
+  if (!event.isRecurring || !event.recurrenceRule || event.startAt > date) return null;
+
+  const rule = event.recurrenceRule.toUpperCase();
+  const dateStart = startOfDay(date);
+  const eventStart = startOfDay(event.startAt);
+  const daysSinceStart = Math.round((dateStart.getTime() - eventStart.getTime()) / 86400000);
+  const shouldRepeat =
+    (rule === "FREQ=DAILY" && daysSinceStart >= 0) ||
+    (rule === "FREQ=WEEKLY" && daysSinceStart >= 0 && daysSinceStart % 7 === 0) ||
+    (rule === "FREQ=MONTHLY" &&
+      date.getDate() === event.startAt.getDate() &&
+      dateStart >= eventStart);
+
+  if (!shouldRepeat) return null;
+
+  const durationMinutes = getDurationMinutes(event.startAt, event.endAt);
+  const startAt = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    event.startAt.getHours(),
+    event.startAt.getMinutes(),
+    0,
+    0
+  );
+
+  return {
+    startAt,
+    endAt: addMinutes(startAt, durationMinutes),
+  };
+}
+
+function getEventsForDay(date: Date, events: CalendarEventRecord[]) {
+  return events
+    .map((event) => {
+      const occurrence = getRecurringEventOccurrence(event, date);
+      return occurrence ? { event, ...occurrence } : null;
+    })
+    .filter(Boolean) as Array<{
+      event: CalendarEventRecord;
+      startAt: Date;
+      endAt: Date | null;
+    }>;
+}
+
 function maxDate(left: Date, right: Date) {
   return left.getTime() >= right.getTime() ? left : right;
 }
@@ -205,22 +259,23 @@ export function getItemsForDay(
   categories: CategoryRecord[],
   tasks: TaskRecord[] = []
 ) {
-  const eventItems: CalendarDayItem[] = events
-    .filter((event) => isSameDay(event.startAt, date))
-    .map((event) => {
+  const eventItems: CalendarDayItem[] = getEventsForDay(date, events)
+    .map(({ event, startAt, endAt }) => {
       const category = getCategoryForKey(categories, event.categoryId || event.eventType);
 
       return {
         id: event.id,
         title: event.title,
-        startAt: event.startAt,
-        endAt: event.endAt,
+        startAt,
+        endAt,
         kind: "event",
         color: category.color,
-        badge: event.eventType === "other" ? "fixed event" : event.eventType,
+        badge: event.isRecurring
+          ? `${event.eventType === "other" ? "fixed event" : event.eventType} | repeats`
+          : event.eventType === "other" ? "fixed event" : event.eventType,
         helper: event.allDay
           ? "All day"
-          : `${formatTimeLabel(event.startAt)} - ${formatTimeLabel(event.endAt)}`,
+          : `${formatTimeLabel(startAt)} - ${formatTimeLabel(endAt)}`,
         allDay: event.allDay,
         isFlexible: false,
         isCompleted: false,
@@ -296,8 +351,7 @@ export function getScheduledMinutesForDay(
   events: CalendarEventRecord[],
   taskBlocks: CalendarTaskBlockRecord[]
 ) {
-  const fixedMinutes = events
-    .filter((event) => isSameDay(event.startAt, date))
+  const fixedMinutes = getEventsForDay(date, events)
     .reduce((total, event) => total + getDurationMinutes(event.startAt, event.endAt), 0);
 
   const taskMinutes = taskBlocks
@@ -321,8 +375,8 @@ export function getOpenTimeWindowsForDay(
   const dayEnd = new Date(date.getFullYear(), date.getMonth(), date.getDate(), dayEndHour, 0, 0, 0);
 
   const occupied = [
-    ...events
-      .filter((event) => isSameDay(event.startAt, date) && event.startAt && event.endAt)
+    ...getEventsForDay(date, events)
+      .filter((event) => event.startAt && event.endAt)
       .map((event) => ({ startAt: event.startAt as Date, endAt: event.endAt as Date })),
     ...taskBlocks
       .filter(

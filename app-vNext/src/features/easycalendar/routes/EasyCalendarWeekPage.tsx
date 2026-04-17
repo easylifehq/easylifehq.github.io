@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties, type FormEvent } from "react";
 import { PageSection } from "@/components/ui/PageSection";
 import { CalendarComposer } from "@/features/easycalendar/components/CalendarComposer";
 import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
@@ -18,6 +18,9 @@ export function EasyCalendarWeekPage() {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [showComposer, setShowComposer] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategoryColor, setNewCategoryColor] = useState("#4d7fe6");
+  const [categoryMessage, setCategoryMessage] = useState("");
 
   const weekStart = startOfWeek(new Date());
   const days = Array.from({ length: 7 }, (_, index) => addDays(weekStart, index));
@@ -40,6 +43,26 @@ export function EasyCalendarWeekPage() {
         : null,
     [selectedBlock, tasks]
   );
+
+  async function handleAddCategory(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!newCategoryName.trim()) {
+      setCategoryMessage("Name the category first.");
+      return;
+    }
+
+    await addCategory({
+      name: newCategoryName.trim(),
+      color: newCategoryColor,
+      type: newCategoryName.trim().toLowerCase().replace(/\s+/g, "-"),
+      isDefault: false,
+    });
+
+    setNewCategoryName("");
+    setNewCategoryColor("#4d7fe6");
+    setCategoryMessage("Category added.");
+  }
 
   return (
     <>
@@ -132,6 +155,29 @@ export function EasyCalendarWeekPage() {
       </PageSection>
 
       <PageSection eyebrow="Categories" title="Tags">
+        <form className="calendar-category-form" onSubmit={(event) => void handleAddCategory(event)}>
+          <label className="field-stack">
+            <span>New category</span>
+            <input
+              type="text"
+              value={newCategoryName}
+              onChange={(event) => setNewCategoryName(event.target.value)}
+              placeholder="Computer science"
+            />
+          </label>
+          <label className="field-stack">
+            <span>Color</span>
+            <input
+              type="color"
+              value={newCategoryColor}
+              onChange={(event) => setNewCategoryColor(event.target.value)}
+            />
+          </label>
+          <button type="submit" className="primary-button">
+            Add Category
+          </button>
+        </form>
+        {categoryMessage ? <p className="helper-copy">{categoryMessage}</p> : null}
         <div className="calendar-category-grid">
           {categories.map((category) => (
             <article key={category.id} className="calendar-category-card">

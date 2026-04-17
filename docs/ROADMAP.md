@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.8.1`
-- Current planning target: `3.8.1` AI Calendar Suggestion Polish
-- Next feature target: `3.9.0` Calendar Recurrence and Category Customization
+- App package version: `3.9.0`
+- Current planning target: `3.9.0` Calendar Recurrence and Category Customization
+- Next feature target: `3.10.0` Settings Navigation Split
 
 ## Working Rules
 
@@ -49,17 +49,17 @@ Goal: Make EasyList and EasyCalendar understandable together.
 
 ### 3.3.0 Calendar and Settings Upgrade
 
-Status: Partially Done
+Status: In Progress
 
 Goal: Give Calendar a clearer structure and move customization into organized settings.
 
 - Done: Day view uses an hour-by-hour layout.
 - Done: Day, week, and month views can be switched from the calendar screen.
 - Next: Unnecessary calendar header tabs are removed or consolidated.
-- Repeating events support classes and other recurring obligations.
+- Done: Repeating events support classes and other recurring obligations.
 - Done: Wakeup time can be edited by the user in Settings.
-- Users can create custom categories.
-- Users can customize category colors for tasks, school, and personal categories.
+- Done: Users can create custom categories.
+- Done: Users can customize category colors for tasks, school, and personal categories.
 - Started: Settings includes a dedicated Calendar section and app-specific settings cards.
 - Next: Settings are split into app-specific pages.
 - Next: Settings navigation works well on mobile.
