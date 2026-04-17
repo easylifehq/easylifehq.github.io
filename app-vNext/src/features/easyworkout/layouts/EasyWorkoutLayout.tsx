@@ -5,7 +5,8 @@ import { EasyWorkoutProvider } from "@/features/easyworkout/EasyWorkoutContext";
 const links = [
   { to: "/app/easyworkout/dashboard", label: "Dashboard" },
   { to: "/app/easyworkout/routines", label: "Routines" },
-  { to: "/app/easyworkout/log", label: "Log Workout" },
+  { to: "/app/easyworkout/log?workoutMode=1", label: "Start Workout" },
+  { to: "/app/easyworkout/log", label: "Log Old Workout" },
 ];
 
 export function EasyWorkoutLayout() {

@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.4.0`
-- Current planning target: `3.4.0` Fast Capture and Notes Integration
-- Next feature target: `3.5.0` EasyWorkout Redesign
+- App package version: `3.5.0`
+- Current planning target: `3.5.0` EasyWorkout Redesign
+- Next feature target: `3.6.0` EasyStatistics Hub
 
 ## Working Rules
 
@@ -66,7 +66,7 @@ Goal: Give Calendar a clearer structure and move customization into organized se
 
 ### 3.4.0 Fast Capture and Notes Integration
 
-Status: In Progress
+Status: Done
 
 Goal: Minimize the time between having a thought and saving it.
 
@@ -82,21 +82,21 @@ Goal: Minimize the time between having a thought and saving it.
 
 ### 3.5.0 EasyWorkout Redesign
 
-Status: Planned
+Status: In Progress
 
 Goal: Separate passive workout logging from active workout mode.
 
-- EasyWorkout has a normal browsing/logging mode.
-- EasyWorkout has a focused Start Workout mode.
-- Workout mode hides unrelated UI.
-- Workout mode shows date, workout focus, general notes, and exercise entry.
-- New workouts start with several compact exercise boxes already available.
+- Done: EasyWorkout has a normal browsing/logging mode.
+- Started: EasyWorkout has a focused Start Workout mode.
+- Started: Workout mode hides unrelated UI.
+- Done: Workout mode shows date, general notes, and exercise entry.
+- Done: New workouts start with several compact exercise boxes already available.
 - Exercise boxes can be added or removed quickly.
 - Exercise names are free-form text, not restricted to hardcoded categories.
-- Each exercise has a notes field above sets.
+- Done: Each exercise has a notes field above sets.
 - Exercise boxes are compact enough to reduce scrolling.
-- Paste-from-notes moves out of the primary workout flow and into an import area.
-- Duration is removed unless there is a clear workout-specific use.
+- Started: Paste-from-notes moves out of the primary workout flow and into an import area.
+- Done: Duration is removed from focused workout mode.
 
 ### 3.6.0 EasyStatistics Hub
 

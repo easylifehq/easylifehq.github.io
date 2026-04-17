@@ -6,6 +6,18 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.5.0
+
+### Added
+
+- Added a focused EasyWorkout Start Workout path with five blank exercise boxes ready immediately.
+- Added exercise-level notes above workout sets.
+
+### Changed
+
+- Moved paste-from-notes and duration out of focused workout mode so active logging starts cleaner.
+- Renamed workout navigation around Start Workout and Log Old Workout.
+
 ## 3.4.0
 
 ### Added

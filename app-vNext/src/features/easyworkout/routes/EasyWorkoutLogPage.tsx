@@ -13,18 +13,22 @@ const emptyExerciseLog = (): WorkoutExerciseLogRecord => ({
   notes: "",
   sets: [emptySet()],
 });
+const startingWorkoutLogs = () => Array.from({ length: 5 }, () => emptyExerciseLog());
 
 export function EasyWorkoutLogPage() {
   const [searchParams] = useSearchParams();
   const routineId = searchParams.get("routineId");
   const gymMode = searchParams.get("gymMode") === "1";
+  const workoutMode = searchParams.get("workoutMode") === "1" || searchParams.get("start") === "1";
   const { isExperimentalFeatureEnabled } = useSettings();
   const { routines, exercises, sessions, addSession, error } = useEasyWorkout();
   const [selectedRoutineId, setSelectedRoutineId] = useState(routineId || "");
   const [performedOn, setPerformedOn] = useState(new Date().toISOString().split("T")[0]);
   const [durationMinutes, setDurationMinutes] = useState("");
   const [sessionNotes, setSessionNotes] = useState("");
-  const [exerciseLogs, setExerciseLogs] = useState<WorkoutExerciseLogRecord[]>([emptyExerciseLog()]);
+  const [exerciseLogs, setExerciseLogs] = useState<WorkoutExerciseLogRecord[]>(
+    workoutMode ? startingWorkoutLogs() : [emptyExerciseLog()]
+  );
   const [workoutPaste, setWorkoutPaste] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
 
@@ -33,21 +37,9 @@ export function EasyWorkoutLogPage() {
     [routines, selectedRoutineId]
   );
 
-  const allExerciseOptions = useMemo(
-    () =>
-      [...defaultWorkoutExercises, ...exercises.map((exercise) => ({
-        name: exercise.name,
-        muscleGroup: exercise.muscleGroup,
-      }))].filter(
-        (exercise, index, array) =>
-          array.findIndex((entry) => entry.name === exercise.name) === index
-      ),
-    [exercises]
-  );
-
   useEffect(() => {
     if (!selectedRoutine) {
-      setExerciseLogs([emptyExerciseLog()]);
+      setExerciseLogs(workoutMode ? startingWorkoutLogs() : [emptyExerciseLog()]);
       return;
     }
 
@@ -66,7 +58,7 @@ export function EasyWorkoutLogPage() {
           }))
         : [emptyExerciseLog()]
     );
-  }, [selectedRoutine]);
+  }, [selectedRoutine, workoutMode]);
 
   const previousByExercise = useMemo(
     () =>
@@ -92,6 +84,7 @@ export function EasyWorkoutLogPage() {
   );
 
   const isGymModeActive = gymMode && isExperimentalFeatureEnabled("gymMode");
+  const isFocusedWorkoutMode = workoutMode || isGymModeActive;
 
   function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogRecord>) {
     setExerciseLogs((current) =>
@@ -207,18 +200,23 @@ export function EasyWorkoutLogPage() {
     setSessionNotes("");
     setDurationMinutes("");
     if (!selectedRoutine) {
-      setExerciseLogs([emptyExerciseLog()]);
+      setExerciseLogs(isFocusedWorkoutMode ? startingWorkoutLogs() : [emptyExerciseLog()]);
     }
   }
 
   return (
     <PageSection
-      eyebrow="Logging mode"
-      title={isGymModeActive ? "Gym Mode" : "Log workout"}
-      description={isGymModeActive ? "Big taps, last-time hints, and only the fields you need while you are lifting." : "Keep it moving, see the last weight you hit, and save the session without digging through old notes."}
+      eyebrow={isFocusedWorkoutMode ? "Workout mode" : "Logging mode"}
+      title={isFocusedWorkoutMode ? "Start workout" : "Log workout"}
+      description={
+        isFocusedWorkoutMode
+          ? "Date, notes, and compact exercise boxes. Everything else gets out of the way."
+          : "Keep it moving, see the last weight you hit, and save the session without digging through old notes."
+      }
     >
       {error ? <p className="error-copy">{error}</p> : null}
       <form className="task-composer" onSubmit={handleSaveSession}>
+        {!isFocusedWorkoutMode ? (
         <div className="workout-quick-paste">
           <label className="field-stack">
             <span>Paste from notes</span>
@@ -236,8 +234,10 @@ export function EasyWorkoutLogPage() {
             <span className="helper-copy">Use one line per exercise. Reps and weight can be written like 8x135 or 8 reps at 135.</span>
           </div>
         </div>
+        ) : null}
 
-        <div className={`task-composer-grid${isGymModeActive ? " gym-mode-meta" : ""}`}>
+        <div className={`task-composer-grid${isFocusedWorkoutMode ? " gym-mode-meta workout-mode-meta" : ""}`}>
+          {!isFocusedWorkoutMode ? (
           <label className="field-stack">
             <span>Routine</span>
             <select
@@ -255,14 +255,17 @@ export function EasyWorkoutLogPage() {
               ))}
             </select>
           </label>
+          ) : null}
           <label className="field-stack">
             <span>Date</span>
             <input type="date" value={performedOn} onChange={(event) => setPerformedOn(event.target.value)} />
           </label>
+          {!isFocusedWorkoutMode ? (
           <label className="field-stack">
             <span>Duration (minutes)</span>
             <input type="number" min="0" value={durationMinutes} onChange={(event) => setDurationMinutes(event.target.value)} placeholder="75" />
           </label>
+          ) : null}
           <label className="field-stack field-stack-wide">
             <span>Session notes</span>
             <input value={sessionNotes} onChange={(event) => setSessionNotes(event.target.value)} placeholder="Energy, pump, machine setup, etc." />
@@ -273,17 +276,17 @@ export function EasyWorkoutLogPage() {
           {exerciseLogs.map((exercise, exerciseIndex) => {
             const previous = previousByExercise[exercise.exerciseName];
             return (
-              <article key={`${exercise.exerciseName}-${exerciseIndex}`} className={`panel-section${isGymModeActive ? " gym-exercise-card" : ""}`}>
-                <div className="panel-header">
+              <article key={`${exercise.exerciseName}-${exerciseIndex}`} className={`panel-section workout-exercise-card${isFocusedWorkoutMode ? " gym-exercise-card workout-mode-card" : ""}`}>
+                <div className="panel-header workout-exercise-header">
                   <p className="eyebrow">Exercise {exerciseIndex + 1}</p>
                   <h2>{exercise.exerciseName || "Pick a lift"}</h2>
-                  <p>
+                  {!isFocusedWorkoutMode ? <p>
                     {previous
                       ? `Last time: ${previous.weight} lbs x ${previous.reps} on ${previous.performedOn}`
                       : "No logged history yet for this exercise."}
-                  </p>
+                  </p> : null}
                 </div>
-                {isGymModeActive && previous ? (
+                {isFocusedWorkoutMode && previous ? (
                   <div className="calendar-info-card gym-suggestion">
                     <strong>Suggested working set: {previous.weight} lbs x {previous.reps}</strong>
                     <button type="button" className="primary-button compact-button" onClick={() => fillFromLastTime(exerciseIndex)}>
@@ -313,11 +316,15 @@ export function EasyWorkoutLogPage() {
                     <span>Muscle group</span>
                     <input value={exercise.muscleGroup} onChange={(event) => updateExerciseLog(exerciseIndex, { muscleGroup: event.target.value })} placeholder="Back" />
                   </label>
+                  <label className="field-stack field-stack-wide">
+                    <span>Exercise notes</span>
+                    <input value={exercise.notes} onChange={(event) => updateExerciseLog(exerciseIndex, { notes: event.target.value })} placeholder="Vertical grip, slow eccentric, machine 4, etc." />
+                  </label>
                 </div>
 
                 <div className="task-list-vnext">
                   {exercise.sets.map((set, setIndex) => (
-                    <div key={`${exercise.exerciseName}-${setIndex}`} className={`task-row-card${isGymModeActive ? " gym-set-row" : ""}`}>
+                    <div key={`${exercise.exerciseName}-${setIndex}`} className={`task-row-card${isFocusedWorkoutMode ? " gym-set-row workout-set-row" : ""}`}>
                       <div className="task-row-grid task-row-grid-workout">
                         <label className="field-stack task-row-field">
                           <span>Set</span>
@@ -344,7 +351,7 @@ export function EasyWorkoutLogPage() {
                   <button type="button" className="button-secondary" onClick={() => updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, emptySet()] })}>
                     Add set
                   </button>
-                  {isGymModeActive && exercise.sets.length ? (
+                  {isFocusedWorkoutMode && exercise.sets.length ? (
                     <button
                       type="button"
                       className="button-secondary"
