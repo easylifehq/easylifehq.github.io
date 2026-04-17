@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.10.0`
-- Current planning target: `3.10.0` Settings Navigation Split
-- Next feature target: `3.11.0` Notes Library Organization
+- App package version: `3.11.0`
+- Current planning target: `3.11.0` Notes Library Organization
+- Next feature target: `3.12.0` EasyWorkout Polish
 
 ## Working Rules
 
@@ -49,19 +49,19 @@ Goal: Make EasyList and EasyCalendar understandable together.
 
 ### 3.3.0 Calendar and Settings Upgrade
 
-Status: In Progress
+Status: Done
 
 Goal: Give Calendar a clearer structure and move customization into organized settings.
 
 - Done: Day view uses an hour-by-hour layout.
 - Done: Day, week, and month views can be switched from the calendar screen.
-- Next: Unnecessary calendar header tabs are removed or consolidated.
+- Done: Calendar view switching moved into the calendar screen instead of relying on old header tabs.
 - Done: Repeating events support classes and other recurring obligations.
 - Done: Wakeup time can be edited by the user in Settings.
 - Done: Users can create custom categories.
 - Done: Users can customize category colors for tasks, school, and personal categories.
-- Started: Settings includes a dedicated Calendar section and app-specific settings cards.
-- Started: Settings are split into focused sections for each major settings area.
+- Done: Settings includes a dedicated Calendar section and app-specific settings cards.
+- Done: Settings are split into focused sections for each major settings area.
 - Done: Settings navigation works well on mobile.
 
 ### 3.4.0 Fast Capture and Notes Integration
@@ -70,15 +70,15 @@ Status: Done
 
 Goal: Minimize the time between having a thought and saving it.
 
-- Started: Creating a blank note, task, workout, event, or project item takes the fewest practical clicks.
+- Started: Creating a blank note, task, workout, event, or project item takes the fewest practical clicks across the suite.
 - Done: EasyNotes has a direct blank-note route for one-click writing from HQ and the notes library.
 - Done: EasyList focuses the first task row when the add-task page opens.
 - Done: Returning to EasyNotes offers a Resume writing action for the previously open note.
 - Done: EasyNotes has a button to make tasks from a note.
 - Done: EasyNotes can transform note lines into a series of tasks.
 - Done: Notes can send generated tasks to EasyList.
-- Tasks can be routed to EasyProject, EasyPipeline, or Calendar when applicable.
-- Untitled empty notes can be cleaned up safely on a recurring basis or via a maintenance action.
+- Done: Tasks can be routed to EasyProject, EasyPipeline, or Calendar when applicable.
+- Moved to `3.11.0`: Untitled empty notes can be cleaned up safely on a recurring basis or via a maintenance action.
 
 ### 3.5.0 EasyWorkout Redesign
 
@@ -87,28 +87,28 @@ Status: Done
 Goal: Separate passive workout logging from active workout mode.
 
 - Done: EasyWorkout has a normal browsing/logging mode.
-- Started: EasyWorkout has a focused Start Workout mode.
-- Started: Workout mode hides unrelated UI.
+- Done: EasyWorkout has a focused Start Workout mode.
+- Done: Workout mode hides unrelated UI.
 - Done: Workout mode shows date, general notes, and exercise entry.
 - Done: New workouts start with several compact exercise boxes already available.
-- Exercise boxes can be added or removed quickly.
-- Exercise names are free-form text, not restricted to hardcoded categories.
+- Done: Exercise boxes can be added or removed quickly.
+- Done: Exercise names are free-form text, not restricted to hardcoded categories.
 - Done: Each exercise has a notes field above sets.
-- Exercise boxes are compact enough to reduce scrolling.
-- Started: Paste-from-notes moves out of the primary workout flow and into an import area.
+- Done: Exercise boxes are compact enough to reduce scrolling.
+- Done: Paste-from-notes moves out of the primary workout flow and into an import area.
 - Done: Duration is removed from focused workout mode.
 
 ### 3.6.0 EasyStatistics Hub
 
-Status: In Progress
+Status: Done
 
 Goal: Keep statistics fun without making primary pages feel cramped.
 
 - Done: EasyStatistics becomes the main analytics page.
-- Started: Primary app pages show only light, useful summary stats.
+- Done: Primary app pages show only light, useful summary stats.
 - Done: EasyStatistics has an overall dashboard.
-- Started: EasyStatistics has deeper per-app views for tasks, calendar, notes, workouts, projects, and pipeline.
-- Statistics loading does not bog down the main app experience.
+- Done: EasyStatistics has deeper per-app views for tasks, calendar, notes, workouts, projects, and pipeline.
+- Done: Statistics loading does not bog down the main app experience.
 
 ### 3.7.0 EasyProject and Pipeline Routing
 
@@ -119,7 +119,7 @@ Goal: Let tasks and notes move into larger workflows when they belong there.
 - Done: Tasks can be sent to EasyProject.
 - Done: Tasks can be sent to EasyPipeline.
 - Done: Tasks can be sent to an existing EasyProject and section.
-- Notes can create project-ready task groups.
+- Moved to `3.11.0`: Notes can create project-ready task groups.
 - Done: Applicable tasks offer a clear send-to-project or send-to-pipeline action.
 - Done: Routing preserves the original source task context.
 
@@ -134,75 +134,124 @@ Goal: Add helpful suggestions after the manual systems are stable.
 - Done: AI date suggestions stay editable and visible before tasks are saved.
 - Done: AI asks whether detected dates should become suggested EasyCalendar task blocks.
 - Done: AI can break notes or brain dumps into suggested tasks.
-- AI can suggest whether an item belongs in EasyProject or EasyPipeline.
+- Moved to `3.13.0`: AI can suggest whether an item belongs in EasyProject or EasyPipeline.
 - Done: AI suggestions are confirm-before-action, never automatic silent changes.
+
+### 3.9.0 Calendar Recurrence and Category Customization
+
+Status: Done
+
+Goal: Make classes and recurring obligations practical while giving users control over calendar colors.
+
+- Done: Fixed events can repeat daily, weekly, or monthly.
+- Done: Recurring events appear in day, week, and month views.
+- Done: Recurring events block time for Plan My Day suggestions.
+- Done: Calendar categories can be created by the user.
+- Done: Category colors can be customized from the calendar tools.
+
+### 3.10.0 Settings Navigation Split
+
+Status: Done
+
+Goal: Make Settings easier to scan by splitting the long page into focused control sections.
+
+- Done: Settings has section navigation for Customize, Apps, Calendar, Pages, Labs, and Account.
+- Done: Desktop Settings uses a sidebar.
+- Done: Mobile Settings uses a section picker.
+- Done: Each Settings section shows one focused area at a time.
+- Done: Settings version display matches the current release.
+
+### 3.10.1 Roadmap Cleanup
+
+Status: Done
+
+Goal: Remove duplicate backlog items and move unfinished leftovers into clear future releases.
+
+- Done: Completed backlog items were reconciled against shipped releases.
+- Done: Old Started items were either marked done or moved into a future release.
+- Done: Future releases now have clear names and boundaries.
+
+### 3.11.0 Notes Library Organization
+
+Status: Done
+
+Goal: Make EasyNotes feel more like a usable notes library instead of a flat pile of documents.
+
+- Done: Add folders.
+- Done: Add multi-select.
+- Done: Add bulk delete.
+- Done: Add move-to-folder.
+- Done: Add safe cleanup for untitled empty notes.
+- Done: Add project-ready task groups from notes.
+- Done: Preserve sleek notes control center styling while adding these basic controls.
+
+### 3.12.0 EasyWorkout Polish
+
+Status: Planned
+
+Goal: Finish the workout quality-of-life details after the main Start Workout mode is stable.
+
+- Tighten active workout mobile spacing.
+- Make add/remove exercise boxes faster during a workout.
+- Improve old workout import placement and copy.
+- Add sensible defaults for starting exercise count.
+
+### 3.13.0 AI Routing Suggestions
+
+Status: Planned
+
+Goal: Let AI suggest where an item belongs without silently moving anything.
+
+- AI can suggest whether a task belongs in EasyProject.
+- AI can suggest whether a task belongs in EasyPipeline.
+- AI can scan current task, note, and calendar context when appropriate.
+- AI suggestions stay confirm-before-action.
 
 ## Backlog by Area
 
 ### Global and Mobile
 
-- Make feature popups fit mobile screens and browser chrome.
-- Keep close buttons reachable above nav bars.
-- Make "add blank" actions prominent across apps.
-- Preserve user context when switching tabs.
+- Preserve user context when switching tabs across every app.
+- Continue reducing minimum clicks to write, log, or capture.
+- Keep mobile overlays checked as new drawers and sheets are added.
 
 ### EasyList
 
-- Redesign task ranking around human urgency.
-- Improve list scan speed.
-- Add quick check-off behavior.
-- Add lightweight archive animation.
-- Support planned work dates separately from deadlines.
-- Support split task work time.
-- Keep queue only on the to-do list page.
+- Add more keyboard-friendly quick actions.
+- Add stronger filters for urgency, deadline, and calendar status.
+- Keep task routing prompts useful without becoming noisy.
 
 ### EasyCalendar
 
-- Add hour-by-hour day layout.
-- Add day, week, and month switching.
-- Support repeating class events.
-- Let users edit wakeup time.
 - Clarify event type and category fields.
-- Support custom categories and colors.
-- Fix event editing bugs.
+- Add richer recurrence controls later, such as selected weekdays or end dates.
+- Move more calendar customization into the Settings Calendar section.
 
 ### EasyNotes
 
-- Fix long-note typing and textbook layout.
-- Add note-to-task action.
-- Add note-to-task-series action.
-- Add folders.
-- Add multi-select.
-- Add bulk delete.
-- Add move-to-folder.
-- Add safe cleanup for untitled empty notes.
-- Restore the open note when returning to EasyNotes.
+- Keep notes library controls polished as the folder model grows.
+- Consider nested folders only after flat folders feel solid.
+- Add richer note-to-project options later if project templates need more structure.
 
 ### EasyWorkout
 
-- Fix keyboard disappearing in exercise inputs.
-- Add focused workout mode.
-- Make exercise boxes smaller.
-- Allow free-form exercise names.
-- Add per-exercise notes above sets.
-- Move old workout import away from active logging.
+- Finish workout polish in `3.12.0`.
+- Keep active workout logging compact on mobile.
+- Add workout settings when Settings app sections become deeper pages.
 
 ### EasyStatistics
 
-- Move heavy stats out of primary pages.
-- Create overall statistics dashboard.
-- Add per-app statistics pages.
-- Keep primary pages visually lighter.
+- Add more useful per-app drilldowns over time.
+- Keep statistics fun without crowding primary app pages.
 
 ### EasyProject and EasyPipeline
 
-- Receive tasks from EasyNotes and EasyList.
-- Preserve task context when routed.
-- Add prompts for task routing only when useful.
+- Improve note-to-project task groups after real use.
+- Add AI routing suggestions in `3.13.0`.
+- Keep source context preserved whenever items move between apps.
 
 ### AI Backend
 
-- Scan current data for dates and task intent.
-- Suggest calendar additions from task and note text.
-- Suggest task breakdowns from notes.
-- Suggest project or pipeline routing.
+- Add context scanning in `3.13.0`.
+- Suggest project or pipeline routing in `3.13.0`.
+- Keep all AI actions review-first and reversible.

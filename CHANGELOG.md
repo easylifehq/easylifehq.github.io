@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.11.0
+
+### Added
+
+- EasyNotes can now turn a note outline into an EasyProject with linked EasyList tasks.
+- EasyNotes library organization work is formalized around folders, multi-select, bulk move, bulk delete, and cleanup.
+
 ## 3.10.0
 
 ### Changed

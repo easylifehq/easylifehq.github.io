@@ -20,7 +20,7 @@ function extractActionSuggestions(value: string) {
 export function EasyNotesEditorPage() {
   const navigate = useNavigate();
   const { noteId = "" } = useParams();
-  const { notes, folders, isLoading, saveNote, deleteNote, createTaskDraftsFromText } = useEasyNotes();
+  const { notes, folders, isLoading, saveNote, deleteNote, createTaskDraftsFromText, createProjectFromText } = useEasyNotes();
   const { isExperimentalFeatureEnabled } = useSettings();
   const note = useMemo(() => notes.find((entry) => entry.id === noteId) || null, [notes, noteId]);
   const activeNoteId = note?.id || "";
@@ -32,6 +32,7 @@ export function EasyNotesEditorPage() {
   const [processorMessage, setProcessorMessage] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isCreatingTasks, setIsCreatingTasks] = useState(false);
+  const [isCreatingProject, setIsCreatingProject] = useState(false);
   const saveTimeoutRef = useRef<number | null>(null);
   const hydratedNoteIdRef = useRef<string | null>(null);
   const noteMetaRef = useRef({ tags: [] as string[], pinned: false });
@@ -154,6 +155,24 @@ export function EasyNotesEditorPage() {
     );
   }
 
+  async function handleCreateProjectFromNote() {
+    if (!note || isCreatingProject) return;
+    setIsCreatingProject(true);
+    const result = await createProjectFromText({
+      noteTitle: title || note.title,
+      text: suggestions.length ? suggestions.join("\n") : bodyText,
+    });
+    setIsCreatingProject(false);
+    setSuggestions([]);
+    setProcessorMessage(
+      result
+        ? `Created an EasyProject with ${result.taskCount} linked task${
+            result.taskCount === 1 ? "" : "s"
+          }.`
+        : "Write a project outline with one action per line, then try again."
+    );
+  }
+
   return (
     <section className="notes-editor-shell notes-editor-shell-immersive">
       <div className="notes-editor-topbar">
@@ -173,6 +192,14 @@ export function EasyNotesEditorPage() {
             disabled={isCreatingTasks || !bodyText.trim()}
           >
             {isCreatingTasks ? "Sending..." : "Make tasks"}
+          </button>
+          <button
+            type="button"
+            className="button-secondary compact-button"
+            onClick={() => void handleCreateProjectFromNote()}
+            disabled={isCreatingProject || !bodyText.trim()}
+          >
+            {isCreatingProject ? "Creating..." : "Make project"}
           </button>
           {saveMessage ? <span>{saveMessage}</span> : null}
         </div>

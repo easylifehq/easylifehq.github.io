@@ -26,6 +26,9 @@ import {
   type NoteRecord,
 } from "@/lib/firestore/notes";
 import { createTask, type TaskDraft } from "@/lib/firestore/tasks";
+import { createProject } from "@/lib/firestore/projects";
+import { createProjectSection } from "@/lib/firestore/projectSections";
+import { createProjectTaskLink } from "@/lib/firestore/projectTaskLinks";
 import { useAuth } from "@/features/auth/AuthContext";
 
 type EasyNotesContextValue = {
@@ -48,6 +51,7 @@ type EasyNotesContextValue = {
   permanentlyDeleteNote: (noteId: string) => Promise<void>;
   permanentlyDeleteNotes: (noteIds: string[]) => Promise<void>;
   createTaskDraftsFromText: (payload: { noteTitle: string; text: string }) => Promise<number>;
+  createProjectFromText: (payload: { noteTitle: string; text: string }) => Promise<{ projectId: string; taskCount: number } | null>;
 };
 
 const EasyNotesContext = createContext<EasyNotesContextValue | undefined>(undefined);
@@ -306,6 +310,54 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
     return drafts.length;
   }
 
+  async function createProjectFromNote(payload: { noteTitle: string; text: string }) {
+    if (!user) return null;
+
+    const lines = normalizeLinesToTasks(payload.text);
+    if (!lines.length) return null;
+
+    const projectTitle = payload.noteTitle.trim() || "Project from EasyNotes";
+    const projectId = await createProject(user.uid, {
+      title: projectTitle,
+      description: [
+        "Created from EasyNotes.",
+        payload.text.trim() ? `Source note outline:\n${payload.text.trim()}` : "",
+      ].filter(Boolean).join("\n\n"),
+      targetDate: "",
+      status: "active",
+    });
+    const sectionId = await createProjectSection(user.uid, {
+      projectId,
+      title: "From note",
+      order: 1,
+    });
+
+    await Promise.all(
+      lines.map(async (line, index) => {
+        const taskId = await createTask(user.uid, {
+          title: line,
+          notes: `Created from EasyNotes project group: ${projectTitle}`,
+          category: "EasyNotes",
+          estimatedLength: null,
+          priorityTier: 5,
+          priorityLabel: "Important",
+          dueDate: null,
+          recurring: false,
+        });
+
+        await createProjectTaskLink(user.uid, {
+          projectId,
+          sectionId,
+          taskId,
+          order: index + 1,
+          parentLabel: "Created from EasyNotes",
+        });
+      })
+    );
+
+    return { projectId, taskCount: lines.length };
+  }
+
   const value = useMemo(
     () => ({
       notes,
@@ -327,6 +379,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       permanentlyDeleteNote: permanentlyDeleteNoteForUser,
       permanentlyDeleteNotes: permanentlyDeleteNotesForUser,
       createTaskDraftsFromText: createTaskDraftsFromNote,
+      createProjectFromText: createProjectFromNote,
     }),
     [notes, deletedNotes, folders, isLoading, error]
   );
