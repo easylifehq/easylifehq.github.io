@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { useAuth } from "@/features/auth/AuthContext";
+import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 import {
   defaultShellSettings,
   saveShellSettings,
@@ -109,7 +110,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setError("");
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setIsLoading(false);
       }
     );

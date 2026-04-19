@@ -6,6 +6,19 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.20.0
+
+### Added
+
+- Added deployable Firestore rules that restrict user data to the signed-in account owner.
+- Added a security checklist for Firebase rules, frontend secrets, friendly errors, deploy review, and mobile security follow-up.
+
+### Changed
+
+- Narrowed AI Cloud Function CORS to known EasyLife and local development origins.
+- Hardened auth startup so persistence failures do not block account checks.
+- Replaced raw Firebase data-load errors with safer user-facing messages.
+
 ## 3.19.1
 
 ### Fixed

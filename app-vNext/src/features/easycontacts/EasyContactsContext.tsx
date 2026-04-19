@@ -15,6 +15,7 @@ import {
   type ContactRecord,
 } from "@/lib/firestore/contacts";
 import { useAuth } from "@/features/auth/AuthContext";
+import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 
 type EasyContactsContextValue = {
   contacts: ContactRecord[];
@@ -49,7 +50,7 @@ export function EasyContactsProvider({ children }: { children: ReactNode }) {
         setError("");
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setIsLoading(false);
       }
     );

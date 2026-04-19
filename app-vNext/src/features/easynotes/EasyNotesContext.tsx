@@ -30,6 +30,7 @@ import { createProject } from "@/lib/firestore/projects";
 import { createProjectSection } from "@/lib/firestore/projectSections";
 import { createProjectTaskLink } from "@/lib/firestore/projectTaskLinks";
 import { useAuth } from "@/features/auth/AuthContext";
+import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 
 type EasyNotesContextValue = {
   notes: NoteRecord[];
@@ -142,7 +143,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
         setError("");
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setIsLoading(false);
       }
     );
@@ -153,7 +154,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
         setFolders(sortFolders(nextFolders));
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
       }
     );
 

@@ -20,6 +20,7 @@ import {
   markCalendarTaskBlocksComplete,
 } from "@/lib/firestore/calendarTaskBlocks";
 import { useAuth } from "@/features/auth/AuthContext";
+import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 
 type EasyListContextValue = {
   tasks: TaskRecord[];
@@ -56,7 +57,7 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
         setError("");
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setIsLoading(false);
       }
     );

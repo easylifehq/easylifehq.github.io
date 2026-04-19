@@ -46,6 +46,7 @@ import {
   markCalendarTaskBlocksComplete,
   type PlanningState,
 } from "@/lib/firestore/calendarTaskBlocks";
+import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 
 type EasyProjectsContextValue = {
   projects: ProjectRecord[];
@@ -212,7 +213,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         setError("");
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setProjectsLoading(false);
       }
     );
@@ -223,7 +224,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         setSectionsLoading(false);
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setSectionsLoading(false);
       }
     );
@@ -234,7 +235,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         setLinksLoading(false);
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setLinksLoading(false);
       }
     );
@@ -245,7 +246,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         setTasksLoading(false);
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setTasksLoading(false);
       }
     );

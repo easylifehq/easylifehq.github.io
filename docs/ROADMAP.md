@@ -4,11 +4,12 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.19.1`
-- Current planning target: `3.19.1` Visual QA Patch
-- Next feature target: `3.20.0` Security Hardening
-- Product polish queue: `3.19.x` Real-Use Patch Cycle, `3.20.0` Security Hardening
-- Future major target: `4.0.0` AI Assistant Foundation and Suite Expansion with EasyDrinks and EasyGames
+- App package version: `3.20.0`
+- Current planning target: `3.20.0` Security Hardening
+- Next feature target: `4.0.0` Mobile App Foundation
+- Product polish queue: `4.0.0` Mobile App Foundation, `4.5.0` Firebase Rules Verification
+- Future major target: `4.0.0` Mobile App Foundation and Notifications
+- Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
 
 ## Working Rules
 
@@ -287,7 +288,7 @@ Goal: Turn Settings into the real control center for app-specific preferences.
 - Done: Add EasyWorkout settings for default exercise box count, default set count, and last-time helpers.
 - Done: Add EasyCalendar settings for default view, wakeup time, default task block length, and planning window.
 - Done: Add EasyProjects and EasyPipeline routing defaults plus source-context behavior.
-- Done: Keep EasyDrinks and EasyGames settings hidden until the `4.0.0` hold lifts.
+- Done: Keep EasyDrinks and EasyGames settings hidden until the `5.0.0` hold lifts.
 - Done: Preserve the mobile-friendly Settings navigation created in `3.10.0`.
 
 ### 3.18.0 Data Review and Export
@@ -317,11 +318,11 @@ Goal: Make EasyLife feel like a refined, classy command center while keeping the
 - Done: Make themes feel more distinct while preserving the same easy interaction model.
 - Done: Push Gamer toward a game-like command center, Elvish toward adventure/fantasy polish, and Candy toward bright playful energy.
 - Done: Keep the base app refined and classy, with personality coming from themes.
-- Done: Avoid AI assistant foundation work until `4.0.0`.
+- Done: Avoid AI assistant foundation work until the mobile foundation is stable.
 
 ### 3.19.x Real-Use Patch Cycle
 
-Status: Planned
+Status: Done
 
 Goal: Patch issues found during a week of real use before closing out the `3.x` line.
 
@@ -347,22 +348,121 @@ Status: Planned
 
 Goal: Make EasyLife significantly harder to attack, safer with user data, and ready for more ambitious `4.0.0` features.
 
-- Audit Firebase Authentication assumptions and make sure every authenticated route handles signed-out states safely.
-- Audit Firestore security rules so each user can only read and write their own data.
-- Review all client-side data access paths for user-id leakage, broad queries, unsafe writes, or missing ownership checks.
-- Review environment variables and build output so secrets are never exposed in the frontend bundle.
-- Add a dependency and package audit pass for known vulnerabilities.
-- Add a security checklist for deploys, including Firebase rules, hosting settings, API keys, and allowed domains.
-- Add user-facing safety copy where exports, deletes, trash, account actions, or future assistant features could affect private data.
-- Add safer error handling so sensitive technical details are not shown to users.
-- Document remaining security limits clearly, because no app can be made literally impossible to hack.
-- Keep the goal practical: reduce risk, close obvious holes, and create a repeatable security review process before `4.0.0`.
+- Done: Audit Firebase Authentication assumptions and make sure every authenticated route handles signed-out states safely.
+- Done: Audit Firestore security rules so each user can only read and write their own data.
+- Done: Review all client-side data access paths for user-id leakage, broad queries, unsafe writes, or missing ownership checks.
+- Done: Review environment variables and build output so secrets are never exposed in the frontend bundle.
+- Done: Add a dependency and package audit pass for known vulnerabilities.
+- Done: Add a security checklist for deploys, including Firebase rules, hosting settings, API keys, and allowed domains.
+- Done: Add user-facing safety copy where exports, deletes, trash, account actions, or future assistant features could affect private data.
+- Done: Add safer error handling so sensitive technical details are not shown to users.
+- Done: Document remaining security limits clearly, because no app can be made literally impossible to hack.
+- Done: Keep the goal practical: reduce risk, close obvious holes, and create a repeatable security review process before `4.0.0`.
 
-### 4.0.0 Suite Expansion
+### 4.0.0 Mobile App Foundation
+
+Status: Planned
+
+Goal: Turn EasyLife into a real phone-first daily companion with app install, native-feeling navigation, and a path to notifications.
+
+- Choose the mobile approach, with Capacitor preferred first because the current app is already React/Vite and can become an installable app without a full rewrite.
+- Add Capacitor project scaffolding for iOS and Android while keeping the existing web app as the shared source of truth.
+- Define app name, bundle IDs, icons, splash screen, platform targets, and build settings.
+- Add a temporary `4.0.0` EasyLife mobile logo and app icon that fits the polished command-center identity.
+- Create mobile-safe environment handling so Firebase config, API URLs, and build variables are clear per platform.
+- Verify Firebase Authentication works inside the mobile wrapper, including sign-in, sign-out, persisted sessions, and signed-out redirects.
+- Verify Firestore reads/writes work correctly in the mobile shell without broad or unsafe queries.
+- Audit every primary route in the mobile wrapper: EasyHQ, EasyList, EasyCalendar, EasyNotes, EasyWorkout, EasyProjects, EasyPipeline, EasyStatistics, Settings, and Login.
+- Add mobile app navigation rules for the shell, header, drawer/menu behavior, back behavior, and safe-area handling.
+- Make the capture flow feel native on phone: fast open, usable keyboard behavior, reachable close/save actions, and no Safari-browser-chrome assumptions.
+- Make mobile app layout honor safe areas, keyboard height, notches, home indicator areas, and small screens.
+- Add app lifecycle handling for resume, background, and reload behavior so returning to the app keeps the user oriented.
+- Add basic offline/degraded-state messaging for weak signal, failed sync, and unavailable Firebase operations.
+- Confirm data export and safety tools still work in mobile.
+- Add mobile-specific QA checklist covering install/open, login, navigation, capture, task edit, note edit, calendar edit, workout start, settings, and logout.
+- Build local Android and iOS development versions where platform tooling is available.
+- Document what is required for real app store release, including developer accounts, signing, screenshots, privacy details, and review notes.
+
+### 4.1.0 Notification Foundation
+
+Status: Planned
+
+Goal: Add useful reminders without making EasyLife noisy or annoying.
+
+- Decide notification stack for mobile, including Capacitor local notifications for on-device reminders and Firebase Cloud Messaging only if remote push is truly needed.
+- Add notification permission onboarding with plain-language copy and a clear skip path.
+- Add Settings controls for enabling, disabling, and tuning notification categories.
+- Add task deadline reminders.
+- Add calendar work-block reminders.
+- Add daily planning or wake-up reminders based on the user wakeup/planning settings.
+- Add workout reminders only if the user enables them.
+- Add quiet-hours settings so notifications do not fire during unwanted times.
+- Add test notification action in Settings.
+- Add notification fallback states when permissions are denied, unavailable, or revoked.
+- Keep notification scheduling deterministic and user-controlled; no surprise AI-triggered notifications.
+- Add QA for permission prompts, scheduling, cancellation, duplicate prevention, and notification tap behavior.
+
+### 4.2.0 Mobile Polish and Reliability
+
+Status: Planned
+
+Goal: Make the mobile app feel genuinely comfortable to use every day.
+
+- Tighten all mobile screens after real device use, not just desktop browser simulation.
+- Improve keyboard handling for notes, tasks, workout exercises, calendar forms, and settings fields.
+- Make task completion, archive motion, and quick capture feel satisfying without slowing the app.
+- Add better loading states for cold app launch, auth restore, and slow data loads.
+- Improve app resume behavior so the last relevant page or note can reopen naturally.
+- Reduce accidental taps by reviewing button sizes, spacing, sticky controls, and destructive actions.
+- Add platform-specific polish for status bar color, splash timing, app icon display, and safe-area backgrounds.
+- Add crash/error reporting plan before broader distribution.
+- Create a real-device QA checklist for iPhone, Android, small screens, and large screens.
+
+### 4.3.0 Mobile Distribution Prep
+
+Status: Planned
+
+Goal: Prepare the mobile app for sharing beyond local testing.
+
+- Decide whether the first distribution path is TestFlight, Android internal testing, direct APK, or both stores.
+- Prepare app metadata: name, subtitle, description, keywords, support URL, privacy URL, screenshots, and category.
+- Document privacy posture for stored data, Firebase usage, notifications, exports, and AI features.
+- Prepare app signing, build numbers, release notes, and platform-specific versioning.
+- Add production build checklist for web, Android, and iOS outputs.
+- Add rollback plan for bad mobile releases.
+- Add user-facing support path for login problems, sync issues, notification issues, and data export questions.
+- Run final mobile QA before any external install link is shared.
+
+### 4.4.0 AI Assistant Foundation
+
+Status: Planned
+
+Goal: Start the assistant foundation only after mobile, notifications, security, and daily-use reliability are solid.
+
+- Define what the assistant is allowed to see, suggest, and change.
+- Add user-facing AI controls and explanation in Settings.
+- Add better fallback states when AI is unavailable.
+- Keep all assistant actions review-first, reversible, and scoped to the user account.
+- Start with assistant planning and summarizing flows before allowing deeper automation.
+
+### 4.5.0 Firebase Rules Verification
+
+Status: Planned
+
+Goal: Do the deeper Firebase security verification after the mobile foundation is moving, without blocking `4.0.0`.
+
+- Re-check Firestore rules against every app data path after the mobile shell is in place.
+- Deploy or re-deploy Firestore rules when the production timing is right.
+- Add a simple rules test plan for signed-out users, the account owner, and a different signed-in user.
+- Confirm mobile auth sessions still map cleanly to `users/{uid}` data.
+- Review Firebase project settings, allowed domains, and hosting configuration before broader sharing.
+- Update the security checklist with anything learned during real mobile testing.
+
+### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 
 Status: Held
 
-Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun apps without weakening the core system.
+Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun apps after the mobile foundation is stable.
 
 - Add EasyDrinks as a quick drink journal and recipe app.
 - EasyDrinks can save drink name, ingredients, notes, rating, tags, date, and favorite status.
@@ -371,7 +471,7 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 - EasyGames launches with one or two lightweight built-in games instead of a giant game library.
 - EasyGames tracks simple play stats or favorites where useful.
 - Add EasyDrinks and EasyGames to navigation, app visibility settings, theme styling, roadmap, changelog, and versioning.
-- Keep both apps MVP-sized for 4.0.0, then deepen them in later 4.x releases.
+- Keep both apps MVP-sized for `5.0.0`, then deepen them in later `5.x` releases.
 
 ## Backlog by Area
 
@@ -382,7 +482,9 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 - Keep mobile overlays checked as new drawers and sheets are added.
 - Improve landing pages and demo flows in `3.15.0`.
 - Standardize the visual system in `3.16.0`.
-- Prepare navigation and settings for EasyDrinks and EasyGames once the `4.0.0` hold lifts.
+- Build the mobile app foundation in `4.0.0`.
+- Add notification support in `4.1.0`.
+- Prepare navigation and settings for EasyDrinks and EasyGames once the `5.0.0` hold lifts.
 
 ### EasyList
 
@@ -433,12 +535,12 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 - Deepen context scanning after the `3.x` product core has been tested.
 - Keep tuning project and pipeline routing suggestions based on real use.
 - Keep all AI actions review-first and reversible.
-- Add user-facing AI controls in `4.0.0`.
-- Add better fallback states when AI is unavailable in `4.0.0`.
+- Add user-facing AI controls after the mobile foundation is stable.
+- Add better fallback states when AI is unavailable after the mobile foundation is stable.
 
 ### EasyDrinks
 
-- Build the EasyDrinks MVP when the `4.0.0` hold lifts.
+- Build the EasyDrinks MVP when the `5.0.0` hold lifts.
 - Add fast drink capture.
 - Add saved favorite drinks.
 - Add ingredients, notes, rating, tags, and date fields.
@@ -446,7 +548,7 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 
 ### EasyGames
 
-- Build the EasyGames MVP when the `4.0.0` hold lifts.
+- Build the EasyGames MVP when the `5.0.0` hold lifts.
 - Add a games dashboard.
 - Add one or two lightweight built-in games.
 - Add simple favorites or stats if they do not slow down the MVP.

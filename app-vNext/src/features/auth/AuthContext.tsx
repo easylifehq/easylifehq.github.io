@@ -33,14 +33,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    void setPersistence(auth, browserLocalPersistence);
+    let unsubscribe: (() => void) | undefined;
+    let isActive = true;
 
-    const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
-      setUser(nextUser);
-      setIsLoading(false);
-    });
+    setPersistence(auth, browserLocalPersistence)
+      .catch(() => {
+        // Auth still works without local persistence; the session may just be shorter.
+      })
+      .finally(() => {
+        if (!isActive) return;
+        unsubscribe = onAuthStateChanged(auth, (nextUser) => {
+          setUser(nextUser);
+          setIsLoading(false);
+        });
+      });
 
-    return unsubscribe;
+    return () => {
+      isActive = false;
+      unsubscribe?.();
+    };
   }, []);
 
   const value = useMemo(

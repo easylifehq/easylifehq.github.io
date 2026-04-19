@@ -7,6 +7,14 @@ admin.initializeApp();
 
 const openAiApiKey = defineSecret("OPENAI_API_KEY");
 
+const allowedCorsOrigins = [
+  "https://easylifehq.github.io",
+  "https://www.easylifehq.com",
+  "https://easylifehq.com",
+  /^http:\/\/localhost:\d+$/,
+  /^http:\/\/127\.0\.0\.1:\d+$/,
+];
+
 const taskRowsSchema = {
   type: "object",
   additionalProperties: false,
@@ -221,7 +229,7 @@ const projectPlanningInstructions = [
 
 exports.analyzeTaskBrainDump = onRequest(
   {
-    cors: true,
+    cors: allowedCorsOrigins,
     secrets: [openAiApiKey],
     timeoutSeconds: 60,
     memory: "256MiB",
@@ -332,7 +340,7 @@ exports.analyzeTaskBrainDump = onRequest(
 
 exports.planProjectWithAi = onRequest(
   {
-    cors: true,
+    cors: allowedCorsOrigins,
     secrets: [openAiApiKey],
     timeoutSeconds: 60,
     memory: "256MiB",

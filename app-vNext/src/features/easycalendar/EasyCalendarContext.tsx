@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { useAuth } from "@/features/auth/AuthContext";
+import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 import {
   createCalendarEvent,
   removeCalendarEvent,
@@ -127,7 +128,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       },
       (nextError) => {
         setCategoriesLoading(false);
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
       }
     );
 
@@ -140,7 +141,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       },
       (nextError) => {
         setEventsLoading(false);
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
       }
     );
 
@@ -153,7 +154,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       },
       (nextError) => {
         setTaskBlocksLoading(false);
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
       }
     );
 
@@ -166,7 +167,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       },
       (nextError) => {
         setTasksLoading(false);
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
       }
     );
 

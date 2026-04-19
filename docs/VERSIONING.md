@@ -4,9 +4,9 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `3.19.1`
-- Next patch target: `3.19.2`
-- Next feature target: `3.20.0` Security Hardening.
+- Current app version: `3.20.0`
+- Next patch target: `3.20.1`
+- Next feature target: `4.0.0` Mobile App Foundation.
 
 ## What To Update
 
@@ -69,5 +69,12 @@ Before finishing a release batch:
 22. `3.19.1` Visual QA Patch.
 23. `3.19.x` Real-Use Patch Cycle.
 24. `3.20.0` Security Hardening.
+25. `4.0.0` Mobile App Foundation.
+26. `4.1.0` Notification Foundation.
+27. `4.2.0` Mobile Polish and Reliability.
+28. `4.3.0` Mobile Distribution Prep.
+29. `4.4.0` AI Assistant Foundation.
+30. `4.5.0` Firebase Rules Verification.
+31. `5.0.0` EasyDrinks and EasyGames Suite Expansion.
 
-`4.0.0` remains the next major suite expansion target for the AI Assistant Foundation and later suite expansion ideas, but it should wait until the current product core has been used, visually polished, security-hardened, and tested enough to feel stable.
+`4.0.0` is now the mobile app foundation target. EasyDrinks and EasyGames move to `5.0.0` so the phone app, notifications, security hardening, and real-use reliability come first. Deeper Firebase rules verification is parked at `4.5.0` so it does not block the first mobile foundation pass.

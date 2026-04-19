@@ -18,6 +18,7 @@ import {
   type GeneratedDraftRecord,
 } from "@/lib/firestore/applications";
 import { useAuth } from "@/features/auth/AuthContext";
+import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 
 type EasyPipelineContextValue = {
   applications: ApplicationRecord[];
@@ -57,7 +58,7 @@ export function EasyPipelineProvider({ children }: { children: ReactNode }) {
         setError("");
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setIsLoading(false);
       }
     );
@@ -68,7 +69,7 @@ export function EasyPipelineProvider({ children }: { children: ReactNode }) {
         setDrafts(nextDrafts);
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
       }
     );
 

@@ -31,6 +31,7 @@ import {
   type WorkoutSessionDraft,
   type WorkoutSessionRecord,
 } from "@/lib/firestore/workoutSessions";
+import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 
 type EasyWorkoutContextValue = {
   exercises: WorkoutExerciseRecord[];
@@ -99,7 +100,7 @@ export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
         setError("");
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setExercisesLoading(false);
       }
     );
@@ -112,7 +113,7 @@ export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
         setError("");
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setRoutinesLoading(false);
       }
     );
@@ -125,7 +126,7 @@ export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
         setError("");
       },
       (nextError) => {
-        setError(nextError.message);
+        setError(toSafeFirebaseMessage(nextError));
         setSessionsLoading(false);
       }
     );
