@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.14.0`
-- Current planning target: `3.14.0` Final 3.x Stability Sweep
+- App package version: `3.14.2`
+- Current planning target: `3.14.2` Version Sync and Bug-Hunt Patch
 - Next feature target: Held while the `3.x` product core is tested in real use
 - Future major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
 
@@ -220,6 +220,18 @@ Goal: Make sure the productivity core is stable before expanding the suite.
 - Done: Fix small regressions before adding new lifestyle apps.
 - Done: Hold `4.0.0` until the current product core has been tested in real use.
 - Done: Add a manual QA checklist for the full 3.x productivity core.
+
+### 3.14.2 Version Sync and Bug-Hunt Patch
+
+Status: Done
+
+Goal: Make the end-of-3.x testing build identify itself correctly and keep the QA plan close at hand.
+
+- Done: Confirm the production build still passes.
+- Done: Fix app package version drift after the 3.14 patch commits.
+- Done: Keep Settings version display tied to package metadata.
+- Done: Update changelog, roadmap, versioning notes, deploy files, and root assets.
+- Done: Preserve the 3.x QA checklist as the guide for product testing before 4.0.0 resumes.
 
 ### 4.0.0 Suite Expansion
 

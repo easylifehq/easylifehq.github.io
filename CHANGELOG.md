@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.14.2
+
+### Fixed
+
+- Synced the app package version, Settings version display, roadmap, versioning notes, and deploy assets for the 3.14 patch line.
+- Added and preserved the full 3.x manual QA checklist as the product testing guide before any 4.0.0 expansion work resumes.
+
 ## 3.14.0
 
 ### Changed

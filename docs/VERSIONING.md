@@ -4,8 +4,8 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `3.14.0`
-- Next patch target: `3.14.1`
+- Current app version: `3.14.2`
+- Next patch target: `3.14.3`
 - Next feature target: Held while the `3.x` product core is tested.
 
 ## What To Update
@@ -59,5 +59,6 @@ Before finishing a release batch:
 12. `3.12.0` EasyWorkout Polish.
 13. `3.13.0` AI Routing Suggestions.
 14. `3.14.0` Final 3.x Stability Sweep.
+15. `3.14.2` Version sync and bug-hunt patch.
 
 `4.0.0` remains the next major suite expansion target, but it should wait until the current product core has been used and tested enough to feel stable.
