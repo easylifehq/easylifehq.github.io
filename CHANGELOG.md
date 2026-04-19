@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.16.0
+
+### Changed
+
+- Standardized shared button, input, card, empty-state, toolbar, and drawer styling across the app.
+- Tightened mobile overflow safeguards for common cards, drawers, toolbar rows, and action groups.
+- Improved close-button labels for task, calendar, contact, pipeline, and quick-add drawers.
+
 ## 3.15.1
 
 ### Changed

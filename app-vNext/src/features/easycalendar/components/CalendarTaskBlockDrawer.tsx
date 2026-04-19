@@ -111,7 +111,7 @@ export function CalendarTaskBlockDrawer({
             <p className="eyebrow">EasyCalendar</p>
             <h2>Manage task block</h2>
           </div>
-          <button type="button" className="ghost-button compact-button" onClick={onClose}>
+          <button type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close task block editor">
             Close
           </button>
         </div>

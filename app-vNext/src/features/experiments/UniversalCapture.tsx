@@ -566,7 +566,7 @@ export function UniversalCapture() {
           </div>
           <div className="capture-header-actions">
             <span className="command-hint">Ctrl K</span>
-            <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)}>
+            <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)} aria-label="Close quick add">
               Close
             </button>
           </div>

@@ -78,7 +78,7 @@ export function ContactDrawer({ contact, isOpen, onClose, onSave, onArchive }: C
             <p className="eyebrow">EasyContacts</p>
             <h2>{currentContact.fullName || "Edit contact"}</h2>
           </div>
-          <button type="button" className="button-secondary" onClick={onClose}>
+          <button type="button" className="button-secondary" onClick={onClose} aria-label="Close contact editor">
             Close
           </button>
         </div>

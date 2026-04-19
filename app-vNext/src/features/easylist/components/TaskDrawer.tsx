@@ -303,7 +303,7 @@ export function TaskDrawer({
             <p className="eyebrow">Task details</p>
             <h2>Edit task</h2>
           </div>
-          <button type="button" className="ghost-button compact-button" onClick={onClose}>
+          <button type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close task details">
             Close
           </button>
         </div>

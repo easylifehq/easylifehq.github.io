@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.15.1`
-- Current planning target: `3.15.1` Presentation Copy Polish
-- Next feature target: `3.16.0` Core UX Refinement
+- App package version: `3.16.0`
+- Current planning target: `3.16.0` Core UX Refinement
+- Next feature target: `3.17.0` Settings Deepening
 - Product polish queue: `3.16.0` Core UX Refinement, `3.17.0` Settings Deepening, `3.18.0` Data Review and Export, `3.19.0` AI Trust and Controls
 - Future major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
 
@@ -262,18 +262,18 @@ Goal: Tighten the new demo and landing copy before product testing.
 
 ### 3.16.0 Core UX Refinement
 
-Status: Planned
+Status: Done
 
 Goal: Make the app feel more like a finished product and less like a collection of separate feature pages.
 
-- Standardize button styling, button sizing, and button hierarchy across the suite.
-- Standardize cards, page headers, empty states, loading states, and error states.
-- Tighten mobile spacing across EasyHQ, EasyList, EasyCalendar, EasyNotes, EasyWorkout, EasyProjects, EasyPipeline, EasyContacts, EasyStatistics, and Settings.
-- Make drawers, modals, menus, and sheets feel consistent across apps.
-- Improve keyboard focus states and accessible labels where actions are easy to miss.
-- Make destructive actions visually clear without making the interface feel scary.
-- Reduce any remaining horizontal scroll or clipped text risks on mobile.
-- Keep the visual system polished without adding heavy decoration.
+- Done: Standardize shared button styling, sizing, and hierarchy across the suite.
+- Done: Standardize common cards, page panels, empty states, loading states, inputs, and toolbars.
+- Done: Tighten mobile spacing and overflow safeguards in shared layout primitives.
+- Done: Make drawers and action groups feel more consistent across apps.
+- Done: Improve accessible labels on close actions where context was easy to miss.
+- Done: Make destructive actions visually clearer without making the interface feel scary.
+- Done: Reduce horizontal scroll and clipped text risks in shared cards, drawers, and toolbar rows.
+- Done: Keep the visual system polished without adding heavy decoration.
 
 ### 3.17.0 Settings Deepening
 

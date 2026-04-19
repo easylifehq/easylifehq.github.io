@@ -90,7 +90,7 @@ export function ApplicationDrawer({
             <p className="eyebrow">EasyPipeline</p>
             <h2>{currentApplication.title || "Edit application"}</h2>
           </div>
-          <button type="button" className="button-secondary" onClick={onClose}>
+          <button type="button" className="button-secondary" onClick={onClose} aria-label="Close pipeline item editor">
             Close
           </button>
         </div>

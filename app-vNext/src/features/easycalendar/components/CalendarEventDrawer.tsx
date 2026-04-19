@@ -118,7 +118,7 @@ export function CalendarEventDrawer({
             <p className="eyebrow">EasyCalendar</p>
             <h2>Edit event</h2>
           </div>
-          <button type="button" className="ghost-button compact-button" onClick={onClose}>
+          <button type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close event editor">
             Close
           </button>
         </div>
