@@ -425,7 +425,8 @@ export function buildPlanMyDaySuggestions(
   date: Date,
   tasks: TaskRecord[],
   events: CalendarEventRecord[],
-  taskBlocks: CalendarTaskBlockRecord[]
+  taskBlocks: CalendarTaskBlockRecord[],
+  options: { wakeHour?: number; endHour?: number; defaultTaskBlockMinutes?: number } = {}
 ) {
   const activeLinkedBlockIds = new Set(
     taskBlocks.filter((taskBlock) => !taskBlock.completed).map((taskBlock) => taskBlock.id)
@@ -440,7 +441,13 @@ export function buildPlanMyDaySuggestions(
     date
   );
 
-  const windows = getOpenTimeWindowsForDay(date, events, taskBlocks).map((window) => ({
+  const windows = getOpenTimeWindowsForDay(
+    date,
+    events,
+    taskBlocks,
+    options.wakeHour,
+    options.endHour
+  ).map((window) => ({
     ...window,
     startAt: new Date(window.startAt),
     endAt: new Date(window.endAt),
@@ -451,7 +458,7 @@ export function buildPlanMyDaySuggestions(
   candidateTasks.forEach((task) => {
     if (suggestions.length >= 5) return;
 
-    const durationMinutes = Math.max(15, task.estimatedLength || 30);
+    const durationMinutes = Math.max(15, task.estimatedLength || options.defaultTaskBlockMinutes || 30);
     const fittingWindow = [...windows]
       .filter((window) => window.minutes >= durationMinutes)
       .sort((left, right) => {

@@ -6,6 +6,19 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.17.0
+
+### Added
+
+- Settings now stores app-specific preferences for EasyList, EasyNotes, EasyWorkout, EasyCalendar, and cross-app routing.
+- Settings now includes editable app preference controls for task defaults, note behavior, workout mode defaults, calendar planning, and routing behavior.
+
+### Changed
+
+- EasyList quick-add rows now use the configured default urgency and row count.
+- EasyWorkout start mode now uses configured exercise box and set defaults, with a toggle for last-time helpers.
+- EasyCalendar Plan My Day now uses configured planning window and default task block length.
+
 ## 3.16.0
 
 ### Changed

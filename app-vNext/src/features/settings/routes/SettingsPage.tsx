@@ -7,6 +7,9 @@ import type {
   ExperimentalFeatureId,
   ThemeMode,
   VisibleAppId,
+  CalendarDefaultView,
+  NotesResumeBehavior,
+  RoutingDefault,
 } from "@/lib/firestore/settings";
 
 const themeOptions: Array<{
@@ -302,6 +305,24 @@ const pageSettingsSections: Array<{
   },
 ];
 
+const defaultViewOptions: Array<{ value: CalendarDefaultView; label: string }> = [
+  { value: "day", label: "Day" },
+  { value: "week", label: "Week" },
+  { value: "month", label: "Month" },
+];
+
+const notesResumeOptions: Array<{ value: NotesResumeBehavior; label: string }> = [
+  { value: "last-open-note", label: "Resume last open note" },
+  { value: "library", label: "Open notes library" },
+];
+
+const routingOptions: Array<{ value: RoutingDefault; label: string }> = [
+  { value: "ask", label: "Ask me each time" },
+  { value: "projects", label: "Prefer EasyProjects" },
+  { value: "pipeline", label: "Prefer EasyPipeline" },
+  { value: "stay", label: "Keep in current app" },
+];
+
 export function SettingsPage() {
   const [activeSection, setActiveSection] = useState<SettingsSectionId>("customize");
   const {
@@ -314,6 +335,11 @@ export function SettingsPage() {
     toggleExperimentalFeature,
     isExperimentalFeatureEnabled,
     setCalendarWakeTime,
+    updateEasyListSettings,
+    updateEasyNotesSettings,
+    updateEasyWorkoutSettings,
+    updateEasyCalendarSettings,
+    updateRoutingSettings,
   } = useSettings();
 
   const enabledApps = appVisibilityOptions.filter((app) => isAppVisible(app.id));
@@ -439,6 +465,65 @@ export function SettingsPage() {
                 onChange={(event) => void setCalendarWakeTime(event.target.value)}
               />
             </label>
+            <label className="settings-toggle-row active">
+              <div>
+                <span className="settings-card-topline">
+                  <span>Default view</span>
+                  <span className="settings-state-pill">{settings.easyCalendar.defaultView}</span>
+                </span>
+                <strong>Open calendar to</strong>
+                <p>The preferred calendar view for future navigation and shortcuts.</p>
+              </div>
+              <select
+                value={settings.easyCalendar.defaultView}
+                onChange={(event) =>
+                  void updateEasyCalendarSettings({ defaultView: event.target.value as CalendarDefaultView })
+                }
+              >
+                {defaultViewOptions.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </label>
+            <label className="settings-toggle-row active">
+              <div>
+                <span className="settings-card-topline">
+                  <span>Planning</span>
+                  <span className="settings-state-pill">{settings.easyCalendar.defaultTaskBlockMinutes} min</span>
+                </span>
+                <strong>Default task block length</strong>
+                <p>Used by planning helpers when a task does not already have an estimate.</p>
+              </div>
+              <input
+                type="number"
+                min="5"
+                max="240"
+                step="5"
+                value={settings.easyCalendar.defaultTaskBlockMinutes}
+                onChange={(event) =>
+                  void updateEasyCalendarSettings({ defaultTaskBlockMinutes: Number(event.target.value) })
+                }
+              />
+            </label>
+            <label className="settings-toggle-row active">
+              <div>
+                <span className="settings-card-topline">
+                  <span>Planning window</span>
+                  <span className="settings-state-pill">{settings.easyCalendar.planMyDayWindowHours} hours</span>
+                </span>
+                <strong>Plan My Day horizon</strong>
+                <p>How much of the day the planner should consider after wakeup time.</p>
+              </div>
+              <input
+                type="number"
+                min="6"
+                max="18"
+                value={settings.easyCalendar.planMyDayWindowHours}
+                onChange={(event) =>
+                  void updateEasyCalendarSettings({ planMyDayWindowHours: Number(event.target.value) })
+                }
+              />
+            </label>
           </div>
         </PageSection>
         ) : null}
@@ -460,6 +545,169 @@ export function SettingsPage() {
                 <p>{section.description}</p>
               </article>
             ))}
+          </div>
+
+          <div className="settings-app-preference-grid">
+            <section className="settings-app-preference-card">
+              <div className="panel-header">
+                <p className="eyebrow">EasyList</p>
+                <h3>Task defaults</h3>
+                <p>Control how new quick-add rows behave before you type anything.</p>
+              </div>
+              <label className="field-stack">
+                <span>Default urgency</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={settings.easyList.defaultPriorityTier}
+                  onChange={(event) =>
+                    void updateEasyListSettings({ defaultPriorityTier: Number(event.target.value) })
+                  }
+                />
+              </label>
+              <label className="field-stack">
+                <span>Quick-add rows</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="8"
+                  value={settings.easyList.quickAddRows}
+                  onChange={(event) => void updateEasyListSettings({ quickAddRows: Number(event.target.value) })}
+                />
+              </label>
+              <label className="settings-inline-check">
+                <input
+                  type="checkbox"
+                  checked={settings.easyList.showCompletedMotion}
+                  onChange={(event) => void updateEasyListSettings({ showCompletedMotion: event.target.checked })}
+                />
+                Keep completion motion on
+              </label>
+            </section>
+
+            <section className="settings-app-preference-card">
+              <div className="panel-header">
+                <p className="eyebrow">EasyNotes</p>
+                <h3>Writing defaults</h3>
+                <p>Choose what happens when you come back to notes and process messy text.</p>
+              </div>
+              <label className="field-stack">
+                <span>When opening notes</span>
+                <select
+                  value={settings.easyNotes.resumeBehavior}
+                  onChange={(event) =>
+                    void updateEasyNotesSettings({ resumeBehavior: event.target.value as NotesResumeBehavior })
+                  }
+                >
+                  {notesResumeOptions.map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="field-stack">
+                <span>Note-to-task default</span>
+                <select
+                  value={settings.easyNotes.noteToTaskDefault}
+                  onChange={(event) =>
+                    void updateEasyNotesSettings({
+                      noteToTaskDefault: event.target.value as "review" | "send-to-list",
+                    })
+                  }
+                >
+                  <option value="review">Review first</option>
+                  <option value="send-to-list">Send to EasyList</option>
+                </select>
+              </label>
+              <label className="settings-inline-check">
+                <input
+                  type="checkbox"
+                  checked={settings.easyNotes.cleanupUntitledNotes}
+                  onChange={(event) => void updateEasyNotesSettings({ cleanupUntitledNotes: event.target.checked })}
+                />
+                Clean up untitled empty notes
+              </label>
+            </section>
+
+            <section className="settings-app-preference-card">
+              <div className="panel-header">
+                <p className="eyebrow">EasyWorkout</p>
+                <h3>Workout mode defaults</h3>
+                <p>Set how much structure is ready when you hit Start Workout.</p>
+              </div>
+              <label className="field-stack">
+                <span>Focused exercise boxes</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={settings.easyWorkout.focusedExerciseCount}
+                  onChange={(event) =>
+                    void updateEasyWorkoutSettings({ focusedExerciseCount: Number(event.target.value) })
+                  }
+                />
+              </label>
+              <label className="field-stack">
+                <span>Default sets per exercise</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="8"
+                  value={settings.easyWorkout.defaultSetCount}
+                  onChange={(event) => void updateEasyWorkoutSettings({ defaultSetCount: Number(event.target.value) })}
+                />
+              </label>
+              <label className="settings-inline-check">
+                <input
+                  type="checkbox"
+                  checked={settings.easyWorkout.showLastTimeHelper}
+                  onChange={(event) => void updateEasyWorkoutSettings({ showLastTimeHelper: event.target.checked })}
+                />
+                Show last-time helper
+              </label>
+            </section>
+
+            <section className="settings-app-preference-card">
+              <div className="panel-header">
+                <p className="eyebrow">Routing</p>
+                <h3>Cross-app handoffs</h3>
+                <p>Decide how task handoffs should behave as Projects and Pipeline get smarter.</p>
+              </div>
+              <label className="field-stack">
+                <span>Project routing</span>
+                <select
+                  value={settings.routing.projectRoutingDefault}
+                  onChange={(event) =>
+                    void updateRoutingSettings({ projectRoutingDefault: event.target.value as RoutingDefault })
+                  }
+                >
+                  {routingOptions.map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="field-stack">
+                <span>Pipeline routing</span>
+                <select
+                  value={settings.routing.pipelineRoutingDefault}
+                  onChange={(event) =>
+                    void updateRoutingSettings({ pipelineRoutingDefault: event.target.value as RoutingDefault })
+                  }
+                >
+                  {routingOptions.map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="settings-inline-check">
+                <input
+                  type="checkbox"
+                  checked={settings.routing.preserveSourceContext}
+                  onChange={(event) => void updateRoutingSettings({ preserveSourceContext: event.target.checked })}
+                />
+                Preserve source task context
+              </label>
+            </section>
           </div>
         </PageSection>
         ) : null}

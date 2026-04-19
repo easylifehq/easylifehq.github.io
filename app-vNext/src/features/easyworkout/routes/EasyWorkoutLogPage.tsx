@@ -6,15 +6,15 @@ import { useSettings } from "@/features/settings/SettingsContext";
 import type { WorkoutExerciseLogRecord, WorkoutSetRecord } from "@/lib/firestore/workoutSessions";
 
 const emptySet = (): WorkoutSetRecord => ({ reps: 8, weight: 0, notes: "" });
-const emptyExerciseLog = (): WorkoutExerciseLogRecord => ({
+const emptyExerciseLog = (setCount = 1): WorkoutExerciseLogRecord => ({
   exerciseId: null,
   exerciseName: "",
   muscleGroup: "",
   notes: "",
-  sets: [emptySet()],
+  sets: Array.from({ length: setCount }, () => emptySet()),
 });
-const focusedWorkoutExerciseCount = 6;
-const startingWorkoutLogs = () => Array.from({ length: focusedWorkoutExerciseCount }, () => emptyExerciseLog());
+const startingWorkoutLogs = (count: number, setCount: number) =>
+  Array.from({ length: count }, () => emptyExerciseLog(setCount));
 
 export function EasyWorkoutLogPage() {
   const firstExerciseInputRef = useRef<HTMLInputElement | null>(null);
@@ -22,14 +22,16 @@ export function EasyWorkoutLogPage() {
   const routineId = searchParams.get("routineId");
   const gymMode = searchParams.get("gymMode") === "1";
   const workoutMode = searchParams.get("workoutMode") === "1" || searchParams.get("start") === "1";
-  const { isExperimentalFeatureEnabled } = useSettings();
+  const { isExperimentalFeatureEnabled, settings } = useSettings();
   const { routines, exercises, sessions, addSession, error } = useEasyWorkout();
   const [selectedRoutineId, setSelectedRoutineId] = useState(routineId || "");
   const [performedOn, setPerformedOn] = useState(new Date().toISOString().split("T")[0]);
   const [durationMinutes, setDurationMinutes] = useState("");
   const [sessionNotes, setSessionNotes] = useState("");
   const [exerciseLogs, setExerciseLogs] = useState<WorkoutExerciseLogRecord[]>(
-    workoutMode ? startingWorkoutLogs() : [emptyExerciseLog()]
+    workoutMode
+      ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
+      : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
   );
   const [workoutPaste, setWorkoutPaste] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
@@ -41,7 +43,11 @@ export function EasyWorkoutLogPage() {
 
   useEffect(() => {
     if (!selectedRoutine) {
-      setExerciseLogs(workoutMode ? startingWorkoutLogs() : [emptyExerciseLog()]);
+      setExerciseLogs(
+        workoutMode
+          ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
+          : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
+      );
       return;
     }
 
@@ -58,9 +64,11 @@ export function EasyWorkoutLogPage() {
               notes: "",
             })),
           }))
-        : workoutMode ? startingWorkoutLogs() : [emptyExerciseLog()]
+        : workoutMode
+          ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
+          : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
     );
-  }, [selectedRoutine, workoutMode]);
+  }, [selectedRoutine, workoutMode, settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount]);
 
   const previousByExercise = useMemo(
     () =>
@@ -131,7 +139,7 @@ export function EasyWorkoutLogPage() {
   function addExerciseBoxes(count = 1) {
     setExerciseLogs((current) => [
       ...current,
-      ...Array.from({ length: count }, () => emptyExerciseLog()),
+      ...Array.from({ length: count }, () => emptyExerciseLog(settings.easyWorkout.defaultSetCount)),
     ]);
   }
 
@@ -145,7 +153,7 @@ export function EasyWorkoutLogPage() {
           exercise.sets.some((set) => set.reps > 0 || set.weight > 0 || set.notes.trim())
       );
 
-      return filled.length ? filled : [emptyExerciseLog()];
+      return filled.length ? filled : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)];
     });
   }
 
@@ -162,7 +170,7 @@ export function EasyWorkoutLogPage() {
 
         if (!match) {
           return {
-            ...emptyExerciseLog(),
+            ...emptyExerciseLog(settings.easyWorkout.defaultSetCount),
             exerciseName: cleaned,
           };
         }
@@ -228,7 +236,11 @@ export function EasyWorkoutLogPage() {
     setSessionNotes("");
     setDurationMinutes("");
     if (!selectedRoutine) {
-      setExerciseLogs(isFocusedWorkoutMode ? startingWorkoutLogs() : [emptyExerciseLog()]);
+      setExerciseLogs(
+        isFocusedWorkoutMode
+          ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
+          : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
+      );
     }
   }
 
@@ -325,13 +337,13 @@ export function EasyWorkoutLogPage() {
                 <div className="panel-header workout-exercise-header">
                   <p className="eyebrow">Exercise {exerciseIndex + 1}</p>
                   <h2>{exercise.exerciseName || "Pick a lift"}</h2>
-                  {!isFocusedWorkoutMode ? <p>
+                  {!isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper ? <p>
                     {previous
                       ? `Last time: ${previous.weight} lbs x ${previous.reps} on ${previous.performedOn}`
                       : "No logged history yet for this exercise."}
                   </p> : null}
                 </div>
-                {isFocusedWorkoutMode && previous ? (
+                {isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper && previous ? (
                   <div className="calendar-info-card gym-suggestion">
                     <strong>Suggested working set: {previous.weight} lbs x {previous.reps}</strong>
                     <button type="button" className="primary-button compact-button" onClick={() => fillFromLastTime(exerciseIndex)}>
@@ -406,7 +418,7 @@ export function EasyWorkoutLogPage() {
                       Copy previous set
                     </button>
                   ) : null}
-                  <button type="button" className="ghost-button" onClick={() => setExerciseLogs((current) => current.length === 1 ? [emptyExerciseLog()] : current.filter((_, index) => index !== exerciseIndex))}>
+                  <button type="button" className="ghost-button" onClick={() => setExerciseLogs((current) => current.length === 1 ? [emptyExerciseLog(settings.easyWorkout.defaultSetCount)] : current.filter((_, index) => index !== exerciseIndex))}>
                     Remove exercise
                   </button>
                 </div>

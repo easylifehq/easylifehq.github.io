@@ -43,10 +43,12 @@ export function EasyCalendarDayPage() {
   const taskBlockCount = items.filter((item) => item.kind === "task-block").length;
   const isOverloaded = scheduledMinutes > 9 * 60;
   const wakeHour = getHourFromTimeInput(settings.calendarWakeTime, 8);
-  const hourlySlots = useMemo(() => buildHourlySlots(today, wakeHour, 16), [today, wakeHour]);
+  const planWindowHours = settings.easyCalendar.planMyDayWindowHours;
+  const dayEndHour = Math.min(wakeHour + planWindowHours, 24);
+  const hourlySlots = useMemo(() => buildHourlySlots(today, wakeHour, planWindowHours), [today, wakeHour, planWindowHours]);
   const openWindows = useMemo(
-    () => getOpenTimeWindowsForDay(today, events, taskBlocks, wakeHour, Math.min(wakeHour + 16, 24)),
-    [events, taskBlocks, today, wakeHour]
+    () => getOpenTimeWindowsForDay(today, events, taskBlocks, wakeHour, dayEndHour),
+    [events, taskBlocks, today, wakeHour, dayEndHour]
   );
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
@@ -83,7 +85,11 @@ export function EasyCalendarDayPage() {
       const remainingTaskBlocks = taskBlocks.filter(
         (taskBlock) => !existingSuggestedBlocks.some((existing) => existing.id === taskBlock.id)
       );
-      const plan = buildPlanMyDaySuggestions(today, tasks, events, remainingTaskBlocks);
+      const plan = buildPlanMyDaySuggestions(today, tasks, events, remainingTaskBlocks, {
+        wakeHour,
+        endHour: dayEndHour,
+        defaultTaskBlockMinutes: settings.easyCalendar.defaultTaskBlockMinutes,
+      });
 
       if (!plan.suggestions.length) {
         setPlanMessage(

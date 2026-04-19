@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.16.0`
-- Current planning target: `3.16.0` Core UX Refinement
-- Next feature target: `3.17.0` Settings Deepening
-- Product polish queue: `3.16.0` Core UX Refinement, `3.17.0` Settings Deepening, `3.18.0` Data Review and Export, `3.19.0` AI Trust and Controls
+- App package version: `3.17.0`
+- Current planning target: `3.17.0` Settings Deepening
+- Next feature target: `3.18.0` Data Review and Export
+- Product polish queue: `3.18.0` Data Review and Export, `3.19.0` AI Trust and Controls
 - Future major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
 
 ## Working Rules
@@ -277,18 +277,18 @@ Goal: Make the app feel more like a finished product and less like a collection 
 
 ### 3.17.0 Settings Deepening
 
-Status: Planned
+Status: Done
 
 Goal: Turn Settings into the real control center for app-specific preferences.
 
-- Add focused app-specific settings pages or sections instead of placeholder page-setting cards.
-- Add EasyList settings for default urgency, quick-add defaults, archive motion, and task display preferences.
-- Add EasyNotes settings for resume behavior, untitled note cleanup, default folder behavior, and note-to-task defaults.
-- Add EasyWorkout settings for default exercise box count, workout mode defaults, and logging preferences.
-- Add EasyCalendar settings for default view, wakeup time, category defaults, and planning preferences.
-- Add EasyProjects and EasyPipeline settings for routing defaults and source-context behavior.
-- Keep EasyDrinks and EasyGames settings hidden until the `4.0.0` hold lifts.
-- Preserve the mobile-friendly Settings navigation created in `3.10.0`.
+- Done: Add focused app-specific settings controls instead of placeholder page-setting cards.
+- Done: Add EasyList settings for default urgency, quick-add row count, and archive motion preference.
+- Done: Add EasyNotes settings for resume behavior, untitled note cleanup, and note-to-task defaults.
+- Done: Add EasyWorkout settings for default exercise box count, default set count, and last-time helpers.
+- Done: Add EasyCalendar settings for default view, wakeup time, default task block length, and planning window.
+- Done: Add EasyProjects and EasyPipeline routing defaults plus source-context behavior.
+- Done: Keep EasyDrinks and EasyGames settings hidden until the `4.0.0` hold lifts.
+- Done: Preserve the mobile-friendly Settings navigation created in `3.10.0`.
 
 ### 3.18.0 Data Review and Export
 

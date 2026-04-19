@@ -4,6 +4,7 @@ import { getPriorityMeta, normalizePriorityTier, PRIORITY_TIERS } from "@/featur
 import { auth } from "@/lib/firebase/client";
 import { addLinkedCalendarBlock } from "@/lib/firestore/tasks";
 import { createCalendarTaskBlock } from "@/lib/firestore/calendarTaskBlocks";
+import { useSettings } from "@/features/settings/SettingsContext";
 
 type TaskComposerProps = {
   onSubmit: (draft: TaskDraft) => Promise<string | null | void>;
@@ -28,13 +29,13 @@ type AiTaskRow = {
   notes?: string;
 };
 
-const EMPTY_ROW = (): TaskRowDraft => ({
+const EMPTY_ROW = (priorityTier = 5): TaskRowDraft => ({
   id: crypto.randomUUID(),
   title: "",
   category: "",
   dueDate: "",
   estimatedLength: "",
-  priorityTier: 5,
+  priorityTier: normalizePriorityTier(priorityTier),
   notes: "",
 });
 
@@ -351,8 +352,12 @@ function buildAnalysisMessage(parsedRows: TaskRowDraft[], source: "ai" | "local"
 }
 
 export function TaskComposer({ onSubmit }: TaskComposerProps) {
+  const { settings } = useSettings();
   const firstTaskInputRef = useRef<HTMLInputElement | null>(null);
-  const [rows, setRows] = useState<TaskRowDraft[]>([EMPTY_ROW(), EMPTY_ROW(), EMPTY_ROW()]);
+  const makeEmptyRow = () => EMPTY_ROW(settings.easyList.defaultPriorityTier);
+  const makeStarterRows = () =>
+    Array.from({ length: settings.easyList.quickAddRows }, () => makeEmptyRow());
+  const [rows, setRows] = useState<TaskRowDraft[]>(makeStarterRows);
   const [brainDump, setBrainDump] = useState("");
   const [mergeMode, setMergeMode] = useState<"replace" | "append">("replace");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -400,13 +405,13 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
   }
 
   function addBlankRow() {
-    setRows((current) => [...current, EMPTY_ROW()]);
+    setRows((current) => [...current, makeEmptyRow()]);
   }
 
   function removeRow(rowId: string) {
     setRows((current) => {
       if (current.length === 1) {
-        return [EMPTY_ROW()];
+        return [makeEmptyRow()];
       }
 
       return current.filter((row) => row.id !== rowId);
@@ -421,7 +426,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
     if (mergeMode === "replace") {
       setRows([
         ...parsedRows,
-        ...Array.from({ length: Math.max(1, 3 - parsedRows.length) }, () => EMPTY_ROW()),
+        ...Array.from({ length: Math.max(1, settings.easyList.quickAddRows - parsedRows.length) }, () => makeEmptyRow()),
       ]);
       return;
     }
@@ -434,7 +439,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
 
       return [
         ...replacement,
-        ...Array.from({ length: Math.max(neededPadding, 1) }, () => EMPTY_ROW()),
+        ...Array.from({ length: Math.max(neededPadding, 1) }, () => makeEmptyRow()),
       ];
     });
   }
@@ -501,7 +506,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
         }
       }
 
-      setRows([EMPTY_ROW(), EMPTY_ROW(), EMPTY_ROW()]);
+      setRows(makeStarterRows());
       setBrainDump("");
       setCreateCalendarSuggestions(false);
       window.localStorage.removeItem(BRAIN_DUMP_DRAFT_KEY);

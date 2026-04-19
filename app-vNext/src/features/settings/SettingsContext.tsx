@@ -15,6 +15,11 @@ import {
   type ThemeMode,
   type UserShellSettings,
   type VisibleAppId,
+  type EasyCalendarSettings,
+  type EasyListSettings,
+  type EasyNotesSettings,
+  type EasyWorkoutSettings,
+  type RoutingSettings,
 } from "@/lib/firestore/settings";
 
 const visualQaExperimentalFeatures: ExperimentalFeatureId[] = [
@@ -66,6 +71,11 @@ type SettingsContextValue = {
   toggleExperimentalFeature: (featureId: ExperimentalFeatureId) => Promise<void>;
   isExperimentalFeatureEnabled: (featureId: ExperimentalFeatureId) => boolean;
   setCalendarWakeTime: (wakeTime: string) => Promise<void>;
+  updateEasyListSettings: (nextSettings: Partial<EasyListSettings>) => Promise<void>;
+  updateEasyNotesSettings: (nextSettings: Partial<EasyNotesSettings>) => Promise<void>;
+  updateEasyWorkoutSettings: (nextSettings: Partial<EasyWorkoutSettings>) => Promise<void>;
+  updateEasyCalendarSettings: (nextSettings: Partial<EasyCalendarSettings>) => Promise<void>;
+  updateRoutingSettings: (nextSettings: Partial<RoutingSettings>) => Promise<void>;
 };
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
@@ -145,6 +155,26 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     await persist({ ...settings, calendarWakeTime });
   }
 
+  async function updateEasyListSettings(nextSettings: Partial<EasyListSettings>) {
+    await persist({ ...settings, easyList: { ...settings.easyList, ...nextSettings } });
+  }
+
+  async function updateEasyNotesSettings(nextSettings: Partial<EasyNotesSettings>) {
+    await persist({ ...settings, easyNotes: { ...settings.easyNotes, ...nextSettings } });
+  }
+
+  async function updateEasyWorkoutSettings(nextSettings: Partial<EasyWorkoutSettings>) {
+    await persist({ ...settings, easyWorkout: { ...settings.easyWorkout, ...nextSettings } });
+  }
+
+  async function updateEasyCalendarSettings(nextSettings: Partial<EasyCalendarSettings>) {
+    await persist({ ...settings, easyCalendar: { ...settings.easyCalendar, ...nextSettings } });
+  }
+
+  async function updateRoutingSettings(nextSettings: Partial<RoutingSettings>) {
+    await persist({ ...settings, routing: { ...settings.routing, ...nextSettings } });
+  }
+
   const value = useMemo(
     () => ({
       settings,
@@ -154,6 +184,11 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       toggleVisibleApp,
       toggleExperimentalFeature,
       setCalendarWakeTime,
+      updateEasyListSettings,
+      updateEasyNotesSettings,
+      updateEasyWorkoutSettings,
+      updateEasyCalendarSettings,
+      updateRoutingSettings,
       isAppVisible: (appId: VisibleAppId) => settings.visibleApps.includes(appId),
       isExperimentalFeatureEnabled: (featureId: ExperimentalFeatureId) =>
         settings.experimentalFeatures.includes(featureId),

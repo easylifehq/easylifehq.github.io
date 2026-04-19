@@ -3332,6 +3332,7 @@ button.calendar-detail-card:disabled {
 .settings-page-section-list {
   display: grid;
   gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .settings-page-section-card {
@@ -3350,6 +3351,40 @@ button.calendar-detail-card:disabled {
 .settings-page-section-card p {
   margin: 0;
   color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.settings-app-preference-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.settings-app-preference-card {
+  display: grid;
+  align-content: start;
+  gap: 0.85rem;
+  min-width: 0;
+  padding: 1rem;
+  border-radius: var(--shell-control-radius);
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-card-elevated, var(--shell-input-bg));
+}
+
+.settings-app-preference-card .panel-header {
+  margin-bottom: 0;
+}
+
+.settings-app-preference-card .panel-header h3 {
+  margin: 0.25rem 0 0.2rem;
+}
+
+.settings-inline-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-weight: 800;
 }
 
 .settings-page {
@@ -3917,6 +3952,17 @@ button.calendar-detail-card:disabled {
   width: 8.5rem;
 }
 
+.settings-toggle-row input[type="number"],
+.settings-toggle-row select {
+  width: min(12rem, 100%);
+  min-height: 44px;
+  border-radius: var(--shell-control-radius);
+  border: 1px solid var(--ui-border-subtle, var(--shell-input-border));
+  padding: 0.7rem 0.8rem;
+  background: var(--ui-bg-input, var(--shell-input-bg));
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
 .app-shell-vnext.shell-theme-gamer .page-hero-vnext h1,
 .app-shell-vnext.shell-theme-gamer .panel-header h2,
 .app-shell-vnext.shell-theme-gamer .workspace-hero h1,
@@ -4190,6 +4236,10 @@ button.calendar-detail-card:disabled {
   .settings-labs-summary,
   .settings-baseline-grid,
   .settings-option-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-app-preference-grid {
     grid-template-columns: 1fr;
   }
 
