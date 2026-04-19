@@ -236,6 +236,7 @@ type SettingsSectionId =
   | "calendar"
   | "page-settings"
   | "data"
+  | "install"
   | "experiments"
   | "account";
 
@@ -274,6 +275,12 @@ const settingsSections: Array<{
     label: "Data",
     eyebrow: "Review",
     description: "Inspect, export, and understand what EasyLife is storing.",
+  },
+  {
+    id: "install",
+    label: "Install",
+    eyebrow: "Home Screen",
+    description: "Add EasyLife to your phone home screen for faster daily use.",
   },
   {
     id: "experiments",
@@ -1033,6 +1040,72 @@ export function SettingsPage() {
               </span>
               <strong>{softDeletedNoteCount} note{softDeletedNoteCount === 1 ? "" : "s"} in trash</strong>
               <p>Deleted notes remain reviewable from EasyNotes trash before permanent removal.</p>
+            </article>
+          </div>
+        </PageSection>
+        ) : null}
+
+        {activeSection === "install" ? (
+        <PageSection
+          eyebrow="Home screen"
+          title="Add EasyLife to your phone"
+          description="Install EasyLife from Safari so it opens from your home screen like an app."
+        >
+          <div id="install" className="settings-anchor" />
+          <div className="settings-install-hero">
+            <article>
+              <span className="settings-card-topline">
+                <span>iPhone</span>
+                <span className="settings-state-pill">Best path</span>
+              </span>
+              <strong>Use Safari's Share button</strong>
+              <p>The Share button is the square with an arrow pointing up. On most iPhones it sits in Safari's bottom toolbar.</p>
+            </article>
+            <article>
+              <span className="settings-card-topline">
+                <span>Result</span>
+                <span className="settings-state-pill">Home screen</span>
+              </span>
+              <strong>EasyLife opens like an app</strong>
+              <p>After adding it, launch EasyLife from the icon instead of opening a normal browser tab.</p>
+            </article>
+          </div>
+
+          <ol className="settings-install-steps">
+            <li>
+              <span>1</span>
+              <p>Open EasyLife in Safari on your iPhone.</p>
+            </li>
+            <li>
+              <span>2</span>
+              <p>Tap the Share button in Safari.</p>
+            </li>
+            <li>
+              <span>3</span>
+              <p>Choose Add to Home Screen.</p>
+            </li>
+            <li>
+              <span>4</span>
+              <p>Tap Add, then open EasyLife from the new icon.</p>
+            </li>
+          </ol>
+
+          <div className="settings-review-grid">
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Android</span>
+                <span className="settings-state-pill">Chrome</span>
+              </span>
+              <strong>Use Install app or Add to Home screen</strong>
+              <p>Chrome usually shows this from the three-dot menu when the site is ready to install.</p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Later</span>
+                <span className="settings-state-pill">Native</span>
+              </span>
+              <strong>App Store readiness can still happen</strong>
+              <p>This home-screen install path keeps daily use fast while TestFlight and store setup stay optional.</p>
             </article>
           </div>
         </PageSection>

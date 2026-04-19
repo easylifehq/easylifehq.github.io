@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ProductsMenu } from "@/components/navigation/ProductsMenu";
 import { appProductItems } from "@/components/navigation/appProducts";
 import { useSettings } from "@/features/settings/SettingsContext";
@@ -26,13 +26,13 @@ export function AppHeader() {
     <header className="app-header">
       <div className="app-header-main">
         <div className="app-header-brand">
-          <div className="site-brand">
+          <Link to="/app/hq" className="site-brand" aria-label="Go to EasyHQ">
             <span className="brand-badge">EL</span>
             <div>
               <strong className="site-brand-title">EasyLifeHQ</strong>
               <p className="app-current-label">{currentApp}</p>
             </div>
-          </div>
+          </Link>
         </div>
 
         <div className="app-header-actions">
