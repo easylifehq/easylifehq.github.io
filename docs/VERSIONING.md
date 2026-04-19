@@ -4,8 +4,8 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `3.19.0`
-- Next patch target: `3.19.1`
+- Current app version: `3.19.1`
+- Next patch target: `3.19.2`
 - Next feature target: `3.20.0` Security Hardening.
 
 ## What To Update
@@ -66,7 +66,8 @@ Before finishing a release batch:
 19. `3.17.0` Settings Deepening.
 20. `3.18.0` Data Review and Export.
 21. `3.19.0` High-Tech Visual Polish.
-22. `3.19.x` Real-Use Patch Cycle.
-23. `3.20.0` Security Hardening.
+22. `3.19.1` Visual QA Patch.
+23. `3.19.x` Real-Use Patch Cycle.
+24. `3.20.0` Security Hardening.
 
 `4.0.0` remains the next major suite expansion target for the AI Assistant Foundation and later suite expansion ideas, but it should wait until the current product core has been used, visually polished, security-hardened, and tested enough to feel stable.

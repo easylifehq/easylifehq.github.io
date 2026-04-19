@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.19.0`
-- Current planning target: `3.19.0` High-Tech Visual Polish
+- App package version: `3.19.1`
+- Current planning target: `3.19.1` Visual QA Patch
 - Next feature target: `3.20.0` Security Hardening
 - Product polish queue: `3.19.x` Real-Use Patch Cycle, `3.20.0` Security Hardening
 - Future major target: `4.0.0` AI Assistant Foundation and Suite Expansion with EasyDrinks and EasyGames
@@ -329,6 +329,17 @@ Goal: Patch issues found during a week of real use before closing out the `3.x` 
 - Patch mobile and desktop UI issues that show up in normal workflows.
 - Keep release candidates focused on bug fixes, QA, version sync, and deploy assets.
 - Close `3.x` only after the product feels stable enough to build `4.0.0` on top of it.
+
+### 3.19.1 Visual QA Patch
+
+Status: Done
+
+Goal: Fix visual issues found during the `3.19.0` browser check.
+
+- Done: Fix mobile marketing and login page horizontal overflow.
+- Done: Keep header actions visible and readable on narrow screens.
+- Done: Tighten marketing header radii to match the command-center shell.
+- Done: Rebuild and refresh deploy assets after the CSS patch.
 
 ### 3.20.0 Security Hardening
 

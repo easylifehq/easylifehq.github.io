@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.19.1
+
+### Fixed
+
+- Fixed mobile marketing and login page horizontal overflow that clipped header actions and hero copy.
+- Tightened marketing header badge and container radii to match the polished command-center shell.
+
 ## 3.19.0
 
 ### Changed
