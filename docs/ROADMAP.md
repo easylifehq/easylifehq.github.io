@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.20.0`
-- Current planning target: `3.20.0` Security Hardening
-- Next feature target: `4.0.0` Mobile App Foundation
-- Product polish queue: `4.0.0` Mobile App Foundation, `4.5.0` Firebase Rules Verification
+- App package version: `4.0.0`
+- Current planning target: `4.0.0` Mobile App Foundation
+- Next feature target: `4.1.0` Notification Foundation
+- Product polish queue: `4.0.x` Mobile Install Follow-Up, `4.5.0` Firebase Rules Verification
 - Future major target: `4.0.0` Mobile App Foundation and Notifications
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
 
@@ -344,7 +344,7 @@ Goal: Fix visual issues found during the `3.19.0` browser check.
 
 ### 3.20.0 Security Hardening
 
-Status: Planned
+Status: Done
 
 Goal: Make EasyLife significantly harder to attack, safer with user data, and ready for more ambitious `4.0.0` features.
 
@@ -361,14 +361,17 @@ Goal: Make EasyLife significantly harder to attack, safer with user data, and re
 
 ### 4.0.0 Mobile App Foundation
 
-Status: Planned
+Status: In Progress
 
 Goal: Turn EasyLife into a real phone-first daily companion with app install, native-feeling navigation, and a path to notifications.
 
-- Choose the mobile approach, with Capacitor preferred first because the current app is already React/Vite and can become an installable app without a full rewrite.
-- Add Capacitor project scaffolding for iOS and Android while keeping the existing web app as the shared source of truth.
-- Define app name, bundle IDs, icons, splash screen, platform targets, and build settings.
-- Add a temporary `4.0.0` EasyLife mobile logo and app icon that fits the polished command-center identity.
+- Done: Choose the mobile approach: PWA install foundation first for fast iPhone home-screen use, with Capacitor still available later for TestFlight/App Store work.
+- Done: Add web app manifest, iPhone standalone metadata, theme color, and mobile viewport settings.
+- Done: Add a service worker so the app has a real install foundation.
+- Done: Add temporary `4.0.0` EasyLife mobile icons that fit the polished command-center identity.
+- Done: Document the iPhone Add to Home Screen path and later App Store readiness work.
+- Define bundle IDs, splash screen, platform targets, and build settings before native wrapping.
+- Add Capacitor project scaffolding for iOS and Android when the installable web-app path is not enough.
 - Create mobile-safe environment handling so Firebase config, API URLs, and build variables are clear per platform.
 - Verify Firebase Authentication works inside the mobile wrapper, including sign-in, sign-out, persisted sessions, and signed-out redirects.
 - Verify Firestore reads/writes work correctly in the mobile shell without broad or unsafe queries.

@@ -6,6 +6,18 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.0.0
+
+### Added
+
+- Added the first mobile app foundation with PWA install metadata for iPhone home-screen use.
+- Added an EasyLife web app manifest, service worker, app icon set, and Apple touch icon.
+- Added mobile install and future App Store readiness notes.
+
+### Changed
+
+- Updated the app document metadata, mobile viewport, theme color, and iOS standalone settings for a more app-like launch.
+
 ## 3.20.0
 
 ### Added

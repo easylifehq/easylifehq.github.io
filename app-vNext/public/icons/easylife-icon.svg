@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="EasyLife app icon">
+  <rect width="512" height="512" rx="104" fill="#f3f6f4"/>
+  <path d="M64 112c0-26.5 21.5-48 48-48h288c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48H112c-26.5 0-48-21.5-48-48V112Z" fill="#1f2528"/>
+  <path d="M96 126c0-16.6 13.4-30 30-30h260c16.6 0 30 13.4 30 30v260c0 16.6-13.4 30-30 30H126c-16.6 0-30-13.4-30-30V126Z" fill="#f8faf8"/>
+  <path d="M126 156h260M126 222h260M126 288h260M126 354h260" stroke="#dce8e4" stroke-width="10" stroke-linecap="round"/>
+  <path d="M160 188h84c17.7 0 32 14.3 32 32v72c0 17.7 14.3 32 32 32h44" fill="none" stroke="#24766f" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M156 324h98" stroke="#7966d2" stroke-width="30" stroke-linecap="round"/>
+  <circle cx="160" cy="188" r="20" fill="#24766f"/>
+  <circle cx="352" cy="324" r="20" fill="#7966d2"/>
+</svg>
