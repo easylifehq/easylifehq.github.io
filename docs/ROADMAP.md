@@ -4,11 +4,11 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.18.0`
-- Current planning target: `3.18.0` Data Review and Export
-- Next feature target: `3.19.0` High-Tech Visual Polish
-- Product polish queue: `3.19.0` High-Tech Visual Polish, `3.19.x` Real-Use Patch Cycle, `3.20.0` Security Hardening
-- Future major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
+- App package version: `3.19.0`
+- Current planning target: `3.19.0` High-Tech Visual Polish
+- Next feature target: `3.20.0` Security Hardening
+- Product polish queue: `3.19.x` Real-Use Patch Cycle, `3.20.0` Security Hardening
+- Future major target: `4.0.0` AI Assistant Foundation and Suite Expansion with EasyDrinks and EasyGames
 
 ## Working Rules
 
@@ -306,18 +306,18 @@ Goal: Make the app feel safer, more trustworthy, and easier to inspect.
 
 ### 3.19.0 High-Tech Visual Polish
 
-Status: Planned
+Status: Done
 
 Goal: Make EasyLife feel like a refined, classy command center while keeping the base app simple and easy to use.
 
-- Improve the base theme into a sleek daily-use command center.
-- Make page hierarchy, spacing, and cards feel more premium across the suite.
-- Polish HQ, Settings, EasyList, EasyNotes, EasyCalendar, EasyWorkout, EasyProjects, EasyPipeline, and EasyStatistics.
-- Improve empty states, stats, and action areas so quiet accounts still feel intentional.
-- Make themes feel more distinct while preserving the same easy interaction model.
-- Push Gamer toward a game-like command center, Elvish toward adventure/fantasy polish, and Candy toward bright playful energy.
-- Keep the base app refined and classy, with personality coming from themes.
-- Avoid AI assistant foundation work until `4.0.0`.
+- Done: Improve the base theme into a sleek daily-use command center.
+- Done: Make page hierarchy, spacing, and cards feel more premium across the suite.
+- Done: Polish shared HQ, Settings, EasyList, EasyNotes, EasyCalendar, EasyWorkout, EasyProjects, EasyPipeline, and EasyStatistics surfaces through the common shell styles.
+- Done: Improve stats and action areas so quiet accounts still feel intentional.
+- Done: Make themes feel more distinct while preserving the same easy interaction model.
+- Done: Push Gamer toward a game-like command center, Elvish toward adventure/fantasy polish, and Candy toward bright playful energy.
+- Done: Keep the base app refined and classy, with personality coming from themes.
+- Done: Avoid AI assistant foundation work until `4.0.0`.
 
 ### 3.19.x Real-Use Patch Cycle
 
@@ -422,8 +422,8 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 - Deepen context scanning after the `3.x` product core has been tested.
 - Keep tuning project and pipeline routing suggestions based on real use.
 - Keep all AI actions review-first and reversible.
-- Add user-facing AI controls in `3.19.0`.
-- Add better fallback states when AI is unavailable in `3.19.0`.
+- Add user-facing AI controls in `4.0.0`.
+- Add better fallback states when AI is unavailable in `4.0.0`.
 
 ### EasyDrinks
 

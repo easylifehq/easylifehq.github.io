@@ -3,67 +3,70 @@
   font-family: var(--shell-body-font, "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif);
   line-height: 1.5;
   font-weight: 400;
-  color: #221d18;
-  background: #f4efe9;
+  color: #1f2528;
+  background: #f3f6f4;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --shell-accent: #c7723f;
-  --shell-accent-strong: #9e552d;
-  --shell-accent-soft: #fff4eb;
-  --shell-bg-top: #f8f3ed;
-  --shell-bg-bottom: #f4efe9;
-  --shell-header-bg: rgba(255, 252, 247, 0.9);
-  --shell-header-border: rgba(99, 76, 58, 0.12);
-  --shell-button-bg: #c7723f;
-  --shell-button-border: #c7723f;
+  --shell-accent: #24766f;
+  --shell-accent-strong: #174f4a;
+  --shell-accent-soft: #e7f5f2;
+  --shell-bg-top: #f8faf8;
+  --shell-bg-bottom: #e8eeeb;
+  --shell-header-bg: rgba(250, 252, 250, 0.92);
+  --shell-header-border: rgba(35, 48, 51, 0.13);
+  --shell-button-bg: #24766f;
+  --shell-button-border: #24766f;
   --shell-button-text: #ffffff;
-  --shell-brand-gradient: linear-gradient(135deg, #c7723f 0%, #8d6dd7 100%);
-  --shell-card-bg: rgba(255, 252, 247, 0.92);
-  --shell-card-bg-soft: #fff8f2;
-  --shell-card-border: rgba(99, 76, 58, 0.12);
-  --shell-chip-bg: #fff0e3;
-  --shell-chip-text: #8d5b35;
-  --shell-input-bg: #fffdf9;
-  --shell-input-border: rgba(99, 76, 58, 0.14);
-  --ui-bg-page: #f4efe9;
-  --ui-bg-section: rgba(255, 252, 247, 0.92);
-  --ui-bg-card: #fff8f2;
-  --ui-bg-card-elevated: #fffdf9;
+  --shell-brand-gradient: linear-gradient(135deg, #1f2528 0%, #24766f 56%, #7966d2 100%);
+  --shell-card-bg: rgba(255, 255, 255, 0.94);
+  --shell-card-bg-soft: #f1f6f4;
+  --shell-card-border: rgba(35, 48, 51, 0.13);
+  --shell-chip-bg: #e3f1ee;
+  --shell-chip-text: #19544f;
+  --shell-input-bg: #fbfdfc;
+  --shell-input-border: rgba(35, 48, 51, 0.15);
+  --ui-bg-page: #e8eeeb;
+  --ui-bg-section: rgba(255, 255, 255, 0.94);
+  --ui-bg-card: #f2f7f5;
+  --ui-bg-card-elevated: #ffffff;
   --ui-bg-input: #ffffff;
-  --ui-bg-empty: #fff7ee;
-  --ui-bg-tab-active: #fffdf9;
-  --ui-bg-tab-inactive: rgba(255, 248, 242, 0.82);
-  --ui-border-subtle: rgba(99, 76, 58, 0.16);
-  --ui-border-strong: rgba(99, 76, 58, 0.28);
-  --ui-text-primary: #221d18;
-  --ui-text-secondary: #4b4038;
-  --ui-text-muted: #66564b;
-  --ui-text-placeholder: #75665b;
-  --ui-pill-bg: #fff0e3;
-  --ui-pill-text: #70482d;
-  --ui-button-primary-bg: #c7723f;
+  --ui-bg-empty: #edf4f1;
+  --ui-bg-tab-active: #ffffff;
+  --ui-bg-tab-inactive: rgba(235, 242, 239, 0.9);
+  --ui-border-subtle: rgba(35, 48, 51, 0.16);
+  --ui-border-strong: rgba(35, 48, 51, 0.3);
+  --ui-text-primary: #1f2528;
+  --ui-text-secondary: #344144;
+  --ui-text-muted: #5c696b;
+  --ui-text-placeholder: #667477;
+  --ui-pill-bg: #e3f1ee;
+  --ui-pill-text: #19544f;
+  --ui-button-primary-bg: #24766f;
   --ui-button-primary-text: #ffffff;
-  --ui-button-secondary-bg: #fffdf9;
-  --ui-button-secondary-text: #342a22;
-  --shell-drawer-bg: #fffdf9;
+  --ui-button-secondary-bg: #ffffff;
+  --ui-button-secondary-text: #263235;
+  --shell-drawer-bg: #ffffff;
   --shell-body-font: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shell-display-font: "Aptos Display", "Trebuchet MS", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --shell-card-radius: 24px;
+  --shell-card-radius: 8px;
   --shell-control-radius: 8px;
   --shell-panel-radius: 8px;
-  --shell-card-shadow: 0 18px 44px rgba(65, 43, 28, 0.08);
-  --shell-control-shadow: 0 10px 24px rgba(65, 43, 28, 0.08);
+  --shell-card-shadow: 0 18px 44px rgba(24, 35, 38, 0.1);
+  --shell-control-shadow: 0 10px 24px rgba(24, 35, 38, 0.09);
+  --shell-panel-highlight: rgba(255, 255, 255, 0.72);
+  --shell-grid-line: rgba(36, 118, 111, 0.075);
+  --shell-status-glow: rgba(36, 118, 111, 0.17);
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.18s ease;
   --shell-motion-panel: 0.24s ease;
-  --shell-page-text: #221d18;
-  --shell-heading-text: #1f1a16;
-  --shell-muted-text: #665b54;
-  --shell-page-overlay-1: rgba(199, 114, 63, 0.1);
-  --shell-page-overlay-2: rgba(141, 109, 215, 0.08);
-  --shell-page-overlay-3: rgba(255, 255, 255, 0.42);
+  --shell-page-text: #1f2528;
+  --shell-heading-text: #171d20;
+  --shell-muted-text: #5c696b;
+  --shell-page-overlay-1: rgba(36, 118, 111, 0.1);
+  --shell-page-overlay-2: rgba(121, 102, 210, 0.08);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.44);
 }
 
 *,
@@ -88,9 +91,12 @@ body {
   min-height: max(100vh, 100dvh);
   color: var(--ui-text-primary, var(--shell-page-text));
   background:
+    linear-gradient(90deg, var(--shell-grid-line) 1px, transparent 1px),
+    linear-gradient(180deg, var(--shell-grid-line) 1px, transparent 1px),
     radial-gradient(circle at top left, var(--shell-page-overlay-1), transparent 28%),
     radial-gradient(circle at top right, var(--shell-page-overlay-2), transparent 26%),
     linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
+  background-size: 72px 72px, 72px 72px, auto, auto, auto;
 }
 
 #root {
@@ -142,9 +148,12 @@ a {
   grid-template-columns: 280px minmax(0, 1fr);
   color: var(--ui-text-primary, var(--shell-page-text));
   background:
+    linear-gradient(90deg, var(--shell-grid-line) 1px, transparent 1px),
+    linear-gradient(180deg, var(--shell-grid-line) 1px, transparent 1px),
     radial-gradient(circle at top left, var(--shell-page-overlay-1), transparent 26%),
     radial-gradient(circle at top right, var(--shell-page-overlay-2), transparent 24%),
     linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
+  background-size: 72px 72px, 72px 72px, auto, auto, auto;
 }
 
 .app-shell-vnext::before,
@@ -155,9 +164,12 @@ a {
   z-index: -1;
   pointer-events: none;
   background:
+    linear-gradient(90deg, var(--shell-grid-line) 1px, transparent 1px),
+    linear-gradient(180deg, var(--shell-grid-line) 1px, transparent 1px),
     radial-gradient(circle at top left, var(--shell-page-overlay-1), transparent 28%),
     radial-gradient(circle at top right, var(--shell-page-overlay-2), transparent 26%),
     linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
+  background-size: 72px 72px, 72px 72px, auto, auto, auto;
 }
 
 .app-shell-header {
@@ -525,9 +537,12 @@ a {
   padding: 1.5rem;
   min-height: 100%;
   background:
+    linear-gradient(90deg, var(--shell-grid-line) 1px, transparent 1px),
+    linear-gradient(180deg, var(--shell-grid-line) 1px, transparent 1px),
     radial-gradient(circle at top left, var(--shell-page-overlay-1), transparent 26%),
     radial-gradient(circle at top right, var(--shell-page-overlay-2), transparent 24%),
     linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
+  background-size: 72px 72px, 72px 72px, auto, auto, auto;
   min-width: 0;
   max-width: 100vw;
   overflow-x: clip;
@@ -545,9 +560,12 @@ a {
   min-height: 100dvh;
   min-height: max(100vh, 100dvh);
   background:
+    linear-gradient(90deg, var(--shell-grid-line) 1px, transparent 1px),
+    linear-gradient(180deg, var(--shell-grid-line) 1px, transparent 1px),
     radial-gradient(circle at top left, var(--shell-page-overlay-1), transparent 28%),
     radial-gradient(circle at top right, var(--shell-page-overlay-2), transparent 26%),
     linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
+  background-size: 72px 72px, 72px 72px, auto, auto, auto;
 }
 
 .marketing-content {
@@ -901,10 +919,15 @@ a {
 .panel-section,
 .loading-card,
 .auth-card-vnext {
-  background: var(--app-panel-bg, rgba(255, 252, 247, 0.92));
+  background:
+    linear-gradient(135deg, var(--shell-panel-highlight), transparent 48%),
+    var(--app-panel-bg, rgba(255, 255, 255, 0.94));
   border: 1px solid var(--app-panel-border, rgba(99, 76, 58, 0.12));
   border-radius: var(--shell-panel-radius);
-  box-shadow: var(--shell-card-shadow);
+  box-shadow:
+    inset 0 1px 0 var(--shell-panel-highlight),
+    0 0 0 1px rgba(255, 255, 255, 0.28),
+    var(--shell-card-shadow);
   min-width: 0;
 }
 
@@ -927,6 +950,7 @@ a {
   padding: 1.15rem 1.2rem;
   position: relative;
   overflow: hidden;
+  border-top: 1px solid var(--shell-panel-highlight);
 }
 
 .workspace-hero::after {
@@ -963,7 +987,7 @@ a {
 .panel-header h2,
 .auth-card-vnext h1 {
   margin: 0.35rem 0 0.55rem;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
   line-height: 1.04;
   font-family: var(--shell-display-font);
 }
@@ -1161,58 +1185,61 @@ textarea::placeholder {
 }
 
 .shell-theme-classic {
-  --shell-accent: #346ea8;
-  --shell-accent-strong: #245782;
-  --shell-accent-soft: #e9f2fb;
-  --shell-bg-top: #f8fafc;
-  --shell-bg-bottom: #edf1f5;
+  --shell-accent: #24766f;
+  --shell-accent-strong: #174f4a;
+  --shell-accent-soft: #e7f5f2;
+  --shell-bg-top: #f8faf8;
+  --shell-bg-bottom: #e8eeeb;
   --shell-header-bg: rgba(255, 255, 255, 0.94);
-  --shell-header-border: rgba(50, 69, 88, 0.14);
-  --shell-button-bg: #346ea8;
-  --shell-button-border: #346ea8;
+  --shell-header-border: rgba(35, 48, 51, 0.14);
+  --shell-button-bg: #24766f;
+  --shell-button-border: #24766f;
   --shell-button-text: #ffffff;
-  --shell-brand-gradient: linear-gradient(135deg, #346ea8 0%, #2f4052 100%);
+  --shell-brand-gradient: linear-gradient(135deg, #1f2528 0%, #24766f 56%, #7966d2 100%);
   --shell-card-bg: rgba(255, 255, 255, 0.96);
-  --shell-card-bg-soft: #f1f5f9;
-  --shell-card-border: rgba(50, 69, 88, 0.16);
-  --shell-chip-bg: #e6eef7;
-  --shell-chip-text: #23547f;
+  --shell-card-bg-soft: #f1f6f4;
+  --shell-card-border: rgba(35, 48, 51, 0.16);
+  --shell-chip-bg: #e3f1ee;
+  --shell-chip-text: #19544f;
   --shell-input-bg: #ffffff;
-  --shell-input-border: rgba(50, 69, 88, 0.18);
+  --shell-input-border: rgba(35, 48, 51, 0.18);
   --shell-drawer-bg: #ffffff;
   --shell-body-font: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shell-display-font: "Aptos Display", "Trebuchet MS", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --shell-card-radius: 16px;
-  --shell-card-shadow: 0 18px 44px rgba(47, 64, 82, 0.09);
+  --shell-card-radius: 8px;
+  --shell-card-shadow: 0 18px 44px rgba(24, 35, 38, 0.1);
+  --shell-panel-highlight: rgba(255, 255, 255, 0.78);
+  --shell-grid-line: rgba(36, 118, 111, 0.075);
+  --shell-status-glow: rgba(36, 118, 111, 0.17);
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.18s ease;
   --shell-motion-panel: 0.24s ease;
-  --shell-page-text: #202833;
-  --shell-heading-text: #151c25;
-  --shell-muted-text: #5d6876;
-  --shell-page-overlay-1: rgba(52, 110, 168, 0.08);
-  --shell-page-overlay-2: rgba(47, 64, 82, 0.06);
+  --shell-page-text: #1f2528;
+  --shell-heading-text: #171d20;
+  --shell-muted-text: #5c696b;
+  --shell-page-overlay-1: rgba(36, 118, 111, 0.1);
+  --shell-page-overlay-2: rgba(121, 102, 210, 0.08);
   --shell-page-overlay-3: rgba(255, 255, 255, 0.52);
-  --ui-bg-page: #edf1f5;
+  --ui-bg-page: #e8eeeb;
   --ui-bg-section: rgba(255, 255, 255, 0.96);
-  --ui-bg-card: #f3f6fa;
+  --ui-bg-card: #f2f7f5;
   --ui-bg-card-elevated: #ffffff;
   --ui-bg-input: #ffffff;
-  --ui-bg-empty: #e8eef5;
+  --ui-bg-empty: #edf4f1;
   --ui-bg-tab-active: #ffffff;
-  --ui-bg-tab-inactive: #e7edf4;
-  --ui-border-subtle: rgba(50, 69, 88, 0.2);
-  --ui-border-strong: rgba(50, 69, 88, 0.38);
-  --ui-text-primary: #202833;
-  --ui-text-secondary: #394858;
-  --ui-text-muted: #586777;
-  --ui-text-placeholder: #697887;
-  --ui-pill-bg: #e6eef7;
-  --ui-pill-text: #23547f;
-  --ui-button-primary-bg: #346ea8;
+  --ui-bg-tab-inactive: #e9f0ed;
+  --ui-border-subtle: rgba(35, 48, 51, 0.2);
+  --ui-border-strong: rgba(35, 48, 51, 0.38);
+  --ui-text-primary: #1f2528;
+  --ui-text-secondary: #344144;
+  --ui-text-muted: #5c696b;
+  --ui-text-placeholder: #667477;
+  --ui-pill-bg: #e3f1ee;
+  --ui-pill-text: #19544f;
+  --ui-button-primary-bg: #24766f;
   --ui-button-primary-text: #ffffff;
   --ui-button-secondary-bg: #ffffff;
-  --ui-button-secondary-text: #283747;
+  --ui-button-secondary-text: #263235;
 }
 
 .shell-theme-candy {
@@ -1237,8 +1264,11 @@ textarea::placeholder {
   --shell-drawer-bg: #fff4fa;
   --shell-body-font: "Trebuchet MS", "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shell-display-font: "Verdana", "Trebuchet MS", "Aptos Display", sans-serif;
-  --shell-card-radius: 30px;
+  --shell-card-radius: 8px;
   --shell-card-shadow: 0 24px 58px rgba(221, 62, 144, 0.22);
+  --shell-panel-highlight: rgba(255, 255, 255, 0.72);
+  --shell-grid-line: rgba(255, 95, 178, 0.13);
+  --shell-status-glow: rgba(255, 214, 104, 0.24);
   --shell-hover-lift: translateY(-3px) scale(1.01);
   --shell-page-text: #5d1f45;
   --shell-heading-text: #471535;
@@ -1292,8 +1322,11 @@ textarea::placeholder {
   --shell-drawer-bg: #130c22;
   --shell-body-font: "Consolas", "Aptos", "Segoe UI", ui-monospace, monospace;
   --shell-display-font: "Arial Black", "Segoe UI Black", "Aptos Display", sans-serif;
-  --shell-card-radius: 20px;
+  --shell-card-radius: 8px;
   --shell-card-shadow: 0 24px 60px rgba(3, 1, 10, 0.5);
+  --shell-panel-highlight: rgba(125, 242, 255, 0.1);
+  --shell-grid-line: rgba(125, 242, 255, 0.13);
+  --shell-status-glow: rgba(155, 92, 255, 0.34);
   --shell-hover-lift: translateY(-2px) scale(1.008);
   --shell-page-text: #f3ebff;
   --shell-heading-text: #fbf7ff;
@@ -1347,8 +1380,11 @@ textarea::placeholder {
   --shell-drawer-bg: #14251b;
   --shell-body-font: "Georgia", "Aptos", "Segoe UI", serif;
   --shell-display-font: "Palatino Linotype", "Book Antiqua", "Georgia", serif;
-  --shell-card-radius: 26px;
+  --shell-card-radius: 8px;
   --shell-card-shadow: 0 24px 54px rgba(4, 14, 9, 0.42);
+  --shell-panel-highlight: rgba(255, 241, 194, 0.12);
+  --shell-grid-line: rgba(200, 168, 79, 0.1);
+  --shell-status-glow: rgba(200, 168, 79, 0.24);
   --shell-hover-lift: translateY(-3px);
   --shell-page-text: #f5efd5;
   --shell-heading-text: #fff8e4;
@@ -1402,7 +1438,7 @@ textarea::placeholder {
   --shell-drawer-bg: #0c1c27;
   --shell-body-font: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shell-display-font: "Aptos Display", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --shell-card-radius: 22px;
+  --shell-card-radius: 8px;
   --shell-card-shadow: 0 24px 62px rgba(1, 8, 14, 0.46);
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.2s ease;
@@ -1457,7 +1493,7 @@ textarea::placeholder {
   --shell-drawer-bg: #ffffff;
   --shell-body-font: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shell-display-font: "Aptos Display", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --shell-card-radius: 12px;
+  --shell-card-radius: 8px;
   --shell-card-shadow: 0 18px 44px rgba(15, 23, 42, 0.1);
   --shell-hover-lift: translateY(-1px);
   --shell-motion-fast: 0.16s ease;
@@ -1512,7 +1548,7 @@ textarea::placeholder {
   --shell-drawer-bg: #fff8ed;
   --shell-body-font: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shell-display-font: "Trebuchet MS", "Aptos Display", "Segoe UI", sans-serif;
-  --shell-card-radius: 20px;
+  --shell-card-radius: 8px;
   --shell-card-shadow: 0 22px 50px rgba(183, 74, 42, 0.16);
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.2s ease;
@@ -1567,7 +1603,7 @@ textarea::placeholder {
   --shell-drawer-bg: #0d1b19;
   --shell-body-font: "Georgia", "Aptos", "Segoe UI", serif;
   --shell-display-font: "Palatino Linotype", "Georgia", serif;
-  --shell-card-radius: 22px;
+  --shell-card-radius: 8px;
   --shell-card-shadow: 0 24px 58px rgba(2, 8, 7, 0.48);
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.22s ease;
@@ -2175,8 +2211,13 @@ textarea::placeholder {
   gap: 0.3rem;
   padding: 1rem;
   border-radius: var(--shell-control-radius);
-  background: var(--app-stat-bg, #fff8f2);
+  background:
+    linear-gradient(135deg, var(--shell-panel-highlight), transparent 54%),
+    var(--app-stat-bg, #fff8f2);
   border: 1px solid var(--app-stat-border, rgba(199, 114, 63, 0.14));
+  box-shadow:
+    inset 0 1px 0 var(--shell-panel-highlight),
+    0 12px 28px rgba(24, 35, 38, 0.07);
   min-width: 0;
 }
 
@@ -2185,7 +2226,7 @@ textarea::placeholder {
   font-size: 0.84rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
 }
 
 .stat-card-vnext strong {
@@ -4175,6 +4216,45 @@ button.calendar-detail-card:disabled {
   border-color: rgba(255, 150, 150, 0.34);
 }
 
+.app-shell-vnext.shell-theme-gamer .page-hero-vnext,
+.app-shell-vnext.shell-theme-gamer .panel-section,
+.app-shell-vnext.shell-theme-gamer .stat-card-vnext,
+.app-shell-vnext.shell-theme-gamer .hq-link-card {
+  border-color: color-mix(in srgb, var(--shell-accent) 42%, var(--ui-border-subtle));
+  box-shadow:
+    inset 0 1px 0 var(--shell-panel-highlight),
+    0 0 0 1px rgba(125, 242, 255, 0.08),
+    0 0 30px rgba(155, 92, 255, 0.16),
+    var(--shell-card-shadow);
+}
+
+.app-shell-vnext.shell-theme-gamer .brand-badge,
+.app-shell-vnext.shell-theme-gamer .primary-button {
+  box-shadow: 0 0 24px rgba(155, 92, 255, 0.26);
+}
+
+.app-shell-vnext.shell-theme-elvish .page-hero-vnext,
+.app-shell-vnext.shell-theme-elvish .panel-section,
+.app-shell-vnext.shell-theme-elvish .stat-card-vnext,
+.app-shell-vnext.shell-theme-elvish .hq-link-card {
+  border-color: color-mix(in srgb, var(--shell-accent) 36%, var(--ui-border-subtle));
+  box-shadow:
+    inset 0 1px 0 var(--shell-panel-highlight),
+    0 0 0 1px rgba(255, 241, 194, 0.07),
+    0 18px 42px rgba(4, 14, 9, 0.32);
+}
+
+.app-shell-vnext.shell-theme-candy .page-hero-vnext,
+.app-shell-vnext.shell-theme-candy .panel-section,
+.app-shell-vnext.shell-theme-candy .stat-card-vnext,
+.app-shell-vnext.shell-theme-candy .hq-link-card {
+  border-color: color-mix(in srgb, var(--shell-accent) 32%, var(--ui-border-subtle));
+  box-shadow:
+    inset 0 1px 0 var(--shell-panel-highlight),
+    0 14px 34px rgba(221, 62, 144, 0.16),
+    0 0 0 1px rgba(255, 214, 104, 0.14);
+}
+
 @media (max-width: 960px) {
   .app-shell-vnext {
     grid-template-columns: 1fr;
@@ -4690,7 +4770,7 @@ button.calendar-detail-card:disabled {
   .marketing-hero-copy h1 {
     font-size: clamp(1.6rem, 7.4vw, 2rem);
     line-height: 1.02;
-    letter-spacing: -0.035em;
+    letter-spacing: 0;
     overflow-wrap: anywhere;
     word-break: break-word;
   }

@@ -6,6 +6,15 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.19.0
+
+### Changed
+
+- Refined the default EasyLife shell into a sleeker command-center visual system.
+- Added subtler grid, panel highlight, stat card, and surface treatments across the app.
+- Deepened Candy, Gamer, and Elvish theme personality through theme-specific panel, glow, and surface polish.
+- Removed negative heading letter spacing from key responsive styles for cleaner mobile rendering.
+
 ## 3.18.0
 
 ### Added
