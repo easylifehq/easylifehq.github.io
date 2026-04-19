@@ -20,6 +20,7 @@ type ProductMarketingPageProps = {
   steps: FeatureCard[];
   ctaTitle: string;
   ctaBody: string;
+  demoPath?: FeatureCard[];
 };
 
 export function ProductMarketingPage({
@@ -36,6 +37,7 @@ export function ProductMarketingPage({
   steps,
   ctaTitle,
   ctaBody,
+  demoPath = [],
 }: ProductMarketingPageProps) {
   return (
     <main className="marketing-page">
@@ -67,6 +69,11 @@ export function ProductMarketingPage({
           <span className="info-pill">EasyLifeHQ product</span>
           <h2>{heroCardTitle}</h2>
           <p>{heroCardBody}</p>
+          <div className="marketing-card-metrics">
+            {heroPoints.slice(0, 3).map((point) => (
+              <span key={point}>{point}</span>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -104,6 +111,28 @@ export function ProductMarketingPage({
           ))}
         </div>
       </section>
+
+      {demoPath.length ? (
+        <section id="demo" className="marketing-section">
+          <div className="panel-header">
+            <p className="eyebrow">Demo Path</p>
+            <h2>Show this first</h2>
+            <p>Use these moments to explain the product quickly without wandering through every setting.</p>
+          </div>
+
+          <div className="marketing-demo-list">
+            {demoPath.map((item, index) => (
+              <article key={item.title} className="marketing-demo-step">
+                <span>{index + 1}</span>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section id="start" className="marketing-section">
         <div className="marketing-cta-card">

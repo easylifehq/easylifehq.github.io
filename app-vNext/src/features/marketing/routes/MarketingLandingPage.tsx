@@ -59,35 +59,67 @@ const productCards = [
   },
 ];
 
+const demoSteps = [
+  {
+    title: "Start in EasyHQ",
+    description: "Open with the daily snapshot, quick entry points, and the core-first setup.",
+  },
+  {
+    title: "Capture a real task",
+    description: "Add a task in EasyList, set an urgency, and show how it can move into time.",
+  },
+  {
+    title: "Write a messy note",
+    description: "Create a note fast, then turn useful lines into tasks or a project.",
+  },
+  {
+    title: "Show the handoff",
+    description: "Send one task to EasyCalendar, EasyProjects, or EasyPipeline to show the suite connection.",
+  },
+];
+
 export function MarketingLandingPage() {
   return (
     <main className="marketing-page">
       <section className="marketing-hero">
         <div className="marketing-hero-copy">
           <p className="eyebrow">EasyLifeHQ</p>
-          <h1>A calmer operating system for real life.</h1>
+          <h1>One calm place for tasks, time, notes, and momentum.</h1>
           <p>
-            EasyLifeHQ connects tasks, time, notes, projects, follow-ups, contacts,
-            and workouts in one suite that stays soft, fast, and usable.
+            Start with the core: capture what is on your mind, put real work into
+            time, and keep notes close enough to turn ideas into action.
           </p>
 
           <div className="marketing-hero-actions">
             <Link to="/login" className="button-primary">
-              Start Free
+              Open EasyLifeHQ
             </Link>
             <a href="#products" className="button-secondary">
               Explore Products
             </a>
           </div>
+
+          <div className="marketing-points">
+            <span className="info-pill">Fast capture</span>
+            <span className="info-pill">Calendar handoffs</span>
+            <span className="info-pill">Notes to tasks</span>
+            <span className="info-pill">Review-first AI</span>
+          </div>
         </div>
 
         <div className="marketing-hero-card">
-          <span className="info-pill">Smarter without getting loud</span>
-          <h2>Start with the core. Add the rest when it helps.</h2>
+          <span className="info-pill">Demo-ready core</span>
+          <h2>Show the simple loop first.</h2>
           <p>
-            The first view stays focused on List, Notes, and Calendar. The full suite is
-            ready when projects, pipelines, contacts, and workouts need their own space.
+            EasyHQ, EasyList, EasyNotes, and EasyCalendar explain the product in
+            minutes. Projects, Pipeline, Contacts, Workouts, and Statistics are ready
+            when the story needs more depth.
           </p>
+          <div className="marketing-card-metrics">
+            <span>Capture</span>
+            <span>Plan</span>
+            <span>Finish</span>
+          </div>
         </div>
       </section>
 
@@ -137,6 +169,26 @@ export function MarketingLandingPage() {
             <h3>3. Stay connected</h3>
             <p>EasyHQ ties the suite together so you can jump between apps without losing the shape of your day.</p>
           </article>
+        </div>
+      </section>
+
+      <section id="demo-path" className="marketing-section">
+        <div className="panel-header">
+          <p className="eyebrow">Demo Path</p>
+          <h2>A clean walkthrough for a first look</h2>
+          <p>Use this path when someone needs to understand the product quickly.</p>
+        </div>
+
+        <div className="marketing-demo-list">
+          {demoSteps.map((step, index) => (
+            <article key={step.title} className="marketing-demo-step">
+              <span>{index + 1}</span>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 

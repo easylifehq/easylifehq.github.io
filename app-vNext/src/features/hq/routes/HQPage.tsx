@@ -15,6 +15,33 @@ import { useSettings } from "@/features/settings/SettingsContext";
 import { subscribeToApplications, type ApplicationRecord } from "@/lib/firestore/applications";
 import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
 
+const demoPath = [
+  {
+    label: "EasyList",
+    title: "Capture one task",
+    description: "Add a real task, set its urgency, and show how fast the list becomes useful.",
+    to: "/app/easylist/add",
+  },
+  {
+    label: "EasyNotes",
+    title: "Write one messy note",
+    description: "Open a blank note and show that ideas can become tasks or a project later.",
+    to: "/app/easynotes/new",
+  },
+  {
+    label: "EasyCalendar",
+    title: "Put work into time",
+    description: "Open the day view and show fixed events next to flexible task blocks.",
+    to: "/app/easycalendar/day",
+  },
+  {
+    label: "Settings",
+    title: "Show control",
+    description: "Open Settings to show themes, visible apps, calendar wake time, and labs.",
+    to: "/app/settings",
+  },
+];
+
 function toDateKey(date: Date) {
   return date.toISOString().split("T")[0];
 }
@@ -115,24 +142,48 @@ export function HQPage() {
       <PageSection
         eyebrow="Start simple"
         title="Use the core first"
+        description="Start with one task, one note, and one calendar handoff. The rest of the suite can open up when it helps."
       >
         <div className="onboarding-steps-grid">
           <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
             <span className="info-pill">1</span>
             <strong>Add what is on your mind</strong>
+            <p>Capture the loose work first.</p>
           </Link>
           <Link className="hq-link-card" to="/app/easynotes/new">
             <span className="info-pill">2</span>
             <strong>Write messy thoughts</strong>
+            <p>Keep ideas somewhere calm.</p>
           </Link>
           <Link className="hq-link-card" to="/app/easycalendar/day">
             <span className="info-pill">3</span>
             <strong>Put work into time</strong>
+            <p>Make the plan visible.</p>
           </Link>
           <Link className="hq-link-card" to="/app/settings">
             <span className="info-pill">Later</span>
             <strong>Turn on more apps</strong>
+            <p>Add projects, pipeline, contacts, workouts, and stats when they help.</p>
           </Link>
+        </div>
+      </PageSection>
+
+      <PageSection
+        eyebrow="Demo Path"
+        title="Show this flow first"
+        description="A quick walkthrough for explaining the suite without opening every page."
+      >
+        <div className="hq-demo-path">
+          {demoPath.map((step, index) => (
+            <Link key={step.title} to={step.to} className="hq-demo-step">
+              <span>{index + 1}</span>
+              <div>
+                <small>{step.label}</small>
+                <strong>{step.title}</strong>
+                <p>{step.description}</p>
+              </div>
+            </Link>
+          ))}
         </div>
       </PageSection>
 

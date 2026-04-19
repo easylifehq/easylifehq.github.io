@@ -62,11 +62,20 @@ export function LoginPage() {
   return (
     <main className="auth-page-vnext auth-page-shell">
       <section className="auth-card-vnext">
-        <p className="eyebrow">EasyLifeHQ</p>
-        <h1>{title}</h1>
-        <p className="auth-copy">
-          Shared login for EasyHQ, EasyList, EasyCalendar, and the rest of your suite.
-        </p>
+        <div className="auth-intro-grid">
+          <div>
+            <p className="eyebrow">EasyLifeHQ</p>
+            <h1>{title}</h1>
+            <p className="auth-copy">
+              Tasks, notes, time, projects, follow-ups, contacts, workouts, and progress in one calm workspace.
+            </p>
+          </div>
+          <div className="auth-proof-card">
+            <span>Start with</span>
+            <strong>List + Notes + Calendar</strong>
+            <p>Add the rest when the day needs more structure.</p>
+          </div>
+        </div>
 
         <div className="auth-toggle">
           <button

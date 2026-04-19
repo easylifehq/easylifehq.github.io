@@ -45,6 +45,20 @@ export function EasyListMarketingPage() {
       ]}
       ctaTitle="Make life admin feel smaller."
       ctaBody="Use EasyList when the little tasks are starting to steal too much attention from the work you actually care about."
+      demoPath={[
+        {
+          title: "Add one task",
+          description: "Show the quick row entry and the plain 1-10 urgency scale.",
+        },
+        {
+          title: "Use the brain dump",
+          description: "Paste messy thoughts and turn them into reviewable task rows.",
+        },
+        {
+          title: "Send work to time",
+          description: "Open task details and send the task into EasyCalendar.",
+        },
+      ]}
     />
   );
 }

@@ -45,6 +45,20 @@ export function EasyNotesMarketingPage() {
       ]}
       ctaTitle="Keep your notes space calm."
       ctaBody="Use EasyNotes when you want a clean place to think on mobile without turning every note into a project."
+      demoPath={[
+        {
+          title: "Create a blank note",
+          description: "Show how quickly the writing surface opens.",
+        },
+        {
+          title: "Turn lines into tasks",
+          description: "Use a rough note to create EasyList tasks for review.",
+        },
+        {
+          title: "Make a project",
+          description: "Send a note outline into EasyProjects when the note grows bigger.",
+        },
+      ]}
     />
   );
 }

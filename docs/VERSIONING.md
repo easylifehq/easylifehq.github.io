@@ -4,9 +4,9 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `3.14.2`
-- Next patch target: `3.14.3`
-- Next feature target: Held while the `3.x` product core is tested.
+- Current app version: `3.15.0`
+- Next patch target: `3.15.1`
+- Next feature target: `3.16.0` Core UX Refinement.
 
 ## What To Update
 
@@ -60,5 +60,10 @@ Before finishing a release batch:
 13. `3.13.0` AI Routing Suggestions.
 14. `3.14.0` Final 3.x Stability Sweep.
 15. `3.14.2` Version sync and bug-hunt patch.
+16. `3.15.0` Demo, Onboarding, and Landing Pages.
+17. `3.16.0` Core UX Refinement.
+18. `3.17.0` Settings Deepening.
+19. `3.18.0` Data Review and Export.
+20. `3.19.0` AI Trust and Controls.
 
 `4.0.0` remains the next major suite expansion target, but it should wait until the current product core has been used and tested enough to feel stable.

@@ -6,6 +6,15 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.15.0
+
+### Added
+
+- Main landing page now leads with the core EasyLifeHQ loop and a clearer demo path.
+- Product landing pages now include demo-path sections for EasyList, EasyNotes, EasyCalendar, and EasyPipeline.
+- EasyHQ now includes a first-run demo path for showing the core suite quickly.
+- Login now gives clearer suite context before the account form.
+
 ## 3.14.2
 
 ### Fixed

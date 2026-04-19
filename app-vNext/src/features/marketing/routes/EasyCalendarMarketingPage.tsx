@@ -45,6 +45,20 @@ export function EasyCalendarMarketingPage() {
       ]}
       ctaTitle="Make your time visible before it disappears."
       ctaBody="EasyCalendar helps you see what the day can actually hold instead of stuffing more into it than reality allows."
+      demoPath={[
+        {
+          title: "Open day view",
+          description: "Show the hour-by-hour layout and wakeup-time start.",
+        },
+        {
+          title: "Add a class or fixed event",
+          description: "Show repeat options and category color control.",
+        },
+        {
+          title: "Place a task",
+          description: "Send a task from EasyList into open time.",
+        },
+      ]}
     />
   );
 }

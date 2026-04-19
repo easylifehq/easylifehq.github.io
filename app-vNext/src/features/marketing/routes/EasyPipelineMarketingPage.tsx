@@ -45,6 +45,20 @@ export function EasyPipelineMarketingPage() {
       ]}
       ctaTitle="Run your search like a real workflow."
       ctaBody="EasyPipeline is for job hunts that need a system, not just another scattered list of company names."
+      demoPath={[
+        {
+          title: "Add an opportunity",
+          description: "Show company, title, status, priority, and follow-up fields.",
+        },
+        {
+          title: "Review follow-ups",
+          description: "Use the dashboard to show what needs attention next.",
+        },
+        {
+          title: "Route from EasyList",
+          description: "Show how a job-search task can become a pipeline follow-up.",
+        },
+      ]}
     />
   );
 }

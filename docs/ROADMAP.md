@@ -4,9 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.14.2`
-- Current planning target: `3.14.2` Version Sync and Bug-Hunt Patch
-- Next feature target: Held while the `3.x` product core is tested in real use
+- App package version: `3.15.0`
+- Current planning target: `3.15.0` Demo, Onboarding, and Landing Pages
+- Next feature target: `3.16.0` Core UX Refinement
+- Product polish queue: `3.16.0` Core UX Refinement, `3.17.0` Settings Deepening, `3.18.0` Data Review and Export, `3.19.0` AI Trust and Controls
 - Future major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
 
 ## Working Rules
@@ -233,6 +234,80 @@ Goal: Make the end-of-3.x testing build identify itself correctly and keep the Q
 - Done: Update changelog, roadmap, versioning notes, deploy files, and root assets.
 - Done: Preserve the 3.x QA checklist as the guide for product testing before 4.0.0 resumes.
 
+### 3.15.0 Demo, Onboarding, and Landing Pages
+
+Status: Done
+
+Goal: Make EasyLifeHQ easier to understand, demo, and trust before adding new apps.
+
+- Done: Improve the main landing page so the value is obvious in the first screen.
+- Done: Improve individual product landing pages for EasyList, EasyNotes, EasyCalendar, and EasyPipeline.
+- Done: Add clearer calls to action for logging in, exploring products, and starting with the core suite.
+- Done: Add a demo-friendly path that explains what to show first: HQ, EasyList, EasyNotes, EasyCalendar, Settings, and one cross-app handoff.
+- Done: Add first-run or start-here guidance inside EasyHQ for new users.
+- Done: Add demo-friendly empty states across the main apps so blank accounts still look intentional.
+- Done: Make public pages and login feel polished on desktop and mobile.
+- Done: Keep copy user-facing and direct, without overexplaining the interface.
+
+### 3.16.0 Core UX Refinement
+
+Status: Planned
+
+Goal: Make the app feel more like a finished product and less like a collection of separate feature pages.
+
+- Standardize button styling, button sizing, and button hierarchy across the suite.
+- Standardize cards, page headers, empty states, loading states, and error states.
+- Tighten mobile spacing across EasyHQ, EasyList, EasyCalendar, EasyNotes, EasyWorkout, EasyProjects, EasyPipeline, EasyContacts, EasyStatistics, and Settings.
+- Make drawers, modals, menus, and sheets feel consistent across apps.
+- Improve keyboard focus states and accessible labels where actions are easy to miss.
+- Make destructive actions visually clear without making the interface feel scary.
+- Reduce any remaining horizontal scroll or clipped text risks on mobile.
+- Keep the visual system polished without adding heavy decoration.
+
+### 3.17.0 Settings Deepening
+
+Status: Planned
+
+Goal: Turn Settings into the real control center for app-specific preferences.
+
+- Add focused app-specific settings pages or sections instead of placeholder page-setting cards.
+- Add EasyList settings for default urgency, quick-add defaults, archive motion, and task display preferences.
+- Add EasyNotes settings for resume behavior, untitled note cleanup, default folder behavior, and note-to-task defaults.
+- Add EasyWorkout settings for default exercise box count, workout mode defaults, and logging preferences.
+- Add EasyCalendar settings for default view, wakeup time, category defaults, and planning preferences.
+- Add EasyProjects and EasyPipeline settings for routing defaults and source-context behavior.
+- Keep EasyDrinks and EasyGames settings hidden until the `4.0.0` hold lifts.
+- Preserve the mobile-friendly Settings navigation created in `3.10.0`.
+
+### 3.18.0 Data Review and Export
+
+Status: Planned
+
+Goal: Make the app feel safer, more trustworthy, and easier to inspect.
+
+- Add basic export options for tasks, notes, workouts, projects, pipeline items, and contacts.
+- Add clearer archive, trash, and recovery flows where data can disappear from the main view.
+- Add review panels for linked data, such as tasks connected to calendar blocks, projects, or pipeline items.
+- Add a lightweight data health page in Settings or EasyStatistics.
+- Clarify delete confirmation copy for notes, tasks, events, projects, workout sessions, and pipeline items.
+- Add empty-state guidance for recovering or reviewing old data.
+- Keep data tools simple and user-controlled.
+
+### 3.19.0 AI Trust and Controls
+
+Status: Planned
+
+Goal: Make AI helpers more understandable, configurable, and safe before expanding the suite.
+
+- Add an AI settings section.
+- Let users turn AI helpers on or off by app.
+- Explain why AI suggestions appear for calendar dates, task routing, project planning, and note extraction.
+- Add calmer fallback states when the AI backend is unavailable.
+- Tune project and pipeline routing suggestions based on real use.
+- Keep all AI actions review-first and reversible.
+- Document which AI helpers are local heuristics and which use the backend.
+- Avoid silent AI changes to user data.
+
 ### 4.0.0 Suite Expansion
 
 Status: Held
@@ -255,6 +330,8 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 - Preserve user context when switching tabs across every app.
 - Continue reducing minimum clicks to write, log, or capture.
 - Keep mobile overlays checked as new drawers and sheets are added.
+- Improve landing pages and demo flows in `3.15.0`.
+- Standardize the visual system in `3.16.0`.
 - Prepare navigation and settings for EasyDrinks and EasyGames once the `4.0.0` hold lifts.
 
 ### EasyList
@@ -262,39 +339,52 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 - Add more keyboard-friendly quick actions.
 - Add stronger filters for urgency, deadline, and calendar status.
 - Keep task routing prompts useful without becoming noisy.
+- Move list defaults and archive behavior into Settings in `3.17.0`.
+- Include task export and linked-task review in `3.18.0`.
 
 ### EasyCalendar
 
 - Clarify event type and category fields.
 - Add richer recurrence controls later, such as selected weekdays or end dates.
 - Move more calendar customization into the Settings Calendar section.
+- Add calendar defaults and planning preferences to Settings in `3.17.0`.
+- Include calendar/task link review in `3.18.0`.
 
 ### EasyNotes
 
 - Keep notes library controls polished as the folder model grows.
 - Consider nested folders only after flat folders feel solid.
 - Add richer note-to-project options later if project templates need more structure.
+- Move resume behavior, cleanup behavior, and note-processing defaults into Settings in `3.17.0`.
+- Include notes export and trash recovery review in `3.18.0`.
 
 ### EasyWorkout
 
 - Keep active workout logging compact on mobile as new controls are added.
 - Add workout settings when Settings app sections become deeper pages.
+- Move workout mode defaults and exercise box count into Settings in `3.17.0`.
+- Include workout export in `3.18.0`.
 
 ### EasyStatistics
 
 - Add more useful per-app drilldowns over time.
 - Keep statistics fun without crowding primary app pages.
+- Consider hosting data health summaries from `3.18.0`.
 
 ### EasyProject and EasyPipeline
 
 - Improve note-to-project task groups after real use.
 - Keep source context preserved whenever items move between apps.
+- Move routing defaults into Settings in `3.17.0`.
+- Include linked data review and export in `3.18.0`.
 
 ### AI Backend
 
 - Deepen context scanning after the `3.x` product core has been tested.
 - Keep tuning project and pipeline routing suggestions based on real use.
 - Keep all AI actions review-first and reversible.
+- Add user-facing AI controls in `3.19.0`.
+- Add better fallback states when AI is unavailable in `3.19.0`.
 
 ### EasyDrinks
 
