@@ -712,6 +712,7 @@ a {
 .marketing-demo-step h3,
 .marketing-demo-step p {
   margin: 0;
+  min-width: 0;
 }
 
 .marketing-demo-step p {
@@ -3145,6 +3146,7 @@ button.calendar-detail-card:disabled {
 .hq-demo-step strong,
 .hq-demo-step p {
   margin: 0;
+  min-width: 0;
 }
 
 .hq-demo-step p {
@@ -4543,6 +4545,7 @@ button.calendar-detail-card:disabled {
   .marketing-hero-copy,
   .marketing-hero-card,
   .marketing-card,
+  .marketing-demo-step,
   .panel-header {
     max-width: calc(100vw - 3.5rem);
   }

@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.15.0`
-- Current planning target: `3.15.0` Demo, Onboarding, and Landing Pages
+- App package version: `3.15.1`
+- Current planning target: `3.15.1` Presentation Copy Polish
 - Next feature target: `3.16.0` Core UX Refinement
 - Product polish queue: `3.16.0` Core UX Refinement, `3.17.0` Settings Deepening, `3.18.0` Data Review and Export, `3.19.0` AI Trust and Controls
 - Future major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
@@ -248,6 +248,17 @@ Goal: Make EasyLifeHQ easier to understand, demo, and trust before adding new ap
 - Done: Add demo-friendly empty states across the main apps so blank accounts still look intentional.
 - Done: Make public pages and login feel polished on desktop and mobile.
 - Done: Keep copy user-facing and direct, without overexplaining the interface.
+
+### 3.15.1 Presentation Copy Polish
+
+Status: Done
+
+Goal: Tighten the new demo and landing copy before product testing.
+
+- Done: Reduce repeated wording in the main landing demo path.
+- Done: Tighten EasyHQ demo path descriptions.
+- Done: Shorten login context copy.
+- Done: Add narrow-screen safeguards for demo path copy.
 
 ### 3.16.0 Core UX Refinement
 

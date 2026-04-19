@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.15.1
+
+### Changed
+
+- Tightened presentation copy on landing, login, product demo paths, and EasyHQ demo guidance.
+- Added small layout safeguards for demo path copy on narrow screens.
+
 ## 3.15.0
 
 ### Added

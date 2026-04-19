@@ -117,7 +117,7 @@ export function ProductMarketingPage({
           <div className="panel-header">
             <p className="eyebrow">Demo Path</p>
             <h2>Show this first</h2>
-            <p>Use these moments to explain the product quickly without wandering through every setting.</p>
+            <p>Use these moments to explain the product without wandering through every setting.</p>
           </div>
 
           <div className="marketing-demo-list">

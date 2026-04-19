@@ -19,25 +19,25 @@ const demoPath = [
   {
     label: "EasyList",
     title: "Capture one task",
-    description: "Add a real task, set its urgency, and show how fast the list becomes useful.",
+    description: "Add one task, set its urgency, and make the list useful quickly.",
     to: "/app/easylist/add",
   },
   {
     label: "EasyNotes",
     title: "Write one messy note",
-    description: "Open a blank note and show that ideas can become tasks or a project later.",
+    description: "Open a blank note and turn useful lines into tasks or a project later.",
     to: "/app/easynotes/new",
   },
   {
     label: "EasyCalendar",
     title: "Put work into time",
-    description: "Open the day view and show fixed events next to flexible task blocks.",
+    description: "Open day view and place flexible task blocks beside fixed events.",
     to: "/app/easycalendar/day",
   },
   {
     label: "Settings",
     title: "Show control",
-    description: "Open Settings to show themes, visible apps, calendar wake time, and labs.",
+    description: "Open Settings for themes, visible apps, calendar wake time, and labs.",
     to: "/app/settings",
   },
 ];

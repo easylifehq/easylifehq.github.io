@@ -67,7 +67,7 @@ export function LoginPage() {
             <p className="eyebrow">EasyLifeHQ</p>
             <h1>{title}</h1>
             <p className="auth-copy">
-              Tasks, notes, time, projects, follow-ups, contacts, workouts, and progress in one calm workspace.
+              Tasks, notes, time, follow-ups, workouts, and progress in one calm workspace.
             </p>
           </div>
           <div className="auth-proof-card">

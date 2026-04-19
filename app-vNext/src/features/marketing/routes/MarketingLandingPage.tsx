@@ -66,7 +66,7 @@ const demoSteps = [
   },
   {
     title: "Capture a real task",
-    description: "Add a task in EasyList, set an urgency, and show how it can move into time.",
+    description: "Add a task in EasyList, set an urgency, and move it into time.",
   },
   {
     title: "Write a messy note",
@@ -74,7 +74,7 @@ const demoSteps = [
   },
   {
     title: "Show the handoff",
-    description: "Send one task to EasyCalendar, EasyProjects, or EasyPipeline to show the suite connection.",
+    description: "Send one task to EasyCalendar, EasyProjects, or EasyPipeline.",
   },
 ];
 
@@ -127,7 +127,7 @@ export function MarketingLandingPage() {
         <div className="panel-header">
           <p className="eyebrow">Products</p>
           <h2>The EasyLifeHQ suite</h2>
-          <p>Each app has a clear job, so the system stays simple instead of turning into a mess.</p>
+          <p>Each app has a clear job, so the system stays simple as the suite grows.</p>
         </div>
 
         <div className="marketing-card-grid">
