@@ -6,6 +6,15 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 3.18.0
+
+### Added
+
+- Settings now includes a Data section for reviewing stored EasyLife records.
+- Added full JSON export for tasks, notes, calendar data, workouts, projects, pipeline data, contacts, settings, and metadata.
+- Added a copyable data summary with per-app record counts and linked-data review totals.
+- Added data health cards for linked calendar blocks, project task links, and notes in trash.
+
 ## 3.17.0
 
 ### Added

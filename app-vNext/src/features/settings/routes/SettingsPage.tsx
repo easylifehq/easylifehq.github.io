@@ -1,8 +1,22 @@
 import { PageSection } from "@/components/ui/PageSection";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { APP_VERSION } from "@/config/appVersion";
+import { useAuth } from "@/features/auth/AuthContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { auth } from "@/lib/firebase/client";
+import { subscribeToApplications, subscribeToGeneratedDrafts } from "@/lib/firestore/applications";
+import { subscribeToCalendarEvents } from "@/lib/firestore/calendarEvents";
+import { subscribeToCalendarTaskBlocks } from "@/lib/firestore/calendarTaskBlocks";
+import { subscribeToCategories } from "@/lib/firestore/categories";
+import { subscribeToContacts } from "@/lib/firestore/contacts";
+import { subscribeToNotes, subscribeToNoteFolders } from "@/lib/firestore/notes";
+import { subscribeToProjects } from "@/lib/firestore/projects";
+import { subscribeToProjectSections } from "@/lib/firestore/projectSections";
+import { subscribeToProjectTaskLinks } from "@/lib/firestore/projectTaskLinks";
+import { subscribeToTasks } from "@/lib/firestore/tasks";
+import { subscribeToWorkoutExercises } from "@/lib/firestore/workoutExercises";
+import { subscribeToWorkoutRoutines } from "@/lib/firestore/workoutRoutines";
+import { subscribeToWorkoutSessions } from "@/lib/firestore/workoutSessions";
 import type {
   ExperimentalFeatureId,
   ThemeMode,
@@ -221,6 +235,7 @@ type SettingsSectionId =
   | "apps"
   | "calendar"
   | "page-settings"
+  | "data"
   | "experiments"
   | "account";
 
@@ -253,6 +268,12 @@ const settingsSections: Array<{
     label: "Pages",
     eyebrow: "Page Controls",
     description: "The future home for each app's own settings page.",
+  },
+  {
+    id: "data",
+    label: "Data",
+    eyebrow: "Review",
+    description: "Inspect, export, and understand what EasyLife is storing.",
   },
   {
     id: "experiments",
@@ -323,8 +344,112 @@ const routingOptions: Array<{ value: RoutingDefault; label: string }> = [
   { value: "stay", label: "Keep in current app" },
 ];
 
+type DataCollections = {
+  tasks: unknown[];
+  notes: unknown[];
+  noteFolders: unknown[];
+  calendarEvents: unknown[];
+  calendarTaskBlocks: unknown[];
+  calendarCategories: unknown[];
+  workoutExercises: unknown[];
+  workoutRoutines: unknown[];
+  workoutSessions: unknown[];
+  projects: unknown[];
+  projectSections: unknown[];
+  projectTaskLinks: unknown[];
+  pipelineApplications: unknown[];
+  pipelineDrafts: unknown[];
+  contacts: unknown[];
+};
+
+const emptyDataCollections: DataCollections = {
+  tasks: [],
+  notes: [],
+  noteFolders: [],
+  calendarEvents: [],
+  calendarTaskBlocks: [],
+  calendarCategories: [],
+  workoutExercises: [],
+  workoutRoutines: [],
+  workoutSessions: [],
+  projects: [],
+  projectSections: [],
+  projectTaskLinks: [],
+  pipelineApplications: [],
+  pipelineDrafts: [],
+  contacts: [],
+};
+
+const dataExportGroups: Array<{ key: keyof DataCollections; label: string; app: string }> = [
+  { key: "tasks", label: "Tasks", app: "EasyList" },
+  { key: "notes", label: "Notes", app: "EasyNotes" },
+  { key: "noteFolders", label: "Folders", app: "EasyNotes" },
+  { key: "calendarEvents", label: "Events", app: "EasyCalendar" },
+  { key: "calendarTaskBlocks", label: "Task blocks", app: "EasyCalendar" },
+  { key: "calendarCategories", label: "Categories", app: "EasyCalendar" },
+  { key: "workoutExercises", label: "Exercises", app: "EasyWorkout" },
+  { key: "workoutRoutines", label: "Routines", app: "EasyWorkout" },
+  { key: "workoutSessions", label: "Sessions", app: "EasyWorkout" },
+  { key: "projects", label: "Projects", app: "EasyProjects" },
+  { key: "projectSections", label: "Sections", app: "EasyProjects" },
+  { key: "projectTaskLinks", label: "Task links", app: "EasyProjects" },
+  { key: "pipelineApplications", label: "Applications", app: "EasyPipeline" },
+  { key: "pipelineDrafts", label: "Email drafts", app: "EasyPipeline" },
+  { key: "contacts", label: "Contacts", app: "EasyContacts" },
+];
+
+function serializeForExport(value: unknown): unknown {
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => serializeForExport(entry));
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, serializeForExport(entry)])
+    );
+  }
+
+  return value;
+}
+
+function downloadJson(filename: string, payload: unknown) {
+  const blob = new Blob([JSON.stringify(serializeForExport(payload), null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+function getRecordId(record: unknown) {
+  return record && typeof record === "object" && "id" in record ? String(record.id) : "";
+}
+
+function getTaskLinkedBlockIds(record: unknown) {
+  if (!record || typeof record !== "object" || !("linkedCalendarBlockIds" in record)) return [];
+  const value = record.linkedCalendarBlockIds;
+  return Array.isArray(value) ? value.map(String) : [];
+}
+
+function getStringField(record: unknown, field: string) {
+  if (!record || typeof record !== "object" || !(field in record)) return "";
+  const value = record[field as keyof typeof record];
+  return typeof value === "string" ? value : "";
+}
+
 export function SettingsPage() {
   const [activeSection, setActiveSection] = useState<SettingsSectionId>("customize");
+  const { user } = useAuth();
+  const [dataCollections, setDataCollections] = useState<DataCollections>(emptyDataCollections);
+  const [dataError, setDataError] = useState("");
+  const [dataMessage, setDataMessage] = useState("");
   const {
     settings,
     isLoading,
@@ -349,6 +474,98 @@ export function SettingsPage() {
   const activeTheme = themeOptions.find((theme) => theme.value === settings.themeMode) || themeOptions[0];
   const activeSectionConfig =
     settingsSections.find((section) => section.id === activeSection) || settingsSections[0];
+  const dataExport = useMemo(
+    () => ({
+      exportedAt: new Date().toISOString(),
+      appVersion: APP_VERSION,
+      user: {
+        uid: user?.uid || "",
+        email: user?.email || "",
+      },
+      settings,
+      collections: dataCollections,
+    }),
+    [dataCollections, settings, user]
+  );
+  const dataTotals = useMemo(
+    () => dataExportGroups.reduce((sum, group) => sum + dataCollections[group.key].length, 0),
+    [dataCollections]
+  );
+  const linkedTaskCount = useMemo(
+    () => dataCollections.tasks.filter((task) => getTaskLinkedBlockIds(task).length > 0).length,
+    [dataCollections.tasks]
+  );
+  const orphanCalendarBlockCount = useMemo(() => {
+    const taskIds = new Set(dataCollections.tasks.map((task) => getRecordId(task)));
+    return dataCollections.calendarTaskBlocks.filter((block) => {
+      const taskId = getStringField(block, "taskId");
+      return taskId && !taskIds.has(taskId);
+    }).length;
+  }, [dataCollections.calendarTaskBlocks, dataCollections.tasks]);
+  const projectLinkedTaskCount = useMemo(
+    () => new Set(dataCollections.projectTaskLinks.map((link) => getStringField(link, "taskId")).filter(Boolean)).size,
+    [dataCollections.projectTaskLinks]
+  );
+  const softDeletedNoteCount = useMemo(
+    () => dataCollections.notes.filter((note) => Boolean(note && typeof note === "object" && "deletedAt" in note && note.deletedAt)).length,
+    [dataCollections.notes]
+  );
+
+  useEffect(() => {
+    if (!user) {
+      setDataCollections(emptyDataCollections);
+      setDataError("");
+      return;
+    }
+
+    const handleError = (nextError: Error) => setDataError(nextError.message);
+    const setCollection =
+      <T,>(key: keyof DataCollections) =>
+      (records: T[]) => {
+        setDataCollections((current) => ({ ...current, [key]: records }));
+        setDataError("");
+      };
+
+    const unsubscribers = [
+      subscribeToTasks(user.uid, setCollection("tasks"), handleError),
+      subscribeToNotes(user.uid, setCollection("notes"), handleError),
+      subscribeToNoteFolders(user.uid, setCollection("noteFolders"), handleError),
+      subscribeToCalendarEvents(user.uid, setCollection("calendarEvents"), handleError),
+      subscribeToCalendarTaskBlocks(user.uid, setCollection("calendarTaskBlocks"), handleError),
+      subscribeToCategories(user.uid, setCollection("calendarCategories"), handleError),
+      subscribeToWorkoutExercises(user.uid, setCollection("workoutExercises"), handleError),
+      subscribeToWorkoutRoutines(user.uid, setCollection("workoutRoutines"), handleError),
+      subscribeToWorkoutSessions(user.uid, setCollection("workoutSessions"), handleError),
+      subscribeToProjects(user.uid, setCollection("projects"), handleError),
+      subscribeToProjectSections(user.uid, setCollection("projectSections"), handleError),
+      subscribeToProjectTaskLinks(user.uid, setCollection("projectTaskLinks"), handleError),
+      subscribeToApplications(user.uid, setCollection("pipelineApplications"), handleError),
+      subscribeToGeneratedDrafts(user.uid, setCollection("pipelineDrafts"), handleError),
+      subscribeToContacts(user.uid, setCollection("contacts"), handleError),
+    ];
+
+    return () => {
+      unsubscribers.forEach((unsubscribe) => unsubscribe());
+    };
+  }, [user]);
+
+  function handleExportAll() {
+    downloadJson(`easylife-export-${new Date().toISOString().slice(0, 10)}.json`, dataExport);
+    setDataMessage("Export downloaded.");
+  }
+
+  function handleCopySummary() {
+    const summary = [
+      `EasyLife data summary (${new Date().toLocaleDateString()})`,
+      ...dataExportGroups.map((group) => `${group.app} ${group.label}: ${dataCollections[group.key].length}`),
+      `Linked tasks: ${linkedTaskCount}`,
+      `Project-linked tasks: ${projectLinkedTaskCount}`,
+      `Calendar blocks without matching tasks: ${orphanCalendarBlockCount}`,
+      `Notes in trash: ${softDeletedNoteCount}`,
+    ].join("\n");
+
+    void navigator.clipboard.writeText(summary).then(() => setDataMessage("Summary copied."));
+  }
 
   return (
     <main className="page-wrap app-theme app-theme-settings settings-page">
@@ -741,6 +958,82 @@ export function SettingsPage() {
                 </label>
               );
             })}
+          </div>
+        </PageSection>
+        ) : null}
+
+        {activeSection === "data" ? (
+        <PageSection
+          eyebrow="Review"
+          title="Data export and health"
+          description="Download a portable JSON snapshot, scan what exists, and spot linked-data cleanup needs before anything disappears."
+        >
+          <div id="data" className="settings-anchor" />
+          {dataError ? <p className="error-copy">{dataError}</p> : null}
+          {dataMessage ? <div className="calendar-info-card">{dataMessage}</div> : null}
+
+          <div className="settings-data-hero">
+            <article>
+              <span>Total records</span>
+              <strong>{dataTotals}</strong>
+              <p>Across tasks, notes, calendar, workouts, projects, pipeline, contacts, and settings.</p>
+            </article>
+            <article>
+              <span>Linked tasks</span>
+              <strong>{linkedTaskCount}</strong>
+              <p>Tasks connected to one or more calendar blocks.</p>
+            </article>
+            <article>
+              <span>Needs review</span>
+              <strong>{orphanCalendarBlockCount + softDeletedNoteCount}</strong>
+              <p>Calendar blocks missing tasks plus notes currently in trash.</p>
+            </article>
+          </div>
+
+          <div className="settings-data-actions">
+            <button type="button" className="primary-button" onClick={handleExportAll}>
+              Download full export
+            </button>
+            <button type="button" className="button-secondary" onClick={handleCopySummary}>
+              Copy data summary
+            </button>
+          </div>
+
+          <div className="settings-data-grid">
+            {dataExportGroups.map((group) => (
+              <article key={group.key} className="settings-data-card">
+                <span>{group.app}</span>
+                <strong>{dataCollections[group.key].length}</strong>
+                <p>{group.label}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="settings-review-grid">
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Calendar links</span>
+                <span className="settings-state-pill">{orphanCalendarBlockCount ? "Review" : "Clean"}</span>
+              </span>
+              <strong>{orphanCalendarBlockCount} orphan block{orphanCalendarBlockCount === 1 ? "" : "s"}</strong>
+              <p>These are flexible calendar blocks pointing at tasks that are no longer in the current task list.</p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Project links</span>
+                <span className="settings-state-pill">{projectLinkedTaskCount} tasks</span>
+              </span>
+              <strong>{dataCollections.projectTaskLinks.length} project task link{dataCollections.projectTaskLinks.length === 1 ? "" : "s"}</strong>
+              <p>Project sections are connected back to EasyList tasks so larger work stays inspectable.</p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Notes trash</span>
+                <span className="settings-state-pill">{softDeletedNoteCount ? "Recoverable" : "Empty"}</span>
+              </span>
+              <strong>{softDeletedNoteCount} note{softDeletedNoteCount === 1 ? "" : "s"} in trash</strong>
+              <p>Deleted notes remain reviewable from EasyNotes trash before permanent removal.</p>
+            </article>
           </div>
         </PageSection>
         ) : null}

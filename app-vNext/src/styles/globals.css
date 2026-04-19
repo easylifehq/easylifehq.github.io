@@ -3387,6 +3387,70 @@ button.calendar-detail-card:disabled {
   font-weight: 800;
 }
 
+.settings-data-hero,
+.settings-data-grid,
+.settings-review-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.settings-data-hero {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.settings-data-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.settings-review-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.settings-data-hero article,
+.settings-data-card,
+.settings-review-card {
+  min-width: 0;
+  padding: 0.9rem;
+  border-radius: var(--shell-control-radius);
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-card-elevated, var(--shell-input-bg));
+}
+
+.settings-data-hero span,
+.settings-data-card span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.settings-data-hero strong,
+.settings-data-card strong {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.settings-data-hero p,
+.settings-data-card p,
+.settings-review-card p {
+  margin: 0.45rem 0 0;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.settings-data-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
 .settings-page {
   max-width: 1180px;
   margin-inline: auto;
@@ -4240,6 +4304,12 @@ button.calendar-detail-card:disabled {
   }
 
   .settings-app-preference-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-data-hero,
+  .settings-data-grid,
+  .settings-review-grid {
     grid-template-columns: 1fr;
   }
 

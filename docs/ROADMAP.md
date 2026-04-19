@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `3.17.0`
-- Current planning target: `3.17.0` Settings Deepening
-- Next feature target: `3.18.0` Data Review and Export
-- Product polish queue: `3.18.0` Data Review and Export, `3.19.0` AI Trust and Controls
+- App package version: `3.18.0`
+- Current planning target: `3.18.0` Data Review and Export
+- Next feature target: `3.19.0` High-Tech Visual Polish
+- Product polish queue: `3.19.0` High-Tech Visual Polish, `3.19.x` Real-Use Patch Cycle, `3.20.0` Security Hardening
 - Future major target: `4.0.0` Suite Expansion with EasyDrinks and EasyGames
 
 ## Working Rules
@@ -292,32 +292,60 @@ Goal: Turn Settings into the real control center for app-specific preferences.
 
 ### 3.18.0 Data Review and Export
 
-Status: Planned
+Status: Done
 
 Goal: Make the app feel safer, more trustworthy, and easier to inspect.
 
-- Add basic export options for tasks, notes, workouts, projects, pipeline items, and contacts.
-- Add clearer archive, trash, and recovery flows where data can disappear from the main view.
-- Add review panels for linked data, such as tasks connected to calendar blocks, projects, or pipeline items.
-- Add a lightweight data health page in Settings or EasyStatistics.
-- Clarify delete confirmation copy for notes, tasks, events, projects, workout sessions, and pipeline items.
-- Add empty-state guidance for recovering or reviewing old data.
-- Keep data tools simple and user-controlled.
+- Done: Add JSON export for tasks, notes, workouts, projects, pipeline items, contacts, calendar records, settings, and metadata.
+- Done: Add clearer review guidance where notes can disappear into trash or data can become linked across apps.
+- Done: Add review panels for linked data, including task-calendar blocks and project task links.
+- Done: Add a lightweight Data section in Settings.
+- Done: Add copyable summary text for quick inspection and troubleshooting.
+- Done: Add empty-state-friendly counts for recovering or reviewing old data.
+- Done: Keep data tools simple and user-controlled.
 
-### 3.19.0 AI Trust and Controls
+### 3.19.0 High-Tech Visual Polish
 
 Status: Planned
 
-Goal: Make AI helpers more understandable, configurable, and safe before expanding the suite.
+Goal: Make EasyLife feel like a refined, classy command center while keeping the base app simple and easy to use.
 
-- Add an AI settings section.
-- Let users turn AI helpers on or off by app.
-- Explain why AI suggestions appear for calendar dates, task routing, project planning, and note extraction.
-- Add calmer fallback states when the AI backend is unavailable.
-- Tune project and pipeline routing suggestions based on real use.
-- Keep all AI actions review-first and reversible.
-- Document which AI helpers are local heuristics and which use the backend.
-- Avoid silent AI changes to user data.
+- Improve the base theme into a sleek daily-use command center.
+- Make page hierarchy, spacing, and cards feel more premium across the suite.
+- Polish HQ, Settings, EasyList, EasyNotes, EasyCalendar, EasyWorkout, EasyProjects, EasyPipeline, and EasyStatistics.
+- Improve empty states, stats, and action areas so quiet accounts still feel intentional.
+- Make themes feel more distinct while preserving the same easy interaction model.
+- Push Gamer toward a game-like command center, Elvish toward adventure/fantasy polish, and Candy toward bright playful energy.
+- Keep the base app refined and classy, with personality coming from themes.
+- Avoid AI assistant foundation work until `4.0.0`.
+
+### 3.19.x Real-Use Patch Cycle
+
+Status: Planned
+
+Goal: Patch issues found during a week of real use before closing out the `3.x` line.
+
+- Capture real friction, bugs, awkward copy, and layout issues from daily use.
+- Patch mobile and desktop UI issues that show up in normal workflows.
+- Keep release candidates focused on bug fixes, QA, version sync, and deploy assets.
+- Close `3.x` only after the product feels stable enough to build `4.0.0` on top of it.
+
+### 3.20.0 Security Hardening
+
+Status: Planned
+
+Goal: Make EasyLife significantly harder to attack, safer with user data, and ready for more ambitious `4.0.0` features.
+
+- Audit Firebase Authentication assumptions and make sure every authenticated route handles signed-out states safely.
+- Audit Firestore security rules so each user can only read and write their own data.
+- Review all client-side data access paths for user-id leakage, broad queries, unsafe writes, or missing ownership checks.
+- Review environment variables and build output so secrets are never exposed in the frontend bundle.
+- Add a dependency and package audit pass for known vulnerabilities.
+- Add a security checklist for deploys, including Firebase rules, hosting settings, API keys, and allowed domains.
+- Add user-facing safety copy where exports, deletes, trash, account actions, or future assistant features could affect private data.
+- Add safer error handling so sensitive technical details are not shown to users.
+- Document remaining security limits clearly, because no app can be made literally impossible to hack.
+- Keep the goal practical: reduce risk, close obvious holes, and create a repeatable security review process before `4.0.0`.
 
 ### 4.0.0 Suite Expansion
 
