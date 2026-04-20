@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import type {
   CalendarEventRecord,
   CalendarEventType,
+  CalendarItemKind,
 } from "@/lib/firestore/calendarEvents";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
@@ -38,6 +39,7 @@ export function CalendarEventDrawer({
   const { categories, saveEvent, deleteEvent } = useEasyCalendar();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [itemKind, setItemKind] = useState<CalendarItemKind>("event");
   const [categoryId, setCategoryId] = useState("");
   const [eventType, setEventType] = useState<CalendarEventType>("appointment");
   const [eventDate, setEventDate] = useState("");
@@ -52,6 +54,7 @@ export function CalendarEventDrawer({
 
     setTitle(event.title);
     setDescription(event.description);
+    setItemKind(event.itemKind);
     setCategoryId(event.categoryId || "");
     setEventType(event.eventType);
     setEventDate(toDateInputValue(event.startAt));
@@ -75,7 +78,7 @@ export function CalendarEventDrawer({
       return;
     }
 
-    if (!startAt || !endAt || endAt <= startAt) {
+    if (!startAt || (itemKind === "event" && (!endAt || endAt <= startAt))) {
       setStatusMessage("End time must be after the start time.");
       return;
     }
@@ -85,15 +88,17 @@ export function CalendarEventDrawer({
       await saveEvent(currentEvent.id, {
         title: title.trim(),
         description: description.trim(),
+        itemKind,
         categoryId: categoryId || null,
         startAt,
-        endAt,
+        endAt: itemKind === "deadline" ? startAt : endAt,
         allDay: currentEvent.allDay,
-        isRecurring: Boolean(recurrenceRule),
-        recurrenceRule: recurrenceRule || null,
+        isRecurring: itemKind === "event" && Boolean(recurrenceRule),
+        recurrenceRule: itemKind === "event" ? recurrenceRule || null : null,
         eventType,
+        linkedTaskId: currentEvent.linkedTaskId,
       });
-      setStatusMessage("Event updated.");
+      setStatusMessage(itemKind === "deadline" ? "Deadline updated." : "Event updated.");
     } finally {
       setIsSaving(false);
     }
@@ -116,7 +121,7 @@ export function CalendarEventDrawer({
         <div className="drawer-header-vnext">
           <div>
             <p className="eyebrow">EasyCalendar</p>
-            <h2>Edit event</h2>
+            <h2>Edit calendar item</h2>
           </div>
           <button type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close event editor">
             Close
@@ -129,6 +134,14 @@ export function CalendarEventDrawer({
             <input value={title} onChange={(changeEvent) => setTitle(changeEvent.target.value)} />
           </label>
 
+          <label className="field-stack">
+            <span>Item type</span>
+            <select value={itemKind} onChange={(changeEvent) => setItemKind(changeEvent.target.value as CalendarItemKind)}>
+              <option value="event">Event - show up at a time</option>
+              <option value="deadline">Deadline - due by this time</option>
+            </select>
+          </label>
+
           <div className="task-composer-grid">
             <label className="field-stack">
               <span>Date</span>
@@ -136,14 +149,16 @@ export function CalendarEventDrawer({
             </label>
 
             <label className="field-stack">
-              <span>Start time</span>
+              <span>{itemKind === "deadline" ? "Due time" : "Start time"}</span>
               <input type="time" value={startTime} onChange={(changeEvent) => setStartTime(changeEvent.target.value)} />
             </label>
 
+            {itemKind === "event" ? (
             <label className="field-stack">
               <span>End time</span>
               <input type="time" value={endTime} onChange={(changeEvent) => setEndTime(changeEvent.target.value)} />
             </label>
+            ) : null}
 
             <label className="field-stack">
               <span>Type</span>
@@ -156,6 +171,7 @@ export function CalendarEventDrawer({
               </select>
             </label>
 
+            {itemKind === "event" ? (
             <label className="field-stack">
               <span>Repeat</span>
               <select value={recurrenceRule} onChange={(changeEvent) => setRecurrenceRule(changeEvent.target.value)}>
@@ -166,6 +182,7 @@ export function CalendarEventDrawer({
                 ))}
               </select>
             </label>
+            ) : null}
 
             <label className="field-stack field-stack-wide">
               <span>Category color</span>
@@ -189,11 +206,11 @@ export function CalendarEventDrawer({
 
           <div className="drawer-actions-vnext">
             <button type="button" className="danger-button" onClick={() => void handleDelete()} disabled={isSaving}>
-              Delete Event
+              Delete Item
             </button>
             <div className="drawer-actions-right">
               <button type="submit" className="primary-button" disabled={isSaving}>
-                {isSaving ? "Saving..." : "Save Event"}
+                {isSaving ? "Saving..." : "Save Item"}
               </button>
             </div>
           </div>

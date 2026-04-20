@@ -30,9 +30,13 @@ export function TaskCard({ task, onEdit, onComplete, onReopen }: TaskCardProps) 
             <span className="priority-pill-vnext">{priority.label}</span>
           </div>
           <div className="task-meta-row">
+            <span className={`task-meta-chip${task.itemKind === "deadline" ? " urgent" : ""}`}>
+              {task.itemKind === "deadline" ? "Deadline" : "Task"}
+            </span>
             <span className={overdue ? "task-meta-chip urgent" : "task-meta-chip"}>{dueLabel}</span>
             <span className="task-meta-chip">{task.estimatedLength ? `${task.estimatedLength} min` : "No time estimate"}</span>
             {scheduledCount ? <span className="task-meta-chip scheduled">Planned {scheduledCount}x</span> : null}
+            {task.linkedCalendarEventId ? <span className="task-meta-chip scheduled">Linked event</span> : null}
             <span className="task-meta-chip">{task.category || "No category"}</span>
           </div>
           {task.notes ? <small>{task.notes}</small> : null}

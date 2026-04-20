@@ -321,6 +321,22 @@ export function TaskDrawer({
 
         <form className="drawer-form" onSubmit={handleSave}>
           <label className="field-stack">
+            <span>Kind</span>
+            <select
+              value={draft.itemKind || "task"}
+              onChange={(event) =>
+                setDraft((current) => ({
+                  ...current,
+                  itemKind: event.target.value === "deadline" ? "deadline" : "task",
+                }))
+              }
+            >
+              <option value="task">Task - something to work on</option>
+              <option value="deadline">Deadline - something due</option>
+            </select>
+          </label>
+
+          <label className="field-stack">
             <span>Title</span>
             <input
               type="text"
@@ -330,7 +346,7 @@ export function TaskDrawer({
           </label>
 
           <label className="field-stack">
-            <span>Due date</span>
+            <span>{draft.itemKind === "deadline" ? "Due by" : "Due date"}</span>
             <input
               type="date"
               value={draft.dueDate ?? ""}

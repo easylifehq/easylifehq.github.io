@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import type { PriorityTier, TaskDraft } from "@/lib/firestore/tasks";
+import type { PriorityTier, TaskDraft, TaskItemKind } from "@/lib/firestore/tasks";
 import { getPriorityMeta, normalizePriorityTier, PRIORITY_TIERS } from "@/features/easylist/lib/taskUtils";
 import { auth } from "@/lib/firebase/client";
 import { addLinkedCalendarBlock } from "@/lib/firestore/tasks";
@@ -12,6 +12,7 @@ type TaskComposerProps = {
 
 type TaskRowDraft = {
   id: string;
+  itemKind: TaskItemKind;
   title: string;
   category: string;
   dueDate: string;
@@ -31,6 +32,7 @@ type AiTaskRow = {
 
 const EMPTY_ROW = (priorityTier = 5): TaskRowDraft => ({
   id: crypto.randomUUID(),
+  itemKind: "task",
   title: "",
   category: "",
   dueDate: "",
@@ -47,6 +49,7 @@ function buildTaskDraft(row: TaskRowDraft): TaskDraft | null {
   }
 
   return {
+    itemKind: row.itemKind,
     title: row.title.trim(),
     category: row.category.trim(),
     dueDate: row.dueDate || null,
@@ -270,6 +273,7 @@ function parseBrainDump(text: string): TaskRowDraft[] {
 
       accumulator.push({
         ...EMPTY_ROW(),
+        itemKind: /\b(deadline|due|submit|turn in|by midnight)\b/i.test(line) ? "deadline" : "task",
         title,
         category: parseCategory(line, contextCategory),
         dueDate: parseDueDate(line),
@@ -298,6 +302,7 @@ function normalizeAiTaskRows(rows: AiTaskRow[]): TaskRowDraft[] {
             ? String(row.estimatedLength)
             : "",
         priorityTier: normalizePriorityTier(priorityTier),
+        itemKind: typeof row.dueDate === "string" && row.dueDate ? "deadline" as const : "task" as const,
         notes: String(row.notes || "").trim(),
       };
     })
@@ -570,6 +575,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
 
       <div className="task-rows-shell">
         <div className="task-row-grid task-row-grid-header" aria-hidden="true">
+          <span>Kind</span>
           <span>Task</span>
           <span>Category</span>
           <span>Due</span>
@@ -581,6 +587,17 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
 
         {rows.map((row, index) => (
           <div key={row.id} className="task-row-grid task-row-card">
+            <label className="field-stack task-row-field">
+              <span>Kind</span>
+              <select
+                value={row.itemKind}
+                onChange={(event) => updateRow(row.id, "itemKind", event.target.value)}
+              >
+                <option value="task">Task</option>
+                <option value="deadline">Deadline</option>
+              </select>
+            </label>
+
             <label className="field-stack task-row-field">
               <span>Task</span>
               <input
@@ -603,7 +620,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
             </label>
 
             <label className="field-stack task-row-field">
-              <span>Due</span>
+              <span>{row.itemKind === "deadline" ? "Due by" : "Due"}</span>
               <input
                 type="date"
                 value={row.dueDate}

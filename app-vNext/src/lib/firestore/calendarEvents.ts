@@ -18,11 +18,13 @@ export type CalendarEventType =
   | "appointment"
   | "personal"
   | "other";
+export type CalendarItemKind = "event" | "deadline";
 
 export type CalendarEventRecord = {
   id: string;
   title: string;
   description: string;
+  itemKind: CalendarItemKind;
   categoryId: string | null;
   startAt: Date | null;
   endAt: Date | null;
@@ -30,6 +32,7 @@ export type CalendarEventRecord = {
   isRecurring: boolean;
   recurrenceRule: string | null;
   eventType: CalendarEventType;
+  linkedTaskId: string | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -37,6 +40,7 @@ export type CalendarEventRecord = {
 export type CalendarEventDraft = {
   title: string;
   description: string;
+  itemKind?: CalendarItemKind;
   categoryId: string | null;
   startAt: Date | null;
   endAt: Date | null;
@@ -44,6 +48,7 @@ export type CalendarEventDraft = {
   isRecurring?: boolean;
   recurrenceRule?: string | null;
   eventType?: CalendarEventType;
+  linkedTaskId?: string | null;
 };
 
 export function getCalendarEventsCollection(userId: string) {
@@ -70,6 +75,7 @@ export function normalizeCalendarEvent(
     id: snapshot.id,
     title: data.title || "",
     description: data.description || "",
+    itemKind: data.itemKind === "deadline" ? "deadline" : "event",
     categoryId: data.categoryId || null,
     startAt: toDate(data.startAt),
     endAt: toDate(data.endAt),
@@ -77,6 +83,7 @@ export function normalizeCalendarEvent(
     isRecurring: Boolean(data.isRecurring),
     recurrenceRule: data.recurrenceRule || null,
     eventType: (data.eventType || "other") as CalendarEventType,
+    linkedTaskId: typeof data.linkedTaskId === "string" ? data.linkedTaskId : null,
     createdAt: toDate(data.createdAt),
     updatedAt: toDate(data.updatedAt),
   } satisfies CalendarEventRecord;
@@ -105,6 +112,7 @@ export async function createCalendarEvent(
   const reference = await addDoc(getCalendarEventsCollection(userId), {
     title: draft.title,
     description: draft.description,
+    itemKind: draft.itemKind || "event",
     categoryId: draft.categoryId || null,
     startAt: draft.startAt || null,
     endAt: draft.endAt || null,
@@ -112,6 +120,7 @@ export async function createCalendarEvent(
     isRecurring: Boolean(draft.isRecurring),
     recurrenceRule: draft.recurrenceRule || null,
     eventType: draft.eventType || "other",
+    linkedTaskId: draft.linkedTaskId || null,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -127,6 +136,7 @@ export async function updateCalendarEvent(
   await updateDoc(doc(db, "users", userId, "calendarEvents", eventId), {
     title: draft.title,
     description: draft.description,
+    itemKind: draft.itemKind || "event",
     categoryId: draft.categoryId || null,
     startAt: draft.startAt || null,
     endAt: draft.endAt || null,
@@ -134,6 +144,7 @@ export async function updateCalendarEvent(
     isRecurring: Boolean(draft.isRecurring),
     recurrenceRule: draft.recurrenceRule || null,
     eventType: draft.eventType || "other",
+    linkedTaskId: draft.linkedTaskId || null,
     updatedAt: serverTimestamp(),
   });
 }

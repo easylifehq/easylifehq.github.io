@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.4.0`
-- Current planning target: `4.4.0` AI Assistant Foundation
-- Next feature target: `4.5.0` Firebase Rules Verification
-- Product polish queue: `4.1.x` Notification Follow-Up, `4.5.0` Firebase Rules Verification
+- App package version: `4.5.0`
+- Current planning target: `4.5.0` Planner Item Types
+- Next feature target: `4.6.0` Firebase Rules Verification
+- Product polish queue: `4.1.x` Notification Follow-Up, `4.6.0` Firebase Rules Verification
 - Future major target: `4.0.0` Mobile App Foundation and Notifications
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
 
@@ -456,7 +456,20 @@ Goal: Start the assistant foundation only after mobile, notifications, security,
 - Done: Gate EasyProjects AI planning behind both the Lab toggle and Assistant draft permissions.
 - Done: Keep generated project plans review-first before creating sections or linked tasks.
 
-### 4.5.0 Firebase Rules Verification
+### 4.5.0 Planner Item Types
+
+Status: Done
+
+Goal: Separate calendar and task items by how they behave in real life: events you attend, deadlines you owe, and tasks you make time for.
+
+- Done: EasyList tasks can be marked as either Task or Deadline.
+- Done: EasyCalendar items can be marked as either Event or Deadline.
+- Done: Calendar deadlines use due-time wording and deadline markers instead of pretending to be full time blocks.
+- Done: Calendar event creation can also create a linked EasyList task/deadline for prep work or submission work.
+- Done: EasyList cards show whether an item is a Task or Deadline and whether it is linked to a calendar event.
+- Done: Existing tasks and events remain compatible with default Task/Event behavior.
+
+### 4.6.0 Firebase Rules Verification
 
 Status: Planned
 

@@ -1,7 +1,8 @@
 import { useMemo, useState, type FormEvent } from "react";
-import type { CalendarEventType } from "@/lib/firestore/calendarEvents";
+import type { CalendarEventType, CalendarItemKind } from "@/lib/firestore/calendarEvents";
 import type { PlanningState } from "@/lib/firestore/calendarTaskBlocks";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
+import { getPriorityMeta } from "@/features/easylist/lib/taskUtils";
 import {
   addMinutes,
   combineDateAndTime,
@@ -26,18 +27,22 @@ const RECURRENCE_OPTIONS = [
 ];
 
 export function CalendarComposer() {
-  const { categories, tasks, addEvent, scheduleTask } = useEasyCalendar();
+  const { categories, tasks, addEvent, addTask, scheduleTask } = useEasyCalendar();
   const activeTasks = useMemo(() => tasks.filter((task) => !task.completed), [tasks]);
   const todayValue = toDateInputValue(startOfDay(new Date()));
 
   const [eventTitle, setEventTitle] = useState("");
   const [eventDescription, setEventDescription] = useState("");
+  const [eventItemKind, setEventItemKind] = useState<CalendarItemKind>("event");
   const [eventCategory, setEventCategory] = useState("");
   const [eventType, setEventType] = useState<CalendarEventType>("appointment");
   const [eventDate, setEventDate] = useState(todayValue);
   const [eventStartTime, setEventStartTime] = useState("09:00");
   const [eventEndTime, setEventEndTime] = useState("10:00");
   const [eventRecurrenceRule, setEventRecurrenceRule] = useState("");
+  const [createPrepTask, setCreatePrepTask] = useState(false);
+  const [prepTaskTitle, setPrepTaskTitle] = useState("");
+  const [prepTaskMinutes, setPrepTaskMinutes] = useState("60");
   const [eventStatus, setEventStatus] = useState("");
   const [isSavingEvent, setIsSavingEvent] = useState(false);
 
@@ -63,30 +68,50 @@ export function CalendarComposer() {
       return;
     }
 
-    if (!startAt || !endAt || endAt <= startAt) {
+    if (!startAt || (eventItemKind === "event" && (!endAt || endAt <= startAt))) {
       setEventStatus("End time must be after the start time.");
       return;
     }
 
     setIsSavingEvent(true);
     try {
-      await addEvent({
+      const eventId = await addEvent({
         title: eventTitle.trim(),
         description: eventDescription.trim(),
+        itemKind: eventItemKind,
         categoryId: eventCategory || null,
         startAt,
-        endAt,
+        endAt: eventItemKind === "deadline" ? startAt : endAt,
         allDay: false,
         isRecurring: Boolean(eventRecurrenceRule),
         recurrenceRule: eventRecurrenceRule || null,
         eventType,
       });
+
+      if (createPrepTask && eventId) {
+        await addTask({
+          itemKind: eventItemKind === "deadline" ? "deadline" : "task",
+          title: prepTaskTitle.trim() || `Prepare for ${eventTitle.trim()}`,
+          category: eventCategory || eventType,
+          dueDate: toDateInputValue(startAt),
+          estimatedLength: Math.max(5, Number(prepTaskMinutes) || 60),
+          priorityTier: 4,
+          priorityLabel: getPriorityMeta(4).label,
+          notes: `Linked to calendar ${eventItemKind}: ${eventTitle.trim()}`,
+          linkedCalendarEventId: eventId,
+          recurring: false,
+        });
+      }
       setEventTitle("");
       setEventDescription("");
+      setEventItemKind("event");
       setEventCategory("");
       setEventType("appointment");
       setEventRecurrenceRule("");
-      setEventStatus("Event added.");
+      setCreatePrepTask(false);
+      setPrepTaskTitle("");
+      setPrepTaskMinutes("60");
+      setEventStatus(createPrepTask ? "Calendar item and linked task added." : "Calendar item added.");
     } finally {
       setIsSavingEvent(false);
     }
@@ -129,8 +154,8 @@ export function CalendarComposer() {
       <form className="calendar-form-card" onSubmit={handleEventSubmit}>
         <div className="panel-header">
           <p className="eyebrow">Fixed event</p>
-          <h2>Add an event</h2>
-          <p>Classes, work, appointments, and other real commitments belong here.</p>
+          <h2>Add calendar item</h2>
+          <p>Use Event for things you attend. Use Deadline for things that are due at a specific time.</p>
         </div>
 
         <div className="task-composer-grid">
@@ -145,7 +170,18 @@ export function CalendarComposer() {
           </label>
 
           <label className="field-stack">
-            <span>Kind of event</span>
+            <span>Item type</span>
+            <select
+              value={eventItemKind}
+              onChange={(event) => setEventItemKind(event.target.value as CalendarItemKind)}
+            >
+              <option value="event">Event - show up at a time</option>
+              <option value="deadline">Deadline - due by this time</option>
+            </select>
+          </label>
+
+          <label className="field-stack">
+            <span>{eventItemKind === "deadline" ? "Deadline area" : "Event kind"}</span>
             <select
               value={eventType}
               onChange={(event) => setEventType(event.target.value as CalendarEventType)}
@@ -183,7 +219,7 @@ export function CalendarComposer() {
           </label>
 
           <label className="field-stack">
-            <span>Start</span>
+            <span>{eventItemKind === "deadline" ? "Due time" : "Start"}</span>
             <input
               type="time"
               value={eventStartTime}
@@ -191,6 +227,7 @@ export function CalendarComposer() {
             />
           </label>
 
+          {eventItemKind === "event" ? (
           <label className="field-stack">
             <span>End</span>
             <input
@@ -199,7 +236,9 @@ export function CalendarComposer() {
               onChange={(event) => setEventEndTime(event.target.value)}
             />
           </label>
+          ) : null}
 
+          {eventItemKind === "event" ? (
           <label className="field-stack">
             <span>Repeat</span>
             <select
@@ -213,11 +252,48 @@ export function CalendarComposer() {
               ))}
             </select>
           </label>
+          ) : null}
 
           <p className="helper-copy field-stack-wide">
-            Use Kind for what this is. Use Color label for how it should look on the calendar.
+            Events block time. Deadlines sit on the calendar as due markers and can also create a linked EasyList item.
             Repeating classes can use Weekly.
           </p>
+
+          <label className="inline-check field-stack-wide">
+            <input
+              type="checkbox"
+              checked={createPrepTask}
+              onChange={(event) => setCreatePrepTask(event.target.checked)}
+            />
+            <span>
+              Also create a linked EasyList {eventItemKind === "deadline" ? "deadline" : "task"} for this.
+            </span>
+          </label>
+
+          {createPrepTask ? (
+            <>
+              <label className="field-stack field-stack-wide">
+                <span>Linked task title</span>
+                <input
+                  type="text"
+                  value={prepTaskTitle}
+                  onChange={(event) => setPrepTaskTitle(event.target.value)}
+                  placeholder={`Prepare for ${eventTitle || "this item"}`}
+                />
+              </label>
+
+              <label className="field-stack">
+                <span>Estimated task minutes</span>
+                <input
+                  type="number"
+                  min="5"
+                  step="5"
+                  value={prepTaskMinutes}
+                  onChange={(event) => setPrepTaskMinutes(event.target.value)}
+                />
+              </label>
+            </>
+          ) : null}
 
           <label className="field-stack field-stack-wide">
             <span>Notes</span>
@@ -232,7 +308,7 @@ export function CalendarComposer() {
 
         {eventStatus ? <p className="helper-copy">{eventStatus}</p> : null}
         <button type="submit" className="primary-button" disabled={isSavingEvent}>
-          {isSavingEvent ? "Adding..." : "Add Event"}
+          {isSavingEvent ? "Adding..." : "Add Calendar Item"}
         </button>
       </form>
 

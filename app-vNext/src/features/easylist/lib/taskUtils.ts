@@ -340,6 +340,7 @@ export function buildMotivationData(completedTodayCount: number, activeTasks: Ta
 
 export function getEmptyTaskDraft(): TaskDraft {
   return {
+    itemKind: "task",
     title: "",
     notes: "",
     category: "",
@@ -347,12 +348,14 @@ export function getEmptyTaskDraft(): TaskDraft {
     priorityTier: 3,
     priorityLabel: PRIORITY_LABELS[3],
     dueDate: null,
+    linkedCalendarEventId: null,
     recurring: false,
   };
 }
 
 export function taskToDraft(task: TaskRecord): TaskDraft {
   return {
+    itemKind: task.itemKind,
     title: task.title,
     notes: task.notes,
     category: task.category,
@@ -360,6 +363,7 @@ export function taskToDraft(task: TaskRecord): TaskDraft {
     priorityTier: normalizePriorityTier(task.priorityTier),
     priorityLabel: task.priorityLabel || PRIORITY_LABELS[task.priorityTier],
     dueDate: task.dueDate ? toDateInputValue(task.dueDate) : null,
+    linkedCalendarEventId: task.linkedCalendarEventId,
     recurring: task.recurring,
   };
 }

@@ -37,9 +37,11 @@ import {
 import {
   addLinkedCalendarBlock,
   completeTask,
+  createTask,
   removeLinkedCalendarBlock,
   reopenTask,
   subscribeToTasks,
+  type TaskDraft,
   type TaskRecord,
 } from "@/lib/firestore/tasks";
 
@@ -50,7 +52,8 @@ type EasyCalendarContextValue = {
   tasks: TaskRecord[];
   isLoading: boolean;
   error: string;
-  addEvent: (draft: CalendarEventDraft) => Promise<void>;
+  addEvent: (draft: CalendarEventDraft) => Promise<string | null>;
+  addTask: (draft: TaskDraft) => Promise<string | null>;
   saveEvent: (eventId: string, draft: CalendarEventDraft) => Promise<void>;
   deleteEvent: (eventId: string) => Promise<void>;
   addTaskBlock: (draft: CalendarTaskBlockDraft) => Promise<void>;
@@ -188,8 +191,12 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       isLoading: categoriesLoading || eventsLoading || taskBlocksLoading || tasksLoading,
       error,
       addEvent: async (draft: CalendarEventDraft) => {
-        if (!user) return;
-        await createCalendarEvent(user.uid, draft);
+        if (!user) return null;
+        return createCalendarEvent(user.uid, draft);
+      },
+      addTask: async (draft: TaskDraft) => {
+        if (!user) return null;
+        return createTask(user.uid, draft);
       },
       saveEvent: async (eventId: string, draft: CalendarEventDraft) => {
         if (!user) return;

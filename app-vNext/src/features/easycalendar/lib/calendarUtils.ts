@@ -268,14 +268,18 @@ export function getItemsForDay(
         title: event.title,
         startAt,
         endAt,
-        kind: "event",
+        kind: event.itemKind === "deadline" ? "deadline" : "event",
         color: category.color,
-        badge: event.isRecurring
+        badge: event.itemKind === "deadline"
+          ? "deadline"
+          : event.isRecurring
           ? `${event.eventType === "other" ? "fixed event" : event.eventType} | repeats`
           : event.eventType === "other" ? "fixed event" : event.eventType,
         helper: event.allDay
           ? "All day"
-          : `${formatTimeLabel(startAt)} - ${formatTimeLabel(endAt)}`,
+          : event.itemKind === "deadline"
+            ? `Due ${formatTimeLabel(startAt)}`
+            : `${formatTimeLabel(startAt)} - ${formatTimeLabel(endAt)}`,
         allDay: event.allDay,
         isFlexible: false,
         isCompleted: false,
@@ -316,6 +320,7 @@ export function getItemsForDay(
         !task.completed &&
         task.dueDate &&
         isSameDay(task.dueDate, date) &&
+        !task.linkedCalendarEventId &&
         !scheduledTaskIds.has(task.id)
     )
     .map((task) => {
@@ -329,7 +334,7 @@ export function getItemsForDay(
         endAt: task.dueDate,
         kind: "deadline",
         color: category.color,
-        badge: "deadline",
+        badge: task.itemKind === "deadline" ? "deadline" : "task due",
         helper: `${priority.label}${task.estimatedLength ? ` | ${task.estimatedLength} min` : ""}`,
         allDay: true,
         isFlexible: false,

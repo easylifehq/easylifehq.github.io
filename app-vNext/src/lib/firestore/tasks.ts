@@ -15,9 +15,11 @@ import {
 import { db } from "@/lib/firebase/client";
 
 export type PriorityTier = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+export type TaskItemKind = "task" | "deadline";
 
 export type TaskRecord = {
   id: string;
+  itemKind: TaskItemKind;
   title: string;
   notes: string;
   category: string;
@@ -25,6 +27,7 @@ export type TaskRecord = {
   priorityTier: PriorityTier;
   priorityLabel: string;
   dueDate: Date | null;
+  linkedCalendarEventId: string | null;
   recurring: boolean;
   completed: boolean;
   completedAt: Date | null;
@@ -64,6 +67,7 @@ export function normalizeTask(snapshot: QueryDocumentSnapshot<DocumentData>) {
 
   return {
     id: snapshot.id,
+    itemKind: data.itemKind === "deadline" ? "deadline" : "task",
     title: data.title || "",
     notes: data.notes || "",
     category: data.category || "",
@@ -72,6 +76,7 @@ export function normalizeTask(snapshot: QueryDocumentSnapshot<DocumentData>) {
     priorityTier: normalizePriorityTier(data.priorityTier),
     priorityLabel: data.priorityLabel || "",
     dueDate: toDate(data.dueDate),
+    linkedCalendarEventId: typeof data.linkedCalendarEventId === "string" ? data.linkedCalendarEventId : null,
     recurring: Boolean(data.recurring),
     completed: Boolean(data.completed),
     completedAt: toDate(data.completedAt),
@@ -100,6 +105,7 @@ export function subscribeToTasks(
 }
 
 export type TaskDraft = {
+  itemKind?: TaskItemKind;
   title: string;
   notes: string;
   category: string;
@@ -107,11 +113,13 @@ export type TaskDraft = {
   priorityTier: PriorityTier;
   priorityLabel: string;
   dueDate: string | null;
+  linkedCalendarEventId?: string | null;
   recurring?: boolean;
 };
 
 export async function createTask(userId: string, draft: TaskDraft) {
   const reference = await addDoc(getTasksCollection(userId), {
+    itemKind: draft.itemKind || "task",
     title: draft.title,
     notes: draft.notes,
     category: draft.category,
@@ -119,6 +127,7 @@ export async function createTask(userId: string, draft: TaskDraft) {
     priorityTier: draft.priorityTier,
     priorityLabel: draft.priorityLabel,
     dueDate: draft.dueDate || null,
+    linkedCalendarEventId: draft.linkedCalendarEventId || null,
     recurring: Boolean(draft.recurring),
     completed: false,
     completedAt: null,
@@ -141,6 +150,7 @@ function normalizePriorityTier(value: unknown): PriorityTier {
 
 export async function updateTask(userId: string, taskId: string, draft: TaskDraft) {
   await updateDoc(doc(db, "users", userId, "tasks", taskId), {
+    itemKind: draft.itemKind || "task",
     title: draft.title,
     notes: draft.notes,
     category: draft.category,
@@ -148,6 +158,7 @@ export async function updateTask(userId: string, taskId: string, draft: TaskDraf
     priorityTier: draft.priorityTier,
     priorityLabel: draft.priorityLabel,
     dueDate: draft.dueDate || null,
+    linkedCalendarEventId: draft.linkedCalendarEventId || null,
     recurring: Boolean(draft.recurring),
     updatedAt: serverTimestamp(),
   });

@@ -6,6 +6,19 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.5.0
+
+### Added
+
+- Added Task vs Deadline item types to EasyList rows and task editing.
+- Added Event vs Deadline item types to EasyCalendar creation and editing.
+- Added linked task creation from EasyCalendar so exams, due dates, and events can create a connected EasyList item.
+
+### Changed
+
+- Calendar deadline markers now distinguish hard deadlines from normal task due dates.
+- Calendar event forms now use clearer wording for event kind, deadline area, due time, and linked task estimates.
+
 ## 4.4.0
 
 ### Added

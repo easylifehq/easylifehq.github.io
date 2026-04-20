@@ -2074,7 +2074,7 @@ textarea::placeholder {
 
 .task-row-grid {
   display: grid;
-  grid-template-columns: minmax(180px, 1.55fr) minmax(112px, 0.9fr) 126px 96px 140px minmax(220px, 1.45fr) 92px;
+  grid-template-columns: 116px minmax(180px, 1.55fr) minmax(112px, 0.9fr) 126px 96px 140px minmax(220px, 1.45fr) 92px;
   gap: 0.55rem;
   align-items: end;
 }
@@ -4652,7 +4652,7 @@ button.calendar-detail-card:disabled {
   }
 
   .task-row-grid {
-    grid-template-columns: minmax(180px, 1.55fr) minmax(112px, 0.9fr) 126px 96px 140px minmax(220px, 1.45fr) 92px;
+    grid-template-columns: 116px minmax(180px, 1.55fr) minmax(112px, 0.9fr) 126px 96px 140px minmax(220px, 1.45fr) 92px;
   }
 
   .task-row-grid-workout {
@@ -5131,7 +5131,7 @@ button.calendar-detail-card:disabled {
   }
 
   .task-row-grid {
-    grid-template-columns: minmax(180px, 1.55fr) minmax(112px, 0.9fr) 126px 96px 140px minmax(220px, 1.45fr) 92px;
+    grid-template-columns: 116px minmax(180px, 1.55fr) minmax(112px, 0.9fr) 126px 96px 140px minmax(220px, 1.45fr) 92px;
   }
 
   .task-row-grid-workout {

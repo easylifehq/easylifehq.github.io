@@ -4,9 +4,9 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `4.4.0`
-- Next patch target: `4.4.1`
-- Next feature target: `4.5.0` Firebase Rules Verification.
+- Current app version: `4.5.0`
+- Next patch target: `4.5.1`
+- Next feature target: `4.6.0` Firebase Rules Verification.
 
 ## What To Update
 
@@ -77,7 +77,8 @@ Before finishing a release batch:
 30. `4.2.0` Mobile Polish and Reliability.
 31. `4.3.0` Mobile Distribution Prep.
 32. `4.4.0` AI Assistant Foundation.
-33. `4.5.0` Firebase Rules Verification.
-34. `5.0.0` EasyDrinks and EasyGames Suite Expansion.
+33. `4.5.0` Planner Item Types.
+34. `4.6.0` Firebase Rules Verification.
+35. `5.0.0` EasyDrinks and EasyGames Suite Expansion.
 
-`4.0.0` is now the mobile app foundation target. EasyDrinks and EasyGames move to `5.0.0` so the phone app, notifications, security hardening, and real-use reliability come first. Deeper Firebase rules verification is parked at `4.5.0` so it does not block the first mobile foundation pass.
+`4.0.0` is now the mobile app foundation target. EasyDrinks and EasyGames move to `5.0.0` so the phone app, notifications, security hardening, and real-use reliability come first. Deeper Firebase rules verification is parked at `4.6.0` so the calendar/task planner model can land first.

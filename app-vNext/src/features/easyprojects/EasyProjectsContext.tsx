@@ -149,6 +149,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
       setTasks([
         {
           id: "visual-task-1",
+          itemKind: "task",
           title: "Verify Settings labs in the deployed build",
           notes: "Seeded visual QA task",
           category: "EasyLife",
@@ -156,6 +157,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
           priorityTier: 2,
           priorityLabel: "High",
           dueDate: new Date("2026-04-12T12:00:00"),
+          linkedCalendarEventId: null,
           recurring: false,
           completed: false,
           completedAt: null,
@@ -165,6 +167,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         },
         {
           id: "visual-task-2",
+          itemKind: "task",
           title: "Write down the next cleanup ideas",
           notes: "Seeded visual QA task",
           category: "EasyLife",
@@ -172,6 +175,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
           priorityTier: 3,
           priorityLabel: "Medium",
           dueDate: null,
+          linkedCalendarEventId: null,
           recurring: false,
           completed: false,
           completedAt: null,
