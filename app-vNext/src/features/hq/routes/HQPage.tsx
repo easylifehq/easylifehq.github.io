@@ -15,6 +15,7 @@ import { useSettings } from "@/features/settings/SettingsContext";
 import { subscribeToApplications, type ApplicationRecord } from "@/lib/firestore/applications";
 import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
 import { useLastAppRoute } from "@/lib/mobile/appRouteMemory";
+import { buildNotificationPreview } from "@/lib/mobile/notificationPreview";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 
 const demoPath = [
@@ -55,7 +56,7 @@ function isSameDate(left: Date | null, right: Date) {
 export function HQPage() {
   const { user } = useAuth();
   const { events, taskBlocks, tasks, isLoading, error } = useEasyCalendar();
-  const { isAppVisible, isExperimentalFeatureEnabled } = useSettings();
+  const { settings, isAppVisible, isExperimentalFeatureEnabled } = useSettings();
   const mobileRuntime = useMobileRuntime();
   const lastAppRoute = useLastAppRoute();
   const showPlanningPreview = isExperimentalFeatureEnabled("dailyReview");
@@ -90,6 +91,7 @@ export function HQPage() {
   const openMinutes = openWindows.reduce((sum, window) => sum + window.minutes, 0);
   const completedTodayCount = tasks.filter(isCompletedToday).length;
   const planPreview = buildPlanMyDaySuggestions(today, tasks, events, taskBlocks).suggestions.slice(0, 3);
+  const notificationPreview = buildNotificationPreview(settings.notifications, tasks, events, taskBlocks);
   const followUpsDueToday = applications.filter((app) => app.nextFollowUp && app.nextFollowUp <= todayKey && app.status !== "archived");
   const weeklyWorkouts = workoutSessions.filter((session) => {
     const performed = new Date(`${session.performedOn}T00:00:00`);
@@ -234,6 +236,32 @@ export function HQPage() {
               <span>Open tasks</span>
               <strong>{topTasks.length} ready</strong>
             </article>
+          </div>
+        </PageSection>
+
+        <PageSection
+          eyebrow="Reminders"
+          title="Notification preview"
+          description="Upcoming reminders EasyLife is allowed to prepare based on your Settings choices."
+        >
+          <div className="hq-list">
+            {notificationPreview.length ? (
+              notificationPreview.map((item) => (
+                <article key={item.id} className="hq-list-card">
+                  <span className="settings-card-topline">
+                    <span>{item.label}</span>
+                    <span className="settings-state-pill">Preview</span>
+                  </span>
+                  <strong>{item.title}</strong>
+                  <p>{item.detail}</p>
+                </article>
+              ))
+            ) : (
+              <article className="hq-list-card">
+                <strong>No reminders queued</strong>
+                <p>Turn on notification categories in Settings or add dated tasks and calendar blocks.</p>
+              </article>
+            )}
           </div>
         </PageSection>
 

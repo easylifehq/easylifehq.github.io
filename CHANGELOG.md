@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.1.1
+
+### Added
+
+- Added a notification preview helper that finds eligible upcoming task and calendar reminders.
+- Added an EasyHQ notification preview panel so reminder candidates are visible before scheduling is automated.
+
 ## 4.1.0
 
 ### Added

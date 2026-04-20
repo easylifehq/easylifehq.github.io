@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.1.0`
-- Current planning target: `4.1.0` Notification Foundation
+- App package version: `4.1.1`
+- Current planning target: `4.1.1` Notification Preview
 - Next feature target: `4.2.0` Mobile Polish and Reliability
 - Product polish queue: `4.1.x` Notification Follow-Up, `4.5.0` Firebase Rules Verification
 - Future major target: `4.0.0` Mobile App Foundation and Notifications
@@ -407,6 +407,7 @@ Goal: Add useful reminders without making EasyLife noisy or annoying.
 - Done: Add quiet-hours settings so notifications do not fire during unwanted times.
 - Done: Add test notification action in Settings.
 - Done: Add notification fallback states when permissions are denied, unavailable, or revoked.
+- Done: Add an EasyHQ reminder preview so eligible task and calendar reminders are visible before automated scheduling.
 - Keep notification scheduling deterministic and user-controlled; no surprise AI-triggered notifications.
 - Add QA for permission prompts, scheduling, cancellation, duplicate prevention, and notification tap behavior.
 
