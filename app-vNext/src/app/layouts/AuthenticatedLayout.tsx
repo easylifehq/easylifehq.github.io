@@ -6,12 +6,14 @@ import { UniversalCapture } from "@/features/experiments/UniversalCapture";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { useRememberAppRoute } from "@/lib/mobile/appRouteMemory";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
+import { useMobileViewportCssVars } from "@/lib/mobile/useMobileViewportCssVars";
 
 export function AuthenticatedLayout() {
   const location = useLocation();
   const { settings, isExperimentalFeatureEnabled } = useSettings();
   const { isStandalone, isOnline } = useMobileRuntime();
   useRememberAppRoute();
+  useMobileViewportCssVars();
   const isNotesFocusEditorEnabled = isExperimentalFeatureEnabled("notesFocusEditor");
   const isDistractionFreeRoute =
     isNotesFocusEditorEnabled && /^\/app\/easynotes\/[^/]+$/.test(location.pathname);

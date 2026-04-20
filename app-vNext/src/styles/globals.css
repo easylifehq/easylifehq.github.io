@@ -67,6 +67,8 @@
   --shell-page-overlay-1: rgba(36, 118, 111, 0.1);
   --shell-page-overlay-2: rgba(121, 102, 210, 0.08);
   --shell-page-overlay-3: rgba(255, 255, 255, 0.44);
+  --easy-viewport-height: 100dvh;
+  --easy-keyboard-inset: 0px;
 }
 
 *,
@@ -115,6 +117,7 @@ textarea {
 button {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 button:disabled,
@@ -140,7 +143,7 @@ a {
   isolation: isolate;
   min-height: 100vh;
   min-height: 100dvh;
-  min-height: max(100vh, 100dvh);
+  min-height: max(100vh, var(--easy-viewport-height, 100dvh));
   width: 100%;
   max-width: 100vw;
   overflow-x: clip;
@@ -179,7 +182,7 @@ a {
 }
 
 .mobile-standalone-shell {
-  min-height: 100dvh;
+  min-height: var(--easy-viewport-height, 100dvh);
 }
 
 .mobile-runtime-banner {
@@ -554,7 +557,7 @@ a {
 
 .app-content {
   padding: 1.5rem;
-  min-height: 100%;
+  min-height: var(--easy-viewport-height, 100%);
   background:
     linear-gradient(90deg, var(--shell-grid-line) 1px, transparent 1px),
     linear-gradient(180deg, var(--shell-grid-line) 1px, transparent 1px),
@@ -569,6 +572,7 @@ a {
 
 .app-content-shell {
   padding-top: 1rem;
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--easy-keyboard-inset, 0px));
   min-width: 0;
 }
 
@@ -1101,6 +1105,38 @@ a {
 .auth-card-vnext {
   width: min(100%, 460px);
   padding: 1.05rem;
+}
+
+.loading-card {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  text-align: center;
+}
+
+.loading-card strong,
+.loading-card small {
+  display: block;
+}
+
+.loading-card small {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.86rem;
+}
+
+.loading-orbit {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 3px solid color-mix(in srgb, var(--shell-accent) 18%, transparent);
+  border-top-color: var(--shell-accent);
+  animation: loading-orbit-spin 0.82s linear infinite;
+}
+
+@keyframes loading-orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .auth-intro-grid {
@@ -2290,7 +2326,14 @@ textarea::placeholder {
 
 .task-card-vnext.completed {
   background: color-mix(in srgb, var(--ui-bg-card) 86%, var(--ui-pill-bg) 14%);
-  animation: task-archive-pop 0.34s ease both;
+  border-color: color-mix(in srgb, var(--shell-accent) 26%, var(--ui-border-subtle));
+  animation: task-archive-pop 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.task-card-vnext.completed .task-card-title-row h3 {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: color-mix(in srgb, var(--shell-accent) 52%, transparent);
 }
 
 .task-card-main {
@@ -2355,13 +2398,55 @@ textarea::placeholder {
     opacity: 1;
     transform: translateX(0) scale(1);
   }
-  55% {
-    opacity: 0.86;
-    transform: translateX(10px) scale(0.985);
+  42% {
+    opacity: 0.96;
+    transform: translateX(12px) scale(1.012);
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--shell-accent) 18%, transparent);
   }
   100% {
-    opacity: 0.72;
+    opacity: 0.74;
     transform: translateX(0) scale(0.99);
+  }
+}
+
+.app-shell-vnext.shell-theme-gamer .task-card-vnext.completed {
+  animation-name: task-archive-gamer;
+}
+
+.app-shell-vnext.shell-theme-elvish .task-card-vnext.completed,
+.app-shell-vnext.shell-theme-aurora .task-card-vnext.completed {
+  animation-name: task-archive-drift;
+}
+
+@keyframes task-archive-gamer {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  46% {
+    opacity: 0.98;
+    transform: translateX(14px) translateY(-2px) scale(1.01);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--shell-accent) 22%, transparent);
+  }
+  100% {
+    opacity: 0.74;
+    transform: translateX(0) scale(0.99);
+  }
+}
+
+@keyframes task-archive-drift {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  48% {
+    opacity: 0.94;
+    transform: translateY(-6px) scale(1.008);
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--shell-accent) 16%, transparent);
+  }
+  100% {
+    opacity: 0.76;
+    transform: translateY(0) scale(0.99);
   }
 }
 
@@ -5072,7 +5157,7 @@ button.calendar-detail-card:disabled {
   }
 
   .notes-body-field textarea {
-    min-height: calc(100vh - 15rem);
+    min-height: calc(var(--easy-viewport-height, 100dvh) - 15rem);
   }
 
   .contacts-bubble-map {
@@ -5087,5 +5172,19 @@ button.calendar-detail-card:disabled {
   .contact-bubble-5 {
     width: 104px;
     height: 104px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-card-vnext.completed,
+  .app-shell-vnext.shell-theme-gamer .task-card-vnext.completed,
+  .app-shell-vnext.shell-theme-elvish .task-card-vnext.completed,
+  .app-shell-vnext.shell-theme-aurora .task-card-vnext.completed {
+    animation: none;
+    opacity: 0.78;
+  }
+
+  .loading-orbit {
+    animation: none;
   }
 }

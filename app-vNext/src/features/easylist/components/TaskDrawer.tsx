@@ -125,6 +125,7 @@ export function TaskDrawer({
   const [scheduleDate, setScheduleDate] = useState("");
   const [scheduleTime, setScheduleTime] = useState("09:00");
   const [scheduleDuration, setScheduleDuration] = useState("30");
+  const [scheduleParts, setScheduleParts] = useState("1");
   const [planningState, setPlanningState] = useState<PlanningState>("scheduled");
   const [scheduleMessage, setScheduleMessage] = useState("");
   const [isScheduling, setIsScheduling] = useState(false);
@@ -162,6 +163,7 @@ export function TaskDrawer({
       setScheduleDate(toDateInputValue(baseDate));
       setScheduleTime(toTimeInputValue(suggestedTime));
       setScheduleDuration(String(task.estimatedLength ?? 30));
+      setScheduleParts("1");
       setPlanningState(task.linkedCalendarBlockIds.length ? "accepted" : "scheduled");
       setScheduleMessage("");
       setRoutingMessage("");
@@ -198,23 +200,32 @@ export function TaskDrawer({
     if (currentTask.completed) return;
 
     const startAt = combineDateAndTime(scheduleDate, scheduleTime);
-    const durationMinutes = Math.max(5, Number(scheduleDuration) || 30);
-    const endAt = addMinutes(startAt, durationMinutes);
+    const totalMinutes = Math.max(5, Number(scheduleDuration) || 30);
+    const partCount = Math.min(6, Math.max(1, Math.round(Number(scheduleParts) || 1)));
+    const minutesPerPart = Math.max(5, Math.ceil(totalMinutes / partCount / 5) * 5);
 
-    if (!startAt || !endAt) {
+    if (!startAt) {
       setScheduleMessage("Pick a day and time before sending this to EasyCalendar.");
       return;
     }
 
     setIsScheduling(true);
     try {
-      await scheduleTask(currentTask, {
-        startAt,
-        endAt,
-        planningState,
-        userAdjusted: true,
-      });
-      setScheduleMessage("Sent to EasyCalendar.");
+      for (let index = 0; index < partCount; index += 1) {
+        const blockStart = addMinutes(startAt, index * minutesPerPart);
+        const blockEnd = addMinutes(blockStart, minutesPerPart);
+        await scheduleTask(currentTask, {
+          startAt: blockStart,
+          endAt: blockEnd,
+          planningState,
+          userAdjusted: true,
+        });
+      }
+      setScheduleMessage(
+        partCount === 1
+          ? "Sent to EasyCalendar."
+          : `Split into ${partCount} calendar blocks.`
+      );
     } finally {
       setIsScheduling(false);
     }
@@ -448,7 +459,22 @@ export function TaskDrawer({
             </label>
 
             <label className="field-stack">
-              <span>State</span>
+              <span>Split into blocks</span>
+              <select
+                value={scheduleParts}
+                onChange={(event) => setScheduleParts(event.target.value)}
+              >
+                <option value="1">1 block</option>
+                <option value="2">2 blocks</option>
+                <option value="3">3 blocks</option>
+                <option value="4">4 blocks</option>
+                <option value="5">5 blocks</option>
+                <option value="6">6 blocks</option>
+              </select>
+            </label>
+
+            <label className="field-stack">
+              <span>Calendar status</span>
               <select
                 value={planningState}
                 onChange={(event) => setPlanningState(event.target.value as PlanningState)}
@@ -465,6 +491,9 @@ export function TaskDrawer({
               {currentTask.linkedCalendarBlockIds.length
                 ? `Already linked ${currentTask.linkedCalendarBlockIds.length} time(s).`
                 : "Not on the calendar yet."}
+              {Number(scheduleParts) > 1
+                ? ` This will create ${scheduleParts} equal work blocks starting at ${scheduleTime}.`
+                : ""}
             </p>
             {scheduleMessage ? <p className="helper-copy">{scheduleMessage}</p> : null}
             <button

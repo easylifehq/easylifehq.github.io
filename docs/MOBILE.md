@@ -37,6 +37,11 @@ EasyLife `4.0.0` starts with the path that helps fastest: installable iPhone hom
 - Confirm Settings can request notification permission and send a test notification where the browser supports it.
 - Confirm notification categories and quiet hours save correctly.
 - Confirm EasyHQ shows notification preview items only after notification categories are enabled.
+- Confirm app loading states look intentional during cold launch and auth restore.
+- Open the keyboard in notes, tasks, calendar forms, workout fields, and settings fields; confirm save/close actions remain reachable.
+- Split one EasyList task into multiple calendar blocks from the task drawer.
+- Split one EasyCalendar task block into multiple calendar blocks from the calendar composer.
+- Complete a task in each theme and confirm the archive motion feels quick and does not block checking off more tasks.
 - Sign in, sign out, and relaunch.
 - Create and edit a task.
 - Open and edit a note.

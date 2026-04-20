@@ -45,6 +45,7 @@ export function CalendarComposer() {
   const [taskDate, setTaskDate] = useState(todayValue);
   const [taskStartTime, setTaskStartTime] = useState("14:00");
   const [taskDuration, setTaskDuration] = useState("30");
+  const [taskSplitCount, setTaskSplitCount] = useState("1");
   const [taskPlanningState, setTaskPlanningState] = useState<PlanningState>("scheduled");
   const [taskStatus, setTaskStatus] = useState("");
   const [isSavingTaskBlock, setIsSavingTaskBlock] = useState(false);
@@ -95,24 +96,29 @@ export function CalendarComposer() {
     event.preventDefault();
 
     const startAt = combineDateAndTime(taskDate, taskStartTime);
-    const durationMinutes = Math.max(5, Number(taskDuration) || selectedTask?.estimatedLength || 30);
-    const endAt = addMinutes(startAt, durationMinutes);
+    const totalMinutes = Math.max(5, Number(taskDuration) || selectedTask?.estimatedLength || 30);
+    const splitCount = Math.min(6, Math.max(1, Math.round(Number(taskSplitCount) || 1)));
+    const minutesPerBlock = Math.max(5, Math.ceil(totalMinutes / splitCount / 5) * 5);
 
-    if (!selectedTask || !startAt || !endAt) {
+    if (!selectedTask || !startAt) {
       setTaskStatus("Pick a task, day, and time first.");
       return;
     }
 
     setIsSavingTaskBlock(true);
     try {
-      await scheduleTask(selectedTask, {
-        startAt,
-        endAt,
-        planningState: taskPlanningState,
-        userAdjusted: true,
-      });
-      setTaskStatus("Task block added.");
-      setTaskDuration(String(selectedTask.estimatedLength ?? durationMinutes));
+      for (let index = 0; index < splitCount; index += 1) {
+        const blockStart = addMinutes(startAt, index * minutesPerBlock);
+        const blockEnd = addMinutes(blockStart, minutesPerBlock);
+        await scheduleTask(selectedTask, {
+          startAt: blockStart,
+          endAt: blockEnd,
+          planningState: taskPlanningState,
+          userAdjusted: true,
+        });
+      }
+      setTaskStatus(splitCount === 1 ? "Task block added." : `Task split into ${splitCount} blocks.`);
+      setTaskDuration(String(selectedTask.estimatedLength ?? totalMinutes));
     } finally {
       setIsSavingTaskBlock(false);
     }
@@ -139,7 +145,7 @@ export function CalendarComposer() {
           </label>
 
           <label className="field-stack">
-            <span>Type of event</span>
+            <span>Kind of event</span>
             <select
               value={eventType}
               onChange={(event) => setEventType(event.target.value as CalendarEventType)}
@@ -153,7 +159,7 @@ export function CalendarComposer() {
           </label>
 
           <label className="field-stack">
-            <span>Category color</span>
+            <span>Color label</span>
             <select
               value={eventCategory}
               onChange={(event) => setEventCategory(event.target.value)}
@@ -207,6 +213,11 @@ export function CalendarComposer() {
               ))}
             </select>
           </label>
+
+          <p className="helper-copy field-stack-wide">
+            Use Kind for what this is. Use Color label for how it should look on the calendar.
+            Repeating classes can use Weekly.
+          </p>
 
           <label className="field-stack field-stack-wide">
             <span>Notes</span>
@@ -285,7 +296,22 @@ export function CalendarComposer() {
           </label>
 
           <label className="field-stack">
-            <span>State</span>
+            <span>Split into blocks</span>
+            <select
+              value={taskSplitCount}
+              onChange={(event) => setTaskSplitCount(event.target.value)}
+            >
+              <option value="1">1 block</option>
+              <option value="2">2 blocks</option>
+              <option value="3">3 blocks</option>
+              <option value="4">4 blocks</option>
+              <option value="5">5 blocks</option>
+              <option value="6">6 blocks</option>
+            </select>
+          </label>
+
+          <label className="field-stack">
+            <span>Calendar status</span>
             <select
               value={taskPlanningState}
               onChange={(event) => setTaskPlanningState(event.target.value as PlanningState)}
@@ -305,6 +331,9 @@ export function CalendarComposer() {
             {selectedTask.dueDate ? ` | Due ${toDateInputValue(selectedTask.dueDate)}` : ""}
             {selectedTask.linkedCalendarBlockIds.length
               ? ` | Already scheduled ${selectedTask.linkedCalendarBlockIds.length} time(s)`
+              : ""}
+            {Number(taskSplitCount) > 1
+              ? ` | Creates ${taskSplitCount} equal blocks starting at ${taskStartTime}`
               : ""}
           </p>
         ) : (

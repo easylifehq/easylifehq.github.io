@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.1.1`
-- Current planning target: `4.1.1` Notification Preview
-- Next feature target: `4.2.0` Mobile Polish and Reliability
+- App package version: `4.2.0`
+- Current planning target: `4.2.0` Mobile Polish and Reliability
+- Next feature target: `4.3.0` Mobile Distribution Prep
 - Product polish queue: `4.1.x` Notification Follow-Up, `4.5.0` Firebase Rules Verification
 - Future major target: `4.0.0` Mobile App Foundation and Notifications
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
@@ -413,19 +413,20 @@ Goal: Add useful reminders without making EasyLife noisy or annoying.
 
 ### 4.2.0 Mobile Polish and Reliability
 
-Status: Planned
+Status: Done
 
 Goal: Make the mobile app feel genuinely comfortable to use every day.
 
-- Tighten all mobile screens after real device use, not just desktop browser simulation.
-- Improve keyboard handling for notes, tasks, workout exercises, calendar forms, and settings fields.
-- Make task completion, archive motion, and quick capture feel satisfying without slowing the app.
-- Add better loading states for cold app launch, auth restore, and slow data loads.
-- Improve app resume behavior so the last relevant page or note can reopen naturally.
-- Reduce accidental taps by reviewing button sizes, spacing, sticky controls, and destructive actions.
-- Add platform-specific polish for status bar color, splash timing, app icon display, and safe-area backgrounds.
-- Add crash/error reporting plan before broader distribution.
-- Create a real-device QA checklist for iPhone, Android, small screens, and large screens.
+- Done: Add mobile viewport tracking so shell height and bottom spacing can respond to keyboard and visible viewport changes.
+- Done: Improve notes editor mobile height so long typing sessions fit better with the keyboard open.
+- Done: Add split scheduling from EasyList task details and EasyCalendar task blocks.
+- Done: Make task completion/archive motion more satisfying and theme-aware without adding heavy animation.
+- Done: Respect reduced-motion preferences for task completion and loading motion.
+- Done: Add better loading states for cold app launch, auth restore, and lazy-loaded screens.
+- Done: Clarify EasyCalendar event kind, color label, repeat, and calendar task status wording.
+- Done: Keep app resume behavior through the existing EasyHQ last-route resume card.
+- Done: Reduce accidental taps with mobile touch-action polish and safer bottom spacing.
+- Done: Update the real-device mobile QA checklist for keyboard, split scheduling, and completion motion.
 
 ### 4.3.0 Mobile Distribution Prep
 

@@ -2,6 +2,7 @@ import { lazy, Suspense, type ComponentType } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthenticatedLayout } from "@/app/layouts/AuthenticatedLayout";
 import { MarketingLayout } from "@/app/layouts/MarketingLayout";
+import { LoadingState } from "@/components/feedback/LoadingState";
 import { AuthenticatedRoute } from "@/features/auth/AuthenticatedRoute";
 
 function lazyNamed<TModule extends Record<string, ComponentType>>(
@@ -155,7 +156,7 @@ const SettingsPage = lazyNamed(
 
 export function AppRouter() {
   return (
-    <Suspense fallback={<div className="page-wrap">Loading EasyLifeHQ...</div>}>
+    <Suspense fallback={<LoadingState label="Loading EasyLifeHQ..." />}>
       <Routes>
         <Route element={<MarketingLayout />}>
           <Route path="/" element={<MarketingLandingPage />} />

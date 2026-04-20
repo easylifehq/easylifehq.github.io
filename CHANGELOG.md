@@ -6,6 +6,20 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.2.0
+
+### Added
+
+- Added mobile viewport tracking so the app shell can respond to iPhone keyboard and visible-height changes.
+- Added split scheduling for EasyList tasks so one task can become multiple calendar work blocks.
+- Added a more polished loading state for app launch, auth restore, and lazy-loaded screens.
+
+### Changed
+
+- Improved EasyCalendar wording for event kind, color labels, recurrence, and calendar task block status.
+- Improved task completion styling with lightweight theme-aware archive motion and reduced-motion support.
+- Improved mobile bottom spacing and notes editor height handling when the keyboard is open.
+
 ## 4.1.1
 
 ### Added
