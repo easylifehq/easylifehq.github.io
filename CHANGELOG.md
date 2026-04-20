@@ -6,6 +6,21 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.0.2
+
+### Added
+
+- Added a Settings install section with iPhone and Android home-screen guidance.
+- Added an Install EasyLife action that opens the share sheet when supported.
+- Added mobile runtime detection for browser vs home-screen launch and online vs offline status.
+- Added EasyHQ install guidance when EasyLife is still running in the browser.
+
+### Changed
+
+- Updated the home-screen app manifest to launch into `/app`.
+- Made the top-left EasyLifeHQ brand return users to EasyHQ.
+- Added an offline banner for the authenticated app shell.
+
 ## 4.0.0
 
 ### Added

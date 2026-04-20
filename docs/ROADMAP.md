@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.0.0`
-- Current planning target: `4.0.0` Mobile App Foundation
+- App package version: `4.0.2`
+- Current planning target: `4.0.2` Mobile Install and Runtime Polish
 - Next feature target: `4.1.0` Notification Foundation
 - Product polish queue: `4.0.x` Mobile Install Follow-Up, `4.5.0` Firebase Rules Verification
 - Future major target: `4.0.0` Mobile App Foundation and Notifications
@@ -370,6 +370,10 @@ Goal: Turn EasyLife into a real phone-first daily companion with app install, na
 - Done: Add a service worker so the app has a real install foundation.
 - Done: Add temporary `4.0.0` EasyLife mobile icons that fit the polished command-center identity.
 - Done: Document the iPhone Add to Home Screen path and later App Store readiness work.
+- Done: Add Settings install guidance, an install/share action, and browser vs home-screen status.
+- Done: Add EasyHQ install guidance when the app is still running in the browser.
+- Done: Add online/offline runtime status and an offline shell banner.
+- Done: Launch home-screen installs into `/app`.
 - Define bundle IDs, splash screen, platform targets, and build settings before native wrapping.
 - Add Capacitor project scaffolding for iOS and Android when the installable web-app path is not enough.
 - Create mobile-safe environment handling so Firebase config, API URLs, and build variables are clear per platform.

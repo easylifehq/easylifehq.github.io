@@ -2,7 +2,7 @@
   "name": "EasyLife",
   "short_name": "EasyLife",
   "description": "A personal command center for tasks, notes, calendar planning, workouts, projects, and pipeline work.",
-  "start_url": "/",
+  "start_url": "/app",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",

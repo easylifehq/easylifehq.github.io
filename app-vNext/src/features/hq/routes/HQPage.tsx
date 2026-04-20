@@ -14,6 +14,7 @@ import { useAuth } from "@/features/auth/AuthContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { subscribeToApplications, type ApplicationRecord } from "@/lib/firestore/applications";
 import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
+import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 
 const demoPath = [
   {
@@ -54,6 +55,7 @@ export function HQPage() {
   const { user } = useAuth();
   const { events, taskBlocks, tasks, isLoading, error } = useEasyCalendar();
   const { isAppVisible, isExperimentalFeatureEnabled } = useSettings();
+  const mobileRuntime = useMobileRuntime();
   const showPlanningPreview = isExperimentalFeatureEnabled("dailyReview");
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [workoutSessions, setWorkoutSessions] = useState<WorkoutSessionRecord[]>([]);
@@ -144,6 +146,13 @@ export function HQPage() {
         title="Use the core first"
         description="Start with one task, one note, and one calendar handoff. The rest of the suite can open up when it helps."
       >
+        {!mobileRuntime.isStandalone ? (
+          <Link className="hq-install-card" to="/app/settings?section=install">
+            <span className="settings-state-pill">Mobile</span>
+            <strong>Install EasyLife on your phone</strong>
+            <p>Add it to your home screen from Settings so it opens like an app.</p>
+          </Link>
+        ) : null}
         <div className="onboarding-steps-grid">
           <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
             <span className="info-pill">1</span>

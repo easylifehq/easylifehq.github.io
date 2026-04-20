@@ -1,5 +1,6 @@
 import { PageSection } from "@/components/ui/PageSection";
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { APP_VERSION } from "@/config/appVersion";
 import { useAuth } from "@/features/auth/AuthContext";
 import { useSettings } from "@/features/settings/SettingsContext";
@@ -17,6 +18,7 @@ import { subscribeToTasks } from "@/lib/firestore/tasks";
 import { subscribeToWorkoutExercises } from "@/lib/firestore/workoutExercises";
 import { subscribeToWorkoutRoutines } from "@/lib/firestore/workoutRoutines";
 import { subscribeToWorkoutSessions } from "@/lib/firestore/workoutSessions";
+import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 import type {
   ExperimentalFeatureId,
   ThemeMode,
@@ -452,11 +454,14 @@ function getStringField(record: unknown, field: string) {
 }
 
 export function SettingsPage() {
+  const [searchParams] = useSearchParams();
   const [activeSection, setActiveSection] = useState<SettingsSectionId>("customize");
   const { user } = useAuth();
   const [dataCollections, setDataCollections] = useState<DataCollections>(emptyDataCollections);
   const [dataError, setDataError] = useState("");
   const [dataMessage, setDataMessage] = useState("");
+  const [installMessage, setInstallMessage] = useState("");
+  const mobileRuntime = useMobileRuntime();
   const {
     settings,
     isLoading,
@@ -519,6 +524,13 @@ export function SettingsPage() {
   );
 
   useEffect(() => {
+    const requestedSection = searchParams.get("section");
+    if (settingsSections.some((section) => section.id === requestedSection)) {
+      setActiveSection(requestedSection as SettingsSectionId);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
     if (!user) {
       setDataCollections(emptyDataCollections);
       setDataError("");
@@ -574,6 +586,26 @@ export function SettingsPage() {
     void navigator.clipboard.writeText(summary).then(() => setDataMessage("Summary copied."));
   }
 
+  function handleOpenInstallShare() {
+    const installUrl = window.location.origin;
+
+    if (navigator.share) {
+      void navigator
+        .share({
+          title: "EasyLife",
+          text: "Add EasyLife to your home screen.",
+          url: installUrl,
+        })
+        .then(() => setInstallMessage("Choose Add to Home Screen from the share sheet."))
+        .catch(() => setInstallMessage("Share sheet closed. Open Safari's Share menu and choose Add to Home Screen."));
+      return;
+    }
+
+    void navigator.clipboard
+      .writeText(installUrl)
+      .then(() => setInstallMessage("EasyLife link copied. Open it in Safari, then choose Add to Home Screen."));
+  }
+
   return (
     <main className="page-wrap app-theme app-theme-settings settings-page">
       {error ? <p className="error-copy">{error}</p> : null}
@@ -593,6 +625,11 @@ export function SettingsPage() {
             <span>Visible apps</span>
             <strong>{enabledApps.length} of {appVisibilityOptions.length}</strong>
             <p>Start with core apps, then add optional tools later.</p>
+          </article>
+          <article className="settings-status-card">
+            <span>Mobile</span>
+            <strong>{mobileRuntime.runtimeLabel}</strong>
+            <p>{mobileRuntime.connectionLabel}</p>
           </article>
           <article className="settings-status-card">
             <span>Experimental</span>
@@ -1052,14 +1089,31 @@ export function SettingsPage() {
           description="Install EasyLife from Safari so it opens from your home screen like an app."
         >
           <div id="install" className="settings-anchor" />
+          {installMessage ? <div className="calendar-info-card">{installMessage}</div> : null}
+          <div className="settings-install-status">
+            <article>
+              <span>Launch mode</span>
+              <strong>{mobileRuntime.runtimeLabel}</strong>
+              <p>
+                {mobileRuntime.isStandalone
+                  ? "EasyLife is already opening from your home screen."
+                  : "EasyLife is still running in the browser on this device."}
+              </p>
+            </article>
+            <article>
+              <span>Connection</span>
+              <strong>{mobileRuntime.connectionLabel}</strong>
+              <p>{mobileRuntime.isOnline ? "Sync features can reach Firebase." : "Some updates may wait until you reconnect."}</p>
+            </article>
+          </div>
           <div className="settings-install-hero">
             <article>
               <span className="settings-card-topline">
                 <span>iPhone</span>
                 <span className="settings-state-pill">Best path</span>
               </span>
-              <strong>Use Safari's Share button</strong>
-              <p>The Share button is the square with an arrow pointing up. On most iPhones it sits in Safari's bottom toolbar.</p>
+              <strong>Tap Install EasyLife</strong>
+              <p>This opens the share sheet when your browser allows it. From there, choose Add to Home Screen.</p>
             </article>
             <article>
               <span className="settings-card-topline">
@@ -1071,14 +1125,23 @@ export function SettingsPage() {
             </article>
           </div>
 
+          <div className="settings-data-actions">
+            <button type="button" className="primary-button" onClick={handleOpenInstallShare}>
+              Install EasyLife
+            </button>
+            <a className="button-secondary" href="/" target="_blank" rel="noreferrer">
+              Open install page
+            </a>
+          </div>
+
           <ol className="settings-install-steps">
             <li>
               <span>1</span>
-              <p>Open EasyLife in Safari on your iPhone.</p>
+              <p>Tap Install EasyLife from this Settings tab.</p>
             </li>
             <li>
               <span>2</span>
-              <p>Tap the Share button in Safari.</p>
+              <p>If the share sheet opens, scroll through the actions.</p>
             </li>
             <li>
               <span>3</span>

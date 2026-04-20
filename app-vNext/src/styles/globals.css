@@ -178,6 +178,25 @@ a {
   min-width: 0;
 }
 
+.mobile-standalone-shell {
+  min-height: 100dvh;
+}
+
+.mobile-runtime-banner {
+  position: sticky;
+  top: 0;
+  z-index: 850;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  padding-top: calc(0.65rem + env(safe-area-inset-top, 0px));
+  border-bottom: 1px solid rgba(161, 61, 52, 0.22);
+  background: color-mix(in srgb, #fff2f1 84%, var(--ui-bg-card-elevated) 16%);
+  color: #8f352f;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+}
+
 .app-sidebar {
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -3145,6 +3164,28 @@ button.calendar-detail-card:disabled {
   gap: 0.9rem;
 }
 
+.hq-install-card {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--shell-accent) 34%, var(--ui-border-subtle) 66%);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--shell-accent) 14%, transparent), transparent 62%),
+    var(--ui-bg-card-elevated, #ffffff);
+  box-shadow: var(--shell-control-shadow);
+}
+
+.hq-install-card strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+}
+
+.hq-install-card p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+}
+
 .hq-link-card,
 .hq-list-card {
   display: grid;
@@ -3430,6 +3471,7 @@ button.calendar-detail-card:disabled {
 
 .settings-data-hero,
 .settings-data-grid,
+.settings-install-status,
 .settings-review-grid {
   display: grid;
   gap: 0.85rem;
@@ -3452,6 +3494,7 @@ button.calendar-detail-card:disabled {
 
 .settings-data-hero article,
 .settings-data-card,
+.settings-install-status article,
 .settings-review-card {
   min-width: 0;
   padding: 0.9rem;
@@ -3461,6 +3504,7 @@ button.calendar-detail-card:disabled {
 }
 
 .settings-data-hero span,
+.settings-install-status span,
 .settings-data-card span {
   color: var(--ui-text-muted, var(--shell-muted-text));
   font-size: 0.78rem;
@@ -3470,6 +3514,7 @@ button.calendar-detail-card:disabled {
 }
 
 .settings-data-hero strong,
+.settings-install-status strong,
 .settings-data-card strong {
   display: block;
   margin-top: 0.25rem;
@@ -3479,6 +3524,7 @@ button.calendar-detail-card:disabled {
 }
 
 .settings-data-hero p,
+.settings-install-status p,
 .settings-data-card p,
 .settings-review-card p {
   margin: 0.45rem 0 0;
@@ -3496,6 +3542,11 @@ button.calendar-detail-card:disabled {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.settings-install-status {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-bottom: 1rem;
 }
 
@@ -4435,6 +4486,7 @@ button.calendar-detail-card:disabled {
   .calendar-composer-grid,
   .settings-hero,
   .settings-install-hero,
+  .settings-install-status,
   .settings-layout-grid,
   .settings-labs-summary,
   .settings-baseline-grid,
@@ -4448,6 +4500,7 @@ button.calendar-detail-card:disabled {
 
   .settings-data-hero,
   .settings-data-grid,
+  .settings-install-status,
   .settings-review-grid {
     grid-template-columns: 1fr;
   }
