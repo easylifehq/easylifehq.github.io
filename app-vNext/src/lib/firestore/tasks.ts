@@ -28,6 +28,7 @@ export type TaskRecord = {
   priorityLabel: string;
   dueDate: Date | null;
   linkedCalendarEventId: string | null;
+  linkedNoteId: string | null;
   recurring: boolean;
   completed: boolean;
   completedAt: Date | null;
@@ -77,6 +78,7 @@ export function normalizeTask(snapshot: QueryDocumentSnapshot<DocumentData>) {
     priorityLabel: data.priorityLabel || "",
     dueDate: toDate(data.dueDate),
     linkedCalendarEventId: typeof data.linkedCalendarEventId === "string" ? data.linkedCalendarEventId : null,
+    linkedNoteId: typeof data.linkedNoteId === "string" ? data.linkedNoteId : null,
     recurring: Boolean(data.recurring),
     completed: Boolean(data.completed),
     completedAt: toDate(data.completedAt),
@@ -114,6 +116,7 @@ export type TaskDraft = {
   priorityLabel: string;
   dueDate: string | null;
   linkedCalendarEventId?: string | null;
+  linkedNoteId?: string | null;
   recurring?: boolean;
 };
 
@@ -128,6 +131,7 @@ export async function createTask(userId: string, draft: TaskDraft) {
     priorityLabel: draft.priorityLabel,
     dueDate: draft.dueDate || null,
     linkedCalendarEventId: draft.linkedCalendarEventId || null,
+    linkedNoteId: draft.linkedNoteId || null,
     recurring: Boolean(draft.recurring),
     completed: false,
     completedAt: null,
@@ -159,6 +163,7 @@ export async function updateTask(userId: string, taskId: string, draft: TaskDraf
     priorityLabel: draft.priorityLabel,
     dueDate: draft.dueDate || null,
     linkedCalendarEventId: draft.linkedCalendarEventId || null,
+    linkedNoteId: draft.linkedNoteId || null,
     recurring: Boolean(draft.recurring),
     updatedAt: serverTimestamp(),
   });

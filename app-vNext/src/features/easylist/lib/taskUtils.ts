@@ -349,6 +349,7 @@ export function getEmptyTaskDraft(): TaskDraft {
     priorityLabel: PRIORITY_LABELS[3],
     dueDate: null,
     linkedCalendarEventId: null,
+    linkedNoteId: null,
     recurring: false,
   };
 }
@@ -364,6 +365,7 @@ export function taskToDraft(task: TaskRecord): TaskDraft {
     priorityLabel: task.priorityLabel || PRIORITY_LABELS[task.priorityTier],
     dueDate: task.dueDate ? toDateInputValue(task.dueDate) : null,
     linkedCalendarEventId: task.linkedCalendarEventId,
+    linkedNoteId: task.linkedNoteId,
     recurring: task.recurring,
   };
 }

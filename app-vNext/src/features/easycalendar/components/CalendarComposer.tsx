@@ -99,6 +99,7 @@ export function CalendarComposer() {
           priorityLabel: getPriorityMeta(4).label,
           notes: `Linked to calendar ${eventItemKind}: ${eventTitle.trim()}`,
           linkedCalendarEventId: eventId,
+          linkedNoteId: null,
           recurring: false,
         });
       }

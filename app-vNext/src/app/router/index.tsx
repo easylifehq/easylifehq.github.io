@@ -4,6 +4,8 @@ import { AuthenticatedLayout } from "@/app/layouts/AuthenticatedLayout";
 import { MarketingLayout } from "@/app/layouts/MarketingLayout";
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { AuthenticatedRoute } from "@/features/auth/AuthenticatedRoute";
+import { useSettings } from "@/features/settings/SettingsContext";
+import { getLastAppRoute } from "@/lib/mobile/appRouteMemory";
 
 function lazyNamed<TModule extends Record<string, ComponentType>>(
   importer: () => Promise<TModule>,
@@ -154,6 +156,21 @@ const SettingsPage = lazyNamed(
   "SettingsPage"
 );
 
+function StartupRedirect() {
+  const { settings, isLoading } = useSettings();
+
+  if (isLoading) {
+    return <LoadingState label="Opening your workspace..." />;
+  }
+
+  const target =
+    settings.startupRoute === "last-used"
+      ? getLastAppRoute()?.path || "/app/hq"
+      : settings.startupRoute;
+
+  return <Navigate to={target} replace />;
+}
+
 export function AppRouter() {
   return (
     <Suspense fallback={<LoadingState label="Loading EasyLifeHQ..." />}>
@@ -169,7 +186,7 @@ export function AppRouter() {
 
         <Route element={<AuthenticatedRoute />}>
           <Route path="/app" element={<AuthenticatedLayout />}>
-            <Route index element={<Navigate to="/app/hq" replace />} />
+            <Route index element={<StartupRedirect />} />
             <Route path="hq" element={<HQPage />} />
             <Route path="easylist" element={<EasyListLayout />}>
               <Route index element={<Navigate to="/app/easylist/dashboard" replace />} />

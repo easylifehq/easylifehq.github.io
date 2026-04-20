@@ -32,6 +32,7 @@ import type {
   CalendarDefaultView,
   NotesResumeBehavior,
   RoutingDefault,
+  StartupRoute,
 } from "@/lib/firestore/settings";
 
 const themeOptions: Array<{
@@ -368,6 +369,17 @@ const defaultViewOptions: Array<{ value: CalendarDefaultView; label: string }> =
   { value: "month", label: "Month" },
 ];
 
+const startupRouteOptions: Array<{ value: StartupRoute; label: string; description: string }> = [
+  { value: "/app/hq", label: "EasyHQ", description: "Start at the command center." },
+  { value: "last-used", label: "Last used screen", description: "Resume where you left off." },
+  { value: "/app/easylist/dashboard", label: "EasyList", description: "Open straight to your task list." },
+  { value: "/app/easylist/add", label: "Add tasks", description: "Start in fast capture mode." },
+  { value: "/app/easycalendar/day", label: "Today calendar", description: "Start with today hour by hour." },
+  { value: "/app/easynotes", label: "EasyNotes", description: "Open your notes library." },
+  { value: "/app/easynotes/new", label: "Blank note", description: "Start writing immediately." },
+  { value: "/app/easyworkout/dashboard", label: "EasyWorkout", description: "Open the workout dashboard." },
+];
+
 const notesResumeOptions: Array<{ value: NotesResumeBehavior; label: string }> = [
   { value: "last-open-note", label: "Resume last open note" },
   { value: "library", label: "Open notes library" },
@@ -580,6 +592,7 @@ export function SettingsPage() {
     isLoading,
     error,
     setThemeMode,
+    setStartupRoute,
     toggleVisibleApp,
     isAppVisible,
     toggleExperimentalFeature,
@@ -848,6 +861,32 @@ export function SettingsPage() {
                 <p>{option.description}</p>
               </button>
             ))}
+          </div>
+        </PageSection>
+        ) : null}
+
+        {activeSection === "customize" ? (
+        <PageSection
+          eyebrow="Startup"
+          title="Opening screen"
+        >
+          <div className="settings-toggle-list">
+            <label className="field-stack">
+              <span>Default landing page</span>
+              <select
+                value={settings.startupRoute}
+                onChange={(event) => void setStartupRoute(event.target.value as StartupRoute)}
+              >
+                {startupRouteOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <p className="helper-copy">
+              {startupRouteOptions.find((option) => option.value === settings.startupRoute)?.description}
+            </p>
           </div>
         </PageSection>
         ) : null}

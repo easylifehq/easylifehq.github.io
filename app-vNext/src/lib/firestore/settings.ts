@@ -35,6 +35,15 @@ export type ExperimentalFeatureId =
 export type CalendarDefaultView = "day" | "week" | "month";
 export type NotesResumeBehavior = "last-open-note" | "library";
 export type RoutingDefault = "ask" | "projects" | "pipeline" | "stay";
+export type StartupRoute =
+  | "/app/hq"
+  | "/app/easylist/dashboard"
+  | "/app/easylist/add"
+  | "/app/easycalendar/day"
+  | "/app/easynotes"
+  | "/app/easynotes/new"
+  | "/app/easyworkout/dashboard"
+  | "last-used";
 
 export type EasyListSettings = {
   defaultPriorityTier: number;
@@ -88,6 +97,7 @@ export type AssistantSettings = {
 
 export type UserShellSettings = {
   themeMode: ThemeMode;
+  startupRoute: StartupRoute;
   visibleApps: VisibleAppId[];
   experimentalFeatures: ExperimentalFeatureId[];
   calendarWakeTime: string;
@@ -102,6 +112,7 @@ export type UserShellSettings = {
 
 export const defaultShellSettings: UserShellSettings = {
   themeMode: "classic",
+  startupRoute: "/app/hq",
   visibleApps: [
     "easylist",
     "easynotes",
@@ -220,6 +231,21 @@ function normalizeThemeMode(value: unknown): ThemeMode {
   return valid.includes(value as ThemeMode) ? (value as ThemeMode) : "classic";
 }
 
+function normalizeStartupRoute(value: unknown): StartupRoute {
+  const valid: StartupRoute[] = [
+    "/app/hq",
+    "/app/easylist/dashboard",
+    "/app/easylist/add",
+    "/app/easycalendar/day",
+    "/app/easynotes",
+    "/app/easynotes/new",
+    "/app/easyworkout/dashboard",
+    "last-used",
+  ];
+
+  return valid.includes(value as StartupRoute) ? (value as StartupRoute) : defaultShellSettings.startupRoute;
+}
+
 function normalizeTimeInput(value: unknown, fallback: string) {
   if (typeof value !== "string") return fallback;
   return /^\d{2}:\d{2}$/.test(value) ? value : fallback;
@@ -254,6 +280,7 @@ export function normalizeShellSettings(data: DocumentData | undefined): UserShel
 
   return {
     themeMode: normalizeThemeMode(data?.themeMode),
+    startupRoute: normalizeStartupRoute(data?.startupRoute),
     visibleApps: normalizeVisibleApps(data?.visibleApps),
     experimentalFeatures: normalizeExperimentalFeatures(data?.experimentalFeatures),
     calendarWakeTime: normalizeTimeInput(data?.calendarWakeTime, defaultShellSettings.calendarWakeTime),
@@ -415,6 +442,7 @@ export async function saveShellSettings(userId: string, settings: UserShellSetti
     getShellSettingsDoc(userId),
     {
       themeMode: settings.themeMode,
+      startupRoute: settings.startupRoute,
       visibleApps: settings.visibleApps,
       experimentalFeatures: settings.experimentalFeatures,
       calendarWakeTime: settings.calendarWakeTime,

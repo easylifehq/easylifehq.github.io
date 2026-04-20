@@ -50,6 +50,7 @@ export function EasyListDashboardPage() {
     const nextDate = new Date();
     nextDate.setDate(nextDate.getDate() + days);
     return saveTask(task.id, {
+      itemKind: task.itemKind,
       title: task.title,
       notes: task.notes,
       category: task.category,
@@ -57,12 +58,15 @@ export function EasyListDashboardPage() {
       priorityTier: task.priorityTier,
       priorityLabel: task.priorityLabel,
       dueDate: toDateInputValue(nextDate),
+      linkedCalendarEventId: task.linkedCalendarEventId,
+      linkedNoteId: task.linkedNoteId,
       recurring: task.recurring,
     });
   }
 
   function makeSmallerStep(task: TaskRecord) {
     return saveTask(task.id, {
+      itemKind: task.itemKind,
       title: task.title.startsWith("Next step:") ? task.title : `Next step: ${task.title}`,
       notes: [task.notes, "Experimental triage: break this into the next concrete step."].filter(Boolean).join("\n\n"),
       category: task.category || "Triage",
@@ -70,6 +74,8 @@ export function EasyListDashboardPage() {
       priorityTier: task.priorityTier,
       priorityLabel: task.priorityLabel,
       dueDate: toDateInputValue(new Date()),
+      linkedCalendarEventId: task.linkedCalendarEventId,
+      linkedNoteId: task.linkedNoteId,
       recurring: task.recurring,
     });
   }

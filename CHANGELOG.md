@@ -13,11 +13,15 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 - Added Task vs Deadline item types to EasyList rows and task editing.
 - Added Event vs Deadline item types to EasyCalendar creation and editing.
 - Added linked task creation from EasyCalendar so exams, due dates, and events can create a connected EasyList item.
+- Added a Settings startup preference so `/app` and mobile home-screen launches can open HQ, last-used, EasyList, Calendar, Notes, or Workout.
+- Added optional EasyNote linking from EasyList task details.
 
 ### Changed
 
 - Calendar deadline markers now distinguish hard deadlines from normal task due dates.
 - Calendar event forms now use clearer wording for event kind, deadline area, due time, and linked task estimates.
+- Simplified EasyList task cards so the list shows more items and keeps extra detail inside the task drawer.
+- Changed the PWA theme color from green to a neutral shell color so iPhone browser chrome blends better across themes.
 
 ## 4.4.0
 

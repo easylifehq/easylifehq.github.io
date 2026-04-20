@@ -4,6 +4,7 @@ import type { TaskDraft, TaskRecord } from "@/lib/firestore/tasks";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import { auth } from "@/lib/firebase/client";
 import { createApplication } from "@/lib/firestore/applications";
+import { subscribeToNotes, type NoteRecord } from "@/lib/firestore/notes";
 import { createProject, subscribeToProjects, type ProjectRecord } from "@/lib/firestore/projects";
 import { createProjectSection, subscribeToProjectSections, type ProjectSectionRecord } from "@/lib/firestore/projectSections";
 import { createProjectTaskLink } from "@/lib/firestore/projectTaskLinks";
@@ -133,6 +134,7 @@ export function TaskDrawer({
   const [isRouting, setIsRouting] = useState(false);
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [sections, setSections] = useState<ProjectSectionRecord[]>([]);
+  const [notes, setNotes] = useState<NoteRecord[]>([]);
   const [targetProjectId, setTargetProjectId] = useState("__new");
   const [targetSectionId, setTargetSectionId] = useState("");
 
@@ -146,9 +148,13 @@ export function TaskDrawer({
 
     const unsubscribeProjects = subscribeToProjects(user.uid, setProjects);
     const unsubscribeSections = subscribeToProjectSections(user.uid, setSections);
+    const unsubscribeNotes = subscribeToNotes(user.uid, (nextNotes) =>
+      setNotes(nextNotes.filter((note) => !note.deletedAt))
+    );
     return () => {
       unsubscribeProjects();
       unsubscribeSections();
+      unsubscribeNotes();
     };
   }, [isOpen]);
 
@@ -405,6 +411,26 @@ export function TaskDrawer({
               value={draft.notes}
               onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))}
             />
+          </label>
+
+          <label className="field-stack">
+            <span>Linked EasyNote</span>
+            <select
+              value={draft.linkedNoteId || ""}
+              onChange={(event) =>
+                setDraft((current) => ({
+                  ...current,
+                  linkedNoteId: event.target.value || null,
+                }))
+              }
+            >
+              <option value="">No linked note</option>
+              {notes.slice(0, 80).map((note) => (
+                <option key={note.id} value={note.id}>
+                  {note.title || note.bodyText.slice(0, 48) || "Untitled note"}
+                </option>
+              ))}
+            </select>
           </label>
 
           <div className="drawer-actions-vnext">

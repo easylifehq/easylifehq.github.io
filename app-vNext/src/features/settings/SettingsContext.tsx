@@ -23,6 +23,7 @@ import {
   type RoutingSettings,
   type NotificationSettings,
   type AssistantSettings,
+  type StartupRoute,
 } from "@/lib/firestore/settings";
 
 const visualQaExperimentalFeatures: ExperimentalFeatureId[] = [
@@ -69,6 +70,7 @@ type SettingsContextValue = {
   isLoading: boolean;
   error: string;
   setThemeMode: (themeMode: ThemeMode) => Promise<void>;
+  setStartupRoute: (startupRoute: StartupRoute) => Promise<void>;
   toggleVisibleApp: (appId: VisibleAppId) => Promise<void>;
   isAppVisible: (appId: VisibleAppId) => boolean;
   toggleExperimentalFeature: (featureId: ExperimentalFeatureId) => Promise<void>;
@@ -130,6 +132,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   async function setThemeMode(themeMode: ThemeMode) {
     await persist({ ...settings, themeMode });
+  }
+
+  async function setStartupRoute(startupRoute: StartupRoute) {
+    await persist({ ...settings, startupRoute });
   }
 
   async function toggleVisibleApp(appId: VisibleAppId) {
@@ -194,6 +200,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       isLoading,
       error,
       setThemeMode,
+      setStartupRoute,
       toggleVisibleApp,
       toggleExperimentalFeature,
       setCalendarWakeTime,
