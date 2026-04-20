@@ -14,6 +14,7 @@ import { useAuth } from "@/features/auth/AuthContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { subscribeToApplications, type ApplicationRecord } from "@/lib/firestore/applications";
 import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
+import { useLastAppRoute } from "@/lib/mobile/appRouteMemory";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 
 const demoPath = [
@@ -56,6 +57,7 @@ export function HQPage() {
   const { events, taskBlocks, tasks, isLoading, error } = useEasyCalendar();
   const { isAppVisible, isExperimentalFeatureEnabled } = useSettings();
   const mobileRuntime = useMobileRuntime();
+  const lastAppRoute = useLastAppRoute();
   const showPlanningPreview = isExperimentalFeatureEnabled("dailyReview");
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [workoutSessions, setWorkoutSessions] = useState<WorkoutSessionRecord[]>([]);
@@ -151,6 +153,13 @@ export function HQPage() {
             <span className="settings-state-pill">Mobile</span>
             <strong>Install EasyLife on your phone</strong>
             <p>Add it to your home screen from Settings so it opens like an app.</p>
+          </Link>
+        ) : null}
+        {lastAppRoute ? (
+          <Link className="hq-resume-card" to={lastAppRoute.path}>
+            <span className="settings-state-pill">Resume</span>
+            <strong>Pick up in {lastAppRoute.label}</strong>
+            <p>Return to the last app screen you were using.</p>
           </Link>
         ) : null}
         <div className="onboarding-steps-grid">

@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.0.3
+
+### Added
+
+- Added mobile route memory so EasyLife remembers the last app screen used.
+- Added an EasyHQ resume card for returning to the last active app screen.
+
 ## 4.0.2
 
 ### Added

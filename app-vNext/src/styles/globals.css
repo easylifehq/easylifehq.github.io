@@ -3164,7 +3164,8 @@ button.calendar-detail-card:disabled {
   gap: 0.9rem;
 }
 
-.hq-install-card {
+.hq-install-card,
+.hq-resume-card {
   display: grid;
   gap: 0.45rem;
   margin-bottom: 1rem;
@@ -3177,11 +3178,20 @@ button.calendar-detail-card:disabled {
   box-shadow: var(--shell-control-shadow);
 }
 
-.hq-install-card strong {
+.hq-resume-card {
+  border-color: color-mix(in srgb, #7966d2 32%, var(--ui-border-subtle) 68%);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #7966d2 12%, transparent), transparent 62%),
+    var(--ui-bg-card-elevated, #ffffff);
+}
+
+.hq-install-card strong,
+.hq-resume-card strong {
   color: var(--ui-text-primary, var(--shell-heading-text));
 }
 
-.hq-install-card p {
+.hq-install-card p,
+.hq-resume-card p {
   margin: 0;
   color: var(--ui-text-secondary, var(--shell-page-text));
 }
