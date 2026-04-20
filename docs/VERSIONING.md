@@ -4,9 +4,9 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `4.0.3`
-- Next patch target: `4.0.4`
-- Next feature target: `4.1.0` Notification Foundation.
+- Current app version: `4.1.0`
+- Next patch target: `4.1.1`
+- Next feature target: `4.2.0` Mobile Polish and Reliability.
 
 ## What To Update
 

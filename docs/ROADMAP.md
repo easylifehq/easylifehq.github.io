@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.0.3`
-- Current planning target: `4.0.3` Mobile Resume Polish
-- Next feature target: `4.1.0` Notification Foundation
-- Product polish queue: `4.0.x` Mobile Install Follow-Up, `4.5.0` Firebase Rules Verification
+- App package version: `4.1.0`
+- Current planning target: `4.1.0` Notification Foundation
+- Next feature target: `4.2.0` Mobile Polish and Reliability
+- Product polish queue: `4.1.x` Notification Follow-Up, `4.5.0` Firebase Rules Verification
 - Future major target: `4.0.0` Mobile App Foundation and Notifications
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
 
@@ -393,20 +393,20 @@ Goal: Turn EasyLife into a real phone-first daily companion with app install, na
 
 ### 4.1.0 Notification Foundation
 
-Status: Planned
+Status: In Progress
 
 Goal: Add useful reminders without making EasyLife noisy or annoying.
 
-- Decide notification stack for mobile, including Capacitor local notifications for on-device reminders and Firebase Cloud Messaging only if remote push is truly needed.
-- Add notification permission onboarding with plain-language copy and a clear skip path.
-- Add Settings controls for enabling, disabling, and tuning notification categories.
+- Done: Decide notification stack for now: browser/PWA local notification controls first, with Capacitor local notifications later if native wrapping becomes necessary.
+- Done: Add notification permission onboarding with plain-language copy and a clear skip path.
+- Done: Add Settings controls for enabling, disabling, and tuning notification categories.
 - Add task deadline reminders.
 - Add calendar work-block reminders.
 - Add daily planning or wake-up reminders based on the user wakeup/planning settings.
 - Add workout reminders only if the user enables them.
-- Add quiet-hours settings so notifications do not fire during unwanted times.
-- Add test notification action in Settings.
-- Add notification fallback states when permissions are denied, unavailable, or revoked.
+- Done: Add quiet-hours settings so notifications do not fire during unwanted times.
+- Done: Add test notification action in Settings.
+- Done: Add notification fallback states when permissions are denied, unavailable, or revoked.
 - Keep notification scheduling deterministic and user-controlled; no surprise AI-triggered notifications.
 - Add QA for permission prompts, scheduling, cancellation, duplicate prevention, and notification tap behavior.
 

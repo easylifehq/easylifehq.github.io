@@ -66,6 +66,17 @@ export type RoutingSettings = {
   preserveSourceContext: boolean;
 };
 
+export type NotificationSettings = {
+  enabled: boolean;
+  taskDeadlines: boolean;
+  calendarBlocks: boolean;
+  dailyPlanning: boolean;
+  workouts: boolean;
+  quietHoursEnabled: boolean;
+  quietHoursStart: string;
+  quietHoursEnd: string;
+};
+
 export type UserShellSettings = {
   themeMode: ThemeMode;
   visibleApps: VisibleAppId[];
@@ -76,6 +87,7 @@ export type UserShellSettings = {
   easyWorkout: EasyWorkoutSettings;
   easyCalendar: EasyCalendarSettings;
   routing: RoutingSettings;
+  notifications: NotificationSettings;
 };
 
 export const defaultShellSettings: UserShellSettings = {
@@ -113,6 +125,16 @@ export const defaultShellSettings: UserShellSettings = {
     projectRoutingDefault: "ask",
     pipelineRoutingDefault: "ask",
     preserveSourceContext: true,
+  },
+  notifications: {
+    enabled: false,
+    taskDeadlines: true,
+    calendarBlocks: true,
+    dailyPlanning: false,
+    workouts: false,
+    quietHoursEnabled: true,
+    quietHoursStart: "22:00",
+    quietHoursEnd: "07:00",
   },
 };
 
@@ -209,6 +231,7 @@ export function normalizeShellSettings(data: DocumentData | undefined): UserShel
   const easyWorkoutData = data?.easyWorkout || {};
   const easyCalendarData = data?.easyCalendar || {};
   const routingData = data?.routing || {};
+  const notificationsData = data?.notifications || {};
 
   return {
     themeMode: normalizeThemeMode(data?.themeMode),
@@ -297,6 +320,34 @@ export function normalizeShellSettings(data: DocumentData | undefined): UserShel
         defaultShellSettings.routing.preserveSourceContext
       ),
     },
+    notifications: {
+      enabled: normalizeBoolean(notificationsData.enabled, defaultShellSettings.notifications.enabled),
+      taskDeadlines: normalizeBoolean(
+        notificationsData.taskDeadlines,
+        defaultShellSettings.notifications.taskDeadlines
+      ),
+      calendarBlocks: normalizeBoolean(
+        notificationsData.calendarBlocks,
+        defaultShellSettings.notifications.calendarBlocks
+      ),
+      dailyPlanning: normalizeBoolean(
+        notificationsData.dailyPlanning,
+        defaultShellSettings.notifications.dailyPlanning
+      ),
+      workouts: normalizeBoolean(notificationsData.workouts, defaultShellSettings.notifications.workouts),
+      quietHoursEnabled: normalizeBoolean(
+        notificationsData.quietHoursEnabled,
+        defaultShellSettings.notifications.quietHoursEnabled
+      ),
+      quietHoursStart: normalizeTimeInput(
+        notificationsData.quietHoursStart,
+        defaultShellSettings.notifications.quietHoursStart
+      ),
+      quietHoursEnd: normalizeTimeInput(
+        notificationsData.quietHoursEnd,
+        defaultShellSettings.notifications.quietHoursEnd
+      ),
+    },
   };
 }
 
@@ -329,6 +380,7 @@ export async function saveShellSettings(userId: string, settings: UserShellSetti
       easyWorkout: settings.easyWorkout,
       easyCalendar: settings.easyCalendar,
       routing: settings.routing,
+      notifications: settings.notifications,
       updatedAt: serverTimestamp(),
     },
     { merge: true }

@@ -19,6 +19,12 @@ import { subscribeToWorkoutExercises } from "@/lib/firestore/workoutExercises";
 import { subscribeToWorkoutRoutines } from "@/lib/firestore/workoutRoutines";
 import { subscribeToWorkoutSessions } from "@/lib/firestore/workoutSessions";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
+import {
+  getNotificationPermission,
+  requestNotificationPermission,
+  sendTestNotification,
+  type NotificationPermissionState,
+} from "@/lib/mobile/notifications";
 import type {
   ExperimentalFeatureId,
   ThemeMode,
@@ -239,6 +245,7 @@ type SettingsSectionId =
   | "page-settings"
   | "data"
   | "install"
+  | "notifications"
   | "experiments"
   | "account";
 
@@ -283,6 +290,12 @@ const settingsSections: Array<{
     label: "Install",
     eyebrow: "Home Screen",
     description: "Add EasyLife to your phone home screen for faster daily use.",
+  },
+  {
+    id: "notifications",
+    label: "Notifications",
+    eyebrow: "Reminders",
+    description: "Control reminder permission, categories, quiet hours, and test alerts.",
   },
   {
     id: "experiments",
@@ -461,6 +474,10 @@ export function SettingsPage() {
   const [dataError, setDataError] = useState("");
   const [dataMessage, setDataMessage] = useState("");
   const [installMessage, setInstallMessage] = useState("");
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermissionState>(() =>
+    typeof window === "undefined" ? "unsupported" : getNotificationPermission()
+  );
+  const [notificationMessage, setNotificationMessage] = useState("");
   const mobileRuntime = useMobileRuntime();
   const {
     settings,
@@ -477,6 +494,7 @@ export function SettingsPage() {
     updateEasyWorkoutSettings,
     updateEasyCalendarSettings,
     updateRoutingSettings,
+    updateNotificationSettings,
   } = useSettings();
 
   const enabledApps = appVisibilityOptions.filter((app) => isAppVisible(app.id));
@@ -606,6 +624,34 @@ export function SettingsPage() {
       .then(() => setInstallMessage("EasyLife link copied. Open it in Safari, then choose Add to Home Screen."));
   }
 
+  async function handleRequestNotifications() {
+    const nextPermission = await requestNotificationPermission();
+    setNotificationPermission(nextPermission);
+
+    if (nextPermission === "granted") {
+      await updateNotificationSettings({ enabled: true });
+      setNotificationMessage("Notifications are enabled. Use the category switches below to choose what can remind you.");
+      return;
+    }
+
+    if (nextPermission === "denied") {
+      await updateNotificationSettings({ enabled: false });
+      setNotificationMessage("Notifications are blocked for this browser. Change the browser or iPhone site settings to allow them.");
+      return;
+    }
+
+    setNotificationMessage("This browser does not support web notifications here.");
+  }
+
+  function handleSendTestNotification() {
+    const sent = sendTestNotification();
+    setNotificationMessage(
+      sent
+        ? "Test notification sent."
+        : "Allow notifications first, then try the test again."
+    );
+  }
+
   return (
     <main className="page-wrap app-theme app-theme-settings settings-page">
       {error ? <p className="error-copy">{error}</p> : null}
@@ -630,6 +676,11 @@ export function SettingsPage() {
             <span>Mobile</span>
             <strong>{mobileRuntime.runtimeLabel}</strong>
             <p>{mobileRuntime.connectionLabel}</p>
+          </article>
+          <article className="settings-status-card">
+            <span>Reminders</span>
+            <strong>{settings.notifications.enabled ? "On" : "Off"}</strong>
+            <p>{notificationPermission}</p>
           </article>
           <article className="settings-status-card">
             <span>Experimental</span>
@@ -1170,6 +1221,144 @@ export function SettingsPage() {
               <strong>App Store readiness can still happen</strong>
               <p>This home-screen install path keeps daily use fast while TestFlight and store setup stay optional.</p>
             </article>
+          </div>
+        </PageSection>
+        ) : null}
+
+        {activeSection === "notifications" ? (
+        <PageSection
+          eyebrow="Reminders"
+          title="Notification foundation"
+          description="Start with permission and category controls. EasyLife will keep reminders reviewable and user-controlled."
+        >
+          <div id="notifications" className="settings-anchor" />
+          {notificationMessage ? <div className="calendar-info-card">{notificationMessage}</div> : null}
+
+          <div className="settings-notification-hero">
+            <article>
+              <span>Permission</span>
+              <strong>{notificationPermission}</strong>
+              <p>Browsers and iPhones require permission before EasyLife can send reminders.</p>
+            </article>
+            <article>
+              <span>Reminder categories</span>
+              <strong>{settings.notifications.enabled ? "Enabled" : "Paused"}</strong>
+              <p>Category switches prepare reminder types without scheduling surprise alerts yet.</p>
+            </article>
+          </div>
+
+          <div className="settings-data-actions">
+            <button type="button" className="primary-button" onClick={() => void handleRequestNotifications()}>
+              Allow notifications
+            </button>
+            <button type="button" className="button-secondary" onClick={handleSendTestNotification}>
+              Send test notification
+            </button>
+          </div>
+
+          <div className="settings-toggle-list">
+            <label className={`settings-toggle-row${settings.notifications.enabled ? " active" : ""}`}>
+              <div>
+                <span className="settings-card-topline">
+                  <span>Master switch</span>
+                  <span className="settings-state-pill">{settings.notifications.enabled ? "On" : "Off"}</span>
+                </span>
+                <strong>Use EasyLife reminders</strong>
+                <p>Turns reminder categories on or off without changing your saved category choices.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.notifications.enabled}
+                onChange={(event) => void updateNotificationSettings({ enabled: event.target.checked })}
+              />
+            </label>
+            <label className={`settings-toggle-row${settings.notifications.taskDeadlines ? " active" : ""}`}>
+              <div>
+                <span className="settings-card-topline">
+                  <span>EasyList</span>
+                  <span className="settings-state-pill">Tasks</span>
+                </span>
+                <strong>Task deadline reminders</strong>
+                <p>Prepare reminders for tasks with due dates or deadlines.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.notifications.taskDeadlines}
+                onChange={(event) => void updateNotificationSettings({ taskDeadlines: event.target.checked })}
+              />
+            </label>
+            <label className={`settings-toggle-row${settings.notifications.calendarBlocks ? " active" : ""}`}>
+              <div>
+                <span className="settings-card-topline">
+                  <span>EasyCalendar</span>
+                  <span className="settings-state-pill">Blocks</span>
+                </span>
+                <strong>Calendar work-block reminders</strong>
+                <p>Prepare reminders for scheduled work blocks and fixed events.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.notifications.calendarBlocks}
+                onChange={(event) => void updateNotificationSettings({ calendarBlocks: event.target.checked })}
+              />
+            </label>
+            <label className={`settings-toggle-row${settings.notifications.dailyPlanning ? " active" : ""}`}>
+              <div>
+                <span className="settings-card-topline">
+                  <span>Planning</span>
+                  <span className="settings-state-pill">Daily</span>
+                </span>
+                <strong>Daily planning reminder</strong>
+                <p>Prepare a future reminder for wakeup-time planning.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.notifications.dailyPlanning}
+                onChange={(event) => void updateNotificationSettings({ dailyPlanning: event.target.checked })}
+              />
+            </label>
+            <label className={`settings-toggle-row${settings.notifications.workouts ? " active" : ""}`}>
+              <div>
+                <span className="settings-card-topline">
+                  <span>EasyWorkout</span>
+                  <span className="settings-state-pill">Optional</span>
+                </span>
+                <strong>Workout reminders</strong>
+                <p>Prepare workout reminders only when you explicitly want them.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.notifications.workouts}
+                onChange={(event) => void updateNotificationSettings({ workouts: event.target.checked })}
+              />
+            </label>
+          </div>
+
+          <div className="settings-notification-quiet">
+            <label className="settings-inline-check">
+              <input
+                type="checkbox"
+                checked={settings.notifications.quietHoursEnabled}
+                onChange={(event) => void updateNotificationSettings({ quietHoursEnabled: event.target.checked })}
+              />
+              Use quiet hours
+            </label>
+            <label className="field-stack">
+              <span>Quiet hours start</span>
+              <input
+                type="time"
+                value={settings.notifications.quietHoursStart}
+                onChange={(event) => void updateNotificationSettings({ quietHoursStart: event.target.value })}
+              />
+            </label>
+            <label className="field-stack">
+              <span>Quiet hours end</span>
+              <input
+                type="time"
+                value={settings.notifications.quietHoursEnd}
+                onChange={(event) => void updateNotificationSettings({ quietHoursEnd: event.target.value })}
+              />
+            </label>
           </div>
         </PageSection>
         ) : null}

@@ -34,6 +34,8 @@ EasyLife `4.0.0` starts with the path that helps fastest: installable iPhone hom
 - Confirm EasyHQ only shows the install card while running in the browser.
 - Confirm EasyHQ shows a resume card after visiting another app screen.
 - Confirm Settings shows Browser vs Home screen app and Online vs Offline status.
+- Confirm Settings can request notification permission and send a test notification where the browser supports it.
+- Confirm notification categories and quiet hours save correctly.
 - Sign in, sign out, and relaunch.
 - Create and edit a task.
 - Open and edit a note.

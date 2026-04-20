@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.1.0
+
+### Added
+
+- Added notification preferences for task deadlines, calendar blocks, daily planning, workouts, and quiet hours.
+- Added notification permission onboarding and a test notification action in Settings.
+- Added browser notification support helpers for the mobile/PWA foundation.
+
 ## 4.0.3
 
 ### Added

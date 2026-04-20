@@ -21,6 +21,7 @@ import {
   type EasyNotesSettings,
   type EasyWorkoutSettings,
   type RoutingSettings,
+  type NotificationSettings,
 } from "@/lib/firestore/settings";
 
 const visualQaExperimentalFeatures: ExperimentalFeatureId[] = [
@@ -77,6 +78,7 @@ type SettingsContextValue = {
   updateEasyWorkoutSettings: (nextSettings: Partial<EasyWorkoutSettings>) => Promise<void>;
   updateEasyCalendarSettings: (nextSettings: Partial<EasyCalendarSettings>) => Promise<void>;
   updateRoutingSettings: (nextSettings: Partial<RoutingSettings>) => Promise<void>;
+  updateNotificationSettings: (nextSettings: Partial<NotificationSettings>) => Promise<void>;
 };
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
@@ -176,6 +178,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     await persist({ ...settings, routing: { ...settings.routing, ...nextSettings } });
   }
 
+  async function updateNotificationSettings(nextSettings: Partial<NotificationSettings>) {
+    await persist({ ...settings, notifications: { ...settings.notifications, ...nextSettings } });
+  }
+
   const value = useMemo(
     () => ({
       settings,
@@ -190,6 +196,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       updateEasyWorkoutSettings,
       updateEasyCalendarSettings,
       updateRoutingSettings,
+      updateNotificationSettings,
       isAppVisible: (appId: VisibleAppId) => settings.visibleApps.includes(appId),
       isExperimentalFeatureEnabled: (featureId: ExperimentalFeatureId) =>
         settings.experimentalFeatures.includes(featureId),
