@@ -245,6 +245,7 @@ type SettingsSectionId =
   | "page-settings"
   | "data"
   | "install"
+  | "distribution"
   | "notifications"
   | "experiments"
   | "account";
@@ -290,6 +291,12 @@ const settingsSections: Array<{
     label: "Install",
     eyebrow: "Home Screen",
     description: "Add EasyLife to your phone home screen for faster daily use.",
+  },
+  {
+    id: "distribution",
+    label: "Share",
+    eyebrow: "Distribution",
+    description: "Prep the app for friends, TestFlight, stores, support, and rollback.",
   },
   {
     id: "notifications",
@@ -364,6 +371,50 @@ const routingOptions: Array<{ value: RoutingDefault; label: string }> = [
   { value: "projects", label: "Prefer EasyProjects" },
   { value: "pipeline", label: "Prefer EasyPipeline" },
   { value: "stay", label: "Keep in current app" },
+];
+
+const distributionChecklist: Array<{
+  label: string;
+  title: string;
+  status: "Ready" | "Next" | "Later";
+  description: string;
+}> = [
+  {
+    label: "First share path",
+    title: "Home-screen PWA link",
+    status: "Ready",
+    description: "Best for you and friends right now: open the site in Safari, then Add to Home Screen.",
+  },
+  {
+    label: "iPhone beta path",
+    title: "TestFlight later",
+    status: "Next",
+    description: "Use this when native wrapping, signing, and Apple developer setup are worth the extra ceremony.",
+  },
+  {
+    label: "Store metadata",
+    title: "Name, subtitle, screenshots, privacy, and support",
+    status: "Next",
+    description: "These need to be prepared before any App Store or Play Store submission.",
+  },
+  {
+    label: "Safety net",
+    title: "Rollback plan",
+    status: "Ready",
+    description: "Keep the previous stable release available in git so a bad deploy can be reverted quickly.",
+  },
+  {
+    label: "Support",
+    title: "Bug and login help path",
+    status: "Ready",
+    description: "The footer feedback link and Settings export tools give early testers a clear support route.",
+  },
+  {
+    label: "Native builds",
+    title: "Capacitor iOS and Android projects",
+    status: "Later",
+    description: "Add these when home-screen install is not enough for notifications, distribution, or store review.",
+  },
 ];
 
 type DataCollections = {
@@ -1222,6 +1273,69 @@ export function SettingsPage() {
               <p>This home-screen install path keeps daily use fast while TestFlight and store setup stay optional.</p>
             </article>
           </div>
+        </PageSection>
+        ) : null}
+
+        {activeSection === "distribution" ? (
+        <PageSection
+          eyebrow="Distribution"
+          title="Share-ready checklist"
+          description="Use this before sending EasyLife to friends, TestFlight, or a store review."
+        >
+          <div id="distribution" className="settings-anchor" />
+          <div className="settings-install-status">
+            <article>
+              <span>Best current path</span>
+              <strong>iPhone home-screen install</strong>
+              <p>Share the website link, then have testers add it from Safari.</p>
+            </article>
+            <article>
+              <span>App version</span>
+              <strong>{APP_VERSION}</strong>
+              <p>Use this version in release notes, tester messages, and rollback notes.</p>
+            </article>
+          </div>
+
+          <div className="settings-data-actions">
+            <a className="primary-button" href="/app/settings?section=install">
+              Open install guide
+            </a>
+            <a className="button-secondary" href="/app/settings?section=data">
+              Open export tools
+            </a>
+          </div>
+
+          <div className="settings-review-grid">
+            {distributionChecklist.map((item) => (
+              <article key={item.title} className="settings-review-card">
+                <span className="settings-card-topline">
+                  <span>{item.label}</span>
+                  <span className="settings-state-pill">{item.status}</span>
+                </span>
+                <strong>{item.title}</strong>
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
+
+          <ol className="settings-install-steps">
+            <li>
+              <span>1</span>
+              <p>Run one final mobile QA pass on iPhone before sharing a link.</p>
+            </li>
+            <li>
+              <span>2</span>
+              <p>Send the site link with the Safari Add to Home Screen instructions.</p>
+            </li>
+            <li>
+              <span>3</span>
+              <p>Ask testers to check login, tasks, notes, calendar, workout, settings, export, and logout.</p>
+            </li>
+            <li>
+              <span>4</span>
+              <p>If a release feels wrong, roll back to the previous stable git commit and rebuild.</p>
+            </li>
+          </ol>
         </PageSection>
         ) : null}
 

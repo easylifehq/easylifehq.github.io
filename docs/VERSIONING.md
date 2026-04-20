@@ -4,9 +4,9 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `4.2.0`
-- Next patch target: `4.2.1`
-- Next feature target: `4.3.0` Mobile Distribution Prep.
+- Current app version: `4.3.0`
+- Next patch target: `4.3.1`
+- Next feature target: `4.4.0` AI Assistant Foundation.
 
 ## What To Update
 

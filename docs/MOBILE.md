@@ -27,6 +27,15 @@ EasyLife `4.0.0` starts with the path that helps fastest: installable iPhone hom
 - Prepare privacy copy, screenshots, support URL, and review notes.
 - Use TestFlight before any public App Store submission.
 
+## Sharing Checklist
+
+1. Confirm the version in Settings matches the release being shared.
+2. Open Settings, Distribution and review the share-ready checklist.
+3. Open Settings, Install and confirm the iPhone Add to Home Screen path still makes sense.
+4. Open Settings, Data and confirm export tools work before a wider test.
+5. Send testers the site link with Safari Add to Home Screen instructions.
+6. Keep the previous stable git commit available as the rollback point.
+
 ## QA Checklist
 
 - Install from Safari on iPhone.
@@ -47,6 +56,6 @@ EasyLife `4.0.0` starts with the path that helps fastest: installable iPhone hom
 - Open and edit a note.
 - Add or edit a calendar item.
 - Start and save a workout.
-- Open Settings and data export.
+- Open Settings, Distribution, Install, and Data export.
 - Rotate the device and confirm portrait remains comfortable.
 - Try weak signal or airplane mode and confirm the app fails gracefully.

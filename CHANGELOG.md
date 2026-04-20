@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.3.0
+
+### Added
+
+- Added a Settings distribution checklist for sharing EasyLife with friends, TestFlight prep, support, privacy, and rollback readiness.
+- Added direct Settings links from Distribution to the install guide and data export tools.
+- Added mobile sharing QA notes for tester handoff, release version checks, and rollback practice.
+
 ## 4.2.0
 
 ### Added

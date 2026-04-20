@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.2.0`
-- Current planning target: `4.2.0` Mobile Polish and Reliability
-- Next feature target: `4.3.0` Mobile Distribution Prep
+- App package version: `4.3.0`
+- Current planning target: `4.3.0` Mobile Distribution Prep
+- Next feature target: `4.4.0` AI Assistant Foundation
 - Product polish queue: `4.1.x` Notification Follow-Up, `4.5.0` Firebase Rules Verification
 - Future major target: `4.0.0` Mobile App Foundation and Notifications
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
@@ -430,18 +430,17 @@ Goal: Make the mobile app feel genuinely comfortable to use every day.
 
 ### 4.3.0 Mobile Distribution Prep
 
-Status: Planned
+Status: Done
 
 Goal: Prepare the mobile app for sharing beyond local testing.
 
-- Decide whether the first distribution path is TestFlight, Android internal testing, direct APK, or both stores.
-- Prepare app metadata: name, subtitle, description, keywords, support URL, privacy URL, screenshots, and category.
-- Document privacy posture for stored data, Firebase usage, notifications, exports, and AI features.
-- Prepare app signing, build numbers, release notes, and platform-specific versioning.
-- Add production build checklist for web, Android, and iOS outputs.
-- Add rollback plan for bad mobile releases.
-- Add user-facing support path for login problems, sync issues, notification issues, and data export questions.
-- Run final mobile QA before any external install link is shared.
+- Done: Keep the first distribution path as the iPhone home-screen PWA link for owner and friend testing.
+- Done: Add a Settings Distribution checklist for sharing, TestFlight readiness, support, export, rollback, and native build timing.
+- Done: Add direct Settings links from Distribution to install guidance and data export tools.
+- Done: Document that TestFlight/App Store work stays next until native wrapping, signing, screenshots, privacy copy, and metadata are ready.
+- Done: Add a practical rollback path: return to the previous stable git commit, rebuild, and redeploy.
+- Done: Add tester handoff QA notes before any external install link is shared.
+- Done: Keep user-facing support tied to the footer feedback link plus Settings data export tools.
 
 ### 4.4.0 AI Assistant Foundation
 
