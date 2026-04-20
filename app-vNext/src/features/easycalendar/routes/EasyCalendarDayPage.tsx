@@ -249,11 +249,14 @@ export function EasyCalendarDayPage() {
 
         <div className="calendar-day-surface">
         <div className="calendar-hour-grid">
-          {hourlySlots.map((slot) => {
+          {hourlySlots.map((slot, slotIndex) => {
             const slotItems = items.filter((item) => {
               if (item.kind === "deadline") return false;
               if (!item.startAt || !item.endAt) return false;
-              return item.startAt < slot.endAt && item.endAt > slot.startAt;
+              const startsInSlot = item.startAt >= slot.startAt && item.startAt < slot.endAt;
+              const startsBeforeFirstVisibleSlot =
+                slotIndex === 0 && item.startAt < slot.startAt && item.endAt > slot.startAt;
+              return startsInSlot || startsBeforeFirstVisibleSlot;
             });
 
             return (
@@ -261,7 +264,11 @@ export function EasyCalendarDayPage() {
                 <time>{formatTimeLabel(slot.startAt)}</time>
                 <div className="calendar-hour-content">
                   {slotItems.length ? (
-                    slotItems.map((item) => (
+                    slotItems.map((item) => {
+                      const durationMinutes = Math.max(30, getDurationMinutes(item.startAt, item.endAt));
+                      const blockHeight = Math.min(220, Math.max(44, Math.round(durationMinutes * 0.9)));
+
+                      return (
                       <button
                         key={`${item.kind}-${item.id}-${slot.startAt.toISOString()}`}
                         type="button"
@@ -273,7 +280,12 @@ export function EasyCalendarDayPage() {
                           }
                         }}
                         className={`calendar-detail-card${item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
-                        style={{ "--calendar-block-color": item.color } as CSSProperties}
+                        style={
+                          {
+                            "--calendar-block-color": item.color,
+                            "--calendar-block-min-height": `${blockHeight}px`,
+                          } as CSSProperties
+                        }
                       >
                         <div>
                           <strong>{item.title}</strong>
@@ -281,7 +293,8 @@ export function EasyCalendarDayPage() {
                         </div>
                         <span>{item.badge}</span>
                       </button>
-                    ))
+                    );
+                    })
                   ) : (
                     <button
                       type="button"

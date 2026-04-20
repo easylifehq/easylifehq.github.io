@@ -3062,12 +3062,18 @@ textarea::placeholder {
 .calendar-block-vnext,
 .calendar-detail-card {
   --calendar-block-color: #7a8a9d;
+  --calendar-block-min-height: auto;
   position: relative;
   display: grid;
   gap: 0.25rem;
   padding: 0.58rem 0.7rem;
   border-radius: 8px;
   overflow: hidden;
+}
+
+.calendar-hour-content .calendar-detail-card {
+  min-height: var(--calendar-block-min-height);
+  align-content: start;
 }
 
 .calendar-block-vnext.compact {

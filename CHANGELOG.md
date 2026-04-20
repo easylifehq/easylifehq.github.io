@@ -6,6 +6,12 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.5.4
+
+### Changed
+
+- Updated EasyCalendar day view so longer events and task blocks render once at their starting hour with a taller block based on duration.
+
 ## 4.5.3
 
 ### Added
