@@ -152,88 +152,99 @@ const experimentalFeatureOptions: Array<{
   label: string;
   description: string;
   category: "HQ" | "Capture" | "Planning" | "Projects" | "Notes" | "Workout";
-  status: "Preview" | "Early" | "Polish";
+  status: "Active" | "Partial" | "Coming soon";
   showsUp: string;
+  recommendation: string;
 }> = [
   {
     id: "dailyReview",
     label: "Daily Review",
     description: "Adds a compact read on today's load, wins, open time, and follow-ups.",
     category: "HQ",
-    status: "Preview",
+    status: "Active",
     showsUp: "EasyHQ",
+    recommendation: "Keep if you like HQ showing a planning pulse.",
   },
   {
     id: "startHere",
     label: "Start Here",
     description: "Suggests the best app to open first based on tasks, follow-ups, calendar room, and workouts.",
     category: "HQ",
-    status: "Preview",
+    status: "Active",
     showsUp: "EasyHQ",
+    recommendation: "Keep if you want HQ to suggest where to begin.",
   },
   {
     id: "inboxCapture",
     label: "Inbox Capture",
-    description: "Adds a global capture button for saving messy thoughts before choosing where they belong.",
+    description: "Planned global capture button for saving messy thoughts before choosing where they belong.",
     category: "Capture",
-    status: "Early",
-    showsUp: "Every app",
+    status: "Coming soon",
+    showsUp: "No active surface yet",
+    recommendation: "Leave off until the global capture button is built.",
   },
   {
     id: "smartTaskEntry",
     label: "Smart Task Entry",
-    description: "Keeps faster task parsing and bulk-entry helpers available while they mature.",
+    description: "Legacy switch for task parsing work that is now mostly part of the standard Add Tasks flow.",
     category: "Planning",
-    status: "Polish",
+    status: "Partial",
     showsUp: "EasyList Add Tasks",
+    recommendation: "Can be retired soon unless we wire a specific smart-entry behavior to it.",
   },
   {
     id: "overdueTriage",
     label: "Overdue Triage",
     description: "Adds a recovery-oriented cleanup panel for overdue tasks instead of only flagging them.",
     category: "Planning",
-    status: "Early",
+    status: "Active",
     showsUp: "EasyList dashboard",
+    recommendation: "Keep if you want the overdue cleanup panel.",
   },
   {
     id: "projectPlanner",
     label: "Project Planner AI",
     description: "Drafts project sections, due dates, and linked task suggestions from a rough goal.",
     category: "Projects",
-    status: "Early",
+    status: "Active",
     showsUp: "EasyProjects",
+    recommendation: "Requires Assistant and draft creation to be on.",
   },
   {
     id: "notesFocusEditor",
     label: "Notes Focus Editor",
     description: "Uses a calmer writing surface with less chrome when editing a note.",
     category: "Notes",
-    status: "Polish",
+    status: "Active",
     showsUp: "EasyNotes editor",
+    recommendation: "Keep if you prefer the calmer note editor shell.",
   },
   {
     id: "notesProcessor",
     label: "Notes Processor",
     description: "Extracts likely tasks from notes for review before anything is created.",
     category: "Notes",
-    status: "Early",
+    status: "Active",
     showsUp: "EasyNotes editor",
+    recommendation: "Keep if you want note-to-task/project review tools.",
   },
   {
     id: "mobileAppSheet",
     label: "Mobile App Switcher Sheet",
     description: "Uses a more intentional mobile Apps menu with backdrop and sheet behavior.",
     category: "Capture",
-    status: "Polish",
+    status: "Active",
     showsUp: "Mobile header",
+    recommendation: "Keep for a better phone app switcher.",
   },
   {
     id: "gymMode",
     label: "Gym Mode",
     description: "Adds faster workout entry points, larger in-gym controls, and training stat previews.",
     category: "Workout",
-    status: "Preview",
+    status: "Active",
     showsUp: "EasyWorkout",
+    recommendation: "Promote to a normal workout feature after this pass.",
   },
 ];
 
@@ -1711,8 +1722,8 @@ export function SettingsPage() {
         <div className="settings-labs-summary">
           <article>
             <span>Recommended first</span>
-            <strong>Daily Review, Start Here, Inbox Capture</strong>
-            <p>These add the most value without changing how your core data works.</p>
+            <strong>Daily Review, Start Here, Mobile App Sheet</strong>
+            <p>Active labs have visible app surfaces today. Coming soon switches are parked until we build them.</p>
           </article>
           <article>
             <span>Easy to undo</span>
@@ -1752,6 +1763,7 @@ export function SettingsPage() {
                           </span>
                           <strong>{feature.label}</strong>
                           <p>{feature.description}</p>
+                          <p className="helper-copy">{feature.recommendation}</p>
                         </div>
                         <input
                           type="checkbox"

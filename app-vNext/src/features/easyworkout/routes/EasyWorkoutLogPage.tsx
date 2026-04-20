@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { defaultWorkoutExercises, useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
 import { useSettings } from "@/features/settings/SettingsContext";
@@ -93,7 +93,7 @@ export function EasyWorkoutLogPage() {
     [sessions]
   );
 
-  const isGymModeActive = gymMode && isExperimentalFeatureEnabled("gymMode");
+  const isGymModeActive = gymMode;
   const isFocusedWorkoutMode = workoutMode || isGymModeActive;
 
   useEffect(() => {
@@ -245,16 +245,37 @@ export function EasyWorkoutLogPage() {
   }
 
   return (
-    <PageSection
-      eyebrow={isFocusedWorkoutMode ? "Workout mode" : "Logging mode"}
-      title={isFocusedWorkoutMode ? "Start workout" : "Log workout"}
+      <PageSection
+        eyebrow={isFocusedWorkoutMode ? "Workout mode" : "Logging mode"}
+        title={isFocusedWorkoutMode ? "Start workout" : "Log workout"}
       description={
         isFocusedWorkoutMode
           ? "Date, notes, and compact exercise boxes. Everything else gets out of the way."
           : "Keep it moving, see the last weight you hit, and save the session without digging through old notes."
       }
-    >
-      {error ? <p className="error-copy">{error}</p> : null}
+      >
+        <div className="toolbar-row toolbar-row-compact">
+          <div className="pill-row">
+            <span className="info-pill">{isGymModeActive ? "Gym Mode active" : isFocusedWorkoutMode ? "Workout Mode active" : "Regular logger"}</span>
+            {isExperimentalFeatureEnabled("gymMode") ? <span className="info-pill">Gym extras on</span> : null}
+          </div>
+          <div className="pill-row">
+            {isGymModeActive ? (
+              <Link className="button-secondary compact-button" to="/app/easyworkout/log?workoutMode=1">
+                Use Workout Mode
+              </Link>
+            ) : (
+              <Link className="primary-button compact-button" to="/app/easyworkout/log?gymMode=1">
+                Gym Mode
+              </Link>
+            )}
+            <Link className="ghost-button compact-button" to="/app/easyworkout/log">
+              Regular Log
+            </Link>
+          </div>
+        </div>
+
+        {error ? <p className="error-copy">{error}</p> : null}
       <form className="task-composer" onSubmit={handleSaveSession}>
         {!isFocusedWorkoutMode ? (
         <div className="workout-quick-paste">

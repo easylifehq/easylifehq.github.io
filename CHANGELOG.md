@@ -15,6 +15,8 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 - Added linked task creation from EasyCalendar so exams, due dates, and events can create a connected EasyList item.
 - Added a Settings startup preference so `/app` and mobile home-screen launches can open HQ, last-used, EasyList, Calendar, Notes, or Workout.
 - Added optional EasyNote linking from EasyList task details.
+- Added honest Labs statuses and recommendations so active, partial, and coming-soon toggles are clearer.
+- Added a visible Gym Mode button on EasyWorkout dashboard and the workout logging page.
 
 ### Changed
 
@@ -22,6 +24,7 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 - Calendar event forms now use clearer wording for event kind, deadline area, due time, and linked task estimates.
 - Simplified EasyList task cards so the list shows more items and keeps extra detail inside the task drawer.
 - Changed the PWA theme color from green to a neutral shell color so iPhone browser chrome blends better across themes.
+- Changed Gym Mode so the main in-gym logger can be opened directly without requiring the Lab switch.
 
 ## 4.4.0
 

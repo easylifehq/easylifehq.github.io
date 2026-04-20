@@ -96,12 +96,10 @@ export function EasyWorkoutDashboardPage() {
             <strong>Build a routine</strong>
             <p>Set up your Push, Pull, Legs, or any custom split.</p>
           </Link>
-          {isExperimentalFeatureEnabled("gymMode") ? (
-            <Link className="hq-link-card gym-mode-card" to="/app/easyworkout/log?gymMode=1">
-              <strong>Activate Gym Mode</strong>
-              <p>Open the faster in-gym logger with larger controls and last-time suggestions.</p>
-            </Link>
-          ) : null}
+          <Link className="hq-link-card gym-mode-card" to="/app/easyworkout/log?gymMode=1">
+            <strong>Gym Mode</strong>
+            <p>Open the faster in-gym logger with larger controls and last-time suggestions.</p>
+          </Link>
         </div>
       </PageSection>
 
