@@ -247,6 +247,7 @@ type SettingsSectionId =
   | "install"
   | "distribution"
   | "notifications"
+  | "assistant"
   | "experiments"
   | "account";
 
@@ -303,6 +304,12 @@ const settingsSections: Array<{
     label: "Notifications",
     eyebrow: "Reminders",
     description: "Control reminder permission, categories, quiet hours, and test alerts.",
+  },
+  {
+    id: "assistant",
+    label: "Assistant",
+    eyebrow: "AI Controls",
+    description: "Set what AI can review, suggest, draft, and never do automatically.",
   },
   {
     id: "experiments",
@@ -414,6 +421,44 @@ const distributionChecklist: Array<{
     title: "Capacitor iOS and Android projects",
     status: "Later",
     description: "Add these when home-screen install is not enough for notifications, distribution, or store review.",
+  },
+];
+
+const assistantBoundaries: Array<{
+  label: string;
+  title: string;
+  status: "Allowed" | "Review" | "Blocked";
+  description: string;
+}> = [
+  {
+    label: "Planning",
+    title: "Summaries and next-step suggestions",
+    status: "Allowed",
+    description: "The assistant can help organize work into readable plans when the feature is enabled.",
+  },
+  {
+    label: "Creation",
+    title: "Drafts only until you approve",
+    status: "Review",
+    description: "Projects, tasks, and note-derived actions should stay review-first before anything is saved.",
+  },
+  {
+    label: "Automation",
+    title: "No surprise changes",
+    status: "Blocked",
+    description: "The assistant should not delete, archive, send, schedule, or notify without a clear user action.",
+  },
+  {
+    label: "Data",
+    title: "Scoped to your account",
+    status: "Review",
+    description: "AI review should use only the current signed-in user's EasyLife data and visible context.",
+  },
+  {
+    label: "Fallback",
+    title: "Manual path stays available",
+    status: "Allowed",
+    description: "If AI is unavailable, the app should explain what happened and keep the manual workflow usable.",
   },
 ];
 
@@ -546,6 +591,7 @@ export function SettingsPage() {
     updateEasyCalendarSettings,
     updateRoutingSettings,
     updateNotificationSettings,
+    updateAssistantSettings,
   } = useSettings();
 
   const enabledApps = appVisibilityOptions.filter((app) => isAppVisible(app.id));
@@ -1473,6 +1519,145 @@ export function SettingsPage() {
                 onChange={(event) => void updateNotificationSettings({ quietHoursEnd: event.target.value })}
               />
             </label>
+          </div>
+        </PageSection>
+        ) : null}
+
+        {activeSection === "assistant" ? (
+        <PageSection
+          eyebrow="AI Controls"
+          title="Assistant foundation"
+          description="EasyLife AI stays helpful, review-first, reversible, and scoped to your account."
+        >
+          <div id="assistant" className="settings-anchor" />
+          <div className="settings-notification-hero">
+            <article>
+              <span>Assistant</span>
+              <strong>{settings.assistant.enabled ? "Enabled" : "Paused"}</strong>
+              <p>
+                {settings.assistant.enabled
+                  ? "AI helpers can appear where you have enabled matching preview features."
+                  : "AI helpers stay hidden or inactive until you turn the assistant on."}
+              </p>
+            </article>
+            <article>
+              <span>Review rule</span>
+              <strong>{settings.assistant.requireReviewBeforeSave ? "Required" : "Manual caution"}</strong>
+              <p>Keep this on so AI suggestions become drafts before anything enters your real data.</p>
+            </article>
+          </div>
+
+          <div className="settings-toggle-list">
+            <label className={`settings-toggle-row${settings.assistant.enabled ? " active" : ""}`}>
+              <div>
+                <span className="settings-card-topline">
+                  <span>Master switch</span>
+                  <span className="settings-state-pill">{settings.assistant.enabled ? "On" : "Off"}</span>
+                </span>
+                <strong>Use EasyLife assistant helpers</strong>
+                <p>Turns assistant surfaces on or off without changing individual Labs switches.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.assistant.enabled}
+                onChange={(event) => void updateAssistantSettings({ enabled: event.target.checked })}
+              />
+            </label>
+
+            <label className={`settings-toggle-row${settings.assistant.allowDataReview ? " active" : ""}`}>
+              <div>
+                <span className="settings-card-topline">
+                  <span>Context</span>
+                  <span className="settings-state-pill">Private</span>
+                </span>
+                <strong>Allow current data review</strong>
+                <p>Allows assistant features to summarize selected EasyLife data from your account.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.assistant.allowDataReview}
+                onChange={(event) => void updateAssistantSettings({ allowDataReview: event.target.checked })}
+              />
+            </label>
+
+            <label className={`settings-toggle-row${settings.assistant.allowCrossAppSuggestions ? " active" : ""}`}>
+              <div>
+                <span className="settings-card-topline">
+                  <span>Routing</span>
+                  <span className="settings-state-pill">Suggestions</span>
+                </span>
+                <strong>Allow cross-app suggestions</strong>
+                <p>Lets AI suggest moving a thought into Tasks, Calendar, Projects, Pipeline, or Notes.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.assistant.allowCrossAppSuggestions}
+                onChange={(event) => void updateAssistantSettings({ allowCrossAppSuggestions: event.target.checked })}
+              />
+            </label>
+
+            <label className={`settings-toggle-row${settings.assistant.allowDraftCreation ? " active" : ""}`}>
+              <div>
+                <span className="settings-card-topline">
+                  <span>Drafts</span>
+                  <span className="settings-state-pill">Review first</span>
+                </span>
+                <strong>Allow draft creation</strong>
+                <p>Allows AI helpers to prepare draft tasks, project plans, or note actions for review.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.assistant.allowDraftCreation}
+                onChange={(event) => void updateAssistantSettings({ allowDraftCreation: event.target.checked })}
+              />
+            </label>
+
+            <label className={`settings-toggle-row${settings.assistant.requireReviewBeforeSave ? " active" : ""}`}>
+              <div>
+                <span className="settings-card-topline">
+                  <span>Safety</span>
+                  <span className="settings-state-pill">Required</span>
+                </span>
+                <strong>Require review before save</strong>
+                <p>AI output should stay editable and reversible before it changes your workspace.</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={settings.assistant.requireReviewBeforeSave}
+                onChange={(event) => void updateAssistantSettings({ requireReviewBeforeSave: event.target.checked })}
+              />
+            </label>
+          </div>
+
+          <div className="settings-notification-quiet">
+            <label className="field-stack">
+              <span>If AI is unavailable</span>
+              <select
+                value={settings.assistant.fallbackMode}
+                onChange={(event) =>
+                  void updateAssistantSettings({
+                    fallbackMode: event.target.value as "quiet" | "explain" | "manual",
+                  })
+                }
+              >
+                <option value="explain">Explain and keep manual controls</option>
+                <option value="manual">Open the manual workflow</option>
+                <option value="quiet">Stay quiet</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="settings-review-grid">
+            {assistantBoundaries.map((item) => (
+              <article key={item.title} className="settings-review-card">
+                <span className="settings-card-topline">
+                  <span>{item.label}</span>
+                  <span className="settings-state-pill">{item.status}</span>
+                </span>
+                <strong>{item.title}</strong>
+                <p>{item.description}</p>
+              </article>
+            ))}
           </div>
         </PageSection>
         ) : null}

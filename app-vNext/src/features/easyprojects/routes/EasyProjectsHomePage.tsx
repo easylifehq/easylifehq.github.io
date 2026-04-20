@@ -21,8 +21,11 @@ export function EasyProjectsHomePage() {
     error,
     isLoading,
   } = useEasyProjects();
-  const { isExperimentalFeatureEnabled } = useSettings();
-  const isProjectPlannerEnabled = isExperimentalFeatureEnabled("projectPlanner");
+  const { settings, isExperimentalFeatureEnabled } = useSettings();
+  const isProjectPlannerEnabled =
+    settings.assistant.enabled &&
+    settings.assistant.allowDraftCreation &&
+    isExperimentalFeatureEnabled("projectPlanner");
   const [editingProjectId, setEditingProjectId] = useState("");
   const [editingTitle, setEditingTitle] = useState("");
   const [editingDescription, setEditingDescription] = useState("");
@@ -43,6 +46,12 @@ export function EasyProjectsHomePage() {
     setIsPlanning(true);
     setPlannerMessage("");
 
+    if (!settings.assistant.enabled || !settings.assistant.allowDraftCreation) {
+      setPlannerMessage("Turn on Assistant and draft creation in Settings before using AI project planning.");
+      setIsPlanning(false);
+      return;
+    }
+
     try {
       const nextPlan = await requestProjectPlan({
         title: plannerTitle,
@@ -50,9 +59,19 @@ export function EasyProjectsHomePage() {
         targetDate: plannerTargetDate,
       });
       setAiPlan(nextPlan);
-      setPlannerMessage("Review the plan, then create it when it feels right.");
+      setPlannerMessage(
+        settings.assistant.requireReviewBeforeSave
+          ? "Review the plan, then create it when it feels right."
+          : "A draft plan is ready. Check it before adding it to your workspace."
+      );
     } catch (nextError) {
-      setPlannerMessage(nextError instanceof Error ? nextError.message : "AI project planning failed.");
+      setPlannerMessage(
+        settings.assistant.fallbackMode === "quiet"
+          ? "AI project planning is unavailable."
+          : nextError instanceof Error
+            ? nextError.message
+            : "AI project planning is unavailable. You can still create the project manually below."
+      );
     } finally {
       setIsPlanning(false);
     }
@@ -65,6 +84,10 @@ export function EasyProjectsHomePage() {
     setPlannerMessage("");
 
     try {
+      if (settings.assistant.requireReviewBeforeSave && !aiPlan.sections.length) {
+        throw new Error("Review a generated draft before creating the project.");
+      }
+
       const projectId = await addProject({
         title: plannerTitle.trim() || "AI planned project",
         description: [plannerDescription.trim(), aiPlan.summary.trim()].filter(Boolean).join("\n\n"),
@@ -154,7 +177,7 @@ export function EasyProjectsHomePage() {
           <PageSection
             eyebrow="Experimental"
             title="Plan a project from a rough idea"
-            description="Describe what you want to finish and EasyProjects will draft sections, due dates, and linked tasks for review."
+            description="Describe what you want to finish and EasyProjects will draft sections, due dates, and linked tasks for review before anything is saved."
           >
             <form className="project-ai-planner" onSubmit={handlePlanProject}>
               <div className="task-composer-grid">

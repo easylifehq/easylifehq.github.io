@@ -77,6 +77,15 @@ export type NotificationSettings = {
   quietHoursEnd: string;
 };
 
+export type AssistantSettings = {
+  enabled: boolean;
+  allowDataReview: boolean;
+  allowCrossAppSuggestions: boolean;
+  allowDraftCreation: boolean;
+  requireReviewBeforeSave: boolean;
+  fallbackMode: "quiet" | "explain" | "manual";
+};
+
 export type UserShellSettings = {
   themeMode: ThemeMode;
   visibleApps: VisibleAppId[];
@@ -88,6 +97,7 @@ export type UserShellSettings = {
   easyCalendar: EasyCalendarSettings;
   routing: RoutingSettings;
   notifications: NotificationSettings;
+  assistant: AssistantSettings;
 };
 
 export const defaultShellSettings: UserShellSettings = {
@@ -135,6 +145,14 @@ export const defaultShellSettings: UserShellSettings = {
     quietHoursEnabled: true,
     quietHoursStart: "22:00",
     quietHoursEnd: "07:00",
+  },
+  assistant: {
+    enabled: false,
+    allowDataReview: false,
+    allowCrossAppSuggestions: true,
+    allowDraftCreation: false,
+    requireReviewBeforeSave: true,
+    fallbackMode: "explain",
   },
 };
 
@@ -232,6 +250,7 @@ export function normalizeShellSettings(data: DocumentData | undefined): UserShel
   const easyCalendarData = data?.easyCalendar || {};
   const routingData = data?.routing || {};
   const notificationsData = data?.notifications || {};
+  const assistantData = data?.assistant || {};
 
   return {
     themeMode: normalizeThemeMode(data?.themeMode),
@@ -348,6 +367,30 @@ export function normalizeShellSettings(data: DocumentData | undefined): UserShel
         defaultShellSettings.notifications.quietHoursEnd
       ),
     },
+    assistant: {
+      enabled: normalizeBoolean(assistantData.enabled, defaultShellSettings.assistant.enabled),
+      allowDataReview: normalizeBoolean(
+        assistantData.allowDataReview,
+        defaultShellSettings.assistant.allowDataReview
+      ),
+      allowCrossAppSuggestions: normalizeBoolean(
+        assistantData.allowCrossAppSuggestions,
+        defaultShellSettings.assistant.allowCrossAppSuggestions
+      ),
+      allowDraftCreation: normalizeBoolean(
+        assistantData.allowDraftCreation,
+        defaultShellSettings.assistant.allowDraftCreation
+      ),
+      requireReviewBeforeSave: normalizeBoolean(
+        assistantData.requireReviewBeforeSave,
+        defaultShellSettings.assistant.requireReviewBeforeSave
+      ),
+      fallbackMode: normalizeStringUnion(
+        assistantData.fallbackMode,
+        ["quiet", "explain", "manual"],
+        defaultShellSettings.assistant.fallbackMode
+      ),
+    },
   };
 }
 
@@ -381,6 +424,7 @@ export async function saveShellSettings(userId: string, settings: UserShellSetti
       easyCalendar: settings.easyCalendar,
       routing: settings.routing,
       notifications: settings.notifications,
+      assistant: settings.assistant,
       updatedAt: serverTimestamp(),
     },
     { merge: true }

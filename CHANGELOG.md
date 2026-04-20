@@ -6,6 +6,19 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.4.0
+
+### Added
+
+- Added saved Assistant settings for enabling AI helpers, data review, cross-app suggestions, draft creation, review-before-save, and fallback behavior.
+- Added a Settings Assistant section that explains what AI can review, suggest, draft, and never change automatically.
+- Added assistant fallback controls for quiet, explanatory, and manual-workflow behavior.
+
+### Changed
+
+- Updated EasyProjects AI planning so the Project Planner requires both the Lab toggle and Assistant draft permissions.
+- Kept AI project planning review-first before creating project sections or linked tasks.
+
 ## 4.3.0
 
 ### Added

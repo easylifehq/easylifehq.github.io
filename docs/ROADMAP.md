@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.3.0`
-- Current planning target: `4.3.0` Mobile Distribution Prep
-- Next feature target: `4.4.0` AI Assistant Foundation
+- App package version: `4.4.0`
+- Current planning target: `4.4.0` AI Assistant Foundation
+- Next feature target: `4.5.0` Firebase Rules Verification
 - Product polish queue: `4.1.x` Notification Follow-Up, `4.5.0` Firebase Rules Verification
 - Future major target: `4.0.0` Mobile App Foundation and Notifications
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
@@ -444,15 +444,17 @@ Goal: Prepare the mobile app for sharing beyond local testing.
 
 ### 4.4.0 AI Assistant Foundation
 
-Status: Planned
+Status: Done
 
 Goal: Start the assistant foundation only after mobile, notifications, security, and daily-use reliability are solid.
 
-- Define what the assistant is allowed to see, suggest, and change.
-- Add user-facing AI controls and explanation in Settings.
-- Add better fallback states when AI is unavailable.
-- Keep all assistant actions review-first, reversible, and scoped to the user account.
-- Start with assistant planning and summarizing flows before allowing deeper automation.
+- Done: Define saved Assistant controls for data review, cross-app suggestions, draft creation, review-before-save, and fallback behavior.
+- Done: Add user-facing Assistant controls and boundaries in Settings.
+- Done: Explain that AI suggestions stay review-first and should not delete, archive, send, schedule, or notify without user action.
+- Done: Keep assistant scope tied to the signed-in user's EasyLife data.
+- Done: Add fallback modes for unavailable AI so manual workflows remain usable.
+- Done: Gate EasyProjects AI planning behind both the Lab toggle and Assistant draft permissions.
+- Done: Keep generated project plans review-first before creating sections or linked tasks.
 
 ### 4.5.0 Firebase Rules Verification
 
