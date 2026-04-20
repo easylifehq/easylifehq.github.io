@@ -5,9 +5,12 @@ import { CalendarEventDrawer } from "@/features/easycalendar/components/Calendar
 import { CalendarTaskBlockDrawer } from "@/features/easycalendar/components/CalendarTaskBlockDrawer";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import { useSettings } from "@/features/settings/SettingsContext";
+import type { CalendarEventType } from "@/lib/firestore/calendarEvents";
 import {
+  addMinutes,
   buildHourlySlots,
   buildPlanMyDaySuggestions,
+  combineDateAndTime,
   formatDuration,
   formatTimeLabel,
   getDurationMinutes,
@@ -18,7 +21,17 @@ import {
   getScheduledMinutesForDay,
   isSameDay,
   startOfDay,
+  toDateInputValue,
+  toTimeInputValue,
 } from "@/features/easycalendar/lib/calendarUtils";
+
+type QuickEventDraft = {
+  date: string;
+  startTime: string;
+  endTime: string;
+  title: string;
+  eventType: CalendarEventType;
+};
 
 export function EasyCalendarDayPage() {
   const {
@@ -28,12 +41,16 @@ export function EasyCalendarDayPage() {
     tasks,
     isLoading,
     error,
+    addEvent,
     deleteTaskBlock,
     scheduleTask,
   } = useEasyCalendar();
   const { settings } = useSettings();
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [quickEvent, setQuickEvent] = useState<QuickEventDraft | null>(null);
+  const [quickEventMessage, setQuickEventMessage] = useState("");
+  const [isSavingQuickEvent, setIsSavingQuickEvent] = useState(false);
   const [planMessage, setPlanMessage] = useState("");
   const [isPlanning, setIsPlanning] = useState(false);
   const today = startOfDay(new Date());
@@ -121,44 +138,90 @@ export function EasyCalendarDayPage() {
     }
   }
 
+  function openQuickEvent(slotStart: Date) {
+    const slotEnd = addMinutes(slotStart, settings.easyCalendar.defaultTaskBlockMinutes) || addMinutes(slotStart, 30) || slotStart;
+    setQuickEvent({
+      date: toDateInputValue(slotStart),
+      startTime: toTimeInputValue(slotStart),
+      endTime: toTimeInputValue(slotEnd),
+      title: "",
+      eventType: "appointment",
+    });
+    setQuickEventMessage("");
+  }
+
+  async function handleQuickEventSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!quickEvent) return;
+
+    const startAt = combineDateAndTime(quickEvent.date, quickEvent.startTime);
+    const endAt = combineDateAndTime(quickEvent.date, quickEvent.endTime);
+
+    if (!quickEvent.title.trim()) {
+      setQuickEventMessage("Name the event first.");
+      return;
+    }
+
+    if (!startAt || !endAt || endAt <= startAt) {
+      setQuickEventMessage("End time needs to be after the start.");
+      return;
+    }
+
+    setIsSavingQuickEvent(true);
+    try {
+      await addEvent({
+        title: quickEvent.title.trim(),
+        description: "",
+        itemKind: "event",
+        categoryId: null,
+        startAt,
+        endAt,
+        allDay: false,
+        isRecurring: false,
+        recurrenceRule: null,
+        eventType: quickEvent.eventType,
+      });
+      setQuickEvent(null);
+      setQuickEventMessage("");
+    } finally {
+      setIsSavingQuickEvent(false);
+    }
+  }
+
   return (
     <>
       <PageSection
         eyebrow="Day View"
         title={formatLongDate(today)}
-        description="Today's commitments and flexible work blocks, pulled live from Firestore."
+        description="Today, hour by hour."
       >
         {error ? <p className="error-copy">{error}</p> : null}
-        <div className="stats-grid">
-          <article className="stat-card-vnext">
-            <span>Fixed events</span>
-            <strong>{fixedEventCount}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Task blocks</span>
-            <strong>{taskBlockCount}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Planned time</span>
-            <strong>{formatDuration(scheduledMinutes)}</strong>
-          </article>
+        <div className="quiet-metrics-row" aria-label="Calendar snapshot">
+          <span>{fixedEventCount} event{fixedEventCount === 1 ? "" : "s"}</span>
+          <span>{taskBlockCount} task block{taskBlockCount === 1 ? "" : "s"}</span>
+          <span>{formatDuration(scheduledMinutes)} planned</span>
         </div>
       </PageSection>
 
       <PageSection
-        eyebrow="Plan My Day"
+        eyebrow="Calendar"
         title="Today timeline"
-        description="A first planning pass that looks for open windows and suggests work from EasyList."
       >
         {isLoading ? <p className="helper-copy">Loading today's schedule...</p> : null}
 
-        <div className="calendar-day-actions">
+        <div className="calendar-view-links calendar-view-links-sticky" aria-label="Calendar views">
+          <Link to="/app/easycalendar/day" className="view-button-vnext active">Day</Link>
+          <Link to="/app/easycalendar/week" className="view-button-vnext">Week</Link>
+          <Link to="/app/easycalendar/month" className="view-button-vnext">Month</Link>
+        </div>
+
+        <div className="calendar-day-actions calendar-command-bar">
           <div className="calendar-status-card">
             <strong>{openWindows.length} open window{openWindows.length === 1 ? "" : "s"}</strong>
             <p>
               {openWindows.length
-                ? `${formatDuration(openWindows.reduce((sum, window) => sum + window.minutes, 0))} still available today.`
-                : "Your day is already packed with commitments or scheduled work."}
+                ? `${formatDuration(openWindows.reduce((sum, window) => sum + window.minutes, 0))} available.`
+                : "No open windows left today."}
             </p>
           </div>
 
@@ -184,12 +247,7 @@ export function EasyCalendarDayPage() {
           </div>
         ) : null}
 
-        <div className="calendar-view-links" aria-label="Calendar views">
-          <Link to="/app/easycalendar/day" className="view-button-vnext active">Day</Link>
-          <Link to="/app/easycalendar/week" className="view-button-vnext">View week</Link>
-          <Link to="/app/easycalendar/month" className="view-button-vnext">View month</Link>
-        </div>
-
+        <div className="calendar-day-surface">
         <div className="calendar-hour-grid">
           {hourlySlots.map((slot) => {
             const slotItems = items.filter((item) => {
@@ -225,16 +283,23 @@ export function EasyCalendarDayPage() {
                       </button>
                     ))
                   ) : (
-                    <span className="calendar-empty-hour">Open</span>
+                    <button
+                      type="button"
+                      className="calendar-empty-hour calendar-empty-hour-button"
+                      onClick={() => openQuickEvent(slot.startAt)}
+                    >
+                      + Add
+                    </button>
                   )}
                 </div>
               </section>
             );
           })}
         </div>
+        </div>
 
-        <div className="calendar-deadline-stack">
-          <h3>Deadlines</h3>
+        <details className="advanced-disclosure calendar-deadline-stack">
+          <summary>Deadlines</summary>
           {items.filter((item) => item.kind === "deadline").length ? (
             items
               .filter((item) => item.kind === "deadline")
@@ -256,7 +321,7 @@ export function EasyCalendarDayPage() {
           ) : (
             <p className="helper-copy">No task deadlines today.</p>
           )}
-        </div>
+        </details>
       </PageSection>
 
       <CalendarTaskBlockDrawer
@@ -270,6 +335,95 @@ export function EasyCalendarDayPage() {
         isOpen={Boolean(selectedEvent)}
         onClose={() => setSelectedEventId(null)}
       />
+
+      {quickEvent ? (
+        <div className="drawer-backdrop open" role="presentation" onClick={() => setQuickEvent(null)}>
+          <aside
+            className="drawer-panel-vnext calendar-quick-create-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Quick add calendar event"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="drawer-header-vnext">
+              <div>
+                <p className="eyebrow">Quick add</p>
+                <h2>New event</h2>
+              </div>
+              <button type="button" className="ghost-button compact-button" onClick={() => setQuickEvent(null)}>
+                Close
+              </button>
+            </div>
+
+            <form className="task-composer" onSubmit={(event) => void handleQuickEventSubmit(event)}>
+              <label className="field-stack">
+                <span>Title</span>
+                <input
+                  autoFocus
+                  value={quickEvent.title}
+                  onChange={(event) => setQuickEvent((current) => current ? { ...current, title: event.target.value } : current)}
+                  placeholder="Class, practice, appointment..."
+                />
+              </label>
+
+              <div className="task-composer-grid">
+                <label className="field-stack">
+                  <span>Date</span>
+                  <input
+                    type="date"
+                    value={quickEvent.date}
+                    onChange={(event) => setQuickEvent((current) => current ? { ...current, date: event.target.value } : current)}
+                  />
+                </label>
+                <label className="field-stack">
+                  <span>Start</span>
+                  <input
+                    type="time"
+                    value={quickEvent.startTime}
+                    onChange={(event) => setQuickEvent((current) => current ? { ...current, startTime: event.target.value } : current)}
+                  />
+                </label>
+                <label className="field-stack">
+                  <span>End</span>
+                  <input
+                    type="time"
+                    value={quickEvent.endTime}
+                    onChange={(event) => setQuickEvent((current) => current ? { ...current, endTime: event.target.value } : current)}
+                  />
+                </label>
+                <label className="field-stack">
+                  <span>Kind</span>
+                  <select
+                    value={quickEvent.eventType}
+                    onChange={(event) =>
+                      setQuickEvent((current) =>
+                        current ? { ...current, eventType: event.target.value as CalendarEventType } : current
+                      )
+                    }
+                  >
+                    <option value="appointment">Appointment</option>
+                    <option value="class">Class</option>
+                    <option value="work">Work</option>
+                    <option value="personal">Personal</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+              </div>
+
+              {quickEventMessage ? <p className="error-copy">{quickEventMessage}</p> : null}
+
+              <div className="task-composer-actions">
+                <button type="button" className="ghost-button" onClick={() => setQuickEvent(null)}>
+                  Cancel
+                </button>
+                <button type="submit" className="primary-button" disabled={isSavingQuickEvent}>
+                  {isSavingQuickEvent ? "Adding..." : "Add event"}
+                </button>
+              </div>
+            </form>
+          </aside>
+        </div>
+      ) : null}
     </>
   );
 }

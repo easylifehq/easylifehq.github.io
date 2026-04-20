@@ -188,11 +188,8 @@ export function HQPage() {
         </div>
       </PageSection>
 
-      <PageSection
-        eyebrow="Demo Path"
-        title="Show this flow first"
-        description="A quick walkthrough for explaining the suite without opening every page."
-      >
+      <details className="advanced-disclosure">
+        <summary>Presentation flow</summary>
         <div className="hq-demo-path">
           {demoPath.map((step, index) => (
             <Link key={step.title} to={step.to} className="hq-demo-step">
@@ -205,7 +202,7 @@ export function HQPage() {
             </Link>
           ))}
         </div>
-      </PageSection>
+      </details>
 
       <div className="dashboard-grid">
         <PageSection
@@ -239,11 +236,8 @@ export function HQPage() {
           </div>
         </PageSection>
 
-        <PageSection
-          eyebrow="Reminders"
-          title="Notification preview"
-          description="Upcoming reminders EasyLife is allowed to prepare based on your Settings choices."
-        >
+        <details className="advanced-disclosure">
+          <summary>Reminder preview</summary>
           <div className="hq-list">
             {notificationPreview.length ? (
               notificationPreview.map((item) => (
@@ -263,7 +257,7 @@ export function HQPage() {
               </article>
             )}
           </div>
-        </PageSection>
+        </details>
 
         <PageSection
           eyebrow="Launch"
@@ -315,10 +309,8 @@ export function HQPage() {
       </div>
 
       {isExperimentalFeatureEnabled("dailyReview") ? (
-        <PageSection
-          eyebrow="Experimental"
-          title="Daily Review"
-        >
+        <details className="advanced-disclosure">
+          <summary>Daily review</summary>
           <div className="daily-review-grid">
             <article className="stat-card-vnext">
               <span>Due now</span>
@@ -379,7 +371,7 @@ export function HQPage() {
               </article>
             ) : null}
           </div>
-        </PageSection>
+        </details>
       ) : null}
 
       {showPlanningPreview ? (

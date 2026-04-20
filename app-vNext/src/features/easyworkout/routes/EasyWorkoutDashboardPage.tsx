@@ -60,55 +60,32 @@ export function EasyWorkoutDashboardPage() {
     <>
       <PageSection
         eyebrow="Lift Log"
-        title="Workout dashboard"
-        description="See your recent work, your best lifts, and jump back into a session fast."
+        title="EasyWorkout"
+        description="Start fast, log what happened, and leave the deeper tracking tucked away until you need it."
       >
         {error ? <p className="error-copy">{error}</p> : null}
-        <div className="stats-grid">
-          <article className="stat-card-vnext">
-            <span>Routines</span>
-            <strong>{routines.length}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Sessions logged</span>
-            <strong>{sessions.length}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>This week</span>
-            <strong>{weeklySessions.length}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Current streak</span>
-            <strong>{streak} day{streak === 1 ? "" : "s"}</strong>
-          </article>
+        <div className="deep-module-hero">
+          <Link className="primary-button deep-module-primary-action" to="/app/easyworkout/log?workoutMode=1">
+            <strong>Start workout</strong>
+          </Link>
+          <Link className="button-secondary deep-module-secondary-action" to="/app/easyworkout/routines">
+            Routines
+          </Link>
+          <Link className="ghost-button deep-module-secondary-action" to="/app/easyworkout/log">
+            Log old workout
+          </Link>
         </div>
 
-        <div className="hq-link-grid">
-          <Link className="hq-link-card hq-link-card-primary" to="/app/easyworkout/log">
-            <strong>Log from notes</strong>
-            <p>Use the regular logger when you are entering an older workout.</p>
-          </Link>
-          <Link className="hq-link-card hq-link-card-primary" to="/app/easyworkout/log?workoutMode=1">
-            <strong>Start workout</strong>
-            <p>Open five blank exercise boxes and start typing now.</p>
-          </Link>
-          <Link className="hq-link-card" to="/app/easyworkout/routines">
-            <strong>Build a routine</strong>
-            <p>Set up your Push, Pull, Legs, or any custom split.</p>
-          </Link>
-          <Link className="hq-link-card gym-mode-card" to="/app/easyworkout/log?gymMode=1">
-            <strong>Gym Mode</strong>
-            <p>Open the faster in-gym logger with larger controls and last-time suggestions.</p>
-          </Link>
+        <div className="quiet-metrics-row" aria-label="Workout snapshot">
+          <span>{sessions.length} sessions</span>
+          <span>{weeklySessions.length} this week</span>
+          <span>{streak} day{streak === 1 ? "" : "s"} active</span>
         </div>
       </PageSection>
 
       {isExperimentalFeatureEnabled("gymMode") ? (
-        <PageSection
-          eyebrow="Experimental"
-          title="Long-term training read"
-          description="A compact view of consistency, volume, and what you are hitting most."
-        >
+        <details className="advanced-disclosure">
+          <summary>Training insights</summary>
           <div className="stats-grid">
             <article className="stat-card-vnext">
               <span>Total volume</span>
@@ -135,7 +112,7 @@ export function EasyWorkoutDashboardPage() {
               </Link>
             ))}
           </div>
-        </PageSection>
+        </details>
       ) : null}
 
       <div className="dashboard-grid">

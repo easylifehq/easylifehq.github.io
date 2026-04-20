@@ -55,9 +55,12 @@ export function EasyPipelineDashboardPage() {
 
   return (
     <>
-      <PageSection eyebrow="Pipeline" title="Board">
+      <PageSection eyebrow="Pipeline" title="Applications">
         {error ? <p className="error-copy">{error}</p> : null}
-        {followUpsDue ? <p className="helper-copy">{followUpsDue} follow-up{followUpsDue === 1 ? "" : "s"} due.</p> : null}
+        <div className="quiet-metrics-row" aria-label="Pipeline snapshot">
+          <span>{applications.length} total</span>
+          <span>{followUpsDue} follow-up{followUpsDue === 1 ? "" : "s"} due</span>
+        </div>
       </PageSection>
 
       <PageSection eyebrow="Board" title="Status lanes">

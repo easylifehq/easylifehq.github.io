@@ -30,7 +30,7 @@ export function EasyWorkoutLogPage() {
   const routineId = searchParams.get("routineId");
   const gymMode = searchParams.get("gymMode") === "1";
   const workoutMode = searchParams.get("workoutMode") === "1" || searchParams.get("start") === "1";
-  const { isExperimentalFeatureEnabled, settings } = useSettings();
+  const { settings } = useSettings();
   const { routines, exercises, sessions, addSession, error } = useEasyWorkout();
   const [selectedRoutineId, setSelectedRoutineId] = useState(routineId || "");
   const [performedOn, setPerformedOn] = useState(new Date().toISOString().split("T")[0]);
@@ -271,10 +271,10 @@ export function EasyWorkoutLogPage() {
           : "Keep it moving, see the last weight you hit, and save the session without digging through old notes."
       }
       >
-        <div className="toolbar-row toolbar-row-compact">
-          <div className="pill-row">
-            <span className="info-pill">{isGymModeActive ? "Gym Mode active" : isFocusedWorkoutMode ? "Workout Mode active" : "Regular logger"}</span>
-            {isExperimentalFeatureEnabled("gymMode") ? <span className="info-pill">Gym extras on</span> : null}
+        <div className="toolbar-row toolbar-row-compact deep-module-toolbar">
+          <div>
+            <strong>{isGymModeActive ? "Gym Mode" : isFocusedWorkoutMode ? "Workout Mode" : "Logger"}</strong>
+            <p className="helper-copy">Only the essentials are up front. Extra tools stay tucked away.</p>
           </div>
           <div className="pill-row">
             {isGymModeActive ? (
@@ -295,23 +295,26 @@ export function EasyWorkoutLogPage() {
         {error ? <p className="error-copy">{error}</p> : null}
       <form className="task-composer" onSubmit={handleSaveSession}>
         {!isFocusedWorkoutMode ? (
-        <div className="workout-quick-paste">
-          <label className="field-stack">
-            <span>Import old workout notes</span>
-            <textarea
-              rows={4}
-              value={workoutPaste}
-              onChange={(event) => setWorkoutPaste(event.target.value)}
-              placeholder={"Bench press 8x135\nLat pulldown 10x110\nSquat 5x185"}
-            />
-          </label>
-          <div className="task-composer-actions">
-            <button type="button" className="button-secondary" onClick={parseWorkoutPaste} disabled={!workoutPaste.trim()}>
-              Turn into sets
-            </button>
-            <span className="helper-copy">For old workouts only. Use one line per exercise, like 8x135 or 8 reps at 135.</span>
+        <details className="advanced-disclosure workout-advanced-tools">
+          <summary>Import old workout notes</summary>
+          <div className="workout-quick-paste">
+            <label className="field-stack">
+              <span>Workout notes</span>
+              <textarea
+                rows={4}
+                value={workoutPaste}
+                onChange={(event) => setWorkoutPaste(event.target.value)}
+                placeholder={"Bench press 8x135\nLat pulldown 10x110\nSquat 5x185"}
+              />
+            </label>
+            <div className="task-composer-actions">
+              <button type="button" className="button-secondary" onClick={parseWorkoutPaste} disabled={!workoutPaste.trim()}>
+                Turn into sets
+              </button>
+              <span className="helper-copy">One line per exercise, like 8x135 or 8 reps at 135.</span>
+            </div>
           </div>
-        </div>
+        </details>
         ) : null}
 
         <div className={`task-composer-grid${isFocusedWorkoutMode ? " gym-mode-meta workout-mode-meta" : ""}`}>
@@ -351,10 +354,10 @@ export function EasyWorkoutLogPage() {
         </div>
 
         {isFocusedWorkoutMode ? (
-          <div className="workout-mode-quick-actions">
+          <div className="workout-mode-quick-actions deep-module-compact-actions">
             <div>
-              <strong>{exerciseLogs.length} exercise boxes ready</strong>
-              <p className="helper-copy">Start typing, add a few more, or clear empty boxes when the workout tightens up.</p>
+              <strong>{exerciseLogs.length} boxes ready</strong>
+              <p className="helper-copy">Type the lift. Save the sets. Keep moving.</p>
             </div>
             <div className="drawer-actions-right">
               <button type="button" className="button-secondary compact-button" onClick={() => addExerciseBoxes(3)}>
@@ -374,7 +377,7 @@ export function EasyWorkoutLogPage() {
               <article key={exercise.localId} className={`panel-section workout-exercise-card${isFocusedWorkoutMode ? " gym-exercise-card workout-mode-card" : ""}`}>
                 <div className="panel-header workout-exercise-header">
                   <p className="eyebrow">Exercise {exerciseIndex + 1}</p>
-                  <h2>{exercise.exerciseName || "Pick a lift"}</h2>
+                  <h2>{exercise.exerciseName || "Lift"}</h2>
                   {!isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper ? <p>
                     {previous
                       ? `Last time: ${previous.weight} lbs x ${previous.reps} on ${previous.performedOn}`

@@ -159,21 +159,14 @@ export function EasyNotesLibraryPage() {
                 Resume writing
               </Link>
             ) : null}
-            <button type="button" className="button-secondary" onClick={() => void handleCreateFolder()}>
-              New folder
-            </button>
-            <button type="button" className="button-secondary" onClick={() => void handleCleanup()}>
-              Clean up empty notes
-            </button>
-            <Link to="/app/easynotes/trash" className="button-secondary">
-              Recently deleted
-            </Link>
             <Link to="/app/easynotes/new" className="primary-button">
               Blank note
             </Link>
           </div>
         </div>
 
+        <details className="advanced-disclosure notes-advanced-tools">
+          <summary>Folders and cleanup</summary>
         <div className="notes-control-center">
           <label className="field-stack">
             <span>Folder</span>
@@ -239,6 +232,18 @@ export function EasyNotesLibraryPage() {
             </div>
           )}
         </div>
+          <div className="task-composer-actions">
+            <button type="button" className="button-secondary compact-button" onClick={() => void handleCreateFolder()}>
+              New folder
+            </button>
+            <button type="button" className="button-secondary compact-button" onClick={() => void handleCleanup()}>
+              Clean up empty notes
+            </button>
+            <Link to="/app/easynotes/trash" className="button-secondary compact-button">
+              Recently deleted
+            </Link>
+          </div>
+        </details>
 
         {error ? <p className="error-copy">{error}</p> : null}
         {cleanupMessage ? <p className="helper-copy">{cleanupMessage}</p> : null}

@@ -6,6 +6,16 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.5.3
+
+### Added
+
+- Added EasyCalendar quick-create from free hourly slots so tapping a blank hour opens a compact event form with the date and time prefilled.
+
+### Changed
+
+- Kept the deeper EasyCalendar interaction polish aligned with the cleaner calendar grid style from 4.5.0.
+
 ## 4.5.0
 
 ### Added
@@ -25,7 +35,12 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 - Calendar event forms now use clearer wording for event kind, deadline area, due time, and linked task estimates.
 - Simplified EasyList task cards so the list shows more items and keeps extra detail inside the task drawer.
 - Changed the PWA theme color from green to a neutral shell color so iPhone browser chrome blends better across themes.
+- Changed mobile browser chrome to follow the active theme after the app shell loads.
 - Changed Gym Mode so the main in-gym logger can be opened directly without requiring the Lab switch.
+- Simplified EasyWorkout so the default surface is start, log, and save, with imports and training analytics tucked behind quiet advanced controls.
+- Simplified high-traffic app surfaces across HQ, EasyCalendar, EasyNotes, and EasyPipeline so primary actions stay visible while previews, cleanup tools, and analytics sit behind calmer controls.
+- Restyled EasyCalendar day, week, and month views around cleaner grid surfaces, sticky view controls, compact event blocks, and quieter advanced tools.
+- Hid mobile runtime status noise from the main shell so users only see system details when functionality actually needs attention.
 - Improved routine exercise row layout so routine builders do not inherit the EasyList task-row grid.
 - Improved Gym Mode startup so it opens with the full focused exercise box count immediately.
 

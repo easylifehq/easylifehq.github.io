@@ -1,4 +1,5 @@
 import { useMemo, useState, type CSSProperties } from "react";
+import { Link } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
 import { CalendarTaskBlockDrawer } from "@/features/easycalendar/components/CalendarTaskBlockDrawer";
@@ -50,6 +51,12 @@ export function EasyCalendarMonthPage() {
       <PageSection eyebrow="Month" title="Calendar">
         {error ? <p className="error-copy">{error}</p> : null}
         {isLoading ? <p className="helper-copy">Loading your month...</p> : null}
+        <div className="calendar-view-links calendar-view-links-sticky" aria-label="Calendar views">
+          <Link to="/app/easycalendar/day" className="view-button-vnext">Day</Link>
+          <Link to="/app/easycalendar/week" className="view-button-vnext">Week</Link>
+          <Link to="/app/easycalendar/month" className="view-button-vnext active">Month</Link>
+        </div>
+        <div className="calendar-month-surface">
         <div className="calendar-month-grid">
           {days.map((day) => {
             const items = getItemsForDay(day, events, taskBlocks, categories, tasks);
@@ -97,6 +104,7 @@ export function EasyCalendarMonthPage() {
               </article>
             );
           })}
+        </div>
         </div>
       </PageSection>
 

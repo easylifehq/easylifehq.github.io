@@ -5,6 +5,7 @@ import { EasyCalendarProvider } from "@/features/easycalendar/EasyCalendarContex
 import { UniversalCapture } from "@/features/experiments/UniversalCapture";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { useRememberAppRoute } from "@/lib/mobile/appRouteMemory";
+import { useMobileThemeColor } from "@/lib/mobile/useMobileThemeColor";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 import { useMobileViewportCssVars } from "@/lib/mobile/useMobileViewportCssVars";
 
@@ -13,6 +14,7 @@ export function AuthenticatedLayout() {
   const { settings, isExperimentalFeatureEnabled } = useSettings();
   const { isStandalone, isOnline } = useMobileRuntime();
   useRememberAppRoute();
+  useMobileThemeColor(settings.themeMode);
   useMobileViewportCssVars();
   const isNotesFocusEditorEnabled = isExperimentalFeatureEnabled("notesFocusEditor");
   const isDistractionFreeRoute =
@@ -31,11 +33,6 @@ export function AuthenticatedLayout() {
     <EasyCalendarProvider>
       <div className={`app-shell-vnext app-shell-header shell-theme-${settings.themeMode}${experimentalClasses ? ` ${experimentalClasses}` : ""}`}>
         {isDistractionFreeRoute ? null : <AppHeader />}
-        {!isOnline ? (
-          <div className="mobile-runtime-banner" role="status">
-            EasyLife is offline. You can keep viewing cached screens, but new syncs may wait.
-          </div>
-        ) : null}
         <div className="app-content app-content-shell">
           <Outlet />
           <SiteFooter />

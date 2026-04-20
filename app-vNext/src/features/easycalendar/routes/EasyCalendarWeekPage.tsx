@@ -1,4 +1,5 @@
 import { useMemo, useState, type CSSProperties, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { CalendarComposer } from "@/features/easycalendar/components/CalendarComposer";
 import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
@@ -68,24 +69,21 @@ export function EasyCalendarWeekPage() {
     <>
       <PageSection eyebrow="Week" title="Calendar">
         {error ? <p className="error-copy">{error}</p> : null}
-        <div className="stats-grid">
-          <article className="stat-card-vnext">
-            <span>Fixed events</span>
-            <strong>{events.length}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Task blocks</span>
-            <strong>{taskBlocks.length}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Scheduled time</span>
-            <strong>{formatDuration(totalMinutes)}</strong>
-          </article>
+        <div className="calendar-view-links calendar-view-links-sticky" aria-label="Calendar views">
+          <Link to="/app/easycalendar/day" className="view-button-vnext">Day</Link>
+          <Link to="/app/easycalendar/week" className="view-button-vnext active">Week</Link>
+          <Link to="/app/easycalendar/month" className="view-button-vnext">Month</Link>
+        </div>
+        <div className="quiet-metrics-row" aria-label="Week snapshot">
+          <span>{events.length} events</span>
+          <span>{taskBlocks.length} task blocks</span>
+          <span>{formatDuration(totalMinutes)} scheduled</span>
         </div>
       </PageSection>
 
       <PageSection eyebrow="This Week" title="Week timeline">
         {isLoading ? <p className="helper-copy">Loading your calendar...</p> : null}
+        <div className="calendar-week-surface">
         <div className="calendar-week-grid">
           {days.map((day) => {
             const items = getItemsForDay(day, events, taskBlocks, categories, tasks);
@@ -139,9 +137,11 @@ export function EasyCalendarWeekPage() {
             );
           })}
         </div>
+        </div>
       </PageSection>
 
-      <PageSection eyebrow="Advanced" title="Scheduling tools">
+      <details className="advanced-disclosure">
+        <summary>Scheduling tools</summary>
         <div className="inline-action-card">
           <div>
             <strong>Add events and task blocks</strong>
@@ -152,9 +152,10 @@ export function EasyCalendarWeekPage() {
           </button>
         </div>
         {showComposer ? <CalendarComposer /> : null}
-      </PageSection>
+      </details>
 
-      <PageSection eyebrow="Categories" title="Tags">
+      <details className="advanced-disclosure">
+        <summary>Categories</summary>
         <form className="calendar-category-form" onSubmit={(event) => void handleAddCategory(event)}>
           <label className="field-stack">
             <span>New category</span>
@@ -211,7 +212,7 @@ export function EasyCalendarWeekPage() {
             </article>
           ))}
         </div>
-      </PageSection>
+      </details>
 
       <CalendarTaskBlockDrawer
         block={selectedBlock}
