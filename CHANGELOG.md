@@ -17,6 +17,7 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 - Added optional EasyNote linking from EasyList task details.
 - Added honest Labs statuses and recommendations so active, partial, and coming-soon toggles are clearer.
 - Added a visible Gym Mode button on EasyWorkout dashboard and the workout logging page.
+- Added stable workout exercise and set row IDs so typing exercise names no longer remounts the active input.
 
 ### Changed
 
@@ -25,6 +26,8 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 - Simplified EasyList task cards so the list shows more items and keeps extra detail inside the task drawer.
 - Changed the PWA theme color from green to a neutral shell color so iPhone browser chrome blends better across themes.
 - Changed Gym Mode so the main in-gym logger can be opened directly without requiring the Lab switch.
+- Improved routine exercise row layout so routine builders do not inherit the EasyList task-row grid.
+- Improved Gym Mode startup so it opens with the full focused exercise box count immediately.
 
 ## 4.4.0
 

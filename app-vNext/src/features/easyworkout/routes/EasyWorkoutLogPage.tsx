@@ -5,8 +5,16 @@ import { defaultWorkoutExercises, useEasyWorkout } from "@/features/easyworkout/
 import { useSettings } from "@/features/settings/SettingsContext";
 import type { WorkoutExerciseLogRecord, WorkoutSetRecord } from "@/lib/firestore/workoutSessions";
 
-const emptySet = (): WorkoutSetRecord => ({ reps: 8, weight: 0, notes: "" });
-const emptyExerciseLog = (setCount = 1): WorkoutExerciseLogRecord => ({
+type WorkoutSetDraft = WorkoutSetRecord & { localId: string };
+type WorkoutExerciseLogDraft = Omit<WorkoutExerciseLogRecord, "sets"> & {
+  localId: string;
+  sets: WorkoutSetDraft[];
+};
+
+const createLocalId = () => crypto.randomUUID();
+const emptySet = (): WorkoutSetDraft => ({ localId: createLocalId(), reps: 8, weight: 0, notes: "" });
+const emptyExerciseLog = (setCount = 1): WorkoutExerciseLogDraft => ({
+  localId: createLocalId(),
   exerciseId: null,
   exerciseName: "",
   muscleGroup: "",
@@ -28,8 +36,8 @@ export function EasyWorkoutLogPage() {
   const [performedOn, setPerformedOn] = useState(new Date().toISOString().split("T")[0]);
   const [durationMinutes, setDurationMinutes] = useState("");
   const [sessionNotes, setSessionNotes] = useState("");
-  const [exerciseLogs, setExerciseLogs] = useState<WorkoutExerciseLogRecord[]>(
-    workoutMode
+  const [exerciseLogs, setExerciseLogs] = useState<WorkoutExerciseLogDraft[]>(
+    workoutMode || gymMode
       ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
       : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
   );
@@ -44,7 +52,7 @@ export function EasyWorkoutLogPage() {
   useEffect(() => {
     if (!selectedRoutine) {
       setExerciseLogs(
-        workoutMode
+        workoutMode || gymMode
           ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
           : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
       );
@@ -54,6 +62,7 @@ export function EasyWorkoutLogPage() {
     setExerciseLogs(
       selectedRoutine.exercises.length
         ? selectedRoutine.exercises.map((exercise) => ({
+            localId: createLocalId(),
             exerciseId: exercise.exerciseId,
             exerciseName: exercise.exerciseName,
             muscleGroup: exercise.muscleGroup,
@@ -61,14 +70,15 @@ export function EasyWorkoutLogPage() {
             sets: Array.from({ length: Math.max(exercise.targetSets, 1) }, () => ({
               reps: Number(exercise.targetReps.split("-")[0]) || 8,
               weight: exercise.targetWeight || 0,
-              notes: "",
+                localId: createLocalId(),
+                notes: "",
             })),
           }))
-        : workoutMode
+        : workoutMode || gymMode
           ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
           : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
     );
-  }, [selectedRoutine, workoutMode, settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount]);
+  }, [selectedRoutine, workoutMode, gymMode, settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount]);
 
   const previousByExercise = useMemo(
     () =>
@@ -101,7 +111,7 @@ export function EasyWorkoutLogPage() {
     window.setTimeout(() => firstExerciseInputRef.current?.focus(), 0);
   }, [isFocusedWorkoutMode]);
 
-  function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogRecord>) {
+  function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogDraft>) {
     setExerciseLogs((current) =>
       current.map((exercise, exerciseIndex) =>
         exerciseIndex === index ? { ...exercise, ...next } : exercise
@@ -109,7 +119,7 @@ export function EasyWorkoutLogPage() {
     );
   }
 
-  function updateSet(exerciseIndex: number, setIndex: number, next: Partial<WorkoutSetRecord>) {
+  function updateSet(exerciseIndex: number, setIndex: number, next: Partial<WorkoutSetDraft>) {
     setExerciseLogs((current) =>
       current.map((exercise, currentExerciseIndex) =>
         currentExerciseIndex === exerciseIndex
@@ -184,6 +194,7 @@ export function EasyWorkoutLogPage() {
         );
 
         return {
+          localId: createLocalId(),
           exerciseId: saved?.id || null,
           exerciseName,
           muscleGroup: saved?.muscleGroup || builtIn?.muscleGroup || "",
@@ -193,6 +204,7 @@ export function EasyWorkoutLogPage() {
               reps: Number(match[2]) || 0,
               weight: Number(match[3]) || 0,
               notes: "",
+              localId: createLocalId(),
             },
           ],
         };
@@ -213,8 +225,13 @@ export function EasyWorkoutLogPage() {
     const cleanedExercises = exerciseLogs
       .filter((exercise) => exercise.exerciseName.trim())
       .map((exercise) => ({
-        ...exercise,
-        sets: exercise.sets.filter((set) => set.reps > 0 || set.weight > 0),
+        exerciseId: exercise.exerciseId,
+        exerciseName: exercise.exerciseName,
+        muscleGroup: exercise.muscleGroup,
+        notes: exercise.notes,
+        sets: exercise.sets
+          .filter((set) => set.reps > 0 || set.weight > 0)
+          .map((set) => ({ reps: set.reps, weight: set.weight, notes: set.notes })),
       }))
       .filter((exercise) => exercise.sets.length);
 
@@ -354,7 +371,7 @@ export function EasyWorkoutLogPage() {
           {exerciseLogs.map((exercise, exerciseIndex) => {
             const previous = previousByExercise[exercise.exerciseName];
             return (
-              <article key={`${exercise.exerciseName}-${exerciseIndex}`} className={`panel-section workout-exercise-card${isFocusedWorkoutMode ? " gym-exercise-card workout-mode-card" : ""}`}>
+              <article key={exercise.localId} className={`panel-section workout-exercise-card${isFocusedWorkoutMode ? " gym-exercise-card workout-mode-card" : ""}`}>
                 <div className="panel-header workout-exercise-header">
                   <p className="eyebrow">Exercise {exerciseIndex + 1}</p>
                   <h2>{exercise.exerciseName || "Pick a lift"}</h2>
@@ -403,7 +420,7 @@ export function EasyWorkoutLogPage() {
 
                 <div className="task-list-vnext">
                   {exercise.sets.map((set, setIndex) => (
-                    <div key={`${exercise.exerciseName}-${setIndex}`} className={`task-row-card${isFocusedWorkoutMode ? " gym-set-row workout-set-row" : ""}`}>
+                    <div key={set.localId} className={`task-row-card${isFocusedWorkoutMode ? " gym-set-row workout-set-row" : ""}`}>
                       <div className="task-row-grid task-row-grid-workout">
                         <label className="field-stack task-row-field">
                           <span>Set</span>
@@ -434,7 +451,10 @@ export function EasyWorkoutLogPage() {
                     <button
                       type="button"
                       className="button-secondary"
-                      onClick={() => updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, { ...exercise.sets[exercise.sets.length - 1] }] })}
+                      onClick={() => {
+                        const previousSet = exercise.sets[exercise.sets.length - 1];
+                        updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, { ...previousSet, localId: createLocalId() }] });
+                      }}
                     >
                       Copy previous set
                     </button>

@@ -210,7 +210,7 @@ export function EasyWorkoutRoutinesPage() {
             <div className="task-list-vnext">
               {routineExercises.map((exercise, index) => (
                 <div key={`${exercise.exerciseName}-${index}`} className="task-row-card routine-exercise-card">
-                  <div className="task-row-grid">
+                  <div className="task-row-grid task-row-grid-routine">
                     <label className="field-stack task-row-field">
                       <span>Exercise</span>
                       <input
@@ -304,7 +304,7 @@ export function EasyWorkoutRoutinesPage() {
                     <div className="task-list-vnext">
                       {editingRoutineExercises.map((exercise, index) => (
                         <div key={`${routine.id}-edit-${index}`} className="task-row-card routine-exercise-card">
-                          <div className="task-row-grid">
+                          <div className="task-row-grid task-row-grid-routine">
                             <label className="field-stack task-row-field">
                               <span>Exercise</span>
                               <input
