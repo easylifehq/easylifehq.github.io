@@ -6,6 +6,16 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.11.0
+
+### Changed
+
+- Improved mobile safe-area handling for sticky headers, drawers, and capture sheets.
+- Lifted and enlarged the mobile quick-add button for more reliable thumb access.
+- Reduced mobile app-header height and hid the secondary app label on narrow screens.
+- Added stronger drawer and capture-sheet scroll containment to avoid accidental page/header scrolling.
+- Updated login redirects so signed-in users follow their selected startup page or last-used route.
+
 ## 4.10.0
 
 ### Changed

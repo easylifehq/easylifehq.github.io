@@ -7,11 +7,14 @@ import {
 import { Navigate } from "react-router-dom";
 import { auth } from "@/lib/firebase/client";
 import { useAuth } from "../AuthContext";
+import { useSettings } from "@/features/settings/SettingsContext";
+import { getLastAppRoute } from "@/lib/mobile/appRouteMemory";
 
 type Mode = "login" | "signup";
 
 export function LoginPage() {
   const { user } = useAuth();
+  const { settings, isLoading: isSettingsLoading } = useSettings();
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +27,12 @@ export function LoginPage() {
   );
 
   if (user) {
-    return <Navigate to="/app/hq" replace />;
+    const target =
+      settings.startupRoute === "last-used"
+        ? getLastAppRoute()?.path || "/app/hq"
+        : settings.startupRoute;
+
+    return <Navigate to={isSettingsLoading ? "/app/hq" : target} replace />;
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {

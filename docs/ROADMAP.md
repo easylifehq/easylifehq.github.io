@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.10.0`
-- Current planning target: `4.10.0` EasyCalendar Google-Style Polish
-- Next feature target: `4.11.0` Mobile Interaction QA
+- App package version: `4.11.0`
+- Current planning target: `4.11.0` Mobile Interaction QA
+- Next feature target: `4.12.0` Native Readiness and Tester Prep
 - Product polish queue: 4.9-4.12 catch-up releases, mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
@@ -539,15 +539,15 @@ Goal: Make EasyCalendar feel closer to a polished calendar app while preserving 
 
 ### 4.11.0 Mobile Interaction QA
 
-Status: Planned
+Status: Done
 
 Goal: Fix the phone-specific friction that appears only after real use.
 
-- Check sticky headers, drawers, Safari chrome, safe areas, and accidental header-only scrolling.
-- Verify startup routing on installed PWA, browser refresh, login, and returning sessions.
-- Tune quick-add placement and sizing across the highest-traffic pages.
-- Check task, note, calendar, workout, and settings flows on narrow mobile widths.
-- Patch any tap targets, overflow, or modal close buttons that feel unreliable.
+- Done: Checked sticky headers, drawers, Safari chrome, safe areas, and accidental header-only scrolling at the shell level.
+- Done: Hardened startup routing on login so signed-in users follow the selected startup route or last-used route.
+- Done: Tuned quick-add placement and sizing for mobile thumb access across high-traffic pages.
+- Done: Tightened narrow mobile header behavior so task, note, calendar, workout, and settings flows have more working space.
+- Done: Patched drawer, capture sheet, and close-button safe-area behavior for more reliable mobile taps and scrolling.
 
 ### 4.12.0 Native Readiness and Tester Prep
 
