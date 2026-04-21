@@ -49,6 +49,13 @@ export function CalendarEventDrawer({
   const [statusMessage, setStatusMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
+  function applyDuration(minutes: number) {
+    const startAt = combineDateAndTime(eventDate, startTime);
+    if (!startAt) return;
+    const nextEnd = new Date(startAt.getTime() + minutes * 60000);
+    setEndTime(toTimeInputValue(nextEnd) || endTime);
+  }
+
   useEffect(() => {
     if (!event) return;
 
@@ -122,6 +129,7 @@ export function CalendarEventDrawer({
           <div>
             <p className="eyebrow">EasyCalendar</p>
             <h2>Edit calendar item</h2>
+            <p className="helper-copy">{itemKind === "deadline" ? "Quick deadline details." : "Fast event editing."}</p>
           </div>
           <button type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close event editor">
             Close
@@ -129,20 +137,26 @@ export function CalendarEventDrawer({
         </div>
 
         <form className="drawer-form" onSubmit={handleSave}>
+          <div className="calendar-drawer-summary">
+            <span>{itemKind === "deadline" ? "Deadline" : "Event"}</span>
+            <span>{eventDate || "No date"}</span>
+            <span>{startTime || "No time"}</span>
+          </div>
+
           <label className="field-stack">
             <span>Title</span>
             <input value={title} onChange={(changeEvent) => setTitle(changeEvent.target.value)} />
           </label>
 
-          <label className="field-stack">
-            <span>Item type</span>
-            <select value={itemKind} onChange={(changeEvent) => setItemKind(changeEvent.target.value as CalendarItemKind)}>
-              <option value="event">Event - show up at a time</option>
-              <option value="deadline">Deadline - due by this time</option>
-            </select>
-          </label>
-
           <div className="task-composer-grid">
+            <label className="field-stack">
+              <span>Item type</span>
+              <select value={itemKind} onChange={(changeEvent) => setItemKind(changeEvent.target.value as CalendarItemKind)}>
+                <option value="event">Event</option>
+                <option value="deadline">Deadline</option>
+              </select>
+            </label>
+
             <label className="field-stack">
               <span>Date</span>
               <input type="date" value={eventDate} onChange={(changeEvent) => setEventDate(changeEvent.target.value)} />
@@ -197,20 +211,32 @@ export function CalendarEventDrawer({
             </label>
           </div>
 
+          {itemKind === "event" ? (
+            <div className="calendar-drawer-quick-actions">
+              <span className="helper-copy">Quick duration</span>
+              <div className="pill-row">
+                <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(30)}>30m</button>
+                <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(60)}>1h</button>
+                <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(90)}>90m</button>
+                <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(120)}>2h</button>
+              </div>
+            </div>
+          ) : null}
+
           <label className="field-stack">
             <span>Notes</span>
-            <textarea rows={6} value={description} onChange={(changeEvent) => setDescription(changeEvent.target.value)} />
+            <textarea rows={4} value={description} onChange={(changeEvent) => setDescription(changeEvent.target.value)} />
           </label>
 
           {statusMessage ? <p className="helper-copy">{statusMessage}</p> : null}
 
           <div className="drawer-actions-vnext">
             <button type="button" className="danger-button" onClick={() => void handleDelete()} disabled={isSaving}>
-              Delete Item
+              Delete
             </button>
             <div className="drawer-actions-right">
               <button type="submit" className="primary-button" disabled={isSaving}>
-                {isSaving ? "Saving..." : "Save Item"}
+                {isSaving ? "Saving..." : "Save"}
               </button>
             </div>
           </div>

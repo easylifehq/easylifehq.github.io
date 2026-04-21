@@ -2886,6 +2886,30 @@ textarea::placeholder {
   flex-wrap: wrap;
 }
 
+.calendar-drawer-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.calendar-drawer-summary span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0.18rem 0.45rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-card-elevated, var(--shell-card-bg));
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.calendar-drawer-quick-actions {
+  display: grid;
+  gap: 0.45rem;
+}
+
 .danger-button {
   min-height: 44px;
   border-radius: var(--shell-control-radius);
@@ -2916,7 +2940,7 @@ textarea::placeholder {
   display: grid;
   gap: 1rem;
   padding: 1rem;
-  border-radius: 20px;
+  border-radius: 8px;
   border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
   background: var(--ui-bg-card, var(--shell-input-bg));
 }

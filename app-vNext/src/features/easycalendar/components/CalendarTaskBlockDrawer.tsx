@@ -36,6 +36,10 @@ export function CalendarTaskBlockDrawer({
   const [statusMessage, setStatusMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
+  function applyDuration(minutes: number) {
+    setScheduleDuration(String(minutes));
+  }
+
   useEffect(() => {
     if (!block) return;
 
@@ -110,6 +114,7 @@ export function CalendarTaskBlockDrawer({
           <div>
             <p className="eyebrow">EasyCalendar</p>
             <h2>Manage task block</h2>
+            <p className="helper-copy">Move it fast, resize it fast, finish it fast.</p>
           </div>
           <button type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close task block editor">
             Close
@@ -117,13 +122,16 @@ export function CalendarTaskBlockDrawer({
         </div>
 
         <section className="drawer-link-card">
+          <div className="calendar-drawer-summary">
+            <span>{currentTask.completed ? "Completed" : "Active"}</span>
+            <span>{scheduleDate || "No date"}</span>
+            <span>{scheduleTime || "No time"}</span>
+          </div>
+
           <div className="panel-header">
             <p className="eyebrow">Linked task</p>
             <h2>{currentTask.title || "Untitled task"}</h2>
-            <p>
-              Move this flexible block, remove it from the calendar, or mark the
-              underlying EasyList task complete.
-            </p>
+            <p>Adjust the block without leaving the calendar.</p>
           </div>
 
           <div className="task-composer-grid">
@@ -169,6 +177,16 @@ export function CalendarTaskBlockDrawer({
             </label>
           </div>
 
+          <div className="calendar-drawer-quick-actions">
+            <span className="helper-copy">Quick duration</span>
+            <div className="pill-row">
+              <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(15)}>15m</button>
+              <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(30)}>30m</button>
+              <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(60)}>1h</button>
+              <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(90)}>90m</button>
+            </div>
+          </div>
+
           <div className="drawer-link-footer">
             <p className="helper-copy">
               {currentTask.category || "No category"}
@@ -179,15 +197,15 @@ export function CalendarTaskBlockDrawer({
 
           <div className="drawer-actions-vnext">
             <button type="button" className="danger-button" onClick={() => void handleDelete()}>
-              Remove From Calendar
+              Remove
             </button>
 
             <div className="drawer-actions-right">
               <button type="button" className="ghost-button" onClick={() => void handleTaskToggle()}>
-                {currentTask.completed ? "Reopen Task" : "Mark Task Complete"}
+                {currentTask.completed ? "Reopen Task" : "Complete Task"}
               </button>
               <button type="button" className="primary-button" disabled={isSaving} onClick={() => void handleSave()}>
-                {isSaving ? "Saving..." : "Save Block"}
+                {isSaving ? "Saving..." : "Save"}
               </button>
             </div>
           </div>
