@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.6.0`
-- Current planning target: `4.6.0` Firebase Rules Verification
-- Next feature target: `4.1.x` Notification Follow-Up
-- Product polish queue: `4.1.x` Notification Follow-Up, mobile real-device QA, calendar/list real-use patches
+- App package version: `4.7.0`
+- Current planning target: `4.7.0` Notification Scheduling Polish
+- Next feature target: `4.13.0` Settings and Landing Page Cleanup
+- Product polish queue: Settings cleanup, landing page refresh, mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
 
@@ -400,16 +400,16 @@ Goal: Add useful reminders without making EasyLife noisy or annoying.
 - Done: Decide notification stack for now: browser/PWA local notification controls first, with Capacitor local notifications later if native wrapping becomes necessary.
 - Done: Add notification permission onboarding with plain-language copy and a clear skip path.
 - Done: Add Settings controls for enabling, disabling, and tuning notification categories.
-- Add task deadline reminders.
-- Add calendar work-block reminders.
-- Add daily planning or wake-up reminders based on the user wakeup/planning settings.
-- Add workout reminders only if the user enables them.
+- Done in `4.7.0`: Add task deadline reminders.
+- Done in `4.7.0`: Add calendar work-block reminders.
+- Done in `4.7.0`: Add daily planning or wake-up reminders based on the user wakeup/planning settings.
+- Done in `4.7.0`: Keep standalone workout reminders out of Settings; workouts are covered when scheduled as calendar blocks.
 - Done: Add quiet-hours settings so notifications do not fire during unwanted times.
 - Done: Add test notification action in Settings.
 - Done: Add notification fallback states when permissions are denied, unavailable, or revoked.
 - Done: Add an EasyHQ reminder preview so eligible task and calendar reminders are visible before automated scheduling.
 - Keep notification scheduling deterministic and user-controlled; no surprise AI-triggered notifications.
-- Add QA for permission prompts, scheduling, cancellation, duplicate prevention, and notification tap behavior.
+- Done in `4.7.0`: Add QA notes for permission prompts, scheduling, cancellation, duplicate prevention, and notification tap behavior.
 
 ### 4.2.0 Mobile Polish and Reliability
 
@@ -484,6 +484,45 @@ Goal: Do the deeper Firebase security verification after the mobile foundation i
 - Done: Reviewed Firebase project config files and documented the intentional Firestore rules deploy command.
 - Done: Updated the security checklist with the 4.6.0 verification record.
 - Done: Deployed Firestore rules to `pipeline-2f422` with `firebase deploy --only firestore:rules --project pipeline-2f422`.
+
+### 4.7.0 Notification Scheduling Polish
+
+Status: Done
+
+Goal: Turn the existing notification controls into useful reminders for real tasks, calendar blocks, and daily planning without making EasyLife noisy.
+
+- Done: Add task deadline reminders based on due date, due time, notification settings, and quiet hours.
+- Done: Add calendar work-block reminders for scheduled task blocks and fixed events.
+- Done: Add daily planning or wake-up reminders using the user's wake time and planning settings.
+- Done: Keep workout reminders out of standalone notification settings; workouts can remind the user when they are scheduled as calendar blocks.
+- Done: Prevent duplicate reminders when the same task, event, or task block is updated.
+- Done: Add cancellation behavior when a task is completed, a calendar block is deleted, or reminders are disabled.
+- Done: Keep reminder scheduling local, deterministic, and reviewable from Settings or EasyHQ.
+- Done: Add QA coverage notes for permission prompts, denied permissions, quiet hours, duplicate prevention, reminder cancellation, and notification tap behavior.
+
+### 4.13.0 Settings and Landing Page Cleanup
+
+Status: Planned
+
+Goal: Clean up Settings and refresh public landing pages so the app explains the current product instead of the older project shape.
+
+- Make Settings easier to scan by reducing crowded sections, tightening labels, and grouping controls around real user decisions.
+- Update the main landing page with the mobile, notification, assistant, planner-item, and security improvements.
+- Make sure each active app has a current landing page or clear product page.
+- Add landing pages for apps that are active but not represented yet.
+- Keep landing copy polished, direct, and honest about what is active versus what is coming later.
+- Push broad button/text/padding housekeeping into the next visual cleanup release.
+
+### 4.14.0 General Housekeeping and UI QA
+
+Status: Planned
+
+Goal: Run the ugly sweep after Settings and landing pages are current.
+
+- Audit buttons, labels, and page copy for clarity.
+- Tighten padding, margins, spacing, and mobile overflow across high-traffic pages.
+- Check quick-add placement, drawer scrolling, sticky headers, and accidental mobile header capture.
+- Patch pages that feel crowded or visually out of rhythm after real use.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

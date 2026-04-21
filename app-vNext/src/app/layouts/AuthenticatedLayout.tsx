@@ -5,6 +5,7 @@ import { EasyCalendarProvider } from "@/features/easycalendar/EasyCalendarContex
 import { UniversalCapture } from "@/features/experiments/UniversalCapture";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { useRememberAppRoute } from "@/lib/mobile/appRouteMemory";
+import { NotificationScheduler } from "@/lib/mobile/NotificationScheduler";
 import { useMobileThemeColor } from "@/lib/mobile/useMobileThemeColor";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 import { useMobileViewportCssVars } from "@/lib/mobile/useMobileViewportCssVars";
@@ -37,6 +38,7 @@ export function AuthenticatedLayout() {
           <Outlet />
           <SiteFooter />
         </div>
+        <NotificationScheduler />
         <UniversalCapture />
       </div>
     </EasyCalendarProvider>

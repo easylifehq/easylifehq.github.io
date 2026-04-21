@@ -1438,8 +1438,8 @@ export function SettingsPage() {
         {activeSection === "notifications" ? (
         <PageSection
           eyebrow="Reminders"
-          title="Notification foundation"
-          description="Start with permission and category controls. EasyLife will keep reminders reviewable and user-controlled."
+          title="Notification scheduling"
+          description="Allow task, calendar, and daily planning reminders. Workout alerts only happen when the workout lives on the calendar."
         >
           <div id="notifications" className="settings-anchor" />
           {notificationMessage ? <div className="calendar-info-card">{notificationMessage}</div> : null}
@@ -1453,7 +1453,7 @@ export function SettingsPage() {
             <article>
               <span>Reminder categories</span>
               <strong>{settings.notifications.enabled ? "Enabled" : "Paused"}</strong>
-              <p>Category switches prepare reminder types without scheduling surprise alerts yet.</p>
+              <p>EasyLife schedules local reminders while the app is open or installed, then avoids repeats.</p>
             </article>
           </div>
 
@@ -1489,7 +1489,7 @@ export function SettingsPage() {
                   <span className="settings-state-pill">Tasks</span>
                 </span>
                 <strong>Task deadline reminders</strong>
-                <p>Prepare reminders for tasks with due dates or deadlines.</p>
+                <p>Remind you when unfinished tasks with due dates or deadlines are coming up.</p>
               </div>
               <input
                 type="checkbox"
@@ -1504,7 +1504,7 @@ export function SettingsPage() {
                   <span className="settings-state-pill">Blocks</span>
                 </span>
                 <strong>Calendar work-block reminders</strong>
-                <p>Prepare reminders for scheduled work blocks and fixed events.</p>
+                <p>Remind you about fixed events and scheduled work blocks, including workouts you put on the calendar.</p>
               </div>
               <input
                 type="checkbox"
@@ -1519,27 +1519,12 @@ export function SettingsPage() {
                   <span className="settings-state-pill">Daily</span>
                 </span>
                 <strong>Daily planning reminder</strong>
-                <p>Prepare a future reminder for wakeup-time planning.</p>
+                <p>Use your calendar wake time as the daily planning reminder.</p>
               </div>
               <input
                 type="checkbox"
                 checked={settings.notifications.dailyPlanning}
                 onChange={(event) => void updateNotificationSettings({ dailyPlanning: event.target.checked })}
-              />
-            </label>
-            <label className={`settings-toggle-row${settings.notifications.workouts ? " active" : ""}`}>
-              <div>
-                <span className="settings-card-topline">
-                  <span>EasyWorkout</span>
-                  <span className="settings-state-pill">Optional</span>
-                </span>
-                <strong>Workout reminders</strong>
-                <p>Prepare workout reminders only when you explicitly want them.</p>
-              </div>
-              <input
-                type="checkbox"
-                checked={settings.notifications.workouts}
-                onChange={(event) => void updateNotificationSettings({ workouts: event.target.checked })}
               />
             </label>
           </div>

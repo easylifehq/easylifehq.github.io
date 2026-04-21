@@ -6,6 +6,18 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.7.0
+
+### Added
+
+- Added local notification scheduling for task deadlines, calendar events, scheduled work blocks, and daily planning reminders.
+- Added reminder duplicate prevention and quiet-hours adjustment for scheduled notifications.
+
+### Changed
+
+- Updated notification settings copy around active scheduling and removed standalone workout reminder controls.
+- Updated the roadmap with 4.13.0 Settings and landing page cleanup, pushing general housekeeping to 4.14.0.
+
 ## 4.6.0
 
 ### Added
