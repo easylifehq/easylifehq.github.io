@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.14.1`
-- Current planning target: `4.14.1` UI Housekeeping Patch
+- App package version: `4.14.2`
+- Current planning target: `4.14.2` Presentation Polish Patch
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -603,6 +603,16 @@ Goal: Clean up the small interaction rough edges from the `4.14.0` housekeeping 
 
 - Done: Notes Search command now focuses the search input directly.
 - Done: Notes no longer shows a duplicate Blank note button beside the new add command.
+
+### 4.14.2 Presentation Polish Patch
+
+Status: Done
+
+Goal: Remove visible clutter from the final 4.x presentation surface before starting larger feature work.
+
+- Done: Removed the duplicate floating EasyNotes add button.
+- Done: Kept EasyNotes add, search, and edit actions consolidated in one clean command strip.
+- Done: Tidied Notes library edit-tools markup after the command strip changes.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

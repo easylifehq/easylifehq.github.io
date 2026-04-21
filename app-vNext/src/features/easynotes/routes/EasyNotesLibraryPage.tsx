@@ -139,11 +139,10 @@ export function EasyNotesLibraryPage() {
   }
 
   return (
-    <>
-      <PageSection
-        eyebrow="EasyNotes"
-        title="Notes"
-      >
+    <PageSection
+      eyebrow="EasyNotes"
+      title="Notes"
+    >
         <div className="notes-command-strip" aria-label="Notes actions">
           <button type="button" className="notes-command-button" onClick={() => void handleCreateNote()} aria-label="Add note">
             +
@@ -196,7 +195,7 @@ export function EasyNotesLibraryPage() {
           onToggle={(event) => setToolsOpen(event.currentTarget.open)}
         >
           <summary>Folders and cleanup</summary>
-        <div className="notes-control-center">
+          <div className="notes-control-center">
           <label className="field-stack">
             <span>Folder</span>
             <select
@@ -260,7 +259,7 @@ export function EasyNotesLibraryPage() {
               </button>
             </div>
           )}
-        </div>
+          </div>
           <div className="task-composer-actions">
             <button type="button" className="button-secondary compact-button" onClick={() => void handleCreateFolder()}>
               New folder
@@ -329,16 +328,6 @@ export function EasyNotesLibraryPage() {
             </article>
           ))}
         </div>
-      </PageSection>
-
-      <button
-        type="button"
-        className="notes-create-fab"
-        aria-label="Create note"
-        onClick={() => void handleCreateNote()}
-      >
-        +
-      </button>
-    </>
+    </PageSection>
   );
 }

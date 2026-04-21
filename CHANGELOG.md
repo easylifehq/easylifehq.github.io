@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.14.2
+
+### Fixed
+
+- Removed the duplicate floating EasyNotes add button so the Notes command strip is the single clear add/search/edit control.
+- Tidied the Notes library markup around the edit tools for a cleaner presentation pass.
+
 ## 4.14.1
 
 ### Fixed
