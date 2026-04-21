@@ -6,6 +6,17 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.12.0
+
+### Added
+
+- Added a 4.12 tester-prep guide covering iPhone install, first-run checks, app-by-app test flows, phone friction checks, and native-wrapper blockers.
+
+### Changed
+
+- Updated mobile release guidance around friend testing, startup routing, PWA install expectations, and later TestFlight/App Store readiness.
+- Refreshed versioning docs so the release checklist and recommended order match the current 4.x plan.
+
 ## 4.11.0
 
 ### Changed

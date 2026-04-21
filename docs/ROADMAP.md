@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.11.0`
-- Current planning target: `4.11.0` Mobile Interaction QA
-- Next feature target: `4.12.0` Native Readiness and Tester Prep
-- Product polish queue: 4.9-4.12 catch-up releases, mobile real-device QA, calendar/list real-use patches, native wrapping readiness
+- App package version: `4.12.0`
+- Current planning target: `4.12.0` Native Readiness and Tester Prep
+- Next feature target: `4.14.0` General Housekeeping and UI QA
+- Product polish queue: general housekeeping, mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
 
@@ -551,25 +551,25 @@ Goal: Fix the phone-specific friction that appears only after real use.
 
 ### 4.12.0 Native Readiness and Tester Prep
 
-Status: Planned
+Status: Done
 
 Goal: Prepare the PWA for friends/testers and future native wrapping without rushing App Store work.
 
-- Document the current install path for iPhone testers.
-- Add a tester checklist for login, startup page, tasks, calendar, notes, workout, settings, export, reminders, and logout.
-- Review manifest, icons, theme color behavior, and share/install copy.
-- Identify what still requires native wrapping, TestFlight, or Firebase rule changes.
-- Keep App Store readiness as a future path, not a blocker for personal/friend use.
+- Done: Documented the current install path for iPhone testers.
+- Done: Added a tester checklist for login, startup page, tasks, calendar, notes, workout, settings, export, reminders, and logout.
+- Done: Reviewed manifest, icons, theme color behavior, and share/install copy.
+- Done: Identified what still requires native wrapping, TestFlight, or Firebase rule changes.
+- Done: Kept App Store readiness as a future path, not a blocker for personal/friend use.
 
 ### 4.9.0-4.12.0 Version Note
 
-Status: Planned
+Status: Done
 
 Goal: Preserve the intended release sequence after `4.13.0` shipped early for Settings and landing pages.
 
 - `4.13.0` was completed early because Settings cleanup and landing pages were the active requested work.
-- `4.9.0`, `4.10.0`, `4.11.0`, and `4.12.0` remain planned and should be completed before moving to `4.14.0`.
-- Future commits can use these version numbers even though `4.13.0` already exists in history.
+- Done: `4.9.0`, `4.10.0`, `4.11.0`, and `4.12.0` were completed after `4.13.0`.
+- Done: The release line is ready to move forward to `4.14.0`.
 
 ### 4.13.0 Settings and Landing Page Cleanup
 

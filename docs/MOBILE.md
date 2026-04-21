@@ -9,6 +9,7 @@ EasyLife `4.0.0` starts with the path that helps fastest: installable iPhone hom
 - Current approach: PWA install foundation first, then Capacitor/native wrapping when needed.
 - The app now detects browser vs home-screen launch mode and shows install guidance from EasyHQ and Settings.
 - The app now remembers the last active app route and offers a resume card from EasyHQ.
+- The `4.12.0` tester pass lives in `docs/TESTER_PREP_4_12.md` and should be used before sharing the app link with friends.
 
 ## iPhone Install Path
 
@@ -35,6 +36,7 @@ EasyLife `4.0.0` starts with the path that helps fastest: installable iPhone hom
 4. Open Settings, Data and confirm export tools work before a wider test.
 5. Send testers the site link with Safari Add to Home Screen instructions.
 6. Keep the previous stable git commit available as the rollback point.
+7. Run the `4.12.0` tester prep guide before expanding beyond personal/friend testing.
 
 ## QA Checklist
 
