@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.14.0`
-- Current planning target: `4.14.0` General Housekeeping and UI QA
+- App package version: `4.14.1`
+- Current planning target: `4.14.1` UI Housekeeping Patch
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -594,6 +594,15 @@ Goal: Run the ugly sweep after Settings, landing pages, and the 4.9-4.12 catch-u
 - Done: Tightened padding, margins, spacing, and mobile overflow across shared list and notes surfaces.
 - Done: Checked quick-add placement, task-card stacking, and mobile tap targets.
 - Done: Patched crowded Notes and EasyList surfaces so the app feels lighter in daily use.
+
+### 4.14.1 UI Housekeeping Patch
+
+Status: Done
+
+Goal: Clean up the small interaction rough edges from the `4.14.0` housekeeping pass.
+
+- Done: Notes Search command now focuses the search input directly.
+- Done: Notes no longer shows a duplicate Blank note button beside the new add command.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

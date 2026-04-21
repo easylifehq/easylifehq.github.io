@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyNotes } from "@/features/easynotes/EasyNotesContext";
@@ -38,6 +38,7 @@ export function EasyNotesLibraryPage() {
   const [cleanupMessage, setCleanupMessage] = useState("");
   const [toolsOpen, setToolsOpen] = useState(false);
   const [lastOpenNoteId] = useState(() => window.localStorage.getItem(lastOpenNoteStorageKey) || "");
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   const folderNameById = useMemo(
     () => new Map(folders.map((folder) => [folder.id, folder.name])),
@@ -147,9 +148,14 @@ export function EasyNotesLibraryPage() {
           <button type="button" className="notes-command-button" onClick={() => void handleCreateNote()} aria-label="Add note">
             +
           </button>
-          <a className="notes-command-button" href="#notes-search" aria-label="Search notes">
+          <button
+            type="button"
+            className="notes-command-button"
+            onClick={() => searchInputRef.current?.focus()}
+            aria-label="Search notes"
+          >
             Search
-          </a>
+          </button>
           <button
             type="button"
             className={`notes-command-button${toolsOpen ? " active" : ""}`}
@@ -166,6 +172,7 @@ export function EasyNotesLibraryPage() {
             <span>Search notes</span>
             <input
               id="notes-search"
+              ref={searchInputRef}
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
@@ -179,9 +186,6 @@ export function EasyNotesLibraryPage() {
                 Resume writing
               </Link>
             ) : null}
-            <Link to="/app/easynotes/new" className="primary-button">
-              Blank note
-            </Link>
           </div>
         </div>
 

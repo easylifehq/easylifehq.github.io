@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.14.1
+
+### Fixed
+
+- Made the EasyNotes Search command focus the search field directly instead of only jumping down the page.
+- Removed the duplicate Blank note button from the Notes toolbar now that the command strip has the primary add action.
+
 ## 4.14.0
 
 ### Changed
