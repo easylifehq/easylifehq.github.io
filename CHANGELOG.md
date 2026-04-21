@@ -6,6 +6,16 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.10.0
+
+### Changed
+
+- Tightened EasyCalendar day, week, and month spacing for a denser Google-style scan.
+- Clarified fixed events, flexible task blocks, completed blocks, and deadlines with stronger visual treatments.
+- Reduced calendar drawer width and padding so event and task-block editing feels lighter on mobile.
+- Made event-backed calendar deadlines editable from week, month, and day deadline sections.
+- Added inline category name editing next to category color controls.
+
 ## 4.9.0
 
 ### Added

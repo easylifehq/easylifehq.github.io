@@ -71,7 +71,7 @@ export function EasyCalendarDayPage() {
     () => getOpenTimeWindowsForDay(today, events, taskBlocks, wakeHour, dayEndHour),
     [events, taskBlocks, today, wakeHour, dayEndHour]
   );
-  const activeTasks = useMemo(() => tasks.filter((task) => !task.completed), [tasks]);
+  const activeTasks = useMemo(() => tasks.filter((task) => !task.completed && !task.deletedAt), [tasks]);
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
     [selectedBlockId, taskBlocks]
@@ -351,13 +351,20 @@ export function EasyCalendarDayPage() {
           {items.filter((item) => item.kind === "deadline").length ? (
             items
               .filter((item) => item.kind === "deadline")
-              .map((item) => (
+              .map((item) => {
+                const editableDeadline = events.some((event) => event.id === item.id);
+                return (
                 <button
                   key={`${item.kind}-${item.id}`}
                   type="button"
                   className="calendar-detail-card deadline"
                   style={{ "--calendar-block-color": item.color } as CSSProperties}
-                  disabled
+                  onClick={() => {
+                    if (editableDeadline) {
+                      setSelectedEventId(item.id);
+                    }
+                  }}
+                  disabled={!editableDeadline}
                 >
                   <div>
                     <strong>{item.title}</strong>
@@ -365,7 +372,8 @@ export function EasyCalendarDayPage() {
                   </div>
                   <span>{item.badge}</span>
                 </button>
-              ))
+              );
+              })
           ) : (
             <p className="helper-copy">No task deadlines today.</p>
           )}

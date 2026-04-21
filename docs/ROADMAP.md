@@ -4,9 +4,9 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.9.0`
-- Current planning target: `4.9.0` EasyList Multi-List Cleanup
-- Next feature target: `4.10.0` EasyCalendar Google-Style Polish
+- App package version: `4.10.0`
+- Current planning target: `4.10.0` EasyCalendar Google-Style Polish
+- Next feature target: `4.11.0` Mobile Interaction QA
 - Product polish queue: 4.9-4.12 catch-up releases, mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
@@ -527,15 +527,15 @@ Goal: Make EasyList feel fast in real use by supporting multiple lists, thinner 
 
 ### 4.10.0 EasyCalendar Google-Style Polish
 
-Status: Planned
+Status: Done
 
 Goal: Make EasyCalendar feel closer to a polished calendar app while preserving EasyLife's task/deadline/event model.
 
-- Tighten day, week, and month layout spacing so the calendar is easier to read at a glance.
-- Improve event and task-block editing from the calendar without oversized drawers on mobile.
-- Make fixed events, deadlines, and scheduled task blocks visually distinct without adding clutter.
-- Improve repeat/class editing and category color handling in the primary calendar flow.
-- Keep quick-create from blank slots fast for events, deadlines, and scheduled work.
+- Done: Tightened day, week, and month layout spacing so the calendar is easier to read at a glance.
+- Done: Improved event and task-block editing from the calendar with lighter drawer sizing and padding on mobile.
+- Done: Made fixed events, deadlines, scheduled task blocks, and completed blocks visually distinct without adding clutter.
+- Done: Improved repeat/class editing support by keeping event-backed deadlines editable and adding inline category name editing beside color controls.
+- Done: Kept quick-create from blank slots fast for events, deadlines, and scheduled work.
 
 ### 4.11.0 Mobile Interaction QA
 

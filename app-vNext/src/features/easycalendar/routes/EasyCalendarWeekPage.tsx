@@ -22,6 +22,7 @@ export function EasyCalendarWeekPage() {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryColor, setNewCategoryColor] = useState("#4d7fe6");
   const [categoryMessage, setCategoryMessage] = useState("");
+  const [categoryDrafts, setCategoryDrafts] = useState<Record<string, string>>({});
 
   const weekStart = startOfWeek(new Date());
   const days = Array.from({ length: 7 }, (_, index) => addDays(weekStart, index));
@@ -103,14 +104,16 @@ export function EasyCalendarWeekPage() {
 
                 <div className="calendar-item-stack">
                   {items.length > 0 ? (
-                    items.map((item) => (
+                    items.map((item) => {
+                      const editableDeadline = item.kind === "deadline" && events.some((event) => event.id === item.id);
+                      return (
                       <button
                         key={`${item.kind}-${item.id}`}
                         type="button"
                         onClick={() => {
                           if (item.kind === "task-block") {
                             setSelectedBlockId(item.id);
-                          } else if (item.kind === "event") {
+                          } else if (item.kind === "event" || editableDeadline) {
                             setSelectedEventId(item.id);
                           }
                         }}
@@ -120,13 +123,14 @@ export function EasyCalendarWeekPage() {
                             "--calendar-block-color": item.color,
                           } as CSSProperties
                         }
-                        disabled={item.kind === "deadline"}
+                        disabled={item.kind === "deadline" && !editableDeadline}
                       >
                         <strong>{item.title}</strong>
                         <span>{item.helper}</span>
                         <small>{item.badge}</small>
                       </button>
-                    ))
+                    );
+                    })
                   ) : (
                     <div className="empty-card-vnext planner-empty-card">
                       <p className="helper-copy">Nothing scheduled yet.</p>
@@ -207,7 +211,31 @@ export function EasyCalendarWeekPage() {
                 />
               </label>
               <div>
-                <strong>{category.name}</strong>
+                <label className="field-stack calendar-category-name-edit">
+                  <span>Category</span>
+                  <input
+                    value={categoryDrafts[category.id] ?? category.name}
+                    onChange={(event) =>
+                      setCategoryDrafts((current) => ({ ...current, [category.id]: event.target.value }))
+                    }
+                    onBlur={(event) => {
+                      const nextName = event.target.value.trim();
+                      if (!nextName || nextName === category.name) return;
+                      const draft = {
+                        name: nextName,
+                        color: category.color,
+                        type: nextName.toLowerCase().replace(/\s+/g, "-"),
+                        isDefault: false,
+                      };
+
+                      if (category.isDefault) {
+                        void addCategory(draft);
+                      } else {
+                        void saveCategory(category.id, draft);
+                      }
+                    }}
+                  />
+                </label>
               </div>
             </article>
           ))}

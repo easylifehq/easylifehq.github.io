@@ -80,25 +80,28 @@ export function EasyCalendarMonthPage() {
                 </header>
 
                 <div className="calendar-item-stack">
-                  {items.slice(0, 4).map((item) => (
+                  {items.slice(0, 4).map((item) => {
+                    const editableDeadline = item.kind === "deadline" && events.some((event) => event.id === item.id);
+                    return (
                     <button
                       key={`${item.kind}-${item.id}`}
                       type="button"
                       onClick={() => {
                         if (item.kind === "task-block") {
                           setSelectedBlockId(item.id);
-                        } else if (item.kind === "event") {
+                        } else if (item.kind === "event" || editableDeadline) {
                           setSelectedEventId(item.id);
                         }
                       }}
                       className={`calendar-block-vnext compact${item.kind === "deadline" ? " deadline" : item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
                       style={{ "--calendar-block-color": item.color } as CSSProperties}
-                      disabled={item.kind === "deadline"}
+                      disabled={item.kind === "deadline" && !editableDeadline}
                     >
                       <strong>{item.title}</strong>
                       <small>{item.badge}</small>
                     </button>
-                  ))}
+                  );
+                  })}
                   {items.length > 4 ? <p className="helper-copy">+{items.length - 4} more</p> : null}
                 </div>
               </article>
