@@ -192,6 +192,7 @@ export function TaskDrawer({
       await onSave(taskId, {
         ...draft,
         title: draft.title.trim(),
+        listName: draft.listName?.trim() || "Main",
         category: draft.category.trim(),
         notes: draft.notes.trim(),
         priorityLabel: getPriorityMeta(draft.priorityTier).label,
@@ -357,6 +358,15 @@ export function TaskDrawer({
               type="date"
               value={draft.dueDate ?? ""}
               onChange={(event) => setDraft((current) => ({ ...current, dueDate: event.target.value || null }))}
+            />
+          </label>
+
+          <label className="field-stack">
+            <span>List</span>
+            <input
+              type="text"
+              value={draft.listName || "Main"}
+              onChange={(event) => setDraft((current) => ({ ...current, listName: event.target.value }))}
             />
           </label>
 

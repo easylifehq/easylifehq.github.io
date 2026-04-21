@@ -15,7 +15,7 @@ export function EasyListArchivePage() {
     return <LoadingState label="Loading archive..." />;
   }
 
-  const completedTasks = tasks.filter((task) => task.completed);
+  const completedTasks = tasks.filter((task) => task.completed && !task.deletedAt);
   const groupedWeeks = groupCompletedTasksByWeek(completedTasks);
 
   return (

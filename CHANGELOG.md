@@ -6,6 +6,20 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.9.0
+
+### Added
+
+- Added EasyList list names so tasks can be grouped into multiple context lists.
+- Added list tabs, a lightweight new-list control, and an Add Tasks list picker.
+- Added EasyList bulk edit actions for completing, archiving, and soft-deleting selected tasks.
+- Added a Deleted tasks page with restore and permanent delete actions.
+
+### Changed
+
+- Made EasyList task rows thinner and more scan-friendly, with task details still available in the drawer.
+- Changed EasyList deletion to soft-delete by default so accidental cleanup can be recovered.
+
 ## 4.13.0
 
 ### Added

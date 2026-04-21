@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.13.0`
-- Current planning target: `4.13.0` Settings and Landing Page Cleanup
-- Next feature target: `4.14.0` General Housekeeping and UI QA
-- Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
+- App package version: `4.9.0`
+- Current planning target: `4.9.0` EasyList Multi-List Cleanup
+- Next feature target: `4.10.0` EasyCalendar Google-Style Polish
+- Product polish queue: 4.9-4.12 catch-up releases, mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
 
@@ -512,6 +512,65 @@ Goal: Make EasyLife open like a real app and make the always-available capture b
 - Done: Quick add is larger and lifted away from the phone corner and safe-area edge.
 - Done: Quick add keeps its compact plus-button treatment on mobile without shrinking below a reliable tap target.
 
+### 4.9.0 EasyList Multi-List Cleanup
+
+Status: Done
+
+Goal: Make EasyList feel fast in real use by supporting multiple lists, thinner rows, bulk cleanup, and safer deleted-task recovery.
+
+- Done: Added multiple named lists so tasks can be grouped by context, trip, exam, project, or life area.
+- Done: Kept the main task rows thin enough to scan quickly, with details staying in the drawer.
+- Done: Added edit mode for bulk complete, bulk archive, and bulk soft-delete.
+- Done: Added a deleted tasks area so mistakes can be recovered before permanent cleanup.
+- Done: Kept archive-heavy review out of the everyday list and preserved Archive as completed-history only.
+- Done: Kept basic one-word tasks valid and fast to save.
+
+### 4.10.0 EasyCalendar Google-Style Polish
+
+Status: Planned
+
+Goal: Make EasyCalendar feel closer to a polished calendar app while preserving EasyLife's task/deadline/event model.
+
+- Tighten day, week, and month layout spacing so the calendar is easier to read at a glance.
+- Improve event and task-block editing from the calendar without oversized drawers on mobile.
+- Make fixed events, deadlines, and scheduled task blocks visually distinct without adding clutter.
+- Improve repeat/class editing and category color handling in the primary calendar flow.
+- Keep quick-create from blank slots fast for events, deadlines, and scheduled work.
+
+### 4.11.0 Mobile Interaction QA
+
+Status: Planned
+
+Goal: Fix the phone-specific friction that appears only after real use.
+
+- Check sticky headers, drawers, Safari chrome, safe areas, and accidental header-only scrolling.
+- Verify startup routing on installed PWA, browser refresh, login, and returning sessions.
+- Tune quick-add placement and sizing across the highest-traffic pages.
+- Check task, note, calendar, workout, and settings flows on narrow mobile widths.
+- Patch any tap targets, overflow, or modal close buttons that feel unreliable.
+
+### 4.12.0 Native Readiness and Tester Prep
+
+Status: Planned
+
+Goal: Prepare the PWA for friends/testers and future native wrapping without rushing App Store work.
+
+- Document the current install path for iPhone testers.
+- Add a tester checklist for login, startup page, tasks, calendar, notes, workout, settings, export, reminders, and logout.
+- Review manifest, icons, theme color behavior, and share/install copy.
+- Identify what still requires native wrapping, TestFlight, or Firebase rule changes.
+- Keep App Store readiness as a future path, not a blocker for personal/friend use.
+
+### 4.9.0-4.12.0 Version Note
+
+Status: Planned
+
+Goal: Preserve the intended release sequence after `4.13.0` shipped early for Settings and landing pages.
+
+- `4.13.0` was completed early because Settings cleanup and landing pages were the active requested work.
+- `4.9.0`, `4.10.0`, `4.11.0`, and `4.12.0` remain planned and should be completed before moving to `4.14.0`.
+- Future commits can use these version numbers even though `4.13.0` already exists in history.
+
 ### 4.13.0 Settings and Landing Page Cleanup
 
 Status: Done
@@ -529,7 +588,7 @@ Goal: Clean up Settings and refresh public landing pages so the app explains the
 
 Status: Planned
 
-Goal: Run the ugly sweep after Settings and landing pages are current.
+Goal: Run the ugly sweep after Settings, landing pages, and the 4.9-4.12 catch-up releases are current.
 
 - Audit buttons, labels, and page copy for clarity.
 - Tighten padding, margins, spacing, and mobile overflow across high-traffic pages.

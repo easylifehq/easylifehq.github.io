@@ -16,11 +16,23 @@ export function EasyListDashboardPage() {
   const { tasks, isLoading, error, saveTask, markComplete, markActive, deleteTask } = useEasyList();
   const { isExperimentalFeatureEnabled } = useSettings();
   const [search, setSearch] = useState("");
+  const [activeListName, setActiveListName] = useState("Main");
+  const [newListName, setNewListName] = useState("");
+  const [isBulkEditing, setIsBulkEditing] = useState(false);
+  const [selectedTaskIds, setSelectedTaskIds] = useState<string[]>([]);
   const [selectedTask, setSelectedTask] = useState<TaskRecord | null>(null);
 
+  const visibleTasks = useMemo(() => tasks.filter((task) => !task.deletedAt), [tasks]);
+  const listNames = useMemo(
+    () => Array.from(new Set(["Main", ...visibleTasks.map((task) => task.listName || "Main")])).sort(),
+    [visibleTasks]
+  );
   const activeTasks = useMemo(
-    () => sortActiveTasks(tasks.filter((task) => !task.completed)),
-    [tasks]
+    () =>
+      sortActiveTasks(
+        visibleTasks.filter((task) => !task.completed && (task.listName || "Main") === activeListName)
+      ),
+    [visibleTasks, activeListName]
   );
   const filteredTasks = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -32,19 +44,48 @@ export function EasyListDashboardPage() {
       [task.title, task.notes, task.category].join(" ").toLowerCase().includes(term)
     );
   }, [activeTasks, search]);
-  const completedTodayCount = useMemo(() => tasks.filter(isCompletedToday).length, [tasks]);
+  const completedTodayCount = useMemo(() => visibleTasks.filter(isCompletedToday).length, [visibleTasks]);
   const overdueTasks = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return sortActiveTasks(
-      tasks.filter((task) => {
-        if (task.completed || !task.dueDate) return false;
+      visibleTasks.filter((task) => {
+        if (task.completed || !task.dueDate || (task.listName || "Main") !== activeListName) return false;
         const due = new Date(task.dueDate);
         due.setHours(0, 0, 0, 0);
         return due.getTime() < today.getTime();
       })
     );
-  }, [tasks]);
+  }, [visibleTasks, activeListName]);
+
+  function addList() {
+    const nextName = newListName.trim();
+    if (!nextName) return;
+    setActiveListName(nextName);
+    setNewListName("");
+  }
+
+  function selectTask(taskId: string, selected: boolean) {
+    setSelectedTaskIds((current) =>
+      selected ? Array.from(new Set([...current, taskId])) : current.filter((id) => id !== taskId)
+    );
+  }
+
+  async function runBulkAction(action: "complete" | "archive" | "delete") {
+    const taskIds = selectedTaskIds;
+    if (!taskIds.length) return;
+
+    for (const taskId of taskIds) {
+      if (action === "complete" || action === "archive") {
+        await markComplete(taskId);
+      } else {
+        await deleteTask(taskId);
+      }
+    }
+
+    setSelectedTaskIds([]);
+    setIsBulkEditing(false);
+  }
 
   function rescheduleTask(task: TaskRecord, days: number) {
     const nextDate = new Date();
@@ -104,6 +145,65 @@ export function EasyListDashboardPage() {
           </div>
         </div>
 
+        <div className="easylist-list-bar">
+          <div className="easylist-list-tabs" aria-label="Task lists">
+            {listNames.map((name) => (
+              <button
+                key={name}
+                type="button"
+                className={activeListName === name ? "active" : ""}
+                onClick={() => {
+                  setActiveListName(name);
+                  setSelectedTaskIds([]);
+                }}
+              >
+                {name}
+                <span>{visibleTasks.filter((task) => (task.listName || "Main") === name && !task.completed).length}</span>
+              </button>
+            ))}
+          </div>
+          <div className="easylist-new-list">
+            <input
+              value={newListName}
+              onChange={(event) => setNewListName(event.target.value)}
+              placeholder="New list"
+            />
+            <button type="button" className="button-secondary compact-button" onClick={addList}>
+              Add list
+            </button>
+          </div>
+        </div>
+
+        <div className="easylist-bulk-bar">
+          <button
+            type="button"
+            className={isBulkEditing ? "primary-button compact-button" : "button-secondary compact-button"}
+            onClick={() => {
+              setIsBulkEditing((value) => !value);
+              setSelectedTaskIds([]);
+            }}
+          >
+            {isBulkEditing ? "Done editing" : "Edit list"}
+          </button>
+          {isBulkEditing ? (
+            <>
+              <span className="info-pill">{selectedTaskIds.length} selected</span>
+              <button type="button" className="button-secondary compact-button" onClick={() => setSelectedTaskIds(filteredTasks.map((task) => task.id))}>
+                Select visible
+              </button>
+              <button type="button" className="button-secondary compact-button" onClick={() => void runBulkAction("complete")}>
+                Complete
+              </button>
+              <button type="button" className="button-secondary compact-button" onClick={() => void runBulkAction("archive")}>
+                Archive
+              </button>
+              <button type="button" className="ghost-button compact-button" onClick={() => void runBulkAction("delete")}>
+                Delete
+              </button>
+            </>
+          ) : null}
+        </div>
+
         {error ? <p className="error-copy">{error}</p> : null}
 
         <div className="task-list-vnext">
@@ -114,6 +214,8 @@ export function EasyListDashboardPage() {
                 task={task}
                 onEdit={setSelectedTask}
                 onComplete={markComplete}
+                isSelected={selectedTaskIds.includes(task.id)}
+                onSelect={isBulkEditing ? selectTask : undefined}
               />
             ))
           ) : (

@@ -9,7 +9,9 @@ import {
   completeTask,
   createTask,
   removeTask,
+  restoreTask,
   reopenTask,
+  softDeleteTask,
   subscribeToTasks,
   updateTask,
   type TaskDraft,
@@ -31,6 +33,8 @@ type EasyListContextValue = {
   markComplete: (taskId: string) => Promise<void>;
   markActive: (taskId: string) => Promise<void>;
   deleteTask: (taskId: string) => Promise<void>;
+  restoreDeletedTask: (taskId: string) => Promise<void>;
+  removeTaskPermanently: (taskId: string) => Promise<void>;
 };
 
 const EasyListContext = createContext<EasyListContextValue | undefined>(undefined);
@@ -95,6 +99,16 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
 
   async function deleteTaskForUser(taskId: string) {
     if (!user) return;
+    await softDeleteTask(user.uid, taskId);
+  }
+
+  async function restoreDeletedTaskForUser(taskId: string) {
+    if (!user) return;
+    await restoreTask(user.uid, taskId);
+  }
+
+  async function removeTaskPermanentlyForUser(taskId: string) {
+    if (!user) return;
     await removeTask(user.uid, taskId);
   }
 
@@ -109,6 +123,8 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
         markComplete: markCompleteForUser,
         markActive: markActiveForUser,
         deleteTask: deleteTaskForUser,
+        restoreDeletedTask: restoreDeletedTaskForUser,
+        removeTaskPermanently: removeTaskPermanentlyForUser,
       }}
     >
       {children}

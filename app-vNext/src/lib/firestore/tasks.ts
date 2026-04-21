@@ -22,6 +22,7 @@ export type TaskRecord = {
   itemKind: TaskItemKind;
   title: string;
   notes: string;
+  listName: string;
   category: string;
   estimatedLength: number | null;
   priorityTier: PriorityTier;
@@ -32,6 +33,7 @@ export type TaskRecord = {
   recurring: boolean;
   completed: boolean;
   completedAt: Date | null;
+  deletedAt: Date | null;
   linkedCalendarBlockIds: string[];
   createdAt: Date | null;
   updatedAt: Date | null;
@@ -71,6 +73,7 @@ export function normalizeTask(snapshot: QueryDocumentSnapshot<DocumentData>) {
     itemKind: data.itemKind === "deadline" ? "deadline" : "task",
     title: data.title || "",
     notes: data.notes || "",
+    listName: typeof data.listName === "string" && data.listName.trim() ? data.listName : "Main",
     category: data.category || "",
     estimatedLength:
       typeof data.estimatedLength === "number" ? data.estimatedLength : null,
@@ -82,6 +85,7 @@ export function normalizeTask(snapshot: QueryDocumentSnapshot<DocumentData>) {
     recurring: Boolean(data.recurring),
     completed: Boolean(data.completed),
     completedAt: toDate(data.completedAt),
+    deletedAt: toDate(data.deletedAt),
     linkedCalendarBlockIds: Array.isArray(data.linkedCalendarBlockIds)
       ? data.linkedCalendarBlockIds.filter((value: unknown): value is string => typeof value === "string")
       : [],
@@ -110,6 +114,7 @@ export type TaskDraft = {
   itemKind?: TaskItemKind;
   title: string;
   notes: string;
+  listName?: string;
   category: string;
   estimatedLength: number | null;
   priorityTier: PriorityTier;
@@ -125,6 +130,7 @@ export async function createTask(userId: string, draft: TaskDraft) {
     itemKind: draft.itemKind || "task",
     title: draft.title,
     notes: draft.notes,
+    listName: draft.listName?.trim() || "Main",
     category: draft.category,
     estimatedLength: draft.estimatedLength ?? "",
     priorityTier: draft.priorityTier,
@@ -135,6 +141,7 @@ export async function createTask(userId: string, draft: TaskDraft) {
     recurring: Boolean(draft.recurring),
     completed: false,
     completedAt: null,
+    deletedAt: null,
     linkedCalendarBlockIds: [],
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -157,6 +164,7 @@ export async function updateTask(userId: string, taskId: string, draft: TaskDraf
     itemKind: draft.itemKind || "task",
     title: draft.title,
     notes: draft.notes,
+    listName: draft.listName?.trim() || "Main",
     category: draft.category,
     estimatedLength: draft.estimatedLength ?? "",
     priorityTier: draft.priorityTier,
@@ -187,6 +195,20 @@ export async function reopenTask(userId: string, taskId: string) {
 
 export async function removeTask(userId: string, taskId: string) {
   await deleteDoc(doc(db, "users", userId, "tasks", taskId));
+}
+
+export async function softDeleteTask(userId: string, taskId: string) {
+  await updateDoc(doc(db, "users", userId, "tasks", taskId), {
+    deletedAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function restoreTask(userId: string, taskId: string) {
+  await updateDoc(doc(db, "users", userId, "tasks", taskId), {
+    deletedAt: null,
+    updatedAt: serverTimestamp(),
+  });
 }
 
 export async function addLinkedCalendarBlock(userId: string, taskId: string, blockId: string) {

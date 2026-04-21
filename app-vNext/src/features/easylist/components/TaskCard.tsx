@@ -6,9 +6,11 @@ type TaskCardProps = {
   onEdit: (task: TaskRecord) => void;
   onComplete: (taskId: string) => Promise<void>;
   onReopen?: (taskId: string) => Promise<void>;
+  isSelected?: boolean;
+  onSelect?: (taskId: string, selected: boolean) => void;
 };
 
-export function TaskCard({ task, onEdit, onComplete, onReopen }: TaskCardProps) {
+export function TaskCard({ task, onEdit, onComplete, onReopen, isSelected = false, onSelect }: TaskCardProps) {
   const priority = getPriorityMeta(task.priorityTier, task.priorityLabel);
   const overdue = isOverdue(task);
   const dueToday = isDueToday(task);
@@ -22,15 +24,25 @@ export function TaskCard({ task, onEdit, onComplete, onReopen }: TaskCardProps) 
         : "";
 
   return (
-    <article className={`task-card-vnext priority-tier-${priority.tier}${task.completed ? " completed" : ""}`}>
+    <article className={`task-card-vnext priority-tier-${priority.tier}${task.completed ? " completed" : ""}${isSelected ? " selected" : ""}`}>
+      {onSelect ? (
+        <label className="task-card-select" aria-label={`Select ${task.title || "task"}`}>
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={(event) => onSelect(task.id, event.target.checked)}
+          />
+        </label>
+      ) : null}
       <button type="button" className="task-card-main" onClick={() => onEdit(task)}>
         <div className="task-card-copy">
           <div className="task-card-title-row">
             <h3>{task.title || "Untitled task"}</h3>
             <span className="priority-pill-vnext">{priority.tier}</span>
           </div>
-          {(task.itemKind === "deadline" || dueLabel || scheduledCount || task.linkedCalendarEventId || task.linkedNoteId) ? (
+          {(task.itemKind === "deadline" || dueLabel || task.listName !== "Main" || scheduledCount || task.linkedCalendarEventId || task.linkedNoteId) ? (
           <div className="task-meta-row task-meta-row-compact">
+            {task.listName !== "Main" ? <span className="task-meta-chip">{task.listName}</span> : null}
             <span className={`task-meta-chip${task.itemKind === "deadline" ? " urgent" : ""}`}>
               {task.itemKind === "deadline" ? "Deadline" : "Task"}
             </span>

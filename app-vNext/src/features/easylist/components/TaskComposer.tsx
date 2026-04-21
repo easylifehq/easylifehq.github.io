@@ -8,6 +8,7 @@ import { useSettings } from "@/features/settings/SettingsContext";
 
 type TaskComposerProps = {
   onSubmit: (draft: TaskDraft) => Promise<string | null | void>;
+  listName?: string;
 };
 
 type TaskRowDraft = {
@@ -43,7 +44,7 @@ const EMPTY_ROW = (priorityTier = 5): TaskRowDraft => ({
 
 const BRAIN_DUMP_DRAFT_KEY = "easylife.easylist.brainDumpDraft";
 
-function buildTaskDraft(row: TaskRowDraft): TaskDraft | null {
+function buildTaskDraft(row: TaskRowDraft, listName = "Main"): TaskDraft | null {
   if (!row.title.trim()) {
     return null;
   }
@@ -51,6 +52,7 @@ function buildTaskDraft(row: TaskRowDraft): TaskDraft | null {
   return {
     itemKind: row.itemKind,
     title: row.title.trim(),
+    listName,
     category: row.category.trim(),
     dueDate: row.dueDate || null,
     estimatedLength: row.estimatedLength ? Number(row.estimatedLength) : null,
@@ -356,7 +358,7 @@ function buildAnalysisMessage(parsedRows: TaskRowDraft[], source: "ai" | "local"
   }; check the Due column before saving.`;
 }
 
-export function TaskComposer({ onSubmit }: TaskComposerProps) {
+export function TaskComposer({ onSubmit, listName = "Main" }: TaskComposerProps) {
   const { settings } = useSettings();
   const firstTaskInputRef = useRef<HTMLInputElement | null>(null);
   const makeEmptyRow = () => EMPTY_ROW(settings.easyList.defaultPriorityTier);
@@ -498,7 +500,7 @@ export function TaskComposer({ onSubmit }: TaskComposerProps) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const drafts = rows.map(buildTaskDraft).filter(Boolean) as TaskDraft[];
+    const drafts = rows.map((row) => buildTaskDraft(row, listName)).filter(Boolean) as TaskDraft[];
     if (!drafts.length) return;
 
     setIsSubmitting(true);

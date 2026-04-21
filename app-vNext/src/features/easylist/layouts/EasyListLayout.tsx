@@ -6,6 +6,7 @@ const links = [
   { to: "/app/easylist/dashboard", label: "To-do list" },
   { to: "/app/easylist/add", label: "Add Tasks" },
   { to: "/app/easylist/archive", label: "Archive" },
+  { to: "/app/easylist/deleted", label: "Deleted" },
 ];
 
 export function EasyListLayout() {
