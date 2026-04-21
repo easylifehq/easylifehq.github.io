@@ -6,6 +6,17 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.6.0
+
+### Added
+
+- Added a Firebase rules verification record covering current Firestore rule shape, client data paths, Cloud Function auth checks, and a manual owner-vs-other-user test plan.
+
+### Changed
+
+- Updated the security checklist and roadmap around the 4.6.0 Firebase rules verification pass.
+- Documented that the verified Firestore rules were deployed to `pipeline-2f422`.
+
 ## 4.5.6
 
 ### Added

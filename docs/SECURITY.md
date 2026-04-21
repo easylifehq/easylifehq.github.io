@@ -7,6 +7,7 @@ This checklist is the working security baseline for the web app, mobile app, Fir
 - Firestore rules must stay deployed with `firestore.rules`.
 - User data must live under `users/{uid}/...` and only be readable or writable by that authenticated `uid`.
 - New shared or public collections require an explicit rule review before use.
+- The 4.6.0 Firestore path verification lives in `docs/FIREBASE_RULES_VERIFICATION.md`.
 - Firebase Authentication must be required for every private app route.
 - Cloud Functions that use private app data or AI features must verify Firebase ID tokens.
 - Cloud Function CORS should stay limited to known EasyLife origins and local development origins.
@@ -26,6 +27,7 @@ This checklist is the working security baseline for the web app, mobile app, Fir
 - Confirm `firebase.json` still points to Firestore rules before deploy.
 - Confirm new Firestore collections live under `users/{uid}` or have documented rules.
 - Confirm new functions validate auth before doing private work.
+- Re-run the Firebase rules verification checklist before broader mobile sharing or native wrapping.
 - Confirm user-facing copy explains data export, delete, trash, AI, and notification behavior clearly.
 
 ## Mobile

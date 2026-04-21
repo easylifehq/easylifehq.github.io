@@ -4,11 +4,11 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.5.0`
-- Current planning target: `4.5.0` Planner Item Types
-- Next feature target: `4.6.0` Firebase Rules Verification
-- Product polish queue: `4.1.x` Notification Follow-Up, `4.6.0` Firebase Rules Verification
-- Future major target: `4.0.0` Mobile App Foundation and Notifications
+- App package version: `4.6.0`
+- Current planning target: `4.6.0` Firebase Rules Verification
+- Next feature target: `4.1.x` Notification Follow-Up
+- Product polish queue: `4.1.x` Notification Follow-Up, mobile real-device QA, calendar/list real-use patches
+- Future major target: native mobile wrapping after the PWA install path proves stable
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
 
 ## Working Rules
@@ -468,19 +468,22 @@ Goal: Separate calendar and task items by how they behave in real life: events y
 - Done: Calendar event creation can also create a linked EasyList task/deadline for prep work or submission work.
 - Done: EasyList cards show whether an item is a Task or Deadline and whether it is linked to a calendar event.
 - Done: Existing tasks and events remain compatible with default Task/Event behavior.
+- Done in `4.5.6`: EasyCalendar blank hour quick-create can create events, deadlines, or scheduled EasyList task blocks.
 
 ### 4.6.0 Firebase Rules Verification
 
-Status: Planned
+Status: Done
 
 Goal: Do the deeper Firebase security verification after the mobile foundation is moving, without blocking `4.0.0`.
 
-- Re-check Firestore rules against every app data path after the mobile shell is in place.
-- Deploy or re-deploy Firestore rules when the production timing is right.
-- Add a simple rules test plan for signed-out users, the account owner, and a different signed-in user.
-- Confirm mobile auth sessions still map cleanly to `users/{uid}` data.
-- Review Firebase project settings, allowed domains, and hosting configuration before broader sharing.
-- Update the security checklist with anything learned during real mobile testing.
+- Done: Re-checked Firestore rules against every app data path after the mobile shell was in place.
+- Done: Confirmed current client Firestore helpers stay under `users/{uid}` owner-scoped paths.
+- Done: Confirmed the active rules deny root-level/shared document paths by default.
+- Done: Added a simple rules test plan for signed-out users, the account owner, and a different signed-in user.
+- Done: Confirmed mobile auth sessions should continue mapping cleanly to `users/{uid}` data because the client helpers all receive the signed-in user id before reading or writing.
+- Done: Reviewed Firebase project config files and documented the intentional Firestore rules deploy command.
+- Done: Updated the security checklist with the 4.6.0 verification record.
+- Done: Deployed Firestore rules to `pipeline-2f422` with `firebase deploy --only firestore:rules --project pipeline-2f422`.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 
