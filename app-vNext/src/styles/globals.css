@@ -3396,6 +3396,39 @@ button.calendar-detail-card:disabled {
   max-width: min(94vw, 420px);
 }
 
+.calendar-quick-create-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.3rem;
+  padding: 0.25rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  background: var(--ui-bg-subtle, color-mix(in srgb, var(--shell-card-bg) 80%, transparent));
+}
+
+.calendar-quick-create-tabs button {
+  min-height: 2.2rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.calendar-quick-create-tabs button:hover,
+.calendar-quick-create-tabs button:focus-visible {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  border-color: var(--ui-border-subtle, var(--shell-card-border));
+}
+
+.calendar-quick-create-tabs button.active {
+  background: var(--shell-button-bg);
+  color: var(--shell-button-text);
+  box-shadow: var(--shadow-soft);
+}
+
 .calendar-deadline-stack {
   display: grid;
   gap: 0.55rem;

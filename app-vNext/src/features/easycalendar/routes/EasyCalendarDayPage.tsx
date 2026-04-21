@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
@@ -25,12 +25,16 @@ import {
   toTimeInputValue,
 } from "@/features/easycalendar/lib/calendarUtils";
 
-type QuickEventDraft = {
+type QuickCreateMode = "event" | "deadline" | "task-block";
+
+type QuickCalendarDraft = {
+  mode: QuickCreateMode;
   date: string;
   startTime: string;
   endTime: string;
   title: string;
   eventType: CalendarEventType;
+  selectedTaskId: string;
 };
 
 export function EasyCalendarDayPage() {
@@ -48,7 +52,7 @@ export function EasyCalendarDayPage() {
   const { settings } = useSettings();
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  const [quickEvent, setQuickEvent] = useState<QuickEventDraft | null>(null);
+  const [quickEvent, setQuickEvent] = useState<QuickCalendarDraft | null>(null);
   const [quickEventMessage, setQuickEventMessage] = useState("");
   const [isSavingQuickEvent, setIsSavingQuickEvent] = useState(false);
   const [planMessage, setPlanMessage] = useState("");
@@ -67,6 +71,7 @@ export function EasyCalendarDayPage() {
     () => getOpenTimeWindowsForDay(today, events, taskBlocks, wakeHour, dayEndHour),
     [events, taskBlocks, today, wakeHour, dayEndHour]
   );
+  const activeTasks = useMemo(() => tasks.filter((task) => !task.completed), [tasks]);
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
     [selectedBlockId, taskBlocks]
@@ -141,41 +146,71 @@ export function EasyCalendarDayPage() {
   function openQuickEvent(slotStart: Date) {
     const slotEnd = addMinutes(slotStart, settings.easyCalendar.defaultTaskBlockMinutes) || addMinutes(slotStart, 30) || slotStart;
     setQuickEvent({
+      mode: "event",
       date: toDateInputValue(slotStart),
       startTime: toTimeInputValue(slotStart),
       endTime: toTimeInputValue(slotEnd),
       title: "",
       eventType: "appointment",
+      selectedTaskId: "",
     });
     setQuickEventMessage("");
   }
 
-  async function handleQuickEventSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleQuickEventSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!quickEvent) return;
 
     const startAt = combineDateAndTime(quickEvent.date, quickEvent.startTime);
     const endAt = combineDateAndTime(quickEvent.date, quickEvent.endTime);
 
-    if (!quickEvent.title.trim()) {
-      setQuickEventMessage("Name the event first.");
+    if (quickEvent.mode === "task-block" && !quickEvent.selectedTaskId) {
+      setQuickEventMessage("Choose a task first.");
       return;
     }
 
-    if (!startAt || !endAt || endAt <= startAt) {
+    if (quickEvent.mode !== "task-block" && !quickEvent.title.trim()) {
+      setQuickEventMessage(quickEvent.mode === "deadline" ? "Name the deadline first." : "Name the event first.");
+      return;
+    }
+
+    if (!startAt) {
+      setQuickEventMessage("Choose a valid time first.");
+      return;
+    }
+
+    if (quickEvent.mode !== "deadline" && (!endAt || endAt <= startAt)) {
       setQuickEventMessage("End time needs to be after the start.");
       return;
     }
 
     setIsSavingQuickEvent(true);
     try {
+      if (quickEvent.mode === "task-block") {
+        const task = activeTasks.find((activeTask) => activeTask.id === quickEvent.selectedTaskId);
+        if (!task || !endAt) {
+          setQuickEventMessage("That task is not available anymore.");
+          return;
+        }
+
+        await scheduleTask(task, {
+          startAt,
+          endAt,
+          planningState: "scheduled",
+          userAdjusted: true,
+        });
+        setQuickEvent(null);
+        setQuickEventMessage("");
+        return;
+      }
+
       await addEvent({
         title: quickEvent.title.trim(),
         description: "",
-        itemKind: "event",
+        itemKind: quickEvent.mode === "deadline" ? "deadline" : "event",
         categoryId: null,
         startAt,
-        endAt,
+        endAt: quickEvent.mode === "deadline" ? startAt : endAt,
         allDay: false,
         isRecurring: false,
         recurrenceRule: null,
@@ -355,13 +390,19 @@ export function EasyCalendarDayPage() {
             className="drawer-panel-vnext calendar-quick-create-panel"
             role="dialog"
             aria-modal="true"
-            aria-label="Quick add calendar event"
+            aria-label="Quick add calendar item"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="drawer-header-vnext">
               <div>
                 <p className="eyebrow">Quick add</p>
-                <h2>New event</h2>
+                <h2>
+                  {quickEvent.mode === "task-block"
+                    ? "Schedule task"
+                    : quickEvent.mode === "deadline"
+                      ? "New deadline"
+                      : "New event"}
+                </h2>
               </div>
               <button type="button" className="ghost-button compact-button" onClick={() => setQuickEvent(null)}>
                 Close
@@ -369,15 +410,56 @@ export function EasyCalendarDayPage() {
             </div>
 
             <form className="task-composer" onSubmit={(event) => void handleQuickEventSubmit(event)}>
-              <label className="field-stack">
-                <span>Title</span>
-                <input
-                  autoFocus
-                  value={quickEvent.title}
-                  onChange={(event) => setQuickEvent((current) => current ? { ...current, title: event.target.value } : current)}
-                  placeholder="Class, practice, appointment..."
-                />
-              </label>
+              <div className="calendar-quick-create-tabs" aria-label="Quick add type">
+                {[
+                  ["event", "Event"],
+                  ["deadline", "Deadline"],
+                  ["task-block", "Task"],
+                ].map(([mode, label]) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    className={quickEvent.mode === mode ? "active" : ""}
+                    onClick={() =>
+                      setQuickEvent((current) =>
+                        current ? { ...current, mode: mode as QuickCreateMode, title: mode === "task-block" ? "" : current.title } : current
+                      )
+                    }
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              {quickEvent.mode === "task-block" ? (
+                <label className="field-stack">
+                  <span>Task</span>
+                  <select
+                    autoFocus
+                    value={quickEvent.selectedTaskId}
+                    onChange={(event) =>
+                      setQuickEvent((current) => current ? { ...current, selectedTaskId: event.target.value } : current)
+                    }
+                  >
+                    <option value="">Choose a task...</option>
+                    {activeTasks.map((task) => (
+                      <option key={task.id} value={task.id}>
+                        {task.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : (
+                <label className="field-stack">
+                  <span>{quickEvent.mode === "deadline" ? "Deadline" : "Title"}</span>
+                  <input
+                    autoFocus
+                    value={quickEvent.title}
+                    onChange={(event) => setQuickEvent((current) => current ? { ...current, title: event.target.value } : current)}
+                    placeholder={quickEvent.mode === "deadline" ? "Homework due, exam, application..." : "Class, practice, appointment..."}
+                  />
+                </label>
+              )}
 
               <div className="task-composer-grid">
                 <label className="field-stack">
@@ -389,38 +471,42 @@ export function EasyCalendarDayPage() {
                   />
                 </label>
                 <label className="field-stack">
-                  <span>Start</span>
+                  <span>{quickEvent.mode === "deadline" ? "Due time" : "Start"}</span>
                   <input
                     type="time"
                     value={quickEvent.startTime}
                     onChange={(event) => setQuickEvent((current) => current ? { ...current, startTime: event.target.value } : current)}
                   />
                 </label>
-                <label className="field-stack">
-                  <span>End</span>
-                  <input
-                    type="time"
-                    value={quickEvent.endTime}
-                    onChange={(event) => setQuickEvent((current) => current ? { ...current, endTime: event.target.value } : current)}
-                  />
-                </label>
-                <label className="field-stack">
-                  <span>Kind</span>
-                  <select
-                    value={quickEvent.eventType}
-                    onChange={(event) =>
-                      setQuickEvent((current) =>
-                        current ? { ...current, eventType: event.target.value as CalendarEventType } : current
-                      )
-                    }
-                  >
-                    <option value="appointment">Appointment</option>
-                    <option value="class">Class</option>
-                    <option value="work">Work</option>
-                    <option value="personal">Personal</option>
-                    <option value="other">Other</option>
-                  </select>
-                </label>
+                {quickEvent.mode !== "deadline" ? (
+                  <label className="field-stack">
+                    <span>End</span>
+                    <input
+                      type="time"
+                      value={quickEvent.endTime}
+                      onChange={(event) => setQuickEvent((current) => current ? { ...current, endTime: event.target.value } : current)}
+                    />
+                  </label>
+                ) : null}
+                {quickEvent.mode !== "task-block" ? (
+                  <label className="field-stack">
+                    <span>Kind</span>
+                    <select
+                      value={quickEvent.eventType}
+                      onChange={(event) =>
+                        setQuickEvent((current) =>
+                          current ? { ...current, eventType: event.target.value as CalendarEventType } : current
+                        )
+                      }
+                    >
+                      <option value="appointment">Appointment</option>
+                      <option value="class">Class</option>
+                      <option value="work">Work</option>
+                      <option value="personal">Personal</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </label>
+                ) : null}
               </div>
 
               {quickEventMessage ? <p className="error-copy">{quickEventMessage}</p> : null}
@@ -430,7 +516,13 @@ export function EasyCalendarDayPage() {
                   Cancel
                 </button>
                 <button type="submit" className="primary-button" disabled={isSavingQuickEvent}>
-                  {isSavingQuickEvent ? "Adding..." : "Add event"}
+                  {isSavingQuickEvent
+                    ? "Adding..."
+                    : quickEvent.mode === "task-block"
+                      ? "Schedule task"
+                      : quickEvent.mode === "deadline"
+                        ? "Add deadline"
+                        : "Add event"}
                 </button>
               </div>
             </form>

@@ -6,6 +6,12 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.5.6
+
+### Added
+
+- Expanded EasyCalendar quick-create so blank hour slots can create events, deadlines, or scheduled EasyList task blocks.
+
 ## 4.5.4
 
 ### Changed
