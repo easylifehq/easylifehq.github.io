@@ -36,6 +36,7 @@ export function EasyNotesLibraryPage() {
   const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
   const [bulkFolderId, setBulkFolderId] = useState("");
   const [cleanupMessage, setCleanupMessage] = useState("");
+  const [toolsOpen, setToolsOpen] = useState(false);
   const [lastOpenNoteId] = useState(() => window.localStorage.getItem(lastOpenNoteStorageKey) || "");
 
   const folderNameById = useMemo(
@@ -142,10 +143,29 @@ export function EasyNotesLibraryPage() {
         eyebrow="EasyNotes"
         title="Notes"
       >
+        <div className="notes-command-strip" aria-label="Notes actions">
+          <button type="button" className="notes-command-button" onClick={() => void handleCreateNote()} aria-label="Add note">
+            +
+          </button>
+          <a className="notes-command-button" href="#notes-search" aria-label="Search notes">
+            Search
+          </a>
+          <button
+            type="button"
+            className={`notes-command-button${toolsOpen ? " active" : ""}`}
+            onClick={() => setToolsOpen((current) => !current)}
+            aria-expanded={toolsOpen}
+            aria-controls="notes-library-tools"
+          >
+            Edit
+          </button>
+        </div>
+
         <div className="notes-library-toolbar">
           <label className="field-stack notes-search-field">
             <span>Search notes</span>
             <input
+              id="notes-search"
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
@@ -165,7 +185,12 @@ export function EasyNotesLibraryPage() {
           </div>
         </div>
 
-        <details className="advanced-disclosure notes-advanced-tools">
+        <details
+          id="notes-library-tools"
+          className="advanced-disclosure notes-advanced-tools"
+          open={toolsOpen}
+          onToggle={(event) => setToolsOpen(event.currentTarget.open)}
+        >
           <summary>Folders and cleanup</summary>
         <div className="notes-control-center">
           <label className="field-stack">

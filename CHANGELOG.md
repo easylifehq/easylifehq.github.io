@@ -6,6 +6,15 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.14.0
+
+### Changed
+
+- Added a small EasyNotes command strip for faster add, search, and edit access.
+- Tightened EasyList task row spacing so lists stay easier to scan on mobile and desktop.
+- Improved shared button, focus, and floating action button polish across the app shell.
+- Kept mobile task rows compact instead of stacking every action into tall cards.
+
 ## 4.12.0
 
 ### Added

@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.12.0`
-- Current planning target: `4.12.0` Native Readiness and Tester Prep
-- Next feature target: `4.14.0` General Housekeeping and UI QA
-- Product polish queue: general housekeeping, mobile real-device QA, calendar/list real-use patches, native wrapping readiness
+- App package version: `4.14.0`
+- Current planning target: `4.14.0` General Housekeeping and UI QA
+- Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
+- Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
 
@@ -586,14 +586,14 @@ Goal: Clean up Settings and refresh public landing pages so the app explains the
 
 ### 4.14.0 General Housekeeping and UI QA
 
-Status: Planned
+Status: Done
 
 Goal: Run the ugly sweep after Settings, landing pages, and the 4.9-4.12 catch-up releases are current.
 
-- Audit buttons, labels, and page copy for clarity.
-- Tighten padding, margins, spacing, and mobile overflow across high-traffic pages.
-- Check quick-add placement, drawer scrolling, sticky headers, and accidental mobile header capture.
-- Patch pages that feel crowded or visually out of rhythm after real use.
+- Done: Audited shared buttons, task rows, Notes actions, and high-traffic mobile controls for clarity.
+- Done: Tightened padding, margins, spacing, and mobile overflow across shared list and notes surfaces.
+- Done: Checked quick-add placement, task-card stacking, and mobile tap targets.
+- Done: Patched crowded Notes and EasyList surfaces so the app feels lighter in daily use.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 
