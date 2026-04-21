@@ -337,6 +337,38 @@ const settingsSections: Array<{
   },
 ];
 
+const settingsFocusCards: Array<{
+  section: SettingsSectionId;
+  label: string;
+  title: string;
+  description: string;
+}> = [
+  {
+    section: "customize",
+    label: "Look and feel",
+    title: "Themes and app tone",
+    description: "Change the base polish or switch into a personality theme.",
+  },
+  {
+    section: "install",
+    label: "Phone setup",
+    title: "Home-screen install",
+    description: "Use the iPhone path and startup preference together.",
+  },
+  {
+    section: "notifications",
+    label: "Reminders",
+    title: "Task and calendar alerts",
+    description: "Control permission, quiet hours, and reminder categories.",
+  },
+  {
+    section: "data",
+    label: "Safety",
+    title: "Export and health check",
+    description: "Download your data and review link cleanup signals.",
+  },
+];
+
 const pageSettingsSections: Array<{
   id: string;
   label: string;
@@ -781,6 +813,10 @@ export function SettingsPage() {
         <div className="panel-header">
           <p className="eyebrow">Control Center</p>
           <h1>Settings</h1>
+          <p>
+            Keep daily controls easy to find. Theme, startup, install, reminders, exports,
+            and app visibility live here without crowding the working pages.
+          </p>
         </div>
         <div className="settings-status-grid">
           <article className="settings-status-card">
@@ -804,9 +840,9 @@ export function SettingsPage() {
             <p>{notificationPermission}</p>
           </article>
           <article className="settings-status-card">
-            <span>Experimental</span>
-            <strong>{enabledExperiments.length} enabled</strong>
-            <p>{enabledExperiments.length ? "Labs are active." : "Standard experience only."}</p>
+            <span>Startup</span>
+            <strong>{startupRouteOptions.find((option) => option.value === settings.startupRoute)?.label || "EasyHQ"}</strong>
+            <p>Where the app opens after login or install.</p>
           </article>
         </div>
       </section>
@@ -845,6 +881,21 @@ export function SettingsPage() {
             <p className="eyebrow">{activeSectionConfig.eyebrow}</p>
             <h2>{activeSectionConfig.label}</h2>
             <p>{activeSectionConfig.description}</p>
+          </div>
+
+          <div className="settings-focus-grid" aria-label="Common settings shortcuts">
+            {settingsFocusCards.map((card) => (
+              <button
+                key={card.title}
+                type="button"
+                className={activeSection === card.section ? "active" : ""}
+                onClick={() => setActiveSection(card.section)}
+              >
+                <span>{card.label}</span>
+                <strong>{card.title}</strong>
+                <p>{card.description}</p>
+              </button>
+            ))}
           </div>
 
       <div className="settings-layout-grid">

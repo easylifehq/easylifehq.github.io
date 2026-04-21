@@ -4,10 +4,10 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.8.0`
-- Current planning target: `4.8.0` App Entry and Mobile Shell Fixes
-- Next feature target: `4.13.0` Settings and Landing Page Cleanup
-- Product polish queue: Settings cleanup, landing page refresh, mobile real-device QA, calendar/list real-use patches, native wrapping readiness
+- App package version: `4.13.0`
+- Current planning target: `4.13.0` Settings and Landing Page Cleanup
+- Next feature target: `4.14.0` General Housekeeping and UI QA
+- Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
 - Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
 
@@ -514,16 +514,16 @@ Goal: Make EasyLife open like a real app and make the always-available capture b
 
 ### 4.13.0 Settings and Landing Page Cleanup
 
-Status: Planned
+Status: Done
 
 Goal: Clean up Settings and refresh public landing pages so the app explains the current product instead of the older project shape.
 
-- Make Settings easier to scan by reducing crowded sections, tightening labels, and grouping controls around real user decisions.
-- Update the main landing page with the mobile, notification, assistant, planner-item, and security improvements.
-- Make sure each active app has a current landing page or clear product page.
-- Add landing pages for apps that are active but not represented yet.
-- Keep landing copy polished, direct, and honest about what is active versus what is coming later.
-- Push broad button/text/padding housekeeping into the next visual cleanup release.
+- Done: Made Settings easier to scan with clearer hero copy, a startup status card, and shortcuts for themes, phone install, reminders, and data safety.
+- Done: Updated the main landing page with mobile home-screen use, task/deadline structure, notifications, exports, scoped safety, and review-first AI.
+- Done: Made sure each active app has a current landing page or clear product page.
+- Done: Added public pages for EasyHQ, EasyProjects, EasyContacts, EasyWorkout, and EasyStatistics.
+- Done: Kept landing copy polished, direct, and honest about what is active versus what is coming later.
+- Done: Pushed broad button/text/padding housekeeping into the next visual cleanup release.
 
 ### 4.14.0 General Housekeeping and UI QA
 

@@ -6,6 +6,19 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.13.0
+
+### Added
+
+- Added public product pages for EasyHQ, EasyProjects, EasyContacts, EasyWorkout, and EasyStatistics.
+- Added common Settings shortcut cards for themes, phone install, reminders, and data safety.
+
+### Changed
+
+- Refreshed the main landing page around the current mobile-ready command center, task/deadline model, reminders, exports, and review-first AI.
+- Updated product navigation so every active app has a current marketing route.
+- Tightened the Settings hero copy and status cards around real daily controls.
+
 ## 4.8.0
 
 ### Changed

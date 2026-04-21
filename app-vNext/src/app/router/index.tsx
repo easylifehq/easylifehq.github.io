@@ -148,6 +148,26 @@ const EasyPipelineMarketingPage = lazyNamed(
   () => import("@/features/marketing/routes/EasyPipelineMarketingPage"),
   "EasyPipelineMarketingPage"
 );
+const EasyHQMarketingPage = lazyNamed(
+  () => import("@/features/marketing/routes/EasyHQMarketingPage"),
+  "EasyHQMarketingPage"
+);
+const EasyProjectsMarketingPage = lazyNamed(
+  () => import("@/features/marketing/routes/EasyProjectsMarketingPage"),
+  "EasyProjectsMarketingPage"
+);
+const EasyContactsMarketingPage = lazyNamed(
+  () => import("@/features/marketing/routes/EasyContactsMarketingPage"),
+  "EasyContactsMarketingPage"
+);
+const EasyWorkoutMarketingPage = lazyNamed(
+  () => import("@/features/marketing/routes/EasyWorkoutMarketingPage"),
+  "EasyWorkoutMarketingPage"
+);
+const EasyStatisticsMarketingPage = lazyNamed(
+  () => import("@/features/marketing/routes/EasyStatisticsMarketingPage"),
+  "EasyStatisticsMarketingPage"
+);
 const MarketingLandingPage = lazyNamed(
   () => import("@/features/marketing/routes/MarketingLandingPage"),
   "MarketingLandingPage"
@@ -202,6 +222,11 @@ export function AppRouter() {
           <Route path="/easynotes" element={<EasyNotesMarketingPage />} />
           <Route path="/easycalendar" element={<EasyCalendarMarketingPage />} />
           <Route path="/easypipeline" element={<EasyPipelineMarketingPage />} />
+          <Route path="/easyhq" element={<EasyHQMarketingPage />} />
+          <Route path="/easyprojects" element={<EasyProjectsMarketingPage />} />
+          <Route path="/easycontacts" element={<EasyContactsMarketingPage />} />
+          <Route path="/easyworkout" element={<EasyWorkoutMarketingPage />} />
+          <Route path="/easystatistics" element={<EasyStatisticsMarketingPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Route>
 

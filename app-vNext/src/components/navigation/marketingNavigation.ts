@@ -2,6 +2,11 @@ import type { ProductsMenuItem } from "@/components/navigation/ProductsMenu";
 
 export const marketingProductItems: ProductsMenuItem[] = [
   {
+    href: "/easyhq",
+    label: "EasyHQ",
+    description: "Open the command center.",
+  },
+  {
     href: "/easylist",
     label: "EasyList",
     description: "Clear the small stuff and protect your time.",
@@ -20,6 +25,26 @@ export const marketingProductItems: ProductsMenuItem[] = [
     href: "/easypipeline",
     label: "EasyPipeline",
     description: "Track applications and follow-ups clearly.",
+  },
+  {
+    href: "/easyprojects",
+    label: "EasyProjects",
+    description: "Plan bigger goals with linked tasks.",
+  },
+  {
+    href: "/easycontacts",
+    label: "EasyContacts",
+    description: "Remember people and follow-ups.",
+  },
+  {
+    href: "/easyworkout",
+    label: "EasyWorkout",
+    description: "Log training in Gym Mode.",
+  },
+  {
+    href: "/easystatistics",
+    label: "EasyStatistics",
+    description: "Review progress without page clutter.",
   },
 ];
 
@@ -42,7 +67,7 @@ export function getMarketingSectionLinks(pathname: string): SectionLink[] {
     return [
       { href: "#overview", label: "Overview" },
       { href: "#features", label: "Features" },
-      { href: "#mobile", label: "Mobile" },
+      { href: "#workflow", label: "Workflow" },
       { href: "#start", label: "Start" },
     ];
   }
@@ -61,6 +86,17 @@ export function getMarketingSectionLinks(pathname: string): SectionLink[] {
       { href: "#overview", label: "Overview" },
       { href: "#features", label: "Features" },
       { href: "#planning", label: "Planning" },
+      { href: "#start", label: "Start" },
+    ];
+  }
+
+  if (
+    ["/easyhq", "/easyprojects", "/easycontacts", "/easyworkout", "/easystatistics"].includes(pathname)
+  ) {
+    return [
+      { href: "#overview", label: "Overview" },
+      { href: "#features", label: "Features" },
+      { href: "#workflow", label: "Workflow" },
       { href: "#start", label: "Start" },
     ];
   }

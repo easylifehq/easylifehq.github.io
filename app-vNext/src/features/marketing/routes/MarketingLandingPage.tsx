@@ -3,34 +3,39 @@ import { Link } from "react-router-dom";
 const productCards = [
   {
     id: "easyhq",
+    href: "/easyhq",
     eyebrow: "EasyHQ",
-    title: "The calm control center.",
+    title: "The command center.",
     description:
-      "See the shape of your day, the next things that matter, and where you still have room.",
+      "Open to the page that matters, see the shape of your day, and jump into the next useful action.",
   },
   {
     id: "easylist",
+    href: "/easylist",
     eyebrow: "EasyList",
-    title: "The master task system.",
+    title: "Tasks, deadlines, and quick lists.",
     description:
-      "Capture brain dumps, sort priorities, and turn loose thoughts into structured work.",
+      "Capture anything from burritos to exam prep, then add urgency, notes, deadlines, or calendar time only when needed.",
   },
   {
     id: "easycalendar",
+    href: "/easycalendar",
     eyebrow: "EasyCalendar",
-    title: "The time system.",
+    title: "The Google-style time layer.",
     description:
-      "See fixed commitments, flexible task blocks, and the open windows where progress actually fits.",
+      "Separate fixed events, deadlines, and flexible work blocks so your day stays readable.",
   },
   {
     id: "easynotes",
+    href: "/easynotes",
     eyebrow: "EasyNotes",
-    title: "The thought capture space.",
+    title: "Fast notes that can turn into action.",
     description:
-      "Write quickly, keep it simple, and turn rough notes into task drafts when you are ready.",
+      "Write quickly, keep folders clean, and turn useful lines into task drafts when you are ready.",
   },
   {
     id: "easypipeline",
+    href: "/easypipeline",
     eyebrow: "EasyPipeline",
     title: "The momentum tracker.",
     description:
@@ -38,6 +43,7 @@ const productCards = [
   },
   {
     id: "easyprojects",
+    href: "/easyprojects",
     eyebrow: "EasyProjects",
     title: "The project planning layer.",
     description:
@@ -45,6 +51,7 @@ const productCards = [
   },
   {
     id: "easycontacts",
+    href: "/easycontacts",
     eyebrow: "EasyContacts",
     title: "The relationship memory.",
     description:
@@ -52,29 +59,38 @@ const productCards = [
   },
   {
     id: "easyworkout",
+    href: "/easyworkout",
     eyebrow: "EasyWorkout",
-    title: "The training tracker.",
+    title: "The training logger.",
     description:
-      "Log workouts, reuse routines, and keep gym progress from disappearing between sessions.",
+      "Start Gym Mode, log exercises without fighting the keyboard, and keep routines close.",
+  },
+  {
+    id: "easystatistics",
+    href: "/easystatistics",
+    eyebrow: "EasyStatistics",
+    title: "The progress room.",
+    description:
+      "Keep the numbers fun without crowding the pages where you are trying to work.",
   },
 ];
 
 const demoSteps = [
   {
-    title: "Start in EasyHQ",
-    description: "Open with the daily snapshot, quick entry points, and the core-first setup.",
+    title: "Open from the home screen",
+    description: "Launch into HQ, last-used, or the startup page you picked in Settings.",
   },
   {
-    title: "Capture a real task",
-    description: "Add a task in EasyList, set an urgency, and move it into time.",
+    title: "Capture a real life item",
+    description: "Add a task, deadline, class, note, or workout without deciding every detail first.",
   },
   {
-    title: "Write a messy note",
-    description: "Create a note fast, then turn useful lines into tasks or a project.",
+    title: "Move it when it grows",
+    description: "Send tasks into Calendar, Projects, Pipeline, or Notes when more structure is useful.",
   },
   {
-    title: "Show the handoff",
-    description: "Send one task to EasyCalendar, EasyProjects, or EasyPipeline.",
+    title: "Review safely",
+    description: "Use exports, reminders, and review-first AI helpers without surprise changes.",
   },
 ];
 
@@ -84,10 +100,10 @@ export function MarketingLandingPage() {
       <section className="marketing-hero">
         <div className="marketing-hero-copy">
           <p className="eyebrow">EasyLifeHQ</p>
-          <h1>One calm place for tasks, time, notes, and momentum.</h1>
+          <h1>A sleek command center for the things you actually have to handle.</h1>
           <p>
-            Start with the core: capture what is on your mind, put real work into
-            time, and keep notes close enough to turn ideas into action.
+            Capture the messy stuff fast, separate tasks from deadlines and fixed
+            events, then open the app from your phone like it belongs there.
           </p>
 
           <div className="marketing-hero-actions">
@@ -100,25 +116,24 @@ export function MarketingLandingPage() {
           </div>
 
           <div className="marketing-points">
-            <span className="info-pill">Fast capture</span>
-            <span className="info-pill">Calendar handoffs</span>
-            <span className="info-pill">Notes to tasks</span>
+            <span className="info-pill">Home-screen ready</span>
+            <span className="info-pill">Task vs deadline</span>
+            <span className="info-pill">Local reminders</span>
             <span className="info-pill">Review-first AI</span>
           </div>
         </div>
 
         <div className="marketing-hero-card">
-          <span className="info-pill">Demo-ready core</span>
-          <h2>Show the simple loop first.</h2>
+          <span className="info-pill">4.x mobile core</span>
+          <h2>Built around daily use, not a settings maze.</h2>
           <p>
-            EasyHQ, EasyList, EasyNotes, and EasyCalendar explain the product in
-            minutes. Projects, Pipeline, Contacts, Workouts, and Statistics are ready
-            when the story needs more depth.
+            Pick your startup page, add EasyLife to your iPhone home screen, keep
+            reminders local, and export your data when you want a safety check.
           </p>
           <div className="marketing-card-metrics">
+            <span>Launch</span>
             <span>Capture</span>
-            <span>Plan</span>
-            <span>Finish</span>
+            <span>Review</span>
           </div>
         </div>
       </section>
@@ -136,15 +151,9 @@ export function MarketingLandingPage() {
               <p className="eyebrow">{card.eyebrow}</p>
               <h3>{card.title}</h3>
               <p>{card.description}</p>
-              {["easyhq", "easylist", "easycalendar", "easynotes", "easypipeline"].includes(card.id) ? (
-                <Link to={`/${card.id === "easyhq" ? "" : card.id}`} className="text-button marketing-inline-link">
-                  {card.id === "easyhq" ? "See the system" : `Learn about ${card.eyebrow}`}
-                </Link>
-              ) : (
-                <Link to="/login" className="text-button marketing-inline-link">
-                  Open {card.eyebrow}
-                </Link>
-              )}
+              <Link to={card.href} className="text-button marketing-inline-link">
+                Learn about {card.eyebrow}
+              </Link>
             </article>
           ))}
         </div>
@@ -158,16 +167,16 @@ export function MarketingLandingPage() {
 
         <div className="marketing-card-grid">
           <article className="marketing-card">
-            <h3>1. Capture it</h3>
-            <p>Drop tasks, notes, and rough thoughts into the right app without forcing everything into one giant workspace.</p>
+            <h3>1. Capture fast</h3>
+            <p>Drop the thought before it disappears. Details can stay hidden until they matter.</p>
           </article>
           <article className="marketing-card">
-            <h3>2. Plan it</h3>
-            <p>Use EasyCalendar and EasyProjects to turn rough intent into real time, sections, and next steps.</p>
+            <h3>2. Separate the shape</h3>
+            <p>Tasks, deadlines, classes, events, notes, and workouts each get the right amount of structure.</p>
           </article>
           <article className="marketing-card">
-            <h3>3. Stay connected</h3>
-            <p>EasyHQ ties the suite together so you can jump between apps without losing the shape of your day.</p>
+            <h3>3. Keep control</h3>
+            <p>Reminders, exports, startup pages, visible apps, themes, and AI controls stay in Settings.</p>
           </article>
         </div>
       </section>
@@ -200,16 +209,16 @@ export function MarketingLandingPage() {
 
         <div className="marketing-highlights">
           <div className="mini-panel-vnext">
-            <span>Core first</span>
-            <strong>New accounts start with the essentials, then can turn on more apps when they are useful.</strong>
+            <span>Phone first</span>
+            <strong>Add it to your home screen, pick your startup page, and get back in quickly.</strong>
           </div>
           <div className="mini-panel-vnext">
             <span>Connected ecosystem</span>
-            <strong>One login, shared context, and fast switching between the parts of life that need attention.</strong>
+            <strong>One login, shared context, and clean switching between the apps that need attention.</strong>
           </div>
           <div className="mini-panel-vnext">
-            <span>Helpful intelligence</span>
-            <strong>AI assists with capture and planning, but the final call stays with the user.</strong>
+            <span>Safe by design</span>
+            <strong>Exports, scoped data, security rules, and review-first AI keep the user in charge.</strong>
           </div>
         </div>
       </section>
