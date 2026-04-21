@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.8.0
+
+### Changed
+
+- Updated the public root route so signed-in users open their selected startup page instead of the marketing landing page.
+- Enlarged and repositioned the universal quick-add button so it is easier to hit on mobile and less pinned to the corner.
+
 ## 4.7.0
 
 ### Added

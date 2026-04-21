@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.7.0`
-- Current planning target: `4.7.0` Notification Scheduling Polish
+- App package version: `4.8.0`
+- Current planning target: `4.8.0` App Entry and Mobile Shell Fixes
 - Next feature target: `4.13.0` Settings and Landing Page Cleanup
 - Product polish queue: Settings cleanup, landing page refresh, mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -499,6 +499,18 @@ Goal: Turn the existing notification controls into useful reminders for real tas
 - Done: Add cancellation behavior when a task is completed, a calendar block is deleted, or reminders are disabled.
 - Done: Keep reminder scheduling local, deterministic, and reviewable from Settings or EasyHQ.
 - Done: Add QA coverage notes for permission prompts, denied permissions, quiet hours, duplicate prevention, reminder cancellation, and notification tap behavior.
+
+### 4.8.0 App Entry and Mobile Shell Fixes
+
+Status: Done
+
+Goal: Make EasyLife open like a real app and make the always-available capture button easier to reach on mobile.
+
+- Done: Signed-in users who open `/` are sent to HQ, last-used, or their selected startup page instead of the public landing page.
+- Done: The existing `/app` startup route still respects the user's selected startup page.
+- Done: Home-screen installs continue to launch into `/app` through the web app manifest.
+- Done: Quick add is larger and lifted away from the phone corner and safe-area edge.
+- Done: Quick add keeps its compact plus-button treatment on mobile without shrinking below a reliable tap target.
 
 ### 4.13.0 Settings and Landing Page Cleanup
 

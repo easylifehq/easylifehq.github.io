@@ -4,6 +4,7 @@ import { AuthenticatedLayout } from "@/app/layouts/AuthenticatedLayout";
 import { MarketingLayout } from "@/app/layouts/MarketingLayout";
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { AuthenticatedRoute } from "@/features/auth/AuthenticatedRoute";
+import { useAuth } from "@/features/auth/AuthContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { getLastAppRoute } from "@/lib/mobile/appRouteMemory";
 
@@ -171,12 +172,32 @@ function StartupRedirect() {
   return <Navigate to={target} replace />;
 }
 
+function PublicHomeRoute() {
+  const { user, isLoading: isAuthLoading } = useAuth();
+  const { settings, isLoading: isSettingsLoading } = useSettings();
+
+  if (isAuthLoading || (user && isSettingsLoading)) {
+    return <LoadingState label="Opening EasyLifeHQ..." />;
+  }
+
+  if (user) {
+    const target =
+      settings.startupRoute === "last-used"
+        ? getLastAppRoute()?.path || "/app/hq"
+        : settings.startupRoute;
+
+    return <Navigate to={target} replace />;
+  }
+
+  return <MarketingLandingPage />;
+}
+
 export function AppRouter() {
   return (
     <Suspense fallback={<LoadingState label="Loading EasyLifeHQ..." />}>
       <Routes>
         <Route element={<MarketingLayout />}>
-          <Route path="/" element={<MarketingLandingPage />} />
+          <Route path="/" element={<PublicHomeRoute />} />
           <Route path="/easylist" element={<EasyListMarketingPage />} />
           <Route path="/easynotes" element={<EasyNotesMarketingPage />} />
           <Route path="/easycalendar" element={<EasyCalendarMarketingPage />} />
