@@ -249,8 +249,8 @@ export function AppRouter() {
               <Route path="deleted" element={<EasyListDeletedPage />} />
             </Route>
             <Route path="easycalendar" element={<EasyCalendarLayout />}>
-              <Route index element={<Navigate to="/app/easycalendar/week" replace />} />
-              <Route path="week" element={<EasyCalendarWeekPage />} />
+              <Route index element={<Navigate to="/app/easycalendar/month" replace />} />
+              <Route path="week" element={<Navigate to="/app/easycalendar/month" replace />} />
               <Route path="day" element={<EasyCalendarDayPage />} />
               <Route path="month" element={<EasyCalendarMonthPage />} />
             </Route>

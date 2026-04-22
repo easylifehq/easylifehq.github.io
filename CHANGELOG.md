@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.17.0
+
+### Changed
+
+- Reworked EasyCalendar into a month-first flow where the app opens to the month grid and dates drill into day detail.
+- Added day-detail week-strip navigation, swipeable day changes, and a simple back-to-month action.
+- Removed the visible Day/Week/Month mode-switch flow and tucked advanced scheduling behind the month view.
+
 ## 4.16.0
 
 ### Changed

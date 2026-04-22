@@ -1,0 +1,1 @@
+import{j as n,g as t}from"./vendor-react-D1CEJJJM.js";function i({appLabel:r,links:e=[]}){return e.length?n.jsx("nav",{className:"subnav","aria-label":`${r} navigation`,children:e.map(a=>n.jsx(t,{to:a.to,className:({isActive:s})=>`subnav-link${s?" active":""}`,children:a.label},a.to))}):null}export{i as A};

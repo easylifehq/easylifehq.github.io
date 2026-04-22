@@ -1,6 +1,7 @@
 import { useMemo, useState, type CSSProperties } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
+import { CalendarComposer } from "@/features/easycalendar/components/CalendarComposer";
 import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
 import { CalendarTaskBlockDrawer } from "@/features/easycalendar/components/CalendarTaskBlockDrawer";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
@@ -11,6 +12,7 @@ import {
   getScheduledMinutesForDay,
   isSameDay,
   startOfDay,
+  toDateInputValue,
 } from "@/features/easycalendar/lib/calendarUtils";
 
 function getMonthGrid(date: Date) {
@@ -29,6 +31,7 @@ function getMonthGrid(date: Date) {
 
 export function EasyCalendarMonthPage() {
   const { categories, events, taskBlocks, tasks, isLoading, error } = useEasyCalendar();
+  const navigate = useNavigate();
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const today = startOfDay(new Date());
@@ -48,15 +51,21 @@ export function EasyCalendarMonthPage() {
 
   return (
     <>
-      <PageSection eyebrow="Month" title="Calendar">
+      <PageSection eyebrow="Calendar" title={new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(today)}>
         {error ? <p className="error-copy">{error}</p> : null}
         {isLoading ? <p className="helper-copy">Loading your month...</p> : null}
-        <div className="calendar-view-links calendar-view-links-sticky" aria-label="Calendar views">
-          <Link to="/app/easycalendar/day" className="view-button-vnext">Day</Link>
-          <Link to="/app/easycalendar/week" className="view-button-vnext">Week</Link>
-          <Link to="/app/easycalendar/month" className="view-button-vnext active">Month</Link>
+        <div className="calendar-month-command">
+          <p>Tap a date to open the day. The month stays as your home base.</p>
+          <Link className="primary-button compact-button" to={`/app/easycalendar/day?date=${toDateInputValue(today)}`}>
+            Add
+          </Link>
         </div>
         <div className="calendar-month-surface">
+        <div className="calendar-month-weekdays" aria-hidden="true">
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((weekday) => (
+            <span key={weekday}>{weekday}</span>
+          ))}
+        </div>
         <div className="calendar-month-grid">
           {days.map((day) => {
             const items = getItemsForDay(day, events, taskBlocks, categories, tasks);
@@ -65,13 +74,19 @@ export function EasyCalendarMonthPage() {
             return (
               <article
                 key={day.toISOString()}
+                role="button"
+                tabIndex={0}
                 className={`calendar-month-day${isSameDay(day, today) ? " today" : ""}${day.getMonth() !== today.getMonth() ? " muted" : ""}`}
+                onClick={() => navigate(`/app/easycalendar/day?date=${toDateInputValue(day)}`)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    navigate(`/app/easycalendar/day?date=${toDateInputValue(day)}`);
+                  }
+                }}
               >
                 <header className="calendar-day-header-vnext">
                   <div>
-                    <p className="planner-day-name">
-                      {new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(day)}
-                    </p>
                     <h3>{day.getDate()}</h3>
                   </div>
                   <span className="calendar-duration-pill">
@@ -86,7 +101,8 @@ export function EasyCalendarMonthPage() {
                     <button
                       key={`${item.kind}-${item.id}`}
                       type="button"
-                      onClick={() => {
+                      onClick={(event) => {
+                        event.stopPropagation();
                         if (item.kind === "task-block") {
                           setSelectedBlockId(item.id);
                         } else if (item.kind === "event" || editableDeadline) {
@@ -110,6 +126,11 @@ export function EasyCalendarMonthPage() {
         </div>
         </div>
       </PageSection>
+
+      <details className="advanced-disclosure">
+        <summary>Advanced scheduling</summary>
+        <CalendarComposer />
+      </details>
 
       <CalendarTaskBlockDrawer
         block={selectedBlock}

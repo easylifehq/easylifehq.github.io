@@ -1,5 +1,5 @@
 import { useMemo, useState, type CSSProperties, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
 import { CalendarTaskBlockDrawer } from "@/features/easycalendar/components/CalendarTaskBlockDrawer";
@@ -12,6 +12,7 @@ import {
   buildPlanMyDaySuggestions,
   combineDateAndTime,
   formatDuration,
+  formatShortDay,
   formatTimeLabel,
   getDurationMinutes,
   getHourFromTimeInput,
@@ -21,6 +22,7 @@ import {
   getScheduledMinutesForDay,
   isSameDay,
   startOfDay,
+  startOfWeek,
   toDateInputValue,
   toTimeInputValue,
 } from "@/features/easycalendar/lib/calendarUtils";
@@ -50,6 +52,8 @@ export function EasyCalendarDayPage() {
     scheduleTask,
   } = useEasyCalendar();
   const { settings } = useSettings();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [quickEvent, setQuickEvent] = useState<QuickCalendarDraft | null>(null);
@@ -57,19 +61,32 @@ export function EasyCalendarDayPage() {
   const [isSavingQuickEvent, setIsSavingQuickEvent] = useState(false);
   const [planMessage, setPlanMessage] = useState("");
   const [isPlanning, setIsPlanning] = useState(false);
-  const today = startOfDay(new Date());
-  const items = getItemsForDay(today, events, taskBlocks, categories, tasks);
-  const scheduledMinutes = getScheduledMinutesForDay(today, events, taskBlocks);
+  const selectedDate = useMemo(() => {
+    const dateParam = searchParams.get("date");
+    if (!dateParam) return startOfDay(new Date());
+    const [year, month, day] = dateParam.split("-").map(Number);
+    const parsed = new Date(year, (month || 1) - 1, day || 1);
+    return Number.isNaN(parsed.getTime()) ? startOfDay(new Date()) : startOfDay(parsed);
+  }, [searchParams]);
+  const weekStart = useMemo(() => startOfWeek(selectedDate), [selectedDate]);
+  const weekDays = useMemo(() => Array.from({ length: 7 }, (_, index) => {
+    const day = new Date(weekStart);
+    day.setDate(weekStart.getDate() + index);
+    return day;
+  }), [weekStart]);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const items = getItemsForDay(selectedDate, events, taskBlocks, categories, tasks);
+  const scheduledMinutes = getScheduledMinutesForDay(selectedDate, events, taskBlocks);
   const fixedEventCount = items.filter((item) => item.kind === "event").length;
   const taskBlockCount = items.filter((item) => item.kind === "task-block").length;
   const isOverloaded = scheduledMinutes > 9 * 60;
   const wakeHour = getHourFromTimeInput(settings.calendarWakeTime, 8);
   const planWindowHours = settings.easyCalendar.planMyDayWindowHours;
   const dayEndHour = Math.min(wakeHour + planWindowHours, 24);
-  const hourlySlots = useMemo(() => buildHourlySlots(today, wakeHour, planWindowHours), [today, wakeHour, planWindowHours]);
+  const hourlySlots = useMemo(() => buildHourlySlots(selectedDate, wakeHour, planWindowHours), [selectedDate, wakeHour, planWindowHours]);
   const openWindows = useMemo(
-    () => getOpenTimeWindowsForDay(today, events, taskBlocks, wakeHour, dayEndHour),
-    [events, taskBlocks, today, wakeHour, dayEndHour]
+    () => getOpenTimeWindowsForDay(selectedDate, events, taskBlocks, wakeHour, dayEndHour),
+    [events, taskBlocks, selectedDate, wakeHour, dayEndHour]
   );
   const activeTasks = useMemo(() => tasks.filter((task) => !task.completed && !task.deletedAt), [tasks]);
   const selectedBlock = useMemo(
@@ -88,6 +105,16 @@ export function EasyCalendarDayPage() {
     [selectedBlock, tasks]
   );
 
+  function openDate(date: Date) {
+    navigate(`/app/easycalendar/day?date=${toDateInputValue(date)}`);
+  }
+
+  function moveDay(amount: number) {
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(selectedDate.getDate() + amount);
+    openDate(nextDate);
+  }
+
   async function handlePlanMyDay() {
     setIsPlanning(true);
     setPlanMessage("");
@@ -95,7 +122,7 @@ export function EasyCalendarDayPage() {
     try {
       const existingSuggestedBlocks = taskBlocks.filter(
         (taskBlock) =>
-          isSameDay(taskBlock.startAt, today) &&
+          isSameDay(taskBlock.startAt, selectedDate) &&
           taskBlock.planningState === "suggested" &&
           !taskBlock.completed
       );
@@ -107,7 +134,7 @@ export function EasyCalendarDayPage() {
       const remainingTaskBlocks = taskBlocks.filter(
         (taskBlock) => !existingSuggestedBlocks.some((existing) => existing.id === taskBlock.id)
       );
-      const plan = buildPlanMyDaySuggestions(today, tasks, events, remainingTaskBlocks, {
+      const plan = buildPlanMyDaySuggestions(selectedDate, tasks, events, remainingTaskBlocks, {
         wakeHour,
         endHour: dayEndHour,
         defaultTaskBlockMinutes: settings.easyCalendar.defaultTaskBlockMinutes,
@@ -116,8 +143,8 @@ export function EasyCalendarDayPage() {
       if (!plan.suggestions.length) {
         setPlanMessage(
           plan.windows.length
-            ? "No good task fits were found for today yet."
-            : "There are no open windows to place suggested work today."
+            ? "No good task fits were found for this day yet."
+            : "There are no open windows to place suggested work on this day."
         );
         return;
       }
@@ -136,7 +163,7 @@ export function EasyCalendarDayPage() {
       setPlanMessage(
         `Planned ${plan.suggestions.length} suggested block${
           plan.suggestions.length === 1 ? "" : "s"
-        } for today.`
+        } for this day.`
       );
     } finally {
       setIsPlanning(false);
@@ -226,11 +253,32 @@ export function EasyCalendarDayPage() {
   return (
     <>
       <PageSection
-        eyebrow="Day View"
-        title={formatLongDate(today)}
-        description="Today, hour by hour."
+        eyebrow="Calendar"
+        title={formatLongDate(selectedDate)}
+        description="Swipe through days or jump with the week strip."
       >
         {error ? <p className="error-copy">{error}</p> : null}
+        <div className="calendar-day-topbar">
+          <Link to="/app/easycalendar/month" className="button-secondary compact-button">
+            Back to month
+          </Link>
+          <button type="button" className="primary-button compact-button" onClick={() => openQuickEvent(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), wakeHour, 0, 0, 0))}>
+            Add
+          </button>
+        </div>
+        <div className="calendar-week-strip" aria-label="Week">
+          {weekDays.map((day) => (
+            <button
+              key={day.toISOString()}
+              type="button"
+              className={isSameDay(day, selectedDate) ? "active" : ""}
+              onClick={() => openDate(day)}
+            >
+              <span>{formatShortDay(day).split(" ")[0]}</span>
+              <strong>{day.getDate()}</strong>
+            </button>
+          ))}
+        </div>
         <div className="quiet-metrics-row" aria-label="Calendar snapshot">
           <span>{fixedEventCount} event{fixedEventCount === 1 ? "" : "s"}</span>
           <span>{taskBlockCount} task block{taskBlockCount === 1 ? "" : "s"}</span>
@@ -238,17 +286,8 @@ export function EasyCalendarDayPage() {
         </div>
       </PageSection>
 
-      <PageSection
-        eyebrow="Calendar"
-        title="Today timeline"
-      >
-        {isLoading ? <p className="helper-copy">Loading today's schedule...</p> : null}
-
-        <div className="calendar-view-links calendar-view-links-sticky" aria-label="Calendar views">
-          <Link to="/app/easycalendar/day" className="view-button-vnext active">Day</Link>
-          <Link to="/app/easycalendar/week" className="view-button-vnext">Week</Link>
-          <Link to="/app/easycalendar/month" className="view-button-vnext">Month</Link>
-        </div>
+      <PageSection eyebrow="Day" title="Timeline">
+        {isLoading ? <p className="helper-copy">Loading this schedule...</p> : null}
 
         <div className="calendar-day-actions calendar-command-bar">
           <div className="calendar-status-card">
@@ -256,7 +295,7 @@ export function EasyCalendarDayPage() {
             <p>
               {openWindows.length
                 ? `${formatDuration(openWindows.reduce((sum, window) => sum + window.minutes, 0))} available.`
-                : "No open windows left today."}
+                : "No open windows left on this day."}
             </p>
           </div>
 
@@ -282,7 +321,18 @@ export function EasyCalendarDayPage() {
           </div>
         ) : null}
 
-        <div className="calendar-day-surface">
+        <div
+          className="calendar-day-surface"
+          onTouchStart={(event) => setTouchStartX(event.touches[0]?.clientX ?? null)}
+          onTouchEnd={(event) => {
+            if (touchStartX === null) return;
+            const endX = event.changedTouches[0]?.clientX ?? touchStartX;
+            const delta = endX - touchStartX;
+            setTouchStartX(null);
+            if (Math.abs(delta) < 48) return;
+            moveDay(delta < 0 ? 1 : -1);
+          }}
+        >
         <div className="calendar-hour-grid">
           {hourlySlots.map((slot, slotIndex) => {
             const slotItems = items.filter((item) => {
@@ -375,7 +425,7 @@ export function EasyCalendarDayPage() {
               );
               })
           ) : (
-            <p className="helper-copy">No task deadlines today.</p>
+            <p className="helper-copy">No task deadlines on this day.</p>
           )}
         </details>
       </PageSection>

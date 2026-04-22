@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.16.0`
-- Current planning target: `4.16.0` EasyList Simplification
+- App package version: `4.17.0`
+- Current planning target: `4.17.0` EasyCalendar Month-First Flow
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -649,7 +649,20 @@ Goal: Make EasyList feel like a fast daily list while keeping the deeper planner
 - Done: Moved AI brain dump analysis behind an optional disclosure on the add page.
 - Done: Reduced the add-task row grid so task entry starts with the task itself.
 - Done: Collapsed calendar planning and project/pipeline routing inside the task drawer.
-- Next: Audit EasyCalendar as the `4.17.0` page pass.
+
+### 4.17.0 EasyCalendar Month-First Flow
+
+Status: Done
+
+Goal: Make EasyCalendar open like a real calendar: month overview first, tap into a day, then swipe through nearby days.
+
+- Done: Made the EasyCalendar index route open the month view by default.
+- Done: Redirected the old week route to month so the visible flow is no longer Day/Week/Month mode switching.
+- Done: Made month days open the selected day detail.
+- Done: Added a compact weekday header and seven-column month grid that stays month-shaped on mobile.
+- Done: Added a day-detail week strip, back-to-month action, Add action, and swipe left/right day navigation.
+- Done: Moved advanced scheduling into a month-level disclosure.
+- Next: Audit EasyNotes as the `4.18.0` page pass.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 
