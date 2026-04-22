@@ -3622,6 +3622,112 @@ button.calendar-detail-card:disabled {
   padding: 0.35rem 0.5rem;
 }
 
+.hq-command-center {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.78fr);
+  gap: 1rem;
+  align-items: stretch;
+  margin-bottom: 1rem;
+}
+
+.hq-command-copy,
+.hq-start-card {
+  min-width: 0;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  background: var(--ui-bg-card-elevated, #fffdf9);
+  box-shadow: var(--shell-card-shadow);
+}
+
+.hq-command-copy {
+  display: grid;
+  align-content: center;
+  gap: 0.55rem;
+  padding: clamp(1.1rem, 2vw, 1.65rem);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 12%, transparent), transparent 62%),
+    var(--ui-bg-card-elevated, #fffdf9);
+}
+
+.hq-command-copy h1 {
+  margin: 0;
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: clamp(2rem, 4vw, 3.45rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.hq-command-copy p {
+  max-width: 46rem;
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 1rem;
+}
+
+.hq-start-card {
+  display: grid;
+  align-content: center;
+  gap: 0.75rem;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 34%, var(--ui-border-subtle) 66%);
+}
+
+.hq-start-card strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 1.25rem;
+}
+
+.hq-start-card p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+}
+
+.hq-status-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.hq-status-strip article {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  background: var(--ui-bg-card, #fffdf9);
+}
+
+.hq-status-strip span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.76rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.hq-status-strip strong,
+.hq-status-strip p {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.hq-status-strip strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+}
+
+.hq-status-strip p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.9rem;
+}
+
+.hq-action-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
 .hq-summary-grid,
 .hq-link-grid,
 .hq-list {
@@ -5165,6 +5271,16 @@ button.calendar-detail-card:disabled {
 
   .calendar-day-actions {
     grid-template-columns: 1fr;
+  }
+
+  .hq-command-center,
+  .hq-status-strip,
+  .hq-action-row {
+    grid-template-columns: 1fr;
+  }
+
+  .hq-command-copy h1 {
+    font-size: 2.15rem;
   }
 
   .hq-summary-grid,

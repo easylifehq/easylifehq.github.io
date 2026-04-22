@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.15.0
+
+### Changed
+
+- Rebuilt EasyHQ into a calmer command center with one start recommendation, a compact daily status strip, and fewer daily distractions.
+- Moved presentation-only HQ flow behind the daily review experiment so the default home page feels more like a real app landing surface.
+
 ## 4.14.3
 
 ### Changed
