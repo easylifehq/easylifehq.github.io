@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.18.0
+
+### Changed
+
+- Simplified EasyNotes library into a writing-first notes list with optional search and edit-only selection controls.
+- Moved note processing, task/project creation, folder assignment, and delete into an editor Actions panel.
+
 ## 4.17.0
 
 ### Changed

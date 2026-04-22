@@ -37,6 +37,7 @@ export function EasyNotesLibraryPage() {
   const [bulkFolderId, setBulkFolderId] = useState("");
   const [cleanupMessage, setCleanupMessage] = useState("");
   const [toolsOpen, setToolsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [lastOpenNoteId] = useState(() => window.localStorage.getItem(lastOpenNoteStorageKey) || "");
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -150,7 +151,10 @@ export function EasyNotesLibraryPage() {
           <button
             type="button"
             className="notes-command-button"
-            onClick={() => searchInputRef.current?.focus()}
+            onClick={() => {
+              setSearchOpen((current) => !current);
+              window.setTimeout(() => searchInputRef.current?.focus(), 0);
+            }}
             aria-label="Search notes"
           >
             Search
@@ -166,7 +170,8 @@ export function EasyNotesLibraryPage() {
           </button>
         </div>
 
-        <div className="notes-library-toolbar">
+        {searchOpen ? (
+        <div className="notes-library-toolbar notes-search-toolbar">
           <label className="field-stack notes-search-field">
             <span>Search notes</span>
             <input
@@ -187,6 +192,12 @@ export function EasyNotesLibraryPage() {
             ) : null}
           </div>
         </div>
+        ) : lastOpenNote ? (
+          <Link to={`/app/easynotes/${lastOpenNote.id}`} className="notes-resume-row">
+            <span>Resume</span>
+            <strong>{lastOpenNote.title.trim() || "Untitled note"}</strong>
+          </Link>
+        ) : null}
 
         <details
           id="notes-library-tools"
@@ -289,8 +300,9 @@ export function EasyNotesLibraryPage() {
           {filteredNotes.map((note) => (
             <article
               key={note.id}
-              className={`note-card-vnext note-card-selectable${selectedNoteIds.includes(note.id) ? " note-card-selected" : ""}`}
+              className={`note-card-vnext note-card-selectable note-card-compact${selectedNoteIds.includes(note.id) ? " note-card-selected" : ""}${toolsOpen ? " edit-mode" : ""}`}
             >
+              {toolsOpen ? (
               <label className="notes-select-row">
                 <input
                   type="checkbox"
@@ -299,6 +311,7 @@ export function EasyNotesLibraryPage() {
                 />
                 <span>Select</span>
               </label>
+              ) : null}
               <Link to={`/app/easynotes/${note.id}`} className="note-card-link">
               <div className="note-card-top">
                 <div>

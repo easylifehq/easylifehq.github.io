@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.17.0`
-- Current planning target: `4.17.0` EasyCalendar Month-First Flow
+- App package version: `4.18.0`
+- Current planning target: `4.18.0` EasyNotes Writing-First Cleanup
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -662,7 +662,19 @@ Goal: Make EasyCalendar open like a real calendar: month overview first, tap int
 - Done: Added a compact weekday header and seven-column month grid that stays month-shaped on mobile.
 - Done: Added a day-detail week strip, back-to-month action, Add action, and swipe left/right day navigation.
 - Done: Moved advanced scheduling into a month-level disclosure.
-- Next: Audit EasyNotes as the `4.18.0` page pass.
+
+### 4.18.0 EasyNotes Writing-First Cleanup
+
+Status: Done
+
+Goal: Make EasyNotes feel like opening a writing app, with organization and AI tools available only when needed.
+
+- Done: Hid the search field until Search is activated.
+- Done: Replaced the large resume action with a compact recent-note row.
+- Done: Made note library rows denser and less card-heavy.
+- Done: Hid note selection checkboxes unless Edit mode is open.
+- Done: Moved note processing, task/project creation, folder assignment, and delete into an editor Actions panel.
+- Next: Audit EasyWorkout as the `4.19.0` page pass.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

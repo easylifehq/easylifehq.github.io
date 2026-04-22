@@ -1844,9 +1844,40 @@ textarea::placeholder {
   margin: 0;
 }
 
+.notes-search-toolbar {
+  margin-bottom: 0.85rem;
+}
+
+.notes-resume-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  padding: 0.58rem 0.7rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  background: var(--ui-bg-card, var(--shell-input-bg));
+}
+
+.notes-resume-row span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.notes-resume-row strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .notes-library-grid {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.5rem;
   margin-top: 1rem;
 }
 
@@ -1859,6 +1890,25 @@ textarea::placeholder {
   border: 1px solid var(--ui-border-subtle, var(--app-panel-border, rgba(99, 76, 58, 0.1)));
   box-shadow: var(--shell-card-shadow);
   transition: transform var(--shell-motion-fast), box-shadow var(--shell-motion-fast), border-color var(--shell-motion-fast);
+}
+
+.note-card-compact {
+  gap: 0.35rem;
+  padding: 0.58rem 0.68rem;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.note-card-compact .note-card-link {
+  gap: 0.35rem;
+}
+
+.note-card-compact .note-card-body {
+  -webkit-line-clamp: 1;
+}
+
+.note-card-compact:not(.edit-mode) .note-tag-row {
+  display: none;
 }
 
 .note-card-trash {
@@ -2058,6 +2108,17 @@ textarea::placeholder {
 
 .notes-editor-folder-field {
   max-width: 280px;
+}
+
+.notes-editor-action-panel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.notes-editor-action-grid {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
 }
 
 .notes-trash-actions {

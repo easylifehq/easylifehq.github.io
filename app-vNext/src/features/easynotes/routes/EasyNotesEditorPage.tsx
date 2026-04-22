@@ -33,6 +33,7 @@ export function EasyNotesEditorPage() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isCreatingTasks, setIsCreatingTasks] = useState(false);
   const [isCreatingProject, setIsCreatingProject] = useState(false);
+  const [actionsOpen, setActionsOpen] = useState(false);
   const saveTimeoutRef = useRef<number | null>(null);
   const hydratedNoteIdRef = useRef<string | null>(null);
   const noteMetaRef = useRef({ tags: [] as string[], pinned: false });
@@ -180,28 +181,14 @@ export function EasyNotesEditorPage() {
           Back
         </Link>
         <div className="notes-editor-status notes-editor-tools">
-          {isExperimentalFeatureEnabled("notesProcessor") ? (
-            <button type="button" className="button-secondary compact-button" onClick={handleProcessNote}>
-              Process note
-            </button>
-          ) : null}
-          <button
-            type="button"
-            className="primary-button compact-button"
-            onClick={() => void handleCreateTasksFromNote()}
-            disabled={isCreatingTasks || !bodyText.trim()}
-          >
-            {isCreatingTasks ? "Sending..." : "Make tasks"}
-          </button>
-          <button
-            type="button"
-            className="button-secondary compact-button"
-            onClick={() => void handleCreateProjectFromNote()}
-            disabled={isCreatingProject || !bodyText.trim()}
-          >
-            {isCreatingProject ? "Creating..." : "Make project"}
-          </button>
           {saveMessage ? <span>{saveMessage}</span> : null}
+          <button
+            type="button"
+            className={`button-secondary compact-button${actionsOpen ? " active" : ""}`}
+            onClick={() => setActionsOpen((current) => !current)}
+          >
+            Actions
+          </button>
         </div>
       </div>
 
@@ -215,18 +202,6 @@ export function EasyNotesEditorPage() {
           />
         </label>
 
-        <label className="field-stack notes-editor-folder-field">
-          <span>Folder</span>
-          <select value={folderId} onChange={(event) => setFolderId(event.target.value)}>
-            <option value="">No folder</option>
-            {folders.map((folder) => (
-              <option key={folder.id} value={folder.id}>
-                {folder.name}
-              </option>
-            ))}
-          </select>
-        </label>
-
         <label className="notes-body-field">
           <textarea
             value={bodyText}
@@ -236,14 +211,53 @@ export function EasyNotesEditorPage() {
           />
         </label>
 
-        <button
-          type="button"
-          className="ghost-button notes-delete-button"
-          onClick={() => void handleDelete()}
-          disabled={isDeleting}
-        >
-          {isDeleting ? "Moving..." : "Move to recently deleted"}
-        </button>
+        {actionsOpen ? (
+          <aside className="advanced-disclosure notes-editor-action-panel">
+            <strong>Use this note</strong>
+            <div className="notes-editor-action-grid">
+              {isExperimentalFeatureEnabled("notesProcessor") ? (
+                <button type="button" className="button-secondary compact-button" onClick={handleProcessNote}>
+                  Process note
+                </button>
+              ) : null}
+              <button
+                type="button"
+                className="primary-button compact-button"
+                onClick={() => void handleCreateTasksFromNote()}
+                disabled={isCreatingTasks || !bodyText.trim()}
+              >
+                {isCreatingTasks ? "Sending..." : "Make tasks"}
+              </button>
+              <button
+                type="button"
+                className="button-secondary compact-button"
+                onClick={() => void handleCreateProjectFromNote()}
+                disabled={isCreatingProject || !bodyText.trim()}
+              >
+                {isCreatingProject ? "Creating..." : "Make project"}
+              </button>
+            </div>
+            <label className="field-stack notes-editor-folder-field">
+              <span>Folder</span>
+              <select value={folderId} onChange={(event) => setFolderId(event.target.value)}>
+                <option value="">No folder</option>
+                {folders.map((folder) => (
+                  <option key={folder.id} value={folder.id}>
+                    {folder.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              type="button"
+              className="ghost-button notes-delete-button"
+              onClick={() => void handleDelete()}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Moving..." : "Move to recently deleted"}
+            </button>
+          </aside>
+        ) : null}
 
         {isExperimentalFeatureEnabled("notesProcessor") && (processorMessage || suggestions.length) ? (
           <aside className="notes-processor-panel">
