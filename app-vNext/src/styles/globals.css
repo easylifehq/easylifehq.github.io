@@ -2601,6 +2601,56 @@ textarea::placeholder {
   font-size: 1.4rem;
 }
 
+.statistics-hero-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.statistics-hero-strip article,
+.statistics-insight-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.85rem;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  border-radius: 8px;
+  background: var(--ui-bg-card, #fffdf9);
+}
+
+.statistics-hero-strip span,
+.statistics-insight-card span {
+  color: var(--ui-text-muted, #7f6e62);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.statistics-hero-strip strong {
+  color: var(--ui-text, #2f271f);
+  font-size: 1.35rem;
+}
+
+.statistics-insight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.statistics-insight-card strong,
+.statistics-insight-card p {
+  margin: 0;
+}
+
+.statistics-insight-card strong {
+  color: var(--ui-text, #2f271f);
+  font-size: 1.05rem;
+}
+
+.statistics-insight-card p {
+  color: var(--ui-text-muted, #7f6e62);
+  line-height: 1.45;
+}
+
 .toolbar-row {
   display: flex;
   gap: 0.8rem;
@@ -5576,6 +5626,8 @@ button.calendar-detail-card:disabled {
   .project-command-strip,
   .project-task-create-grid,
   .pipeline-command-strip,
+  .statistics-hero-strip,
+  .statistics-insight-grid,
   .stats-grid,
   .inline-action-card,
   .project-ai-preview-header,

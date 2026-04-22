@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.21.0`
-- Current planning target: `4.21.0` EasyPipeline Focused Job Search
+- App package version: `4.22.0`
+- Current planning target: `4.22.0` EasyStatistics Insight Hub
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -714,7 +714,20 @@ Goal: Make EasyPipeline feel like a fast job-search tracker first, with deeper d
 - Done: Tightened the board with adaptive lanes and denser application cards.
 - Done: Moved secondary application drawer fields into a More details disclosure.
 - Done: Removed developer-facing migration copy from Email Drafts.
-- Next: Audit EasyStatistics as the `4.22.0` page pass.
+- Done: Audit EasyStatistics as the `4.22.0` page pass.
+
+### 4.22.0 EasyStatistics Insight Hub
+
+Status: Done
+
+Goal: Make EasyStatistics explain what matters first, with deeper app data available when wanted.
+
+- Done: Added a weekly readout to the Progress hub description.
+- Done: Replaced the opening stat grid with a compact overview strip.
+- Done: Added insight cards for next focus, calendar load, and training pulse.
+- Done: Moved app breakdown and training details into expandable sections.
+- Done: Added task completion rate to the deeper training/details area.
+- Next: Audit EasyContacts as the `4.23.0` page pass.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

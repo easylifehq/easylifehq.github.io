@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.22.0
+
+### Changed
+
+- Reworked EasyStatistics into an insight-first progress hub with a weekly readout and clearer next-focus guidance.
+- Added compact overview cards for completed work, planned time, workouts, and recovery.
+- Moved deeper app and training details into expandable sections so the page feels calmer.
+
 ## 4.21.0
 
 ### Changed

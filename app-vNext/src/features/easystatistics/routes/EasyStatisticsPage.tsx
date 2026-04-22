@@ -25,6 +25,12 @@ function getWorkoutVolume(session: WorkoutSessionRecord) {
   );
 }
 
+function formatHours(minutes: number) {
+  if (minutes < 60) return `${minutes} min`;
+  const hours = minutes / 60;
+  return `${Number.isInteger(hours) ? hours : hours.toFixed(1)} hr`;
+}
+
 export function EasyStatisticsPage() {
   const { user } = useAuth();
   const { tasks, events, taskBlocks, isLoading, error } = useEasyCalendar();
@@ -72,6 +78,12 @@ export function EasyStatisticsPage() {
     );
     const workoutVolume = workoutsThisWeek.reduce((sum, session) => sum + getWorkoutVolume(session), 0);
     const exerciseCount = workoutsThisWeek.reduce((sum, session) => sum + session.exercises.length, 0);
+    const completionRate = completedTasks.length
+      ? Math.round((completedThisWeek.length / Math.max(completedThisWeek.length + activeTasks.length, 1)) * 100)
+      : 0;
+    const nextTask = [...activeTasks]
+      .filter((task) => task.dueDate)
+      .sort((left, right) => (left.dueDate?.getTime() || 0) - (right.dueDate?.getTime() || 0))[0];
 
     return {
       activeTasks,
@@ -84,8 +96,17 @@ export function EasyStatisticsPage() {
       workoutsThisWeek,
       workoutVolume,
       exerciseCount,
+      completionRate,
+      nextTask,
     };
   }, [events, taskBlocks, tasks, today, weekStart, workoutSessions]);
+
+  const weeklyRead =
+    stats.overdue.length > 0
+      ? `${stats.overdue.length} task${stats.overdue.length === 1 ? "" : "s"} need recovery first.`
+      : stats.completedThisWeek.length > 0
+        ? `${stats.completedThisWeek.length} task${stats.completedThisWeek.length === 1 ? "" : "s"} finished this week. Keep the rhythm.`
+        : "Nothing completed yet this week. Start with one small win.";
 
   return (
     <main className="page-wrap app-theme app-theme-easystatistics">
@@ -94,29 +115,49 @@ export function EasyStatisticsPage() {
       <PageSection
         eyebrow="EasyStatistics"
         title="Progress hub"
-        description="A calmer place for trends, streaks, and proof that the little things are adding up."
+        description={weeklyRead}
       >
-        <div className="stats-grid">
-          <article className="stat-card-vnext">
-            <span>Completed this week</span>
+        <div className="statistics-hero-strip">
+          <article>
+            <span>Done this week</span>
             <strong>{stats.completedThisWeek.length}</strong>
           </article>
-          <article className="stat-card-vnext">
-            <span>Planned work blocks</span>
-            <strong>{stats.plannedBlocksThisWeek.length}</strong>
+          <article>
+            <span>Planned time</span>
+            <strong>{formatHours(stats.plannedMinutes)}</strong>
           </article>
-          <article className="stat-card-vnext">
-            <span>Fixed events</span>
-            <strong>{stats.eventsThisWeek.length}</strong>
-          </article>
-          <article className="stat-card-vnext">
+          <article>
             <span>Workouts</span>
             <strong>{stats.workoutsThisWeek.length}</strong>
+          </article>
+          <article>
+            <span>Recovery</span>
+            <strong>{stats.overdue.length}</strong>
           </article>
         </div>
       </PageSection>
 
-      <div className="dashboard-grid">
+      <div className="statistics-insight-grid">
+        <article className="statistics-insight-card">
+          <span>Focus next</span>
+          <strong>{stats.nextTask?.title || "Pick one task"}</strong>
+          <p>{stats.nextTask?.dueDate ? `Due ${stats.nextTask.dueDate.toLocaleDateString()}` : "Choose the one thing that would make today feel handled."}</p>
+        </article>
+        <article className="statistics-insight-card">
+          <span>Calendar load</span>
+          <strong>{stats.plannedBlocksThisWeek.length + stats.eventsThisWeek.length} blocks</strong>
+          <p>{formatHours(stats.plannedMinutes)} planned around {stats.eventsThisWeek.length} fixed event{stats.eventsThisWeek.length === 1 ? "" : "s"}.</p>
+        </article>
+        <article className="statistics-insight-card">
+          <span>Training pulse</span>
+          <strong>{stats.exerciseCount} exercises</strong>
+          <p>{stats.workoutVolume.toLocaleString()} total volume logged this week.</p>
+        </article>
+      </div>
+
+      <details className="advanced-disclosure" open>
+        <summary>App breakdown</summary>
+        <div className="dashboard-grid">
         <PageSection eyebrow="EasyList" title="Tasks">
           {isLoading ? <p className="helper-copy">Loading task stats...</p> : null}
           <div className="hq-summary-grid">
@@ -157,27 +198,35 @@ export function EasyStatisticsPage() {
             Open EasyCalendar
           </Link>
         </PageSection>
-      </div>
-
-      <PageSection eyebrow="EasyWorkout" title="Training">
-        <div className="stats-grid">
-          <article className="stat-card-vnext">
-            <span>Sessions this week</span>
-            <strong>{stats.workoutsThisWeek.length}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Exercises logged</span>
-            <strong>{stats.exerciseCount}</strong>
-          </article>
-          <article className="stat-card-vnext">
-            <span>Weekly volume</span>
-            <strong>{stats.workoutVolume.toLocaleString()}</strong>
-          </article>
         </div>
-        <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">
-          Open EasyWorkout
-        </Link>
-      </PageSection>
+      </details>
+
+      <details className="advanced-disclosure">
+        <summary>Training details</summary>
+        <PageSection eyebrow="EasyWorkout" title="Training">
+          <div className="stats-grid">
+            <article className="stat-card-vnext">
+              <span>Sessions this week</span>
+              <strong>{stats.workoutsThisWeek.length}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Exercises logged</span>
+              <strong>{stats.exerciseCount}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Weekly volume</span>
+              <strong>{stats.workoutVolume.toLocaleString()}</strong>
+            </article>
+            <article className="stat-card-vnext">
+              <span>Task completion</span>
+              <strong>{stats.completionRate}%</strong>
+            </article>
+          </div>
+          <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">
+            Open EasyWorkout
+          </Link>
+        </PageSection>
+      </details>
     </main>
   );
 }
