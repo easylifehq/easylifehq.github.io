@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.15.0`
-- Current planning target: `4.15.0` EasyHQ Command Center
+- App package version: `4.16.0`
+- Current planning target: `4.16.0` EasyList Simplification
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -637,7 +637,19 @@ Goal: Make HQ feel like the future assistant home base instead of another busy d
 - Done: Added a compact daily status strip for next event, focus item, and open room.
 - Done: Kept quick actions focused on task, note, calendar, and workout entry.
 - Done: Hid presentation-only flow behind the daily review experiment.
-- Next: Audit EasyList as the `4.16.0` page pass.
+
+### 4.16.0 EasyList Simplification
+
+Status: Done
+
+Goal: Make EasyList feel like a fast daily list while keeping the deeper planner tools underneath.
+
+- Done: Made task rows denser with checkbox-style completion and quieter inline metadata.
+- Done: Hid new-list creation inside a Manage lists disclosure.
+- Done: Moved AI brain dump analysis behind an optional disclosure on the add page.
+- Done: Reduced the add-task row grid so task entry starts with the task itself.
+- Done: Collapsed calendar planning and project/pipeline routing inside the task drawer.
+- Next: Audit EasyCalendar as the `4.17.0` page pass.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

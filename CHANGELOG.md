@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.16.0
+
+### Changed
+
+- Simplified EasyList into a denser daily list with checkbox-style completion, quieter metadata, and details still available on tap.
+- Moved list creation, AI brain dump analysis, calendar planning, and workflow routing into calmer secondary surfaces.
+
 ## 4.15.0
 
 ### Changed

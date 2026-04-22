@@ -129,7 +129,7 @@ export function EasyListDashboardPage() {
     <>
       <PageSection
         eyebrow="Tasks"
-        title="Task list"
+        title={activeListName}
       >
         <div className="toolbar-row toolbar-row-compact">
           <input
@@ -162,16 +162,19 @@ export function EasyListDashboardPage() {
               </button>
             ))}
           </div>
-          <div className="easylist-new-list">
-            <input
-              value={newListName}
-              onChange={(event) => setNewListName(event.target.value)}
-              placeholder="New list"
-            />
-            <button type="button" className="button-secondary compact-button" onClick={addList}>
-              Add list
-            </button>
-          </div>
+          <details className="easylist-manage-lists">
+            <summary>Manage lists</summary>
+            <div className="easylist-new-list">
+              <input
+                value={newListName}
+                onChange={(event) => setNewListName(event.target.value)}
+                placeholder="New list"
+              />
+              <button type="button" className="button-secondary compact-button" onClick={addList}>
+                Add list
+              </button>
+            </div>
+          </details>
         </div>
 
         <div className="easylist-bulk-bar">

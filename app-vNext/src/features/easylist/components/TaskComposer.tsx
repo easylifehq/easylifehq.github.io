@@ -524,7 +524,8 @@ export function TaskComposer({ onSubmit, listName = "Main" }: TaskComposerProps)
 
   return (
     <form className="task-composer" onSubmit={handleSubmit}>
-      <div className="brain-dump-card">
+      <details className="brain-dump-card">
+        <summary>Brain dump with AI</summary>
         <label className="field-stack">
           <span>Brain dump</span>
           <textarea
@@ -573,13 +574,19 @@ export function TaskComposer({ onSubmit, listName = "Main" }: TaskComposerProps)
               : analysisMessage || "Paste a messy paragraph. AI will pull out editable task rows for you to approve."}
           </span>
         </div>
-      </div>
+      </details>
 
       <div className="task-rows-shell">
+        <div className="task-rows-heading">
+          <div>
+            <strong>Quick rows</strong>
+            <p>Add the thing first. Details are optional.</p>
+          </div>
+          <span className="info-pill">{readyCount} ready</span>
+        </div>
         <div className="task-row-grid task-row-grid-header" aria-hidden="true">
-          <span>Kind</span>
           <span>Task</span>
-          <span>Category</span>
+          <span>Kind</span>
           <span>Due</span>
           <span>Minutes</span>
           <span>Priority</span>
@@ -589,17 +596,6 @@ export function TaskComposer({ onSubmit, listName = "Main" }: TaskComposerProps)
 
         {rows.map((row, index) => (
           <div key={row.id} className="task-row-grid task-row-card">
-            <label className="field-stack task-row-field">
-              <span>Kind</span>
-              <select
-                value={row.itemKind}
-                onChange={(event) => updateRow(row.id, "itemKind", event.target.value)}
-              >
-                <option value="task">Task</option>
-                <option value="deadline">Deadline</option>
-              </select>
-            </label>
-
             <label className="field-stack task-row-field">
               <span>Task</span>
               <input
@@ -612,13 +608,14 @@ export function TaskComposer({ onSubmit, listName = "Main" }: TaskComposerProps)
             </label>
 
             <label className="field-stack task-row-field">
-              <span>Category</span>
-              <input
-                type="text"
-                value={row.category}
-                onChange={(event) => updateRow(row.id, "category", event.target.value)}
-                placeholder="Personal"
-              />
+              <span>Kind</span>
+              <select
+                value={row.itemKind}
+                onChange={(event) => updateRow(row.id, "itemKind", event.target.value)}
+              >
+                <option value="task">Task</option>
+                <option value="deadline">Deadline</option>
+              </select>
             </label>
 
             <label className="field-stack task-row-field">

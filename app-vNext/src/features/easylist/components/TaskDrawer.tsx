@@ -470,15 +470,12 @@ export function TaskDrawer({
           </div>
         </form>
 
-        <section className="drawer-link-card">
-          <div className="panel-header">
-            <p className="eyebrow">EasyCalendar</p>
-            <h2>Send this task to your calendar</h2>
-            <p>
-              Choose when you want to work on it. This creates a flexible linked
-              task block in EasyCalendar.
-            </p>
-          </div>
+        <details className="drawer-link-card">
+          <summary>Plan on EasyCalendar</summary>
+          <p className="helper-copy">
+            Choose when you want to work on it. This creates a flexible linked
+            task block in EasyCalendar.
+          </p>
 
           <div className="task-composer-grid">
             <label className="field-stack">
@@ -557,17 +554,14 @@ export function TaskDrawer({
               {isScheduling ? "Sending..." : "Send to EasyCalendar"}
             </button>
           </div>
-        </section>
+        </details>
 
-        <section className="drawer-link-card">
-          <div className="panel-header">
-            <p className="eyebrow">Routing</p>
-            <h2>Send this task into a bigger workflow</h2>
-            <p>
-              Keep the source task intact while creating the project or pipeline
-              context around it.
-            </p>
-          </div>
+        <details className="drawer-link-card">
+          <summary>Send somewhere else</summary>
+          <p className="helper-copy">
+            Keep the source task intact while creating the project or pipeline
+            context around it.
+          </p>
 
           {routingSuggestion ? (
             <div className={`routing-suggestion ${routingSuggestion.destination}`}>
@@ -661,7 +655,7 @@ export function TaskDrawer({
             </button>
           </div>
           {routingMessage ? <p className="helper-copy">{routingMessage}</p> : null}
-        </section>
+        </details>
       </aside>
     </>
   );
