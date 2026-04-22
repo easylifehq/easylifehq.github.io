@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.20.0
+
+### Changed
+
+- Simplified EasyProjects around a quick-create project lane instead of leading with stats and experimental planning.
+- Moved project pulse metrics and the AI project planner behind secondary disclosures.
+- Tightened project cards, section controls, and project task entry so active project work takes fewer clicks and less screen space.
+
 ## 4.19.0
 
 ### Changed

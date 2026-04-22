@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.19.0`
-- Current planning target: `4.19.0` EasyWorkout Focused Logging
+- App package version: `4.20.0`
+- Current planning target: `4.20.0` EasyProjects Focused Planning
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -687,7 +687,21 @@ Goal: Make EasyWorkout start-first and keep active logging compact enough to use
 - Done: Tightened workout mode copy and controls.
 - Done: Hid muscle group from active workout mode so exercise entry stays fast.
 - Done: Added focused workout styles for sticky controls, session metadata, and denser exercise boxes.
-- Next: Audit EasyProjects as the `4.20.0` page pass.
+- Done: Audit EasyProjects as the `4.20.0` page pass.
+
+### 4.20.0 EasyProjects Focused Planning
+
+Status: Done
+
+Goal: Make EasyProjects feel like a simple project launcher first, with deeper planning available only when wanted.
+
+- Done: Added a quick-create project lane to the top of EasyProjects.
+- Done: Moved project pulse metrics behind a secondary disclosure.
+- Done: Moved the AI project planner behind a secondary disclosure.
+- Done: Tightened active project cards so the list is easier to scan.
+- Done: Moved section creation and task creation into compact expandable controls.
+- Done: Added denser project task rows for active project detail pages.
+- Next: Audit EasyPipeline as the `4.21.0` page pass.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

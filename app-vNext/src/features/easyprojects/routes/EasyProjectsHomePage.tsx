@@ -31,6 +31,9 @@ export function EasyProjectsHomePage() {
   const [editingDescription, setEditingDescription] = useState("");
   const [editingTargetDate, setEditingTargetDate] = useState("");
   const [editingStatus, setEditingStatus] = useState<ProjectStatus>("active");
+  const [newProjectTitle, setNewProjectTitle] = useState("");
+  const [newProjectTargetDate, setNewProjectTargetDate] = useState("");
+  const [newProjectDescription, setNewProjectDescription] = useState("");
   const [plannerTitle, setPlannerTitle] = useState("");
   const [plannerDescription, setPlannerDescription] = useState("");
   const [plannerTargetDate, setPlannerTargetDate] = useState("");
@@ -142,6 +145,24 @@ export function EasyProjectsHomePage() {
     }
   }
 
+  async function handleCreateProject(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!newProjectTitle.trim()) return;
+
+    const projectId = await addProject({
+      title: newProjectTitle.trim(),
+      description: newProjectDescription.trim(),
+      targetDate: newProjectTargetDate,
+      status: "active",
+    });
+
+    if (!projectId) return;
+
+    setNewProjectTitle("");
+    setNewProjectTargetDate("");
+    setNewProjectDescription("");
+  }
+
   function startEditingProject(projectId: string) {
     const project = projects.find((entry) => entry.id === projectId);
     if (!project) return;
@@ -173,136 +194,178 @@ export function EasyProjectsHomePage() {
       {error ? <p className="error-copy">{error}</p> : null}
 
       <div className="dashboard-grid">
-        {isProjectPlannerEnabled ? (
+        <PageSection
+          eyebrow="Projects"
+          title="Start a project"
+          description="Give the work a name now. Sections, tasks, and dates can come after."
+        >
+          <form className="project-command-strip" onSubmit={handleCreateProject}>
+            <label className="field-stack project-title-field">
+              <span>Project name</span>
+              <input
+                value={newProjectTitle}
+                onChange={(event) => setNewProjectTitle(event.target.value)}
+                placeholder="Portfolio refresh, exam prep, apartment move..."
+              />
+            </label>
+            <label className="field-stack">
+              <span>Target date</span>
+              <input
+                type="date"
+                value={newProjectTargetDate}
+                onChange={(event) => setNewProjectTargetDate(event.target.value)}
+              />
+            </label>
+            <button type="submit" className="primary-button" disabled={!newProjectTitle.trim()}>
+              Add project
+            </button>
+            <label className="field-stack field-stack-wide project-description-field">
+              <span>Notes</span>
+              <input
+                value={newProjectDescription}
+                onChange={(event) => setNewProjectDescription(event.target.value)}
+                placeholder="Optional context, constraints, or what done looks like"
+              />
+            </label>
+          </form>
+        </PageSection>
+
+        <details className="advanced-disclosure">
+          <summary>Project pulse</summary>
           <PageSection
-            eyebrow="Experimental"
-            title="Plan a project from a rough idea"
-            description="Describe what you want to finish and EasyProjects will draft sections, due dates, and linked tasks for review before anything is saved."
+            eyebrow="Summary"
+            title="Current load"
+            description="A quick read on the amount of work currently living in projects."
           >
-            <form className="project-ai-planner" onSubmit={handlePlanProject}>
-              <div className="task-composer-grid">
-                <label className="field-stack">
-                  <span>Project idea</span>
-                  <input
-                    value={plannerTitle}
-                    onChange={(event) => setPlannerTitle(event.target.value)}
-                    placeholder="Launch portfolio refresh"
-                  />
-                </label>
-                <label className="field-stack">
-                  <span>Target date</span>
-                  <input
-                    type="date"
-                    value={plannerTargetDate}
-                    onChange={(event) => setPlannerTargetDate(event.target.value)}
-                  />
-                </label>
-                <label className="field-stack field-stack-wide">
-                  <span>What should the plan account for?</span>
-                  <textarea
-                    rows={4}
-                    value={plannerDescription}
-                    onChange={(event) => setPlannerDescription(event.target.value)}
-                    placeholder="Add constraints, deliverables, class deadlines, materials, people involved, or what done looks like."
-                  />
-                </label>
-              </div>
+            <div className="stats-grid">
+              <article className="stat-card-vnext">
+                <span>Projects</span>
+                <strong>{projects.length}</strong>
+              </article>
+              <article className="stat-card-vnext">
+                <span>Sections</span>
+                <strong>{sections.length}</strong>
+              </article>
+              <article className="stat-card-vnext">
+                <span>Linked tasks</span>
+                <strong>{links.length}</strong>
+              </article>
+              <article className="stat-card-vnext">
+                <span>Completed</span>
+                <strong>{links.filter((link) => tasks.find((task) => task.id === link.taskId)?.completed).length}</strong>
+              </article>
+            </div>
+          </PageSection>
+        </details>
 
-              <div className="task-composer-actions">
-                <button
-                  type="submit"
-                  className="primary-button"
-                  disabled={isPlanning || (!plannerTitle.trim() && !plannerDescription.trim())}
-                >
-                  {isPlanning ? "Planning..." : "Generate plan"}
-                </button>
-                {aiPlan ? (
-                  <button type="button" className="button-secondary" onClick={() => setAiPlan(null)}>
-                    Clear preview
-                  </button>
-                ) : null}
-              </div>
-            </form>
-
-            {plannerMessage ? <p className="helper-copy">{plannerMessage}</p> : null}
-
-            {aiPlan ? (
-              <div className="project-ai-preview">
-                <div className="project-ai-preview-header">
-                  <div>
-                    <p className="eyebrow">Draft plan</p>
-                    <h3>{aiPlan.summary || "A structured project plan is ready."}</h3>
-                  </div>
-                  <button
-                    type="button"
-                    className="primary-button compact-button"
-                    onClick={() => void handleCreateAiPlan()}
-                    disabled={isCreatingPlan}
-                  >
-                    {isCreatingPlan ? "Creating..." : "Create project plan"}
-                  </button>
+        {isProjectPlannerEnabled ? (
+          <details className="advanced-disclosure">
+            <summary>AI project planner</summary>
+            <PageSection
+              eyebrow="Experimental"
+              title="Draft from a rough idea"
+              description="Describe the outcome and EasyProjects can draft sections, due dates, and linked tasks for review."
+            >
+              <form className="project-ai-planner" onSubmit={handlePlanProject}>
+                <div className="task-composer-grid">
+                  <label className="field-stack">
+                    <span>Project idea</span>
+                    <input
+                      value={plannerTitle}
+                      onChange={(event) => setPlannerTitle(event.target.value)}
+                      placeholder="Launch portfolio refresh"
+                    />
+                  </label>
+                  <label className="field-stack">
+                    <span>Target date</span>
+                    <input
+                      type="date"
+                      value={plannerTargetDate}
+                      onChange={(event) => setPlannerTargetDate(event.target.value)}
+                    />
+                  </label>
+                  <label className="field-stack field-stack-wide">
+                    <span>What should the plan account for?</span>
+                    <textarea
+                      rows={4}
+                      value={plannerDescription}
+                      onChange={(event) => setPlannerDescription(event.target.value)}
+                      placeholder="Add constraints, deliverables, class deadlines, materials, people involved, or what done looks like."
+                    />
+                  </label>
                 </div>
 
-                {aiPlan.risks.length ? (
-                  <div className="pill-row">
-                    {aiPlan.risks.map((risk) => (
-                      <span key={risk} className="info-pill">{risk}</span>
+                <div className="task-composer-actions">
+                  <button
+                    type="submit"
+                    className="primary-button"
+                    disabled={isPlanning || (!plannerTitle.trim() && !plannerDescription.trim())}
+                  >
+                    {isPlanning ? "Planning..." : "Generate plan"}
+                  </button>
+                  {aiPlan ? (
+                    <button type="button" className="button-secondary" onClick={() => setAiPlan(null)}>
+                      Clear preview
+                    </button>
+                  ) : null}
+                </div>
+              </form>
+
+              {plannerMessage ? <p className="helper-copy">{plannerMessage}</p> : null}
+
+              {aiPlan ? (
+                <div className="project-ai-preview">
+                  <div className="project-ai-preview-header">
+                    <div>
+                      <p className="eyebrow">Draft plan</p>
+                      <h3>{aiPlan.summary || "A structured project plan is ready."}</h3>
+                    </div>
+                    <button
+                      type="button"
+                      className="primary-button compact-button"
+                      onClick={() => void handleCreateAiPlan()}
+                      disabled={isCreatingPlan}
+                    >
+                      {isCreatingPlan ? "Creating..." : "Create project plan"}
+                    </button>
+                  </div>
+
+                  {aiPlan.risks.length ? (
+                    <div className="pill-row">
+                      {aiPlan.risks.map((risk) => (
+                        <span key={risk} className="info-pill">{risk}</span>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  <div className="project-ai-section-list">
+                    {aiPlan.sections.map((section) => (
+                      <article key={section.title} className="project-ai-section-card">
+                        <div className="task-card-title-row">
+                          <h4>{section.title}</h4>
+                          {section.suggestedDueDate ? <span className="priority-pill-vnext">Due {section.suggestedDueDate}</span> : null}
+                        </div>
+                        {section.goal ? <p>{section.goal}</p> : null}
+                        <ul>
+                          {section.tasks.map((task) => (
+                            <li key={`${section.title}-${task.title}`}>
+                              <span>{task.title}</span>
+                              <small>
+                                {getPriorityMeta(task.priorityTier).label}
+                                {task.estimatedLength ? ` | ${task.estimatedLength} min` : ""}
+                                {task.dueDate ? ` | ${task.dueDate}` : ""}
+                              </small>
+                            </li>
+                          ))}
+                        </ul>
+                      </article>
                     ))}
                   </div>
-                ) : null}
-
-                <div className="project-ai-section-list">
-                  {aiPlan.sections.map((section) => (
-                    <article key={section.title} className="project-ai-section-card">
-                      <div className="task-card-title-row">
-                        <h4>{section.title}</h4>
-                        {section.suggestedDueDate ? <span className="priority-pill-vnext">Due {section.suggestedDueDate}</span> : null}
-                      </div>
-                      {section.goal ? <p>{section.goal}</p> : null}
-                      <ul>
-                        {section.tasks.map((task) => (
-                          <li key={`${section.title}-${task.title}`}>
-                            <span>{task.title}</span>
-                            <small>
-                              {getPriorityMeta(task.priorityTier).label}
-                              {task.estimatedLength ? ` | ${task.estimatedLength} min` : ""}
-                              {task.dueDate ? ` | ${task.dueDate}` : ""}
-                            </small>
-                          </li>
-                        ))}
-                      </ul>
-                    </article>
-                  ))}
                 </div>
-              </div>
-            ) : null}
-          </PageSection>
+              ) : null}
+            </PageSection>
+          </details>
         ) : null}
-
-        <PageSection
-          eyebrow="Summary"
-          title="Project pulse"
-          description="A quick read on the amount of work currently living in projects."
-        >
-          <div className="stats-grid">
-            <article className="stat-card-vnext">
-              <span>Projects</span>
-              <strong>{projects.length}</strong>
-            </article>
-            <article className="stat-card-vnext">
-              <span>Sections</span>
-              <strong>{sections.length}</strong>
-            </article>
-            <article className="stat-card-vnext">
-              <span>Linked tasks</span>
-              <strong>{links.length}</strong>
-            </article>
-            <article className="stat-card-vnext">
-              <span>Completed</span>
-              <strong>{links.filter((link) => tasks.find((task) => task.id === link.taskId)?.completed).length}</strong>
-            </article>
-          </div>
-        </PageSection>
       </div>
 
       <PageSection
@@ -320,7 +383,7 @@ export function EasyProjectsHomePage() {
             const projectLinks = links.filter((link) => link.projectId === project.id);
             const completedCount = projectLinks.filter((link) => tasks.find((task) => task.id === link.taskId)?.completed).length;
             return (
-              <article key={project.id} className="task-card-vnext">
+              <article key={project.id} className="task-card-vnext project-card-compact">
                 {editingProjectId === project.id ? (
                   <form className="task-card-copy" onSubmit={handleSaveProject}>
                     <div className="task-composer-grid">
@@ -359,8 +422,7 @@ export function EasyProjectsHomePage() {
                       <span className="priority-pill-vnext">{project.status}</span>
                     </div>
                     <p>
-                      {projectSections.length} section{projectSections.length === 1 ? "" : "s"} |{" "}
-                      {completedCount}/{projectLinks.length} tasks complete
+                      {completedCount}/{projectLinks.length} done | {projectSections.length} section{projectSections.length === 1 ? "" : "s"}
                       {project.targetDate ? ` | due ${project.targetDate}` : ""}
                     </p>
                     {project.description ? <small>{project.description}</small> : null}

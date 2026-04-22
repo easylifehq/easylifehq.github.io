@@ -32,6 +32,8 @@ export function EasyProjectDetailPage() {
   const project = projects.find((entry) => entry.id === projectId) || null;
   const projectSections = sections.filter((section) => section.projectId === projectId);
   const projectLinks = links.filter((link) => link.projectId === projectId);
+  const completedCount = projectLinks.filter((link) => tasks.find((task) => task.id === link.taskId)?.completed).length;
+  const openCount = projectLinks.length - completedCount;
 
   async function handleAddSection(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -129,7 +131,7 @@ export function EasyProjectDetailPage() {
       <PageSection
         eyebrow="Project"
         title={project.title}
-        description={project.description || "Organize the work into sections, then feed it into EasyList and EasyCalendar."}
+        description={project.description || "Break the work into sections, then schedule the pieces that need calendar time."}
       >
         {isEditingProject ? (
           <form className="task-composer" onSubmit={handleSaveProject}>
@@ -166,6 +168,8 @@ export function EasyProjectDetailPage() {
           <div className="toolbar-row-compact">
             <div className="pill-row">
               <span className="info-pill">{project.status}</span>
+              <span className="info-pill">{openCount} open</span>
+              <span className="info-pill">{completedCount} done</span>
               {project.targetDate ? <span className="info-pill">Due {project.targetDate}</span> : null}
             </div>
             <div className="task-composer-actions">
@@ -180,18 +184,21 @@ export function EasyProjectDetailPage() {
         )}
       </PageSection>
 
-      <PageSection
-        eyebrow="Structure"
-        title="Add a section"
-        description="Use sections for milestones, phases, or buckets of work."
-      >
-        <form className="task-composer-actions" onSubmit={handleAddSection}>
-          <input name="title" className="search-input" placeholder="Research, Build, Polish..." />
-          <button type="submit" className="primary-button">Add section</button>
-        </form>
-      </PageSection>
+      <details className="advanced-disclosure">
+        <summary>Add a section</summary>
+        <PageSection
+          eyebrow="Structure"
+          title="Create a bucket"
+          description="Use sections for milestones, phases, or groups of work."
+        >
+          <form className="task-composer-actions" onSubmit={handleAddSection}>
+            <input name="title" className="search-input" placeholder="Research, Build, Polish..." />
+            <button type="submit" className="primary-button">Add section</button>
+          </form>
+        </PageSection>
+      </details>
 
-      <div className="stacked-sections">
+      <div className="project-section-board">
         {projectSections.length === 0 ? <div className="empty-card-vnext">Add your first section to start breaking the project down.</div> : null}
         {projectSections.map((section) => {
           const sectionLinks = projectLinks.filter((link) => link.sectionId === section.id);
@@ -202,8 +209,8 @@ export function EasyProjectDetailPage() {
               title={section.title}
               description={`${sectionLinks.length} task${sectionLinks.length === 1 ? "" : "s"} linked to this section`}
             >
-              <div className="toolbar-row-compact">
-                <span className="helper-copy">Tasks removed from this section stay alive in EasyList.</span>
+              <div className="toolbar-row-compact project-section-toolbar">
+                <span className="helper-copy">{sectionLinks.length} task{sectionLinks.length === 1 ? "" : "s"}</span>
                 <div className="task-composer-actions">
                   <button type="button" className="button-secondary compact-button" onClick={() => startEditingSection(section.id)}>
                     Edit section
@@ -224,37 +231,40 @@ export function EasyProjectDetailPage() {
                 </form>
               ) : null}
 
-              <form className="task-composer" onSubmit={(event) => void handleAddTask(event, section.id, sectionLinks.length)}>
-                <div className="task-composer-grid">
-                  <label className="field-stack">
-                    <span>Task</span>
-                    <input name="title" placeholder="Build onboarding screen" />
-                  </label>
-                  <label className="field-stack">
-                    <span>Due date</span>
-                    <input name="dueDate" type="date" />
-                  </label>
-                  <label className="field-stack">
-                    <span>Minutes</span>
-                    <input name="estimatedLength" type="number" min="0" step="5" placeholder="45" />
-                  </label>
-                  <label className="field-stack">
-                    <span>Priority</span>
-                    <select name="priorityTier" defaultValue="3">
-                      {[1, 2, 3, 4, 5].map((tier) => (
-                        <option key={tier} value={tier}>
-                          {getPriorityMeta(tier).label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="field-stack field-stack-wide">
-                    <span>Notes</span>
-                    <input name="notes" placeholder="Anything the task needs to keep its context" />
-                  </label>
-                </div>
-                <button type="submit" className="primary-button">Add task to section</button>
-              </form>
+              <details className="project-inline-add">
+                <summary>Add task</summary>
+                <form className="task-composer" onSubmit={(event) => void handleAddTask(event, section.id, sectionLinks.length)}>
+                  <div className="task-composer-grid project-task-create-grid">
+                    <label className="field-stack">
+                      <span>Task</span>
+                      <input name="title" placeholder="Build onboarding screen" />
+                    </label>
+                    <label className="field-stack">
+                      <span>Due date</span>
+                      <input name="dueDate" type="date" />
+                    </label>
+                    <label className="field-stack">
+                      <span>Minutes</span>
+                      <input name="estimatedLength" type="number" min="0" step="5" placeholder="45" />
+                    </label>
+                    <label className="field-stack">
+                      <span>Priority</span>
+                      <select name="priorityTier" defaultValue="3">
+                        {[1, 2, 3, 4, 5].map((tier) => (
+                          <option key={tier} value={tier}>
+                            {getPriorityMeta(tier).label}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="field-stack field-stack-wide">
+                      <span>Notes</span>
+                      <input name="notes" placeholder="Anything the task needs to keep its context" />
+                    </label>
+                  </div>
+                  <button type="submit" className="primary-button">Add task to section</button>
+                </form>
+              </details>
 
               <div className="task-list-vnext">
                 {sectionLinks.length === 0 ? (
@@ -264,7 +274,7 @@ export function EasyProjectDetailPage() {
                     const task = tasks.find((entry) => entry.id === link.taskId);
                     if (!task) return null;
                     return (
-                      <article key={link.id} className={`task-card-vnext${task.completed ? " completed" : ""}`}>
+                      <article key={link.id} className={`task-card-vnext project-task-row${task.completed ? " completed" : ""}`}>
                         <div className="task-card-copy">
                           <div className="task-card-title-row">
                             <h3>{task.title}</h3>
