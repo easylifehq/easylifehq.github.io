@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.21.0
+
+### Changed
+
+- Simplified EasyPipeline around a quick-add application lane and a clearer job-search focus snapshot.
+- Tightened the pipeline board with denser cards and adaptive lanes.
+- Moved secondary application fields behind a More details panel and cleaned up Email Drafts user-facing copy.
+
 ## 4.20.0
 
 ### Changed

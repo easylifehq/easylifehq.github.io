@@ -91,7 +91,7 @@ export function EasyPipelineEmailPage() {
       <PageSection
         eyebrow="Generator"
         title="Email drafts"
-        description="This React migration uses a built-in draft generator so the workflow still works without the old cloud endpoint."
+        description="Draft follow-ups, thank-yous, and networking notes from saved applications."
       >
         <form className="task-composer" onSubmit={handleGenerate}>
           <label className="field-stack">
@@ -141,7 +141,7 @@ export function EasyPipelineEmailPage() {
       <PageSection
         eyebrow="Output"
         title="Draft preview"
-        description="Tweak the subject and body before saving the draft back to Firestore."
+        description="Tweak the subject and body, then save it for later."
       >
         <div className="task-composer">
           <label className="field-stack">

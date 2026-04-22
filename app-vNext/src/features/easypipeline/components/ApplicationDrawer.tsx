@@ -162,36 +162,47 @@ export function ApplicationDrawer({
             </label>
           </div>
           <label className="field-stack">
-            <span>Location</span>
-            <input
-              value={draft.location}
-              onChange={(event) => setDraft((current) => ({ ...current, location: event.target.value }))}
+            <span>Notes</span>
+            <textarea
+              value={draft.notes}
+              onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))}
+              rows={4}
             />
           </label>
-          <label className="field-stack">
-            <span>Link</span>
-            <input
-              value={draft.link}
-              onChange={(event) => setDraft((current) => ({ ...current, link: event.target.value }))}
-            />
-          </label>
-          <div className="task-composer-grid">
+
+          <details className="advanced-disclosure pipeline-drawer-details">
+            <summary>More details</summary>
             <label className="field-stack">
-              <span>Contact name</span>
+              <span>Location</span>
               <input
-                value={draft.contactName}
-                onChange={(event) => setDraft((current) => ({ ...current, contactName: event.target.value }))}
+                value={draft.location}
+                onChange={(event) => setDraft((current) => ({ ...current, location: event.target.value }))}
               />
             </label>
             <label className="field-stack">
-              <span>Contact email</span>
+              <span>Link</span>
               <input
-                value={draft.contactEmail}
-                onChange={(event) => setDraft((current) => ({ ...current, contactEmail: event.target.value }))}
+                value={draft.link}
+                onChange={(event) => setDraft((current) => ({ ...current, link: event.target.value }))}
               />
             </label>
-          </div>
-          {draft.status === "offer" ? (
+            <div className="task-composer-grid">
+              <label className="field-stack">
+                <span>Contact name</span>
+                <input
+                  value={draft.contactName}
+                  onChange={(event) => setDraft((current) => ({ ...current, contactName: event.target.value }))}
+                />
+              </label>
+              <label className="field-stack">
+                <span>Contact email</span>
+                <input
+                  value={draft.contactEmail}
+                  onChange={(event) => setDraft((current) => ({ ...current, contactEmail: event.target.value }))}
+                />
+              </label>
+            </div>
+            {draft.status === "offer" ? (
             <label className="field-stack">
               <span>Offer response</span>
               <select
@@ -206,15 +217,8 @@ export function ApplicationDrawer({
                 <option value="no">Declined</option>
               </select>
             </label>
-          ) : null}
-          <label className="field-stack">
-            <span>Notes</span>
-            <textarea
-              value={draft.notes}
-              onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))}
-              rows={5}
-            />
-          </label>
+            ) : null}
+          </details>
 
           <div className="drawer-actions-vnext">
             <button type="submit" className="primary-button" disabled={isSaving}>

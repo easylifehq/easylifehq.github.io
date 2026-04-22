@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.20.0`
-- Current planning target: `4.20.0` EasyProjects Focused Planning
+- App package version: `4.21.0`
+- Current planning target: `4.21.0` EasyPipeline Focused Job Search
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -701,7 +701,20 @@ Goal: Make EasyProjects feel like a simple project launcher first, with deeper p
 - Done: Tightened active project cards so the list is easier to scan.
 - Done: Moved section creation and task creation into compact expandable controls.
 - Done: Added denser project task rows for active project detail pages.
-- Next: Audit EasyPipeline as the `4.21.0` page pass.
+- Done: Audit EasyPipeline as the `4.21.0` page pass.
+
+### 4.21.0 EasyPipeline Focused Job Search
+
+Status: Done
+
+Goal: Make EasyPipeline feel like a fast job-search tracker first, with deeper details available only when needed.
+
+- Done: Added a quick-add application lane to the top of the board.
+- Done: Added a job-search focus strip for follow-ups, interviews, active roles, and newest application.
+- Done: Tightened the board with adaptive lanes and denser application cards.
+- Done: Moved secondary application drawer fields into a More details disclosure.
+- Done: Removed developer-facing migration copy from Email Drafts.
+- Next: Audit EasyStatistics as the `4.22.0` page pass.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 
