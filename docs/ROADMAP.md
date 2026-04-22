@@ -233,7 +233,7 @@ Goal: Make the end-of-3.x testing build identify itself correctly and keep the Q
 - Done: Fix app package version drift after the 3.14 patch commits.
 - Done: Keep Settings version display tied to package metadata.
 - Done: Update changelog, roadmap, versioning notes, deploy files, and root assets.
-- Done: Preserve the 3.x QA checklist as the guide for product testing before 4.0.0 resumes.
+- Done: Preserve the core QA checklist as the guide for product testing before major feature work resumes.
 
 ### 3.15.0 Demo, Onboarding, and Landing Pages
 

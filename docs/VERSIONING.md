@@ -87,6 +87,8 @@ Before finishing a release batch:
 40. `4.12.0` Native Readiness and Tester Prep.
 41. `4.13.0` Settings and Landing Page Cleanup.
 42. `4.14.0` General Housekeeping and UI QA.
-43. `5.0.0` EasyDrinks and EasyGames Suite Expansion.
+43. `4.14.1` Notes command patch.
+44. `4.14.2` Presentation polish.
+45. `5.0.0` EasyDrinks and EasyGames Suite Expansion.
 
-`4.13.0` shipped before the 4.9-4.12 catch-up releases because Settings cleanup and landing pages were active work at the time. Finish the numbered catch-up releases before moving into `4.14.0`.
+`4.13.0` shipped before the 4.9-4.12 catch-up releases because Settings cleanup and landing pages were active work at the time. The catch-up releases are now complete, so the next large feature line can move toward `5.0.0` after any final `4.14.x` real-use patches.

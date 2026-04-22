@@ -1,4 +1,4 @@
-# EasyLife 4.12 Tester Prep
+# EasyLife Tester Prep
 
 Use this guide before sending EasyLife to friends or using it as a phone-first daily app for a longer stretch. The goal is to prove the PWA install path is comfortable now and to keep the later native wrapper path clear.
 
@@ -14,7 +14,7 @@ Use this guide before sending EasyLife to friends or using it as a phone-first d
 
 ## First Five Minutes
 
-- Confirm the version in Settings matches `4.12.0`.
+- Confirm the version in Settings matches the release being tested.
 - Confirm Settings, Install says whether the app is running in Browser or Home screen mode.
 - Confirm Settings, Data can create an export before heavy testing.
 - Confirm Quick Add opens and closes without fighting the keyboard.
@@ -27,7 +27,7 @@ Use this guide before sending EasyLife to friends or using it as a phone-first d
 - EasyHQ: open the resume card after visiting another app.
 - EasyList: add a one-word task, add a deadline, switch lists, complete an item, bulk edit, and recover a deleted task.
 - EasyCalendar: create an event, deadline, and scheduled task block; edit each one; check day, week, and month views.
-- EasyNotes: create a note, type a long note, leave and return, search, and use add/edit controls from the notes home.
+- EasyNotes: create a note, type a long note, leave and return, search, and use the add/search/edit command strip from the notes home.
 - EasyWorkout: start workout mode, type a custom exercise, add notes, save, and return to history.
 - EasyProjects: create a project, add a section, and link or route a task.
 - EasyPipeline: add a pipeline item and update its status.

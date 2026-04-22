@@ -6,6 +6,10 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+### Changed
+
+- Refreshed QA, mobile tester, and versioning docs so they describe the current `4.14.x` presentation-ready app instead of older `3.x` and `4.12.0` milestones.
+
 ## 4.14.2
 
 ### Fixed

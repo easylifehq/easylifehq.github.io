@@ -1,6 +1,6 @@
-# EasyLife 3.x QA Checklist
+# EasyLife Core QA Checklist
 
-Use this checklist before reopening major feature work. The goal is to catch workflow friction, mobile layout problems, and data handoff issues while the 3.x productivity core is still stable enough to reason about.
+Use this checklist before reopening major feature work or sharing a presentation build. The goal is to catch workflow friction, mobile layout problems, and data handoff issues while the productivity core is stable enough to reason about.
 
 ## Release Checks
 
@@ -42,6 +42,7 @@ Use this checklist before reopening major feature work. The goal is to catch wor
 ## EasyNotes
 
 - Create a blank note quickly.
+- Use the Notes add/search/edit command strip.
 - Type a long note and confirm the page moves naturally.
 - Leave and return to EasyNotes, then confirm resume behavior.
 - Create tasks from note lines.
@@ -89,10 +90,10 @@ Use this checklist before reopening major feature work. The goal is to catch wor
 - Toggle visible apps.
 - Change calendar wakeup time.
 - Switch between Settings sections on desktop and mobile.
-- Confirm app-specific settings cards are readable and not pretending to be fully wired pages yet.
+- Confirm app-specific settings cards are readable and only expose controls that are wired.
 
-## Hold Criteria For 4.0.0
+## Hold Criteria For 5.0.0
 
 - Start EasyDrinks and EasyGames only after the core flows above feel stable in real use.
-- If a core workflow feels confusing, patch the 3.x product first.
+- If a core workflow feels confusing, patch the current productivity product first.
 - Keep notes on repeated friction, especially mobile drawer behavior, fast capture speed, and cross-app routing clarity.
