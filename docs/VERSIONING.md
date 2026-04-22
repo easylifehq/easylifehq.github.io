@@ -4,8 +4,8 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `4.14.2`
-- Next patch target: `4.14.3`
+- Current app version: `4.14.3`
+- Next patch target: `4.14.4`
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion.
 
 ## What To Update
@@ -89,6 +89,7 @@ Before finishing a release batch:
 42. `4.14.0` General Housekeeping and UI QA.
 43. `4.14.1` Notes command patch.
 44. `4.14.2` Presentation polish.
-45. `5.0.0` EasyDrinks and EasyGames Suite Expansion.
+45. `4.14.3` App-wide declutter audit.
+46. `5.0.0` EasyDrinks and EasyGames Suite Expansion.
 
 `4.13.0` shipped before the 4.9-4.12 catch-up releases because Settings cleanup and landing pages were active work at the time. The catch-up releases are now complete, so the next large feature line can move toward `5.0.0` after any final `4.14.x` real-use patches.

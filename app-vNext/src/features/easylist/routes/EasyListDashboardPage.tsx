@@ -71,12 +71,12 @@ export function EasyListDashboardPage() {
     );
   }
 
-  async function runBulkAction(action: "complete" | "archive" | "delete") {
+  async function runBulkAction(action: "complete" | "delete") {
     const taskIds = selectedTaskIds;
     if (!taskIds.length) return;
 
     for (const taskId of taskIds) {
-      if (action === "complete" || action === "archive") {
+      if (action === "complete") {
         await markComplete(taskId);
       } else {
         await deleteTask(taskId);
@@ -193,9 +193,6 @@ export function EasyListDashboardPage() {
               </button>
               <button type="button" className="button-secondary compact-button" onClick={() => void runBulkAction("complete")}>
                 Complete
-              </button>
-              <button type="button" className="button-secondary compact-button" onClick={() => void runBulkAction("archive")}>
-                Archive
               </button>
               <button type="button" className="ghost-button compact-button" onClick={() => void runBulkAction("delete")}>
                 Delete

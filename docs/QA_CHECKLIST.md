@@ -16,6 +16,7 @@ Use this checklist before reopening major feature work or sharing a presentation
 - Open the global capture modal and confirm the close control is reachable.
 - Confirm no drawer or popup is hidden behind the browser chrome or bottom nav.
 - Switch between apps and confirm the page does not feel cramped or horizontally scroll.
+- Confirm each app has only one obvious command/navigation area.
 
 ## EasyList
 

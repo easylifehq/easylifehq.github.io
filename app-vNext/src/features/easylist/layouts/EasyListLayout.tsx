@@ -3,10 +3,8 @@ import { AppWorkspaceHeader } from "@/components/navigation/AppWorkspaceHeader";
 import { EasyListProvider } from "@/features/easylist/EasyListContext";
 
 const links = [
-  { to: "/app/easylist/dashboard", label: "To-do list" },
-  { to: "/app/easylist/add", label: "Add Tasks" },
-  { to: "/app/easylist/archive", label: "Archive" },
-  { to: "/app/easylist/deleted", label: "Deleted" },
+  { to: "/app/easylist/dashboard", label: "Lists" },
+  { to: "/app/easylist/add", label: "Add" },
 ];
 
 export function EasyListLayout() {

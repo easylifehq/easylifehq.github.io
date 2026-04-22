@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.14.2`
-- Current planning target: `4.14.2` Presentation Polish Patch
+- App package version: `4.14.3`
+- Current planning target: `4.14.3` App-Wide Declutter Audit
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -613,6 +613,20 @@ Goal: Remove visible clutter from the final 4.x presentation surface before star
 - Done: Removed the duplicate floating EasyNotes add button.
 - Done: Kept EasyNotes add, search, and edit actions consolidated in one clean command strip.
 - Done: Tidied Notes library edit-tools markup after the command strip changes.
+
+### 4.14.3 App-Wide Declutter Audit
+
+Status: In Progress
+
+Goal: Reduce duplicate controls and make each app surface feel calm before starting `5.0.0`.
+
+- Done: Added an app-wide declutter audit guide.
+- Done: Removed duplicate EasyCalendar view navigation from the outer app header.
+- Done: Removed Archive and Deleted from always-visible EasyList navigation.
+- Done: Removed duplicate EasyList bulk Archive action.
+- Done: Removed redundant EasyWorkout top navigation so Start Workout can stay dominant on the page.
+- Done: Removed the one-link EasyProjects top navigation.
+- Next: Click through every main app surface and decide which controls are daily, secondary, or advanced.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

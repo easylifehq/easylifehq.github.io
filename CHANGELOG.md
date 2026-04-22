@@ -6,9 +6,12 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.14.3
+
 ### Changed
 
 - Refreshed QA, mobile tester, and versioning docs so they describe the current `4.14.x` presentation-ready app instead of older `3.x` and `4.12.0` milestones.
+- Started the app-wide declutter audit and removed obvious duplicate navigation from Calendar, Workout, Projects, and EasyList.
 
 ## 4.14.2
 
