@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.18.0`
-- Current planning target: `4.18.0` EasyNotes Writing-First Cleanup
+- App package version: `4.19.0`
+- Current planning target: `4.19.0` EasyWorkout Focused Logging
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -674,7 +674,20 @@ Goal: Make EasyNotes feel like opening a writing app, with organization and AI t
 - Done: Made note library rows denser and less card-heavy.
 - Done: Hid note selection checkboxes unless Edit mode is open.
 - Done: Moved note processing, task/project creation, folder assignment, and delete into an editor Actions panel.
-- Next: Audit EasyWorkout as the `4.19.0` page pass.
+
+### 4.19.0 EasyWorkout Focused Logging
+
+Status: Done
+
+Goal: Make EasyWorkout start-first and keep active logging compact enough to use mid-workout.
+
+- Done: Reframed the dashboard around Start workout as the primary action.
+- Done: Moved workout history and top lifts into a secondary History and records disclosure.
+- Done: Replaced the dashboard metrics row with a compact training snapshot.
+- Done: Tightened workout mode copy and controls.
+- Done: Hid muscle group from active workout mode so exercise entry stays fast.
+- Done: Added focused workout styles for sticky controls, session metadata, and denser exercise boxes.
+- Next: Audit EasyProjects as the `4.20.0` page pass.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

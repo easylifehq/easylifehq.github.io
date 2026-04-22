@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.19.0
+
+### Changed
+
+- Simplified EasyWorkout around a start-first dashboard with history and records tucked behind a secondary panel.
+- Tightened workout mode so active logging shows fewer controls, a compact session strip, and denser exercise boxes.
+
 ## 4.18.0
 
 ### Changed

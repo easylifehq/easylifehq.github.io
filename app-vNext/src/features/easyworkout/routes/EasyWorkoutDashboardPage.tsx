@@ -60,8 +60,8 @@ export function EasyWorkoutDashboardPage() {
     <>
       <PageSection
         eyebrow="Lift Log"
-        title="EasyWorkout"
-        description="Start fast, log what happened, and leave the deeper tracking tucked away until you need it."
+        title="Ready to train"
+        description="Open workout mode, log the lifts, and keep the rest out of the way."
       >
         {error ? <p className="error-copy">{error}</p> : null}
         <div className="deep-module-hero">
@@ -76,10 +76,19 @@ export function EasyWorkoutDashboardPage() {
           </Link>
         </div>
 
-        <div className="quiet-metrics-row" aria-label="Workout snapshot">
-          <span>{sessions.length} sessions</span>
-          <span>{weeklySessions.length} this week</span>
-          <span>{streak} day{streak === 1 ? "" : "s"} active</span>
+        <div className="workout-today-strip" aria-label="Workout snapshot">
+          <article>
+            <span>This week</span>
+            <strong>{weeklySessions.length}</strong>
+          </article>
+          <article>
+            <span>Total sessions</span>
+            <strong>{sessions.length}</strong>
+          </article>
+          <article>
+            <span>Recent activity</span>
+            <strong>{streak} day{streak === 1 ? "" : "s"}</strong>
+          </article>
         </div>
       </PageSection>
 
@@ -115,6 +124,8 @@ export function EasyWorkoutDashboardPage() {
         </details>
       ) : null}
 
+      <details className="advanced-disclosure">
+        <summary>History and records</summary>
       <div className="dashboard-grid">
         <PageSection
           eyebrow="Recent"
@@ -169,6 +180,7 @@ export function EasyWorkoutDashboardPage() {
           </div>
         </PageSection>
       </div>
+      </details>
     </>
   );
 }

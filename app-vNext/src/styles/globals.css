@@ -5054,16 +5054,59 @@ button.calendar-detail-card:disabled {
   border-color: var(--ui-border-strong, var(--shell-card-border));
 }
 
+.workout-today-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.9rem;
+}
+
+.workout-today-strip article {
+  display: grid;
+  gap: 0.12rem;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-card, var(--shell-input-bg));
+}
+
+.workout-today-strip span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.74rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.workout-today-strip strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 1.1rem;
+}
+
 .gym-exercise-card {
   border-radius: 16px;
 }
 
 .workout-mode-card {
-  padding: 0.9rem;
+  padding: 0.65rem;
+  border-radius: 8px;
 }
 
 .workout-mode-card .panel-header {
   margin-bottom: 0.55rem;
+}
+
+.workout-focus-toolbar {
+  position: sticky;
+  top: calc(var(--app-header-height, 72px) + 0.4rem);
+  z-index: 15;
+}
+
+.workout-session-strip {
+  grid-template-columns: minmax(120px, 0.3fr) minmax(0, 1fr);
+}
+
+.workout-exercise-fields {
+  grid-template-columns: minmax(170px, 0.7fr) minmax(0, 1fr);
 }
 
 .gym-suggestion {
@@ -5519,6 +5562,12 @@ button.calendar-detail-card:disabled {
   .workout-mode-quick-actions {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .workout-today-strip,
+  .workout-session-strip,
+  .workout-exercise-fields {
+    grid-template-columns: 1fr;
   }
 
   .workout-mode-card {

@@ -264,17 +264,17 @@ export function EasyWorkoutLogPage() {
   return (
       <PageSection
         eyebrow={isFocusedWorkoutMode ? "Workout mode" : "Logging mode"}
-        title={isFocusedWorkoutMode ? "Start workout" : "Log workout"}
+        title={isFocusedWorkoutMode ? "Workout" : "Log workout"}
       description={
         isFocusedWorkoutMode
-          ? "Date, notes, and compact exercise boxes. Everything else gets out of the way."
+          ? "Just the lifts, sets, and quick notes."
           : "Keep it moving, see the last weight you hit, and save the session without digging through old notes."
       }
       >
-        <div className="toolbar-row toolbar-row-compact deep-module-toolbar">
+        <div className={`toolbar-row toolbar-row-compact deep-module-toolbar${isFocusedWorkoutMode ? " workout-focus-toolbar" : ""}`}>
           <div>
             <strong>{isGymModeActive ? "Gym Mode" : isFocusedWorkoutMode ? "Workout Mode" : "Logger"}</strong>
-            <p className="helper-copy">Only the essentials are up front. Extra tools stay tucked away.</p>
+            {!isFocusedWorkoutMode ? <p className="helper-copy">Only the essentials are up front. Extra tools stay tucked away.</p> : null}
           </div>
           <div className="pill-row">
             {isGymModeActive ? (
@@ -286,9 +286,11 @@ export function EasyWorkoutLogPage() {
                 Gym Mode
               </Link>
             )}
-            <Link className="ghost-button compact-button" to="/app/easyworkout/log">
-              Regular Log
-            </Link>
+            {!isFocusedWorkoutMode ? (
+              <Link className="ghost-button compact-button" to="/app/easyworkout/log">
+                Regular Log
+              </Link>
+            ) : null}
           </div>
         </div>
 
@@ -317,7 +319,7 @@ export function EasyWorkoutLogPage() {
         </details>
         ) : null}
 
-        <div className={`task-composer-grid${isFocusedWorkoutMode ? " gym-mode-meta workout-mode-meta" : ""}`}>
+        <div className={`task-composer-grid${isFocusedWorkoutMode ? " gym-mode-meta workout-mode-meta workout-session-strip" : ""}`}>
           {!isFocusedWorkoutMode ? (
           <label className="field-stack">
             <span>Routine</span>
@@ -347,7 +349,7 @@ export function EasyWorkoutLogPage() {
             <input type="number" min="0" value={durationMinutes} onChange={(event) => setDurationMinutes(event.target.value)} placeholder="75" />
           </label>
           ) : null}
-          <label className="field-stack field-stack-wide">
+          <label className={`field-stack${isFocusedWorkoutMode ? "" : " field-stack-wide"}`}>
             <span>Session notes</span>
             <input value={sessionNotes} onChange={(event) => setSessionNotes(event.target.value)} placeholder="Energy, pump, machine setup, etc." />
           </label>
@@ -377,7 +379,7 @@ export function EasyWorkoutLogPage() {
               <article key={exercise.localId} className={`panel-section workout-exercise-card${isFocusedWorkoutMode ? " gym-exercise-card workout-mode-card" : ""}`}>
                 <div className="panel-header workout-exercise-header">
                   <p className="eyebrow">Exercise {exerciseIndex + 1}</p>
-                  <h2>{exercise.exerciseName || "Lift"}</h2>
+                  {!isFocusedWorkoutMode ? <h2>{exercise.exerciseName || "Lift"}</h2> : null}
                   {!isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper ? <p>
                     {previous
                       ? `Last time: ${previous.weight} lbs x ${previous.reps} on ${previous.performedOn}`
@@ -393,7 +395,7 @@ export function EasyWorkoutLogPage() {
                   </div>
                 ) : null}
 
-                <div className="task-composer-grid">
+                <div className={`task-composer-grid${isFocusedWorkoutMode ? " workout-exercise-fields" : ""}`}>
                   <label className="field-stack">
                     <span>Exercise</span>
                     <input
@@ -411,11 +413,13 @@ export function EasyWorkoutLogPage() {
                       placeholder="Lat pulldown"
                     />
                   </label>
+                  {!isFocusedWorkoutMode ? (
                   <label className="field-stack">
                     <span>Muscle group</span>
                     <input value={exercise.muscleGroup} onChange={(event) => updateExerciseLog(exerciseIndex, { muscleGroup: event.target.value })} placeholder="Back" />
                   </label>
-                  <label className="field-stack field-stack-wide">
+                  ) : null}
+                  <label className={`field-stack${isFocusedWorkoutMode ? "" : " field-stack-wide"}`}>
                     <span>Exercise notes</span>
                     <input value={exercise.notes} onChange={(event) => updateExerciseLog(exerciseIndex, { notes: event.target.value })} placeholder="Vertical grip, slow eccentric, machine 4, etc." />
                   </label>
