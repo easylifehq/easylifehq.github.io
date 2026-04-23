@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.22.0`
-- Current planning target: `4.22.0` EasyStatistics Insight Hub
+- App package version: `4.23.0`
+- Current planning target: `4.23.0` EasyStatistics Analytics Expansion
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -727,7 +727,22 @@ Goal: Make EasyStatistics explain what matters first, with deeper app data avail
 - Done: Added insight cards for next focus, calendar load, and training pulse.
 - Done: Moved app breakdown and training details into expandable sections.
 - Done: Added task completion rate to the deeper training/details area.
-- Next: Audit EasyContacts as the `4.23.0` page pass.
+- Done: Expand EasyStatistics analytics as the `4.23.0` page pass.
+
+### 4.23.0 EasyStatistics Analytics Expansion
+
+Status: Done
+
+Goal: Make EasyStatistics fun to explore by showing real progress across every active app.
+
+- Done: Subscribed EasyStatistics to applications, projects, project links, notes, and workouts.
+- Done: Added task creation, completion, and completion-rate analytics.
+- Done: Added workout sessions, exercise count, all-time volume, and top exercise highlights.
+- Done: Added application tracking, response, interview, offer, and monthly creation metrics.
+- Done: Added project activity and linked project task completion metrics.
+- Done: Added notes created, pinned notes, and words captured metrics.
+- Done: Added milestone pills for long-running life stats.
+- Next: Audit EasyContacts as the `4.24.0` page pass.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

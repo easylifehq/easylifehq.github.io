@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.23.0
+
+### Changed
+
+- Expanded EasyStatistics with per-app analytics for tasks, calendar, workouts, applications, projects, and notes.
+- Added broader progress metrics including task/application creation, workout volume, note word count, project task completion, and milestone pills.
+- Reworked the statistics app breakdown into richer sections that link back to each app.
+
 ## 4.22.0
 
 ### Changed

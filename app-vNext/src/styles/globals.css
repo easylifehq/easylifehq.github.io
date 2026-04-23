@@ -2651,6 +2651,58 @@ textarea::placeholder {
   line-height: 1.45;
 }
 
+.statistics-milestone-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.statistics-milestone-row span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0.38rem 0.7rem;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  border-radius: 8px;
+  background: var(--ui-bg-card, #fffdf9);
+  color: var(--ui-text-muted, #7f6e62);
+  font-weight: 800;
+}
+
+.statistics-app-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.statistics-progress-list {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.statistics-progress-list div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+}
+
+.statistics-progress-list div:last-child {
+  border-bottom: 0;
+}
+
+.statistics-progress-list span {
+  color: var(--ui-text-muted, #7f6e62);
+  font-weight: 700;
+}
+
+.statistics-progress-list strong {
+  color: var(--ui-text, #2f271f);
+  white-space: nowrap;
+}
+
 .toolbar-row {
   display: flex;
   gap: 0.8rem;
@@ -5628,6 +5680,7 @@ button.calendar-detail-card:disabled {
   .pipeline-command-strip,
   .statistics-hero-strip,
   .statistics-insight-grid,
+  .statistics-app-grid,
   .stats-grid,
   .inline-action-card,
   .project-ai-preview-header,
