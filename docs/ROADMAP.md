@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.23.0`
-- Current planning target: `4.23.0` EasyStatistics Analytics Expansion
+- App package version: `4.24.0`
+- Current planning target: `4.24.0` EasyWorkout Research And Progress Foundation
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -746,15 +746,16 @@ Goal: Make EasyStatistics fun to explore by showing real progress across every a
 
 ### 4.24.0 EasyWorkout Research And Progress Foundation
 
-Status: Planned
+Status: In Progress
 
 Goal: Research the strongest workout trackers on the market, then implement the best fit-for-purpose ideas so EasyWorkout feels competitive in real use.
 
-- Research what Strong, Hevy, Fitbod, and similar tools do especially well in workout logging and progress tracking.
-- Pull over the strongest patterns that match EasyLife: previous performance reference, best set visibility, progress over time, and low-friction logging.
-- Improve the workout page itself so logging stays fast even as progress features deepen.
-- Add the first real workout progress foundation: per-exercise history, best-set tracking, weekly volume, and sessions over time.
-- Keep the interface clean by putting deeper stats in the right place instead of crowding the logger.
+- Done: Research what Strong, Hevy, Fitbod, and similar tools do especially well in workout logging and progress tracking.
+- Done: Pull over the strongest patterns that match EasyLife: previous performance reference, best set visibility, progress over time, and low-friction logging.
+- Done: Improve the workout page itself so logging stays fast even as progress features deepen.
+- Done: Add the first real workout progress foundation: per-exercise history, best-set tracking, weekly volume, and sessions over time.
+- Done: Keep the interface clean by putting deeper stats in the right place instead of crowding the logger.
+- Next: Start the `4.25.0` EasyWorkout muscle group system.
 
 ### 4.25.0 EasyWorkout Muscle Group System
 

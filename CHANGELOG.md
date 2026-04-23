@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.24.0
+
+### Changed
+
+- Improved EasyWorkout logging with stronger previous-performance context, including last working set, best weight, best volume, and session count per exercise.
+- Added an exercise history foundation to the EasyWorkout dashboard so repeated lifts start showing real progress over time.
+- Kept the logger focused while moving deeper progress visibility into supporting workout views.
+
 ## 4.23.0
 
 ### Changed

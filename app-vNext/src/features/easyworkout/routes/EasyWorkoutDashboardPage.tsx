@@ -48,6 +48,37 @@ export function EasyWorkoutDashboardPage() {
     .sort((left, right) => right.weight - left.weight)
     .slice(0, 5);
   const totalVolume = sessions.reduce((sum, session) => sum + getSessionVolume(session), 0);
+  const exerciseStats = Object.values(
+    sessions.reduce<
+      Record<
+        string,
+        {
+          exerciseName: string;
+          sessionCount: number;
+          bestWeight: number;
+          totalVolume: number;
+          lastPerformedOn: string;
+        }
+      >
+    >((accumulator, session) => {
+      session.exercises.forEach((exercise) => {
+        const current = accumulator[exercise.exerciseName];
+        const bestWeight = exercise.sets.reduce((best, set) => Math.max(best, set.weight), 0);
+        const volume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
+
+        accumulator[exercise.exerciseName] = {
+          exerciseName: exercise.exerciseName,
+          sessionCount: (current?.sessionCount || 0) + 1,
+          bestWeight: Math.max(current?.bestWeight || 0, bestWeight),
+          totalVolume: (current?.totalVolume || 0) + volume,
+          lastPerformedOn: current?.lastPerformedOn || session.performedOn,
+        };
+      });
+      return accumulator;
+    }, {})
+  )
+    .sort((left, right) => right.sessionCount - left.sessionCount || right.totalVolume - left.totalVolume)
+    .slice(0, 6);
   const muscleGroups = sessions.reduce<Record<string, number>>((accumulator, session) => {
     session.exercises.forEach((exercise) => {
       accumulator[exercise.muscleGroup || "Other"] = (accumulator[exercise.muscleGroup || "Other"] || 0) + 1;
@@ -180,6 +211,28 @@ export function EasyWorkoutDashboardPage() {
           </div>
         </PageSection>
       </div>
+      <PageSection
+        eyebrow="Progress"
+        title="Exercise history"
+        description="The foundation view: what you hit the most, what is moving up, and what keeps showing up."
+      >
+        <div className="statistics-app-grid">
+          {exerciseStats.length === 0 ? (
+            <div className="empty-card-vnext">Exercise history will show up after a few saved workouts.</div>
+          ) : (
+            exerciseStats.map((exercise) => (
+              <article key={exercise.exerciseName} className="statistics-insight-card">
+                <span>{exercise.exerciseName}</span>
+                <strong>{exercise.bestWeight} lbs best</strong>
+                <p>
+                  {exercise.sessionCount} session{exercise.sessionCount === 1 ? "" : "s"} |{" "}
+                  {exercise.totalVolume.toLocaleString()} total volume
+                </p>
+              </article>
+            ))
+          )}
+        </div>
+      </PageSection>
       </details>
     </>
   );

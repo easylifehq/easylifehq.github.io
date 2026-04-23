@@ -24,6 +24,15 @@ const emptyExerciseLog = (setCount = 1): WorkoutExerciseLogDraft => ({
 const startingWorkoutLogs = (count: number, setCount: number) =>
   Array.from({ length: count }, () => emptyExerciseLog(setCount));
 
+type ExerciseHistorySummary = {
+  lastWeight: number;
+  lastReps: number;
+  performedOn: string;
+  bestWeight: number;
+  bestVolume: number;
+  sessionCount: number;
+};
+
 export function EasyWorkoutLogPage() {
   const firstExerciseInputRef = useRef<HTMLInputElement | null>(null);
   const [searchParams] = useSearchParams();
@@ -80,28 +89,44 @@ export function EasyWorkoutLogPage() {
     );
   }, [selectedRoutine, workoutMode, gymMode, settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount]);
 
-  const previousByExercise = useMemo(
-    () =>
-      sessions.reduce<Record<string, { weight: number; reps: number; performedOn: string }>>(
-        (accumulator, session) => {
-          session.exercises.forEach((exercise) => {
-            exercise.sets.forEach((set) => {
-              const current = accumulator[exercise.exerciseName];
-              if (!current && set.weight > 0) {
-                accumulator[exercise.exerciseName] = {
-                  weight: set.weight,
-                  reps: set.reps,
-                  performedOn: session.performedOn,
-                };
-              }
-            });
-          });
-          return accumulator;
-        },
-        {}
-      ),
-    [sessions]
-  );
+  const previousByExercise = useMemo(() => {
+    const accumulator: Record<string, ExerciseHistorySummary> = {};
+
+    sessions.forEach((session) => {
+      session.exercises.forEach((exercise) => {
+        const key = exercise.exerciseName.trim();
+        if (!key) return;
+
+        const bestSetWeight = exercise.sets.reduce((best, set) => Math.max(best, set.weight), 0);
+        const bestSet = exercise.sets.find((set) => set.weight === bestSetWeight) || exercise.sets[0];
+        const exerciseVolume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
+        const current = accumulator[key];
+
+        if (!current) {
+          accumulator[key] = {
+            lastWeight: bestSet?.weight || 0,
+            lastReps: bestSet?.reps || 0,
+            performedOn: session.performedOn,
+            bestWeight: bestSetWeight,
+            bestVolume: exerciseVolume,
+            sessionCount: 1,
+          };
+          return;
+        }
+
+        accumulator[key] = {
+          lastWeight: current.lastWeight,
+          lastReps: current.lastReps,
+          performedOn: current.performedOn,
+          bestWeight: Math.max(current.bestWeight, bestSetWeight),
+          bestVolume: Math.max(current.bestVolume, exerciseVolume),
+          sessionCount: current.sessionCount + 1,
+        };
+      });
+    });
+
+    return accumulator;
+  }, [sessions]);
 
   const isGymModeActive = gymMode;
   const isFocusedWorkoutMode = workoutMode || isGymModeActive;
@@ -141,7 +166,7 @@ export function EasyWorkoutLogPage() {
 
     updateExerciseLog(exerciseIndex, {
       sets: exercise.sets.map((set, index) =>
-        index === 0 ? { ...set, reps: previous.reps, weight: previous.weight } : set
+        index === 0 ? { ...set, reps: previous.lastReps, weight: previous.lastWeight } : set
       ),
     });
   }
@@ -382,16 +407,23 @@ export function EasyWorkoutLogPage() {
                   {!isFocusedWorkoutMode ? <h2>{exercise.exerciseName || "Lift"}</h2> : null}
                   {!isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper ? <p>
                     {previous
-                      ? `Last time: ${previous.weight} lbs x ${previous.reps} on ${previous.performedOn}`
+                      ? `Last time: ${previous.lastWeight} lbs x ${previous.lastReps} on ${previous.performedOn}`
                       : "No logged history yet for this exercise."}
                   </p> : null}
                 </div>
                 {isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper && previous ? (
                   <div className="calendar-info-card gym-suggestion">
-                    <strong>Suggested working set: {previous.weight} lbs x {previous.reps}</strong>
+                    <strong>Suggested working set: {previous.lastWeight} lbs x {previous.lastReps}</strong>
                     <button type="button" className="primary-button compact-button" onClick={() => fillFromLastTime(exerciseIndex)}>
                       Fill first set
                     </button>
+                  </div>
+                ) : null}
+                {previous ? (
+                  <div className="workout-history-strip">
+                    <span>{previous.sessionCount} session{previous.sessionCount === 1 ? "" : "s"}</span>
+                    <span>Best weight {previous.bestWeight} lbs</span>
+                    <span>Best volume {previous.bestVolume.toLocaleString()}</span>
                   </div>
                 ) : null}
 
