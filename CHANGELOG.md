@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.25.0
+
+### Changed
+
+- Added muscle-group progress to EasyWorkout with weekly volume, set count, frequency, and most-trained group summaries.
+- Added muscle-group coverage and recovery-style indicators so the workout dashboard can call out what is active this week and what has gone quiet.
+- Expanded EasyStatistics training analytics with top muscle-group, active-groups, and weekly muscle breakdown signals.
+
 ## 4.24.0
 
 ### Changed

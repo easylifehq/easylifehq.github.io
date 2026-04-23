@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.24.0`
-- Current planning target: `4.24.0` EasyWorkout Research And Progress Foundation
+- App package version: `4.25.0`
+- Current planning target: `4.25.0` EasyWorkout Muscle Group System
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -746,7 +746,7 @@ Goal: Make EasyStatistics fun to explore by showing real progress across every a
 
 ### 4.24.0 EasyWorkout Research And Progress Foundation
 
-Status: In Progress
+Status: Done
 
 Goal: Research the strongest workout trackers on the market, then implement the best fit-for-purpose ideas so EasyWorkout feels competitive in real use.
 
@@ -755,18 +755,18 @@ Goal: Research the strongest workout trackers on the market, then implement the 
 - Done: Improve the workout page itself so logging stays fast even as progress features deepen.
 - Done: Add the first real workout progress foundation: per-exercise history, best-set tracking, weekly volume, and sessions over time.
 - Done: Keep the interface clean by putting deeper stats in the right place instead of crowding the logger.
-- Next: Start the `4.25.0` EasyWorkout muscle group system.
+- Done: Handed off into the `4.25.0` muscle-group pass.
 
 ### 4.25.0 EasyWorkout Muscle Group System
 
-Status: Planned
+Status: Done
 
 Goal: Make EasyWorkout progress understandable by muscle group instead of only by raw session totals.
 
-- Split EasyWorkout progress by muscle group.
-- Add muscle-group summaries for sets, volume, and frequency.
-- Add a body or muscle-group style statistics view inspired by the strongest market examples.
-- Start lightweight recovery logic or "recently trained" indicators if the data supports it cleanly.
+- Done: Split EasyWorkout progress by muscle group.
+- Done: Added muscle-group summaries for sets, volume, and frequency.
+- Done: Added muscle-group style workout and statistics views inspired by the strongest market examples.
+- Done: Added lightweight recovery-style indicators by calling out muscle groups that have gone quiet this week.
 
 ### 4.26.0 EasyStatistics Tabbed App Views
 

@@ -3,6 +3,13 @@ import { PageSection } from "@/components/ui/PageSection";
 import { useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 
+function getDateKeyOffset(days: number) {
+  const next = new Date();
+  next.setHours(0, 0, 0, 0);
+  next.setDate(next.getDate() + days);
+  return next.toISOString().split("T")[0];
+}
+
 function getSessionVolume(session: ReturnType<typeof useEasyWorkout>["sessions"][number]) {
   return session.exercises.reduce(
     (sum, exercise) =>
@@ -15,13 +22,11 @@ function getSessionVolume(session: ReturnType<typeof useEasyWorkout>["sessions"]
 export function EasyWorkoutDashboardPage() {
   const { sessions, routines, isLoading, error, deleteSession } = useEasyWorkout();
   const { isExperimentalFeatureEnabled } = useSettings();
+  const weekThreshold = getDateKeyOffset(-6);
   const recentSessions = sessions.slice(0, 4);
   const weeklySessions = sessions.filter((session) => {
     if (!session.performedOn) return false;
-    const sessionDate = new Date(session.performedOn);
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
-    return sessionDate >= sevenDaysAgo;
+    return session.performedOn >= weekThreshold;
   });
   const streak = weeklySessions.length;
 
@@ -79,13 +84,48 @@ export function EasyWorkoutDashboardPage() {
   )
     .sort((left, right) => right.sessionCount - left.sessionCount || right.totalVolume - left.totalVolume)
     .slice(0, 6);
-  const muscleGroups = sessions.reduce<Record<string, number>>((accumulator, session) => {
+  const muscleGroups = sessions.reduce<
+    Record<
+      string,
+      {
+        name: string;
+        exerciseHits: number;
+        setCount: number;
+        totalVolume: number;
+        weeklyVolume: number;
+        lastPerformedOn: string;
+      }
+    >
+  >((accumulator, session) => {
     session.exercises.forEach((exercise) => {
-      accumulator[exercise.muscleGroup || "Other"] = (accumulator[exercise.muscleGroup || "Other"] || 0) + 1;
+      const name = exercise.muscleGroup || "Other";
+      const current = accumulator[name];
+      const setCount = exercise.sets.length;
+      const volume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
+      const isThisWeek = !!session.performedOn && session.performedOn >= weekThreshold;
+
+      accumulator[name] = {
+        name,
+        exerciseHits: (current?.exerciseHits || 0) + 1,
+        setCount: (current?.setCount || 0) + setCount,
+        totalVolume: (current?.totalVolume || 0) + volume,
+        weeklyVolume: (current?.weeklyVolume || 0) + (isThisWeek ? volume : 0),
+        lastPerformedOn:
+          !current?.lastPerformedOn || current.lastPerformedOn < session.performedOn
+            ? session.performedOn
+            : current.lastPerformedOn,
+      };
     });
     return accumulator;
   }, {});
-  const mostHitMuscle = Object.entries(muscleGroups).sort((left, right) => right[1] - left[1])[0];
+  const muscleGroupStats = Object.values(muscleGroups).sort(
+    (left, right) => right.weeklyVolume - left.weeklyVolume || right.exerciseHits - left.exerciseHits
+  );
+  const mostHitMuscle = muscleGroupStats[0];
+  const muscleGroupsThisWeek = muscleGroupStats.filter((group) => group.weeklyVolume > 0).length;
+  const needsAttentionMuscle = [...muscleGroupStats]
+    .filter((group) => group.weeklyVolume === 0)
+    .sort((left, right) => left.lastPerformedOn.localeCompare(right.lastPerformedOn))[0];
 
   return (
     <>
@@ -137,7 +177,7 @@ export function EasyWorkoutDashboardPage() {
             </article>
             <article className="stat-card-vnext">
               <span>Most hit</span>
-              <strong>{mostHitMuscle?.[0] || "None yet"}</strong>
+              <strong>{mostHitMuscle?.name || "None yet"}</strong>
             </article>
             <article className="stat-card-vnext">
               <span>Recent PR pool</span>
@@ -227,6 +267,57 @@ export function EasyWorkoutDashboardPage() {
                 <p>
                   {exercise.sessionCount} session{exercise.sessionCount === 1 ? "" : "s"} |{" "}
                   {exercise.totalVolume.toLocaleString()} total volume
+                </p>
+              </article>
+            ))
+          )}
+        </div>
+      </PageSection>
+      <PageSection
+        eyebrow="Muscle groups"
+        title="Training coverage"
+        description="A clean read on where your work is landing this week."
+      >
+        <div className="statistics-insight-grid workout-muscle-overview">
+          <article className="statistics-insight-card">
+            <span>Most trained</span>
+            <strong>{mostHitMuscle?.name || "No signal yet"}</strong>
+            <p>
+              {mostHitMuscle
+                ? `${mostHitMuscle.setCount} set${mostHitMuscle.setCount === 1 ? "" : "s"} and ${mostHitMuscle.weeklyVolume.toLocaleString()} volume this week.`
+                : "Log a few sessions to see which muscle groups lead the week."}
+            </p>
+          </article>
+          <article className="statistics-insight-card">
+            <span>Groups active</span>
+            <strong>{muscleGroupsThisWeek}</strong>
+            <p>
+              {muscleGroupsThisWeek > 0
+                ? `${muscleGroupStats.length} tracked group${muscleGroupStats.length === 1 ? "" : "s"} in your history.`
+                : "No muscle groups trained yet this week."}
+            </p>
+          </article>
+          <article className="statistics-insight-card">
+            <span>Needs attention</span>
+            <strong>{needsAttentionMuscle?.name || "Balanced week"}</strong>
+            <p>
+              {needsAttentionMuscle
+                ? `Last hit ${needsAttentionMuscle.lastPerformedOn || "earlier"} and still quiet this week.`
+                : "Every tracked muscle group has been touched this week."}
+            </p>
+          </article>
+        </div>
+        <div className="statistics-app-grid">
+          {muscleGroupStats.length === 0 ? (
+            <div className="empty-card-vnext">Muscle-group progress will show up after a few saved workouts.</div>
+          ) : (
+            muscleGroupStats.slice(0, 6).map((group) => (
+              <article key={group.name} className="statistics-insight-card">
+                <span>{group.name}</span>
+                <strong>{group.weeklyVolume.toLocaleString()} week volume</strong>
+                <p>
+                  {group.setCount} set{group.setCount === 1 ? "" : "s"} | {group.exerciseHits} logged move
+                  {group.exerciseHits === 1 ? "" : "s"}
                 </p>
               </article>
             ))

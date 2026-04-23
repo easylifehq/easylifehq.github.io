@@ -33,6 +33,47 @@ function getWorkoutVolume(session: WorkoutSessionRecord) {
   );
 }
 
+function summarizeMuscleGroups(sessions: WorkoutSessionRecord[], weekStart: Date) {
+  const weekKey = weekStart.toISOString().split("T")[0];
+  const summary = new Map<
+    string,
+    {
+      name: string;
+      setCount: number;
+      totalVolume: number;
+      weeklyVolume: number;
+      frequency: number;
+      lastPerformedOn: string;
+    }
+  >();
+
+  sessions.forEach((session) => {
+    session.exercises.forEach((exercise) => {
+      const name = exercise.muscleGroup || "Other";
+      const current = summary.get(name);
+      const setCount = exercise.sets.length;
+      const volume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
+      const isThisWeek = !!session.performedOn && session.performedOn >= weekKey;
+
+      summary.set(name, {
+        name,
+        setCount: (current?.setCount || 0) + setCount,
+        totalVolume: (current?.totalVolume || 0) + volume,
+        weeklyVolume: (current?.weeklyVolume || 0) + (isThisWeek ? volume : 0),
+        frequency: (current?.frequency || 0) + 1,
+        lastPerformedOn:
+          !current?.lastPerformedOn || current.lastPerformedOn < session.performedOn
+            ? session.performedOn
+            : current.lastPerformedOn,
+      });
+    });
+  });
+
+  return [...summary.values()].sort(
+    (left, right) => right.weeklyVolume - left.weeklyVolume || right.frequency - left.frequency
+  );
+}
+
 function formatHours(minutes: number) {
   if (minutes < 60) return `${minutes} min`;
   const hours = minutes / 60;
@@ -109,6 +150,7 @@ export function EasyStatisticsPage() {
     const allTimeWorkoutVolume = workoutSessions.reduce((sum, session) => sum + getWorkoutVolume(session), 0);
     const exerciseCount = workoutsThisWeek.reduce((sum, session) => sum + session.exercises.length, 0);
     const exerciseVolume = new Map<string, number>();
+    const muscleGroups = summarizeMuscleGroups(workoutSessions, weekStart);
 
     workoutSessions.forEach((session) => {
       session.exercises.forEach((exercise) => {
@@ -139,6 +181,11 @@ export function EasyStatisticsPage() {
     const notesCreatedThisMonth = liveNotes.filter((note) => note.createdAt && note.createdAt >= monthStart);
     const wordCount = getWordCount(liveNotes);
     const pinnedNotes = liveNotes.filter((note) => note.pinned).length;
+    const topMuscleGroup = muscleGroups[0] || null;
+    const muscleGroupsThisWeek = muscleGroups.filter((group) => group.weeklyVolume > 0).length;
+    const muscleRecoveryCandidate = [...muscleGroups]
+      .filter((group) => group.weeklyVolume === 0)
+      .sort((left, right) => left.lastPerformedOn.localeCompare(right.lastPerformedOn))[0] || null;
 
     return {
       activeTasks,
@@ -157,6 +204,10 @@ export function EasyStatisticsPage() {
       allTimeWorkoutVolume,
       exerciseCount,
       topExercise,
+      muscleGroups,
+      topMuscleGroup,
+      muscleGroupsThisWeek,
+      muscleRecoveryCandidate,
       completionRate,
       nextTask,
       activeApplications,
@@ -274,6 +325,43 @@ export function EasyStatisticsPage() {
               <div><span>Sessions this month</span><strong>{stats.workoutsThisMonth.length}</strong></div>
               <div><span>Exercises logged</span><strong>{stats.exerciseCount}</strong></div>
               <div><span>All-time volume</span><strong>{stats.allTimeWorkoutVolume.toLocaleString()}</strong></div>
+            </div>
+            <div className="statistics-subgrid">
+              <article className="statistics-insight-card">
+                <span>Top muscle</span>
+                <strong>{stats.topMuscleGroup?.name || "No signal yet"}</strong>
+                <p>
+                  {stats.topMuscleGroup
+                    ? `${stats.topMuscleGroup.weeklyVolume.toLocaleString()} volume this week across ${stats.topMuscleGroup.setCount} sets.`
+                    : "Log a few workouts to unlock muscle-group progress."}
+                </p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Groups active</span>
+                <strong>{stats.muscleGroupsThisWeek}</strong>
+                <p>
+                  {stats.muscleGroups.length > 0
+                    ? `${stats.muscleGroups.length} total tracked muscle group${stats.muscleGroups.length === 1 ? "" : "s"}.`
+                    : "No muscle-group history yet."}
+                </p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Recovery read</span>
+                <strong>{stats.muscleRecoveryCandidate?.name || "Balanced week"}</strong>
+                <p>
+                  {stats.muscleRecoveryCandidate
+                    ? `Last trained ${stats.muscleRecoveryCandidate.lastPerformedOn}.`
+                    : "Every tracked muscle group has work this week."}
+                </p>
+              </article>
+            </div>
+            <div className="statistics-progress-list">
+              {stats.muscleGroups.slice(0, 4).map((group) => (
+                <div key={group.name}>
+                  <span>{group.name}</span>
+                  <strong>{group.weeklyVolume.toLocaleString()} wk</strong>
+                </div>
+              ))}
             </div>
             <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open EasyWorkout</Link>
           </PageSection>

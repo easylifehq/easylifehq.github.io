@@ -2670,6 +2670,13 @@ textarea::placeholder {
   font-weight: 800;
 }
 
+.statistics-subgrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0.85rem 0;
+}
+
 .statistics-app-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2678,6 +2685,10 @@ textarea::placeholder {
 
 .statistics-breakdown {
   margin-top: 0.2rem;
+}
+
+.workout-muscle-overview {
+  margin-bottom: 0.9rem;
 }
 
 .statistics-progress-list {
@@ -5709,6 +5720,7 @@ button.calendar-detail-card:disabled {
   .pipeline-command-strip,
   .statistics-hero-strip,
   .statistics-insight-grid,
+  .statistics-subgrid,
   .statistics-app-grid,
   .stats-grid,
   .inline-action-card,
