@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.36.0
+
+### Changed
+
+- Ran a shared UI consistency sweep across common panels, headers, toolbars, and compact controls so the app feels more intentional from page to page.
+- Tightened panel spacing and header rhythm to reduce the slightly puffy look that had built up across recent releases.
+- Cleaned up settings card radii and other shared control shapes so the visual system matches the tighter, more polished app direction.
+
 ## 4.35.0
 
 ### Changed

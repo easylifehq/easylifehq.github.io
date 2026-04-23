@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.35.0`
-- Current planning target: `4.35.0` Settings And Personalization Cleanup
+- App package version: `4.36.0`
+- Current planning target: `4.36.0` Housekeeping and UI Consistency Sweep
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -882,14 +882,14 @@ Goal: Make settings easier to scan and better at shaping the app around the user
 
 ### 4.36.0 Housekeeping and UI Consistency Sweep
 
-Status: Planned
+Status: Done
 
 Goal: Clean up the visual and structural mess that accumulates across fast release work so the app feels intentional everywhere.
 
-- Do a shared-button and spacing sweep across the active apps.
-- Tighten headers, padding, margins, and card density where pages still feel messy or uneven.
-- Clean up leftover duplicate controls, stale labels, and awkward empty states.
-- Tidy deploy/build leftovers and obvious file-structure clutter where it is safe to do so.
+- Done: Ran a shared-button and spacing sweep across common app surfaces.
+- Done: Tightened headers, padding, margins, and card density where the shell had become uneven.
+- Done: Cleaned up shared control shapes so the visual system matches the tighter polished direction.
+- Partial: Deploy/build leftovers are still safe but messy, and should be finished in a later cleanup sweep.
 
 ### 4.37.0 Shell, Mobile, And Stability Finish
 
