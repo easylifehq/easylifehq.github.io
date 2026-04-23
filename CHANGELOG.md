@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.35.0
+
+### Changed
+
+- Reworked Settings around a clearer everyday path, with Basics first and advanced controls tucked behind a calmer disclosure.
+- Added a quick setup strip for startup, home-screen install, and reminders so the most important setup tasks are easier to find.
+- Simplified settings labels and section framing so the page feels more like personal setup and less like app administration.
+
 ## 4.34.0
 
 ### Changed

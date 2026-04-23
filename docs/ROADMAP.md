@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.34.0`
-- Current planning target: `4.34.0` EasyContacts Relationship Hub
+- App package version: `4.35.0`
+- Current planning target: `4.35.0` Settings And Personalization Cleanup
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -871,16 +871,27 @@ Goal: Make EasyContacts feel like a lightweight relationship tracker instead of 
 
 ### 4.35.0 Settings And Personalization Cleanup
 
-Status: Planned
+Status: Done
 
 Goal: Make settings easier to scan and better at shaping the app around the user.
 
-- Clean up settings structure and reduce clutter.
-- Improve landing-page and default-behavior settings.
-- Add more personalization options only where they clearly improve daily use.
-- Keep settings powerful under the hood but clean on the surface.
+- Done: Reworked Settings around a clearer Basics-first path with advanced controls grouped more quietly.
+- Done: Added a quick setup strip for startup, install, and reminder setup.
+- Done: Improved landing-page and default-behavior framing so the main path reads more clearly.
+- Done: Kept settings powerful under the hood while making the top-level experience feel more like personal setup than administration.
 
-### 4.36.0 Shell, Mobile, And Stability Finish
+### 4.36.0 Housekeeping and UI Consistency Sweep
+
+Status: Planned
+
+Goal: Clean up the visual and structural mess that accumulates across fast release work so the app feels intentional everywhere.
+
+- Do a shared-button and spacing sweep across the active apps.
+- Tighten headers, padding, margins, and card density where pages still feel messy or uneven.
+- Clean up leftover duplicate controls, stale labels, and awkward empty states.
+- Tidy deploy/build leftovers and obvious file-structure clutter where it is safe to do so.
+
+### 4.37.0 Shell, Mobile, And Stability Finish
 
 Status: Planned
 

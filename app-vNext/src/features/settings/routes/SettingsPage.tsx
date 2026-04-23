@@ -268,72 +268,84 @@ const settingsSections: Array<{
   label: string;
   eyebrow: string;
   description: string;
+  group: "basics" | "advanced";
 }> = [
   {
     id: "customize",
-    label: "Customize",
+    label: "Basics",
     eyebrow: "Appearance",
-    description: "Theme, tone, and the overall feel of the app.",
+    description: "Theme, startup, and the parts of the app you feel every day.",
+    group: "basics",
   },
   {
     id: "apps",
     label: "Apps",
     eyebrow: "Suite",
     description: "Choose which apps show up in your workspace.",
+    group: "basics",
   },
   {
     id: "calendar",
     label: "Calendar",
     eyebrow: "EasyCalendar",
     description: "Wakeup time and calendar-specific defaults.",
+    group: "basics",
   },
   {
     id: "page-settings",
-    label: "Pages",
+    label: "Per-app",
     eyebrow: "Page Controls",
-    description: "The future home for each app's own settings page.",
+    description: "App-specific settings areas as the suite gets deeper.",
+    group: "advanced",
   },
   {
     id: "data",
     label: "Data",
     eyebrow: "Review",
     description: "Inspect, export, and understand what EasyLife is storing.",
+    group: "advanced",
   },
   {
     id: "install",
     label: "Install",
     eyebrow: "Home Screen",
     description: "Add EasyLife to your phone home screen for faster daily use.",
+    group: "basics",
   },
   {
     id: "distribution",
     label: "Share",
     eyebrow: "Distribution",
     description: "Prep the app for friends, TestFlight, stores, support, and rollback.",
+    group: "advanced",
   },
   {
     id: "notifications",
     label: "Notifications",
     eyebrow: "Reminders",
     description: "Control reminder permission, categories, quiet hours, and test alerts.",
+    group: "basics",
   },
   {
     id: "assistant",
     label: "Assistant",
     eyebrow: "AI Controls",
     description: "Set what AI can review, suggest, draft, and never do automatically.",
+    group: "advanced",
   },
   {
     id: "experiments",
     label: "Labs",
     eyebrow: "Experimental",
     description: "Preview features that can be switched on or off.",
+    group: "advanced",
   },
   {
     id: "account",
     label: "Account",
     eyebrow: "User Info",
     description: "Account, version, and session controls.",
+    group: "basics",
   },
 ];
 
@@ -366,6 +378,32 @@ const settingsFocusCards: Array<{
     label: "Safety",
     title: "Export and health check",
     description: "Download your data and review link cleanup signals.",
+  },
+];
+
+const settingsQuickActions: Array<{
+  section: SettingsSectionId;
+  label: string;
+  title: string;
+  description: string;
+}> = [
+  {
+    section: "customize",
+    label: "Start here",
+    title: "Set your opening screen",
+    description: "Make the app open where you actually begin your day.",
+  },
+  {
+    section: "install",
+    label: "Phone",
+    title: "Add to home screen",
+    description: "Use the fast iPhone install path and keep it close.",
+  },
+  {
+    section: "notifications",
+    label: "Reminders",
+    title: "Choose what can interrupt you",
+    description: "Keep the useful alerts and leave the rest quiet.",
   },
 ];
 
@@ -654,6 +692,8 @@ export function SettingsPage() {
   const enabledExperiments = experimentalFeatureOptions.filter((feature) =>
     isExperimentalFeatureEnabled(feature.id)
   );
+  const primarySections = settingsSections.filter((section) => section.group === "basics");
+  const advancedSections = settingsSections.filter((section) => section.group === "advanced");
   const activeTheme = themeOptions.find((theme) => theme.value === settings.themeMode) || themeOptions[0];
   const activeSectionConfig =
     settingsSections.find((section) => section.id === activeSection) || settingsSections[0];
@@ -814,8 +854,8 @@ export function SettingsPage() {
           <p className="eyebrow">Control Center</p>
           <h1>Settings</h1>
           <p>
-            Keep daily controls easy to find. Theme, startup, install, reminders, exports,
-            and app visibility live here without crowding the working pages.
+            Set up the parts of EasyLife that shape daily use first. The deeper controls are still here,
+            but they do not need to crowd the main path.
           </p>
         </div>
         <div className="settings-status-grid">
@@ -825,14 +865,14 @@ export function SettingsPage() {
             <p>{activeTheme.tone}</p>
           </article>
           <article className="settings-status-card">
-            <span>Visible apps</span>
-            <strong>{enabledApps.length} of {appVisibilityOptions.length}</strong>
-            <p>Start with core apps, then add optional tools later.</p>
+            <span>Startup</span>
+            <strong>{startupRouteOptions.find((option) => option.value === settings.startupRoute)?.label || "EasyHQ"}</strong>
+            <p>Where EasyLife opens after login or install.</p>
           </article>
           <article className="settings-status-card">
-            <span>Mobile</span>
-            <strong>{mobileRuntime.runtimeLabel}</strong>
-            <p>{mobileRuntime.connectionLabel}</p>
+            <span>Visible apps</span>
+            <strong>{enabledApps.length} of {appVisibilityOptions.length}</strong>
+            <p>Keep the suite lean, then turn on more tools when you want them.</p>
           </article>
           <article className="settings-status-card">
             <span>Reminders</span>
@@ -840,26 +880,60 @@ export function SettingsPage() {
             <p>{notificationPermission}</p>
           </article>
           <article className="settings-status-card">
-            <span>Startup</span>
-            <strong>{startupRouteOptions.find((option) => option.value === settings.startupRoute)?.label || "EasyHQ"}</strong>
-            <p>Where the app opens after login or install.</p>
+            <span>Phone</span>
+            <strong>{mobileRuntime.runtimeLabel}</strong>
+            <p>{mobileRuntime.connectionLabel}</p>
           </article>
+        </div>
+
+        <div className="settings-quick-strip">
+          {settingsQuickActions.map((card) => (
+            <button
+              key={card.title}
+              type="button"
+              className={`settings-quick-card${activeSection === card.section ? " active" : ""}`}
+              onClick={() => setActiveSection(card.section)}
+            >
+              <span>{card.label}</span>
+              <strong>{card.title}</strong>
+              <p>{card.description}</p>
+            </button>
+          ))}
         </div>
       </section>
 
       <section className="settings-section-shell">
         <nav className="settings-side-nav" aria-label="Settings sections">
-          {settingsSections.map((section) => (
-            <button
-              key={section.id}
-              type="button"
-              className={activeSection === section.id ? "active" : ""}
-              onClick={() => setActiveSection(section.id)}
-            >
-              <span>{section.eyebrow}</span>
-              <strong>{section.label}</strong>
-            </button>
-          ))}
+          <div className="settings-side-group">
+            <p className="eyebrow">Everyday</p>
+            {primarySections.map((section) => (
+              <button
+                key={section.id}
+                type="button"
+                className={activeSection === section.id ? "active" : ""}
+                onClick={() => setActiveSection(section.id)}
+              >
+                <span>{section.eyebrow}</span>
+                <strong>{section.label}</strong>
+              </button>
+            ))}
+          </div>
+          <details className="settings-side-details">
+            <summary>Advanced controls</summary>
+            <div className="settings-side-group settings-side-group-advanced">
+              {advancedSections.map((section) => (
+                <button
+                  key={section.id}
+                  type="button"
+                  className={activeSection === section.id ? "active" : ""}
+                  onClick={() => setActiveSection(section.id)}
+                >
+                  <span>{section.eyebrow}</span>
+                  <strong>{section.label}</strong>
+                </button>
+              ))}
+            </div>
+          </details>
         </nav>
 
         <label className="settings-mobile-nav field-stack">
@@ -868,11 +942,20 @@ export function SettingsPage() {
             value={activeSection}
             onChange={(event) => setActiveSection(event.target.value as SettingsSectionId)}
           >
-            {settingsSections.map((section) => (
-              <option key={section.id} value={section.id}>
-                {section.label}
-              </option>
-            ))}
+            <optgroup label="Everyday">
+              {primarySections.map((section) => (
+                <option key={section.id} value={section.id}>
+                  {section.label}
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="Advanced">
+              {advancedSections.map((section) => (
+                <option key={section.id} value={section.id}>
+                  {section.label}
+                </option>
+              ))}
+            </optgroup>
           </select>
         </label>
 
