@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.34.0
+
+### Changed
+
+- Reworked EasyContacts around a relationship-hub flow with quick add, follow-ups due, and active relationship panels at the top.
+- Added richer contact context so the directory shows next follow-up timing and last-touch signals without opening every person.
+- Kept the contact map as a secondary browse view so the main surface feels more useful day to day.
+
 ## 4.33.0
 
 ### Changed

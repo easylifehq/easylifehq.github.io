@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.33.0`
-- Current planning target: `4.33.0` EasyNotes Implementation Pass
+- App package version: `4.34.0`
+- Current planning target: `4.34.0` EasyContacts Relationship Hub
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -860,14 +860,14 @@ Goal: Implement the strongest EasyNotes ideas from the research pass while prese
 
 ### 4.34.0 EasyContacts Relationship Hub
 
-Status: Planned
+Status: Done
 
 Goal: Make EasyContacts feel like a lightweight relationship tracker instead of just a saved list.
 
-- Improve quick add and detail flows.
-- Add better follow-up context such as last-contacted and next-step style information.
-- Make notes around each person easier to read and update.
-- Keep it lightweight and personal rather than turning it into a bulky CRM.
+- Done: Added a quick-add strip so saving a person does not require opening a full editor first.
+- Done: Added follow-up and active-relationship focus panels so the page answers who needs attention now.
+- Done: Added better directory context with next follow-up timing and last-touch signals on each contact card.
+- Done: Kept it lightweight and personal by pushing the bubble map into a secondary browse layer instead of treating it like the main workflow.
 
 ### 4.35.0 Settings And Personalization Cleanup
 
