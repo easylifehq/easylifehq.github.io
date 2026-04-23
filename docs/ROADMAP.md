@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.26.0`
-- Current planning target: `4.26.0` EasyStatistics Tabbed App Views
+- App package version: `4.27.0`
+- Current planning target: `4.27.0` EasyWorkout Advanced Progress
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -781,14 +781,14 @@ Goal: Turn EasyStatistics into an organized analytics hub with tabs instead of o
 
 ### 4.27.0 EasyWorkout Advanced Progress
 
-Status: Planned
+Status: Done
 
 Goal: Push EasyWorkout progress features closer to the strongest workout apps without losing the clean EasyLife feel.
 
-- Add stronger exercise progress views such as charts over time, top exercises, and PR-style highlights.
-- Add consistency views such as streaks, recent training rhythm, or similar motivation features.
-- Consider estimated strength or e1RM-style metrics only if they stay simple and useful.
-- Keep the workout page itself focused on logging while the deeper analysis lives in stats.
+- Done: Added stronger exercise progress views with PR-style highlights and best-lift focus.
+- Done: Added consistency views through recent training rhythm and weekly scoring.
+- Done: Added simple estimated-strength style metrics without turning the page into gym math.
+- Done: Kept the workout page itself focused on logging while the deeper analysis lives in stats.
 
 ### 4.28.0 EasyCalendar Research Pass
 

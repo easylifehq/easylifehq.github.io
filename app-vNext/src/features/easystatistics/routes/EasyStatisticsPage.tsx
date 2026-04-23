@@ -33,6 +33,12 @@ function getWorkoutVolume(session: WorkoutSessionRecord) {
   );
 }
 
+function getEstimatedMax(weight: number, reps: number) {
+  if (weight <= 0 || reps <= 0) return 0;
+  if (reps === 1) return weight;
+  return Math.round(weight * (36 / Math.max(37 - reps, 1)));
+}
+
 function summarizeMuscleGroups(sessions: WorkoutSessionRecord[], weekStart: Date) {
   const weekKey = weekStart.toISOString().split("T")[0];
   const summary = new Map<
@@ -153,6 +159,7 @@ export function EasyStatisticsPage() {
     const allTimeWorkoutVolume = workoutSessions.reduce((sum, session) => sum + getWorkoutVolume(session), 0);
     const exerciseCount = workoutsThisWeek.reduce((sum, session) => sum + session.exercises.length, 0);
     const exerciseVolume = new Map<string, number>();
+    const exerciseStrength = new Map<string, { estimatedMax: number; weight: number; reps: number }>();
     const muscleGroups = summarizeMuscleGroups(workoutSessions, weekStart);
 
     workoutSessions.forEach((session) => {
@@ -160,10 +167,24 @@ export function EasyStatisticsPage() {
         const volume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
         const exerciseName = exercise.exerciseName || "Untitled exercise";
         exerciseVolume.set(exerciseName, (exerciseVolume.get(exerciseName) || 0) + volume);
+        exercise.sets.forEach((set) => {
+          const nextEstimatedMax = getEstimatedMax(set.weight, set.reps);
+          const current = exerciseStrength.get(exerciseName);
+          if (!current || nextEstimatedMax > current.estimatedMax) {
+            exerciseStrength.set(exerciseName, {
+              estimatedMax: nextEstimatedMax,
+              weight: set.weight,
+              reps: set.reps,
+            });
+          }
+        });
       });
     });
 
     const topExercise = [...exerciseVolume.entries()].sort((left, right) => right[1] - left[1])[0] || null;
+    const prHighlights = [...exerciseStrength.entries()]
+      .sort((left, right) => right[1].estimatedMax - left[1].estimatedMax)
+      .slice(0, 3);
     const completionRate = Math.round((completedTasks.length / Math.max(completedTasks.length + activeTasks.length, 1)) * 100);
     const nextTask = [...activeTasks]
       .filter((task) => task.dueDate)
@@ -189,6 +210,7 @@ export function EasyStatisticsPage() {
     const muscleRecoveryCandidate = [...muscleGroups]
       .filter((group) => group.weeklyVolume === 0)
       .sort((left, right) => left.lastPerformedOn.localeCompare(right.lastPerformedOn))[0] || null;
+    const consistencyScore = Math.min(100, Math.round((workoutsThisWeek.length / 4) * 100));
 
     return {
       activeTasks,
@@ -207,10 +229,12 @@ export function EasyStatisticsPage() {
       allTimeWorkoutVolume,
       exerciseCount,
       topExercise,
+      prHighlights,
       muscleGroups,
       topMuscleGroup,
       muscleGroupsThisWeek,
       muscleRecoveryCandidate,
+      consistencyScore,
       completionRate,
       nextTask,
       activeApplications,
@@ -403,6 +427,10 @@ export function EasyStatisticsPage() {
                 <strong>{stats.muscleGroupsThisWeek}</strong>
               </article>
               <article>
+                <span>Consistency</span>
+                <strong>{stats.consistencyScore}%</strong>
+              </article>
+              <article>
                 <span>All-time volume</span>
                 <strong>{stats.allTimeWorkoutVolume.toLocaleString()}</strong>
               </article>
@@ -427,6 +455,15 @@ export function EasyStatisticsPage() {
                 </p>
               </article>
               <article className="statistics-insight-card">
+                <span>PR lead</span>
+                <strong>{stats.prHighlights[0]?.[0] || "No PR yet"}</strong>
+                <p>
+                  {stats.prHighlights[0]
+                    ? `${stats.prHighlights[0][1].estimatedMax} estimated max from ${stats.prHighlights[0][1].weight} x ${stats.prHighlights[0][1].reps}.`
+                    : "Best-set highlights will show up after a few stronger sessions."}
+                </p>
+              </article>
+              <article className="statistics-insight-card">
                 <span>Recovery read</span>
                 <strong>{stats.muscleRecoveryCandidate?.name || "Balanced week"}</strong>
                 <p>
@@ -446,6 +483,20 @@ export function EasyStatisticsPage() {
                       <div key={group.name}>
                         <span>{group.name}</span>
                         <strong>{group.weeklyVolume.toLocaleString()} wk</strong>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </PageSection>
+              <PageSection eyebrow="PRs" title="Strength highlights">
+                <div className="statistics-progress-list">
+                  {stats.prHighlights.length === 0 ? (
+                    <div><span>No PRs yet</span><strong>Keep logging</strong></div>
+                  ) : (
+                    stats.prHighlights.map(([exerciseName, summary]) => (
+                      <div key={exerciseName}>
+                        <span>{exerciseName}</span>
+                        <strong>{summary.estimatedMax} est. max</strong>
                       </div>
                     ))
                   )}

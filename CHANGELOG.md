@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.27.0
+
+### Changed
+
+- Expanded EasyWorkout with PR-style strength highlights, simple estimated-max signals, and clearer training-consistency reads.
+- Added workout rhythm views for 7-day and 30-day volume so progress feels more alive over time.
+- Deepened the EasyStatistics workout tab with PR leaders, consistency scoring, and stronger training pulse summaries.
+
 ## 4.26.0
 
 ### Changed

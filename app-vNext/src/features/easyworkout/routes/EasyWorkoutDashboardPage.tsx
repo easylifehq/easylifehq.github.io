@@ -19,16 +19,30 @@ function getSessionVolume(session: ReturnType<typeof useEasyWorkout>["sessions"]
   );
 }
 
+function getEstimatedMax(weight: number, reps: number) {
+  if (weight <= 0 || reps <= 0) return 0;
+  if (reps === 1) return weight;
+  return Math.round(weight * (36 / Math.max(37 - reps, 1)));
+}
+
 export function EasyWorkoutDashboardPage() {
   const { sessions, routines, isLoading, error, deleteSession } = useEasyWorkout();
   const { isExperimentalFeatureEnabled } = useSettings();
   const weekThreshold = getDateKeyOffset(-6);
+  const monthThreshold = getDateKeyOffset(-29);
   const recentSessions = sessions.slice(0, 4);
   const weeklySessions = sessions.filter((session) => {
     if (!session.performedOn) return false;
     return session.performedOn >= weekThreshold;
   });
+  const monthlySessions = sessions.filter((session) => {
+    if (!session.performedOn) return false;
+    return session.performedOn >= monthThreshold;
+  });
   const streak = weeklySessions.length;
+  const weeklyVolume = weeklySessions.reduce((sum, session) => sum + getSessionVolume(session), 0);
+  const monthlyVolume = monthlySessions.reduce((sum, session) => sum + getSessionVolume(session), 0);
+  const consistencyScore = Math.min(100, Math.round((weeklySessions.length / 4) * 100));
 
   const topLifts = Object.values(
     sessions.reduce<Record<string, { exerciseName: string; weight: number; reps: number }>>(
@@ -61,22 +75,39 @@ export function EasyWorkoutDashboardPage() {
           exerciseName: string;
           sessionCount: number;
           bestWeight: number;
+          bestReps: number;
           totalVolume: number;
           lastPerformedOn: string;
+          estimatedMax: number;
         }
       >
     >((accumulator, session) => {
       session.exercises.forEach((exercise) => {
         const current = accumulator[exercise.exerciseName];
         const bestWeight = exercise.sets.reduce((best, set) => Math.max(best, set.weight), 0);
+        const bestSet = exercise.sets.reduce(
+          (best, set) => {
+            const nextEstimatedMax = getEstimatedMax(set.weight, set.reps);
+            if (nextEstimatedMax > best.estimatedMax) {
+              return { reps: set.reps, estimatedMax: nextEstimatedMax };
+            }
+            return best;
+          },
+          { reps: 0, estimatedMax: 0 }
+        );
         const volume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
 
         accumulator[exercise.exerciseName] = {
           exerciseName: exercise.exerciseName,
           sessionCount: (current?.sessionCount || 0) + 1,
           bestWeight: Math.max(current?.bestWeight || 0, bestWeight),
+          bestReps:
+            bestWeight > (current?.bestWeight || 0)
+              ? exercise.sets.find((set) => set.weight === bestWeight)?.reps || bestSet.reps
+              : current?.bestReps || bestSet.reps,
           totalVolume: (current?.totalVolume || 0) + volume,
           lastPerformedOn: current?.lastPerformedOn || session.performedOn,
+          estimatedMax: Math.max(current?.estimatedMax || 0, bestSet.estimatedMax),
         };
       });
       return accumulator;
@@ -84,6 +115,13 @@ export function EasyWorkoutDashboardPage() {
   )
     .sort((left, right) => right.sessionCount - left.sessionCount || right.totalVolume - left.totalVolume)
     .slice(0, 6);
+  const prHighlights = [...exerciseStats]
+    .sort((left, right) => right.estimatedMax - left.estimatedMax || right.bestWeight - left.bestWeight)
+    .slice(0, 3);
+  const trainingRhythm = [
+    { label: "7 days", sessions: weeklySessions.length, volume: weeklyVolume },
+    { label: "30 days", sessions: monthlySessions.length, volume: monthlyVolume },
+  ];
   const muscleGroups = sessions.reduce<
     Record<
       string,
@@ -172,16 +210,16 @@ export function EasyWorkoutDashboardPage() {
               <strong>{totalVolume.toLocaleString()}</strong>
             </article>
             <article className="stat-card-vnext">
+              <span>Consistency</span>
+              <strong>{consistencyScore}%</strong>
+            </article>
+            <article className="stat-card-vnext">
               <span>Stacks saved</span>
               <strong>{routines.length}</strong>
             </article>
             <article className="stat-card-vnext">
               <span>Most hit</span>
               <strong>{mostHitMuscle?.name || "None yet"}</strong>
-            </article>
-            <article className="stat-card-vnext">
-              <span>Recent PR pool</span>
-              <strong>{topLifts.length}</strong>
             </article>
           </div>
           <div className="hq-link-grid">
@@ -252,6 +290,27 @@ export function EasyWorkoutDashboardPage() {
         </PageSection>
       </div>
       <PageSection
+        eyebrow="PRs"
+        title="Strength highlights"
+        description="The lifts currently carrying your best numbers."
+      >
+        <div className="statistics-subgrid">
+          {prHighlights.length === 0 ? (
+            <div className="empty-card-vnext">Your PR-style highlights will show up after a few logged sets.</div>
+          ) : (
+            prHighlights.map((exercise) => (
+              <article key={exercise.exerciseName} className="statistics-insight-card">
+                <span>{exercise.exerciseName}</span>
+                <strong>{exercise.estimatedMax} est. max</strong>
+                <p>
+                  {exercise.bestWeight} lbs x {exercise.bestReps || 1} best working set
+                </p>
+              </article>
+            ))
+          )}
+        </div>
+      </PageSection>
+      <PageSection
         eyebrow="Progress"
         title="Exercise history"
         description="Your most repeated lifts and what they are doing over time."
@@ -271,6 +330,43 @@ export function EasyWorkoutDashboardPage() {
               </article>
             ))
           )}
+        </div>
+      </PageSection>
+      <PageSection
+        eyebrow="Rhythm"
+        title="Training consistency"
+        description="A quick read on whether your training is building real momentum."
+      >
+        <div className="statistics-subgrid">
+          <article className="statistics-insight-card">
+            <span>Consistency score</span>
+            <strong>{consistencyScore}%</strong>
+            <p>
+              {weeklySessions.length >= 4
+                ? "You are in a strong weekly rhythm right now."
+                : "A couple more sessions this week would tighten the streak."}
+            </p>
+          </article>
+          <article className="statistics-insight-card">
+            <span>Weekly volume</span>
+            <strong>{weeklyVolume.toLocaleString()}</strong>
+            <p>{weeklySessions.length} session{weeklySessions.length === 1 ? "" : "s"} in the last 7 days.</p>
+          </article>
+          <article className="statistics-insight-card">
+            <span>Monthly volume</span>
+            <strong>{monthlyVolume.toLocaleString()}</strong>
+            <p>{monthlySessions.length} session{monthlySessions.length === 1 ? "" : "s"} in the last 30 days.</p>
+          </article>
+        </div>
+        <div className="statistics-progress-list">
+          {trainingRhythm.map((window) => (
+            <div key={window.label}>
+              <span>{window.label}</span>
+              <strong>
+                {window.sessions} sessions | {window.volume.toLocaleString()} volume
+              </strong>
+            </div>
+          ))}
         </div>
       </PageSection>
       <PageSection
