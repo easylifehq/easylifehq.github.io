@@ -6,6 +6,22 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.37.1
+
+### Changed
+
+- Polished the lived-in calendar, list, and notes surfaces with clearer labels and calmer empty states.
+- Improved last-used resume behavior so EasyHQ can be remembered as a real return point instead of being silently skipped.
+- Cleaned up the deployed root assets against the latest build output so stale hashed files stop piling up before `5.0.0`.
+
+## 4.37.0
+
+### Changed
+
+- Finished the 4.x shell pass with calmer app spacing, cleaner mobile shell padding, and a less crowded footer rhythm.
+- Reframed the phone/runtime status in Settings around install readiness instead of exposing online versus offline plumbing.
+- Tightened the final shared shell behavior so the app feels more stable and intentional heading into the pre-5.0 bug and QA cycle.
+
 ## 4.36.0
 
 ### Changed

@@ -56,7 +56,7 @@ export function EasyCalendarMonthPage() {
         {error ? <p className="error-copy">{error}</p> : null}
         {isLoading ? <p className="helper-copy">Loading your month...</p> : null}
         <div className="calendar-month-command">
-          <p>Tap a date to open the day. Fixed events, deadlines, and planned work each keep their own signal.</p>
+          <p>Tap any date to zoom into the day. Events, deadlines, and task blocks stay visually separate so the month is easier to scan.</p>
           <div className="calendar-inline-actions">
             <button
               type="button"
@@ -80,7 +80,7 @@ export function EasyCalendarMonthPage() {
               Next
             </button>
             <Link className="primary-button compact-button" to={`/app/easycalendar/day?date=${toDateInputValue(today)}`}>
-              Add
+              Open today
             </Link>
           </div>
         </div>
@@ -147,7 +147,7 @@ export function EasyCalendarMonthPage() {
                     </button>
                   );
                   })}
-                  {items.length > 4 ? <p className="helper-copy">+{items.length - 4} more</p> : null}
+                  {items.length > 4 ? <p className="helper-copy">+{items.length - 4} more items</p> : null}
                 </div>
               </article>
             );

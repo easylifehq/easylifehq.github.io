@@ -13,7 +13,7 @@ import { useMobileViewportCssVars } from "@/lib/mobile/useMobileViewportCssVars"
 export function AuthenticatedLayout() {
   const location = useLocation();
   const { settings, isExperimentalFeatureEnabled } = useSettings();
-  const { isStandalone, isOnline } = useMobileRuntime();
+  const { isStandalone } = useMobileRuntime();
   useRememberAppRoute();
   useMobileThemeColor(settings.themeMode);
   useMobileViewportCssVars();
@@ -25,7 +25,6 @@ export function AuthenticatedLayout() {
     isNotesFocusEditorEnabled ? "experiment-notes-focus-editor" : "",
     isExperimentalFeatureEnabled("gymMode") ? "experiment-gym-mode" : "",
     isStandalone ? "mobile-standalone-shell" : "",
-    isOnline ? "" : "mobile-offline-shell",
   ]
     .filter(Boolean)
     .join(" ");

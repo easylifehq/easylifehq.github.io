@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.36.0`
-- Current planning target: `4.36.0` Housekeeping and UI Consistency Sweep
+- App package version: `4.37.1`
+- Current planning target: `4.37.1` Pre-5.0.0 Stabilization Patch
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -893,14 +893,26 @@ Goal: Clean up the visual and structural mess that accumulates across fast relea
 
 ### 4.37.0 Shell, Mobile, And Stability Finish
 
-Status: Planned
+Status: Done
 
 Goal: Finish the 4.x line with a broad polish and stability pass before `5.0.0`.
 
-- Run a global shell consistency pass for headers, spacing, navigation, and shared controls.
-- Fix remaining mobile awkwardness across iPhone-first use.
-- Do a broad bug-hunt and cleanup pass across the active apps.
-- Lock the suite down so `5.0.0` can be expansion, not rescue work.
+- Done: Ran the final shared shell pass for app spacing, footer rhythm, and calmer mobile padding.
+- Done: Made phone/runtime status read in human terms instead of exposing online-versus-offline plumbing.
+- Done: Tightened the final shared shell behavior heading into the pre-5.0 bug and QA cycle.
+- Done: Locked the roadmap into a pre-5.0 stabilization phase instead of jumping straight into expansion.
+
+### Pre-5.0.0 Stabilization Queue
+
+Status: In Progress
+
+Goal: Use the app in real life, patch what breaks trust, and only then open the expansion track.
+
+- Started in `4.37.1`: Run a real iPhone-first QA pass across HQ, login, list, notes, calendar, workout, settings, and install flow.
+- Done in `4.37.1`: Do a lived-in patch cycle for calendar/list/notes friction that only shows up during daily use.
+- Done in `4.37.1`: Sanity-check startup and resume behavior so the app always opens where the user expects.
+- Done in `4.37.1`: Do a safe deploy-assets cleanup so root build output stops getting messier every release.
+- Started in `4.37.1`: Run a final empty-state, label, and awkward-button-row polish pass before `5.0.0`.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

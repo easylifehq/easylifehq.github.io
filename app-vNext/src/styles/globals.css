@@ -584,7 +584,7 @@ a {
 }
 
 .app-content {
-  padding: 1.5rem;
+  padding: 1.25rem;
   min-height: var(--easy-viewport-height, 100%);
   background:
     linear-gradient(90deg, var(--shell-grid-line) 1px, transparent 1px),
@@ -599,8 +599,8 @@ a {
 }
 
 .app-content-shell {
-  padding-top: 1rem;
-  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--easy-keyboard-inset, 0px));
+  padding-top: 0.85rem;
+  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px) + var(--easy-keyboard-inset, 0px));
   min-width: 0;
 }
 
@@ -803,7 +803,7 @@ a {
 
 .site-footer {
   width: min(1180px, 100%);
-  margin: 1.5rem auto 0;
+  margin: 1.15rem auto 0;
   padding: 0.85rem 0.25rem calc(0.5rem + env(safe-area-inset-bottom));
   display: flex;
   justify-content: center;
@@ -6350,11 +6350,11 @@ button.calendar-detail-card:disabled {
   }
 
   .app-content {
-    padding: 0.8rem;
+    padding: 0.72rem;
   }
 
   .app-content-shell {
-    padding-top: 0.65rem;
+    padding-top: 0.55rem;
   }
 
   .capture-fab {

@@ -265,7 +265,13 @@ export function EasyListDashboardPage() {
               />
             ))
           ) : (
-            <div className="empty-card-vnext">No tasks match this view yet.</div>
+            <div className="empty-card-vnext">
+              {activeView === "focus"
+                ? "Nothing urgent right now. Add a task or switch to Upcoming or Lists."
+                : activeView === "upcoming"
+                  ? "Nothing upcoming yet. Add a due date when you want it to show here."
+                  : "This list is empty right now."}
+            </div>
           )}
         </div>
       </PageSection>
@@ -284,7 +290,7 @@ export function EasyListDashboardPage() {
                     <span className="priority-pill-vnext">Overdue</span>
                   </div>
                   <p>
-                    Try one: reschedule to a real day, shrink it to a next step, or drop it if it no longer matters.
+                    Pick the gentlest fix: reschedule it, shrink it, or clear it out.
                   </p>
                 </div>
                 <div className="triage-actions">

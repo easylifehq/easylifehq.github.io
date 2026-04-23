@@ -65,6 +65,7 @@ export function EasyNotesLibraryPage() {
       return matchesFolder && matchesSearch;
     });
   }, [notes, search, selectedFolderId]);
+  const hasFilters = Boolean(search.trim()) || Boolean(selectedFolderId);
 
   const lastOpenNote = useMemo(
     () => notes.find((note) => note.id === lastOpenNoteId) || notes[0] || null,
@@ -355,8 +356,10 @@ export function EasyNotesLibraryPage() {
 
           {!isLoading && filteredNotes.length === 0 ? (
             <div className="empty-card-vnext notes-empty-card">
-              <strong>No notes yet</strong>
-              <p className="helper-copy">Create your first note.</p>
+              <strong>{hasFilters ? "No notes match this view" : "No notes yet"}</strong>
+              <p className="helper-copy">
+                {hasFilters ? "Try a different search or folder, or clear the filters." : "Create your first note and it will show up here."}
+              </p>
             </div>
           ) : null}
 

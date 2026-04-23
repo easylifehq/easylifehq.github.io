@@ -35,6 +35,6 @@ export function useMobileRuntime() {
     isStandalone,
     isOnline,
     runtimeLabel: isStandalone ? "Home screen app" : "Browser",
-    connectionLabel: isOnline ? "Online" : "Offline",
+    installLabel: isStandalone ? "Ready on your home screen" : "Add to Home Screen for the smoother phone version",
   };
 }

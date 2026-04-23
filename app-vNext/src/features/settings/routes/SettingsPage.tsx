@@ -882,7 +882,7 @@ export function SettingsPage() {
           <article className="settings-status-card">
             <span>Phone</span>
             <strong>{mobileRuntime.runtimeLabel}</strong>
-            <p>{mobileRuntime.connectionLabel}</p>
+            <p>{mobileRuntime.installLabel}</p>
           </article>
         </div>
 
@@ -1433,9 +1433,13 @@ export function SettingsPage() {
               </p>
             </article>
             <article>
-              <span>Connection</span>
-              <strong>{mobileRuntime.connectionLabel}</strong>
-              <p>{mobileRuntime.isOnline ? "Sync features can reach Firebase." : "Some updates may wait until you reconnect."}</p>
+              <span>Install status</span>
+              <strong>{mobileRuntime.installLabel}</strong>
+              <p>
+                {mobileRuntime.isStandalone
+                  ? "You are already in the smoother app-style version."
+                  : "For the best phone setup, add EasyLife to your home screen from Safari."}
+              </p>
             </article>
           </div>
           <div className="settings-install-hero">

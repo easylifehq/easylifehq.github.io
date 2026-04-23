@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 const lastAppRouteKey = "easylife:last-app-route";
 
-const ignoredResumePaths = new Set(["/app", "/app/hq", "/app/settings"]);
+const ignoredResumePaths = new Set(["/app", "/app/settings"]);
 
 type LastAppRoute = {
   path: string;
