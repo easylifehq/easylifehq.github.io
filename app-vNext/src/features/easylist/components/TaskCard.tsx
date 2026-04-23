@@ -8,9 +8,18 @@ type TaskCardProps = {
   onReopen?: (taskId: string) => Promise<void>;
   isSelected?: boolean;
   onSelect?: (taskId: string, selected: boolean) => void;
+  showContextMeta?: boolean;
 };
 
-export function TaskCard({ task, onEdit, onComplete, onReopen, isSelected = false, onSelect }: TaskCardProps) {
+export function TaskCard({
+  task,
+  onEdit,
+  onComplete,
+  onReopen,
+  isSelected = false,
+  onSelect,
+  showContextMeta = false,
+}: TaskCardProps) {
   const priority = getPriorityMeta(task.priorityTier, task.priorityLabel);
   const overdue = isOverdue(task);
   const dueToday = isDueToday(task);
@@ -53,7 +62,7 @@ export function TaskCard({ task, onEdit, onComplete, onReopen, isSelected = fals
               {hasLinks ? <span className="task-due-inline">Linked</span> : null}
             </span>
           </div>
-          {(task.listName !== "Main" || scheduledCount) && onSelect ? (
+          {(task.listName !== "Main" || scheduledCount) && showContextMeta ? (
           <div className="task-meta-row task-meta-row-compact" aria-label="Task details">
             {task.listName !== "Main" ? <span className="task-meta-chip">{task.listName}</span> : null}
             {scheduledCount ? <span className="task-meta-chip scheduled">Planned {scheduledCount}x</span> : null}

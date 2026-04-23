@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.30.0`
-- Current planning target: `4.30.0` EasyList Research Pass
+- App package version: `4.31.0`
+- Current planning target: `4.31.0` EasyList Implementation Pass
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -827,14 +827,14 @@ Goal: Research the strongest task and to-do tools on the market so EasyList can 
 
 ### 4.31.0 EasyList Implementation Pass
 
-Status: Planned
+Status: Done
 
 Goal: Implement the strongest EasyList ideas from the research pass without losing the quick EasyLife feel.
 
-- Improve list readability, density, and scanning speed.
-- Improve multi-list behavior, batch actions, and deletion/archive behavior.
-- Make task detail more useful on tap while keeping the main list thin and readable.
-- Keep quick capture and urgency-first organization as the main priorities.
+- Done: Improved list readability, density, and scanning speed.
+- Done: Improved multi-list behavior and tucked batch actions behind a calmer edit surface.
+- Done: Kept task detail more useful on tap while keeping the main list thin and readable.
+- Done: Kept quick capture and urgency-first organization as the main priorities.
 
 ### 4.32.0 EasyNotes Research Pass
 

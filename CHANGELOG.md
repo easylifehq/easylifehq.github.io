@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.31.0
+
+### Changed
+
+- Reworked EasyList around calmer smart views for Focus, Upcoming, and Lists so the default reading experience stays thin and fast.
+- Tucked batch edit actions behind a secondary panel so the main task surface feels lighter during normal use.
+- Kept richer task context inside the drawer and only surfaced list/planning metadata when it actually helps the current view.
+
 ## 4.30.0
 
 ### Changed
