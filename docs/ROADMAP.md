@@ -742,7 +742,152 @@ Goal: Make EasyStatistics fun to explore by showing real progress across every a
 - Done: Added project activity and linked project task completion metrics.
 - Done: Added notes created, pinned notes, and words captured metrics.
 - Done: Added milestone pills for long-running life stats.
-- Next: Audit EasyContacts as the `4.24.0` page pass.
+- Next: Start the `4.24.0` EasyWorkout research and progress foundation pass.
+
+### 4.24.0 EasyWorkout Research And Progress Foundation
+
+Status: Planned
+
+Goal: Research the strongest workout trackers on the market, then implement the best fit-for-purpose ideas so EasyWorkout feels competitive in real use.
+
+- Research what Strong, Hevy, Fitbod, and similar tools do especially well in workout logging and progress tracking.
+- Pull over the strongest patterns that match EasyLife: previous performance reference, best set visibility, progress over time, and low-friction logging.
+- Improve the workout page itself so logging stays fast even as progress features deepen.
+- Add the first real workout progress foundation: per-exercise history, best-set tracking, weekly volume, and sessions over time.
+- Keep the interface clean by putting deeper stats in the right place instead of crowding the logger.
+
+### 4.25.0 EasyWorkout Muscle Group System
+
+Status: Planned
+
+Goal: Make EasyWorkout progress understandable by muscle group instead of only by raw session totals.
+
+- Split EasyWorkout progress by muscle group.
+- Add muscle-group summaries for sets, volume, and frequency.
+- Add a body or muscle-group style statistics view inspired by the strongest market examples.
+- Start lightweight recovery logic or "recently trained" indicators if the data supports it cleanly.
+
+### 4.26.0 EasyStatistics Tabbed App Views
+
+Status: Planned
+
+Goal: Turn EasyStatistics into an organized analytics hub with tabs instead of one long blended page.
+
+- Add top-level tabs for Overview, EasyWorkout, EasyList, EasyPipeline, EasyProjects, and EasyNotes.
+- Make EasyWorkout the deepest and most fun tab first.
+- Keep each tab focused on the app-specific metrics users actually care about.
+- Preserve a simple overview so the whole statistics area still feels easy to scan.
+
+### 4.27.0 EasyWorkout Advanced Progress
+
+Status: Planned
+
+Goal: Push EasyWorkout progress features closer to the strongest workout apps without losing the clean EasyLife feel.
+
+- Add stronger exercise progress views such as charts over time, top exercises, and PR-style highlights.
+- Add consistency views such as streaks, recent training rhythm, or similar motivation features.
+- Consider estimated strength or e1RM-style metrics only if they stay simple and useful.
+- Keep the workout page itself focused on logging while the deeper analysis lives in stats.
+
+### 4.28.0 EasyCalendar Research Pass
+
+Status: Planned
+
+Goal: Research the strongest calendar and planner tools on the market, then decide which patterns should shape the next EasyCalendar upgrade.
+
+- Study what Google Calendar and other strong planning tools do especially well in month, week, and day flows.
+- Study how strong tools handle deadlines vs scheduled events vs work blocks.
+- Study how they surface rescheduling, context, and planning density without feeling crowded.
+- Identify which interaction patterns fit EasyLife and which would add complexity without helping.
+- Turn the research into a concrete implementation plan for EasyCalendar.
+
+### 4.29.0 EasyCalendar Implementation Pass
+
+Status: Planned
+
+Goal: Implement the strongest EasyCalendar ideas from the research pass in a way that feels polished and easy to use.
+
+- Improve EasyCalendar structure, scanning, and navigation based on the research findings.
+- Make the difference between scheduled events, deadlines, and work blocks clearer.
+- Improve planning, editing, and rescheduling flows.
+- Keep the interface simple while making the calendar feel more powerful.
+
+### 4.30.0 EasyList Research Pass
+
+Status: Planned
+
+Goal: Research the strongest task and to-do tools on the market so EasyList can learn from what works best in real daily use.
+
+- Study what leading to-do tools do well in quick capture, list organization, prioritization, and completion flow.
+- Study how strong tools handle multiple lists, batch actions, detail drawers, and soft delete/archive patterns.
+- Identify the best patterns for readable one-line task lists with deeper detail on tap.
+- Turn the research into a concrete implementation plan for EasyList.
+
+### 4.31.0 EasyList Implementation Pass
+
+Status: Planned
+
+Goal: Implement the strongest EasyList ideas from the research pass without losing the quick EasyLife feel.
+
+- Improve list readability, density, and scanning speed.
+- Improve multi-list behavior, batch actions, and deletion/archive behavior.
+- Make task detail more useful on tap while keeping the main list thin and readable.
+- Keep quick capture and urgency-first organization as the main priorities.
+
+### 4.32.0 EasyNotes Research Pass
+
+Status: Planned
+
+Goal: Research the strongest note tools on the market so EasyNotes can borrow the best patterns for writing, browsing, and organizing.
+
+- Study what Apple Notes, Google Docs, and other strong note tools do well in creation, browsing, folders, and editing.
+- Study how they handle fast capture, recent work, selection/edit mode, and basic organization without clutter.
+- Identify which note-library patterns fit EasyLife best.
+- Turn the research into a concrete implementation plan for EasyNotes.
+
+### 4.33.0 EasyNotes Implementation Pass
+
+Status: Planned
+
+Goal: Implement the strongest EasyNotes ideas from the research pass while preserving the writing-first direction.
+
+- Improve note control, folder organization, and browse/edit flows.
+- Improve fast capture, recent note continuity, and note-library usability.
+- Keep writing and resuming work extremely fast.
+- Preserve the cleaner notes direction while deepening the useful parts.
+
+### 4.34.0 EasyContacts Relationship Hub
+
+Status: Planned
+
+Goal: Make EasyContacts feel like a lightweight relationship tracker instead of just a saved list.
+
+- Improve quick add and detail flows.
+- Add better follow-up context such as last-contacted and next-step style information.
+- Make notes around each person easier to read and update.
+- Keep it lightweight and personal rather than turning it into a bulky CRM.
+
+### 4.35.0 Settings And Personalization Cleanup
+
+Status: Planned
+
+Goal: Make settings easier to scan and better at shaping the app around the user.
+
+- Clean up settings structure and reduce clutter.
+- Improve landing-page and default-behavior settings.
+- Add more personalization options only where they clearly improve daily use.
+- Keep settings powerful under the hood but clean on the surface.
+
+### 4.36.0 Shell, Mobile, And Stability Finish
+
+Status: Planned
+
+Goal: Finish the 4.x line with a broad polish and stability pass before `5.0.0`.
+
+- Run a global shell consistency pass for headers, spacing, navigation, and shared controls.
+- Fix remaining mobile awkwardness across iPhone-first use.
+- Do a broad bug-hunt and cleanup pass across the active apps.
+- Lock the suite down so `5.0.0` can be expansion, not rescue work.
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 

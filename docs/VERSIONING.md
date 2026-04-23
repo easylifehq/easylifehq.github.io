@@ -99,6 +99,19 @@ Before finishing a release batch:
 52. `4.21.0` EasyPipeline focused job search.
 53. `4.22.0` EasyStatistics insight hub.
 54. `4.23.0` EasyStatistics analytics expansion.
-55. `5.0.0` EasyDrinks and EasyGames Suite Expansion.
+55. `4.24.0` EasyWorkout research and progress foundation.
+56. `4.25.0` EasyWorkout muscle group system.
+57. `4.26.0` EasyStatistics tabbed app views.
+58. `4.27.0` EasyWorkout advanced progress.
+59. `4.28.0` EasyCalendar research pass.
+60. `4.29.0` EasyCalendar implementation pass.
+61. `4.30.0` EasyList research pass.
+62. `4.31.0` EasyList implementation pass.
+63. `4.32.0` EasyNotes research pass.
+64. `4.33.0` EasyNotes implementation pass.
+65. `4.34.0` EasyContacts relationship hub.
+66. `4.35.0` Settings and personalization cleanup.
+67. `4.36.0` Shell, mobile, and stability finish.
+68. `5.0.0` EasyDrinks and EasyGames Suite Expansion.
 
 `4.13.0` shipped before the 4.9-4.12 catch-up releases because Settings cleanup and landing pages were active work at the time. The catch-up releases are now complete, so the next large feature line can move toward `5.0.0` after the page-by-page `4.15+` real-use passes.
