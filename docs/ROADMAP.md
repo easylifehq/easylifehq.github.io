@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.31.0`
-- Current planning target: `4.31.0` EasyList Implementation Pass
+- App package version: `4.32.0`
+- Current planning target: `4.32.0` EasyNotes Research Pass
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -838,14 +838,14 @@ Goal: Implement the strongest EasyList ideas from the research pass without losi
 
 ### 4.32.0 EasyNotes Research Pass
 
-Status: Planned
+Status: Done
 
 Goal: Research the strongest note tools on the market so EasyNotes can borrow the best patterns for writing, browsing, and organizing.
 
-- Study what Apple Notes, Google Docs, and other strong note tools do well in creation, browsing, folders, and editing.
-- Study how they handle fast capture, recent work, selection/edit mode, and basic organization without clutter.
-- Identify which note-library patterns fit EasyLife best.
-- Turn the research into a concrete implementation plan for EasyNotes.
+- Done: Studied what Apple Notes and other strong note tools do well in creation, browsing, folders, and editing.
+- Done: Studied how they handle fast capture, recent work, selection/edit mode, and basic organization without clutter.
+- Done: Identified which note-library patterns fit EasyLife best.
+- Done: Turned the research into a concrete implementation plan for EasyNotes in `docs/EASYNOTES_RESEARCH.md`.
 
 ### 4.33.0 EasyNotes Implementation Pass
 

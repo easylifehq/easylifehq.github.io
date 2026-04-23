@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.32.0
+
+### Changed
+
+- Completed the EasyNotes market research pass and captured the strongest note-library patterns from Apple Notes, Notion, and Obsidian.
+- Turned the research into a concrete implementation brief for the next EasyNotes build, centered on recent work, pinned notes, faster note retrieval, and quieter organization.
+
 ## 4.31.0
 
 ### Changed
