@@ -259,9 +259,17 @@ export function EasyCalendarDayPage() {
       >
         {error ? <p className="error-copy">{error}</p> : null}
         <div className="calendar-day-topbar">
-          <Link to="/app/easycalendar/month" className="button-secondary compact-button">
-            Back to month
-          </Link>
+          <div className="calendar-inline-actions">
+            <Link to="/app/easycalendar/month" className="button-secondary compact-button">
+              Month
+            </Link>
+            <button type="button" className="ghost-button compact-button" onClick={() => moveDay(-1)}>
+              Prev day
+            </button>
+            <button type="button" className="ghost-button compact-button" onClick={() => moveDay(1)}>
+              Next day
+            </button>
+          </div>
           <button type="button" className="primary-button compact-button" onClick={() => openQuickEvent(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), wakeHour, 0, 0, 0))}>
             Add
           </button>
@@ -283,6 +291,11 @@ export function EasyCalendarDayPage() {
           <span>{fixedEventCount} event{fixedEventCount === 1 ? "" : "s"}</span>
           <span>{taskBlockCount} task block{taskBlockCount === 1 ? "" : "s"}</span>
           <span>{formatDuration(scheduledMinutes)} planned</span>
+        </div>
+        <div className="calendar-type-legend" aria-label="Calendar item types">
+          <span className="fixed">Event</span>
+          <span className="deadline">Deadline</span>
+          <span className="flexible">Task block</span>
         </div>
       </PageSection>
 
@@ -376,7 +389,7 @@ export function EasyCalendarDayPage() {
                           <strong>{item.title}</strong>
                           <p>{item.helper}</p>
                         </div>
-                        <span>{item.badge}</span>
+                        <span>{item.kind === "event" ? "Event" : "Task block"}</span>
                       </button>
                     );
                     })
@@ -420,7 +433,7 @@ export function EasyCalendarDayPage() {
                     <strong>{item.title}</strong>
                     <p>{item.helper}</p>
                   </div>
-                  <span>{item.badge}</span>
+                  <span>Deadline</span>
                 </button>
               );
               })

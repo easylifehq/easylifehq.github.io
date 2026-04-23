@@ -3579,12 +3579,62 @@ textarea::placeholder {
   font-weight: 700;
 }
 
+.calendar-inline-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.calendar-type-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.8rem 0 0;
+}
+
+.calendar-type-legend span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.22rem 0.52rem 0.22rem 0.68rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-card, var(--shell-card-bg));
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.72rem;
+  font-weight: 800;
+  position: relative;
+}
+
+.calendar-type-legend span::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  border-radius: 8px 0 0 8px;
+  background: currentColor;
+  opacity: 0.82;
+}
+
+.calendar-type-legend .fixed {
+  color: var(--ui-pill-text, #3e3732);
+}
+
+.calendar-type-legend .flexible {
+  color: #875a38;
+}
+
+.calendar-type-legend .deadline {
+  color: #7a1f17;
+}
+
 .calendar-month-day {
-  min-height: 7.25rem;
+  min-height: 6.6rem;
   display: grid;
   align-content: start;
-  gap: 0.3rem;
-  padding: 0.38rem;
+  gap: 0.22rem;
+  padding: 0.32rem;
   border-radius: 0;
   border-right: 1px solid var(--ui-border-subtle, var(--shell-card-border));
   border-bottom: 1px solid var(--ui-border-subtle, var(--shell-card-border));
@@ -3667,17 +3717,17 @@ textarea::placeholder {
 }
 
 .calendar-block-vnext.compact {
-  padding: 0.28rem 0.34rem 0.28rem 0.5rem;
+  padding: 0.24rem 0.3rem 0.24rem 0.46rem;
 }
 
 .calendar-block-vnext.compact strong {
-  font-size: 0.74rem;
+  font-size: 0.7rem;
 }
 
 .calendar-block-vnext.compact small {
   min-height: 16px;
   padding: 0.02rem 0.24rem;
-  font-size: 0.58rem;
+  font-size: 0.54rem;
 }
 
 button.calendar-block-vnext,

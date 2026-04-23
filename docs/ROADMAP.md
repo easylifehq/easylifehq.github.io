@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.27.0`
-- Current planning target: `4.27.0` EasyWorkout Advanced Progress
+- App package version: `4.29.0`
+- Current planning target: `4.29.0` EasyCalendar Implementation Pass
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -792,26 +792,27 @@ Goal: Push EasyWorkout progress features closer to the strongest workout apps wi
 
 ### 4.28.0 EasyCalendar Research Pass
 
-Status: Planned
+Status: Done
 
 Goal: Research the strongest calendar and planner tools on the market, then decide which patterns should shape the next EasyCalendar upgrade.
 
-- Study what Google Calendar and other strong planning tools do especially well in month, week, and day flows.
-- Study how strong tools handle deadlines vs scheduled events vs work blocks.
-- Study how they surface rescheduling, context, and planning density without feeling crowded.
-- Identify which interaction patterns fit EasyLife and which would add complexity without helping.
-- Turn the research into a concrete implementation plan for EasyCalendar.
+- Done: Studied what Google Calendar and other strong planning tools do especially well in month, week, and day flows.
+- Done: Studied how strong tools handle deadlines vs scheduled events vs work blocks.
+- Done: Studied how they surface rescheduling, context, and planning density without feeling crowded.
+- Done: Identified which interaction patterns fit EasyLife and which would add complexity without helping.
+- Done: Turned the research into a concrete implementation plan for EasyCalendar in `docs/EASYCALENDAR_RESEARCH.md`.
 
 ### 4.29.0 EasyCalendar Implementation Pass
 
-Status: Planned
+Status: Done
 
 Goal: Implement the strongest EasyCalendar ideas from the research pass in a way that feels polished and easy to use.
 
-- Improve EasyCalendar structure, scanning, and navigation based on the research findings.
-- Make the difference between scheduled events, deadlines, and work blocks clearer.
-- Improve planning, editing, and rescheduling flows.
-- Keep the interface simple while making the calendar feel more powerful.
+- Done: Improved EasyCalendar structure, scanning, and navigation based on the research findings.
+- Done: Made the month view denser and more Google-like while preserving the current month-first flow.
+- Done: Made the difference between scheduled events, deadlines, and work blocks clearer.
+- Done: Improved planning, editing, and rescheduling flow with lighter nearby-day context.
+- Done: Kept the interface simple while making the calendar feel more powerful.
 
 ### 4.30.0 EasyList Research Pass
 

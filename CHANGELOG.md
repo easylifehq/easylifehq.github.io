@@ -6,6 +6,21 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.29.0
+
+### Changed
+
+- Tightened EasyCalendar month scanning with denser day cells, lighter item chips, and real previous/next/today month navigation.
+- Clarified event, deadline, and task-block item types across month and day views with calmer visible labels.
+- Simplified calendar navigation by removing leftover duplicate view switching and making day movement lighter from the day page itself.
+
+## 4.28.0
+
+### Changed
+
+- Completed the EasyCalendar market research pass and captured the strongest planning patterns from Google Calendar, Google Tasks, Sunsama, and Todoist.
+- Turned the research into a concrete implementation brief for the next EasyCalendar build, centered on denser month scanning, clearer item types, and lighter rescheduling flow.
+
 ## 4.27.0
 
 ### Changed

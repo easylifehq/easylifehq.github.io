@@ -70,10 +70,12 @@ export function EasyCalendarWeekPage() {
     <>
       <PageSection eyebrow="Week" title="Calendar">
         {error ? <p className="error-copy">{error}</p> : null}
-        <div className="calendar-view-links calendar-view-links-sticky" aria-label="Calendar views">
-          <Link to="/app/easycalendar/day" className="view-button-vnext">Day</Link>
-          <Link to="/app/easycalendar/week" className="view-button-vnext active">Week</Link>
-          <Link to="/app/easycalendar/month" className="view-button-vnext">Month</Link>
+        <div className="calendar-month-command">
+          <p>Use week view when you want the wider scan, then jump back into a day from month view.</p>
+          <div className="calendar-inline-actions">
+            <Link to="/app/easycalendar/month" className="button-secondary compact-button">Month</Link>
+            <Link to="/app/easycalendar/day" className="ghost-button compact-button">Today</Link>
+          </div>
         </div>
         <div className="quiet-metrics-row" aria-label="Week snapshot">
           <span>{events.length} events</span>

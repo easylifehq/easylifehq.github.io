@@ -35,7 +35,8 @@ export function EasyCalendarMonthPage() {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const today = startOfDay(new Date());
-  const days = useMemo(() => getMonthGrid(today), [today]);
+  const [viewedMonth, setViewedMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
+  const days = useMemo(() => getMonthGrid(viewedMonth), [viewedMonth]);
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
     [selectedBlockId, taskBlocks]
@@ -51,14 +52,42 @@ export function EasyCalendarMonthPage() {
 
   return (
     <>
-      <PageSection eyebrow="Calendar" title={new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(today)}>
+      <PageSection eyebrow="Calendar" title={new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(viewedMonth)}>
         {error ? <p className="error-copy">{error}</p> : null}
         {isLoading ? <p className="helper-copy">Loading your month...</p> : null}
         <div className="calendar-month-command">
-          <p>Tap a date to open the day. The month stays as your home base.</p>
-          <Link className="primary-button compact-button" to={`/app/easycalendar/day?date=${toDateInputValue(today)}`}>
-            Add
-          </Link>
+          <p>Tap a date to open the day. Fixed events, deadlines, and planned work each keep their own signal.</p>
+          <div className="calendar-inline-actions">
+            <button
+              type="button"
+              className="button-secondary compact-button"
+              onClick={() => setViewedMonth((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1))}
+            >
+              Prev
+            </button>
+            <button
+              type="button"
+              className="ghost-button compact-button"
+              onClick={() => setViewedMonth(new Date(today.getFullYear(), today.getMonth(), 1))}
+            >
+              Today
+            </button>
+            <button
+              type="button"
+              className="button-secondary compact-button"
+              onClick={() => setViewedMonth((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1))}
+            >
+              Next
+            </button>
+            <Link className="primary-button compact-button" to={`/app/easycalendar/day?date=${toDateInputValue(today)}`}>
+              Add
+            </Link>
+          </div>
+        </div>
+        <div className="calendar-type-legend" aria-label="Calendar item types">
+          <span className="fixed">Event</span>
+          <span className="deadline">Deadline</span>
+          <span className="flexible">Task block</span>
         </div>
         <div className="calendar-month-surface">
         <div className="calendar-month-weekdays" aria-hidden="true">
@@ -76,7 +105,7 @@ export function EasyCalendarMonthPage() {
                 key={day.toISOString()}
                 role="button"
                 tabIndex={0}
-                className={`calendar-month-day${isSameDay(day, today) ? " today" : ""}${day.getMonth() !== today.getMonth() ? " muted" : ""}`}
+                className={`calendar-month-day${isSameDay(day, today) ? " today" : ""}${day.getMonth() !== viewedMonth.getMonth() ? " muted" : ""}`}
                 onClick={() => navigate(`/app/easycalendar/day?date=${toDateInputValue(day)}`)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
@@ -114,7 +143,7 @@ export function EasyCalendarMonthPage() {
                       disabled={item.kind === "deadline" && !editableDeadline}
                     >
                       <strong>{item.title}</strong>
-                      <small>{item.badge}</small>
+                      <small>{item.kind === "event" ? "Event" : item.kind === "deadline" ? "Deadline" : "Task block"}</small>
                     </button>
                   );
                   })}
