@@ -1875,10 +1875,25 @@ textarea::placeholder {
   white-space: nowrap;
 }
 
+.notes-library-overview {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
 .notes-library-grid {
   display: grid;
   gap: 0.5rem;
   margin-top: 1rem;
+}
+
+.notes-library-grid-featured {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 0;
+}
+
+.notes-library-grid-recent {
+  margin-top: 0;
 }
 
 .note-card-vnext {
@@ -1897,6 +1912,10 @@ textarea::placeholder {
   padding: 0.58rem 0.68rem;
   border-radius: 8px;
   box-shadow: none;
+}
+
+.note-card-featured {
+  padding: 0.82rem 0.88rem;
 }
 
 .note-card-compact .note-card-link {

@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.32.0`
-- Current planning target: `4.32.0` EasyNotes Research Pass
+- App package version: `4.33.0`
+- Current planning target: `4.33.0` EasyNotes Implementation Pass
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -849,14 +849,14 @@ Goal: Research the strongest note tools on the market so EasyNotes can borrow th
 
 ### 4.33.0 EasyNotes Implementation Pass
 
-Status: Planned
+Status: Done
 
 Goal: Implement the strongest EasyNotes ideas from the research pass while preserving the writing-first direction.
 
-- Improve note control, folder organization, and browse/edit flows.
-- Improve fast capture, recent note continuity, and note-library usability.
-- Keep writing and resuming work extremely fast.
-- Preserve the cleaner notes direction while deepening the useful parts.
+- Done: Improved note control, folder organization, and browse/edit flows.
+- Done: Improved fast capture, recent note continuity, and note-library usability.
+- Done: Kept writing and resuming work extremely fast.
+- Done: Preserved the cleaner notes direction while deepening the useful parts.
 
 ### 4.34.0 EasyContacts Relationship Hub
 

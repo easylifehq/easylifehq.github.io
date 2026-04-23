@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.33.0
+
+### Changed
+
+- Reworked the EasyNotes library around recent work first, pinned notes second, and quieter organization controls.
+- Kept search and resume-writing close to the top so opening the right note stays fast.
+- Moved folder and cleanup management behind a calmer `Organize notes` surface so the library feels more like a writing app than a file browser.
+
 ## 4.32.0
 
 ### Changed

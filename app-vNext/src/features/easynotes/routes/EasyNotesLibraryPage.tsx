@@ -45,6 +45,14 @@ export function EasyNotesLibraryPage() {
     () => new Map(folders.map((folder) => [folder.id, folder.name])),
     [folders]
   );
+  const pinnedNotes = useMemo(() => notes.filter((note) => note.pinned), [notes]);
+  const recentNotes = useMemo(
+    () =>
+      [...notes]
+        .sort((left, right) => (right.updatedAt?.getTime() || right.createdAt?.getTime() || 0) - (left.updatedAt?.getTime() || left.createdAt?.getTime() || 0))
+        .slice(0, 6),
+    [notes]
+  );
 
   const filteredNotes = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -185,11 +193,7 @@ export function EasyNotesLibraryPage() {
           </label>
 
           <div className="notes-toolbar-actions">
-            {lastOpenNote ? (
-              <Link to={`/app/easynotes/${lastOpenNote.id}`} className="primary-button">
-                Resume writing
-              </Link>
-            ) : null}
+            {lastOpenNote ? <Link to={`/app/easynotes/${lastOpenNote.id}`} className="primary-button">Resume writing</Link> : null}
           </div>
         </div>
         ) : lastOpenNote ? (
@@ -199,13 +203,72 @@ export function EasyNotesLibraryPage() {
           </Link>
         ) : null}
 
+        {!searchOpen ? (
+          <div className="notes-library-overview">
+            {pinnedNotes.length ? (
+              <section className="group-block">
+                <div className="group-heading">
+                  <h3>Pinned</h3>
+                  <span>{pinnedNotes.length}</span>
+                </div>
+                <div className="notes-library-grid notes-library-grid-featured">
+                  {pinnedNotes.slice(0, 4).map((note) => (
+                    <article key={note.id} className="note-card-vnext note-card-selectable note-card-featured">
+                      <Link to={`/app/easynotes/${note.id}`} className="note-card-link">
+                        <div className="note-card-top">
+                          <div>
+                            <strong>{note.title.trim() || "Untitled note"}</strong>
+                            <p>{formatDate(note.updatedAt || note.createdAt)}</p>
+                          </div>
+                          <div className="note-card-badges">
+                            <span className="note-pin-badge">Pinned</span>
+                          </div>
+                        </div>
+                        <p className="note-card-body">{note.bodyText.trim() || "No content yet."}</p>
+                      </Link>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            <section className="group-block">
+              <div className="group-heading">
+                <h3>Recent</h3>
+                <span>{recentNotes.length}</span>
+              </div>
+              <div className="notes-library-grid notes-library-grid-recent">
+                {recentNotes.map((note) => (
+                  <article key={note.id} className="note-card-vnext note-card-selectable note-card-compact">
+                    <Link to={`/app/easynotes/${note.id}`} className="note-card-link">
+                      <div className="note-card-top">
+                        <div>
+                          <strong>{note.title.trim() || "Untitled note"}</strong>
+                          <p>{formatDate(note.updatedAt || note.createdAt)}</p>
+                        </div>
+                        <div className="note-card-badges">
+                          {note.folderId && folderNameById.get(note.folderId) ? (
+                            <span className="note-folder-badge">{folderNameById.get(note.folderId)}</span>
+                          ) : null}
+                          {note.pinned ? <span className="note-pin-badge">Pinned</span> : null}
+                        </div>
+                      </div>
+                      <p className="note-card-body">{note.bodyText.trim() || "No content yet."}</p>
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </div>
+        ) : null}
+
         <details
           id="notes-library-tools"
           className="advanced-disclosure notes-advanced-tools"
           open={toolsOpen}
           onToggle={(event) => setToolsOpen(event.currentTarget.open)}
         >
-          <summary>Folders and cleanup</summary>
+          <summary>Organize notes</summary>
           <div className="notes-control-center">
           <label className="field-stack">
             <span>Folder</span>
