@@ -117,7 +117,7 @@ export function EasyWorkoutDashboardPage() {
             <strong>{sessions.length}</strong>
           </article>
           <article>
-            <span>Recent activity</span>
+            <span>Streak</span>
             <strong>{streak} day{streak === 1 ? "" : "s"}</strong>
           </article>
         </div>
@@ -214,7 +214,7 @@ export function EasyWorkoutDashboardPage() {
       <PageSection
         eyebrow="Progress"
         title="Exercise history"
-        description="The foundation view: what you hit the most, what is moving up, and what keeps showing up."
+        description="Your most repeated lifts and what they are doing over time."
       >
         <div className="statistics-app-grid">
           {exerciseStats.length === 0 ? (

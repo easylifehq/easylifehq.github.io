@@ -244,7 +244,7 @@ export function EasyStatisticsPage() {
         ))}
       </div>
 
-      <details className="advanced-disclosure" open>
+      <details className="advanced-disclosure statistics-breakdown" open>
         <summary>App breakdown</summary>
         <div className="statistics-app-grid">
           <PageSection eyebrow="EasyList" title="Tasks">

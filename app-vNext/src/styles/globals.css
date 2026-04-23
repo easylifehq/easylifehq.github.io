@@ -2655,6 +2655,7 @@ textarea::placeholder {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
+  margin-top: -0.15rem;
 }
 
 .statistics-milestone-row span {
@@ -2673,6 +2674,10 @@ textarea::placeholder {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.statistics-breakdown {
+  margin-top: 0.2rem;
 }
 
 .statistics-progress-list {
@@ -5367,6 +5372,10 @@ button.calendar-detail-card:disabled {
   color: var(--ui-text-muted, var(--shell-muted-text));
   font-size: 0.83rem;
   font-weight: 700;
+}
+
+.gym-suggestion strong {
+  font-size: 0.95rem;
 }
 
 .gym-set-row input {

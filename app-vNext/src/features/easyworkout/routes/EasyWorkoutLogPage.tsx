@@ -299,7 +299,7 @@ export function EasyWorkoutLogPage() {
         <div className={`toolbar-row toolbar-row-compact deep-module-toolbar${isFocusedWorkoutMode ? " workout-focus-toolbar" : ""}`}>
           <div>
             <strong>{isGymModeActive ? "Gym Mode" : isFocusedWorkoutMode ? "Workout Mode" : "Logger"}</strong>
-            {!isFocusedWorkoutMode ? <p className="helper-copy">Only the essentials are up front. Extra tools stay tucked away.</p> : null}
+            {!isFocusedWorkoutMode ? <p className="helper-copy">Log fast. Details stay tucked away.</p> : null}
           </div>
           <div className="pill-row">
             {isGymModeActive ? (
@@ -383,8 +383,8 @@ export function EasyWorkoutLogPage() {
         {isFocusedWorkoutMode ? (
           <div className="workout-mode-quick-actions deep-module-compact-actions">
             <div>
-              <strong>{exerciseLogs.length} boxes ready</strong>
-              <p className="helper-copy">Type the lift. Save the sets. Keep moving.</p>
+              <strong>{exerciseLogs.length} lifts ready</strong>
+              <p className="helper-copy">Type, log, move on.</p>
             </div>
             <div className="drawer-actions-right">
               <button type="button" className="button-secondary compact-button" onClick={() => addExerciseBoxes(3)}>
@@ -413,7 +413,7 @@ export function EasyWorkoutLogPage() {
                 </div>
                 {isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper && previous ? (
                   <div className="calendar-info-card gym-suggestion">
-                    <strong>Suggested working set: {previous.lastWeight} lbs x {previous.lastReps}</strong>
+                    <strong>{previous.lastWeight} lbs x {previous.lastReps} last time</strong>
                     <button type="button" className="primary-button compact-button" onClick={() => fillFromLastTime(exerciseIndex)}>
                       Fill first set
                     </button>
@@ -422,8 +422,8 @@ export function EasyWorkoutLogPage() {
                 {previous ? (
                   <div className="workout-history-strip">
                     <span>{previous.sessionCount} session{previous.sessionCount === 1 ? "" : "s"}</span>
-                    <span>Best weight {previous.bestWeight} lbs</span>
-                    <span>Best volume {previous.bestVolume.toLocaleString()}</span>
+                    <span>{previous.bestWeight} lbs best</span>
+                    <span>{previous.bestVolume.toLocaleString()} volume</span>
                   </div>
                 ) : null}
 
