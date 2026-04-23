@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.25.0`
-- Current planning target: `4.25.0` EasyWorkout Muscle Group System
+- App package version: `4.26.0`
+- Current planning target: `4.26.0` EasyStatistics Tabbed App Views
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -770,14 +770,14 @@ Goal: Make EasyWorkout progress understandable by muscle group instead of only b
 
 ### 4.26.0 EasyStatistics Tabbed App Views
 
-Status: Planned
+Status: Done
 
 Goal: Turn EasyStatistics into an organized analytics hub with tabs instead of one long blended page.
 
-- Add top-level tabs for Overview, EasyWorkout, EasyList, EasyPipeline, EasyProjects, and EasyNotes.
-- Make EasyWorkout the deepest and most fun tab first.
-- Keep each tab focused on the app-specific metrics users actually care about.
-- Preserve a simple overview so the whole statistics area still feels easy to scan.
+- Done: Added top-level tabs for Overview, EasyWorkout, EasyList, EasyPipeline, EasyProjects, and EasyNotes.
+- Done: Made EasyWorkout the deepest and most fun tab first.
+- Done: Kept each tab focused on the app-specific metrics users actually care about.
+- Done: Preserved a simple overview so the whole statistics area still feels easy to scan.
 
 ### 4.27.0 EasyWorkout Advanced Progress
 

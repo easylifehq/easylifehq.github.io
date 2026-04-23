@@ -6,6 +6,14 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.26.0
+
+### Changed
+
+- Rebuilt EasyStatistics into top-level tabs for Overview, EasyWorkout, EasyList, EasyPipeline, EasyProjects, and EasyNotes.
+- Made EasyWorkout the deepest tab first with its own training, muscle-group, and recovery-style views.
+- Kept the overview tab simple so the statistics area feels organized instead of like one long blended page.
+
 ## 4.25.0
 
 ### Changed

@@ -93,6 +93,9 @@ export function EasyStatisticsPage() {
   const [projectLinks, setProjectLinks] = useState<ProjectTaskLinkRecord[]>([]);
   const [notes, setNotes] = useState<NoteRecord[]>([]);
   const [statsError, setStatsError] = useState("");
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "workout" | "list" | "pipeline" | "projects" | "notes"
+  >("overview");
   const today = startOfDay(new Date());
   const weekStart = startOfWeek(today);
   const monthStart = startOfMonth(today);
@@ -245,6 +248,14 @@ export function EasyStatisticsPage() {
     `${applications.length} application${applications.length === 1 ? "" : "s"} tracked`,
     `${stats.wordCount.toLocaleString()} note word${stats.wordCount === 1 ? "" : "s"}`,
   ];
+  const tabs = [
+    { id: "overview", label: "Overview" },
+    { id: "workout", label: "EasyWorkout" },
+    { id: "list", label: "EasyList" },
+    { id: "pipeline", label: "EasyPipeline" },
+    { id: "projects", label: "EasyProjects" },
+    { id: "notes", label: "EasyNotes" },
+  ] as const;
 
   return (
     <main className="page-wrap app-theme app-theme-easystatistics">
@@ -295,8 +306,22 @@ export function EasyStatisticsPage() {
         ))}
       </div>
 
-      <details className="advanced-disclosure statistics-breakdown" open>
-        <summary>App breakdown</summary>
+      <div className="statistics-tab-strip" role="tablist" aria-label="Statistics views">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            role="tab"
+            aria-selected={activeTab === tab.id}
+            className={activeTab === tab.id ? "active" : undefined}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === "overview" ? (
         <div className="statistics-app-grid">
           <PageSection eyebrow="EasyList" title="Tasks">
             {isLoading ? <p className="helper-copy">Loading task stats...</p> : null}
@@ -322,46 +347,9 @@ export function EasyStatisticsPage() {
           <PageSection eyebrow="EasyWorkout" title="Training">
             <div className="statistics-progress-list">
               <div><span>Sessions this week</span><strong>{stats.workoutsThisWeek.length}</strong></div>
-              <div><span>Sessions this month</span><strong>{stats.workoutsThisMonth.length}</strong></div>
-              <div><span>Exercises logged</span><strong>{stats.exerciseCount}</strong></div>
+              <div><span>Top muscle</span><strong>{stats.topMuscleGroup?.name || "No signal yet"}</strong></div>
+              <div><span>Groups active</span><strong>{stats.muscleGroupsThisWeek}</strong></div>
               <div><span>All-time volume</span><strong>{stats.allTimeWorkoutVolume.toLocaleString()}</strong></div>
-            </div>
-            <div className="statistics-subgrid">
-              <article className="statistics-insight-card">
-                <span>Top muscle</span>
-                <strong>{stats.topMuscleGroup?.name || "No signal yet"}</strong>
-                <p>
-                  {stats.topMuscleGroup
-                    ? `${stats.topMuscleGroup.weeklyVolume.toLocaleString()} volume this week across ${stats.topMuscleGroup.setCount} sets.`
-                    : "Log a few workouts to unlock muscle-group progress."}
-                </p>
-              </article>
-              <article className="statistics-insight-card">
-                <span>Groups active</span>
-                <strong>{stats.muscleGroupsThisWeek}</strong>
-                <p>
-                  {stats.muscleGroups.length > 0
-                    ? `${stats.muscleGroups.length} total tracked muscle group${stats.muscleGroups.length === 1 ? "" : "s"}.`
-                    : "No muscle-group history yet."}
-                </p>
-              </article>
-              <article className="statistics-insight-card">
-                <span>Recovery read</span>
-                <strong>{stats.muscleRecoveryCandidate?.name || "Balanced week"}</strong>
-                <p>
-                  {stats.muscleRecoveryCandidate
-                    ? `Last trained ${stats.muscleRecoveryCandidate.lastPerformedOn}.`
-                    : "Every tracked muscle group has work this week."}
-                </p>
-              </article>
-            </div>
-            <div className="statistics-progress-list">
-              {stats.muscleGroups.slice(0, 4).map((group) => (
-                <div key={group.name}>
-                  <span>{group.name}</span>
-                  <strong>{group.weeklyVolume.toLocaleString()} wk</strong>
-                </div>
-              ))}
             </div>
             <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open EasyWorkout</Link>
           </PageSection>
@@ -396,7 +384,223 @@ export function EasyStatisticsPage() {
             <Link to="/app/easynotes" className="button-secondary compact-button">Open EasyNotes</Link>
           </PageSection>
         </div>
-      </details>
+      ) : null}
+
+      {activeTab === "workout" ? (
+        <div className="statistics-tab-panel">
+          <PageSection eyebrow="EasyWorkout" title="Training progress" description="The deeper read on your lifting rhythm, coverage, and momentum.">
+            <div className="statistics-hero-strip">
+              <article>
+                <span>Sessions this week</span>
+                <strong>{stats.workoutsThisWeek.length}</strong>
+              </article>
+              <article>
+                <span>Sessions this month</span>
+                <strong>{stats.workoutsThisMonth.length}</strong>
+              </article>
+              <article>
+                <span>Groups active</span>
+                <strong>{stats.muscleGroupsThisWeek}</strong>
+              </article>
+              <article>
+                <span>All-time volume</span>
+                <strong>{stats.allTimeWorkoutVolume.toLocaleString()}</strong>
+              </article>
+            </div>
+            <div className="statistics-subgrid">
+              <article className="statistics-insight-card">
+                <span>Top muscle</span>
+                <strong>{stats.topMuscleGroup?.name || "No signal yet"}</strong>
+                <p>
+                  {stats.topMuscleGroup
+                    ? `${stats.topMuscleGroup.weeklyVolume.toLocaleString()} volume this week across ${stats.topMuscleGroup.setCount} sets.`
+                    : "Log a few workouts to unlock muscle-group progress."}
+                </p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Top exercise</span>
+                <strong>{stats.topExercise?.[0] || "No lift yet"}</strong>
+                <p>
+                  {stats.topExercise
+                    ? `${stats.topExercise[1].toLocaleString()} total logged volume so far.`
+                    : "Your strongest patterns will show up here."}
+                </p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Recovery read</span>
+                <strong>{stats.muscleRecoveryCandidate?.name || "Balanced week"}</strong>
+                <p>
+                  {stats.muscleRecoveryCandidate
+                    ? `Last trained ${stats.muscleRecoveryCandidate.lastPerformedOn}.`
+                    : "Every tracked muscle group has work this week."}
+                </p>
+              </article>
+            </div>
+            <div className="statistics-app-grid">
+              <PageSection eyebrow="Muscle groups" title="Weekly coverage">
+                <div className="statistics-progress-list">
+                  {stats.muscleGroups.length === 0 ? (
+                    <div><span>No groups yet</span><strong>Start logging</strong></div>
+                  ) : (
+                    stats.muscleGroups.slice(0, 6).map((group) => (
+                      <div key={group.name}>
+                        <span>{group.name}</span>
+                        <strong>{group.weeklyVolume.toLocaleString()} wk</strong>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </PageSection>
+              <PageSection eyebrow="Training load" title="Session pulse">
+                <div className="statistics-progress-list">
+                  <div><span>Exercises this week</span><strong>{stats.exerciseCount}</strong></div>
+                  <div><span>Workout volume</span><strong>{stats.workoutVolume.toLocaleString()}</strong></div>
+                  <div><span>Total groups tracked</span><strong>{stats.muscleGroups.length}</strong></div>
+                  <div><span>Current lead</span><strong>{stats.topMuscleGroup?.name || "None yet"}</strong></div>
+                </div>
+              </PageSection>
+            </div>
+            <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open EasyWorkout</Link>
+          </PageSection>
+        </div>
+      ) : null}
+
+      {activeTab === "list" ? (
+        <div className="statistics-tab-panel">
+          <PageSection eyebrow="EasyList" title="Task progress" description="What is getting captured, cleared, and still needs attention.">
+            {isLoading ? <p className="helper-copy">Loading task stats...</p> : null}
+            <div className="statistics-subgrid">
+              <article className="statistics-insight-card">
+                <span>Completed</span>
+                <strong>{stats.completedTasks.length}</strong>
+                <p>{stats.completedThisWeek.length} finished this week.</p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Completion rate</span>
+                <strong>{stats.completionRate}%</strong>
+                <p>{stats.activeTasks.length} still active right now.</p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Needs recovery</span>
+                <strong>{stats.overdue.length}</strong>
+                <p>{stats.overdue.length > 0 ? "A few tasks are asking to be pulled back into focus." : "No overdue tasks right now."}</p>
+              </article>
+            </div>
+            <div className="statistics-app-grid">
+              <PageSection eyebrow="Capture" title="Creation">
+                <div className="statistics-progress-list">
+                  <div><span>This week</span><strong>{stats.tasksCreatedThisWeek.length}</strong></div>
+                  <div><span>This month</span><strong>{stats.tasksCreatedThisMonth.length}</strong></div>
+                  <div><span>Due this week</span><strong>{stats.dueThisWeek.length}</strong></div>
+                  <div><span>Total tasks</span><strong>{tasks.length}</strong></div>
+                </div>
+              </PageSection>
+              <PageSection eyebrow="Calendar link" title="Planned time">
+                <div className="statistics-progress-list">
+                  <div><span>Task blocks</span><strong>{stats.plannedBlocksThisWeek.length}</strong></div>
+                  <div><span>Planned work</span><strong>{formatHours(stats.plannedMinutes)}</strong></div>
+                  <div><span>Fixed events</span><strong>{stats.eventsThisWeek.length}</strong></div>
+                  <div><span>Next focus</span><strong>{stats.nextTask?.title || "Pick one"}</strong></div>
+                </div>
+              </PageSection>
+            </div>
+            <Link to="/app/easylist/dashboard" className="button-secondary compact-button">Open EasyList</Link>
+          </PageSection>
+        </div>
+      ) : null}
+
+      {activeTab === "pipeline" ? (
+        <div className="statistics-tab-panel">
+          <PageSection eyebrow="EasyPipeline" title="Career progress" description="Applications, responses, and how the search is moving.">
+            <div className="statistics-subgrid">
+              <article className="statistics-insight-card">
+                <span>Active roles</span>
+                <strong>{stats.activeApplications.length}</strong>
+                <p>{stats.followUpsDue} follow-up{stats.followUpsDue === 1 ? "" : "s"} due right now.</p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Responses</span>
+                <strong>{stats.responseCount}</strong>
+                <p>{stats.interviewCount} role{stats.interviewCount === 1 ? "" : "s"} in interview stage.</p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Offers</span>
+                <strong>{stats.offerCount}</strong>
+                <p>{stats.applicationsCreatedThisMonth.length} new application{stats.applicationsCreatedThisMonth.length === 1 ? "" : "s"} this month.</p>
+              </article>
+            </div>
+            <div className="statistics-progress-list">
+              <div><span>Total tracked</span><strong>{applications.length}</strong></div>
+              <div><span>Created this month</span><strong>{stats.applicationsCreatedThisMonth.length}</strong></div>
+              <div><span>Follow-ups due</span><strong>{stats.followUpsDue}</strong></div>
+              <div><span>Offers</span><strong>{stats.offerCount}</strong></div>
+            </div>
+            <Link to="/app/easypipeline/dashboard" className="button-secondary compact-button">Open EasyPipeline</Link>
+          </PageSection>
+        </div>
+      ) : null}
+
+      {activeTab === "projects" ? (
+        <div className="statistics-tab-panel">
+          <PageSection eyebrow="EasyProjects" title="Project movement" description="A quick read on what is active, linked, and actually getting finished.">
+            <div className="statistics-subgrid">
+              <article className="statistics-insight-card">
+                <span>Active</span>
+                <strong>{stats.activeProjects.length}</strong>
+                <p>{stats.completedProjects.length} project{stats.completedProjects.length === 1 ? "" : "s"} finished.</p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Linked tasks</span>
+                <strong>{stats.linkedProjectTasks.length}</strong>
+                <p>{stats.completedProjectTasks} linked task{stats.completedProjectTasks === 1 ? "" : "s"} done.</p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Completion pulse</span>
+                <strong>{stats.completedProjectTasks}</strong>
+                <p>Finished linked tasks are the clearest sign of project momentum here.</p>
+              </article>
+            </div>
+            <div className="statistics-progress-list">
+              <div><span>Active projects</span><strong>{stats.activeProjects.length}</strong></div>
+              <div><span>Completed projects</span><strong>{stats.completedProjects.length}</strong></div>
+              <div><span>Linked tasks</span><strong>{stats.linkedProjectTasks.length}</strong></div>
+              <div><span>Tasks done</span><strong>{stats.completedProjectTasks}</strong></div>
+            </div>
+            <Link to="/app/easyprojects" className="button-secondary compact-button">Open EasyProjects</Link>
+          </PageSection>
+        </div>
+      ) : null}
+
+      {activeTab === "notes" ? (
+        <div className="statistics-tab-panel">
+          <PageSection eyebrow="EasyNotes" title="Writing progress" description="A lighter read on how much writing and capture is happening over time.">
+            <div className="statistics-subgrid">
+              <article className="statistics-insight-card">
+                <span>Live notes</span>
+                <strong>{stats.liveNotes.length}</strong>
+                <p>{stats.notesCreatedThisMonth.length} created this month.</p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Words captured</span>
+                <strong>{stats.wordCount.toLocaleString()}</strong>
+                <p>{stats.pinnedNotes} pinned note{stats.pinnedNotes === 1 ? "" : "s"} worth keeping close.</p>
+              </article>
+              <article className="statistics-insight-card">
+                <span>Writing rhythm</span>
+                <strong>{stats.notesCreatedThisMonth.length}</strong>
+                <p>Fresh notes this month are the clearest sign the capture loop is working.</p>
+              </article>
+            </div>
+            <div className="statistics-progress-list">
+              <div><span>Live notes</span><strong>{stats.liveNotes.length}</strong></div>
+              <div><span>Created this month</span><strong>{stats.notesCreatedThisMonth.length}</strong></div>
+              <div><span>Pinned</span><strong>{stats.pinnedNotes}</strong></div>
+              <div><span>Words captured</span><strong>{stats.wordCount.toLocaleString()}</strong></div>
+            </div>
+            <Link to="/app/easynotes" className="button-secondary compact-button">Open EasyNotes</Link>
+          </PageSection>
+        </div>
+      ) : null}
     </main>
   );
 }
