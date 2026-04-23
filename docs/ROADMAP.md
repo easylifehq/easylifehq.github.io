@@ -4,8 +4,8 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.29.0`
-- Current planning target: `4.29.0` EasyCalendar Implementation Pass
+- App package version: `4.30.0`
+- Current planning target: `4.30.0` EasyList Research Pass
 - Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
@@ -816,14 +816,14 @@ Goal: Implement the strongest EasyCalendar ideas from the research pass in a way
 
 ### 4.30.0 EasyList Research Pass
 
-Status: Planned
+Status: Done
 
 Goal: Research the strongest task and to-do tools on the market so EasyList can learn from what works best in real daily use.
 
-- Study what leading to-do tools do well in quick capture, list organization, prioritization, and completion flow.
-- Study how strong tools handle multiple lists, batch actions, detail drawers, and soft delete/archive patterns.
-- Identify the best patterns for readable one-line task lists with deeper detail on tap.
-- Turn the research into a concrete implementation plan for EasyList.
+- Done: Studied what leading to-do tools do well in quick capture, list organization, prioritization, and completion flow.
+- Done: Studied how strong tools handle multiple lists, batch actions, detail drawers, and soft delete/archive patterns.
+- Done: Identified the best patterns for readable one-line task lists with deeper detail on tap.
+- Done: Turned the research into a concrete implementation plan for EasyList in `docs/EASYLIST_RESEARCH.md`.
 
 ### 4.31.0 EasyList Implementation Pass
 

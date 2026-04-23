@@ -6,6 +6,13 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 4.30.0
+
+### Changed
+
+- Completed the EasyList market research pass and captured the strongest task-management patterns from Todoist, Microsoft To Do, and TickTick.
+- Turned the research into a concrete implementation brief for the next EasyList build, centered on thinner default lists, clearer smart views, and calmer cleanup states.
+
 ## 4.29.0
 
 ### Changed
