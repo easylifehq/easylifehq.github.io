@@ -287,10 +287,10 @@ export function EasyCalendarDayPage() {
             </button>
           ))}
         </div>
-        <div className="quiet-metrics-row" aria-label="Calendar snapshot">
-          <span>{fixedEventCount} event{fixedEventCount === 1 ? "" : "s"}</span>
-          <span>{taskBlockCount} task block{taskBlockCount === 1 ? "" : "s"}</span>
-          <span>{formatDuration(scheduledMinutes)} planned</span>
+        <div className="quiet-metrics-row calendar-day-summary-row" aria-label="Calendar snapshot">
+          <span><strong>{formatDuration(scheduledMinutes)}</strong> planned</span>
+          <span><strong>{fixedEventCount}</strong> event{fixedEventCount === 1 ? "" : "s"}</span>
+          <span><strong>{taskBlockCount}</strong> task block{taskBlockCount === 1 ? "" : "s"}</span>
         </div>
         <div className="calendar-type-legend" aria-label="Calendar item types">
           <span className="fixed">Event</span>

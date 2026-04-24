@@ -2550,6 +2550,17 @@ textarea::placeholder {
   background: var(--ui-bg-card, var(--shell-input-bg));
 }
 
+.calendar-day-summary-row span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28rem;
+}
+
+.calendar-day-summary-row strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 0.98rem;
+}
+
 .advanced-disclosure {
   padding: 0.9rem;
   border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
