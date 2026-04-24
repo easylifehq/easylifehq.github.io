@@ -1,28 +1,53 @@
 type MockCommand = {
   title: string;
   source: string;
+  status: string;
   response: string;
-  confidence: string;
+  preview: string;
 };
 
 const mockCommands: MockCommand[] = [
   {
-    title: "Plan today",
+    title: "Plan Day",
     source: "EasyList + EasyCalendar",
-    response: "Protect the 10 AM focus block, move two low-priority tasks, and prep the 3 PM call notes.",
-    confidence: "Mock response",
+    status: "Ready mock",
+    response: "Builds a clean day plan from fake tasks, calendar blocks, and focus windows.",
+    preview: "9:00 focus, 1:30 errands, 3:00 client prep",
   },
   {
-    title: "Clean up tasks",
+    title: "Clean Up Tasks",
     source: "EasyList",
-    response: "Group five inbox items into Work, Home, and Follow-up. No saves happen from this lab.",
-    confidence: "Draft only",
+    status: "Draft only",
+    response: "Clusters a messy mock inbox into clearer categories without saving changes.",
+    preview: "Work, Home, Follow-up, Someday",
   },
   {
-    title: "Summarize notes",
+    title: "Summarize Notes",
     source: "EasyNotes",
-    response: "Pull three decisions, two open questions, and one next action from the mock project notes.",
-    confidence: "Fake data",
+    status: "Fake data",
+    response: "Turns sample meeting notes into decisions, open questions, and next actions.",
+    preview: "3 decisions, 2 questions, 1 next action",
+  },
+  {
+    title: "Prep Calendar",
+    source: "EasyCalendar",
+    status: "Preview",
+    response: "Reviews a mock schedule and suggests prep notes before busy blocks.",
+    preview: "Standup notes, travel buffer, agenda reminder",
+  },
+  {
+    title: "Workout Coach",
+    source: "EasyWorkout",
+    status: "Coach mock",
+    response: "Drafts a balanced workout suggestion from fake routine and recovery context.",
+    preview: "Push strength, mobility finisher, lighter volume",
+  },
+  {
+    title: "Project Focus",
+    source: "EasyProjects + EasyList",
+    status: "Focus mode",
+    response: "Chooses one mock project outcome and the next three tasks that support it.",
+    preview: "Ship review flow, unblock copy, prep handoff",
   },
 ];
 
@@ -53,15 +78,16 @@ export function AiCommandCenter() {
         ))}
       </div>
 
-      <div className="settings-review-grid">
+      <div className="settings-review-grid ai-command-card-grid">
         {mockCommands.map((command) => (
-          <article key={command.title} className="settings-review-card">
+          <article key={command.title} className="settings-review-card ai-command-card">
             <span className="settings-card-topline">
               <span>{command.source}</span>
-              <span className="settings-state-pill">{command.confidence}</span>
+              <span className="settings-state-pill">{command.status}</span>
             </span>
             <strong>{command.title}</strong>
             <p>{command.response}</p>
+            <span className="ai-command-preview">{command.preview}</span>
           </article>
         ))}
       </div>

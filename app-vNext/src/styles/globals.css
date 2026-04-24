@@ -4881,6 +4881,10 @@ button.calendar-detail-card:disabled {
   margin-top: 1rem;
 }
 
+.ai-command-card-grid {
+  align-items: stretch;
+}
+
 .settings-data-hero article,
 .settings-data-card,
 .settings-install-status article,
@@ -4890,6 +4894,31 @@ button.calendar-detail-card:disabled {
   border-radius: var(--shell-control-radius);
   border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
   background: var(--ui-bg-card-elevated, var(--shell-input-bg));
+}
+
+.ai-command-card {
+  display: grid;
+  align-content: start;
+  gap: 0.55rem;
+  min-height: 210px;
+  box-shadow: 0 12px 28px rgba(34, 29, 24, 0.07);
+}
+
+.ai-command-card strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 1.05rem;
+}
+
+.ai-command-preview {
+  display: block;
+  align-self: end;
+  margin-top: 0.25rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1.35;
 }
 
 .settings-data-hero span,
