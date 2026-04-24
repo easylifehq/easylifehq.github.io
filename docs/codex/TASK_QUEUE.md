@@ -250,4 +250,4 @@ Required final state:
 ## Checkpoint Planner Tasks 2026-04-24 15:20:40
 
 - [x] EasyNotes editor toolbar polish: inspect the EasyNotes editor UI and make one focused spacing, label, or hierarchy improvement so writing feels more consistent with the suite. Do not change note logic, persistence, data models, routing, auth, Firebase, dependencies, generated output, docs report files, or package files.
-- [ ] EasyCalendar agenda polish: improve one small agenda/event list visual detail such as spacing, helper copy, or card hierarchy for scanability. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, dependencies, generated output, docs report files, or package files.
+- [x] EasyCalendar agenda polish: improve one small agenda/event list visual detail such as spacing, helper copy, or card hierarchy for scanability. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, dependencies, generated output, docs report files, or package files.
