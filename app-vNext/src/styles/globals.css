@@ -5026,6 +5026,7 @@ button.calendar-detail-card:disabled {
 
 .ai-command-input-row button {
   padding: 0.7rem 0.95rem;
+  white-space: nowrap;
 }
 
 .ai-command-prompt-list {
@@ -6361,6 +6362,10 @@ button.calendar-detail-card:disabled {
 
   .ai-command-input-row {
     grid-template-columns: 1fr;
+  }
+
+  .ai-command-input-row button {
+    width: 100%;
   }
 
   .settings-status-grid {

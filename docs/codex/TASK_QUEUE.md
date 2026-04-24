@@ -231,7 +231,7 @@ Codex may:
 
 - [x] Docs workflow clarity: improve one `docs/codex` workflow doc or create a short v5 sprint review note explaining how to review the practice branch tomorrow. Docs only. Do not touch app code, Firebase, Functions, auth, secrets, dependencies, generated output, or production config.
 
-- [ ] Final polish scan: remove rough placeholder copy introduced during this sprint and improve one obvious rough UI edge in changed frontend areas only. Do not broaden scope, add features, touch Firebase/auth/backend/dependencies/generated output, or edit report/task queue files.
+- [x] Final polish scan: remove rough placeholder copy introduced during this sprint and improve one obvious rough UI edge in changed frontend areas only. Do not broaden scope, add features, touch Firebase/auth/backend/dependencies/generated output, or edit report/task queue files.
 
 ## Completion Standard
 
