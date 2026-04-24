@@ -380,7 +380,7 @@ export function EasyNotesLibraryPage() {
                   checked={selectedNoteIds.includes(note.id)}
                   onChange={() => toggleSelectedNote(note.id)}
                 />
-                <span>Select</span>
+                <span>Select note</span>
               </label>
               ) : null}
               <Link to={`/app/easynotes/${note.id}`} className="note-card-link">

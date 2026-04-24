@@ -284,5 +284,5 @@ Required final state:
 
 ## Checkpoint Planner Tasks 2026-04-24 15:59:11
 
-- [ ] EasyNotes note-card action polish: improve one small note-card or note-list action label, spacing, or metadata hierarchy detail so notes feel easier to scan with the suite. Do not change note logic, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, or shared architecture.
+- [x] EasyNotes note-card action polish: improve one small note-card or note-list action label, spacing, or metadata hierarchy detail so notes feel easier to scan with the suite. Do not change note logic, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, or shared architecture.
 - [ ] Settings section rhythm polish: improve one small Settings section divider, panel spacing, or helper-copy detail so the control center reads more consistently on desktop and mobile. Do not change auth/account behavior, persistence, data models, routing, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, or shared architecture.
