@@ -607,9 +607,9 @@ a {
 }
 
 .primary-button {
-  background: var(--shell-button-bg);
-  color: var(--shell-button-text);
-  border: 1px solid var(--shell-button-border);
+  background: var(--ui-button-primary-bg, var(--shell-button-bg));
+  color: var(--ui-button-primary-text, var(--shell-button-text));
+  border: 1px solid var(--ui-border-strong, var(--shell-button-border));
   box-shadow: var(--shell-control-shadow);
 }
 
