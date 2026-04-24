@@ -33,8 +33,10 @@ export function TaskCard({
         : "";
   const hasLinks = Boolean(scheduledCount || task.linkedCalendarEventId || task.linkedNoteId);
 
+  const statusClass = overdue ? " overdue" : dueToday ? " due-today" : "";
+
   return (
-    <article className={`task-card-vnext task-card-dense priority-tier-${priority.tier}${task.completed ? " completed" : ""}${isSelected ? " selected" : ""}`}>
+    <article className={`task-card-vnext task-card-dense priority-tier-${priority.tier}${statusClass}${task.completed ? " completed" : ""}${isSelected ? " selected" : ""}`}>
       {onSelect ? (
         <label className="task-card-select" aria-label={`Select ${task.title || "task"}`}>
           <input

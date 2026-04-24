@@ -259,5 +259,5 @@ Required final state:
 
 ## Checkpoint Planner Tasks 2026-04-24 15:32:02
 
-- [ ] EasyList quick-action scanability: improve one small EasyList header, quick-action, or list-item visual detail for faster daily triage. Do not change task logic, persistence, data models, routing, auth, Firebase, dependencies, generated output, docs report files, package files, or shared architecture.
+- [x] EasyList quick-action scanability: improve one small EasyList header, quick-action, or list-item visual detail for faster daily triage. Do not change task logic, persistence, data models, routing, auth, Firebase, dependencies, generated output, docs report files, package files, or shared architecture.
 - [ ] EasyCalendar today-focus polish: improve one small Today/agenda/date-summary copy, spacing, or hierarchy detail so upcoming plans are easier to scan. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, dependencies, generated output, docs report files, package files, or root config files.

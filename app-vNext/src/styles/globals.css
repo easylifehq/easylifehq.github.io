@@ -2873,6 +2873,19 @@ textarea::placeholder {
   padding: 0.28rem 0.38rem;
 }
 
+.app-theme-easylist .task-card-dense.overdue:not(.completed),
+.app-theme-easylist .task-card-dense.due-today:not(.completed) {
+  border-left-width: 4px;
+}
+
+.app-theme-easylist .task-card-dense.overdue:not(.completed) {
+  border-left-color: #b42318;
+}
+
+.app-theme-easylist .task-card-dense.due-today:not(.completed) {
+  border-left-color: var(--app-accent, var(--shell-accent));
+}
+
 .task-card-dense.completed {
   grid-template-columns: minmax(0, 1fr) auto;
 }
