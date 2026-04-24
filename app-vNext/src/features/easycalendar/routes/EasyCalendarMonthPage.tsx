@@ -52,7 +52,7 @@ export function EasyCalendarMonthPage() {
 
   return (
     <>
-      <PageSection eyebrow="Calendar" title={new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(viewedMonth)}>
+      <PageSection eyebrow="EasyCalendar" title={new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(viewedMonth)}>
         {error ? <p className="error-copy">{error}</p> : null}
         {isLoading ? <p className="helper-copy">Loading your month...</p> : null}
         <div className="calendar-month-command">
