@@ -35,8 +35,10 @@ $forbiddenExact = @(
     "firebase.json",
     "firestore.rules",
     "package.json",
+    "npm-shrinkwrap.json",
     "package-lock.json",
     "app-vNext/package.json",
+    "app-vNext/npm-shrinkwrap.json",
     "app-vNext/package-lock.json",
     "docs/codex/TASK_QUEUE.md",
     "docs/codex/NIGHTLY_REPORT.md"
@@ -49,6 +51,8 @@ $forbiddenPatterns = @(
     "^build/",
     "^app-vNext/dist/",
     "^app-vNext/build/",
+    "^app-vNext/coverage/",
+    "^coverage/",
     "^\.env($|\.)",
     "(^|/)\.env($|\.)",
     "\.(pem|key|p12|pfx)$",
@@ -102,6 +106,26 @@ foreach ($file in $normalizedFiles) {
 
 if ($largeFiles.Count -gt 0) {
     Stop-Guardrail "Large file changes detected: $($largeFiles -join ', ')"
+}
+
+$addedDiffLines = @(git diff --unified=0 | Where-Object {
+    $_ -match "^\+" -and $_ -notmatch "^\+\+\+"
+})
+
+$debugLines = @($addedDiffLines | Where-Object {
+    $_ -match "\bconsole\.(log|debug|trace)\b" -or $_ -match "\bdebugger\b"
+})
+
+if ($debugLines.Count -gt 0) {
+    Stop-Guardrail "Debug statements were added."
+}
+
+$todoLines = @($addedDiffLines | Where-Object {
+    $_ -match "(?i)\b(TODO|FIXME|HACK)\b"
+})
+
+if ($todoLines.Count -gt 0) {
+    Stop-Guardrail "Unresolved TODO/FIXME/HACK comments were added."
 }
 
 Write-Host "Guardrails passed during ${Stage}: $($normalizedFiles.Count) changed file(s)." -ForegroundColor Green

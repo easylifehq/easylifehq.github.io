@@ -48,3 +48,7 @@ Do not put these in the unattended queue:
 The guardrail script stops the loop if Codex changes forbidden paths, touches task/report files directly, edits dependency manifests, changes too many files, or makes a docs-only task touch app code.
 
 Raw logs are written to `.codex-logs/`, which is excluded locally through `.git/info/exclude`.
+
+## ChatGPT Pro handoff
+
+After a run, use `scripts/codex-brief.ps1` to generate a compact project-lead brief. Paste that brief into the ChatGPT Pro project and ask it to decide whether to continue, revise the queue, or stop.
