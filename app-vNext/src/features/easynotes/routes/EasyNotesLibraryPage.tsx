@@ -245,7 +245,10 @@ export function EasyNotesLibraryPage() {
                       <div className="note-card-top">
                         <div>
                           <strong>{note.title.trim() || "Untitled note"}</strong>
-                          <p>{formatDate(note.updatedAt || note.createdAt)}</p>
+                          <p className="note-card-meta">
+                            <span>Updated</span>
+                            {formatDate(note.updatedAt || note.createdAt)}
+                          </p>
                         </div>
                         <div className="note-card-badges">
                           {note.folderId && folderNameById.get(note.folderId) ? (
@@ -384,7 +387,10 @@ export function EasyNotesLibraryPage() {
               <div className="note-card-top">
                 <div>
                   <strong>{note.title.trim() || "Untitled note"}</strong>
-                  <p>{formatDate(note.updatedAt || note.createdAt)}</p>
+                  <p className="note-card-meta">
+                    <span>Updated</span>
+                    {formatDate(note.updatedAt || note.createdAt)}
+                  </p>
                 </div>
                 <div className="note-card-badges">
                   {note.folderId && folderNameById.get(note.folderId) ? (

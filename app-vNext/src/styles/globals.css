@@ -2046,6 +2046,21 @@ textarea::placeholder {
   color: var(--ui-text-muted, #6a5d53);
 }
 
+.note-card-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+}
+
+.note-card-meta span {
+  color: var(--ui-text-muted, #6a5d53);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
 .note-card-body {
   display: -webkit-box;
   overflow: hidden;
