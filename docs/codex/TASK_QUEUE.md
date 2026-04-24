@@ -197,7 +197,7 @@ Codex may:
 
 ### Phase 5 - Core App Polish: EasyCalendar
 
-- [ ] EasyCalendar layout polish: improve one EasyCalendar day/week/month UI area for spacing, hierarchy, or readability. Preserve calendar/event logic, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
+- [x] EasyCalendar layout polish: improve one EasyCalendar day/week/month UI area for spacing, hierarchy, or readability. Preserve calendar/event logic, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
 
 - [ ] EasyCalendar mobile readability: improve one EasyCalendar mobile layout or typography issue. Preserve event logic, date logic, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 

@@ -3791,6 +3791,11 @@ textarea::placeholder {
   border-width: 0 1px 0 0;
 }
 
+.calendar-day-card-vnext .calendar-day-header-vnext {
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+}
+
 .calendar-day-header-vnext {
   display: flex;
   justify-content: space-between;
