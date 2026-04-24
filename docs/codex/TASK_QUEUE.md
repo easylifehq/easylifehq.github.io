@@ -213,7 +213,7 @@ Codex may:
 
 ### Phase 7 - Experimental AI Prototype Under Experiments Only
 
-- [ ] Experiments AI shell: create or refine a frontend-only AI Command Center / EasyLife AI Lab under `app-vNext/src/features/experiments/`. It must use fake data and mock responses only. Do not make real API calls, add backend, add OpenAI keys, touch Firebase Functions, change auth, write production data, add dependencies, edit docs, or change production routing behavior.
+- [x] Experiments AI shell: create or refine a frontend-only AI Command Center / EasyLife AI Lab under `app-vNext/src/features/experiments/`. It must use fake data and mock responses only. Do not make real API calls, add backend, add OpenAI keys, touch Firebase Functions, change auth, write production data, add dependencies, edit docs, or change production routing behavior.
 
 - [ ] Experiments AI command cards: add polished static command cards under experiments for Plan Day, Clean Up Tasks, Summarize Notes, Prep Calendar, Workout Coach, and Project Focus. Fake data only. Do not make real API calls, add backend, touch Firebase/auth, add dependencies, edit docs, or change production routing behavior.
 

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { APP_VERSION } from "@/config/appVersion";
 import { useAuth } from "@/features/auth/AuthContext";
+import { AiCommandCenter } from "@/features/experiments/AiCommandCenter";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { auth } from "@/lib/firebase/client";
 import { subscribeToApplications, subscribeToGeneratedDrafts } from "@/lib/firestore/applications";
@@ -1842,6 +1843,7 @@ export function SettingsPage() {
           title="Experimental features"
       >
         <div id="experiments" className="settings-anchor" />
+        <AiCommandCenter />
         <div className="settings-labs-summary">
           <article>
             <span>Recommended first</span>
