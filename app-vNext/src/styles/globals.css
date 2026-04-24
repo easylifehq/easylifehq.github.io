@@ -6281,6 +6281,11 @@ button.calendar-detail-card:disabled {
     overflow: visible;
   }
 
+  .app-header {
+    margin: 0.45rem 0.55rem 0;
+    max-width: calc(100vw - 1.1rem);
+  }
+
   .site-header-inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

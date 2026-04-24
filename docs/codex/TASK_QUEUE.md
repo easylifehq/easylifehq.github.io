@@ -169,7 +169,7 @@ Codex may:
 
 - [x] Shared UI consistency pass: improve one shared button/card/form/container style or component pattern used across the suite. Keep behavior unchanged. Do not change persistence, data models, routing, Firebase, auth, dependencies, generated output, or docs report files.
 
-- [ ] Mobile shell polish: make one safe mobile layout/header/container improvement in the shared suite shell. Do not change routing, auth, Firebase, data models, dependencies, generated output, or root deployed files.
+- [x] Mobile shell polish: make one safe mobile layout/header/container improvement in the shared suite shell. Do not change routing, auth, Firebase, data models, dependencies, generated output, or root deployed files.
 
 ### Phase 2 - Settings Control Center
 
