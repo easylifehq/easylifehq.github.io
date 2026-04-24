@@ -205,7 +205,7 @@ Codex may:
 
 ### Phase 6 - Core App Polish: EasyWorkout
 
-- [ ] EasyWorkout dashboard polish: improve one EasyWorkout dashboard/log/routines UI area for spacing, hierarchy, or readability. Preserve workout behavior, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
+- [x] EasyWorkout dashboard polish: improve one EasyWorkout dashboard/log/routines UI area for spacing, hierarchy, or readability. Preserve workout behavior, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
 
 - [ ] EasyWorkout mobile readability: improve one EasyWorkout mobile layout or typography issue. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 
