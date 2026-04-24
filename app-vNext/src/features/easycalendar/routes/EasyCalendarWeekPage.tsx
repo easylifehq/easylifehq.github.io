@@ -135,7 +135,7 @@ export function EasyCalendarWeekPage() {
                     })
                   ) : (
                     <div className="empty-card-vnext planner-empty-card">
-                      <p className="helper-copy">Nothing scheduled yet.</p>
+                      <p className="helper-copy">Open day - add an event or task block when you are ready to plan it.</p>
                     </div>
                   )}
                 </div>

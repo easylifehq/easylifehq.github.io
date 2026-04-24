@@ -201,7 +201,7 @@ Codex may:
 
 - [x] EasyCalendar mobile readability: improve one EasyCalendar mobile layout or typography issue. Preserve event logic, date logic, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 
-- [ ] EasyCalendar empty/low-content polish: improve one EasyCalendar low-content area, helper copy, or empty state. Copy/UI only. Do not change event logic, date logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
+- [x] EasyCalendar empty/low-content polish: improve one EasyCalendar low-content area, helper copy, or empty state. Copy/UI only. Do not change event logic, date logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
 
 ### Phase 6 - Core App Polish: EasyWorkout
 
