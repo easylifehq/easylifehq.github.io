@@ -1,5 +1,4 @@
 param(
-    [Parameter(Mandatory = $true)]
     [string]$Task,
 
     [string]$Stage = "diff",
@@ -8,6 +7,10 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
+
+if ([string]::IsNullOrWhiteSpace($Task)) {
+    $Task = $env:CODEX_SELECTED_TASK
+}
 
 function Stop-Guardrail {
     param([string]$Message)

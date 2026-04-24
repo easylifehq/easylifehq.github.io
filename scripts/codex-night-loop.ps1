@@ -89,8 +89,14 @@ function Invoke-Guardrails {
         [string]$Stage
     )
 
-    powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\codex-guardrails.ps1" -Task $Task -Stage $Stage -MaxChangedFiles $MaxChangedFiles
-    return $LASTEXITCODE -eq 0
+    $previousTask = $env:CODEX_SELECTED_TASK
+    $env:CODEX_SELECTED_TASK = $Task
+
+    powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\codex-guardrails.ps1" -Stage $Stage -MaxChangedFiles $MaxChangedFiles
+    $passed = $LASTEXITCODE -eq 0
+
+    $env:CODEX_SELECTED_TASK = $previousTask
+    return $passed
 }
 
 function Invoke-CodexExec {
