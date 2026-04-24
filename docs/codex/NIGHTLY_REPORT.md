@@ -49,3 +49,11 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and review completed.
+
+## 2026-04-24 06:23:34
+
+- Task attempted: Settings copy clarity: improve unclear Settings copy/labels/help text while preserving all behavior. Do not change auth, persistence, Firebase, data models, dependencies, routing, or generated output.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/settings/routes/SettingsPage.tsx
+- Risks or follow-up needed: Low. External build passed and review completed.

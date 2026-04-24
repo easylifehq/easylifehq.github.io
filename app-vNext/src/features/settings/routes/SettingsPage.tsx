@@ -274,7 +274,7 @@ const settingsSections: Array<{
     id: "customize",
     label: "Basics",
     eyebrow: "Appearance",
-    description: "Theme, startup, and the parts of the app you feel every day.",
+    description: "Choose the theme, opening screen, and everyday app setup.",
     group: "basics",
   },
   {
@@ -288,14 +288,14 @@ const settingsSections: Array<{
     id: "calendar",
     label: "Calendar",
     eyebrow: "EasyCalendar",
-    description: "Wakeup time and calendar-specific defaults.",
+    description: "Wake-up time, default view, and planning defaults.",
     group: "basics",
   },
   {
     id: "page-settings",
     label: "Per-app",
     eyebrow: "Page Controls",
-    description: "App-specific settings areas as the suite gets deeper.",
+    description: "Calendar defaults now, with more app controls planned.",
     group: "advanced",
   },
   {
@@ -344,7 +344,7 @@ const settingsSections: Array<{
     id: "account",
     label: "Account",
     eyebrow: "User Info",
-    description: "Account, version, and session controls.",
+    description: "See your account, app version, and sign-out control.",
     group: "basics",
   },
 ];
@@ -359,13 +359,13 @@ const settingsFocusCards: Array<{
     section: "customize",
     label: "Look and feel",
     title: "Themes and app tone",
-    description: "Change the base polish or switch into a personality theme.",
+    description: "Pick a quieter work theme or a more expressive one.",
   },
   {
     section: "install",
     label: "Phone setup",
     title: "Home-screen install",
-    description: "Use the iPhone path and startup preference together.",
+    description: "Add EasyLife to your phone and choose where it opens.",
   },
   {
     section: "notifications",
@@ -377,7 +377,7 @@ const settingsFocusCards: Array<{
     section: "data",
     label: "Safety",
     title: "Export and health check",
-    description: "Download your data and review link cleanup signals.",
+    description: "Download your data and check for stale links.",
   },
 ];
 
@@ -418,7 +418,7 @@ const pageSettingsSections: Array<{
     id: "calendar",
     label: "Calendar",
     title: "EasyCalendar",
-    description: "Wakeup time, day layout, categories, recurring classes, and calendar defaults belong here.",
+    description: "Wake-up time, day layout, categories, recurring classes, and calendar defaults belong here.",
     status: "Started",
   },
   {
@@ -1017,7 +1017,7 @@ export function SettingsPage() {
         >
           <div className="settings-toggle-list">
             <label className="field-stack">
-              <span>Default landing page</span>
+              <span>Open EasyLife to</span>
               <select
                 value={settings.startupRoute}
                 onChange={(event) => void setStartupRoute(event.target.value as StartupRoute)}
@@ -1049,8 +1049,8 @@ export function SettingsPage() {
                   <span>EasyCalendar</span>
                   <span className="settings-state-pill">Day view</span>
                 </span>
-                <strong>Wakeup time</strong>
-                <p>Your calendar day starts here when building the hour-by-hour view.</p>
+                <strong>Wake-up time</strong>
+                <p>Your calendar day starts at this time in the hour-by-hour view.</p>
               </div>
               <input
                 type="time"
@@ -1105,7 +1105,7 @@ export function SettingsPage() {
                   <span className="settings-state-pill">{settings.easyCalendar.planMyDayWindowHours} hours</span>
                 </span>
                 <strong>Plan My Day horizon</strong>
-                <p>How much of the day the planner should consider after wakeup time.</p>
+                <p>How many hours after wake-up time the planner should consider.</p>
               </div>
               <input
                 type="number"
@@ -1715,7 +1715,7 @@ export function SettingsPage() {
             </article>
             <article>
               <span>Review rule</span>
-              <strong>{settings.assistant.requireReviewBeforeSave ? "Required" : "Manual caution"}</strong>
+              <strong>{settings.assistant.requireReviewBeforeSave ? "Required" : "Not required"}</strong>
               <p>Keep this on so AI suggestions become drafts before anything enters your real data.</p>
             </article>
           </div>
