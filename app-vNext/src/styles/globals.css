@@ -6847,6 +6847,19 @@ button.calendar-detail-card:disabled {
     width: 100%;
   }
 
+  .settings-app-preference-card {
+    gap: 0.75rem;
+    padding: 0.85rem;
+  }
+
+  .settings-app-preference-card .panel-header {
+    gap: 0.25rem;
+  }
+
+  .settings-app-preference-card .panel-header p {
+    line-height: 1.45;
+  }
+
   .settings-card-topline {
     row-gap: 0.3rem;
   }
