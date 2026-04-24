@@ -369,3 +369,11 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-24 16:42:17
+
+- Task attempted: Theme system audit: inspect the current theme/Candy Mode/customization styling and make one small safe improvement that makes the selected theme feel more intentional and customized. Prefer CSS tokens or existing style hooks. Do not add dependencies, change persistence, change settings logic, touch auth/Firebase/backend, edit package files, generated output, or root config.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
