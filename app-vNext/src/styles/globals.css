@@ -3895,6 +3895,16 @@ textarea::placeholder {
   font-size: 0.54rem;
 }
 
+.calendar-month-day .calendar-block-vnext.compact {
+  gap: 0.12rem;
+  min-height: 2.25rem;
+  padding: 0.28rem 0.34rem 0.28rem 0.5rem;
+}
+
+.calendar-month-day .calendar-block-vnext.compact strong {
+  font-size: 0.72rem;
+}
+
 button.calendar-block-vnext,
 button.calendar-detail-card {
   width: 100%;
@@ -6972,9 +6982,41 @@ button.calendar-detail-card:disabled {
     padding: 0.2rem;
   }
 
-  .calendar-month-day .calendar-duration-pill,
-  .calendar-month-day .calendar-item-stack {
+  .calendar-month-day .calendar-duration-pill {
     display: none;
+  }
+
+  .calendar-month-day .calendar-item-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.12rem;
+    margin-top: 0.08rem;
+  }
+
+  .calendar-month-day .calendar-block-vnext.compact {
+    min-height: 5px;
+    height: 5px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--calendar-block-color) 64%, var(--ui-bg-card) 36%);
+  }
+
+  .calendar-month-day .calendar-block-vnext.compact::before {
+    width: 100%;
+    border-radius: inherit;
+    opacity: 0.78;
+  }
+
+  .calendar-month-day .calendar-block-vnext.compact strong,
+  .calendar-month-day .calendar-block-vnext.compact small,
+  .calendar-month-day .calendar-item-stack .helper-copy {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   .calendar-hour-row time {
