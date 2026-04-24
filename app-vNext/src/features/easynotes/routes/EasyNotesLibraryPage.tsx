@@ -358,7 +358,8 @@ export function EasyNotesLibraryPage() {
           {isLoading ? <p className="helper-copy">Loading your notes...</p> : null}
 
           {!isLoading && filteredNotes.length === 0 ? (
-            <div className="empty-card-vnext notes-empty-card">
+            <div className="empty-card-vnext notes-empty-card notes-suite-empty-card">
+              <span className="notes-empty-suite-label">EasyNotes workspace</span>
               <strong>{hasFilters ? "No notes match this view" : "No notes yet"}</strong>
               <p className="helper-copy">
                 {hasFilters

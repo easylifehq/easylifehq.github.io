@@ -3289,6 +3289,37 @@ textarea::placeholder {
   overflow-wrap: anywhere;
 }
 
+.notes-suite-empty-card {
+  display: grid;
+  gap: 0.48rem;
+  position: relative;
+  overflow: hidden;
+  border-style: solid;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--shell-accent) 10%, transparent), transparent 44%),
+    var(--ui-bg-empty, color-mix(in srgb, var(--shell-card-bg-soft) 82%, white 18%));
+}
+
+.notes-suite-empty-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--shell-accent), color-mix(in srgb, var(--shell-accent) 28%, transparent));
+}
+
+.notes-empty-suite-label {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  background: color-mix(in srgb, var(--shell-accent) 11%, transparent);
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
 .group-block {
   display: grid;
   gap: 0.75rem;
