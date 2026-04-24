@@ -44,6 +44,10 @@ Codex may NOT:
 
 
 
+\## Tasks
+
+
+
 \- \[ ] EasyList tiny cleanup: inspect EasyList UI files and make one copy-only or spacing-only improvement. Do not change logic, routing, auth, Firebase, or data structure.
 
 
