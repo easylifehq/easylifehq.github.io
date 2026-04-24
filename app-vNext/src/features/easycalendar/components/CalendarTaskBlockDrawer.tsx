@@ -114,7 +114,7 @@ export function CalendarTaskBlockDrawer({
           <div>
             <p className="eyebrow">EasyCalendar</p>
             <h2>Manage task block</h2>
-            <p className="helper-copy">Move it fast, resize it fast, finish it fast.</p>
+            <p className="helper-copy">Move it, resize it, or finish it fast.</p>
           </div>
           <button type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close task block editor">
             Close
