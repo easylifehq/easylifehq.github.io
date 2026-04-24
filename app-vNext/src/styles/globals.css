@@ -2035,6 +2035,11 @@ textarea::placeholder {
   gap: 0.9rem;
 }
 
+.notes-editor-topbar {
+  padding: 0.15rem 0 0.75rem;
+  border-bottom: 1px solid var(--ui-border-subtle, #eadfd4);
+}
+
 .note-card-top p,
 .note-card-body {
   margin: 0;
