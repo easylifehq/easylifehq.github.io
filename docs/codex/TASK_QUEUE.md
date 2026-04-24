@@ -193,7 +193,7 @@ Codex may:
 
 - [x] EasyNotes mobile readability: improve one EasyNotes mobile spacing or typography issue. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 
-- [ ] EasyNotes empty/low-content polish: improve one EasyNotes empty state, helper copy, or low-content area. Copy/UI only. Do not change logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
+- [x] EasyNotes empty/low-content polish: improve one EasyNotes empty state, helper copy, or low-content area. Copy/UI only. Do not change logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
 
 ### Phase 5 - Core App Polish: EasyCalendar
 

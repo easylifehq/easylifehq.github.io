@@ -358,7 +358,9 @@ export function EasyNotesLibraryPage() {
             <div className="empty-card-vnext notes-empty-card">
               <strong>{hasFilters ? "No notes match this view" : "No notes yet"}</strong>
               <p className="helper-copy">
-                {hasFilters ? "Try a different search or folder, or clear the filters." : "Create your first note and it will show up here."}
+                {hasFilters
+                  ? "Try a different search or folder, or clear the filters."
+                  : "Capture a thought, meeting note, or rough draft. Your newest notes will collect here."}
               </p>
             </div>
           ) : null}
