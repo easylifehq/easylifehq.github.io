@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 type MockCommand = {
   title: string;
   source: string;
@@ -51,6 +53,40 @@ const mockCommands: MockCommand[] = [
   },
 ];
 
+type MockCommandInputResponse = {
+  prompt: string;
+  title: string;
+  response: string;
+  actions: string[];
+};
+
+const mockCommandInputResponses: MockCommandInputResponse[] = [
+  {
+    prompt: "Plan my day",
+    title: "Mock day plan",
+    response: "Prioritize the proposal outline, keep the review call prepped, and move low-energy chores after the appointment buffer.",
+    actions: ["9:00 deep work", "11:15 prep notes", "3:30 admin batch"],
+  },
+  {
+    prompt: "Turn this note into tasks",
+    title: "Mock task extraction",
+    response: "I found three editable draft tasks from the note and left the original note untouched.",
+    actions: ["Draft follow-up email", "Confirm timeline", "Add budget question"],
+  },
+  {
+    prompt: "Summarize my week",
+    title: "Mock weekly summary",
+    response: "This fake week trends toward heavy planning, two unresolved follow-ups, and one workout consistency win.",
+    actions: ["2 project milestones", "4 completed tasks", "1 missed recovery day"],
+  },
+  {
+    prompt: "Build a workout plan",
+    title: "Mock workout plan",
+    response: "Use a balanced upper-body session today with light conditioning because the sample log shows lower-body fatigue.",
+    actions: ["Push strength", "Core circuit", "10 minute mobility"],
+  },
+];
+
 const mockSignals = [
   { label: "Mock tasks", value: "12" },
   { label: "Mock events", value: "4" },
@@ -90,6 +126,24 @@ const mockDailyBrief = {
 };
 
 export function AiCommandCenter() {
+  const [commandInput, setCommandInput] = useState("Plan my day");
+  const [mockResponse, setMockResponse] = useState<MockCommandInputResponse>(mockCommandInputResponses[0]);
+
+  function runMockCommand(prompt: string) {
+    const normalizedPrompt = prompt.trim().toLowerCase();
+    const response =
+      mockCommandInputResponses.find((mock) => mock.prompt.toLowerCase() === normalizedPrompt) ??
+      mockCommandInputResponses.find((mock) => normalizedPrompt.includes(mock.prompt.toLowerCase())) ??
+      {
+        prompt: prompt.trim() || "Untitled mock command",
+        title: "Mock assistant draft",
+        response: "This sandbox would return an editable draft only. No API call runs and no EasyLife data is changed.",
+        actions: ["Review suggested output", "Edit before saving", "Discard safely"],
+      };
+
+    setMockResponse(response);
+  }
+
   return (
     <>
       <div className="settings-labs-summary">
@@ -148,6 +202,62 @@ export function AiCommandCenter() {
             <p key={warning}>{warning}</p>
           ))}
         </div>
+      </section>
+
+      <section className="ai-command-input-panel" aria-labelledby="ai-command-input-title">
+        <div className="ai-command-input-copy">
+          <span className="settings-card-topline">
+            <span>Command input mockup</span>
+            <span className="settings-state-pill">Mock only</span>
+          </span>
+          <h3 id="ai-command-input-title">Try a safe AI command</h3>
+          <p>Type a command or pick a prompt to preview a fake response without calling an API.</p>
+        </div>
+
+        <form
+          className="ai-command-input-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            runMockCommand(commandInput);
+          }}
+        >
+          <label htmlFor="ai-command-input">Command</label>
+          <div className="ai-command-input-row">
+            <input
+              id="ai-command-input"
+              type="text"
+              value={commandInput}
+              onChange={(event) => setCommandInput(event.target.value)}
+              placeholder="Plan my day"
+            />
+            <button type="submit">Preview</button>
+          </div>
+        </form>
+
+        <div className="ai-command-prompt-list" aria-label="Mock prompt examples">
+          {mockCommandInputResponses.map((mock) => (
+            <button
+              key={mock.prompt}
+              type="button"
+              onClick={() => {
+                setCommandInput(mock.prompt);
+                runMockCommand(mock.prompt);
+              }}
+            >
+              {mock.prompt}
+            </button>
+          ))}
+        </div>
+
+        <article className="ai-command-response-preview" aria-live="polite">
+          <span>{mockResponse.title}</span>
+          <p>{mockResponse.response}</p>
+          <ul>
+            {mockResponse.actions.map((action) => (
+              <li key={action}>{action}</li>
+            ))}
+          </ul>
+        </article>
       </section>
 
       <div className="settings-review-grid ai-command-card-grid">

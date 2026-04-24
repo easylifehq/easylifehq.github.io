@@ -219,7 +219,7 @@ Codex may:
 
 - [x] Experiments AI daily brief mockup: add a fake AI daily brief under experiments that summarizes mock tasks, notes, calendar events, workouts, warnings, and "what matters today." Fake data only. Do not make real API calls, add backend, touch Firebase/auth, add dependencies, edit docs, or write production data.
 
-- [ ] Experiments AI command input mockup: add a frontend-only command input under experiments with mock responses for prompts like Plan my day, Turn this note into tasks, Summarize my week, and Build a workout plan. Do not make real API calls, add backend, use OpenAI keys, touch Firebase/auth, add dependencies, edit docs, or persist production data.
+- [x] Experiments AI command input mockup: add a frontend-only command input under experiments with mock responses for prompts like Plan my day, Turn this note into tasks, Summarize my week, and Build a workout plan. Do not make real API calls, add backend, use OpenAI keys, touch Firebase/auth, add dependencies, edit docs, or persist production data.
 
 - [ ] Experiments AI TypeScript contracts: add TypeScript interfaces under experiments for AiCommand, AiSuggestion, AiBrief, AiContextSnapshot, and AiMockProvider. Fake/mock only. Do not add backend, API clients, OpenAI keys, Firebase Functions, dependencies, docs, or production data writes.
 

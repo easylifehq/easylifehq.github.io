@@ -4959,6 +4959,125 @@ button.calendar-detail-card:disabled {
   gap: 0.55rem;
 }
 
+.ai-command-input-panel {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  padding: 0.95rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: var(--shell-card-radius);
+  background: var(--ui-bg-card, var(--shell-card-bg));
+  box-shadow: 0 14px 34px rgba(34, 29, 24, 0.08);
+}
+
+.ai-command-input-copy h3 {
+  margin: 0.45rem 0 0.3rem;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 1.2rem;
+}
+
+.ai-command-input-copy p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  line-height: 1.45;
+}
+
+.ai-command-input-form {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.ai-command-input-form label {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.ai-command-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.6rem;
+}
+
+.ai-command-input-row input {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: var(--shell-control-radius);
+  background: var(--ui-bg-card-elevated, var(--shell-input-bg));
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font: inherit;
+  font-weight: 750;
+  padding: 0.7rem 0.8rem;
+}
+
+.ai-command-input-row button,
+.ai-command-prompt-list button {
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: var(--shell-control-radius);
+  background: var(--ui-bg-card-elevated, var(--shell-input-bg));
+  color: var(--ui-text-primary, var(--shell-page-text));
+  cursor: pointer;
+  font: inherit;
+  font-weight: 850;
+}
+
+.ai-command-input-row button {
+  padding: 0.7rem 0.95rem;
+}
+
+.ai-command-prompt-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ai-command-prompt-list button {
+  padding: 0.55rem 0.7rem;
+}
+
+.ai-command-input-row button:hover,
+.ai-command-prompt-list button:hover {
+  border-color: var(--ui-accent, var(--shell-accent));
+  color: var(--ui-accent, var(--shell-accent));
+}
+
+.ai-command-response-preview {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 0.85rem;
+  border-radius: var(--shell-control-radius);
+  background: var(--ui-bg-card-elevated, var(--shell-input-bg));
+}
+
+.ai-command-response-preview span {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-weight: 900;
+}
+
+.ai-command-response-preview p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.ai-command-response-preview ul {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-command-response-preview li {
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  line-height: 1.35;
+}
+
 .settings-data-hero article,
 .settings-data-card,
 .settings-install-status article,
@@ -6237,6 +6356,10 @@ button.calendar-detail-card:disabled {
   .settings-notification-quiet,
   .settings-review-grid,
   .ai-daily-brief-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-command-input-row {
     grid-template-columns: 1fr;
   }
 
