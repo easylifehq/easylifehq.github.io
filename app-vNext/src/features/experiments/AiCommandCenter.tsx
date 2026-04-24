@@ -1,14 +1,8 @@
 import { useState } from "react";
 
-type MockCommand = {
-  title: string;
-  source: string;
-  status: string;
-  response: string;
-  preview: string;
-};
+import type { AiBrief, AiCommand, AiSuggestion } from "./aiContracts";
 
-const mockCommands: MockCommand[] = [
+const mockCommands: AiCommand[] = [
   {
     title: "Plan Day",
     source: "EasyList + EasyCalendar",
@@ -53,14 +47,7 @@ const mockCommands: MockCommand[] = [
   },
 ];
 
-type MockCommandInputResponse = {
-  prompt: string;
-  title: string;
-  response: string;
-  actions: string[];
-};
-
-const mockCommandInputResponses: MockCommandInputResponse[] = [
+const mockCommandInputResponses: AiSuggestion[] = [
   {
     prompt: "Plan my day",
     title: "Mock day plan",
@@ -93,7 +80,7 @@ const mockSignals = [
   { label: "Mock notes", value: "7" },
 ];
 
-const mockDailyBrief = {
+const mockDailyBrief: AiBrief = {
   dateLabel: "Today preview",
   headline: "Protect the deep work block and clear the two time-sensitive follow-ups.",
   whatMatters: [
@@ -127,7 +114,7 @@ const mockDailyBrief = {
 
 export function AiCommandCenter() {
   const [commandInput, setCommandInput] = useState("Plan my day");
-  const [mockResponse, setMockResponse] = useState<MockCommandInputResponse>(mockCommandInputResponses[0]);
+  const [mockResponse, setMockResponse] = useState<AiSuggestion>(mockCommandInputResponses[0]);
 
   function runMockCommand(prompt: string) {
     const normalizedPrompt = prompt.trim().toLowerCase();

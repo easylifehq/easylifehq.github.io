@@ -221,7 +221,7 @@ Codex may:
 
 - [x] Experiments AI command input mockup: add a frontend-only command input under experiments with mock responses for prompts like Plan my day, Turn this note into tasks, Summarize my week, and Build a workout plan. Do not make real API calls, add backend, use OpenAI keys, touch Firebase/auth, add dependencies, edit docs, or persist production data.
 
-- [ ] Experiments AI TypeScript contracts: add TypeScript interfaces under experiments for AiCommand, AiSuggestion, AiBrief, AiContextSnapshot, and AiMockProvider. Fake/mock only. Do not add backend, API clients, OpenAI keys, Firebase Functions, dependencies, docs, or production data writes.
+- [x] Experiments AI TypeScript contracts: add TypeScript interfaces under experiments for AiCommand, AiSuggestion, AiBrief, AiContextSnapshot, and AiMockProvider. Fake/mock only. Do not add backend, API clients, OpenAI keys, Firebase Functions, dependencies, docs, or production data writes.
 
 ### Phase 8 - AI Backend Plan Docs Only
 
