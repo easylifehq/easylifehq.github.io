@@ -366,7 +366,14 @@ export function EasyWorkoutRoutinesPage() {
                       <h3>{routine.name}</h3>
                       <span className="priority-pill-vnext">{routine.dayLabel || "Routine"}</span>
                     </div>
-                    <p>{routine.exercises.length} exercise{routine.exercises.length === 1 ? "" : "s"}</p>
+                    <div className="task-meta-row" aria-label="Routine summary">
+                      <span className="task-meta-chip">
+                        {routine.exercises.length} exercise{routine.exercises.length === 1 ? "" : "s"}
+                      </span>
+                      {routine.exercises[0]?.exerciseName ? (
+                        <span className="task-meta-chip">Starts: {routine.exercises[0]?.exerciseName}</span>
+                      ) : null}
+                    </div>
                     {routine.notes ? <small>{routine.notes}</small> : null}
                   </div>
                 )}
