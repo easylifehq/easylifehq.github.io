@@ -6730,6 +6730,23 @@ button.calendar-detail-card:disabled {
     grid-template-columns: auto minmax(0, 1fr) auto;
   }
 
+  .app-theme-easylist .task-card-dense .task-card-title-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 0.35rem;
+  }
+
+  .app-theme-easylist .task-card-title-row h3 {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.35;
+  }
+
+  .app-theme-easylist .task-dense-meta {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
   .task-card-actions .primary-button,
   .task-card-actions .ghost-button {
     min-width: 4.9rem;

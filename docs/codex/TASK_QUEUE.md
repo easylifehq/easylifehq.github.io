@@ -183,7 +183,7 @@ Codex may:
 
 - [x] EasyList layout density polish: improve one EasyList page or component for spacing, layout density, or card hierarchy. Preserve all task behavior, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
 
-- [ ] EasyList mobile readability: improve one EasyList mobile readability issue in list items, composer, drawer, or dashboard UI. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
+- [x] EasyList mobile readability: improve one EasyList mobile readability issue in list items, composer, drawer, or dashboard UI. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 
 - [ ] EasyList empty/low-content polish: improve one EasyList empty state, low-content state, or helper text area. Copy/UI only. Do not change logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
 
