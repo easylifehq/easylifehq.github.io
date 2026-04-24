@@ -7030,6 +7030,16 @@ button.calendar-detail-card:disabled {
     border-radius: var(--shell-panel-radius);
   }
 
+  .app-shell-vnext .page-hero-vnext,
+  .app-shell-vnext .panel-section,
+  .app-shell-vnext .stat-card-vnext,
+  .app-shell-vnext .empty-card-vnext {
+    border-color: color-mix(in srgb, var(--app-panel-border, var(--shell-card-border)) 82%, white 18%);
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--shell-panel-highlight) 88%, white 12%),
+      0 8px 22px rgba(24, 35, 38, 0.08);
+  }
+
   .site-header .button-primary {
     display: none;
   }
