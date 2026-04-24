@@ -213,3 +213,11 @@
 - docs/ai/EASYLIFE_AI_BACKEND_PLAN.md
 - docs/codex/TASK_QUEUE.md
 - Risks or follow-up needed: Low. The recovered file is docs-only and the external build passed.
+
+## 2026-04-24 14:51:48
+
+- Task attempted: Docs workflow clarity: improve one `docs/codex` workflow doc or create a short v5 sprint review note explaining how to review the practice branch tomorrow. Docs only. Do not touch app code, Firebase, Functions, auth, secrets, dependencies, generated output, or production config.
+- Build result: Passed
+- Files changed:
+- docs/codex/RUN_POLICY.md
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
