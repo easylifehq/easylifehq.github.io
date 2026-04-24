@@ -93,6 +93,16 @@ function Invoke-Guardrails {
     return $LASTEXITCODE -eq 0
 }
 
+function Invoke-CodexExec {
+    param(
+        [string]$Prompt,
+        [string]$LogPath
+    )
+
+    $Prompt | & codex exec --full-auto - 2>&1 | Tee-Object -FilePath $LogPath
+    return $LASTEXITCODE
+}
+
 # Preflight: repo must be clean before starting
 $status = (git status --porcelain) -join "`n"
 if (![string]::IsNullOrWhiteSpace($status)) {
@@ -167,8 +177,7 @@ Rules:
 
     $log1 = "$logDir\round-$i-implement.log"
 
-    & codex exec --full-auto "$implementPrompt" 2>&1 | Tee-Object -FilePath $log1
-    $implementExit = $LASTEXITCODE
+    $implementExit = Invoke-CodexExec -Prompt $implementPrompt -LogPath $log1
 
     if ($implementExit -ne 0) {
         Append-Report -Task $task -FilesChanged @() -BuildResult "Failed" -Risk "Codex implementation command failed."
@@ -222,8 +231,7 @@ Rules:
 
     $log2 = "$logDir\round-$i-review.log"
 
-    & codex exec --full-auto "$reviewPrompt" 2>&1 | Tee-Object -FilePath $log2
-    $reviewExit = $LASTEXITCODE
+    $reviewExit = Invoke-CodexExec -Prompt $reviewPrompt -LogPath $log2
 
     if ($reviewExit -ne 0) {
         $filesChanged = git diff --name-only
