@@ -181,7 +181,7 @@ Codex may:
 
 ### Phase 3 - Core App Polish: EasyList
 
-- [ ] EasyList layout density polish: improve one EasyList page or component for spacing, layout density, or card hierarchy. Preserve all task behavior, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
+- [x] EasyList layout density polish: improve one EasyList page or component for spacing, layout density, or card hierarchy. Preserve all task behavior, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
 
 - [ ] EasyList mobile readability: improve one EasyList mobile readability issue in list items, composer, drawer, or dashboard UI. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 

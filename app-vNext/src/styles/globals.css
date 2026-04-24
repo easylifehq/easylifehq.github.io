@@ -2852,6 +2852,15 @@ textarea::placeholder {
   padding: 0.34rem 0.42rem;
 }
 
+.app-theme-easylist .task-list-vnext {
+  gap: 0.55rem;
+}
+
+.app-theme-easylist .task-card-dense:not(.completed) {
+  gap: 0.38rem;
+  padding: 0.28rem 0.38rem;
+}
+
 .task-card-dense.completed {
   grid-template-columns: minmax(0, 1fr) auto;
 }
