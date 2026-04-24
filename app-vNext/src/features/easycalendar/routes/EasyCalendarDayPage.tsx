@@ -389,7 +389,7 @@ export function EasyCalendarDayPage() {
                           <strong>{item.title}</strong>
                           <p>{item.helper}</p>
                         </div>
-                        <span>{item.kind === "event" ? "Event" : "Task block"}</span>
+                        <span>{item.badge}</span>
                       </button>
                     );
                     })
@@ -433,7 +433,7 @@ export function EasyCalendarDayPage() {
                     <strong>{item.title}</strong>
                     <p>{item.helper}</p>
                   </div>
-                  <span>Deadline</span>
+                  <span>{item.badge}</span>
                 </button>
               );
               })
