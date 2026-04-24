@@ -225,7 +225,7 @@ Codex may:
 
 ### Phase 8 - AI Backend Plan Docs Only
 
-- [ ] AI backend plan doc: create `docs/ai/EASYLIFE_AI_BACKEND_PLAN.md` explaining future backend goals, required safety checks, likely API shape, auth requirements, data privacy concerns, what must not be built unattended, and a staged rollout plan. Docs only. Do not touch app code, Firebase, Functions, auth, secrets, dependencies, generated output, or production config.
+- [x] AI backend plan doc: create `docs/ai/EASYLIFE_AI_BACKEND_PLAN.md` explaining future backend goals, required safety checks, likely API shape, auth requirements, data privacy concerns, what must not be built unattended, and a staged rollout plan. Docs only. Do not touch app code, Firebase, Functions, auth, secrets, dependencies, generated output, or production config.
 
 ### Phase 9 - Stability and Review Support
 
