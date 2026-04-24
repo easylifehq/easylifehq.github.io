@@ -276,3 +276,8 @@ Required final state:
 
 - [x] EasyCalendar month grid polish: improve one small month-view spacing, label, or event-chip hierarchy detail so plans are easier to scan across desktop and mobile. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, dependencies, generated output, docs report files, package files, or root config files.
 - [x] Settings mobile scanability polish: improve one small Settings panel/card spacing, helper-copy, or hierarchy detail for better mobile readability. Do not change auth/account behavior, persistence, data models, routing, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, or shared architecture.
+
+## Checkpoint Planner Tasks 2026-04-24 15:54:32
+
+- [ ] EasyList mobile task-card polish: improve one small mobile spacing, tap-target, or metadata hierarchy detail in existing EasyList task cards so daily triage is easier. Do not change task logic, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, or shared architecture.
+- [ ] EasyCalendar event-chip readability: improve one small event-chip, agenda-row, or calendar-label copy/spacing detail for faster scanability across desktop and mobile. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, or shared architecture.
