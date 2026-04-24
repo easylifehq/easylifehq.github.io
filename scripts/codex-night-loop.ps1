@@ -8,7 +8,7 @@ $ErrorActionPreference = "Continue"
 $Repo = "C:\Dev\easylifehq.github.io"
 Set-Location $Repo
 
-$timestamp = Get-Date -Format "yyyyMMdd-HHmm"
+$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $branch = "codex/practice-$timestamp"
 $logDir = ".codex-logs\$timestamp"
 
@@ -26,17 +26,32 @@ if ($excludeText -notmatch "\.codex-logs/") {
 
 mkdir $logDir -Force | Out-Null
 
-# Preflight: start clean
-$status = git status --porcelain
+# Preflight: repo must be clean before starting
+$status = (git status --porcelain) -join "`n"
 if (![string]::IsNullOrWhiteSpace($status)) {
-    Write-Host "Repo is not clean. Commit or stash changes before running the loop." -ForegroundColor Red
+    Write-Host "Repo is not clean. Commit, restore, or stash changes before running the loop." -ForegroundColor Red
     git status
     exit 1
 }
 
+# Start from fresh main
 git checkout main
-git pull
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Could not checkout main. Stopping." -ForegroundColor Red
+    exit 1
+}
+
+git pull --ff-only
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Could not pull main cleanly. Stopping." -ForegroundColor Red
+    exit 1
+}
+
 git checkout -b $branch
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Could not create practice branch. Stopping." -ForegroundColor Red
+    exit 1
+}
 
 if (!(Test-Path "docs/codex/NIGHTLY_REPORT.md")) {
     "# Codex Nightly Report`n" | Set-Content "docs/codex/NIGHTLY_REPORT.md"
@@ -57,6 +72,7 @@ Pick the first unchecked task in docs/codex/TASK_QUEUE.md.
 If there are no unchecked tasks:
 - append a final summary to docs/codex/NIGHTLY_REPORT.md
 - make no code changes
+- stop after reporting
 
 For the selected task:
 1. Inspect the relevant files before editing.
@@ -67,7 +83,7 @@ For the selected task:
 6. Run the app-vNext production build using:
    cd app-vNext
    npm.cmd run build
-7. If the build fails, fix the issue if it is directly caused by your change.
+7. If the build fails, fix the issue only if it is directly caused by your change.
 8. Review your own diff for bugs, mobile regressions, scope creep, and accidental unrelated edits.
 9. Only mark the task complete in docs/codex/TASK_QUEUE.md if the build passes.
 10. Append a concise report entry to docs/codex/NIGHTLY_REPORT.md with:
@@ -78,7 +94,8 @@ For the selected task:
 "@
 
     $log1 = "$logDir\round-$i-implement.log"
-    codex exec --full-auto $implementPrompt 2>&1 | Tee-Object -FilePath $log1
+
+    & codex exec --full-auto "$implementPrompt" 2>&1 | Tee-Object -FilePath $log1
     $implementExit = $LASTEXITCODE
 
     if ($implementExit -ne 0) {
@@ -99,7 +116,7 @@ For the selected task:
         break
     }
 
-    $diff = git diff
+    $diff = (git diff) -join "`n"
 
     if ([string]::IsNullOrWhiteSpace($diff)) {
         Add-Content "docs/codex/NIGHTLY_REPORT.md" "`n## Round $i`nNo code changes detected. Stopping loop.`n"
@@ -112,6 +129,8 @@ Review the current git diff as a strict reviewer.
 
 You are the review pass in a supervised Codex practice loop.
 
+Run git diff yourself and inspect the current working tree.
+
 Check for:
 - bugs
 - broken mobile behavior
@@ -120,10 +139,6 @@ Check for:
 - auth/Firebase/deployment/DNS/secrets risk
 - build/test issues
 - bad UI choices
-
-Current git diff:
-
-$diff
 
 If you find issues:
 - fix only those issues
@@ -136,7 +151,8 @@ If the diff is safe:
 "@
 
     $log2 = "$logDir\round-$i-review.log"
-    codex exec --full-auto $reviewPrompt 2>&1 | Tee-Object -FilePath $log2
+
+    & codex exec --full-auto "$reviewPrompt" 2>&1 | Tee-Object -FilePath $log2
     $reviewExit = $LASTEXITCODE
 
     if ($reviewExit -ne 0) {
@@ -157,11 +173,16 @@ If the diff is safe:
         break
     }
 
-    $changed = git status --porcelain
+    $changed = (git status --porcelain) -join "`n"
 
     if (![string]::IsNullOrWhiteSpace($changed)) {
         git add .
         git commit -m "Codex practice round $i"
+
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Commit failed. Stopping loop." -ForegroundColor Red
+            break
+        }
 
         if ($Push) {
             git push -u origin $branch
