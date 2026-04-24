@@ -217,7 +217,7 @@ Codex may:
 
 - [x] Experiments AI command cards: add polished static command cards under experiments for Plan Day, Clean Up Tasks, Summarize Notes, Prep Calendar, Workout Coach, and Project Focus. Fake data only. Do not make real API calls, add backend, touch Firebase/auth, add dependencies, edit docs, or change production routing behavior.
 
-- [ ] Experiments AI daily brief mockup: add a fake AI daily brief under experiments that summarizes mock tasks, notes, calendar events, workouts, warnings, and "what matters today." Fake data only. Do not make real API calls, add backend, touch Firebase/auth, add dependencies, edit docs, or write production data.
+- [x] Experiments AI daily brief mockup: add a fake AI daily brief under experiments that summarizes mock tasks, notes, calendar events, workouts, warnings, and "what matters today." Fake data only. Do not make real API calls, add backend, touch Firebase/auth, add dependencies, edit docs, or write production data.
 
 - [ ] Experiments AI command input mockup: add a frontend-only command input under experiments with mock responses for prompts like Plan my day, Turn this note into tasks, Summarize my week, and Build a workout plan. Do not make real API calls, add backend, use OpenAI keys, touch Firebase/auth, add dependencies, edit docs, or persist production data.
 
