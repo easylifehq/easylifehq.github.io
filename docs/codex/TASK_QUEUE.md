@@ -175,7 +175,7 @@ Codex may:
 
 - [x] Settings grouping polish: inspect Settings UI and improve visual grouping, card hierarchy, or spacing so it feels more like an EasyLife control center. Do not change auth behavior, persistence, Firebase, data models, dependencies, or generated output.
 
-- [ ] Settings mobile readability: improve Settings mobile spacing, section rhythm, or control readability. Do not change auth behavior, persistence, Firebase, data models, dependencies, routing, or generated output.
+- [x] Settings mobile readability: improve Settings mobile spacing, section rhythm, or control readability. Do not change auth behavior, persistence, Firebase, data models, dependencies, routing, or generated output.
 
 - [ ] Settings copy clarity: improve unclear Settings copy/labels/help text while preserving all behavior. Do not change auth, persistence, Firebase, data models, dependencies, routing, or generated output.
 

@@ -41,3 +41,11 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and review completed.
+
+## 2026-04-24 06:21:18
+
+- Task attempted: Settings mobile readability: improve Settings mobile spacing, section rhythm, or control readability. Do not change auth behavior, persistence, Firebase, data models, dependencies, routing, or generated output.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and review completed.
