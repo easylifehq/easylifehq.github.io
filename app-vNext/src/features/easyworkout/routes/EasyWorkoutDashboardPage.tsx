@@ -244,7 +244,7 @@ export function EasyWorkoutDashboardPage() {
           <div className="task-list-vnext">
             {isLoading ? <p className="helper-copy">Loading workouts...</p> : null}
             {!isLoading && recentSessions.length === 0 ? (
-              <div className="empty-card-vnext">No workouts logged yet.</div>
+              <div className="empty-card-vnext">No workouts logged yet. Start a workout when you are ready, and your recent sessions will collect here.</div>
             ) : null}
             {recentSessions.map((session) => (
               <article key={session.id} className="task-card-vnext">

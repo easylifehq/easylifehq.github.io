@@ -209,7 +209,7 @@ Codex may:
 
 - [x] EasyWorkout mobile readability: improve one EasyWorkout mobile layout or typography issue. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 
-- [ ] EasyWorkout empty/low-content polish: improve one EasyWorkout empty state, helper copy, or low-content area. Copy/UI only. Do not change logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
+- [x] EasyWorkout empty/low-content polish: improve one EasyWorkout empty state, helper copy, or low-content area. Copy/UI only. Do not change logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
 
 ### Phase 7 - Experimental AI Prototype Under Experiments Only
 
