@@ -25,6 +25,17 @@ export function ProductsMenu({
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
+  function isCurrentItem(item: ProductsMenuItem) {
+    if (item.isRoute === false) return false;
+    if (location.pathname === item.href) return true;
+
+    const appRoot = item.href.startsWith("/app/")
+      ? item.href.split("/").slice(0, 3).join("/")
+      : item.href;
+
+    return location.pathname === appRoot || location.pathname.startsWith(`${appRoot}/`);
+  }
+
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname, location.hash]);
@@ -83,8 +94,10 @@ export function ProductsMenu({
             Close
           </button>
         </div>
-        {items.map((item) =>
-          item.isRoute === false ? (
+        {items.map((item) => {
+          const isCurrent = isCurrentItem(item);
+
+          return item.isRoute === false ? (
             <a
               key={item.href}
               href={item.href}
@@ -97,13 +110,17 @@ export function ProductsMenu({
             <Link
               key={item.href}
               to={item.href}
-              className="menu-link-card"
+              className={`menu-link-card${isCurrent ? " active" : ""}`}
+              aria-current={isCurrent ? "page" : undefined}
               onClick={() => setIsOpen(false)}
             >
-              <strong>{item.label}</strong>
+              <span className="menu-link-title">
+                <strong>{item.label}</strong>
+                {isCurrent ? <span className="menu-link-status">Current</span> : null}
+              </span>
             </Link>
-          )
-        )}
+          );
+        })}
       </div>
     </div>
   );
