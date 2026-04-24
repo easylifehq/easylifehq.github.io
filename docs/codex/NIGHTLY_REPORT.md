@@ -386,3 +386,11 @@
 - app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-24 16:47:56
+
+- Task attempted: Theme personality pass: choose one existing theme mode or app theme and add a more distinct but tasteful visual treatment such as accent gradients, surface contrast, focus rings, status chips, or subtle high-tech panels. Keep it accessible and not childish. Do not add dependencies, change settings persistence, touch auth/Firebase/backend, generated output, package files, or root config.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

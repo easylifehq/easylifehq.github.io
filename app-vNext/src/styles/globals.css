@@ -1577,6 +1577,9 @@ textarea::placeholder {
   --shell-display-font: "Aptos Display", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shell-card-radius: 8px;
   --shell-card-shadow: 0 24px 62px rgba(1, 8, 14, 0.46);
+  --shell-panel-highlight: rgba(208, 255, 248, 0.13);
+  --shell-grid-line: rgba(125, 222, 210, 0.1);
+  --shell-status-glow: rgba(159, 183, 255, 0.24);
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.2s ease;
   --shell-motion-panel: 0.28s ease;
@@ -6315,6 +6318,53 @@ button.calendar-detail-card:disabled {
     inset 0 1px 0 var(--shell-panel-highlight),
     0 0 0 1px rgba(255, 241, 194, 0.07),
     0 18px 42px rgba(4, 14, 9, 0.32);
+}
+
+.app-shell-vnext.shell-theme-aurora .page-hero-vnext,
+.app-shell-vnext.shell-theme-aurora .panel-section,
+.app-shell-vnext.shell-theme-aurora .stat-card-vnext,
+.app-shell-vnext.shell-theme-aurora .hq-link-card {
+  background:
+    linear-gradient(135deg, rgba(208, 255, 248, 0.13), transparent 44%),
+    linear-gradient(160deg, color-mix(in srgb, var(--app-panel-bg, var(--shell-card-bg)) 86%, #9fb7ff 14%), var(--app-panel-bg, var(--shell-card-bg)));
+  border-color: color-mix(in srgb, var(--shell-accent) 34%, var(--ui-border-subtle));
+  box-shadow:
+    inset 0 1px 0 var(--shell-panel-highlight),
+    0 0 0 1px rgba(159, 183, 255, 0.1),
+    0 20px 52px rgba(1, 8, 14, 0.38),
+    0 0 34px rgba(125, 222, 210, 0.08);
+}
+
+.app-shell-vnext.shell-theme-aurora .brand-badge,
+.app-shell-vnext.shell-theme-aurora .primary-button,
+.app-shell-vnext.shell-theme-aurora .button-primary {
+  background: linear-gradient(135deg, #7dded2 0%, #9fb7ff 58%, #f0a7c8 100%);
+  border-color: color-mix(in srgb, var(--shell-accent) 70%, #9fb7ff 30%);
+  color: var(--ui-button-primary-text, #071417);
+  box-shadow:
+    0 12px 28px rgba(1, 8, 14, 0.28),
+    0 0 0 1px rgba(208, 255, 248, 0.14);
+}
+
+.app-shell-vnext.shell-theme-aurora .info-pill,
+.app-shell-vnext.shell-theme-aurora .settings-state-pill,
+.app-shell-vnext.shell-theme-aurora .calendar-duration-pill,
+.app-shell-vnext.shell-theme-aurora .priority-pill-vnext,
+.app-shell-vnext.shell-theme-aurora .task-meta-chip,
+.app-shell-vnext.shell-theme-aurora .chip-pill {
+  background: linear-gradient(135deg, rgba(125, 222, 210, 0.16), rgba(159, 183, 255, 0.14));
+  border-color: rgba(198, 235, 255, 0.28);
+  color: #e6fffb;
+}
+
+.app-shell-vnext.shell-theme-aurora .field-stack input:focus,
+.app-shell-vnext.shell-theme-aurora .field-stack select:focus,
+.app-shell-vnext.shell-theme-aurora .field-stack textarea:focus,
+.app-shell-vnext.shell-theme-aurora .search-input:focus {
+  border-color: rgba(198, 235, 255, 0.58);
+  box-shadow:
+    0 0 0 3px rgba(125, 222, 210, 0.22),
+    0 0 22px rgba(159, 183, 255, 0.14);
 }
 
 .app-shell-vnext.shell-theme-candy .page-hero-vnext,
