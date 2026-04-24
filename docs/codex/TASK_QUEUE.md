@@ -255,4 +255,4 @@ Required final state:
 ## Checkpoint Planner Tasks 2026-04-24 15:24:50
 
 - [x] EasyWorkout routine card polish: improve one small routine/log card hierarchy, spacing, or helper-copy detail for faster scanning. Do not change workout behavior, persistence, data models, routing, auth, Firebase, dependencies, generated output, docs report files, package files, or shared architecture.
-- [ ] Settings control-center scanability: improve one small Settings section header, option description, or spacing detail so suite controls read more clearly. Do not change auth/account behavior, persistence, data models, routing, Firebase, dependencies, generated output, docs report files, package files, or root config files.
+- [x] Settings control-center scanability: improve one small Settings section header, option description, or spacing detail so suite controls read more clearly. Do not change auth/account behavior, persistence, data models, routing, Firebase, dependencies, generated output, docs report files, package files, or root config files.

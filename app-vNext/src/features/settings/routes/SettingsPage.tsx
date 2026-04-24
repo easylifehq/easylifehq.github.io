@@ -294,9 +294,9 @@ const settingsSections: Array<{
   },
   {
     id: "page-settings",
-    label: "Per-app",
+    label: "App Controls",
     eyebrow: "Page Controls",
-    description: "Calendar defaults now, with more app controls planned.",
+    description: "Tune suite app defaults, starting with Calendar.",
     group: "advanced",
   },
   {
