@@ -6789,6 +6789,24 @@ button.calendar-detail-card:disabled {
     gap: 0.45rem;
   }
 
+  .note-card-top {
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+
+  .note-card-top > div:first-child {
+    min-width: 0;
+  }
+
+  .note-card-top strong {
+    display: block;
+    line-height: 1.25;
+  }
+
+  .note-card-badges {
+    max-width: 42%;
+  }
+
   .notes-title-field input {
     font-size: 1.85rem;
   }

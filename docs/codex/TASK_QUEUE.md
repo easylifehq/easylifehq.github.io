@@ -191,7 +191,7 @@ Codex may:
 
 - [x] EasyNotes layout polish: improve one EasyNotes library/editor/trash/new-note UI area for spacing, hierarchy, or readability. Preserve note behavior, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
 
-- [ ] EasyNotes mobile readability: improve one EasyNotes mobile spacing or typography issue. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
+- [x] EasyNotes mobile readability: improve one EasyNotes mobile spacing or typography issue. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 
 - [ ] EasyNotes empty/low-content polish: improve one EasyNotes empty state, helper copy, or low-content area. Copy/UI only. Do not change logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
 
