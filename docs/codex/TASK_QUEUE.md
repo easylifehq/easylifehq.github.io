@@ -281,3 +281,8 @@ Required final state:
 
 - [x] EasyList mobile task-card polish: improve one small mobile spacing, tap-target, or metadata hierarchy detail in existing EasyList task cards so daily triage is easier. Do not change task logic, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, or shared architecture.
 - [x] EasyCalendar event-chip readability: improve one small event-chip, agenda-row, or calendar-label copy/spacing detail for faster scanability across desktop and mobile. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, or shared architecture.
+
+## Checkpoint Planner Tasks 2026-04-24 15:59:11
+
+- [ ] EasyNotes note-card action polish: improve one small note-card or note-list action label, spacing, or metadata hierarchy detail so notes feel easier to scan with the suite. Do not change note logic, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, or shared architecture.
+- [ ] Settings section rhythm polish: improve one small Settings section divider, panel spacing, or helper-copy detail so the control center reads more consistently on desktop and mobile. Do not change auth/account behavior, persistence, data models, routing, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, or shared architecture.
