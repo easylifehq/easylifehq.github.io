@@ -1,0 +1,50 @@
+# Codex Unattended Run Policy
+
+This repo supports a bounded unattended Codex loop for small, safe tasks.
+
+## The loop owns the workflow
+
+PowerShell is the supervisor. Codex may inspect files, edit files, and review its own diff, but the outer script owns task selection, builds, reports, task completion, and commits.
+
+For each round, the loop:
+1. Selects the first unchecked task in `docs/codex/TASK_QUEUE.md`.
+2. Asks Codex to implement only that task.
+3. Runs guardrails against the diff.
+4. Runs `npm.cmd run build` from `app-vNext`.
+5. Asks Codex to review and fix only issues in the current diff.
+6. Runs guardrails again.
+7. Runs the final external build.
+8. Marks the task complete, appends `docs/codex/NIGHTLY_REPORT.md`, and commits only after the final build passes.
+
+## Safe unattended tasks
+
+Use the loop for small, specific tasks such as:
+- copy-only UI cleanup
+- spacing-only UI cleanup
+- docs cleanup
+- low-risk component polish
+- tiny bug fixes with an obvious expected result
+
+Good task shape:
+
+```md
+- [ ] EasyList tiny cleanup: inspect EasyList UI files and make one copy-only or spacing-only improvement. Do not change logic, routing, auth, Firebase, or data structure.
+```
+
+## Tasks that should not run unattended
+
+Do not put these in the unattended queue:
+- auth changes
+- Firebase rules or Cloud Functions
+- billing, DNS, deployment, or production config
+- secrets, API keys, credentials, or environment files
+- database migrations or data model changes
+- package/dependency changes
+- broad rewrites
+- old-site changes
+
+## Guardrails
+
+The guardrail script stops the loop if Codex changes forbidden paths, touches task/report files directly, edits dependency manifests, changes too many files, or makes a docs-only task touch app code.
+
+Raw logs are written to `.codex-logs/`, which is excluded locally through `.git/info/exclude`.

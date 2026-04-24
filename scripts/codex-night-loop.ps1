@@ -1,5 +1,6 @@
 param(
     [int]$Rounds = 1,
+    [int]$MaxChangedFiles = 8,
     [switch]$Push
 )
 
@@ -23,8 +24,6 @@ $excludeText = Get-Content ".git\info\exclude" -Raw
 if ($excludeText -notmatch "\.codex-logs/") {
     Add-Content ".git\info\exclude" "`n.codex-logs/"
 }
-
-mkdir $logDir -Force | Out-Null
 
 function Get-FirstUncheckedTask {
     $lines = Get-Content "docs/codex/TASK_QUEUE.md"
@@ -67,7 +66,7 @@ function Append-Report {
 
     $date = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $files = if ($FilesChanged.Count -gt 0) {
-        ($FilesChanged | ForEach-Object { "- `$_" }) -join "`n"
+        ($FilesChanged | ForEach-Object { "- $_" }) -join "`n"
     } else {
         "- None"
     }
@@ -82,6 +81,16 @@ function Append-Report {
 $files
 - Risks or follow-up needed: $Risk
 "@
+}
+
+function Invoke-Guardrails {
+    param(
+        [string]$Task,
+        [string]$Stage
+    )
+
+    powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\codex-guardrails.ps1" -Task $Task -Stage $Stage -MaxChangedFiles $MaxChangedFiles
+    return $LASTEXITCODE -eq 0
 }
 
 # Preflight: repo must be clean before starting
@@ -104,11 +113,21 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+# Main must still be clean before creating any generated report or branch-only docs.
+$mainStatus = (git status --porcelain) -join "`n"
+if (![string]::IsNullOrWhiteSpace($mainStatus)) {
+    Write-Host "Main is not clean after checkout/pull. Commit, restore, or stash changes before running the loop." -ForegroundColor Red
+    git status
+    exit 1
+}
+
 git checkout -b $branch
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Could not create practice branch. Stopping." -ForegroundColor Red
     exit 1
 }
+
+mkdir $logDir -Force | Out-Null
 
 for ($i = 1; $i -le $Rounds; $i++) {
     Write-Host "`n===== ROUND $i of $Rounds =====" -ForegroundColor Cyan
@@ -124,7 +143,7 @@ for ($i = 1; $i -le $Rounds; $i++) {
     Write-Host "Selected task: $task" -ForegroundColor Cyan
 
     $implementPrompt = @"
-Read CODEX.md if present and docs/codex/TASK_QUEUE.md.
+Read CODEX.md if present, docs/codex/RUN_POLICY.md, and docs/codex/TASK_QUEUE.md.
 
 You are running a supervised Codex practice loop.
 
@@ -142,7 +161,8 @@ Rules:
 6. Prefer app-vNext source files only unless this is a docs-only task.
 7. Do not run npm build commands. The outer PowerShell loop will run the build.
 8. Do not mark the task complete. The outer PowerShell loop will do that only after build passes.
-9. Summarize changed files and risks.
+9. Do not edit TASK_QUEUE.md or NIGHTLY_REPORT.md.
+10. Summarize changed files and risks.
 "@
 
     $log1 = "$logDir\round-$i-implement.log"
@@ -161,6 +181,13 @@ Rules:
     if ([string]::IsNullOrWhiteSpace($diff)) {
         Append-Report -Task $task -FilesChanged @() -BuildResult "Skipped" -Risk "Codex made no changes."
         Write-Host "No changes detected. Stopping loop." -ForegroundColor Yellow
+        break
+    }
+
+    if (-not (Invoke-Guardrails -Task $task -Stage "implementation")) {
+        $filesChanged = git diff --name-only
+        Append-Report -Task $task -FilesChanged $filesChanged -BuildResult "Failed" -Risk "Guardrails failed after implementation. Task not marked complete."
+        Write-Host "Guardrails failed after implementation. Stopping loop for safety." -ForegroundColor Red
         break
     }
 
@@ -202,6 +229,13 @@ Rules:
         $filesChanged = git diff --name-only
         Append-Report -Task $task -FilesChanged $filesChanged -BuildResult "Failed" -Risk "Codex review command failed."
         Write-Host "Codex review failed. Stopping loop for safety." -ForegroundColor Red
+        break
+    }
+
+    if (-not (Invoke-Guardrails -Task $task -Stage "review")) {
+        $filesChanged = git diff --name-only
+        Append-Report -Task $task -FilesChanged $filesChanged -BuildResult "Failed" -Risk "Guardrails failed after review. Task not marked complete."
+        Write-Host "Guardrails failed after review. Stopping loop for safety." -ForegroundColor Red
         break
     }
 
