@@ -6797,6 +6797,11 @@ button.calendar-detail-card:disabled {
     grid-template-columns: 1fr;
   }
 
+  .settings-quick-strip {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
   .settings-section-shell {
     gap: 0.75rem;
     padding: 0.6rem;

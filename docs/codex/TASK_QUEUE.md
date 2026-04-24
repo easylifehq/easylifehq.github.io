@@ -270,4 +270,4 @@ Required final state:
 ## Checkpoint Planner Tasks 2026-04-24 15:44:26
 
 - [x] Suite shared header polish: inspect the main app headers in EasyList, EasyNotes, EasyCalendar, EasyWorkout, or Settings and make one small copy, spacing, or hierarchy improvement that improves cross-suite consistency. Do not change routing, behavior, persistence, data models, auth, Firebase, dependencies, generated output, docs report files, package files, or shared architecture.
-- [ ] Mobile panel polish: improve one small mobile readability issue in an existing EasyList, EasyNotes, EasyCalendar, EasyWorkout, or Settings panel/card. Do not add features, change logic, routing, persistence, data models, auth, Firebase, dependencies, generated output, docs report files, package files, or root config files.
+- [x] Mobile panel polish: improve one small mobile readability issue in an existing EasyList, EasyNotes, EasyCalendar, EasyWorkout, or Settings panel/card. Do not add features, change logic, routing, persistence, data models, auth, Firebase, dependencies, generated output, docs report files, package files, or root config files.
