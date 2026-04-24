@@ -189,7 +189,7 @@ Codex may:
 
 ### Phase 4 - Core App Polish: EasyNotes
 
-- [ ] EasyNotes layout polish: improve one EasyNotes library/editor/trash/new-note UI area for spacing, hierarchy, or readability. Preserve note behavior, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
+- [x] EasyNotes layout polish: improve one EasyNotes library/editor/trash/new-note UI area for spacing, hierarchy, or readability. Preserve note behavior, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
 
 - [ ] EasyNotes mobile readability: improve one EasyNotes mobile spacing or typography issue. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 

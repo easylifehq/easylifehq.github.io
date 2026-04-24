@@ -2590,6 +2590,13 @@ textarea::placeholder {
   margin-top: 0;
 }
 
+.notes-advanced-tools .task-composer-actions {
+  justify-content: flex-end;
+  margin-top: 0.85rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+}
+
 .app-shell-vnext .hq-link-card p,
 .app-shell-vnext .hq-list-card p,
 .app-shell-vnext .settings-choice-card p,
