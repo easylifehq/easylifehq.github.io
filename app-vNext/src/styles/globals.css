@@ -6789,6 +6789,22 @@ button.calendar-detail-card:disabled {
     grid-template-columns: 1fr;
   }
 
+  .app-theme-easyworkout .workout-set-row .field-stack {
+    gap: 0.38rem;
+  }
+
+  .app-theme-easyworkout .workout-set-row .field-stack span {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    color: var(--ui-text-muted, var(--shell-muted-text));
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
   .task-row-grid-routine {
     grid-template-columns: 1fr;
   }

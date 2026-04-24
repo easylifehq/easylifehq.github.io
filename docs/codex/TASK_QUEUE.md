@@ -207,7 +207,7 @@ Codex may:
 
 - [x] EasyWorkout dashboard polish: improve one EasyWorkout dashboard/log/routines UI area for spacing, hierarchy, or readability. Preserve workout behavior, data shapes, persistence, routing, auth, Firebase, dependencies, and generated output.
 
-- [ ] EasyWorkout mobile readability: improve one EasyWorkout mobile layout or typography issue. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
+- [x] EasyWorkout mobile readability: improve one EasyWorkout mobile layout or typography issue. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 
 - [ ] EasyWorkout empty/low-content polish: improve one EasyWorkout empty state, helper copy, or low-content area. Copy/UI only. Do not change logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
 
