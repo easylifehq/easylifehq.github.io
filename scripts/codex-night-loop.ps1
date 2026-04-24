@@ -26,6 +26,64 @@ if ($excludeText -notmatch "\.codex-logs/") {
 
 mkdir $logDir -Force | Out-Null
 
+function Get-FirstUncheckedTask {
+    $lines = Get-Content "docs/codex/TASK_QUEUE.md"
+    foreach ($line in $lines) {
+        if ($line -match "^\s*-\s+\[ \]\s+(.+)$") {
+            return $Matches[1].Trim()
+        }
+    }
+    return $null
+}
+
+function Mark-FirstUncheckedTaskComplete {
+    $path = "docs/codex/TASK_QUEUE.md"
+    $lines = Get-Content $path
+    $updated = $false
+
+    $newLines = foreach ($line in $lines) {
+        if (-not $updated -and $line -match "^(\s*-\s+)\[ \](\s+.+)$") {
+            $updated = $true
+            "$($Matches[1])[x]$($Matches[2])"
+        } else {
+            $line
+        }
+    }
+
+    Set-Content $path $newLines
+}
+
+function Append-Report {
+    param(
+        [string]$Task,
+        [string[]]$FilesChanged,
+        [string]$BuildResult,
+        [string]$Risk
+    )
+
+    if (!(Test-Path "docs/codex/NIGHTLY_REPORT.md")) {
+        "# Codex Nightly Report`n" | Set-Content "docs/codex/NIGHTLY_REPORT.md"
+    }
+
+    $date = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $files = if ($FilesChanged.Count -gt 0) {
+        ($FilesChanged | ForEach-Object { "- `$_" }) -join "`n"
+    } else {
+        "- None"
+    }
+
+    Add-Content "docs/codex/NIGHTLY_REPORT.md" @"
+
+## $date
+
+- Task attempted: $Task
+- Build result: $BuildResult
+- Files changed:
+$files
+- Risks or follow-up needed: $Risk
+"@
+}
+
 # Preflight: repo must be clean before starting
 $status = (git status --porcelain) -join "`n"
 if (![string]::IsNullOrWhiteSpace($status)) {
@@ -34,7 +92,6 @@ if (![string]::IsNullOrWhiteSpace($status)) {
     exit 1
 }
 
-# Start from fresh main
 git checkout main
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Could not checkout main. Stopping." -ForegroundColor Red
@@ -53,44 +110,39 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-if (!(Test-Path "docs/codex/NIGHTLY_REPORT.md")) {
-    "# Codex Nightly Report`n" | Set-Content "docs/codex/NIGHTLY_REPORT.md"
-}
-
 for ($i = 1; $i -le $Rounds; $i++) {
     Write-Host "`n===== ROUND $i of $Rounds =====" -ForegroundColor Cyan
 
-    $implementPrompt = @"
-Read CODEX.md if present, AGENTS.md if present, docs/codex/LOOP.md if present, and docs/codex/TASK_QUEUE.md.
+    $task = Get-FirstUncheckedTask
 
-You are running a supervised practice Codex loop.
+    if ([string]::IsNullOrWhiteSpace($task)) {
+        Append-Report -Task "No unchecked tasks" -FilesChanged @() -BuildResult "Skipped" -Risk "No unchecked tasks were found."
+        Write-Host "No unchecked tasks found. Stopping." -ForegroundColor Yellow
+        break
+    }
+
+    Write-Host "Selected task: $task" -ForegroundColor Cyan
+
+    $implementPrompt = @"
+Read CODEX.md if present and docs/codex/TASK_QUEUE.md.
+
+You are running a supervised Codex practice loop.
 
 Round: $i of $Rounds
 
-Pick the first unchecked task in docs/codex/TASK_QUEUE.md.
+Selected task:
+$task
 
-If there are no unchecked tasks:
-- append a final summary to docs/codex/NIGHTLY_REPORT.md
-- make no code changes
-- stop after reporting
-
-For the selected task:
-1. Inspect the relevant files before editing.
-2. Implement only the selected task.
-3. Do not do broad rewrites.
-4. Do not touch auth, Firebase rules, Cloud Functions, DNS, deployment settings, billing, secrets, API keys, old-site, or root build output.
-5. Prefer app-vNext source files only.
-6. Run the app-vNext production build using:
-   cd app-vNext
-   npm.cmd run build
-7. If the build fails, fix the issue only if it is directly caused by your change.
-8. Review your own diff for bugs, mobile regressions, scope creep, and accidental unrelated edits.
-9. Only mark the task complete in docs/codex/TASK_QUEUE.md if the build passes.
-10. Append a concise report entry to docs/codex/NIGHTLY_REPORT.md with:
-   - task attempted
-   - files changed
-   - build result
-   - risks or follow-up needed
+Rules:
+1. Implement only the selected task.
+2. Inspect relevant files before editing.
+3. Make the smallest safe change.
+4. Do not do broad rewrites.
+5. Do not touch auth, Firebase rules, Cloud Functions, DNS, deployment settings, billing, secrets, API keys, old-site, root build output, TASK_QUEUE.md, or NIGHTLY_REPORT.md.
+6. Prefer app-vNext source files only unless this is a docs-only task.
+7. Do not run npm build commands. The outer PowerShell loop will run the build.
+8. Do not mark the task complete. The outer PowerShell loop will do that only after build passes.
+9. Summarize changed files and risks.
 "@
 
     $log1 = "$logDir\round-$i-implement.log"
@@ -99,8 +151,16 @@ For the selected task:
     $implementExit = $LASTEXITCODE
 
     if ($implementExit -ne 0) {
-        Add-Content "docs/codex/NIGHTLY_REPORT.md" "`n## Round $i`nCodex implementation command failed. Stopping loop for safety.`n"
+        Append-Report -Task $task -FilesChanged @() -BuildResult "Failed" -Risk "Codex implementation command failed."
         Write-Host "Codex implementation failed. Stopping loop for safety." -ForegroundColor Red
+        break
+    }
+
+    $diff = (git diff) -join "`n"
+
+    if ([string]::IsNullOrWhiteSpace($diff)) {
+        Append-Report -Task $task -FilesChanged @() -BuildResult "Skipped" -Risk "Codex made no changes."
+        Write-Host "No changes detected. Stopping loop." -ForegroundColor Yellow
         break
     }
 
@@ -111,43 +171,26 @@ For the selected task:
     Pop-Location
 
     if (-not $buildOk) {
-        Add-Content "docs/codex/NIGHTLY_REPORT.md" "`n## Round $i`nExternal build failed after implementation. Stopping loop for safety.`n"
+        $filesChanged = git diff --name-only
+        Append-Report -Task $task -FilesChanged $filesChanged -BuildResult "Failed" -Risk "External PowerShell build failed. Task not marked complete. Stopping loop."
         Write-Host "Build failed. Stopping loop for safety." -ForegroundColor Red
-        break
-    }
-
-    $diff = (git diff) -join "`n"
-
-    if ([string]::IsNullOrWhiteSpace($diff)) {
-        Add-Content "docs/codex/NIGHTLY_REPORT.md" "`n## Round $i`nNo code changes detected. Stopping loop.`n"
-        Write-Host "No changes detected. Stopping loop." -ForegroundColor Yellow
         break
     }
 
     $reviewPrompt = @"
 Review the current git diff as a strict reviewer.
 
-You are the review pass in a supervised Codex practice loop.
+Selected task:
+$task
 
-Run git diff yourself and inspect the current working tree.
-
-Check for:
-- bugs
-- broken mobile behavior
-- accidental scope creep
-- unrelated file edits
-- auth/Firebase/deployment/DNS/secrets risk
-- build/test issues
-- bad UI choices
-
-If you find issues:
-- fix only those issues
-- rerun app-vNext build with npm.cmd run build
-- update docs/codex/NIGHTLY_REPORT.md
-
-If the diff is safe:
-- do not invent extra work
-- append a concise approval note to docs/codex/NIGHTLY_REPORT.md
+Rules:
+1. Run git diff yourself and inspect the working tree.
+2. Check for bugs, broken mobile behavior, accidental scope creep, unrelated file edits, auth/Firebase/deployment/DNS/secrets risk, and bad UI choices.
+3. If you find issues, fix only those issues.
+4. Do not run npm build commands. The outer PowerShell loop will run the final build.
+5. Do not edit TASK_QUEUE.md or NIGHTLY_REPORT.md.
+6. Do not invent extra work.
+7. Summarize whether the diff is safe.
 "@
 
     $log2 = "$logDir\round-$i-review.log"
@@ -156,22 +199,29 @@ If the diff is safe:
     $reviewExit = $LASTEXITCODE
 
     if ($reviewExit -ne 0) {
-        Add-Content "docs/codex/NIGHTLY_REPORT.md" "`n## Round $i`nCodex review command failed. Stopping loop for safety.`n"
+        $filesChanged = git diff --name-only
+        Append-Report -Task $task -FilesChanged $filesChanged -BuildResult "Failed" -Risk "Codex review command failed."
         Write-Host "Codex review failed. Stopping loop for safety." -ForegroundColor Red
         break
     }
 
-    Write-Host "`nRunning final build check..." -ForegroundColor Yellow
+    Write-Host "`nRunning final external build check..." -ForegroundColor Yellow
     Push-Location "app-vNext"
     npm.cmd run build
     $finalBuildOk = $LASTEXITCODE -eq 0
     Pop-Location
 
     if (-not $finalBuildOk) {
-        Add-Content "docs/codex/NIGHTLY_REPORT.md" "`n## Round $i`nFinal build failed after review. Stopping loop for safety.`n"
+        $filesChanged = git diff --name-only
+        Append-Report -Task $task -FilesChanged $filesChanged -BuildResult "Failed" -Risk "Final external PowerShell build failed. Task not marked complete."
         Write-Host "Final build failed. Stopping loop for safety." -ForegroundColor Red
         break
     }
+
+    $filesChangedBeforeDocs = git diff --name-only
+
+    Mark-FirstUncheckedTaskComplete
+    Append-Report -Task $task -FilesChanged $filesChangedBeforeDocs -BuildResult "Passed" -Risk "Low. External build passed and review completed."
 
     $changed = (git status --porcelain) -join "`n"
 
