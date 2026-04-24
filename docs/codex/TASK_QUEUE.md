@@ -163,7 +163,7 @@ Codex may:
 
 ### Phase 1 - Baseline and Suite Shell
 
-- [ ] Shared suite shell audit: inspect shared layout/header/nav/app shell files and make one focused improvement to suite consistency, active app clarity, page container spacing, or mobile header ergonomics. Do not change auth, routing behavior, Firebase, data models, dependencies, generated output, TASK_QUEUE.md, or NIGHTLY_REPORT.md.
+- [x] Shared suite shell audit: inspect shared layout/header/nav/app shell files and make one focused improvement to suite consistency, active app clarity, page container spacing, or mobile header ergonomics. Do not change auth, routing behavior, Firebase, data models, dependencies, generated output, TASK_QUEUE.md, or NIGHTLY_REPORT.md.
 
 - [ ] Shared navigation polish: improve one obvious app dropdown, shared navigation, or active page clarity issue so EasyLife feels more like one connected suite. Do not rewrite routing, change auth, touch Firebase, add dependencies, or edit generated/root output.
 

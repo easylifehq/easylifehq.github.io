@@ -257,6 +257,10 @@ a {
   min-width: 0;
 }
 
+.site-brand > div {
+  min-width: 0;
+}
+
 .app-header-brand {
   min-width: 0;
 }
@@ -6307,7 +6311,10 @@ button.calendar-detail-card:disabled {
   }
 
   .app-current-label {
-    display: none;
+    display: block;
+    margin-top: 0.05rem;
+    font-size: 0.72rem;
+    line-height: 1.1;
   }
 
   .app-header-actions .products-menu {
