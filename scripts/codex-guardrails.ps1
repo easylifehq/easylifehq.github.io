@@ -131,4 +131,14 @@ if ($todoLines.Count -gt 0) {
     Stop-Guardrail "Unresolved TODO/FIXME/HACK comments were added."
 }
 
+if (-not $isDocsOnlyTask) {
+    $backendOrAiRiskLines = @($addedDiffLines | Where-Object {
+        $_ -match "(?i)(fetch\(|axios|XMLHttpRequest|openai|anthropic|gemini|api key|api-key|secret|bearer token|cloud function|httpsCallable|firebase functions|process\.env|import\.meta\.env)"
+    })
+
+    if ($backendOrAiRiskLines.Count -gt 0) {
+        Stop-Guardrail "Backend/API/AI integration risk was added."
+    }
+}
+
 Write-Host "Guardrails passed during ${Stage}: $($normalizedFiles.Count) changed file(s)." -ForegroundColor Green
