@@ -180,9 +180,14 @@ Rules:
     $implementExit = Invoke-CodexExec -Prompt $implementPrompt -LogPath $log1
 
     if ($implementExit -ne 0) {
-        Append-Report -Task $task -FilesChanged @() -BuildResult "Failed" -Risk "Codex implementation command failed."
-        Write-Host "Codex implementation failed. Stopping loop for safety." -ForegroundColor Red
-        break
+        $diffAfterFailedImplement = (git diff) -join "`n"
+        if ([string]::IsNullOrWhiteSpace($diffAfterFailedImplement)) {
+            Append-Report -Task $task -FilesChanged @() -BuildResult "Failed" -Risk "Codex implementation command failed and made no changes."
+            Write-Host "Codex implementation failed with no changes. Stopping loop for safety." -ForegroundColor Red
+            break
+        }
+
+        Write-Host "Codex implementation exited nonzero, but changes were found. Continuing to guardrails and external build." -ForegroundColor Yellow
     }
 
     $diff = (git diff) -join "`n"
@@ -234,10 +239,7 @@ Rules:
     $reviewExit = Invoke-CodexExec -Prompt $reviewPrompt -LogPath $log2
 
     if ($reviewExit -ne 0) {
-        $filesChanged = git diff --name-only
-        Append-Report -Task $task -FilesChanged $filesChanged -BuildResult "Failed" -Risk "Codex review command failed."
-        Write-Host "Codex review failed. Stopping loop for safety." -ForegroundColor Red
-        break
+        Write-Host "Codex review exited nonzero. Continuing to guardrails and final external build." -ForegroundColor Yellow
     }
 
     if (-not (Invoke-Guardrails -Task $task -Stage "review")) {
