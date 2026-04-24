@@ -6681,8 +6681,16 @@ button.calendar-detail-card:disabled {
   }
 
   .calendar-hour-row time {
-    padding-top: 0;
+    padding: 0.5rem 0.65rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.16));
+    background: var(--ui-bg-card-elevated, var(--shell-card-bg));
+    font-size: 0.8rem;
     text-align: left;
+  }
+
+  .calendar-hour-content {
+    padding: 0.5rem 0.55rem 0.6rem;
   }
 
   .planner-toolbar-vnext {
