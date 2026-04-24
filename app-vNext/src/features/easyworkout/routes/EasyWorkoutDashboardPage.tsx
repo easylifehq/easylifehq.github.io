@@ -28,9 +28,11 @@ function getEstimatedMax(weight: number, reps: number) {
 export function EasyWorkoutDashboardPage() {
   const { sessions, routines, isLoading, error, deleteSession } = useEasyWorkout();
   const { isExperimentalFeatureEnabled } = useSettings();
+  const todayKey = getDateKeyOffset(0);
   const weekThreshold = getDateKeyOffset(-6);
   const monthThreshold = getDateKeyOffset(-29);
   const recentSessions = sessions.slice(0, 4);
+  const todaySessions = sessions.filter((session) => session.performedOn === todayKey);
   const weeklySessions = sessions.filter((session) => {
     if (!session.performedOn) return false;
     return session.performedOn >= weekThreshold;
@@ -39,7 +41,6 @@ export function EasyWorkoutDashboardPage() {
     if (!session.performedOn) return false;
     return session.performedOn >= monthThreshold;
   });
-  const streak = weeklySessions.length;
   const weeklyVolume = weeklySessions.reduce((sum, session) => sum + getSessionVolume(session), 0);
   const monthlyVolume = monthlySessions.reduce((sum, session) => sum + getSessionVolume(session), 0);
   const consistencyScore = Math.min(100, Math.round((weeklySessions.length / 4) * 100));
@@ -185,18 +186,18 @@ export function EasyWorkoutDashboardPage() {
           </Link>
         </div>
 
-        <div className="workout-today-strip" aria-label="Workout snapshot">
+        <div className="workout-today-strip" aria-label="Today's workout context">
+          <article>
+            <span>Today</span>
+            <strong>{todaySessions.length} workout{todaySessions.length === 1 ? "" : "s"}</strong>
+          </article>
           <article>
             <span>This week</span>
-            <strong>{weeklySessions.length}</strong>
+            <strong>{weeklySessions.length} session{weeklySessions.length === 1 ? "" : "s"}</strong>
           </article>
           <article>
-            <span>Total sessions</span>
-            <strong>{sessions.length}</strong>
-          </article>
-          <article>
-            <span>Streak</span>
-            <strong>{streak} day{streak === 1 ? "" : "s"}</strong>
+            <span>Latest session</span>
+            <strong>{recentSessions[0]?.performedOn || "Not logged yet"}</strong>
           </article>
         </div>
       </PageSection>
