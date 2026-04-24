@@ -173,7 +173,7 @@ Codex may:
 
 ### Phase 2 - Settings Control Center
 
-- [ ] Settings grouping polish: inspect Settings UI and improve visual grouping, card hierarchy, or spacing so it feels more like an EasyLife control center. Do not change auth behavior, persistence, Firebase, data models, dependencies, or generated output.
+- [x] Settings grouping polish: inspect Settings UI and improve visual grouping, card hierarchy, or spacing so it feels more like an EasyLife control center. Do not change auth behavior, persistence, Firebase, data models, dependencies, or generated output.
 
 - [ ] Settings mobile readability: improve Settings mobile spacing, section rhythm, or control readability. Do not change auth behavior, persistence, Firebase, data models, dependencies, routing, or generated output.
 
