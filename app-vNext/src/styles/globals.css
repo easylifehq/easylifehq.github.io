@@ -1019,6 +1019,20 @@ a {
   max-width: 100%;
 }
 
+.app-shell-vnext .page-hero-vnext,
+.app-shell-vnext .panel-section,
+.app-shell-vnext .loading-card {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--shell-panel-highlight) 86%, transparent), transparent 46%),
+    linear-gradient(180deg, color-mix(in srgb, var(--app-panel-bg, var(--shell-card-bg)) 94%, white 6%), var(--app-panel-bg, var(--shell-card-bg)));
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+  backdrop-filter: blur(18px) saturate(1.08);
+  box-shadow:
+    inset 0 1px 0 var(--shell-panel-highlight),
+    0 1px 0 rgba(255, 255, 255, 0.34),
+    0 24px 58px rgba(24, 35, 38, 0.12);
+}
+
 .page-hero-vnext *,
 .panel-section *,
 .settings-choice-card *,
