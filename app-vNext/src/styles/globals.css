@@ -7119,6 +7119,20 @@ button.calendar-detail-card:disabled {
     flex-wrap: wrap;
   }
 
+  .app-theme-easylist .task-card-dense:not(.completed) {
+    gap: 0.5rem;
+    padding: 0.44rem 0.5rem;
+  }
+
+  .app-theme-easylist .task-card-check {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .app-theme-easylist .task-card-main {
+    min-height: 44px;
+  }
+
   .task-card-actions .primary-button,
   .task-card-actions .ghost-button {
     min-width: 4.9rem;
