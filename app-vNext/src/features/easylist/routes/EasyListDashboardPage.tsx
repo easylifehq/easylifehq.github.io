@@ -267,10 +267,10 @@ export function EasyListDashboardPage() {
           ) : (
             <div className="empty-card-vnext">
               {activeView === "focus"
-                ? "Nothing urgent right now. Add a task or switch to Upcoming or Lists."
+                ? "No urgent tasks right now. Add a task, check Upcoming, or pick a list to keep moving."
                 : activeView === "upcoming"
-                  ? "Nothing upcoming yet. Add a due date when you want it to show here."
-                  : "This list is empty right now."}
+                  ? "No upcoming tasks yet. Add due dates to planned work and they will appear here."
+                  : "This list is empty. Add a task from the Add page or choose another list."}
             </div>
           )}
         </div>

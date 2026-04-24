@@ -185,7 +185,7 @@ Codex may:
 
 - [x] EasyList mobile readability: improve one EasyList mobile readability issue in list items, composer, drawer, or dashboard UI. Preserve behavior, data models, persistence, auth, Firebase, routing, dependencies, and generated output.
 
-- [ ] EasyList empty/low-content polish: improve one EasyList empty state, low-content state, or helper text area. Copy/UI only. Do not change logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
+- [x] EasyList empty/low-content polish: improve one EasyList empty state, low-content state, or helper text area. Copy/UI only. Do not change logic, data models, persistence, auth, Firebase, routing, dependencies, or generated output.
 
 ### Phase 4 - Core App Polish: EasyNotes
 
