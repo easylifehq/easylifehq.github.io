@@ -3,7 +3,7 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyCalendarMarketingPage() {
   return (
     <ProductMarketingPage
-      pageClassName="marketing-page--mobile-preview-lift marketing-page--light-demo-band"
+      pageClassName="marketing-page--mobile-preview-lift marketing-page--easycalendar-preview marketing-page--light-demo-band"
       eyebrow="EasyCalendar"
       heroTitle="See when your life is full and where real work still fits."
       heroDescription="EasyCalendar mixes fixed commitments with flexible task blocks so your schedule becomes something you can actually plan around."

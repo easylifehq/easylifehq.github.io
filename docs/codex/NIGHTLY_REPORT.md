@@ -987,3 +987,12 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 06:51:59
+
+- Task attempted: EasyCalendar mobile preview typography pass: scale down oversized preview title/body/row-label text inside the existing EasyCalendar product hero preview so it reads as compact working app UI instead of a second hero. Do not make previews larger, add behavior, change copy meaning, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

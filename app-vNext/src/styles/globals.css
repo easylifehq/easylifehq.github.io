@@ -7870,6 +7870,46 @@ button.calendar-detail-card:disabled {
     padding: 0.76rem;
   }
 
+  .marketing-page--easycalendar-preview .marketing-hero-preview-header {
+    gap: 0.42rem;
+  }
+
+  .marketing-page--easycalendar-preview .marketing-hero-card h2 {
+    font-size: 0.95rem;
+    line-height: 1.12;
+  }
+
+  .marketing-page--easycalendar-preview .marketing-hero-card p {
+    font-size: 0.76rem;
+    line-height: 1.34;
+  }
+
+  .marketing-page--easycalendar-preview .marketing-hero-preview {
+    gap: 0.3rem;
+  }
+
+  .marketing-page--easycalendar-preview .marketing-hero-preview-row {
+    grid-template-columns: minmax(3.55rem, 0.38fr) minmax(0, 1fr);
+    gap: 0.38rem;
+    padding: 0.34rem 0.42rem;
+  }
+
+  .marketing-page--easycalendar-preview .marketing-hero-preview-row span {
+    font-size: 0.62rem;
+    font-weight: 780;
+  }
+
+  .marketing-page--easycalendar-preview .marketing-hero-preview-row strong {
+    font-size: 0.74rem;
+    line-height: 1.14;
+  }
+
+  .marketing-page--easycalendar-preview .marketing-hero-preview-row strong em {
+    margin-left: 0.32rem;
+    padding: 0.12rem 0.3rem;
+    font-size: 0.56rem;
+  }
+
   .marketing-page--mobile-projects-density .marketing-hero-copy h1 {
     font-size: clamp(1.36rem, 6.1vw, 1.66rem);
   }
