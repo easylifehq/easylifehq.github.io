@@ -4,49 +4,56 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is moving toward a calm personal OS, but the current polish still reads more like disciplined cleanup than a fully designed suite.
+EasyLife is starting to look cohesive and calm, but it still reads more like a polished product brochure than a daily operating system.
 
 ## Mission Fit
-The direction matches the mission: small passes across EasyList, EasyNotes, EasyCalendar, EasyWorkout, Settings, and shared styling are exactly the right surface area for making the product feel connected. The strongest signal is consistency work across headers, empty states, metadata, and card rhythm. The weaker signal is that the work still sounds incremental and page-by-page, so the suite may be improving without yet having a memorable system identity.
+The shared visual language is clearly improving: consistent shell, teal system color, restrained surfaces, repeated hero/product-card pattern, and more intentional copy across EasyList, EasyNotes, EasyCalendar, and EasyWorkout. That supports the connected-suite mission. The problem is emphasis: the inspected screens spend too much first-view real estate selling the products instead of showing the user what needs attention, what is scheduled, what was captured, or what to do next. For EasyLife 5.0, the suite needs to feel operational, not merely branded.
 
 ## Taste Check
-The good: the team is focusing on hierarchy, scanability, calmer copy, shared panels, and mobile polish. That is professional and mission-aligned. The risk: too many tiny "polish" passes can create a beige conference room of UI - tidy, respectable, and utterly forgettable. The product needs stronger shared rhythm and a clearer suite shell, not more isolated microcopy perfume.
+The best parts are the calm palette, confident type scale, strong product naming, tidy buttons, and a recognizable system rhythm across apps. The pages now have a more adult point of view.
+
+The weaker parts are the giant marketing heroes, oversized pills, large empty vertical bands, and repeated "EasyLifeHQ product" cards. It is all very composed, but a little too showroom. The grid background is tasteful in moderation, but across every page it starts to feel like the app is wearing the same expensive sweater to every meeting.
 
 ## Visual Problems To Fix
-- Mobile brand link has a reported small tap target on `/`, which makes the first interaction feel less trustworthy.
-- Shared `globals.css` has been touched repeatedly, so any spacing or card system drift needs visual regression review on desktop and mobile.
-- The design direction appears to rely heavily on cards, panels, helper copy, and metadata tweaks; without stronger hierarchy, pages can still feel like rearranged admin UI.
-- App identity is improving through accents, but the suite needs one coherent visual grammar so each app feels related without becoming identical.
-- Settings must read as a control center, not just another page with grouped labels and descriptions.
-- Calendar, tasks, notes, and workouts need clearer "what matters now" hierarchy, not only cleaner rows.
+- Mobile headers consume too much vertical space before the actual product content appears.
+- The hero cards are too large on mobile, pushing useful content below the fold.
+- Product chips are oversized on mobile and become visual clutter instead of quick scannable metadata.
+- Desktop pages rely on the same two-column hero formula, making each product feel related but not meaningfully distinct.
+- The right-side "EasyLifeHQ product" panel repeats obvious branding without enough functional value.
+- The visual hierarchy is too headline-heavy; page content below the hero feels secondary even when it should carry the workflow.
+- The background grid is visible behind every major surface and risks becoming decorative noise.
+- Settings has a reported route warning on `/settings` in desktop and mobile visual QA, which damages trust even if the screenshot itself is not available here.
+- Confidence is slightly lower for Settings because the supplied screenshot list did not include the actual settings screenshots, only the visual bug report evidence.
 
 ## Strongest Opportunities
-- Turn the suite shell into the hero: shared page headers, consistent section rhythm, and confident navigation should make the product feel like one operating system.
-- Give each main app a restrained identity cue: one accent, one icon treatment, one page-summary pattern, no decorative nonsense.
-- Make mobile feel intentionally designed by tightening tap targets, header spacing, and stacked card density.
-- Standardize empty states into useful action moments with consistent title, short guidance, and one obvious next step.
-- Improve daily-flow scanability with compact summaries: due now, scheduled today, recent notes, next workout, and settings state should feel part of one life dashboard language.
+- Replace some marketing hero weight with operational previews: today, next, captured, scheduled, recently completed.
+- Make each app page share the same shell but expose a distinct workflow pattern, not just a distinct headline.
+- Tighten mobile spacing so users reach actionable content faster.
+- Turn repeated product panels into suite-connection panels that show how this app relates to the others.
+- Use smaller, sharper metadata chips and reserve large rounded pills for primary filters or meaningful states.
+- Give Settings a more control-center feeling with grouped system preferences and quieter explanatory copy.
 
 ## Priority Fix
-Fix the mobile tap-target and suite header rhythm first. The brand/navigation area is the front door; if it feels cramped or fussy on mobile, the entire product feels less mature. Nami should create a small task that increases the mobile brand link target, verifies no header overlap, and checks the same header rhythm across the main suite pages.
+Fix the first-screen hierarchy on mobile. The current mobile experience makes users scroll through a brand block, a large hero, oversized chips, and a secondary product panel before they reach anything that feels like daily-use software. Nami should compress the mobile hero rhythm, reduce chip scale, and bring one concrete workflow cue into the first screen for each app.
 
 ## Designer Handoff
-Keep the calm, professional direction and the small-reviewable task discipline. Change the next batch from "micro-polish everywhere" to "system polish in visible shared patterns": mobile header target size, shared page-title hierarchy, empty-state structure, and app accent consistency. Do not add new sections or features. The user should feel that EasyLife is one composed product with distinct rooms, not five tidy apartments connected by a hallway.
+Keep the calm teal system, the confident typography, and the clean card language. Change the balance from marketing to utility: every main app should still feel like EasyLife, but the first screen should tell the user what they can do today, not just what the product promises. Reduce decorative repetition, make mobile denser without becoming cramped, and convert secondary panels from brand reassurance into connected-suite context. The user should feel, "I can run my day from here," not "I have arrived at a lovely SaaS landing page."
 
 ## What Not To Do Next
-- Do not add more dashboard sections to compensate for weak hierarchy.
-- Do not keep sprinkling copy changes if the layout rhythm is still unresolved.
-- Do not make every app louder with more color; accents should clarify, not decorate.
-- Do not touch backend, auth, persistence, deployment, packages, or architecture.
-- Do not ignore mobile because desktop screenshots look acceptable.
-- Do not turn Settings into a feature showcase; make it a calm control center.
+- Do not add more sections below the current pages to compensate for weak first-screen hierarchy.
+- Do not add more gradients, shadows, or decorative panels.
+- Do not make every app page more identical; shared system does not mean cloned composition.
+- Do not chase new backend, auth, analytics, settings persistence, or routing scope.
+- Do not ignore the `/settings` route warning just because the visible pages look decent.
+- Do not enlarge the chips or buttons further on mobile.
+- Do not solve premium feel by adding more white space; there is already plenty.
 
 ## Next 5 Design Tasks
-- [ ] Fix the mobile brand link tap target on `/`; keep the visual height restrained and verify no header wrapping or overlap on mobile.
-- [ ] Review one shared page-header pattern across EasyList, EasyNotes, EasyCalendar, EasyWorkout, and Settings; align spacing and title/helper hierarchy without changing behavior.
-- [ ] Standardize one empty-state pattern in a main app; keep copy short, include one clear action cue, and avoid adding new functionality.
-- [ ] Tighten one mobile card/list rhythm issue in a main app; improve scanability with spacing or metadata hierarchy only.
-- [ ] Audit app accent usage in one main page; make the accent feel intentional and suite-consistent without introducing new colors broadly.
+- [ ] Mobile hero compression pass: reduce first-screen vertical height on one main app page while preserving readable heading, copy, and primary actions.
+- [ ] Chip scale cleanup: make product chips smaller and more metadata-like on mobile, with no wrapping overlap or tap-target regression.
+- [ ] Suite connection panel rewrite: replace one repeated "EasyLifeHQ product" panel with a functional cross-app cue that explains what this app hands off to another app.
+- [ ] Settings visual QA repair: fix the `/settings` route warning without changing auth, routing architecture, backend, dependencies, or settings behavior.
+- [ ] Desktop differentiation pass: adjust one app landing layout detail so it feels product-specific while keeping the shared EasyLife shell.
 
 ## Stop Or Continue
 continue but fix visual issues first
