@@ -383,7 +383,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 
 - [x] Mobile 390px suite QA patch: inspect one main app page at phone width and fix one visible issue involving tap targets, cramped cards, text wrapping, clipped buttons, or excessive vertical bulk. Do not change behavior, routing, auth, Firebase, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, or root files.
 
-- [ ] App accent consistency pass: inspect one main app's accent treatment and make it feel intentional inside the broader suite without making the page louder or adding unrelated colors. Do not change app logic, persistence, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+- [x] App accent consistency pass: inspect one main app's accent treatment and make it feel intentional inside the broader suite without making the page louder or adding unrelated colors. Do not change app logic, persistence, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
 - [ ] Experiments AI lab fit-and-finish pass: improve one visible AI Lab/experiments mockup surface so it feels like part of EasyLife 5.0 instead of a detached prototype. Fake/mock UI only. Do not make API calls, add backend, use OpenAI keys, touch Firebase/auth, add dependencies, persist production data, edit package files, generated output, deployment config, secrets, or root files.
 
