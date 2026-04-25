@@ -532,7 +532,7 @@ export function TaskComposer({ onSubmit, listName = "Main" }: TaskComposerProps)
             value={brainDump}
             onChange={(event) => setBrainDump(event.target.value)}
             rows={5}
-            placeholder="Ramble here. Example: I need to email my professor tomorrow because the assignment is late, probably study bio for 45 minutes before Thursday, and sometime this weekend I should buy groceries and clean the apartment."
+            placeholder="Drop messy thoughts here. Example: email my professor tomorrow about the late assignment, study bio for 45 minutes before Thursday, and buy groceries this weekend."
           />
         </label>
 
