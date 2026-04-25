@@ -1,9 +1,9 @@
 # Joey Security Review
 
-Generated: 2026-04-24 22:40:00
+Generated: 2026-04-25 02:32:29
 Project: EasyLife
 Branch: codex/mission-EasyLife-20260424-145031
-HEAD: 26ab66c
+HEAD: 929ac1e
 Base branch: main
 
 ## Verdict
@@ -35,6 +35,7 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - docs/codex/SIMON_DESIGN_REVIEW.md
 - docs/codex/TASK_QUEUE.md
 - docs/codex/VISUAL_BUGS.md
+- scripts/codex-guardrails.ps1
 
 ## Sensitive Added Lines
 - None
