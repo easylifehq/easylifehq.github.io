@@ -1,9 +1,9 @@
 # Joey Security Review
 
-Generated: 2026-04-25 04:50:48
+Generated: 2026-04-25 05:18:14
 Project: EasyLife
 Branch: codex/mission-EasyLife-20260424-145031
-HEAD: ecba2e9
+HEAD: 905e9b3
 Base branch: main
 
 ## Verdict
@@ -33,6 +33,7 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyNotesMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyProjectsMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - app-vNext/src/styles/globals.css
