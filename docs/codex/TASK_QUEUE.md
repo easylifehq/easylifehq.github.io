@@ -377,7 +377,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 
 - [x] EasyCalendar scanability pass: improve one EasyCalendar day/week/month area where event chips, agenda rows, headers, or empty time blocks look cramped, noisy, or hard to scan. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
-- [ ] Settings control-center layout pass: improve one Settings group, card, option row, or helper section so the page reads like the command center for the suite. Do not change auth/account behavior, persistence, data models, routing, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+- [x] Settings control-center layout pass: improve one Settings group, card, option row, or helper section so the page reads like the command center for the suite. Do not change auth/account behavior, persistence, data models, routing, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
 - [ ] Cross-app empty-state design pass: standardize one existing empty/low-content state in EasyList, EasyNotes, EasyCalendar, EasyWorkout, or Settings with cleaner hierarchy, short useful guidance, and one obvious existing action cue. Do not add features, change logic, routing, persistence, data models, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 

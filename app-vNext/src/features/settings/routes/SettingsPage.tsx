@@ -1154,6 +1154,22 @@ export function SettingsPage() {
             ))}
           </div>
 
+          <aside className="settings-command-note" aria-label="Suite defaults guidance">
+            <div>
+              <span className="settings-card-topline">Suite command map</span>
+              <strong>Shape the defaults for capture, planning, and handoffs from one place.</strong>
+              <p>
+                These controls tune how each app starts its work while keeping the underlying tools and saved data
+                unchanged.
+              </p>
+            </div>
+            <div className="settings-command-tags" aria-label="Covered settings areas">
+              <span>Capture</span>
+              <span>Plan</span>
+              <span>Route</span>
+            </div>
+          </aside>
+
           <div className="settings-app-preference-grid">
             <section className="settings-app-preference-card">
               <div className="panel-header">

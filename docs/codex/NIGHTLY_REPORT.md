@@ -686,3 +686,12 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 03:49:03
+
+- Task attempted: Settings control-center layout pass: improve one Settings group, card, option row, or helper section so the page reads like the command center for the suite. Do not change auth/account behavior, persistence, data models, routing, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/settings/routes/SettingsPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
