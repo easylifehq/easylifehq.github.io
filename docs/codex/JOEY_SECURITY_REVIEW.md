@@ -1,9 +1,9 @@
 # Joey Security Review
 
-Generated: 2026-04-25 02:47:30
+Generated: 2026-04-25 04:20:19
 Project: EasyLife
 Branch: codex/mission-EasyLife-20260424-145031
-HEAD: 5622c70
+HEAD: e2d0281
 Base branch: main
 
 ## Verdict
@@ -16,9 +16,11 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - No blocking security issues detected by automated review.
 
 ## Changed Files
+- app-vNext/src/app/router/index.tsx
 - app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx
 - app-vNext/src/features/easycalendar/routes/EasyCalendarMonthPage.tsx
 - app-vNext/src/features/easylist/components/TaskCard.tsx
+- app-vNext/src/features/easylist/components/TaskComposer.tsx
 - app-vNext/src/features/easylist/lib/taskUtils.ts
 - app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx
 - app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx
@@ -26,6 +28,8 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutRoutinesPage.tsx
 - app-vNext/src/features/experiments/AiCommandCenter.tsx
+- app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - app-vNext/src/styles/globals.css
 - docs/codex/CHECKPOINT_REVIEW.md
@@ -46,5 +50,6 @@ continue
 
 ## Notes
 - Joey is a guardrail reviewer, not a full penetration test.
+- Local storage is allowed for harmless local-only UI state, but still blocked when it appears to store auth, payment, token, credential, or secret data.
 - A GREEN result means no obvious unattended security regression was detected.
 - Human review is still required before merge.
