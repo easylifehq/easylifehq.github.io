@@ -364,8 +364,8 @@ export function EasyNotesLibraryPage() {
               <strong>{hasFilters ? "No notes match this view" : "No notes yet"}</strong>
               <p className="helper-copy">
                 {hasFilters
-                  ? "Try a different search or folder, or clear the filters."
-                  : "Capture a thought, meeting note, or rough draft. Your newest notes will collect here."}
+                  ? "Try a different search or folder, or clear filters to return to your full EasyNotes workspace."
+                  : "Capture a thought, meeting note, or rough draft here. Your latest notes will be ready to review when you return."}
               </p>
             </div>
           ) : null}

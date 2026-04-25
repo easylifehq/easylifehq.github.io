@@ -320,5 +320,5 @@ Required final state:
 
 ## Checkpoint Planner Tasks 2026-04-24 22:16:09
 
-- [ ] EasyNotes empty-state follow-up polish: improve one small empty-state, note-list helper-copy, or metadata hierarchy detail so capture and review feel more connected to the suite. Do not change note logic, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, `globals.css`, or shared architecture.
+- [x] EasyNotes empty-state follow-up polish: improve one small empty-state, note-list helper-copy, or metadata hierarchy detail so capture and review feel more connected to the suite. Do not change note logic, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, `globals.css`, or shared architecture.
 - [ ] Settings control panel microcopy polish: improve one existing Settings section label, helper description, or panel hierarchy detail so customization reads like a calm suite control center. Do not change auth/account behavior, settings persistence, data models, routing, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, `globals.css`, or shared architecture.
