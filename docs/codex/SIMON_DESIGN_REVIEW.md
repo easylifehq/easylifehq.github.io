@@ -4,55 +4,54 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is finally starting to look like one calm product family, but the marketing pages still wear too much padding and repetition like a nervous blazer.
+EasyLife is finally starting to look like one product, but the marketing shell is still wearing too much padding and too many pills like it got dressed in a component library.
 
 ## Mission Fit
-The current direction matches the mission better than earlier batches: the shared navigation, consistent product hero pattern, restrained palette, and cross-app operational preview all support the idea of EasyLife as a connected personal operating system. The issue is that the suite now feels coherent at the surface level, but not yet especially useful or premium in the first viewport. The design says "organized," but it does not yet say "indispensable."
+The direction fits the mission: the product pages now share a calmer system language, the previews are more specific, and the suite feels more connected across EasyList, EasyNotes, EasyCalendar, and EasyWorkout. The problem is not concept anymore. The problem is discipline: hierarchy, density, and first-viewport rhythm still need a firmer hand, especially on mobile.
 
 ## Taste Check
-The strongest move is the quiet professional palette, the softened grid background, and the operational preview replacing decorative product-card fluff. The typography has confidence, and the repeated EasyLifeHQ identity is clear.
+The teal accent, quiet grid, restrained cards, and operational preview panels are moving EasyLife toward a professional personal operating system. The best parts feel calm, practical, and product-aware.
 
-What is off: the pages are too templated across products, the mobile hero still eats a lot of vertical space, and the pills are visually heavier than their informational value deserves. The right-side preview is useful in concept, but the same row pattern appears everywhere, so it starts to feel like placeholder SaaS dressing instead of a real personal operating system. Less museum label, more daily command surface.
+What still feels off: the layout is too box-dependent, the mobile hero has oversized typography and generous gaps, and the support pills are still louder than their value. The desktop pages are cleaner, but the repeated white-card rhythm risks feeling like polite SaaS wallpaper.
 
 ## Visual Problems To Fix
-- Mobile has a large blank gap between the brand nav and the hero card, which delays meaningful content before the user sees the actual product promise.
-- Mobile navigation collapses to branding only, removing visible product movement or action cues from the first viewport.
-- Hero cards are still too tall on 390px screens; the preview module starts below the primary copy and pushes feature content far down the page.
-- Support pills remain too loud and bulky relative to the main CTA and body copy, especially on mobile where they become a second headline cluster.
-- The cross-app preview rows are identical across product pages, which weakens each product's specific identity.
-- Desktop pages look orderly but slightly over-contained: nav card, hero card, preview card, feature card. The rhythm is clean, but very boxed.
-- The grid background is elegant at desktop scale but can feel like visual scaffolding on mobile because it shows through large empty vertical zones.
-- Product heroes share the same composition so closely that EasyList, EasyNotes, EasyCalendar, and EasyWorkout risk feeling like copy swaps rather than distinct parts of one suite.
+- Mobile header consumes too much first-viewport height for the utility it provides.
+- There is a large empty grid gap between the mobile header and hero card.
+- Mobile hero headlines are heavy enough to dominate the page before the product value lands.
+- Support pills wrap into bulky stacks and compete with the primary CTA.
+- Hero preview cards on mobile feel too large and start too late, forcing the actual product proof below the fold.
+- Desktop section rhythm still reads as stacked panels rather than a composed product page.
+- The shared product previews are improved, but the row styling still feels more like mock data than lived-in interface.
+- Card borders and pale teal fills are used so often that contrast and hierarchy flatten.
 
 ## Strongest Opportunities
-- Make each hero preview show one product-specific daily moment instead of the same generic EasyHQ row stack everywhere.
-- Tighten mobile first viewport rhythm so headline, CTA, and at least the top of the operational preview all appear sooner.
-- Turn support pills into quieter metadata, not visual buttons pretending to be useful.
-- Add subtle product-specific accent behavior within the shared system so the suite feels unified without being cloned.
-- Make feature cards less generic by using sharper labels, denser scan patterns, and stronger contrast between headline, body, and category text.
-- Reduce stacked-card feeling on desktop by letting some sections breathe as full-width bands instead of every area reading as a white container.
+- Tighten mobile first-view rhythm so the user sees headline, CTA, and a hint of product proof without scrolling a novella.
+- Make the hero preview feel more like a real EasyLife surface: denser rows, clearer status contrast, and fewer decorative containers.
+- Reduce pill prominence by treating them as quiet metadata, not secondary CTAs.
+- Break the desktop "card, card, card" rhythm with one more open, editorial product section using the existing content.
+- Strengthen suite identity through repeated functional patterns, not repeated rounded boxes.
 
 ## Priority Fix
-Fix the mobile first viewport hierarchy. The next implementer should reduce the vertical dead space above the hero, compact the hero padding, quiet the support pills, and bring the operational preview higher without adding new sections. At 390px, the user should see brand, product promise, primary action, and a hint of real product utility before the page becomes a scroll tax.
+Fix mobile first-viewport density across the shared product marketing shell. The header, grid gap, hero padding, tag stack, and preview card together make the mobile page feel slower than the product promise. Nami should make one focused mobile pass that reduces vertical dead space, lowers tag visual weight, and brings the product preview higher without changing copy, routing, or behavior.
 
 ## Designer Handoff
-Keep the calm palette, the shared product shell, the confident type scale, and the connected-suite language. Change the density and specificity: mobile should feel faster, desktop should feel less boxed, and each product preview should show a distinct use case from that product while still referencing the suite. Treat the UI like a premium personal operating system, not a brochure template. The user should feel, within one screen, "this will help me run my day," not "this is another pleasant productivity landing page."
+Keep the calm teal system, the operational preview concept, and the shared product-page structure. Change the density and hierarchy: mobile should feel like a sharp product page, not a padded brochure. Reduce top whitespace, compress support tags, make CTAs remain obvious, and let the preview appear earlier as proof. Desktop should keep its polished shell but needs less boxed repetition below the hero. The user should feel "this is organized and ready to use," not "this is a nice template."
 
 ## What Not To Do Next
-- Do not add more marketing sections to compensate for weak first-screen hierarchy.
-- Do not make the palette louder or add decorative gradients to create "personality."
-- Do not add more pills, badges, or micro-labels.
-- Do not redesign the whole product shell.
-- Do not touch backend, auth, routing behavior, persistence, package files, or deployment scope.
-- Do not ignore mobile because the desktop screenshots look presentable.
-- Do not make every product page share the exact same preview content.
+- Do not add more sections to solve a rhythm problem.
+- Do not add more colors, gradients, badges, or decorative UI.
+- Do not redesign the whole marketing system.
+- Do not touch backend, auth, routing behavior, packages, or deployment.
+- Do not ignore mobile because the desktop screenshots look acceptable.
+- Do not make every product page share the exact same preview pattern.
+- Do not make the pills bigger, brighter, or more numerous.
 
 ## Next 5 Design Tasks
-- [ ] Mobile hero density pass: reduce top spacing and hero padding on one product page at 390px so the operational preview begins sooner; preserve copy meaning and existing behavior.
-- [ ] Support pill hierarchy pass: make product hero support tags visually secondary to CTAs and body copy; keep tap targets usable and avoid adding colors.
-- [ ] Product preview specificity pass: update one hero preview so it reflects that product's actual daily use case instead of reusing the generic suite row stack; static UI only.
-- [ ] Desktop boxed-layout relief pass: adjust one marketing section so the page rhythm feels less like stacked cards while preserving the shared shell and current content.
-- [ ] Mobile nav utility pass: add or expose one safe existing action cue in the mobile header area without changing routing behavior or adding new navigation complexity.
+- [ ] Mobile product shell density pass: reduce header-to-hero whitespace and hero vertical padding at 390px while preserving tap targets and existing copy.
+- [ ] Hero tag hierarchy pass: make support pills visually quieter across product pages without adding colors or changing CTA styling.
+- [ ] Mobile preview lift pass: bring the hero preview higher on one product page by tightening surrounding spacing, not by deleting content.
+- [ ] Desktop boxed-rhythm pass: adjust one below-hero product section so it feels less like another white card while preserving the shared shell.
+- [ ] Product preview realism pass: refine one hero preview row stack with clearer status hierarchy and denser spacing, using static existing content only.
 
 ## Stop Or Continue
 continue but fix visual issues first
