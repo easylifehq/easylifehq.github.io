@@ -7470,6 +7470,35 @@ button.calendar-detail-card:disabled {
     padding: 0.95rem;
   }
 
+  .marketing-page--mobile-dense-hero .marketing-hero {
+    gap: 0.72rem;
+    padding: 0.72rem;
+  }
+
+  .marketing-page--mobile-dense-hero .marketing-hero-copy,
+  .marketing-page--mobile-dense-hero .marketing-hero-card {
+    gap: 0.62rem;
+  }
+
+  .marketing-page--mobile-dense-hero .marketing-hero-copy h1 {
+    font-size: clamp(1.34rem, 6vw, 1.64rem);
+    line-height: 1.04;
+  }
+
+  .marketing-page--mobile-dense-hero .marketing-hero .marketing-hero-actions,
+  .marketing-page--mobile-dense-hero .marketing-hero .marketing-points,
+  .marketing-page--mobile-dense-hero .marketing-hero .marketing-card-metrics {
+    gap: 0.38rem;
+  }
+
+  .marketing-page--mobile-dense-hero .marketing-hero .info-pill {
+    padding: 0.32rem 0.48rem;
+  }
+
+  .marketing-page--mobile-dense-hero .marketing-hero-card {
+    padding: 0.72rem;
+  }
+
   .planner-grid-vnext.week-view,
   .planner-grid-vnext.two-week-view,
   .planner-grid-vnext.month-view {

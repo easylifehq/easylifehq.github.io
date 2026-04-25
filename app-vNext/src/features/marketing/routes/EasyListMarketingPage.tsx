@@ -3,6 +3,7 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyListMarketingPage() {
   return (
     <ProductMarketingPage
+      pageClassName="marketing-page--mobile-dense-hero"
       eyebrow="EasyList"
       heroTitle="Clear the annoying stuff. Protect your real time."
       heroDescription="EasyList is the task system for all the small life and admin things that clutter your brain before bigger work can happen."

@@ -7,6 +7,7 @@ type FeatureCard = {
 };
 
 type ProductMarketingPageProps = {
+  pageClassName?: string;
   eyebrow: string;
   heroTitle: string;
   heroDescription: string;
@@ -24,6 +25,7 @@ type ProductMarketingPageProps = {
 };
 
 export function ProductMarketingPage({
+  pageClassName,
   eyebrow,
   heroTitle,
   heroDescription,
@@ -39,8 +41,10 @@ export function ProductMarketingPage({
   ctaBody,
   demoPath = [],
 }: ProductMarketingPageProps) {
+  const pageClass = pageClassName ? `marketing-page ${pageClassName}` : "marketing-page";
+
   return (
-    <main className="marketing-page">
+    <main className={pageClass}>
       <section id="overview" className="marketing-hero">
         <div className="marketing-hero-copy">
           <p className="eyebrow">{eyebrow}</p>

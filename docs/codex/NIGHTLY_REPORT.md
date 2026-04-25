@@ -737,3 +737,13 @@
 - Files changed:
 - app-vNext/src/features/easylist/components/TaskComposer.tsx
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:08:07
+
+- Task attempted: Mobile hero density repair: tighten the first viewport on one public product page at 390px by reducing hero padding, headline bulk, and support-tag spacing so meaningful content appears sooner. Do not change copy meaning, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
