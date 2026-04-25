@@ -678,3 +678,11 @@
 - Files changed:
 - app-vNext/src/app/router/index.tsx
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 03:46:16
+
+- Task attempted: EasyCalendar scanability pass: improve one EasyCalendar day/week/month area where event chips, agenda rows, headers, or empty time blocks look cramped, noisy, or hard to scan. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

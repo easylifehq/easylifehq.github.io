@@ -4338,12 +4338,15 @@ button.calendar-detail-card:disabled {
 }
 
 .calendar-empty-hour-button {
-  width: fit-content;
-  min-height: 32px;
-  padding: 0.25rem 0.55rem;
-  border: 1px solid transparent;
+  width: 100%;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.34rem 0.65rem;
+  border: 1px dashed color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 78%, transparent);
   border-radius: 8px;
-  background: transparent;
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, var(--shell-card-bg)) 48%, transparent);
   font: inherit;
   cursor: pointer;
 }
@@ -4351,7 +4354,7 @@ button.calendar-detail-card:disabled {
 .calendar-empty-hour-button:hover,
 .calendar-empty-hour-button:focus-visible {
   color: var(--ui-text-primary, var(--shell-page-text));
-  border-color: var(--ui-border-subtle, var(--shell-card-border));
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 34%, var(--ui-border-subtle));
   background: var(--ui-bg-card-elevated, var(--shell-card-bg));
 }
 
