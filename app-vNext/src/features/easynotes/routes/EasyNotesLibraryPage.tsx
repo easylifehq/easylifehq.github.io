@@ -152,6 +152,7 @@ export function EasyNotesLibraryPage() {
     <PageSection
       eyebrow="EasyNotes"
       title="Notes"
+      description="Capture, resume, and organize writing from one calm workspace."
     >
         <div className="notes-command-strip" aria-label="Notes actions">
           <button type="button" className="notes-command-button" onClick={() => void handleCreateNote()} aria-label="Add note">
