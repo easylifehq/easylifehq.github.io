@@ -344,3 +344,43 @@ Required final state:
 ## Checkpoint Planner Tasks 2026-04-25 01:14:42
 
 - [x] Mobile card/list rhythm pass: tighten one mobile spacing or metadata hierarchy issue in EasyList, EasyNotes, EasyCalendar, or EasyWorkout so scanability improves without changing behavior. Do not touch `globals.css`, auth, Firebase, backend, routing behavior, persistence, data models, dependencies, generated output, package files, root config files, docs report files, deployment config, secrets, or shared architecture.
+
+## Simon Detail Queue 2026-04-25 - Premium Suite Rescue
+
+Goal: Make EasyLife feel less clunky, less student-made, and more like a calm high-tech personal operating system. Simon should be treated as the design gate for this queue: visible awkwardness, cramped controls, weak hierarchy, and generic surfaces are real product bugs.
+
+Execution rule: implement one selected task at a time. Keep each change reviewable. PowerShell owns builds, reports, checkpoint review, task completion, and commits.
+
+- [ ] Shared shell premium audit: inspect `AuthenticatedLayout`, `AppHeader`, `AppWorkspaceHeader`, `ProductsMenu`, and the main page containers, then make one focused improvement that makes navigation, page width, or top-level hierarchy feel more Apple-level and intentional. Do not change routing behavior, auth, Firebase, persistence, data models, dependencies, package files, generated output, deployment config, secrets, old-site, or root static output.
+
+- [ ] Global surface system pass: inspect `app-vNext/src/styles/globals.css` for heavy borders, noisy shadows, awkward card spacing, or clunky form surfaces, then make one narrow shared CSS improvement that improves premium feel across multiple pages without breaking layout. Do not change app logic, auth, Firebase, routing, persistence, data models, dependencies, package files, generated output, deployment config, or root files.
+
+- [ ] Page header rhythm pass: inspect one shared page-header/title/helper pattern across EasyList, EasyNotes, EasyCalendar, EasyWorkout, and Settings, then align spacing, type scale, and helper hierarchy so pages feel like one suite. Do not add new sections, change behavior, routing, auth, Firebase, persistence, data models, dependencies, package files, generated output, docs report files, or root config.
+
+- [ ] Theme personality audit: inspect existing theme/Candy Mode/customization styling and make one existing theme feel more customized and fun while staying professional, accessible, and consistent with EasyLife 5.0. Prefer existing CSS tokens or theme hooks. Do not add dependencies, change Settings persistence, alter auth/Firebase/backend code, edit package files, generated output, deployment config, secrets, or root files.
+
+- [ ] Theme contrast and focus pass: improve one theme's contrast, focus rings, surface depth, or accent usage so it feels deliberately designed instead of lightly recolored. Do not add new theme settings, change persistence, touch auth, Firebase, backend, dependencies, package files, generated output, deployment config, secrets, or root files.
+
+- [ ] Settings customization control polish: improve the visual hierarchy around existing theme/settings controls so Settings feels like a real control center, not a form dump. Do not add settings behavior, change account/auth behavior, persistence, data models, routing, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+
+- [ ] EasyWorkout exercise form rescue: inspect the workout log/exercise/set input UI and fix one obvious clunky layout issue such as overflowing set rows, cramped inputs, weak labels, or crowded action buttons on desktop or mobile. Preserve workout behavior, persistence, data shapes, auth, Firebase, routing, dependencies, package files, generated output, docs report files, and root config.
+
+- [ ] EasyWorkout mobile log polish: make one focused mobile improvement to workout logging so exercise notes, set rows, add/remove controls, and save actions feel composed and tappable at narrow widths. Do not change workout logic, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+
+- [ ] EasyList premium triage pass: improve one visible EasyList task card, composer, dashboard, or Today view hierarchy so daily triage feels cleaner, faster, and more high-tech. Do not change task logic, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+
+- [ ] EasyNotes writing surface pass: improve one EasyNotes editor/library surface so writing and reviewing notes feels calmer, sharper, and less boxy. Do not change note logic, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+
+- [ ] EasyCalendar scanability pass: improve one EasyCalendar day/week/month area where event chips, agenda rows, headers, or empty time blocks look cramped, noisy, or hard to scan. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+
+- [ ] Settings control-center layout pass: improve one Settings group, card, option row, or helper section so the page reads like the command center for the suite. Do not change auth/account behavior, persistence, data models, routing, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+
+- [ ] Cross-app empty-state design pass: standardize one existing empty/low-content state in EasyList, EasyNotes, EasyCalendar, EasyWorkout, or Settings with cleaner hierarchy, short useful guidance, and one obvious existing action cue. Do not add features, change logic, routing, persistence, data models, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+
+- [ ] Mobile 390px suite QA patch: inspect one main app page at phone width and fix one visible issue involving tap targets, cramped cards, text wrapping, clipped buttons, or excessive vertical bulk. Do not change behavior, routing, auth, Firebase, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, or root files.
+
+- [ ] App accent consistency pass: inspect one main app's accent treatment and make it feel intentional inside the broader suite without making the page louder or adding unrelated colors. Do not change app logic, persistence, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+
+- [ ] Experiments AI lab fit-and-finish pass: improve one visible AI Lab/experiments mockup surface so it feels like part of EasyLife 5.0 instead of a detached prototype. Fake/mock UI only. Do not make API calls, add backend, use OpenAI keys, touch Firebase/auth, add dependencies, persist production data, edit package files, generated output, deployment config, secrets, or root files.
+
+- [ ] Simon cleanup pass: after the above visual work, inspect the changed areas and make one final small CSS or copy cleanup that removes a rough edge Simon would immediately notice. Do not broaden scope, add features, touch auth/Firebase/backend/dependencies/package files/generated output/deployment config/secrets/root files, or edit report files.
