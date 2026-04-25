@@ -4,25 +4,25 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the mission with steady polish across marketing pages, shared styling, mobile density, suite previews, and app-specific hierarchy. Work remains aligned with a connected, professional personal operating system.
+The branch is moving toward the mission with small, reviewable polish across product marketing, shared navigation, main app hierarchy, and suite consistency. Recent work improves the connected, professional feel without touching forbidden backend/auth/deploy scope.
 
 ## Safety Review
-No forbidden files found. Risk is moderate only because `app-vNext/src/styles/globals.css` and shared marketing components were touched repeatedly, increasing shared visual regression risk.
+No forbidden files found. Risk is mainly visual: repeated shared CSS and marketing-shell changes could create responsive regressions, so Simon’s visual concerns should gate the next work.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: 12 recent tasks completed, focused on marketing hero density, product preview specificity, mobile header compactness, and contrast hierarchy
-- files changed: 29 files changed since base, mainly `app-vNext/src` UI/style files and `docs/codex` reports
-- commits added: latest HEAD `8170560`, with many checkpoint, visual, Simon, and Joey review commits since base
-- queue status: unchecked task count is 0; working tree is clean
+- completed tasks in this checkpoint window: 12 recent tasks completed, focused on marketing header polish, product hero previews, mobile density, feature-card hierarchy, and contrast/spacing cleanup
+- files changed: app-vNext frontend UI/CSS files plus codex review/report/task docs and guardrails script
+- commits added: latest HEAD is `a12d604` with multiple checkpoint/planner/review commits since base
+- queue status: 0 unchecked tasks remaining
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN; high 0, medium 0, low 0, so it does not block next work
-- Simon design review: YELLOW; should influence next tasks toward visual repair and shared CSS inspection
-- Joey security review: GREEN; no security blocker for continuation
-- next-task influence: Simon should guide the next batch before adding more mission-forward polish
+- visual bug report: GREEN signal; high 0, medium 0, low 0, no visual bugs currently reported
+- Simon design review: YELLOW; continue but fix visual issues first, should influence next tasks
+- Joey security review: GREEN; no security blocker, should not slow next tasks
+- next-task influence: prioritize Simon-led visual repair before more mission-forward expansion
 
 ## Recommended Next Step
 patch first
@@ -30,10 +30,10 @@ patch first
 ## Next Batch Guidance
 - recommended next batch size: 2
 - next work mode: repair-first
-- reason: Simon is still YELLOW and shared CSS has broad visual impact, so the next batch should stay small and verify the most likely regression surfaces before continuing broader polish.
+- Simon is YELLOW and explicitly asks to continue only after visual issues are addressed, while the build/security state is clean enough for a small focused repair batch.
 
 ## Notes For Human Reviewer
-- Build passed and tree is clean.
-- No unchecked queue items remain.
-- Review shared marketing header, product heroes, and `globals.css` on mobile and desktop.
-- No auth, Firebase, backend, package, deploy, or generated-output files were changed.
+- Working tree is clean.
+- Build passed.
+- No unchecked tasks remain.
+- Main residual risk is accumulated shared CSS/marketing visual polish needing human spot-check on desktop and 390px mobile.
