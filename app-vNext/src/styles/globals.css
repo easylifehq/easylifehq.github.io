@@ -1103,12 +1103,19 @@ a {
 }
 
 .panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
   margin-bottom: 0.85rem;
+}
+
+.panel-header h2 {
+  margin: 0;
 }
 
 .page-section-description {
   max-width: 62ch;
-  margin-bottom: 0;
+  margin: 0;
   font-size: 0.94rem;
 }
 
@@ -4987,7 +4994,7 @@ button.calendar-detail-card:disabled {
 }
 
 .settings-app-preference-card .panel-header h3 {
-  margin: 0.25rem 0 0.2rem;
+  margin: 0;
 }
 
 .settings-inline-check {
