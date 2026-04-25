@@ -595,3 +595,11 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 02:22:35
+
+- Task attempted: Global surface system pass: inspect `app-vNext/src/styles/globals.css` for heavy borders, noisy shadows, awkward card spacing, or clunky form surfaces, then make one narrow shared CSS improvement that improves premium feel across multiple pages without breaking layout. Do not change app logic, auth, Firebase, routing, persistence, data models, dependencies, package files, generated output, deployment config, or root files.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
