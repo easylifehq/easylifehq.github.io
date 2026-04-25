@@ -7494,6 +7494,28 @@ button.calendar-detail-card:disabled {
     text-transform: uppercase;
   }
 
+  .app-theme-easyworkout .workout-exercise-notes input,
+  .app-theme-easyworkout .workout-set-row input {
+    min-height: 44px;
+  }
+
+  .app-theme-easyworkout .workout-set-row {
+    padding: 0.62rem;
+  }
+
+  .app-theme-easyworkout .workout-exercise-actions,
+  .app-theme-easyworkout .workout-log-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .app-theme-easyworkout .workout-exercise-actions button,
+  .app-theme-easyworkout .workout-log-actions button {
+    width: 100%;
+    min-height: 44px;
+  }
+
   .task-row-grid-routine {
     grid-template-columns: 1fr;
   }

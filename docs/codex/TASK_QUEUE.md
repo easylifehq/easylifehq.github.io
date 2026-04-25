@@ -365,7 +365,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 
 - [x] EasyWorkout exercise form rescue: inspect the workout log/exercise/set input UI and fix one obvious clunky layout issue such as overflowing set rows, cramped inputs, weak labels, or crowded action buttons on desktop or mobile. Preserve workout behavior, persistence, data shapes, auth, Firebase, routing, dependencies, package files, generated output, docs report files, and root config.
 
-- [ ] EasyWorkout mobile log polish: make one focused mobile improvement to workout logging so exercise notes, set rows, add/remove controls, and save actions feel composed and tappable at narrow widths. Do not change workout logic, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+- [x] EasyWorkout mobile log polish: make one focused mobile improvement to workout logging so exercise notes, set rows, add/remove controls, and save actions feel composed and tappable at narrow widths. Do not change workout logic, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
 - [ ] EasyList premium triage pass: improve one visible EasyList task card, composer, dashboard, or Today view hierarchy so daily triage feels cleaner, faster, and more high-tech. Do not change task logic, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 

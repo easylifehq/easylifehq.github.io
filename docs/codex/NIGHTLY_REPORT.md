@@ -645,3 +645,12 @@
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 02:46:09
+
+- Task attempted: EasyWorkout mobile log polish: make one focused mobile improvement to workout logging so exercise notes, set rows, add/remove controls, and save actions feel composed and tappable at narrow widths. Do not change workout logic, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

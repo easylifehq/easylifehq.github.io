@@ -451,7 +451,7 @@ export function EasyWorkoutLogPage() {
                     <input value={exercise.muscleGroup} onChange={(event) => updateExerciseLog(exerciseIndex, { muscleGroup: event.target.value })} placeholder="Back" />
                   </label>
                   ) : null}
-                  <label className={`field-stack${isFocusedWorkoutMode ? "" : " field-stack-wide"}`}>
+                  <label className={`field-stack workout-exercise-notes${isFocusedWorkoutMode ? "" : " field-stack-wide"}`}>
                     <span>Exercise notes</span>
                     <input value={exercise.notes} onChange={(event) => updateExerciseLog(exerciseIndex, { notes: event.target.value })} placeholder="Vertical grip, slow eccentric, machine 4, etc." />
                   </label>
@@ -482,7 +482,7 @@ export function EasyWorkoutLogPage() {
                   ))}
                 </div>
 
-                <div className="task-composer-actions">
+                <div className="task-composer-actions workout-exercise-actions">
                   <button type="button" className="button-secondary" onClick={() => updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, emptySet()] })}>
                     Add set
                   </button>
@@ -507,7 +507,7 @@ export function EasyWorkoutLogPage() {
           })}
         </div>
 
-        <div className="task-composer-actions">
+        <div className="task-composer-actions workout-log-actions">
           <button type="button" className="button-secondary" onClick={() => addExerciseBoxes()}>
             Add exercise
           </button>
