@@ -351,7 +351,7 @@ Goal: Make EasyLife feel less clunky, less student-made, and more like a calm hi
 
 Execution rule: implement one selected task at a time. Keep each change reviewable. PowerShell owns builds, reports, checkpoint review, task completion, and commits.
 
-- [ ] Shared shell premium audit: inspect `AuthenticatedLayout`, `AppHeader`, `AppWorkspaceHeader`, `ProductsMenu`, and the main page containers, then make one focused improvement that makes navigation, page width, or top-level hierarchy feel more Apple-level and intentional. Do not change routing behavior, auth, Firebase, persistence, data models, dependencies, package files, generated output, deployment config, secrets, old-site, or root static output.
+- [x] Shared shell premium audit: inspect `AuthenticatedLayout`, `AppHeader`, `AppWorkspaceHeader`, `ProductsMenu`, and the main page containers, then make one focused improvement that makes navigation, page width, or top-level hierarchy feel more Apple-level and intentional. Do not change routing behavior, auth, Firebase, persistence, data models, dependencies, package files, generated output, deployment config, secrets, old-site, or root static output.
 
 - [ ] Global surface system pass: inspect `app-vNext/src/styles/globals.css` for heavy borders, noisy shadows, awkward card spacing, or clunky form surfaces, then make one narrow shared CSS improvement that improves premium feel across multiple pages without breaking layout. Do not change app logic, auth, Firebase, routing, persistence, data models, dependencies, package files, generated output, deployment config, or root files.
 
