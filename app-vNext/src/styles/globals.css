@@ -1077,6 +1077,29 @@ a {
   .marketing-page--light-demo-band #demo .marketing-demo-step + .marketing-demo-step {
     border-top: 1px solid var(--ui-border-subtle, var(--shell-card-border));
   }
+
+  .marketing-page--grouped-workflow #workflow {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  .marketing-page--grouped-workflow #workflow .marketing-card-grid {
+    gap: 0;
+    padding-block: 0.35rem;
+    border-block: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  }
+
+  .marketing-page--grouped-workflow #workflow .marketing-card {
+    padding: 0.4rem 1rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .marketing-page--grouped-workflow #workflow .marketing-card + .marketing-card {
+    border-left: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  }
 }
 
 .site-footer {
