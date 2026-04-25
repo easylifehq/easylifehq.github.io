@@ -52,11 +52,15 @@ export function EasyCalendarMonthPage() {
 
   return (
     <>
-      <PageSection eyebrow="EasyCalendar" title={new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(viewedMonth)}>
+      <PageSection
+        eyebrow="Calendar"
+        title={new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(viewedMonth)}
+        description="Scan the month, then open a day when you are ready to plan the details."
+      >
         {error ? <p className="error-copy">{error}</p> : null}
         {isLoading ? <p className="helper-copy">Loading your month...</p> : null}
         <div className="calendar-month-command">
-          <p>Tap any date to zoom into the day. Events, deadlines, and task blocks stay visually separate so the month is easier to scan.</p>
+          <p>Events, deadlines, and task blocks stay separated for a faster planning read.</p>
           <div className="calendar-inline-actions">
             <button
               type="button"
