@@ -6205,6 +6205,8 @@ button.calendar-detail-card:disabled {
 }
 
 .workout-set-row {
+  min-width: 0;
+  width: 100%;
   padding: 0.45rem;
 }
 

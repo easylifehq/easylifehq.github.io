@@ -459,7 +459,7 @@ export function EasyWorkoutLogPage() {
 
                 <div className="task-list-vnext">
                   {exercise.sets.map((set, setIndex) => (
-                    <div key={set.localId} className={`task-row-card${isFocusedWorkoutMode ? " gym-set-row workout-set-row" : ""}`}>
+                    <div key={set.localId} className={`task-row-card workout-set-row${isFocusedWorkoutMode ? " gym-set-row" : ""}`}>
                       <div className="task-row-grid task-row-grid-workout">
                         <label className="field-stack task-row-field">
                           <span>Set</span>

@@ -636,3 +636,12 @@
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 02:42:22
+
+- Task attempted: EasyWorkout exercise form rescue: inspect the workout log/exercise/set input UI and fix one obvious clunky layout issue such as overflowing set rows, cramped inputs, weak labels, or crowded action buttons on desktop or mobile. Preserve workout behavior, persistence, data shapes, auth, Firebase, routing, dependencies, package files, generated output, docs report files, and root config.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
