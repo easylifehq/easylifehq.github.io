@@ -800,3 +800,11 @@
 - app-vNext/src/features/marketing/routes/EasyNotesMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:37:07
+
+- Task attempted: Product preview specificity follow-up: update one remaining product marketing hero preview so it shows that product’s own daily use case instead of reusing the generic suite row stack; static UI only. Do not add data fetching, persistence, routes, backend, auth, Firebase, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or broad shared architecture.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

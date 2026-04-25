@@ -9,6 +9,12 @@ export function EasyCalendarMarketingPage() {
       heroPoints={["Day and week views", "Fixed vs flexible blocks", "Open window detection", "Plan My Day"]}
       heroCardTitle="A calmer time system."
       heroCardBody="Fixed events stay solid, task blocks stay flexible, and open windows become useful space instead of guesswork."
+      heroPreviewItems={[
+        { app: "8:30 AM", detail: "Class locked" },
+        { app: "11:00 AM", detail: "Open planning window" },
+        { app: "1:30 PM", detail: "Admin task block" },
+        { app: "4:00 PM", detail: "Workout buffer" },
+      ]}
       featuresTitle="Built to answer when things happen"
       featuresDescription="EasyCalendar is where the week planner actually lives, with a clear split between commitments and work you can move."
       features={[
