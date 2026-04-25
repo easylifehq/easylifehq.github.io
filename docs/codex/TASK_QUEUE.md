@@ -369,7 +369,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 
 - [x] EasyList premium triage pass: improve one visible EasyList task card, composer, dashboard, or Today view hierarchy so daily triage feels cleaner, faster, and more high-tech. Do not change task logic, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
-- [ ] EasyNotes writing surface pass: improve one EasyNotes editor/library surface so writing and reviewing notes feels calmer, sharper, and less boxy. Do not change note logic, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+- [x] EasyNotes writing surface pass: improve one EasyNotes editor/library surface so writing and reviewing notes feels calmer, sharper, and less boxy. Do not change note logic, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
 - [ ] EasyCalendar scanability pass: improve one EasyCalendar day/week/month area where event chips, agenda rows, headers, or empty time blocks look cramped, noisy, or hard to scan. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 

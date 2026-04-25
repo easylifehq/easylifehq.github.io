@@ -2162,7 +2162,14 @@ textarea::placeholder {
 
 .notes-editor-page-immersive {
   min-height: calc(100vh - 8rem);
-  padding: 0.5rem 0 1rem;
+  padding: 0.85rem 0 1rem;
+}
+
+.notes-title-field,
+.notes-body-field {
+  display: block;
+  width: min(780px, 100%);
+  justify-self: center;
 }
 
 .notes-format-bar {
@@ -2182,7 +2189,8 @@ textarea::placeholder {
 .notes-title-field input {
   font-size: 2.4rem;
   font-weight: 800;
-  padding: 0.35rem 0.2rem;
+  line-height: 1.1;
+  padding: 0.2rem 0;
   font-family: var(--shell-display-font);
 }
 
@@ -2191,8 +2199,9 @@ textarea::placeholder {
   height: auto;
   overflow: hidden;
   resize: vertical;
-  line-height: 1.7;
-  padding: 0.6rem 0.2rem 1rem;
+  font-size: 1.05rem;
+  line-height: 1.78;
+  padding: 0.6rem 0 1rem;
   border-radius: 0;
   background: transparent;
   border-color: transparent;
