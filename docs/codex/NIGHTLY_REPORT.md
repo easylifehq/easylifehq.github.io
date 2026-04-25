@@ -913,3 +913,11 @@
 - app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 05:22:19
+
+- Task attempted: EasyWorkout mobile preview typography pass: inspect the existing EasyWorkout product marketing hero at 390px and reduce oversized preview heading/body/metadata scale so the mock reads like compact app UI. Do not make the preview larger, add behavior, change copy meaning, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

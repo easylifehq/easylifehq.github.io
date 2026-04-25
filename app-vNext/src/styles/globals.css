@@ -7733,6 +7733,46 @@ button.calendar-detail-card:disabled {
     padding: 0.82rem;
   }
 
+  .marketing-page--preview-realism .marketing-hero-preview-header {
+    gap: 0.46rem;
+  }
+
+  .marketing-page--preview-realism .marketing-hero-preview-header > .info-pill {
+    min-height: 25px;
+    padding: 0.22rem 0.44rem;
+    font-size: 0.64rem;
+  }
+
+  .marketing-page--preview-realism .marketing-hero-card h2 {
+    font-size: 0.98rem;
+    line-height: 1.12;
+  }
+
+  .marketing-page--preview-realism .marketing-hero-card p {
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  .marketing-page--preview-realism .marketing-hero-preview {
+    gap: 0.3rem;
+  }
+
+  .marketing-page--preview-realism .marketing-hero-preview-row {
+    grid-template-columns: minmax(3.9rem, 0.42fr) minmax(0, 1fr);
+    gap: 0.42rem;
+    padding: 0.36rem 0.46rem;
+  }
+
+  .marketing-page--preview-realism .marketing-hero-preview-row span {
+    font-size: 0.64rem;
+    font-weight: 800;
+  }
+
+  .marketing-page--preview-realism .marketing-hero-preview-row strong {
+    font-size: 0.76rem;
+    line-height: 1.16;
+  }
+
   .marketing-page--mobile-dense-hero .marketing-hero {
     gap: 0.72rem;
     padding: 0.72rem;
