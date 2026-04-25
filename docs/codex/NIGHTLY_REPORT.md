@@ -850,3 +850,13 @@
 - Files changed:
 - app-vNext/src/components/navigation/MarketingHeader.tsx
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:56:35
+
+- Task attempted: Product feature-card density repair: refine one existing desktop product marketing feature-card section so cards feel less generic and more connected to the nearby product preview through tighter hierarchy and denser static content. Do not add sections, change copy meaning broadly, redesign the shell, alter routing behavior, touch auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

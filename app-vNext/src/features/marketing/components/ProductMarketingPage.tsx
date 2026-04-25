@@ -4,6 +4,7 @@ type FeatureCard = {
   title: string;
   description: string;
   tag?: string;
+  details?: string[];
 };
 
 type HeroPreviewItem = {
@@ -115,6 +116,13 @@ export function ProductMarketingPage({
               {feature.tag ? <p className="eyebrow">{feature.tag}</p> : null}
               <h3>{feature.title}</h3>
               <p>{feature.description}</p>
+              {feature.details?.length ? (
+                <ul className="marketing-card-details" aria-label={`${feature.title} details`}>
+                  {feature.details.map((detail) => (
+                    <li key={detail}>{detail}</li>
+                  ))}
+                </ul>
+              ) : null}
             </article>
           ))}
         </div>

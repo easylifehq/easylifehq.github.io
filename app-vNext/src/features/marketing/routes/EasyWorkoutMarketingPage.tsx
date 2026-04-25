@@ -23,16 +23,19 @@ export function EasyWorkoutMarketingPage() {
           tag: "Mode",
           title: "Gym Mode",
           description: "A focused workout surface hides unrelated controls when you are actively training.",
+          details: ["Start push day", "Session controls"],
         },
         {
           tag: "Logging",
           title: "Type any exercise",
           description: "Exercise names are free-form, with notes for grips, setup, or machine details.",
+          details: ["Bench press sets", "Grip notes"],
         },
         {
           tag: "Reuse",
           title: "Routines when helpful",
           description: "Use saved routines for structure without forcing every workout through a rigid template.",
+          details: ["Saved plan", "Flexible edits"],
         },
       ]}
       stepsTitle="Log the workout with fewer interruptions"
