@@ -7328,15 +7328,21 @@ button.calendar-detail-card:disabled {
   }
 
   .site-mobile-cue {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     justify-self: end;
+    min-height: 32px;
+    padding: 0.34rem 0.5rem;
+    border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+    border-radius: 999px;
+    background: var(--ui-bg-card, var(--shell-card-bg-soft));
     color: var(--ui-text-muted, var(--shell-muted-text));
     font-size: 0.62rem;
     font-weight: 700;
     line-height: 1.1;
-    max-width: 9.5rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: max-content;
+    text-align: center;
     white-space: nowrap;
   }
 

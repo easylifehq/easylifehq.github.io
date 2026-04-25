@@ -878,3 +878,12 @@
 - app-vNext/src/features/marketing/routes/EasyProjectsMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 05:08:22
+
+- Task attempted: Mobile marketing header truncation repair: inspect `MarketingHeader` at 390px and replace or restyle the right-side cue so it never truncates while preserving existing links, tap targets, and routing behavior. Do not touch app-router behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated navigation.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/components/navigation/MarketingHeader.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
