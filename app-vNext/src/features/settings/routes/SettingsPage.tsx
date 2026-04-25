@@ -273,7 +273,7 @@ const settingsSections: Array<{
 }> = [
   {
     id: "customize",
-    label: "Basics",
+    label: "Personalize",
     eyebrow: "Appearance",
     description: "Choose the theme, opening screen, and everyday app setup.",
     group: "basics",
