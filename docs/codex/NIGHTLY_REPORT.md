@@ -904,3 +904,12 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 05:17:11
+
+- Task attempted: Desktop boxed-rhythm follow-up: convert one additional existing product marketing lower section from a heavy card-stack feel into a lighter grouped layout or content band using existing content only. Do not add sections, introduce colors, redesign the shell, change routing, app logic, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

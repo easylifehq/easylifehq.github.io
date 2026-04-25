@@ -1031,6 +1031,28 @@ a {
   .marketing-page--desktop-rhythm-repair .marketing-hero-card {
     padding: 0.95rem;
   }
+
+  .marketing-page--light-demo-band #demo {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  .marketing-page--light-demo-band #demo .marketing-demo-list {
+    gap: 0;
+    border-block: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  }
+
+  .marketing-page--light-demo-band #demo .marketing-demo-step {
+    padding: 0.95rem 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .marketing-page--light-demo-band #demo .marketing-demo-step + .marketing-demo-step {
+    border-top: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  }
 }
 
 .site-footer {
