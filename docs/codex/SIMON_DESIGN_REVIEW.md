@@ -1,56 +1,56 @@
 # Simon Design Review
 
 ## Verdict
-RED
+YELLOW
 
 ## One-Sentence Read
-The surfaces are cleaner than before, but EasyLife is still behaving like a polished marketing brochure while one core product area, Settings, is literally a blank wall.
+EasyLife now has a calm, credible shell, but it is still presenting the suite like four polished brochures instead of one connected personal operating system.
 
 ## Mission Fit
-The direction partially matches the mission: the teal system, repeated card language, softened surfaces, and shared page rhythm are starting to make EasyLife feel like one suite. But the mission is a connected personal operating system, not four product landing pages with matching hero copy. The visible screenshots sell EasyList, EasyNotes, EasyCalendar, and EasyWorkout instead of showing the user what needs attention, what is scheduled, what was captured, and what to do next. Settings is the worst miss: the current inspected `/settings` view renders blank with route warnings, so the "control center for the suite" is absent.
+The direction partially matches the mission: shared spacing, typography, teal accents, rounded surfaces, and consistent headers are helping the main areas feel related. The problem is that the inspected screens mostly show product-marketing hero pages, not the working life OS the mission describes. I can see polish, but I cannot yet see the user quickly understanding what needs attention, what is scheduled, what was completed, or how tasks, notes, calendar, and workouts connect. Confidence is lower for signed-in workflow quality because the screenshots are mostly public/product surfaces.
 
 ## Taste Check
-The best part is the restraint: typography is bold, spacing is calmer, the muted mint surface system has a recognizable identity, and the desktop hero/cards feel composed. The chips and panels are consistent enough to suggest a real design system.
+The restrained palette, large confident type, soft grid background, and repeated page shell feel more premium than the earlier generic SaaS direction. The typography has presence, and the product copy is much sharper than filler dashboard mush.
 
-The weak part is hierarchy discipline. Everything is oversized, padded, and slogan-heavy. On mobile, the hero card turns into a long promotional scroll with huge chips and massive empty top space; it feels expensive for the first 500 pixels and then starts billing the user rent. The product pages have taste, but they do not yet have enough utility. Settings being blank takes the whole suite from "premium in progress" to "not trustworthy yet."
+But the layout is overcommitted to the same hero recipe everywhere: giant headline, CTA pair, pill tags, pale product card, feature cards. It is tasteful, yes, but also repetitive enough to feel templated. The mobile screenshots are especially heavy: everything becomes oversized, vertical, and slow to scan. The app is wearing a nice coat while still refusing to show me the actual job.
 
 ## Visual Problems To Fix
-- `/settings` renders as an empty pale screen in both desktop and mobile screenshots, with console warnings that no route matched `/settings`.
-- The mobile header area leaves a very large empty band before content, making the first usable content feel pushed too far down.
-- Mobile chips are too large and too pillowy; they compete with primary actions and create a toy-like rhythm.
-- Product pages rely on nearly identical hero structures, so EasyList, EasyNotes, EasyCalendar, and EasyWorkout feel like themed landing pages rather than operational tools.
-- Desktop hero H1s are oversized enough that they dominate the page at the expense of actual app usefulness.
-- The right-side desktop feature panel repeats "EasyLifeHQ product" across pages, which reads like placeholder label design, not premium product language.
-- The mint background grid is pleasant but too visible across all product pages; it risks becoming the personality instead of supporting the work.
-- Feature cards below the fold are clean but generic: uppercase eyebrow, bold heading, paragraph, repeat. Very SaaS showroom. Very "we bought the template and watered it."
+- The first viewport has too much dead vertical space between the nav and hero, especially on mobile, making the product feel slower than it is.
+- Mobile hero headlines are too large and create bulky multi-line blocks that delay access to useful content.
+- The pill tags are oversized on mobile and visually compete with the primary actions instead of acting as supporting metadata.
+- The right-side "EasyLifeHQ product" card repeats brand context already present in the nav and does not prove connected-suite utility.
+- Desktop pages use the same composition across products so strongly that EasyList, EasyNotes, EasyCalendar, and EasyWorkout blur together.
+- Feature cards sit below the fold and feel secondary, while the mission-critical operational value is hidden beneath marketing copy.
+- The pale teal treatment is pleasant but too dominant; the suite needs clearer app-level hierarchy without becoming a rainbow.
+- The top nav feels like a landing page nav, not a personal operating system nav.
 
 ## Strongest Opportunities
-- Turn the top product surfaces from marketing into command surfaces: show today, next, recent, open loops, or a small live preview instead of only selling the concept.
-- Give each app one signature visual behavior while keeping shared shell rules: calendar can show time density, list can show triage lanes, notes can show writing focus, workout can show set logging.
-- Make Settings visibly feel like the suite control center with grouped panels, theme preview, personalization controls, and clear "applies across EasyLife" language.
-- Tighten mobile vertical rhythm so the first screen gives the user identity, purpose, and one useful action without making them scroll through a billboard.
-- Reduce chip dominance and use smaller metadata treatments so primary actions and actual content regain authority.
+- Replace the generic right hero card with a compact "Today across EasyLife" style preview that shows tasks, notes, calendar, and workout signals together.
+- Tighten mobile first screens so a user sees the headline, one action, and a meaningful product preview without scrolling through a parade of giant pills.
+- Give each app one restrained identity cue through layout content, iconography, or data shape, not louder color.
+- Move from sales-page hierarchy toward operating-system hierarchy: status, next action, recent activity, and cross-app handoff.
+- Make Settings feel like the suite control center visually, with denser grouped controls and clearer section priority.
 
 ## Priority Fix
-Fix the missing Settings experience first. A connected personal operating system cannot ship a blank control center, and visual QA already has hard evidence on desktop and mobile. Nami should make the existing Settings route render the intended SettingsPage at the inspected path, then verify the page has a real header, grouped settings panels, no console route warning, and a usable mobile first screen. No new settings behavior. No auth. No persistence changes. Just make the control center exist and look composed.
+Fix the first-viewport proof of mission. The next design pass should reduce the hero bulk and replace the decorative product card pattern with a compact operational preview that demonstrates connection across the suite. Nami should turn this into small tasks: tighten mobile hero spacing, shrink support pills, and make one right-side panel show real cross-app structure instead of another brand card.
 
 ## Designer Handoff
-Next batch should be repair-first, not expansion. Keep the current mint/teal identity, restrained borders, soft panels, and shared typography because there is a recognizable suite language forming. Change the surfaces that feel like promotional landing pages: reduce the hero weight, make chips smaller and more metadata-like, and introduce one practical preview or dashboard-like content block per app so the user feels "I can run my day here," not "I am being pitched software." Settings must come back as a calm control center with clear grouping and tighter mobile spacing. The result should feel useful within five seconds, not merely handsome.
+Keep the calm shell, the confident type, the soft surface treatment, and the professional restraint. Change the product pages from "nice pitch decks" into evidence of a connected daily system. The next implementer should make the first screen denser and more useful: one clear headline, one primary action, smaller supporting tags, and a preview panel that looks like EasyLife doing work. The user should feel, within five seconds, "this app will help me run my day," not "this startup hired a polite template."
 
 ## What Not To Do Next
-- Do not add more sections below these pages; the problem is usefulness and hierarchy, not page length.
-- Do not add more decorative gradients, glow, grid, or chip treatments to make the design feel "premium."
-- Do not start a broad app redesign while `/settings` is blank.
-- Do not make the mobile experience taller and more dramatic; make it denser, clearer, and faster.
-- Do not touch backend, auth, persistence, packages, deployment, or secrets.
-- Do not solve the route warning by hiding the warning while leaving the page visually empty.
+- Do not add more landing sections to solve a first-viewport clarity problem.
+- Do not add decorative gradients, blobs, illustrations, or visual confetti.
+- Do not make every app louder with a different color scheme.
+- Do not touch backend, auth, routing behavior, persistence, packages, or deployment.
+- Do not ignore mobile; mobile is where the current layout feels most indulgent.
+- Do not keep polishing cards below the fold while the first screen remains too brochure-like.
 
 ## Next 5 Design Tasks
-- [ ] Fix `/settings` visual QA so the inspected Settings path renders the existing Settings page on desktop and mobile, with no route warning and no auth, persistence, backend, dependency, or broad routing rewrite.
-- [ ] Tighten mobile top spacing across the product surfaces so content begins sooner while preserving the current brand header and avoiding overlap or wrapping.
-- [ ] Reduce mobile chip size and spacing on one product page first, using smaller metadata styling while keeping tap targets and text legibility intact.
-- [ ] Replace the repeated "EasyLifeHQ product" label in one hero side panel with app-specific suite language that feels intentional and not placeholder-like.
-- [ ] Convert one below-fold feature-card row into a more practical preview-style section, keeping behavior unchanged and avoiding new data, routing, or architecture work.
+- [ ] Mobile hero density pass: reduce vertical bulk on one product page at 390px by tightening headline scale, hero padding, and tag spacing without changing copy meaning or behavior.
+- [ ] Product card utility pass: replace one decorative "EasyLifeHQ product" hero card with a compact operational preview using existing static UI content only; no new data, persistence, or routing.
+- [ ] Pill hierarchy pass: make hero tags visually secondary to primary actions across one shared pattern; keep tap targets usable and avoid adding new colors.
+- [ ] Desktop first-viewport rhythm pass: reduce the nav-to-hero dead space and ensure the next content band is hinted without compressing the layout into clutter.
+- [ ] App identity restraint pass: give one app page a clearer functional identity through layout or content structure, not louder color, new sections, or backend scope.
 
 ## Stop Or Continue
 continue but fix visual issues first
