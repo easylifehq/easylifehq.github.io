@@ -736,6 +736,15 @@ a {
   gap: 0.55rem;
 }
 
+.marketing-hero-copy .marketing-points .info-pill {
+  min-height: 34px;
+  background: color-mix(in srgb, var(--ui-pill-bg, var(--shell-chip-bg)) 48%, transparent);
+  border-color: color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
 .marketing-hero-card {
   align-content: space-between;
   padding: 1.1rem;

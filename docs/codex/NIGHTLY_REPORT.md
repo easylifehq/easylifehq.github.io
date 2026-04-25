@@ -756,3 +756,11 @@
 - app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:15:01
+
+- Task attempted: Pill hierarchy repair: make hero support tags visually secondary to the primary action area across the existing shared product hero pattern while preserving usable tap targets. Do not change copy meaning, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or add new colors.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
