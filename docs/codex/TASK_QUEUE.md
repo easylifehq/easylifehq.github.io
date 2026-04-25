@@ -357,7 +357,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 
 - [x] Page header rhythm pass: inspect one shared page-header/title/helper pattern across EasyList, EasyNotes, EasyCalendar, EasyWorkout, and Settings, then align spacing, type scale, and helper hierarchy so pages feel like one suite. Do not add new sections, change behavior, routing, auth, Firebase, persistence, data models, dependencies, package files, generated output, docs report files, or root config.
 
-- [ ] Theme personality audit: inspect existing theme/Candy Mode/customization styling and make one existing theme feel more customized and fun while staying professional, accessible, and consistent with EasyLife 5.0. Prefer existing CSS tokens or theme hooks. Do not add dependencies, change Settings persistence, alter auth/Firebase/backend code, edit package files, generated output, deployment config, secrets, or root files.
+- [x] Theme personality audit: inspect existing theme/Candy Mode/customization styling and make one existing theme feel more customized and fun while staying professional, accessible, and consistent with EasyLife 5.0. Prefer existing CSS tokens or theme hooks. Do not add dependencies, change Settings persistence, alter auth/Firebase/backend code, edit package files, generated output, deployment config, secrets, or root files.
 
 - [ ] Theme contrast and focus pass: improve one theme's contrast, focus rings, surface depth, or accent usage so it feels deliberately designed instead of lightly recolored. Do not add new theme settings, change persistence, touch auth, Firebase, backend, dependencies, package files, generated output, deployment config, secrets, or root files.
 
