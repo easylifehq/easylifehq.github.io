@@ -851,6 +851,38 @@ a {
   font-weight: 900;
 }
 
+.marketing-page--easynotes-preview .marketing-hero-preview {
+  gap: 0.38rem;
+}
+
+.marketing-page--easynotes-preview .marketing-hero-preview-row {
+  grid-template-columns: minmax(5rem, 0.48fr) minmax(0, 1fr);
+  gap: 0.52rem;
+  padding: 0.46rem 0.58rem;
+  border-color: color-mix(in srgb, var(--shell-accent) 12%, transparent);
+  background: color-mix(in srgb, var(--shell-card-bg) 86%, white 14%);
+}
+
+.marketing-page--easynotes-preview .marketing-hero-preview-row:first-child {
+  border-color: color-mix(in srgb, var(--shell-accent) 24%, transparent);
+  background: color-mix(in srgb, var(--shell-card-bg) 90%, white 10%);
+}
+
+.marketing-page--easynotes-preview .marketing-hero-preview-row span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.marketing-page--easynotes-preview .marketing-hero-preview-row strong {
+  font-size: 0.84rem;
+}
+
+.marketing-page--easynotes-preview .marketing-hero-preview-row:first-child strong {
+  font-weight: 900;
+}
+
 .marketing-section {
   padding: 1.35rem;
   scroll-margin-top: 7rem;
