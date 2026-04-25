@@ -294,9 +294,9 @@ const settingsSections: Array<{
   },
   {
     id: "page-settings",
-    label: "App Controls",
-    eyebrow: "Page Controls",
-    description: "Tune suite app defaults, starting with Calendar.",
+    label: "Suite Controls",
+    eyebrow: "App Defaults",
+    description: "Tune the defaults that shape how each EasyLife app opens and hands work across the suite.",
     group: "advanced",
   },
   {
@@ -1135,8 +1135,8 @@ export function SettingsPage() {
 
         {activeSection === "page-settings" ? (
         <PageSection
-          eyebrow="Page controls"
-          title="App-specific settings"
+          eyebrow="Suite controls"
+          title="App defaults"
         >
           <div id="page-settings" className="settings-anchor" />
           <div className="settings-page-section-list">
