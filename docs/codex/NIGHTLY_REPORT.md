@@ -979,3 +979,11 @@
 - Files changed:
 - app-vNext/src/features/marketing/routes/EasyProjectsMarketingPage.tsx
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 06:49:59
+
+- Task attempted: Mobile hero vertical economy pass: reduce the header-to-hero gap and hero vertical padding at 390px in the shared public product marketing shell so the preview appears sooner, preserving content, links, tap targets, and desktop layout. Do not change routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

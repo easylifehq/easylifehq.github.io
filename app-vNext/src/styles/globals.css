@@ -7716,7 +7716,11 @@ button.calendar-detail-card:disabled {
 
   .marketing-page--product .marketing-hero {
     gap: 0.72rem;
-    padding: 0.78rem 0.82rem;
+    padding: 0.64rem 0.82rem 0.7rem;
+  }
+
+  .marketing-page--product {
+    margin-top: -0.35rem;
   }
 
   .marketing-page--product .marketing-hero-copy,
