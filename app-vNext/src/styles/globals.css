@@ -7195,15 +7195,19 @@ button.calendar-detail-card:disabled {
 
   .site-header-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    gap: 0.35rem;
     padding: 0.3rem 0.45rem;
   }
 
   .site-header-inner,
   .app-header-main {
     gap: 0.45rem;
+  }
+
+  .site-header-inner {
+    column-gap: 0.45rem;
+    row-gap: 0.12rem;
   }
 
   .app-header-actions {
@@ -7255,12 +7259,12 @@ button.calendar-detail-card:disabled {
 
   .site-mobile-cue {
     display: block;
-    margin-top: 0.02rem;
+    justify-self: end;
     color: var(--ui-text-muted, var(--shell-muted-text));
     font-size: 0.62rem;
     font-weight: 700;
     line-height: 1.1;
-    max-width: 100%;
+    max-width: 9.5rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -826,3 +826,11 @@
 - app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:47:27
+
+- Task attempted: Marketing mobile header compactness follow-up: inspect the shared mobile marketing header at 390px and make one narrow spacing or hierarchy adjustment that reduces first-viewport header bulk while preserving existing links and tap targets. Do not change routing behavior, copy meaning, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or app-router behavior.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
