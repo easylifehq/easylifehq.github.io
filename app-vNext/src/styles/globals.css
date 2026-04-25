@@ -817,6 +817,40 @@ a {
   overflow-wrap: anywhere;
 }
 
+.marketing-page--preview-realism .marketing-hero-preview {
+  gap: 0.38rem;
+}
+
+.marketing-page--preview-realism .marketing-hero-preview-row {
+  grid-template-columns: minmax(4.7rem, 0.46fr) minmax(0, 1fr);
+  gap: 0.52rem;
+  padding: 0.46rem 0.58rem;
+  border-color: color-mix(in srgb, var(--shell-accent) 16%, transparent);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--shell-accent) 10%, transparent), transparent 34%),
+    color-mix(in srgb, var(--shell-card-bg) 82%, white 18%);
+}
+
+.marketing-page--preview-realism .marketing-hero-preview-row:first-child {
+  border-color: color-mix(in srgb, var(--shell-accent) 32%, transparent);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--shell-accent) 18%, transparent), transparent 44%),
+    color-mix(in srgb, var(--shell-card-bg) 88%, white 12%);
+}
+
+.marketing-page--preview-realism .marketing-hero-preview-row span {
+  font-size: 0.7rem;
+  letter-spacing: 0;
+}
+
+.marketing-page--preview-realism .marketing-hero-preview-row strong {
+  font-size: 0.84rem;
+}
+
+.marketing-page--preview-realism .marketing-hero-preview-row:first-child strong {
+  font-weight: 900;
+}
+
 .marketing-section {
   padding: 1.35rem;
   scroll-margin-top: 7rem;

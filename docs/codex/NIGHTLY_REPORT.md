@@ -817,3 +817,12 @@
 - app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:43:45
+
+- Task attempted: Product preview realism repair: refine one existing product marketing hero preview row stack with denser spacing, clearer static status hierarchy, and less mock-data stiffness using current content only. Do not add data fetching, new sections, new routes, behavior changes, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or broad shared architecture.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
