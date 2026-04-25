@@ -368,9 +368,9 @@ export function EasyWorkoutRoutinesPage() {
                   <div className="task-card-copy">
                     <div className="task-card-title-row">
                       <h3>{routine.name}</h3>
-                      <span className="priority-pill-vnext">{routine.dayLabel ? `Day: ${routine.dayLabel}` : "Routine"}</span>
                     </div>
                     <div className="task-meta-row" aria-label="Routine summary">
+                      <span className="task-meta-chip">{routine.dayLabel ? `Day: ${routine.dayLabel}` : "Routine"}</span>
                       <span className="task-meta-chip">
                         Plan: {routine.exercises.length} exercise{routine.exercises.length === 1 ? "" : "s"}
                       </span>

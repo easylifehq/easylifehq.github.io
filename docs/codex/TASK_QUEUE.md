@@ -343,4 +343,4 @@ Required final state:
 
 ## Checkpoint Planner Tasks 2026-04-25 01:14:42
 
-- [ ] Mobile card/list rhythm pass: tighten one mobile spacing or metadata hierarchy issue in EasyList, EasyNotes, EasyCalendar, or EasyWorkout so scanability improves without changing behavior. Do not touch `globals.css`, auth, Firebase, backend, routing behavior, persistence, data models, dependencies, generated output, package files, root config files, docs report files, deployment config, secrets, or shared architecture.
+- [x] Mobile card/list rhythm pass: tighten one mobile spacing or metadata hierarchy issue in EasyList, EasyNotes, EasyCalendar, or EasyWorkout so scanability improves without changing behavior. Do not touch `globals.css`, auth, Firebase, backend, routing behavior, persistence, data models, dependencies, generated output, package files, root config files, docs report files, deployment config, secrets, or shared architecture.
