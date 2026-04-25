@@ -4,55 +4,54 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is finally starting to look like one calm suite, but Settings just walked in wearing a broken layout and a floating button costume.
+EasyLife is finally speaking with one voice, but it is still wearing too many rounded white boxes like a nervous startup deck.
 
 ## Mission Fit
-The direction matches the mission: shared headers, calmer spacing, compact previews, and product-specific working UI cues are moving EasyLife toward a connected personal operating system. The suite now feels more intentional than experimental, especially across the marketing product pages. The problem is execution discipline: Settings has visible layout bugs, the public pages still lean too hard on repeated white card stacks, and mobile scale is not yet consistently elegant.
+The direction mostly matches the mission: the product pages now feel connected, calm, and professional, with shared header behavior, consistent preview language, and clearer app identities across EasyList, EasyNotes, EasyCalendar, and EasyWorkout. The best progress is the unified suite shell and the working-UI previews, which make the apps feel related instead of randomly themed. The weak spot is still hierarchy density: mobile hero cards and preview panels compete for attention, and the page structure can feel like stacked containers rather than a confident operating system.
 
 ## Taste Check
-The best work is the clearer product specificity: EasyList, EasyCalendar, EasyNotes, and EasyWorkout now have previews that feel closer to working software instead of generic feature posters. The typography is confident, the palette is quieter, and the suite shell is cleaner.
+The typography has presence, the restrained green-teal system feels more mature than generic blue SaaS, and the previews now communicate real product moments instead of empty marketing decoration. The product copy is sharper and more specific.
 
-What still feels off: too many boxed panels, too much pale teal sameness, and some page sections still behave like a template got dressed up for a board meeting. Settings is the weakest visual surface right now: the desktop hero composition is awkward, the mobile type scale is oversized, and the floating add button overlaps content like it has somewhere more important to be.
+What is off: the repeated large white cards, pill clusters, thick rounded preview boxes, and pale teal fills are becoming a house style by accident. Desktop looks orderly but a bit too boxed-in. Mobile is usable, but the preview panels are too large and loud, almost like second hero sections. The grid background is calmer now, but still risks making the whole product feel like a template with good copy pasted into it.
 
 ## Visual Problems To Fix
-- Settings desktop has a reported covered heading issue around the hero and quick-add/floating control area; this is a blocker for polish.
-- Settings mobile brand/header tap target is reported as too small or awkward despite the visual button mass around it.
-- Settings mobile uses oversized body copy and large vertical gaps, pushing useful controls too far down the page.
-- The Settings floating add button overlaps card content on mobile, creating visual interference and reducing trust.
-- Several product marketing pages still rely on large white boxed sections stacked vertically, which makes the experience feel heavier than the "calm operating system" mission.
-- The pale teal grid/background treatment is still visible enough to compete with content in places.
-- Hero preview cards across products are improved but still share too much visual DNA; the suite is cohesive, but the apps need a little more functional distinction.
-- Desktop lower sections still have equal-card rhythm in places, flattening hierarchy and making every feature feel equally important.
+- Mobile hero spacing still leaves a very large decorative gap between the header and the main product card.
+- Preview panels on mobile are oversized relative to the hero text and should feel like compact app UI, not a second billboard.
+- Support pills wrap into bulky clusters and steal vertical space from the actual product story.
+- Desktop pages rely too heavily on white bordered cards stacked inside a pale background, which flattens the hierarchy.
+- The product preview rows are more realistic than before, but several still use the same two-column label/value rhythm, making apps feel interchangeable.
+- Button sizing is strong on desktop but heavy on mobile, especially when paired with chips and large preview panels.
+- The header feels clean, but the mobile "Products + demo" button is visually dominant enough to compete with the page title.
+- The palette is calmer, but the pale teal treatment is still overused across cards, pills, preview headers, and backgrounds.
 
 ## Strongest Opportunities
-- Make Settings the reference surface for the logged-in suite: calm header, clean control grouping, no overlapping controls, no oversized mobile copy.
-- Reduce the boxed-card habit on marketing pages by turning lower content into lighter bands, rows, and grouped editorial layouts.
-- Create stronger app-specific preview details: calendar time density, list priority state, notes writing surface, workout session state.
-- Normalize mobile type scale across protected pages so the app feels professional, not merely enlarged.
-- Use the suite shell to create trust: consistent spacing, restrained borders, quieter backgrounds, and fewer decorative fills.
-- Give primary actions a predictable placement and size, especially on mobile where floating actions currently feel aggressive.
+- Make each product preview more function-specific: calendar should feel scheduled, notes should feel written, tasks should feel actionable, workout should feel logged.
+- Reduce card-on-card visual weight by turning some lower sections into open bands with tighter content groups.
+- Give mobile a stricter vertical economy: smaller chips, tighter CTA rhythm, and preview panels that arrive sooner without shouting.
+- Use one premium suite-level pattern across protected app pages: consistent page header, compact summary panel, and restrained action area.
+- Add more contrast between marketing surfaces and working app surfaces so the public pages sell the product while the app itself feels operational.
 
 ## Priority Fix
-Fix the Settings protected page first. Specifically: remove the desktop heading coverage, stop the mobile floating add button from overlapping cards, tighten the mobile hero type and vertical spacing, and make the header brand/app control feel like a deliberate navigation bar. Settings is supposed to be the suite control center; right now it is the place where the design discipline visibly breaks.
+Fix mobile preview scale and hierarchy next. The mobile pages are not broken, but the preview cards are too big, too rounded, and too typographically loud, so they read like another marketing block instead of a glimpse of the app. Nami should tighten preview padding, reduce preview heading/body scale, shrink row text where needed, and keep the preview visibly below the hero story without making it feel like a separate hero.
 
 ## Designer Handoff
-For the next batch, stay inside the protected logged-in surfaces and repair the system before adding more polish elsewhere. Keep the current calm neutral direction, the stronger typography, and the connected-suite navigation language. Change the Settings layout so it feels like a high-trust control panel: compact hero, clean summary cards, obvious grouping, no overlapping floating controls, and mobile-first spacing that lets the user reach real settings quickly. The user should feel "this is organized and reliable," not "this page is still negotiating with itself."
+Keep the current calm suite direction, the strong product headlines, the unified header, and the idea of static working-UI previews. Change the proportions: mobile needs smaller preview typography, slimmer chips, less vertical breathing room between header and hero, and preview rows that feel closer to real software. Desktop should keep the wide confident layout, but soften the "three cards in a lunch tray" effect by making lower sections feel more editorial and less boxed. The result should feel like a professional personal operating system: composed, useful, quick to scan, and quietly premium.
 
 ## What Not To Do Next
-- Do not add new sections to marketing pages to hide weak hierarchy.
-- Do not introduce another accent color to solve sameness.
-- Do not keep tweaking product hero copy while Settings has visible layout bugs.
-- Do not enlarge mobile UI to fake accessibility; fix spacing, tap targets, and hierarchy properly.
-- Do not touch backend, auth, routing behavior, package files, or deployment scope.
-- Do not make a broad redesign of the suite shell; repair the specific broken surfaces.
-- Do not let floating actions overlap cards or headings anywhere in the protected app.
+- Do not add more sections to solve hierarchy problems.
+- Do not add more accent colors or decorative gradients.
+- Do not make the preview panels larger or more illustrated.
+- Do not chase novelty before fixing mobile density.
+- Do not change backend, auth, routing behavior, payments, analytics, deployment, or package scope.
+- Do not ignore protected app surfaces while polishing only marketing pages.
+- Do not keep adding pills as a substitute for real product differentiation.
 
 ## Next 5 Design Tasks
-- [ ] Fix Settings desktop heading coverage using layout spacing or stacking only; preserve copy, behavior, routing, and existing settings data.
-- [ ] Fix Settings mobile floating add button overlap so it never covers card text or controls; keep the action available without visual interference.
-- [ ] Tighten Settings mobile hero typography and vertical spacing so the first real setting card appears sooner without shrinking tap targets below usability.
-- [ ] Normalize the Settings header brand/app control tap area on mobile so it reads as one intentional navigation bar, not loose oversized pieces.
-- [ ] Convert one remaining product marketing lower section from equal white cards into a lighter grouped band using existing content only; do not add sections or new colors.
+- [ ] Mobile preview scale pass: reduce typography and padding inside one product hero preview at 390px, preserving copy, links, tap targets, and desktop layout.
+- [ ] Mobile chip economy pass: tighten one product page support-pill cluster so it uses less vertical space without deleting content or changing meaning.
+- [ ] Product differentiation pass: adjust one preview row set so its labels and values feel specific to that product workflow, using static content only.
+- [ ] Lower-section card relief pass: convert one desktop lower marketing section from equal card/card/card weight into a lighter grouped layout with existing content only.
+- [ ] Protected suite rhythm pass: inspect one logged-in app page and align its header or primary panel spacing with the calmer shared EasyLife system, with no behavior changes.
 
 ## Stop Or Continue
 continue but fix visual issues first
