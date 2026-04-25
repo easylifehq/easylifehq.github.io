@@ -930,8 +930,8 @@ a {
 .marketing-card-details li {
   padding: 0.32rem 0.48rem;
   border-radius: 8px;
-  border: 1px solid color-mix(in srgb, var(--shell-accent) 14%, transparent);
-  background: color-mix(in srgb, var(--shell-card-bg) 74%, white 26%);
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-card-elevated, var(--shell-input-bg));
   color: var(--ui-text-muted, var(--shell-muted-text));
   font-size: 0.72rem;
   font-weight: 800;

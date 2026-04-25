@@ -955,3 +955,11 @@
 - Files changed:
 - app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 06:37:58
+
+- Task attempted: Marketing teal-monoculture repair: reduce one remaining overused pale-teal fill, border, or pill treatment in an existing public product marketing surface using existing neutral styles only. Do not introduce new accent colors, redesign the shared shell, change copy meaning, routing behavior, app logic, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
