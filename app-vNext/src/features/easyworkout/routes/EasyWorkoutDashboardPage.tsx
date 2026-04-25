@@ -169,9 +169,9 @@ export function EasyWorkoutDashboardPage() {
   return (
     <>
       <PageSection
-        eyebrow="Lift Log"
-        title="Ready to train"
-        description="Open workout mode, log the lifts, and keep the rest out of the way."
+        eyebrow="EasyWorkout"
+        title="Training dashboard"
+        description="Start a session, check today's lift context, and keep the rest out of the way."
       >
         {error ? <p className="error-copy">{error}</p> : null}
         <div className="deep-module-hero">
@@ -196,7 +196,7 @@ export function EasyWorkoutDashboardPage() {
             <strong>{weeklySessions.length} session{weeklySessions.length === 1 ? "" : "s"}</strong>
           </article>
           <article>
-            <span>Latest session</span>
+            <span>Last logged</span>
             <strong>{recentSessions[0]?.performedOn || "Not logged yet"}</strong>
           </article>
         </div>
