@@ -367,35 +367,40 @@ export function EasyCalendarDayPage() {
                 <div className="calendar-hour-content">
                   {slotItems.length ? (
                     slotItems.map((item) => {
-                      const durationMinutes = Math.max(30, getDurationMinutes(item.startAt, item.endAt));
+                      const actualDurationMinutes = getDurationMinutes(item.startAt, item.endAt);
+                      const durationMinutes = Math.max(30, actualDurationMinutes);
                       const blockHeight = Math.min(220, Math.max(44, Math.round(durationMinutes * 0.9)));
+                      const helperDetail =
+                        item.allDay || actualDurationMinutes <= 0
+                          ? item.helper
+                          : `${item.helper} / ${formatDuration(actualDurationMinutes)}`;
 
                       return (
-                      <button
-                        key={`${item.kind}-${item.id}-${slot.startAt.toISOString()}`}
-                        type="button"
-                        onClick={() => {
-                          if (item.kind === "task-block") {
-                            setSelectedBlockId(item.id);
-                          } else if (item.kind === "event") {
-                            setSelectedEventId(item.id);
+                        <button
+                          key={`${item.kind}-${item.id}-${slot.startAt.toISOString()}`}
+                          type="button"
+                          onClick={() => {
+                            if (item.kind === "task-block") {
+                              setSelectedBlockId(item.id);
+                            } else if (item.kind === "event") {
+                              setSelectedEventId(item.id);
+                            }
+                          }}
+                          className={`calendar-detail-card${item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
+                          style={
+                            {
+                              "--calendar-block-color": item.color,
+                              "--calendar-block-min-height": `${blockHeight}px`,
+                            } as CSSProperties
                           }
-                        }}
-                        className={`calendar-detail-card${item.isFlexible ? " flexible" : " fixed"}${item.isCompleted ? " completed" : ""}`}
-                        style={
-                          {
-                            "--calendar-block-color": item.color,
-                            "--calendar-block-min-height": `${blockHeight}px`,
-                          } as CSSProperties
-                        }
-                      >
-                        <div>
-                          <strong>{item.title}</strong>
-                          <p>{item.helper}</p>
-                        </div>
-                        <span>{item.badge}</span>
-                      </button>
-                    );
+                        >
+                          <div>
+                            <strong>{item.title}</strong>
+                            <p>{helperDetail}</p>
+                          </div>
+                          <span>{item.badge}</span>
+                        </button>
+                      );
                     })
                   ) : (
                     <button
