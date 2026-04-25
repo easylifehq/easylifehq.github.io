@@ -83,7 +83,7 @@ if ($blocked.Count -gt 0) {
     Stop-Guardrail "Forbidden file changes detected: $($blocked -join ', ')"
 }
 
-$isDocsOnlyTask = $Task -match "(?i)\bdocs?\b|documentation|TASK_BOARD|LOOP\.md"
+$isDocsOnlyTask = $Task -match "(?i)\b(docs-only|documentation-only|docs task|documentation task|docs work|documentation work|TASK_BOARD|LOOP\.md)\b"
 
 if ($isDocsOnlyTask) {
     $nonDocsChanges = @($normalizedFiles | Where-Object { $_ -notmatch "^docs/" })
