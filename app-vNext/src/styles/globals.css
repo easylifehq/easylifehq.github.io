@@ -817,6 +817,19 @@ a {
   overflow-wrap: anywhere;
 }
 
+.marketing-hero-preview-row strong em {
+  display: inline-flex;
+  margin-left: 0.45rem;
+  padding: 0.16rem 0.36rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--shell-accent) 14%, transparent);
+  color: var(--shell-accent-strong);
+  font-size: 0.64rem;
+  font-style: normal;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
 .marketing-page--preview-realism .marketing-hero-preview {
   gap: 0.38rem;
 }

@@ -12,7 +12,7 @@ export function EasyCalendarMarketingPage() {
       heroCardBody="Fixed events stay solid, task blocks stay flexible, and open windows become useful space instead of guesswork."
       heroPreviewItems={[
         { app: "8:30 AM", detail: "Class locked" },
-        { app: "11:00 AM", detail: "Open planning window" },
+        { app: "11:00 AM", detail: "Open planning window", status: "Selected" },
         { app: "1:30 PM", detail: "Admin task block" },
         { app: "4:00 PM", detail: "Workout buffer" },
       ]}

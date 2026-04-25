@@ -921,3 +921,13 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 05:25:11
+
+- Task attempted: EasyCalendar product realism pass: add one small static working-UI detail to the existing EasyCalendar hero preview, such as a selected time slot, status marker, timestamp, or compact control, using existing content only. Do not add data fetching, new sections, new routes, behavior changes, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or broad shared architecture.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

@@ -10,6 +10,7 @@ type FeatureCard = {
 type HeroPreviewItem = {
   app: string;
   detail: string;
+  status?: string;
 };
 
 type ProductMarketingPageProps = {
@@ -98,7 +99,10 @@ export function ProductMarketingPage({
             {previewItems.map((item) => (
               <div key={`${item.app}-${item.detail}`} className="marketing-hero-preview-row">
                 <span>{item.app}</span>
-                <strong>{item.detail}</strong>
+                <strong>
+                  {item.detail}
+                  {item.status ? <em>{item.status}</em> : null}
+                </strong>
               </div>
             ))}
           </div>
