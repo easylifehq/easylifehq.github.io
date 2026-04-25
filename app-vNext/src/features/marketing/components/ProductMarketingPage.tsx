@@ -6,6 +6,11 @@ type FeatureCard = {
   tag?: string;
 };
 
+type HeroPreviewItem = {
+  app: string;
+  detail: string;
+};
+
 type ProductMarketingPageProps = {
   pageClassName?: string;
   eyebrow: string;
@@ -14,6 +19,7 @@ type ProductMarketingPageProps = {
   heroPoints: string[];
   heroCardTitle: string;
   heroCardBody: string;
+  heroPreviewItems?: HeroPreviewItem[];
   featuresTitle: string;
   featuresDescription: string;
   features: FeatureCard[];
@@ -32,6 +38,7 @@ export function ProductMarketingPage({
   heroPoints,
   heroCardTitle,
   heroCardBody,
+  heroPreviewItems,
   featuresTitle,
   featuresDescription,
   features,
@@ -42,7 +49,7 @@ export function ProductMarketingPage({
   demoPath = [],
 }: ProductMarketingPageProps) {
   const pageClass = pageClassName ? `marketing-page ${pageClassName}` : "marketing-page";
-  const previewItems = [
+  const previewItems = heroPreviewItems ?? [
     { app: "EasyHQ", detail: "Daily pulse" },
     { app: "EasyList", detail: "Brain dumps" },
     { app: "EasyCalendar", detail: "Plan My Day" },

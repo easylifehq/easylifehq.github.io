@@ -773,3 +773,12 @@
 - app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:29:55
+
+- Task attempted: Product preview specificity repair: update one non-EasyList product marketing hero preview so it shows that product’s specific daily use case instead of the generic suite row stack; static UI only. Do not add data fetching, persistence, routes, backend, auth, Firebase, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or broad shared architecture.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
