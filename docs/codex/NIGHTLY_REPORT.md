@@ -670,3 +670,11 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 03:43:55
+
+- Task attempted: Settings visual QA repair: make the existing Settings experience reachable from the fleet-inspected settings path or update the inspected path so visual QA no longer sees a blank `/settings` route. Preserve the existing authenticated Settings page behavior. Do not change auth logic, Firebase, persistence, data models, backend, dependencies, package files, deployment config, generated output, secrets, or unrelated routing.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/app/router/index.tsx
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

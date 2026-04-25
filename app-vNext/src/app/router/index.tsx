@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ComponentType } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AuthenticatedLayout } from "@/app/layouts/AuthenticatedLayout";
 import { MarketingLayout } from "@/app/layouts/MarketingLayout";
 import { LoadingState } from "@/components/feedback/LoadingState";
@@ -216,6 +216,17 @@ function PublicHomeRoute() {
   return <MarketingLandingPage />;
 }
 
+function SettingsPathRedirect() {
+  const location = useLocation();
+
+  return (
+    <Navigate
+      to={{ pathname: "/app/settings", search: location.search, hash: location.hash }}
+      replace
+    />
+  );
+}
+
 export function AppRouter() {
   return (
     <Suspense fallback={<LoadingState label="Loading EasyLifeHQ..." />}>
@@ -235,6 +246,7 @@ export function AppRouter() {
         </Route>
 
         <Route element={<AuthenticatedRoute />}>
+          <Route path="/settings" element={<SettingsPathRedirect />} />
           <Route path="/app" element={<AuthenticatedLayout />}>
             <Route index element={<StartupRedirect />} />
             <Route path="hq" element={<HQPage />} />
