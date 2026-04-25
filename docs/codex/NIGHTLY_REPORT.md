@@ -931,3 +931,11 @@
 - app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 06:29:07
+
+- Task attempted: Mobile EasyNotes preview density repair: inspect the EasyNotes public product hero at 390px and make one narrow typography or row-density adjustment so the preview reads like compact working UI sooner in the first viewport. Do not make the preview larger, add behavior, change copy meaning, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
