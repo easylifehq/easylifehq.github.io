@@ -364,17 +364,17 @@ export function EasyWorkoutRoutinesPage() {
                   <div className="task-card-copy">
                     <div className="task-card-title-row">
                       <h3>{routine.name}</h3>
-                      <span className="priority-pill-vnext">{routine.dayLabel || "Routine"}</span>
+                      <span className="priority-pill-vnext">{routine.dayLabel ? `Day: ${routine.dayLabel}` : "Routine"}</span>
                     </div>
                     <div className="task-meta-row" aria-label="Routine summary">
                       <span className="task-meta-chip">
-                        {routine.exercises.length} exercise{routine.exercises.length === 1 ? "" : "s"}
+                        Plan: {routine.exercises.length} exercise{routine.exercises.length === 1 ? "" : "s"}
                       </span>
                       {routine.exercises[0]?.exerciseName ? (
-                        <span className="task-meta-chip">Starts: {routine.exercises[0]?.exerciseName}</span>
+                        <span className="task-meta-chip">First: {routine.exercises[0]?.exerciseName}</span>
                       ) : null}
                     </div>
-                    {routine.notes ? <small>{routine.notes}</small> : null}
+                    {routine.notes ? <small>Notes: {routine.notes}</small> : null}
                   </div>
                 )}
                 <div className="task-card-actions">
