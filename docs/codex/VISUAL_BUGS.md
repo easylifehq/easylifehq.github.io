@@ -1,9 +1,9 @@
 # Visual Bug Report
 
-Generated: 2026-04-24 22:07:39
+Generated: 2026-04-24 22:11:21
 Project: EasyLife
 Status: No Blocking Visual Bugs
-Artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260424-220736
+Artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260424-221117
 
 ## Summary
 
@@ -17,7 +17,7 @@ Artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260424-22073
    - Selector: `a.site-brand`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 356x34px EL EASYLIFEHQ EasyLifeHQ
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260424-220736\root-mobile.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260424-221117\root-mobile.png
 
 ## Suggested Task Queue Wording
 
