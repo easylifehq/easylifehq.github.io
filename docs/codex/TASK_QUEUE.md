@@ -312,3 +312,8 @@ Required final state:
 
 - [x] Visual review note cleanup: update one `docs/codex` review note to summarize the current shared CSS visual-regression risk and what to inspect on desktop/mobile. Docs only. Do not touch app code, Firebase, Functions, auth, secrets, dependencies, generated output, production config, report files, or task queue files.
 - [x] EasyWorkout dashboard consistency patch: improve one small heading, helper-copy, spacing, or card-hierarchy detail in the existing EasyWorkout dashboard so it aligns with the suite shell. Do not change workout behavior, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, `globals.css`, or shared architecture.
+
+## Checkpoint Planner Tasks 2026-04-24 22:12:00
+
+- [ ] EasyCalendar day-view summary polish: improve one small heading, helper-copy, spacing, or event-list hierarchy detail in the existing day view so today’s plan is easier to scan. Do not change date logic, event behavior, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, `globals.css`, or shared architecture.
+- [ ] EasyList task metadata polish: improve one small task-card metadata label, spacing, or status hierarchy detail so daily triage feels clearer and more consistent with the suite. Do not change task logic, task utility behavior, persistence, data models, routing, auth, Firebase, backend, dependencies, generated output, docs report files, package files, root config files, `globals.css`, or shared architecture.
