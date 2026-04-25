@@ -7286,6 +7286,22 @@ button.calendar-detail-card:disabled {
     padding: 0.85rem;
   }
 
+  .workout-today-strip {
+    grid-template-columns: repeat(3, minmax(132px, 1fr));
+    gap: 0.55rem;
+    margin-inline: -0.1rem;
+    overflow-x: auto;
+    padding: 0 0.1rem 0.2rem;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .workout-today-strip article {
+    min-width: 132px;
+    padding: 0.85rem;
+    scroll-snap-align: start;
+  }
+
   .settings-app-preference-card .panel-header {
     gap: 0.25rem;
   }
