@@ -6241,6 +6241,35 @@ button.calendar-detail-card:disabled {
   background: linear-gradient(180deg, var(--app-accent), color-mix(in srgb, var(--app-accent) 32%, transparent));
 }
 
+.workout-empty-state {
+  display: grid;
+  gap: 0.52rem;
+  align-items: start;
+  border-style: solid;
+}
+
+.workout-empty-state > span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.workout-empty-state > strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.workout-empty-state > p {
+  margin: 0;
+  max-width: 34rem;
+}
+
+.workout-empty-state > .compact-button {
+  width: fit-content;
+}
+
 .workout-today-strip span {
   color: var(--ui-text-muted, var(--shell-muted-text));
   font-size: 0.74rem;

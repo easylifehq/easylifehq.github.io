@@ -379,7 +379,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 
 - [x] Settings control-center layout pass: improve one Settings group, card, option row, or helper section so the page reads like the command center for the suite. Do not change auth/account behavior, persistence, data models, routing, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
-- [ ] Cross-app empty-state design pass: standardize one existing empty/low-content state in EasyList, EasyNotes, EasyCalendar, EasyWorkout, or Settings with cleaner hierarchy, short useful guidance, and one obvious existing action cue. Do not add features, change logic, routing, persistence, data models, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+- [x] Cross-app empty-state design pass: standardize one existing empty/low-content state in EasyList, EasyNotes, EasyCalendar, EasyWorkout, or Settings with cleaner hierarchy, short useful guidance, and one obvious existing action cue. Do not add features, change logic, routing, persistence, data models, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
 - [ ] Mobile 390px suite QA patch: inspect one main app page at phone width and fix one visible issue involving tap targets, cramped cards, text wrapping, clipped buttons, or excessive vertical bulk. Do not change behavior, routing, auth, Firebase, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, or root files.
 
