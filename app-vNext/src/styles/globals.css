@@ -6505,7 +6505,21 @@ button.calendar-detail-card:disabled {
   display: grid;
   gap: 0.52rem;
   align-items: start;
+  position: relative;
+  overflow: hidden;
+  padding-left: 1.05rem;
   border-style: solid;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 10%, transparent), transparent 48%),
+    var(--ui-bg-empty, color-mix(in srgb, var(--shell-card-bg-soft) 82%, white 18%));
+}
+
+.workout-empty-state::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--app-accent), color-mix(in srgb, var(--app-accent) 30%, transparent));
 }
 
 .workout-empty-state > span {
