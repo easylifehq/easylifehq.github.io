@@ -30,7 +30,9 @@ export function TaskCard({
       ? "Due today"
       : task.dueDate
         ? `Due ${formatDate(task.dueDate, true)}`
-        : "";
+        : task.completed
+          ? ""
+          : "No date";
   const hasLinks = Boolean(scheduledCount || task.linkedCalendarEventId || task.linkedNoteId);
 
   const statusClass = overdue ? " overdue" : dueToday ? " due-today" : "";
