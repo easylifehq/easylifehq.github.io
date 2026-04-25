@@ -1045,3 +1045,11 @@
 - app-vNext/src/features/marketing/routes/EasyPipelineMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 14:07:47
+
+- Task attempted: Logged-in visual QA access verification: inspect the dev-only protected app surfaces through `?visualQa=1` and make one small UI-only repair in EasyList, EasyNotes, EasyCalendar, EasyWorkout, or Settings based on the protected-side visual evidence. Do not change auth logic, Firebase, backend, persistence, data models, routing behavior, dependencies, package files, generated output, deployment config, secrets, or root files.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
