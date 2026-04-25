@@ -2045,6 +2045,9 @@ textarea::placeholder {
   --shell-display-font: "Palatino Linotype", "Georgia", serif;
   --shell-card-radius: 8px;
   --shell-card-shadow: 0 24px 58px rgba(2, 8, 7, 0.48);
+  --shell-panel-highlight: rgba(232, 207, 255, 0.12);
+  --shell-grid-line: rgba(124, 201, 161, 0.11);
+  --shell-status-glow: rgba(169, 184, 255, 0.22);
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.22s ease;
   --shell-motion-panel: 0.3s ease;
