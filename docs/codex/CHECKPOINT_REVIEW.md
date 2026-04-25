@@ -4,25 +4,25 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife 5.0 mission with small, reviewable visual polish across suite headers, empty states, mobile rhythm, theme surfaces, Settings, and EasyWorkout. Progress is aligned with the connected-suite and professional-polish goals, but Simon and visual QA still point to medium visual issues that should shape the next work.
+The branch is moving toward the EasyLife 5.0 mission with small, reviewable polish across EasyList, EasyNotes, EasyCalendar, EasyWorkout, Settings, shared shell styling, and theme surfaces. Progress is aligned with suite consistency and visual polish, but Simon’s RED verdict and 4 medium visual bugs mean the next work should prioritize repair.
 
 ## Safety Review
-No forbidden scope found. Changed files stay within safe frontend, styles, docs, and guardrail/reporting areas. Working tree is clean.
+No forbidden-scope changes found. Risk is concentrated in shared visual files, especially `app-vNext/src/styles/globals.css`, because broad CSS changes can create cross-app regressions.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: mobile card/list rhythm, shared shell premium audit, global surface pass, page header rhythm, theme polish, Settings customization polish, EasyWorkout form/mobile polish, and review gates
-- files changed: app UI/style files plus `docs/codex/*` review/queue/report files and `scripts/codex-guardrails.ps1`
-- commits added: latest HEAD `1996115` plus visual, Simon, Joey, and checkpoint commits for batch 4
-- queue status: 9 unchecked tasks remain
+- completed tasks in this checkpoint window: 12 recent UI polish tasks, including empty states, mobile rhythm, shared shell, theme, Settings, EasyWorkout, EasyList, and EasyNotes polish
+- files changed: app feature routes/components, `app-vNext/src/styles/globals.css`, docs review files, task queue/report files, and `scripts/codex-guardrails.ps1`
+- commits added: latest HEAD `69beb61` with multiple checkpoint, visual inspection, Simon, Joey, and planner commits since base
+- queue status: 7 unchecked tasks remain
 
 ## Follow-Up Gate Status
-- visual bug report: YELLOW influence; 4 medium visual bugs should guide immediate work
-- Simon design review: YELLOW influence; continue, but fix visual issues first
-- Joey security review: GREEN; no security blocker for next tasks
-- next-task influence: prioritize visual repair before broader mission-forward polish
+- visual bug report: 4 medium issues; should influence next tasks
+- Simon design review: RED; should influence next tasks immediately
+- Joey security review: GREEN; no security blocker
+- next tasks should be repair-led until Simon visual concerns are addressed
 
 ## Recommended Next Step
 patch first
@@ -30,11 +30,11 @@ patch first
 ## Next Batch Guidance
 - recommended next batch size: 2
 - next work mode: repair-first
-- Keep the next batch small because build and safety gates are clean, but Simon’s YELLOW verdict and 4 medium visual bugs should be resolved before continuing down the remaining polish queue.
+- Simon is RED with medium visual bugs, so keep the next batch small and focused on visible cleanup before continuing mission-forward polish.
 
 ## Notes For Human Reviewer
-- Clean working tree.
+- Working tree is clean.
 - Build passed.
-- No forbidden files listed.
-- Main risk is visual quality, not safety.
-- Next task should address Simon/visual QA before new polish work.
+- No forbidden files or dependency files are listed.
+- Shared CSS has accumulated many visual changes and deserves careful desktop/mobile inspection.
+- Remaining queue is mostly safe frontend polish.
