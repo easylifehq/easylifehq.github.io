@@ -459,3 +459,11 @@
 - Files changed:
 - app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-24 22:09:18
+
+- Task attempted: Visual review note cleanup: update one `docs/codex` review note to summarize the current shared CSS visual-regression risk and what to inspect on desktop/mobile. Docs only. Do not touch app code, Firebase, Functions, auth, secrets, dependencies, generated output, production config, report files, or task queue files.
+- Build result: Passed
+- Files changed:
+- docs/codex/CHECKPOINT_REVIEW.md
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
