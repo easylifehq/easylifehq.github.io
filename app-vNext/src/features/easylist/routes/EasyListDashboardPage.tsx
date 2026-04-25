@@ -62,6 +62,9 @@ export function EasyListDashboardPage() {
     if (activeView === "upcoming") return upcomingTasks;
     return activeTasks;
   }, [activeTasks, activeView, focusTasks, upcomingTasks]);
+  const boardTitle = activeView === "focus" ? "Focus" : activeView === "upcoming" ? "Upcoming" : activeListName;
+  const boardHeading =
+    activeView === "focus" ? "Triage queue" : activeView === "upcoming" ? "Planned work" : `${activeListName} tasks`;
   const filteredTasks = useMemo(() => {
     const term = search.trim().toLowerCase();
     if (!term) {
@@ -157,7 +160,7 @@ export function EasyListDashboardPage() {
     <>
       <PageSection
         eyebrow="Tasks"
-        title={activeView === "focus" ? "Focus" : activeView === "upcoming" ? "Upcoming" : activeListName}
+        title={boardTitle}
       >
         <div className="easylist-smart-tabs" aria-label="Task views">
           <button type="button" className={activeView === "focus" ? "active" : ""} onClick={() => setActiveView("focus")}>
@@ -251,29 +254,37 @@ export function EasyListDashboardPage() {
 
         {error ? <p className="error-copy">{error}</p> : null}
 
-        <div className="task-list-vnext">
-          {filteredTasks.length ? (
-            filteredTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                onEdit={setSelectedTask}
-                onComplete={markComplete}
-                isSelected={selectedTaskIds.includes(task.id)}
-                onSelect={isBulkEditing ? selectTask : undefined}
-                showContextMeta={activeView !== "focus"}
-              />
-            ))
-          ) : (
-            <div className="empty-card-vnext">
-              {activeView === "focus"
-                ? "No urgent tasks right now. Add a task, check Upcoming, or pick a list to keep moving."
-                : activeView === "upcoming"
-                  ? "No upcoming tasks yet. Add due dates to planned work and they will appear here."
-                  : "This list is empty. Add a task from the Add page or choose another list."}
-            </div>
-          )}
-        </div>
+        <section className="group-block" aria-labelledby="easylist-board-heading">
+          <div className="group-heading">
+            <h3 id="easylist-board-heading">{boardHeading}</h3>
+            <span>
+              {filteredTasks.length} task{filteredTasks.length === 1 ? "" : "s"}
+            </span>
+          </div>
+          <div className="task-list-vnext">
+            {filteredTasks.length ? (
+              filteredTasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onEdit={setSelectedTask}
+                  onComplete={markComplete}
+                  isSelected={selectedTaskIds.includes(task.id)}
+                  onSelect={isBulkEditing ? selectTask : undefined}
+                  showContextMeta={activeView !== "focus"}
+                />
+              ))
+            ) : (
+              <div className="empty-card-vnext">
+                {activeView === "focus"
+                  ? "No urgent tasks right now. Add a task, check Upcoming, or pick a list to keep moving."
+                  : activeView === "upcoming"
+                    ? "No upcoming tasks yet. Add due dates to planned work and they will appear here."
+                    : "This list is empty. Add a task from the Add page or choose another list."}
+              </div>
+            )}
+          </div>
+        </section>
       </PageSection>
 
       {isExperimentalFeatureEnabled("overdueTriage") && overdueTasks.length ? (
