@@ -791,3 +791,12 @@
 - app-vNext/src/components/navigation/MarketingHeader.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:35:30
+
+- Task attempted: Marketing desktop boxed-layout relief: adjust one existing public product marketing section so the page rhythm feels less like stacked white cards while preserving the shared shell and current content. Do not add sections, redesign the product shell, change routing behavior, app logic, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyNotesMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

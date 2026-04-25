@@ -3,6 +3,7 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyNotesMarketingPage() {
   return (
     <ProductMarketingPage
+      pageClassName="marketing-page--open-features"
       eyebrow="EasyNotes"
       heroTitle="Write first. Sort it out later."
       heroDescription="EasyNotes is for brain dumps, meeting notes, rough drafts, and fast thought capture with a calm mobile-first writing experience."
