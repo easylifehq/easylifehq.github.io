@@ -660,13 +660,24 @@ a {
   min-height: 100vh;
   min-height: 100dvh;
   min-height: max(100vh, 100dvh);
+  --marketing-grid-line: color-mix(in srgb, var(--shell-card-border) 22%, transparent);
   background:
-    linear-gradient(90deg, var(--shell-grid-line) 1px, transparent 1px),
-    linear-gradient(180deg, var(--shell-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--marketing-grid-line) 1px, transparent 1px),
+    linear-gradient(180deg, var(--marketing-grid-line) 1px, transparent 1px),
     radial-gradient(circle at top left, var(--shell-page-overlay-1), transparent 28%),
     radial-gradient(circle at top right, var(--shell-page-overlay-2), transparent 26%),
     linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
-  background-size: 72px 72px, 72px 72px, auto, auto, auto;
+  background-size: 96px 96px, 96px 96px, auto, auto, auto;
+}
+
+.marketing-shell::before {
+  background:
+    linear-gradient(90deg, var(--marketing-grid-line) 1px, transparent 1px),
+    linear-gradient(180deg, var(--marketing-grid-line) 1px, transparent 1px),
+    radial-gradient(circle at top left, var(--shell-page-overlay-1), transparent 28%),
+    radial-gradient(circle at top right, var(--shell-page-overlay-2), transparent 26%),
+    linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
+  background-size: 96px 96px, 96px 96px, auto, auto, auto;
 }
 
 .marketing-content {

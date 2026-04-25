@@ -1012,3 +1012,11 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 07:03:04
+
+- Task attempted: Marketing background calmness pass: reduce the visible grid/background texture on one public product marketing page or shared product marketing shell where it competes with card borders, using existing neutral styles only. Do not add sections, introduce colors, change copy meaning, routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
