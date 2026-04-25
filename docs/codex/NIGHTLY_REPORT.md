@@ -947,3 +947,11 @@
 - Files changed:
 - app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 06:35:54
+
+- Task attempted: Product function differentiation pass: add one compact static working-UI cue to an existing EasyList or EasyWorkout marketing preview so it feels less interchangeable with the other product pages. Do not add behavior, data fetching, new sections, routes, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or broad shared architecture.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

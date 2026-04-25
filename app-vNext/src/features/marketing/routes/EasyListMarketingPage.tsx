@@ -10,6 +10,12 @@ export function EasyListMarketingPage() {
       heroPoints={["Brain dumps", "Flexible planner", "Archive history", "EasyCalendar handoff"]}
       heroCardTitle="A task system that keeps the noise manageable."
       heroCardBody="EasyList is where quick obligations, admin chores, reminders, and loose tasks stop living in your head and start moving."
+      heroPreviewItems={[
+        { app: "Inbox", detail: "6 quick tasks captured", status: "Review" },
+        { app: "Today", detail: "Renew registration", status: "Due" },
+        { app: "Priority", detail: "Call dentist before noon", status: "8/10" },
+        { app: "Calendar", detail: "Block errand window", status: "Send" },
+      ]}
       featuresTitle="Built for the stuff that quietly drains your energy"
       featuresDescription="It stays lightweight enough to use every day while still giving you priorities, planning, and momentum."
       features={[
