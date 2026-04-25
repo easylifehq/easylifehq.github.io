@@ -275,12 +275,22 @@ export function EasyListDashboardPage() {
                 />
               ))
             ) : (
-              <div className="empty-card-vnext">
-                {activeView === "focus"
-                  ? "No urgent tasks right now. Add a task, check Upcoming, or pick a list to keep moving."
-                  : activeView === "upcoming"
-                    ? "No upcoming tasks yet. Add due dates to planned work and they will appear here."
-                    : "This list is empty. Add a task from the Add page or choose another list."}
+              <div className="empty-card-vnext easylist-suite-empty-card">
+                <span>EasyList workspace</span>
+                <strong>
+                  {activeView === "focus"
+                    ? "Your focus queue is clear"
+                    : activeView === "upcoming"
+                      ? "No planned tasks yet"
+                      : `${activeListName} is ready for tasks`}
+                </strong>
+                <p>
+                  {activeView === "focus"
+                    ? "Next: capture one task on Add, review Upcoming, or pick a list when you are ready to keep moving."
+                    : activeView === "upcoming"
+                      ? "Next: add due dates to planned work so EasyCalendar and the rest of the suite can surface what is coming."
+                      : "Next: add a task from the Add page or choose another list to keep this workspace connected."}
+                </p>
               </div>
             )}
           </div>

@@ -3624,6 +3624,35 @@ textarea::placeholder {
   overflow-wrap: anywhere;
 }
 
+.easylist-suite-empty-card {
+  display: grid;
+  gap: 0.44rem;
+  border-style: solid;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--shell-accent) 9%, transparent), transparent 48%),
+    var(--ui-bg-empty, color-mix(in srgb, var(--shell-card-bg-soft) 82%, white 18%));
+}
+
+.easylist-suite-empty-card > span {
+  width: fit-content;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--shell-accent) 18%, transparent);
+  padding: 0.18rem 0.52rem;
+  color: var(--ui-text-muted, #8f8173);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.easylist-suite-empty-card > strong {
+  color: var(--ui-text-primary, #2f261f);
+}
+
+.easylist-suite-empty-card > p {
+  margin: 0;
+}
+
 .notes-suite-empty-card {
   display: grid;
   gap: 0.48rem;
