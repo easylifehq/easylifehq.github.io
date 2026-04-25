@@ -355,6 +355,17 @@ export function EasyNotesLibraryPage() {
         {error ? <p className="error-copy">{error}</p> : null}
         {cleanupMessage ? <p className="helper-copy">{cleanupMessage}</p> : null}
 
+        <div className="group-heading" aria-label="Notes library results">
+          <div>
+            <h3>{hasFilters ? "Filtered library" : "Library"}</h3>
+            <div className="note-card-meta">
+              <span>{hasFilters ? "Showing" : "Review"}</span>
+              {hasFilters ? "Matches your current search or folder" : "All notes sorted by latest update"}
+            </div>
+          </div>
+          <span>{filteredNotes.length}</span>
+        </div>
+
         <div className="notes-library-grid">
           {isLoading ? <p className="helper-copy">Loading your notes...</p> : null}
 
