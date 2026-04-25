@@ -782,3 +782,12 @@
 - app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:32:56
+
+- Task attempted: Mobile nav utility repair: expose one safe existing action cue or product movement hint in the mobile marketing header first viewport without changing routing behavior or adding new navigation complexity. Do not touch backend, auth, Firebase, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or app-router behavior.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/components/navigation/MarketingHeader.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

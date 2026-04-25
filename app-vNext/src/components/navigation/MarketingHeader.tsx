@@ -24,6 +24,7 @@ export function MarketingHeader() {
             <strong className="site-brand-title">EasyLifeHQ</strong>
           </div>
         </Link>
+        <span className="site-mobile-cue">Products and demo below</span>
 
         <nav className="site-nav-links" aria-label="Marketing">
           {marketingLinks.map((link) => (

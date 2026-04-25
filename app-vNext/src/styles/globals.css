@@ -271,6 +271,10 @@ a {
   color: var(--shell-heading-text);
 }
 
+.site-mobile-cue {
+  display: none;
+}
+
 .app-current-label {
   margin: 0.15rem 0 0;
   color: var(--ui-text-muted, var(--shell-muted-text));
@@ -7206,6 +7210,19 @@ button.calendar-detail-card:disabled {
 
   .brand-kicker {
     font-size: 0.45rem;
+  }
+
+  .site-mobile-cue {
+    display: block;
+    margin-top: 0.02rem;
+    color: var(--ui-text-muted, var(--shell-muted-text));
+    font-size: 0.62rem;
+    font-weight: 700;
+    line-height: 1.1;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .app-current-label {
