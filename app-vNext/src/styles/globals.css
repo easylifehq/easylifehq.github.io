@@ -1096,6 +1096,7 @@ a {
 }
 
 .page-hero-vnext h1,
+.panel-header h1,
 .panel-header h2,
 .auth-card-vnext h1 {
   margin: 0.25rem 0 0.45rem;
@@ -1118,18 +1119,27 @@ a {
 .panel-header {
   display: flex;
   flex-direction: column;
-  gap: 0.42rem;
-  margin-bottom: 0.85rem;
+  gap: 0.34rem;
+  margin-bottom: 1rem;
 }
 
+.panel-header h1,
 .panel-header h2 {
   margin: 0;
+  font-size: clamp(1.38rem, 2vw, 1.82rem);
+  line-height: 1.08;
+}
+
+.panel-header .eyebrow + h1,
+.panel-header .eyebrow + h2 {
+  margin-top: 0.06rem;
 }
 
 .page-section-description {
   max-width: 62ch;
   margin: 0;
   font-size: 0.94rem;
+  line-height: 1.5;
 }
 
 .panel-section > .panel-header:only-child {
@@ -6227,6 +6237,7 @@ button.calendar-detail-card:disabled {
 }
 
 .app-shell-vnext.shell-theme-gamer .page-hero-vnext h1,
+.app-shell-vnext.shell-theme-gamer .panel-header h1,
 .app-shell-vnext.shell-theme-gamer .panel-header h2,
 .app-shell-vnext.shell-theme-gamer .workspace-hero h1,
 .app-shell-vnext.shell-theme-gamer .task-card-title-row h3,
@@ -6235,6 +6246,7 @@ button.calendar-detail-card:disabled {
 .app-shell-vnext.shell-theme-gamer .hq-list-card strong,
 .app-shell-vnext.shell-theme-gamer .settings-choice-card strong,
 .app-shell-vnext.shell-theme-elvish .page-hero-vnext h1,
+.app-shell-vnext.shell-theme-elvish .panel-header h1,
 .app-shell-vnext.shell-theme-elvish .panel-header h2,
 .app-shell-vnext.shell-theme-elvish .workspace-hero h1,
 .app-shell-vnext.shell-theme-elvish .task-card-title-row h3,
@@ -6243,6 +6255,7 @@ button.calendar-detail-card:disabled {
 .app-shell-vnext.shell-theme-elvish .hq-list-card strong,
 .app-shell-vnext.shell-theme-elvish .settings-choice-card strong,
 .app-shell-vnext.shell-theme-aurora .page-hero-vnext h1,
+.app-shell-vnext.shell-theme-aurora .panel-header h1,
 .app-shell-vnext.shell-theme-aurora .panel-header h2,
 .app-shell-vnext.shell-theme-aurora .workspace-hero h1,
 .app-shell-vnext.shell-theme-aurora .task-card-title-row h3,
@@ -6251,6 +6264,7 @@ button.calendar-detail-card:disabled {
 .app-shell-vnext.shell-theme-aurora .hq-list-card strong,
 .app-shell-vnext.shell-theme-aurora .settings-choice-card strong,
 .app-shell-vnext.shell-theme-midnightGarden .page-hero-vnext h1,
+.app-shell-vnext.shell-theme-midnightGarden .panel-header h1,
 .app-shell-vnext.shell-theme-midnightGarden .panel-header h2,
 .app-shell-vnext.shell-theme-midnightGarden .workspace-hero h1,
 .app-shell-vnext.shell-theme-midnightGarden .task-card-title-row h3,
@@ -7162,6 +7176,7 @@ button.calendar-detail-card:disabled {
   .marketing-hero-card p,
   .marketing-card h3,
   .marketing-hero-card h2,
+  .panel-header h1,
   .panel-header h2,
   .panel-header p {
     overflow-wrap: anywhere;
