@@ -842,3 +842,11 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:53:10
+
+- Task attempted: Marketing header wording repair: replace the mobile header phrase "Products and demo below" with a more polished navigation cue while preserving existing links, tap targets, and routing behavior. Do not touch auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or app-router behavior.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/components/navigation/MarketingHeader.tsx
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
