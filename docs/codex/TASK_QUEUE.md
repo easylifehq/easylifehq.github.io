@@ -361,7 +361,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 
 - [x] Theme contrast and focus pass: improve one theme's contrast, focus rings, surface depth, or accent usage so it feels deliberately designed instead of lightly recolored. Do not add new theme settings, change persistence, touch auth, Firebase, backend, dependencies, package files, generated output, deployment config, secrets, or root files.
 
-- [ ] Settings customization control polish: improve the visual hierarchy around existing theme/settings controls so Settings feels like a real control center, not a form dump. Do not add settings behavior, change account/auth behavior, persistence, data models, routing, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
+- [x] Settings customization control polish: improve the visual hierarchy around existing theme/settings controls so Settings feels like a real control center, not a form dump. Do not add settings behavior, change account/auth behavior, persistence, data models, routing, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
 - [ ] EasyWorkout exercise form rescue: inspect the workout log/exercise/set input UI and fix one obvious clunky layout issue such as overflowing set rows, cramped inputs, weak labels, or crowded action buttons on desktop or mobile. Preserve workout behavior, persistence, data shapes, auth, Firebase, routing, dependencies, package files, generated output, docs report files, and root config.
 

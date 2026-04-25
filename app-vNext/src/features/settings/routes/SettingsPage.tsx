@@ -992,32 +992,34 @@ export function SettingsPage() {
           }
         >
           <div id="customize" className="settings-anchor" />
-          <div className="settings-theme-overview">
-            <div>
-              <span className="settings-card-topline">Current selection</span>
-              <strong>{activeTheme.label}</strong>
-              <p>{activeTheme.description}</p>
+          <div className="settings-customization-console">
+            <div className="settings-theme-overview">
+              <div>
+                <span className="settings-card-topline">Current selection</span>
+                <strong>{activeTheme.label}</strong>
+                <p>{activeTheme.description}</p>
+              </div>
+              <span className="settings-state-pill">{activeTheme.tone}</span>
             </div>
-            <span className="settings-state-pill">{activeTheme.tone}</span>
-          </div>
-          <div className="settings-option-grid">
-            {themeOptions.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                className={`settings-choice-card settings-theme-card settings-theme-${option.value}${
-                  settings.themeMode === option.value ? " active" : ""
-                }`}
-                onClick={() => void setThemeMode(option.value)}
-              >
-                <span className="settings-card-topline">
-                  <span>{option.tone}</span>
-                  {settings.themeMode === option.value ? <span className="settings-state-pill">Active</span> : null}
-                </span>
-                <strong>{option.label}</strong>
-                <p>{option.description}</p>
-              </button>
-            ))}
+            <div className="settings-option-grid">
+              {themeOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`settings-choice-card settings-theme-card settings-theme-${option.value}${
+                    settings.themeMode === option.value ? " active" : ""
+                  }`}
+                  onClick={() => void setThemeMode(option.value)}
+                >
+                  <span className="settings-card-topline">
+                    <span>{option.tone}</span>
+                    {settings.themeMode === option.value ? <span className="settings-state-pill">Active</span> : null}
+                  </span>
+                  <strong>{option.label}</strong>
+                  <p>{option.description}</p>
+                </button>
+              ))}
+            </div>
           </div>
         </PageSection>
         ) : null}

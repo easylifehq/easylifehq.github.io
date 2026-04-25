@@ -4947,18 +4947,29 @@ button.calendar-detail-card:disabled {
   gap: 0.9rem;
 }
 
+.settings-customization-console {
+  display: grid;
+  gap: 0.95rem;
+  padding: 0.85rem;
+  border-radius: var(--shell-panel-radius);
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 10%, transparent), transparent 42%),
+    color-mix(in srgb, var(--ui-bg-section, var(--shell-card-bg)) 82%, transparent);
+}
+
 .settings-theme-overview {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1rem;
   padding: 1rem;
   border-radius: 8px;
-  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border: 1px solid var(--ui-border-strong, var(--shell-card-border));
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 10%, transparent), transparent 58%),
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 16%, transparent), transparent 58%),
     var(--ui-bg-card-elevated, var(--shell-input-bg));
+  box-shadow: 0 14px 34px rgba(34, 29, 24, 0.08);
 }
 
 .settings-theme-overview strong {
@@ -5556,6 +5567,8 @@ button.calendar-detail-card:disabled {
   position: relative;
   overflow: hidden;
   min-height: 9rem;
+  border-color: color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 82%, var(--app-accent) 18%);
+  transition: transform var(--shell-motion-fast), border-color var(--shell-motion-fast), box-shadow var(--shell-motion-fast);
 }
 
 .settings-theme-card::before {
@@ -5612,6 +5625,12 @@ button.calendar-detail-card:disabled {
 .settings-theme-card.active::before {
   width: 4.4rem;
   box-shadow: 0 0 18px color-mix(in srgb, var(--app-accent) 38%, transparent);
+}
+
+.settings-theme-card:hover {
+  border-color: var(--ui-border-strong, var(--shell-card-border));
+  box-shadow: 0 12px 26px rgba(34, 29, 24, 0.08);
+  transform: translateY(-1px);
 }
 
 .settings-choice-card p,
