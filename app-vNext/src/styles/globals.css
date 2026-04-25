@@ -5041,6 +5041,11 @@ button.calendar-detail-card:disabled {
   background: var(--ui-bg-card-elevated, var(--shell-input-bg));
 }
 
+.ai-daily-brief-hero {
+  border-color: color-mix(in srgb, var(--ui-accent, var(--shell-accent)) 28%, var(--ui-border-subtle, var(--shell-card-border)));
+  box-shadow: 0 14px 32px rgba(34, 29, 24, 0.07);
+}
+
 .ai-daily-brief-hero h3 {
   margin: 0.45rem 0 0.35rem;
   color: var(--ui-text-primary, var(--shell-page-text));
@@ -5080,6 +5085,8 @@ button.calendar-detail-card:disabled {
 }
 
 .ai-daily-brief-focus li {
+  padding-left: 0.7rem;
+  border-left: 3px solid color-mix(in srgb, var(--ui-accent, var(--shell-accent)) 42%, transparent);
   font-weight: 800;
 }
 
