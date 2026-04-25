@@ -2674,6 +2674,10 @@ textarea::placeholder {
   grid-template-columns: minmax(180px, 1.2fr) minmax(120px, 0.8fr) 84px 100px 110px 100px 92px;
 }
 
+.workout-set-row {
+  min-width: 0;
+}
+
 .routine-exercise-card {
   overflow: hidden;
 }
