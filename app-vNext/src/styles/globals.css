@@ -7702,6 +7702,9 @@ button.calendar-detail-card:disabled {
     min-height: 28px;
     padding: 0.24rem 0.46rem;
     font-size: 0.72rem;
+    background: color-mix(in srgb, var(--ui-pill-bg, var(--shell-chip-bg)) 34%, transparent);
+    color: color-mix(in srgb, var(--ui-text-muted, var(--shell-muted-text)) 82%, var(--ui-bg-page, var(--shell-bg-bottom)));
+    font-weight: 600;
   }
 
   .marketing-page--product .marketing-hero-card {

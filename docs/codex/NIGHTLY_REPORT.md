@@ -896,3 +896,11 @@
 - app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 05:14:53
+
+- Task attempted: Mobile support-pill quieting verification: inspect the shared product marketing hero at 390px and make one narrow CSS-only adjustment if support tags still compete with CTAs, keeping chips readable and secondary. Do not change copy meaning, routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or desktop layout.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
