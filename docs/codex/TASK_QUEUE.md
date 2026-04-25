@@ -161,6 +161,10 @@ Codex may:
 
 ## Tasks
 
+### Launch Repair Tasks
+
+- [ ] Settings visual QA repair: make the existing Settings experience reachable from the fleet-inspected settings path or update the inspected path so visual QA no longer sees a blank `/settings` route. Preserve the existing authenticated Settings page behavior. Do not change auth logic, Firebase, persistence, data models, backend, dependencies, package files, deployment config, generated output, secrets, or unrelated routing.
+
 ### Phase 1 - Baseline and Suite Shell
 
 - [x] Shared suite shell audit: inspect shared layout/header/nav/app shell files and make one focused improvement to suite consistency, active app clarity, page container spacing, or mobile header ergonomics. Do not change auth, routing behavior, Firebase, data models, dependencies, generated output, TASK_QUEUE.md, or NIGHTLY_REPORT.md.
