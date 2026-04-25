@@ -305,5 +305,5 @@ Required final state:
 
 ## Checkpoint Planner Tasks 2026-04-24 22:03:48
 
-- [ ] Shared CSS regression patch: inspect recent `app-vNext/src/styles/globals.css` changes and make one narrowly scoped spacing, overflow, or mobile readability fix for an obvious shared UI rough edge. Do not change app logic, routing, persistence, data models, auth, Firebase, backend, dependencies, generated output, package files, root config files, docs report files, or broad theme architecture.
+- [x] Shared CSS regression patch: inspect recent `app-vNext/src/styles/globals.css` changes and make one narrowly scoped spacing, overflow, or mobile readability fix for an obvious shared UI rough edge. Do not change app logic, routing, persistence, data models, auth, Firebase, backend, dependencies, generated output, package files, root config files, docs report files, or broad theme architecture.
 - [ ] Cross-app visual consistency patch: inspect one main app page in EasyList, EasyNotes, EasyCalendar, EasyWorkout, or Settings and make one small copy, spacing, or hierarchy improvement that aligns it with the suite shell. Do not touch `globals.css`, auth, Firebase, backend, routing behavior, persistence, data models, dependencies, generated output, package files, root config files, docs report files, or shared architecture.

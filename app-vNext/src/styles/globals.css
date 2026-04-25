@@ -558,6 +558,10 @@ a {
   font-size: inherit;
 }
 
+.menu-link-card .menu-link-title strong {
+  flex: 1 1 0;
+}
+
 .menu-link-card .menu-link-status {
   flex: 0 0 auto;
   color: var(--ui-text-muted, var(--shell-muted-text));
