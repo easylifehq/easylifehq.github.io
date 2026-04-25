@@ -359,7 +359,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 
 - [x] Theme personality audit: inspect existing theme/Candy Mode/customization styling and make one existing theme feel more customized and fun while staying professional, accessible, and consistent with EasyLife 5.0. Prefer existing CSS tokens or theme hooks. Do not add dependencies, change Settings persistence, alter auth/Firebase/backend code, edit package files, generated output, deployment config, secrets, or root files.
 
-- [ ] Theme contrast and focus pass: improve one theme's contrast, focus rings, surface depth, or accent usage so it feels deliberately designed instead of lightly recolored. Do not add new theme settings, change persistence, touch auth, Firebase, backend, dependencies, package files, generated output, deployment config, secrets, or root files.
+- [x] Theme contrast and focus pass: improve one theme's contrast, focus rings, surface depth, or accent usage so it feels deliberately designed instead of lightly recolored. Do not add new theme settings, change persistence, touch auth, Firebase, backend, dependencies, package files, generated output, deployment config, secrets, or root files.
 
 - [ ] Settings customization control polish: improve the visual hierarchy around existing theme/settings controls so Settings feels like a real control center, not a form dump. Do not add settings behavior, change account/auth behavior, persistence, data models, routing, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
