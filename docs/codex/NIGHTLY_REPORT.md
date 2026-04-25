@@ -747,3 +747,12 @@
 - app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:11:52
+
+- Task attempted: Product hero utility repair: replace one decorative right-side "EasyLifeHQ product" style hero card with a compact static operational preview that shows cross-app daily structure using existing UI content only. Do not add data fetching, persistence, new routes, backend, auth, Firebase, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or broad shared architecture.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

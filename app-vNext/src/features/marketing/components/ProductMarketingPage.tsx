@@ -42,6 +42,12 @@ export function ProductMarketingPage({
   demoPath = [],
 }: ProductMarketingPageProps) {
   const pageClass = pageClassName ? `marketing-page ${pageClassName}` : "marketing-page";
+  const previewItems = [
+    { app: "EasyHQ", detail: "Daily pulse" },
+    { app: "EasyList", detail: "Brain dumps" },
+    { app: "EasyCalendar", detail: "Plan My Day" },
+    { app: "EasyNotes", detail: "Draft handoff to EasyList" },
+  ];
 
   return (
     <main className={pageClass}>
@@ -70,12 +76,20 @@ export function ProductMarketingPage({
         </div>
 
         <div className="marketing-hero-card">
-          <span className="info-pill">EasyLifeHQ product</span>
-          <h2>{heroCardTitle}</h2>
-          <p>{heroCardBody}</p>
-          <div className="marketing-card-metrics">
-            {heroPoints.slice(0, 3).map((point) => (
-              <span key={point}>{point}</span>
+          <div className="marketing-hero-preview-header">
+            <span className="info-pill">{eyebrow}</span>
+            <div>
+              <h2>{heroCardTitle}</h2>
+              <p>{heroCardBody}</p>
+            </div>
+          </div>
+
+          <div className="marketing-hero-preview" aria-label={`${eyebrow} daily structure preview`}>
+            {previewItems.map((item) => (
+              <div key={`${item.app}-${item.detail}`} className="marketing-hero-preview-row">
+                <span>{item.app}</span>
+                <strong>{item.detail}</strong>
+              </div>
             ))}
           </div>
         </div>

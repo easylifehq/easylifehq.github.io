@@ -746,10 +746,21 @@ a {
   border: 1px solid color-mix(in srgb, var(--shell-accent) 12%, transparent);
 }
 
+.marketing-hero-preview-header {
+  display: grid;
+  gap: 0.7rem;
+}
+
 .marketing-hero-card h2,
 .marketing-card h3 {
   margin: 0;
   overflow-wrap: break-word;
+}
+
+.marketing-hero-preview {
+  display: grid;
+  gap: 0.5rem;
+  align-self: end;
 }
 
 .marketing-card-metrics {
@@ -766,6 +777,31 @@ a {
   color: var(--ui-pill-text, var(--shell-chip-text));
   font-size: 0.76rem;
   font-weight: 850;
+}
+
+.marketing-hero-preview-row {
+  display: grid;
+  grid-template-columns: minmax(5.8rem, 0.62fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.58rem 0.68rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--shell-accent) 12%, transparent);
+  background: color-mix(in srgb, var(--shell-card-bg) 72%, white 28%);
+}
+
+.marketing-hero-preview-row span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.74rem;
+  font-weight: 850;
+}
+
+.marketing-hero-preview-row strong {
+  min-width: 0;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.86rem;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
 }
 
 .marketing-section {
