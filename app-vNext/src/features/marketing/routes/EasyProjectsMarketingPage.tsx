@@ -12,7 +12,7 @@ export function EasyProjectsMarketingPage() {
       heroCardBody="Keep the plan, task links, and project context together without making every small task feel like a project."
       heroPreviewItems={[
         { app: "Launch plan", detail: "Timeline review", status: "Next" },
-        { app: "Research", detail: "2 linked tasks" },
+        { app: "After research", detail: "Turn 2 findings into tasks" },
         { app: "Build", detail: "Draft checklist" },
         { app: "Handoff", detail: "Friday milestone" },
       ]}
