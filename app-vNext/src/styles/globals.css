@@ -6312,6 +6312,10 @@ button.calendar-detail-card:disabled {
   touch-action: manipulation;
 }
 
+.app-shell-vnext:has(.settings-page) .capture-fab {
+  display: none;
+}
+
 .capture-backdrop {
   position: fixed;
   inset: 0;
@@ -6346,10 +6350,15 @@ button.calendar-detail-card:disabled {
   transition: opacity var(--shell-motion-fast), transform var(--shell-motion-fast);
 }
 
+.capture-modal[aria-hidden="true"] {
+  visibility: hidden;
+}
+
 .capture-modal.open {
   opacity: 1;
   pointer-events: auto;
   transform: translate(-50%, 0);
+  visibility: visible;
 }
 
 .capture-header,
@@ -7399,6 +7408,7 @@ button.calendar-detail-card:disabled {
 
   .site-brand {
     gap: 0.45rem;
+    min-height: 44px;
     min-width: 0;
   }
 
@@ -7569,6 +7579,24 @@ button.calendar-detail-card:disabled {
     grid-template-columns: 1fr;
   }
 
+  .settings-page {
+    padding-bottom: 5.5rem;
+  }
+
+  .settings-page .panel-header {
+    gap: 0.45rem;
+  }
+
+  .settings-page .panel-header h1 {
+    font-size: clamp(2.05rem, 12vw, 3.1rem);
+    line-height: 1;
+  }
+
+  .settings-page .panel-header p:not(.eyebrow) {
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
   .settings-quick-strip {
     grid-template-columns: 1fr;
     gap: 0.65rem;
@@ -7581,6 +7609,24 @@ button.calendar-detail-card:disabled {
 
   .settings-section-content {
     gap: 0.85rem;
+  }
+
+  .settings-hero {
+    gap: 0.8rem;
+  }
+
+  .settings-status-card,
+  .settings-quick-card {
+    padding: 0.78rem;
+  }
+
+  .settings-section-heading {
+    gap: 0.32rem;
+  }
+
+  .settings-section-heading h2 {
+    font-size: clamp(1.45rem, 8vw, 2rem);
+    line-height: 1.06;
   }
 
   .settings-section-heading,
