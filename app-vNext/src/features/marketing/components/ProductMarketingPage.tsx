@@ -49,7 +49,9 @@ export function ProductMarketingPage({
   ctaBody,
   demoPath = [],
 }: ProductMarketingPageProps) {
-  const pageClass = pageClassName ? `marketing-page ${pageClassName}` : "marketing-page";
+  const pageClass = pageClassName
+    ? `marketing-page marketing-page--product ${pageClassName}`
+    : "marketing-page marketing-page--product";
   const previewItems = heroPreviewItems ?? [
     { app: "EasyHQ", detail: "Daily pulse" },
     { app: "EasyList", detail: "Brain dumps" },

@@ -7679,6 +7679,35 @@ button.calendar-detail-card:disabled {
     padding: 0.95rem;
   }
 
+  .marketing-page--product .marketing-hero {
+    gap: 0.72rem;
+    padding: 0.78rem 0.82rem;
+  }
+
+  .marketing-page--product .marketing-hero-copy,
+  .marketing-page--product .marketing-hero-card {
+    gap: 0.64rem;
+  }
+
+  .marketing-page--product .marketing-hero-copy h1 {
+    font-size: clamp(1.34rem, 5.9vw, 1.66rem);
+    line-height: 1.04;
+  }
+
+  .marketing-page--product .marketing-hero .marketing-points {
+    gap: 0.34rem;
+  }
+
+  .marketing-page--product .marketing-hero-copy .marketing-points .info-pill {
+    min-height: 28px;
+    padding: 0.24rem 0.46rem;
+    font-size: 0.72rem;
+  }
+
+  .marketing-page--product .marketing-hero-card {
+    padding: 0.82rem;
+  }
+
   .marketing-page--mobile-dense-hero .marketing-hero {
     gap: 0.72rem;
     padding: 0.72rem;

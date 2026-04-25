@@ -887,3 +887,12 @@
 - app-vNext/src/components/navigation/MarketingHeader.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 05:10:50
+
+- Task attempted: Shared mobile product hero scale repair: reduce mobile-only hero H1 size, line-height, support-pill bulk, and top/bottom padding in the shared product marketing shell so previews appear earlier at 390px without changing copy meaning or desktop layout. Do not add sections, introduce new colors, change routing, app logic, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
