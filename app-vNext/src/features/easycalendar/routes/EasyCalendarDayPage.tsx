@@ -299,7 +299,11 @@ export function EasyCalendarDayPage() {
         </div>
       </PageSection>
 
-      <PageSection eyebrow="Day" title="Timeline">
+      <PageSection
+        eyebrow="Day"
+        title="Day timeline"
+        description="Scan scheduled events, task blocks, and open windows in order."
+      >
         {isLoading ? <p className="helper-copy">Loading this schedule...</p> : null}
 
         <div className="calendar-day-actions calendar-command-bar">
