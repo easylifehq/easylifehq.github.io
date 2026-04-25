@@ -808,3 +808,12 @@
 - Files changed:
 - app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 04:41:07
+
+- Task attempted: Mobile preview lift repair: tighten spacing around one public product marketing hero at 390px so the existing hero preview appears earlier in the first viewport without deleting content or changing copy. Do not change routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

@@ -7594,6 +7594,34 @@ button.calendar-detail-card:disabled {
     padding: 0.72rem;
   }
 
+  .marketing-page--mobile-preview-lift .marketing-hero {
+    gap: 0.68rem;
+    padding: 0.76rem;
+  }
+
+  .marketing-page--mobile-preview-lift .marketing-hero-copy,
+  .marketing-page--mobile-preview-lift .marketing-hero-card {
+    gap: 0.58rem;
+  }
+
+  .marketing-page--mobile-preview-lift .marketing-hero-copy h1 {
+    font-size: clamp(1.36rem, 6.1vw, 1.66rem);
+    line-height: 1.04;
+  }
+
+  .marketing-page--mobile-preview-lift .marketing-hero .marketing-hero-actions,
+  .marketing-page--mobile-preview-lift .marketing-hero .marketing-points {
+    gap: 0.38rem;
+  }
+
+  .marketing-page--mobile-preview-lift .marketing-hero .info-pill {
+    padding: 0.32rem 0.48rem;
+  }
+
+  .marketing-page--mobile-preview-lift .marketing-hero-card {
+    padding: 0.76rem;
+  }
+
   .planner-grid-vnext.week-view,
   .planner-grid-vnext.two-week-view,
   .planner-grid-vnext.month-view {
