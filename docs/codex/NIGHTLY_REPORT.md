@@ -555,3 +555,11 @@
 - Files changed:
 - app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-24 22:43:00
+
+- Task attempted: Visual QA: fix the small mobile tap target for `a.site-brand` on `/`; keep header height restrained and verify no brand/nav wrapping or overlap. Do not change backend, auth, secrets, dependencies, deployment config, generated output, routing behavior, data models, persistence, package files, root config files, docs report files, or unrelated app behavior.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
