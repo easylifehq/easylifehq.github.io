@@ -3,6 +3,7 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyProjectsMarketingPage() {
   return (
     <ProductMarketingPage
+      pageClassName="marketing-page--mobile-projects-density"
       eyebrow="EasyProjects"
       heroTitle="Turn big messy goals into sections, tasks, and next steps."
       heroDescription="EasyProjects gives larger work a place to live when a normal to-do item is not enough."

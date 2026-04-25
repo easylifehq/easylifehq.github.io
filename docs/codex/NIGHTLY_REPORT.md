@@ -869,3 +869,12 @@
 - app-vNext/src/features/marketing/routes/EasyNotesMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 05:04:04
+
+- Task attempted: Mobile product hero final density check: inspect one remaining public product page at 390px and make one narrow spacing or hierarchy adjustment so the preview appears sooner without deleting content or changing copy meaning. Do not change routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyProjectsMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
