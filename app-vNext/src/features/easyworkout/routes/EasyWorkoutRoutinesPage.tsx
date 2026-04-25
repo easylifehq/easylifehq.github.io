@@ -281,7 +281,11 @@ export function EasyWorkoutRoutinesPage() {
       >
         <div className="task-list-vnext">
           {routines.length === 0 ? (
-            <div className="empty-card-vnext">No EasyWorkout routines yet. Save a routine above so repeat sessions stay ready to log.</div>
+            <div className="empty-card-vnext">
+              <strong>No routines saved yet</strong>
+              <p>Build one repeatable plan so common sessions stay ready to log.</p>
+              <span>Fill out the routine form above, then use Save routine.</span>
+            </div>
           ) : (
             routines.map((routine) => (
               <article key={routine.id} className="task-card-vnext">
