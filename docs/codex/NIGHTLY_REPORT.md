@@ -971,3 +971,11 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 06:44:59
+
+- Task attempted: EasyProjects preview realism pass: add one compact static working-UI cue to the existing EasyProjects marketing hero preview so it reads more like a project planning surface and less like a labeled mockup. Do not add data fetching, behavior, new sections, new routes, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or broad shared architecture.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyProjectsMarketingPage.tsx
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.

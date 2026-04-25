@@ -10,6 +10,12 @@ export function EasyProjectsMarketingPage() {
       heroPoints={["Sections", "Linked tasks", "Timeline", "AI drafts"]}
       heroCardTitle="A project layer that stays practical."
       heroCardBody="Keep the plan, task links, and project context together without making every small task feel like a project."
+      heroPreviewItems={[
+        { app: "Launch plan", detail: "Timeline review", status: "Next" },
+        { app: "Research", detail: "2 linked tasks" },
+        { app: "Build", detail: "Draft checklist" },
+        { app: "Handoff", detail: "Friday milestone" },
+      ]}
       featuresTitle="For work that needs more than one checkbox"
       featuresDescription="Use EasyProjects when the task has phases, notes, deadlines, and multiple moving parts."
       features={[
