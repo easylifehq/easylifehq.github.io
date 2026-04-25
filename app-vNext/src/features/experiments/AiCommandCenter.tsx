@@ -159,6 +159,11 @@ export function AiCommandCenter() {
           </span>
           <h3 id="ai-daily-brief-title">{mockDailyBrief.dateLabel}</h3>
           <p>{mockDailyBrief.headline}</p>
+          <ul className="ai-lab-context-strip" aria-label="Mock EasyLife context used by this brief">
+            <li>EasyList sample tasks</li>
+            <li>EasyNotes sample notes</li>
+            <li>EasyCalendar sample events</li>
+          </ul>
         </div>
 
         <div className="ai-daily-brief-focus">

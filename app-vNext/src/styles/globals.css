@@ -5185,6 +5185,9 @@ button.calendar-detail-card:disabled {
 
 .ai-daily-brief-hero {
   border-color: color-mix(in srgb, var(--ui-accent, var(--shell-accent)) 28%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 14%, transparent), transparent 62%),
+    var(--ui-bg-card-elevated, var(--shell-input-bg));
   box-shadow: 0 14px 32px rgba(34, 29, 24, 0.07);
 }
 
@@ -5200,6 +5203,28 @@ button.calendar-detail-card:disabled {
   color: var(--ui-text-secondary, var(--shell-page-text));
   font-weight: 750;
   line-height: 1.45;
+}
+
+.ai-lab-context-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-lab-context-strip li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.65rem;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 24%, var(--ui-border-subtle, var(--shell-card-border)));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 86%, var(--app-accent, var(--shell-accent)) 14%);
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.76rem;
+  font-weight: 850;
 }
 
 .ai-daily-brief-focus span,

@@ -385,6 +385,6 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 
 - [x] App accent consistency pass: inspect one main app's accent treatment and make it feel intentional inside the broader suite without making the page louder or adding unrelated colors. Do not change app logic, persistence, routing, auth, Firebase, backend, dependencies, package files, generated output, docs report files, or root config.
 
-- [ ] Experiments AI lab fit-and-finish pass: improve one visible AI Lab/experiments mockup surface so it feels like part of EasyLife 5.0 instead of a detached prototype. Fake/mock UI only. Do not make API calls, add backend, use OpenAI keys, touch Firebase/auth, add dependencies, persist production data, edit package files, generated output, deployment config, secrets, or root files.
+- [x] Experiments AI lab fit-and-finish pass: improve one visible AI Lab/experiments mockup surface so it feels like part of EasyLife 5.0 instead of a detached prototype. Fake/mock UI only. Do not make API calls, add backend, use OpenAI keys, touch Firebase/auth, add dependencies, persist production data, edit package files, generated output, deployment config, secrets, or root files.
 
 - [ ] Simon cleanup pass: after the above visual work, inspect the changed areas and make one final small CSS or copy cleanup that removes a rough edge Simon would immediately notice. Do not broaden scope, add features, touch auth/Firebase/backend/dependencies/package files/generated output/deployment config/secrets/root files, or edit report files.
