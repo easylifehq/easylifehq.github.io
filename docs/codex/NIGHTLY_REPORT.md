@@ -963,3 +963,11 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
+
+## 2026-04-25 06:41:38
+
+- Task attempted: Marketing mobile CTA density repair: inspect the shared product marketing hero at 390px and make one narrow mobile-only spacing or sizing adjustment so the CTA row consumes less first-viewport height while preserving copy, hierarchy, and tap targets. Do not change routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, desktop layout, or unrelated pages.
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build passed and checkpoint loop review completed.
