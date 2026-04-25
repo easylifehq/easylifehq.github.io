@@ -388,3 +388,8 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 - [x] Experiments AI lab fit-and-finish pass: improve one visible AI Lab/experiments mockup surface so it feels like part of EasyLife 5.0 instead of a detached prototype. Fake/mock UI only. Do not make API calls, add backend, use OpenAI keys, touch Firebase/auth, add dependencies, persist production data, edit package files, generated output, deployment config, secrets, or root files.
 
 - [x] Simon cleanup pass: after the above visual work, inspect the changed areas and make one final small CSS or copy cleanup that removes a rough edge Simon would immediately notice. Do not broaden scope, add features, touch auth/Firebase/backend/dependencies/package files/generated output/deployment config/secrets/root files, or edit report files.
+
+## Checkpoint Planner Tasks 2026-04-25 04:05:14
+
+- [ ] Mobile hero density repair: tighten the first viewport on one public product page at 390px by reducing hero padding, headline bulk, and support-tag spacing so meaningful content appears sooner. Do not change copy meaning, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages.
+- [ ] Product hero utility repair: replace one decorative right-side "EasyLifeHQ product" style hero card with a compact static operational preview that shows cross-app daily structure using existing UI content only. Do not add data fetching, persistence, new routes, backend, auth, Firebase, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or broad shared architecture.
