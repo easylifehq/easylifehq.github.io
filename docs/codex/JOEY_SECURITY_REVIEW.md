@@ -1,9 +1,9 @@
 # Joey Security Review
 
-Generated: 2026-04-25 23:25:25
+Generated: 2026-04-26 00:42:27
 Project: EasyLife
 Branch: codex/mission-EasyLife-20260424-145031
-HEAD: 444b85a
+HEAD: 8be85cb
 Base branch: main
 
 ## Verdict
@@ -45,6 +45,8 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - app-vNext/src/features/marketing/routes/MarketingLandingPage.tsx
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - app-vNext/src/styles/globals.css
+- docs/codex/AUTH_APPROVAL.md
+- docs/codex/AUTH_POLICY.md
 - docs/codex/AUTO_REPAIR.md
 - docs/codex/CHECKPOINT_REVIEW.md
 - docs/codex/EXTERNAL_SERVICES.md
@@ -55,6 +57,7 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - docs/codex/NIGHTLY_REPORT.md
 - docs/codex/QUARANTINED_TASKS.md
 - docs/codex/ROBIN_COPY_REVIEW.md
+- docs/codex/RUNTIME_VERIFICATION.md
 - docs/codex/RUN_POLICY.md
 - docs/codex/SENSITIVE_SYSTEMS_REVIEW.md
 - docs/codex/SIMON_DESIGN_REVIEW.md
@@ -73,5 +76,6 @@ continue
 ## Notes
 - Joey is a guardrail reviewer, not a full penetration test.
 - Local storage is allowed for harmless local-only UI state, but still blocked when it appears to store auth, payment, token, credential, or secret data.
+- Project-specific approvals may allow exact previously reviewed blocked files or exact sensitive lines through docs/codex/SECURITY_APPROVAL.md.
 - A GREEN result means no obvious unattended security regression was detected.
 - Human review is still required before merge.
