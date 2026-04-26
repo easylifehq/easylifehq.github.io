@@ -1566,3 +1566,16 @@
 - app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 01:12:19
+
+- Task attempted: Pack 1 - Product Spine signed-in HQ status-row hierarchy repair: on the existing HQ first screen, compress secondary module context into quieter scan-friendly status rows so the daily-focus action plus at least two module statuses are visible in the first mobile viewport; forbidden scope: no new sections, new content, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/hq/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/features/hq, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
