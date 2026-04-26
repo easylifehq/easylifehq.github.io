@@ -4,7 +4,7 @@ export function LoadingState({ label = "Loading..." }: { label?: string }) {
       <div className="loading-card" role="status" aria-live="polite">
         <span className="loading-orbit" aria-hidden="true" />
         <strong>{label}</strong>
-        <small>Getting your command center ready.</small>
+        <small>Opening your workspace.</small>
       </div>
     </div>
   );
