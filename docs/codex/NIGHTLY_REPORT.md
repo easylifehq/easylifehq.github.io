@@ -1593,3 +1593,16 @@
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 01:23:42
+
+- Task attempted: Pack 1 - Product Spine protected HQ first-viewport repair: inspect the existing signed-in HQ screen and make one narrow UI-only hierarchy adjustment so the daily focus/start area appears first, followed by two compact module statuses before secondary context on 390px mobile and desktop; forbidden scope: no new content, new sections, marketing copy, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/hq/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/features/hq, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

@@ -4948,10 +4948,10 @@ button.calendar-detail-card:disabled {
 .hq-command-center {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(320px, 1.05fr) minmax(260px, 0.95fr);
   grid-template-areas:
-    "start copy"
-    "status copy";
+    "start status"
+    "copy copy";
   gap: 0.85rem 1.15rem;
   align-items: stretch;
   margin-bottom: 1rem;
@@ -4986,10 +4986,10 @@ button.calendar-detail-card:disabled {
   position: relative;
   overflow: hidden;
   display: grid;
-  align-content: center;
-  gap: 0.68rem;
-  min-height: clamp(13rem, 23vw, 18rem);
-  padding: clamp(1.35rem, 2.8vw, 2.25rem) clamp(1.25rem, 2.7vw, 2.15rem) clamp(1.35rem, 2.7vw, 2.15rem) clamp(1.55rem, 3vw, 2.45rem);
+  align-content: start;
+  gap: 0.38rem;
+  min-height: 0;
+  padding: 0.95rem 1.05rem;
   background:
     linear-gradient(90deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent), transparent 34%),
     linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 12%, transparent), transparent 62%),
@@ -5011,8 +5011,8 @@ button.calendar-detail-card:disabled {
 .hq-command-copy h1 {
   margin: 0;
   color: var(--ui-text-primary, var(--shell-heading-text));
-  font-size: clamp(2.05rem, 3.8vw, 3.35rem);
-  line-height: 0.95;
+  font-size: clamp(1.45rem, 2.1vw, 2rem);
+  line-height: 1.02;
   letter-spacing: 0;
 }
 
@@ -7735,7 +7735,8 @@ button.calendar-detail-card:disabled {
   }
 
   .hq-command-copy h1 {
-    font-size: 1.92rem;
+    font-size: 1.36rem;
+    line-height: 1.08;
   }
 
   .hq-summary-grid,
