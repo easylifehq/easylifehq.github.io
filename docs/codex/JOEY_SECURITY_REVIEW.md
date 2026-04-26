@@ -1,9 +1,9 @@
 # Joey Security Review
 
-Generated: 2026-04-26 01:13:27
+Generated: 2026-04-26 15:22:46
 Project: EasyLife
 Branch: codex/mission-EasyLife-20260424-145031
-HEAD: f8bb051
+HEAD: 0e68c78
 Base branch: main
 
 ## Verdict
@@ -20,18 +20,27 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - app-vNext/src/components/feedback/LoadingState.tsx
 - app-vNext/src/components/navigation/MarketingHeader.tsx
 - app-vNext/src/components/navigation/marketingNavigation.ts
+- app-vNext/src/features/easycalendar/EasyCalendarContext.tsx
+- app-vNext/src/features/easycalendar/components/CalendarComposer.tsx
+- app-vNext/src/features/easycalendar/components/CalendarEventDrawer.tsx
+- app-vNext/src/features/easycalendar/lib/calendarUtils.ts
+- app-vNext/src/features/easycalendar/lib/recurrence.ts
 - app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx
 - app-vNext/src/features/easycalendar/routes/EasyCalendarMonthPage.tsx
 - app-vNext/src/features/easylist/components/TaskCard.tsx
 - app-vNext/src/features/easylist/components/TaskComposer.tsx
+- app-vNext/src/features/easylist/components/TaskDrawer.tsx
+- app-vNext/src/features/easylist/layouts/EasyListLayout.tsx
 - app-vNext/src/features/easylist/lib/taskUtils.ts
 - app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx
+- app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
 - app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx
 - app-vNext/src/features/easyworkout/layouts/EasyWorkoutLayout.tsx
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutDashboardPage.tsx
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutRoutinesPage.tsx
 - app-vNext/src/features/experiments/AiCommandCenter.tsx
+- app-vNext/src/features/experiments/UniversalCapture.tsx
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
@@ -55,6 +64,7 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - docs/codex/MAGIC_SCORECARD.md
 - docs/codex/NEXT_5_TASKS.md
 - docs/codex/NIGHTLY_REPORT.md
+- docs/codex/QUALITY_QUARANTINE.md
 - docs/codex/QUARANTINED_TASKS.md
 - docs/codex/ROBIN_COPY_REVIEW.md
 - docs/codex/RUNTIME_VERIFICATION.md
