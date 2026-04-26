@@ -4,38 +4,38 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission: recent work improves protected HQ, shell navigation, EasyList mobile workflow, and suite polish while keeping the app focused on a calmer connected daily workspace.
+The branch is moving toward the EasyLife mission with visible protected-suite polish, HQ assistant-surface improvements, EasyList mobile workflow refinement, and EasyCalendar planning clarity. The work generally supports a calmer connected suite, but Simon and Robin both flagged quality issues that should be addressed before more mission-forward tasks.
 
 ## Safety Review
-No forbidden files found. Risk is moderate breadth: many protected UI surfaces and shared styles have changed, including `globals.css`, navigation, EasyCalendar, EasyList, HQ, marketing, and settings files.
+No forbidden files found. Risk is moderate because the branch includes behavior-facing EasyList completion/add-flow changes and EasyCalendar recurrence/planning UI changes, though no auth, Firebase, backend, dependency, deployment, secret, or package files were changed.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: protected daily assistant surface and EasyList mobile working pass
-- files changed: `app-vNext/src/features/experiments/UniversalCapture.tsx`, `app-vNext/src/styles/globals.css`, plus prior branch changes across protected UI, marketing, and docs
-- commits added: latest HEAD `20db53a` plus recent Simon/Robin/visual/checkpoint commits
-- queue status: 1 unchecked task remains, EasyCalendar planning polish
+- Completed tasks in this checkpoint window: protected shell navigation repair, HQ/AppHeader repair, protected daily assistant surface, EasyList mobile working pass, EasyCalendar planning polish.
+- Files changed: app-vNext UI, feature, navigation, marketing, settings, styles, docs/codex reports, and scripts/codex-guardrails.ps1.
+- Commits added: latest HEAD 45e7aad, with review/inspection commits through Joey security review batch 3.
+- Queue status: unchecked task count is 0; working tree is clean.
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN, no reported visual bugs; should not block next tasks
-- Simon design review: YELLOW, continue but fix visual issues first; should influence next task selection
-- Robin copy review: YELLOW, continue but fix copy first; should influence next task selection
-- Joey security review: GREEN, continue; no security blocker
-- next tasks should prioritize small polish/copy cleanup before mission-forward expansion
+- Visual bug report: GREEN; 0 high, 0 medium, 0 low; should not block next tasks.
+- Simon design review: YELLOW; continue but fix visual issues first; should influence next tasks.
+- Robin copy review: YELLOW; continue but fix copy first; should influence next tasks.
+- Joey security review: GREEN; continue; should not block next tasks.
+- Overall gate influence: next work should be repair-first.
 
 ## Recommended Next Step
 patch first
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Simon and Robin are both YELLOW, so the next batch should be a narrow EasyCalendar polish/copy pass that clears review concerns without widening scope.
+- Recommended next batch size: 2
+- Next work mode: repair-first
+- Simon and Robin both returned YELLOW, so the next batch should resolve the known visual and copy issues before continuing broader suite polish.
 
 ## Notes For Human Reviewer
-- Working tree is clean.
-- Build passed.
-- No forbidden scope detected from file list.
-- Branch is broad but still mostly UI/docs.
-- Remaining task is scoped and acceptable if kept narrow.
+- Build passed and tree is clean.
+- No unchecked tasks remain.
+- Recent work stayed out of explicitly forbidden auth/Firebase/backend/package/deploy areas.
+- Review the EasyList and EasyCalendar behavior-facing changes carefully despite passing build.
+- The branch is broad, but current checkpoint state is shippable after design/copy cleanup.
