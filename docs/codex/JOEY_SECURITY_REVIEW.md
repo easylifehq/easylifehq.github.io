@@ -1,9 +1,9 @@
 # Joey Security Review
 
-Generated: 2026-04-25 23:19:14
+Generated: 2026-04-25 23:25:25
 Project: EasyLife
 Branch: codex/mission-EasyLife-20260424-145031
-HEAD: 41d2570
+HEAD: 444b85a
 Base branch: main
 
 ## Verdict
@@ -32,14 +32,17 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutRoutinesPage.tsx
 - app-vNext/src/features/experiments/AiCommandCenter.tsx
+- app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyContactsMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyHQMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyNotesMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyPipelineMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyProjectsMarketingPage.tsx
 - app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/MarketingLandingPage.tsx
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - app-vNext/src/styles/globals.css
 - docs/codex/AUTO_REPAIR.md
