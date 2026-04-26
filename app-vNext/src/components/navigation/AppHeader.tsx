@@ -25,18 +25,20 @@ export function AppHeader() {
   return (
     <header className="app-header">
       <div className="app-header-main">
-        <div className="app-header-brand">
-          <Link to="/app/hq" className="site-brand" aria-label="Go to EasyHQ">
-            <span className="brand-badge">EL</span>
-            <div>
-              <strong className="site-brand-title">EasyLifeHQ</strong>
-              <p className="app-current-label">{currentApp}</p>
-            </div>
-          </Link>
-        </div>
+        <div className="app-suite-control" role="group" aria-label="EasyLife suite switcher">
+          <div className="app-header-brand">
+            <Link to="/app/hq" className="site-brand" aria-label="Go to EasyHQ">
+              <span className="brand-badge">EL</span>
+              <div>
+                <strong className="site-brand-title">EasyLifeHQ</strong>
+                <p className="app-current-label">{currentApp}</p>
+              </div>
+            </Link>
+          </div>
 
-        <div className="app-header-actions">
-          <ProductsMenu items={visibleItems} label="Apps" />
+          <div className="app-header-actions">
+            <ProductsMenu items={visibleItems} label="Apps" />
+          </div>
         </div>
       </div>
     </header>

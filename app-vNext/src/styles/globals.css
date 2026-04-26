@@ -265,6 +265,25 @@ a {
   min-width: 0;
 }
 
+.app-suite-control {
+  display: inline-grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.42rem;
+  width: min(100%, 25rem);
+  min-width: 0;
+  max-width: min(100%, 25rem);
+  padding: 0.22rem;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  border-radius: calc(var(--shell-control-radius) + 4px);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 82%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--shell-panel-highlight) 72%, transparent);
+}
+
+.app-suite-control .site-brand {
+  padding: 0.18rem 0.34rem;
+}
+
 .site-brand-title {
   display: block;
   font-size: 1rem;
@@ -276,14 +295,31 @@ a {
 }
 
 .app-current-label {
-  margin: 0.15rem 0 0;
-  color: var(--ui-text-muted, var(--shell-muted-text));
-  font-size: 0.88rem;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  width: fit-content;
   max-width: 100%;
+  margin: 0.2rem 0 0;
+  padding: 0.16rem 0.48rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--shell-accent) 13%, transparent);
+  color: color-mix(in srgb, var(--shell-accent-strong) 82%, var(--shell-page-text) 18%);
+  font-size: 0.78rem;
+  font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.app-current-label::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: var(--shell-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--shell-accent) 16%, transparent);
 }
 
 .site-header,
@@ -371,9 +407,9 @@ a {
 }
 
 .app-header-main {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
   align-items: center;
+  justify-content: flex-start;
   padding: 0.68rem 1rem;
   min-width: 0;
   max-width: 100%;
@@ -381,15 +417,23 @@ a {
 }
 
 .app-header-actions {
-  display: contents;
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
 .app-header-actions .products-menu {
-  width: 7.5rem;
+  width: 5.6rem;
 }
 
 .app-header-actions .menu-trigger-button {
   width: 100%;
+  min-height: 36px;
+  padding: 0.55rem 0.72rem;
+  background: var(--ui-bg-tab-active, var(--shell-accent-soft));
+  color: var(--ui-text-primary, var(--shell-page-text));
+  border-color: color-mix(in srgb, var(--shell-accent) 32%, var(--shell-card-border));
+  font-weight: 800;
 }
 
 .app-header-actions .menu-panel {
@@ -8220,7 +8264,7 @@ button.calendar-detail-card:disabled {
   }
 
   .app-current-label {
-    display: block;
+    display: inline-flex;
     margin-top: 0.05rem;
     font-size: 0.72rem;
     line-height: 1.1;
