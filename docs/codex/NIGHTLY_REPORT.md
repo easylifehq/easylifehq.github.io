@@ -1113,3 +1113,26 @@
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Task-specific acceptance check failed.
+
+## 2026-04-25 18:10:04
+
+- Task attempted: Pack 1 - Product Spine protected EasyCalendar panel hierarchy repair: tighten one existing EasyCalendar logged-in summary, empty state, or primary panel so the day/month screens feel calmer and more connected to the shared suite system. Do not change calendar logic, dates, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated features. [class:design risk:low mode:single scope:app-vNext/src/features/easycalendar/,app-vNext/src/styles/ accept:npm.cmd test]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/features/easycalendar, app-vNext/src/styles
+- Acceptance checks: npm.cmd test
+- Build result: Failed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Task-specific acceptance check failed.
+
+## 2026-04-25 18:11:21
+
+- Task attempted: Pack 1 - Product Spine protected EasyCalendar panel hierarchy repair: tighten one existing EasyCalendar logged-in summary, empty state, or primary panel so the day/month screens feel calmer and more connected to the shared suite system. Do not change calendar logic, dates, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated features. [class:design risk:low mode:single scope:app-vNext/src/features/easycalendar/,app-vNext/src/styles/ accept:npm.cmd test]
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- docs/codex/MAGIC_SCORECARD.md
+- docs/codex/NIGHTLY_REPORT.md
+- Risks or follow-up needed: Low. Recovered from interrupted loop after guardrails and external build passed.
