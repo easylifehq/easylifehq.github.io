@@ -4,72 +4,72 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife's copy is calm and mission-aligned, but it leans too often on repeated "command center" and polished-suite language that can start to feel generic instead of personal, useful, and concrete.
+EasyLife sounds calmer and more coherent than before, but some copy still leans on generic suite language, casual filler, and repeated "preview/sample/workspace" phrasing that keeps the product from feeling fully premium.
 
 ## Mission Voice Fit
-The language mostly matches the mission: it frames EasyLife as a connected personal operating system for tasks, notes, calendar planning, workouts, projects, and settings. The tone is professional and restrained, which fits the audience better than playful productivity copy would. The main gap is specificity. Several lines describe the suite at a high level, but fewer lines show the daily user moment clearly enough: what is due, what changed, what to capture, what to do next, and how one app hands off to another.
+The language mostly matches the mission: connected, calm, useful, and professional. The strongest copy is direct and operational, such as "Opening your workspace," "Training dashboard," and "Scan scheduled events, task blocks, and open windows in order." The weaker copy repeats abstract suite terms like "workspace," "defaults," "sample," and "preview" so often that it can feel like internal product scaffolding instead of a lived-in personal operating system.
 
 ## Delicate Wording Risks
-- "Command center" appears useful but risks becoming overused. If repeated across loading states, meta descriptions, marketing pages, and app surfaces, it starts to sound like a slogan instead of product language.
-- "Personal operating system" is strong positioning, but it should be used sparingly. Too much repetition can make the product promise feel larger than the current UI.
-- "Products + demo" is clear but feels slightly mechanical and internal-facing for a polished public header.
-- "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center" is accurate, but it reads like a feature inventory rather than a warm product promise.
-- "Getting your command center ready" is functional, but it repeats the same metaphor and may feel less human than the app's intended calm daily-use voice.
-- AI prototype language should stay visibly mock-only. Avoid wording that implies real AI automation, real external calls, or production intelligence unless the UI clearly states it is a preview or lab.
-- Repeated labels like "premium", "suite", "high-tech", and "Apple-like" should remain internal review language, not product-facing copy.
+- "Closer to Apple Notes than a bloated workspace" is vivid, but the direct brand comparison and "bloated" jab feel less polished than the rest of the product voice.
+- "Brain dumps" is useful shorthand, but it is casual for a premium productivity suite and may cheapen the marketing preview.
+- "The stuff that quietly drains your energy" is emotionally clear, but "stuff" appears repeatedly and can make the product feel less refined.
+- "Current selection," "Sample data," "Sample daily brief," and "Assistant draft preview" are honest, but repeated sample/preview labels make the AI Lab feel unfinished.
+- "Set how EasyLife opens, captures, and routes your work" is clear, but "routes your work" may sound more technical than helpful.
+- "Send" as a status for "Block errand window" is ambiguous without context.
+- "No date" is clear, but it can read slightly bare beside the more polished metadata language elsewhere.
 
 ## Beautiful Language Opportunities
-- Replace broad product metaphors with small, concrete daily actions: capture a thought, check today's plan, review what is done, prepare tomorrow.
-- Let each product page sound more specific to its job: notes should feel like writing and recall; calendar should feel like time and commitments; tasks should feel like triage and follow-through; workouts should feel like logging and progress.
-- Use "suite" less in user-facing copy and more in internal docs. Users should feel the connectedness through clearer labels and handoff language.
-- Make loading and empty states warmer by naming the next useful action, not only the system state.
-- Make marketing preview labels read like real product moments rather than static feature labels.
-- Keep public header cues short and polished: directional, not explanatory.
+- Make Settings feel more like a control center by replacing technical phrasing with plain outcomes: what opens first, what stays visible, what tone the suite uses.
+- Keep product previews concrete, but reduce labels that sound like internal QA states: "Sample," "Preview," "Mock," and "Sandbox."
+- Replace repeated "workspace" phrasing with more specific nouns: library, board, day plan, training log, settings panel.
+- Let each product own a distinct verbal shape: EasyList should sound decisive, EasyNotes should sound quiet and fast, EasyCalendar should sound orderly, EasyWorkout should sound focused.
+- Tighten marketing hero copy by cutting broad nouns like "stuff," "noise," and "structure" where a sharper daily-use phrase is available.
+- Use fewer status pills and more natural preview language, so the static UI feels like a real moment rather than a product spec.
 
 ## Priority Rewrite
-The most important wording problem is repeated generic suite language, especially "command center." Nami should audit changed product, loading, empty-state, and header copy for repeated metaphors, then replace at least one instance per surface with concrete daily-use language that names what the user can do next.
+The single most important wording problem is the repeated scaffold language around previews, samples, workspaces, and suite controls. Nami should turn this into a copy pass that keeps the honesty of mock/static UI but makes the user-facing language feel less provisional: fewer "sample/preview/workspace" labels, more concrete daily objects like "Today plan," "Recent notes," "Training log," and "Theme settings."
 
 ## Suggested Rewrites
-- Before: "Products + demo"
-  After: "Products"
+- Before: "Closer to Apple Notes than a bloated workspace."
+  After: "Fast like a simple notes app, calm enough to use every day."
 
-- Before: "Getting your command center ready."
-  After: "Opening your workspace."
+- Before: "Brain dumps"
+  After: "Quick capture"
 
-- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-  After: "EasyLife brings your tasks, notes, calendar, workouts, and projects into one calmer place to plan the day."
+- Before: "The stuff that quietly drains your energy"
+  After: "The small obligations that steal focus"
 
-- Before: "AI Command Center"
-  After: "EasyLife AI Lab"
+- Before: "Set how EasyLife opens, captures, and routes your work."
+  After: "Choose how EasyLife opens, captures, and hands work between apps."
 
-- Before: "Plan my day"
-  After: "Draft today's plan"
+- Before: "Sample daily brief"
+  After: "Daily brief example"
 
-- Before: "Clean Up Tasks"
-  After: "Tidy the task list"
+- Before: "Assistant draft preview"
+  After: "Draft response"
 
-- Before: "What matters today"
-  After: "Today's focus"
+- Before: "No date"
+  After: "Unscheduled"
 
-- Before: "Turn this note into tasks"
-  After: "Pull tasks from this note"
+- Before: "Block errand window" / "Send"
+  After: "Errand window" / "Ready to plan"
 
 ## Voice Rules
-- Prefer concrete daily actions over abstract productivity claims.
-- Use "command center" only when it adds meaning; do not make it the default metaphor.
-- Keep product promises calm, practical, and believable.
-- Avoid hype words like "ultimate", "powerful", "revolutionary", "magic", or "effortless."
-- Do not imply real AI, automation, backend intelligence, or data processing in mock-only experiments.
-- Empty states should answer: what is here, why it is empty, and what action helps next.
-- Product pages should sound distinct by function, not only by product name.
-- Keep public copy polished and short; keep internal review language out of the UI.
+- Prefer calm, concrete product language over clever phrasing.
+- Use "sample" only when honesty requires it; otherwise name the object the user sees.
+- Avoid competitor comparisons in hero-level copy.
+- Keep humor out of core task, calendar, settings, and workout language unless it is very restrained.
+- Use specific daily-use nouns: task, note, day, session, plan, routine, setting.
+- Avoid overusing "workspace," "suite," "command center," and "preview" in adjacent surfaces.
+- Status labels should be immediately legible without surrounding context.
+- Marketing copy can be warm, but app UI copy should be shorter and more functional.
 
 ## Next 5 Copy Tasks
-- [ ] Audit public marketing pages for repeated "command center" language and replace at least one instance with concrete daily-use wording; do not change product claims or add new features.
-- [ ] Review mobile header labels and keep only short navigation cues; preserve links, tap targets, and routing.
-- [ ] Rewrite one EasyList empty or low-content helper line so it names the next action without sounding like a slogan.
-- [ ] Rewrite one EasyNotes preview or empty-state label so it feels specific to writing, capture, or review; do not invent note features.
-- [ ] Review AI Lab mock copy and make sure every user-facing line reads as prototype/mock behavior, not real production AI.
+- [ ] Replace the EasyNotes Apple Notes comparison with a brand-neutral line that keeps the promise of fast, simple writing.
+- [ ] Audit product hero preview labels and replace vague statuses like "Send," "Review," and "8/10" where they do not explain the action clearly.
+- [ ] Reduce repeated "sample" and "preview" language in AI Lab while preserving clear mock-only honesty.
+- [ ] Tighten Settings copy around app defaults so each sentence explains a user outcome, not an internal system behavior.
+- [ ] Review EasyList marketing copy for casual words like "stuff" and "brain dumps," replacing only the lines that feel too informal.
 
 ## Stop Or Continue
 continue but fix copy first
