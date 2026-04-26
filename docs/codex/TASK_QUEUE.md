@@ -567,3 +567,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 ## Checkpoint Planner Tasks 2026-04-26 00:54:29
 
 - [x] Pack 1 - Product Spine protected EasyWorkout dashboard chrome repair: reduce one decorative pill/status-chip treatment on the existing signed-in EasyWorkout dashboard by converting it into quieter inline metadata so the primary training action and current plan read first; forbidden scope: no workout logic, data shapes, persistence, routing, auth, Firebase, backend, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/easyworkout/,app-vNext/src/styles/]
+
+## Checkpoint Planner Tasks 2026-04-26 00:58:59
+
+- [ ] Pack 1 - Product Spine protected EasyNotes first-screen hierarchy repair: on the existing signed-in EasyNotes library page, reduce top chrome or secondary card/pill weight so the primary note capture action and one useful library status are visible earlier on desktop and mobile; forbidden scope: no editor behavior, note logic, persistence, data shapes, routing, auth, Firebase, backend, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/easynotes/,app-vNext/src/styles/]
