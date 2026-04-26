@@ -20,8 +20,8 @@ export function EasyListInboxPage() {
     <>
       <PageSection
         eyebrow="Capture"
-        title="Add tasks fast"
-        description="Write each task into its own row, or drop a messy brain dump in and turn it into rows first."
+        title="Add task"
+        description="Write one or more clear task rows here. Use the floating Add button for Brain Dump."
       >
         <div className="easylist-list-picker">
           <label className="field-stack">
@@ -39,7 +39,7 @@ export function EasyListInboxPage() {
             </datalist>
           </label>
         </div>
-        <TaskComposer onSubmit={addTask} listName={listName.trim() || "Main"} />
+        <TaskComposer onSubmit={addTask} listName={listName.trim() || "Main"} showBrainDump={false} />
       </PageSection>
 
       {error ? <p className="error-copy">{error}</p> : null}

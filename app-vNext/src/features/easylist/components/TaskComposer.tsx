@@ -9,6 +9,7 @@ import { useSettings } from "@/features/settings/SettingsContext";
 type TaskComposerProps = {
   onSubmit: (draft: TaskDraft) => Promise<string | null | void>;
   listName?: string;
+  showBrainDump?: boolean;
 };
 
 type TaskRowDraft = {
@@ -358,7 +359,7 @@ function buildAnalysisMessage(parsedRows: TaskRowDraft[], source: "ai" | "local"
   }; check the Due column before saving.`;
 }
 
-export function TaskComposer({ onSubmit, listName = "Main" }: TaskComposerProps) {
+export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true }: TaskComposerProps) {
   const { settings } = useSettings();
   const firstTaskInputRef = useRef<HTMLInputElement | null>(null);
   const makeEmptyRow = () => EMPTY_ROW(settings.easyList.defaultPriorityTier);
@@ -381,22 +382,28 @@ export function TaskComposer({ onSubmit, listName = "Main" }: TaskComposerProps)
   );
 
   useEffect(() => {
+    if (!showBrainDump) return;
+
     const savedBrainDump = window.localStorage.getItem(BRAIN_DUMP_DRAFT_KEY);
     if (savedBrainDump) {
       setBrainDump(savedBrainDump);
     }
+  }, [showBrainDump]);
 
+  useEffect(() => {
     window.setTimeout(() => firstTaskInputRef.current?.focus(), 0);
   }, []);
 
   useEffect(() => {
+    if (!showBrainDump) return;
+
     if (brainDump.trim()) {
       window.localStorage.setItem(BRAIN_DUMP_DRAFT_KEY, brainDump);
       return;
     }
 
     window.localStorage.removeItem(BRAIN_DUMP_DRAFT_KEY);
-  }, [brainDump]);
+  }, [brainDump, showBrainDump]);
 
   function updateRow(rowId: string, field: keyof TaskRowDraft, value: string | number) {
     setRows((current) =>
@@ -524,57 +531,59 @@ export function TaskComposer({ onSubmit, listName = "Main" }: TaskComposerProps)
 
   return (
     <form className="task-composer" onSubmit={handleSubmit}>
-      <details className="brain-dump-card">
-        <summary>Brain dump with AI</summary>
-        <label className="field-stack">
-          <span>Brain dump</span>
-          <textarea
-            value={brainDump}
-            onChange={(event) => setBrainDump(event.target.value)}
-            rows={5}
-            placeholder="Drop messy thoughts here. Example: email my professor tomorrow about the late assignment, study bio for 45 minutes before Thursday, and buy groceries this weekend."
-          />
-        </label>
+      {showBrainDump ? (
+        <details className="brain-dump-card">
+          <summary>Brain dump with AI</summary>
+          <label className="field-stack">
+            <span>Brain dump</span>
+            <textarea
+              value={brainDump}
+              onChange={(event) => setBrainDump(event.target.value)}
+              rows={5}
+              placeholder="Drop messy thoughts here. Example: email my professor tomorrow about the late assignment, study bio for 45 minutes before Thursday, and buy groceries this weekend."
+            />
+          </label>
 
-        <div className="brain-dump-actions">
-          <div className="brain-dump-mode-toggle" aria-label="Brain dump row behavior">
+          <div className="brain-dump-actions">
+            <div className="brain-dump-mode-toggle" aria-label="Brain dump row behavior">
+              <button
+                type="button"
+                className={`toggle-button${mergeMode === "replace" ? " active" : ""}`}
+                onClick={() => setMergeMode("replace")}
+              >
+                Replace rows
+              </button>
+              <button
+                type="button"
+                className={`toggle-button${mergeMode === "append" ? " active" : ""}`}
+                onClick={() => setMergeMode("append")}
+              >
+                Add to existing
+              </button>
+            </div>
             <button
               type="button"
-              className={`toggle-button${mergeMode === "replace" ? " active" : ""}`}
-              onClick={() => setMergeMode("replace")}
+              className="button-secondary"
+              onClick={handleBrainDumpToRows}
+              disabled={isAnalyzing || !brainDump.trim()}
             >
-              Replace rows
+              {isAnalyzing ? (
+                <>
+                  <span className="button-spinner" aria-hidden="true" />
+                  Reading your brain dump...
+                </>
+              ) : (
+                "AI Analyze Into Rows"
+              )}
             </button>
-            <button
-              type="button"
-              className={`toggle-button${mergeMode === "append" ? " active" : ""}`}
-              onClick={() => setMergeMode("append")}
-            >
-              Add to existing
-            </button>
+            <span className="helper-copy">
+              {isAnalyzing
+                ? "AI is finding the actual tasks, dates, estimates, and urgency levels."
+                : analysisMessage || "Paste a messy paragraph. AI will pull out editable task rows for you to approve."}
+            </span>
           </div>
-          <button
-            type="button"
-            className="button-secondary"
-            onClick={handleBrainDumpToRows}
-            disabled={isAnalyzing || !brainDump.trim()}
-          >
-            {isAnalyzing ? (
-              <>
-                <span className="button-spinner" aria-hidden="true" />
-                Reading your brain dump...
-              </>
-            ) : (
-              "AI Analyze Into Rows"
-            )}
-          </button>
-          <span className="helper-copy">
-            {isAnalyzing
-              ? "AI is finding the actual tasks, dates, estimates, and urgency levels."
-              : analysisMessage || "Paste a messy paragraph. AI will pull out editable task rows for you to approve."}
-          </span>
-        </div>
-      </details>
+        </details>
+      ) : null}
 
       <div className="task-rows-shell">
         <div className="task-rows-heading">

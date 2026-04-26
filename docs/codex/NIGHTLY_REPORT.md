@@ -1638,3 +1638,19 @@
 - app-vNext/src/features/easycalendar/lib/recurrence.ts
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 15:09:33
+
+- Task attempted: CAPTAIN OVERNIGHT EasyList add-flow reset: move Add Task into the floating plus/add bar as one clear action and make Brain Dump a separate action there; Brain Dump should reasonably classify natural wording as task, event, or deadline before adding, while preserving existing storage/data shapes, routes, auth, Firebase rules, package/dependency files, generated output, deployment config, and secrets. [class:feature risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: feature
+- Task risk: medium
+- Task mode: single
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easylist/components/TaskComposer.tsx
+- app-vNext/src/features/easylist/layouts/EasyListLayout.tsx
+- app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
+- app-vNext/src/features/experiments/UniversalCapture.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
