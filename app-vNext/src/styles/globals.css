@@ -4920,11 +4920,27 @@ button.calendar-detail-card:disabled {
 }
 
 .hq-command-center {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 0.78fr);
   gap: 1rem;
   align-items: stretch;
   margin-bottom: 1rem;
+}
+
+.hq-command-center::before {
+  content: "";
+  position: absolute;
+  inset: 0.7rem auto 0.7rem 0;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    var(--app-accent, var(--shell-accent)),
+    color-mix(in srgb, var(--app-accent, var(--shell-accent)) 28%, transparent)
+  );
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--app-accent, var(--shell-accent)) 7%, transparent);
+  pointer-events: none;
 }
 
 .hq-command-copy,
@@ -4937,13 +4953,28 @@ button.calendar-detail-card:disabled {
 }
 
 .hq-command-copy {
+  position: relative;
+  overflow: hidden;
   display: grid;
   align-content: center;
   gap: 0.55rem;
-  padding: clamp(1.1rem, 2vw, 1.65rem);
+  padding: clamp(1.1rem, 2vw, 1.65rem) clamp(1.1rem, 2vw, 1.65rem) clamp(1.1rem, 2vw, 1.65rem) clamp(1.35rem, 2.4vw, 1.9rem);
   background:
+    linear-gradient(90deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent), transparent 34%),
     linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 12%, transparent), transparent 62%),
     var(--ui-bg-card-elevated, #fffdf9);
+}
+
+.hq-command-copy::after {
+  content: "";
+  position: absolute;
+  inset: auto 1rem 1rem auto;
+  width: min(34%, 13rem);
+  height: 36%;
+  border-right: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 20%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 20%, transparent);
+  opacity: 0.75;
+  pointer-events: none;
 }
 
 .hq-command-copy h1 {
@@ -4962,11 +4993,26 @@ button.calendar-detail-card:disabled {
 }
 
 .hq-start-card {
+  position: relative;
   display: grid;
   align-content: center;
   gap: 0.75rem;
   padding: clamp(1rem, 2vw, 1.35rem);
   border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 34%, var(--ui-border-subtle) 66%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 9%, transparent), transparent 50%),
+    var(--ui-bg-card-elevated, #fffdf9);
+}
+
+.hq-start-card::before {
+  content: "";
+  position: absolute;
+  inset: 0.7rem 0.7rem auto auto;
+  width: 2.25rem;
+  height: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 52%, transparent);
+  pointer-events: none;
 }
 
 .hq-start-card strong {
