@@ -4,56 +4,55 @@
 YELLOW
 
 ## One-Sentence Read
-The branch is cleaner and more coherent, but the proof is still too marketing-heavy for a pack that claims to be fixing the signed-in product spine.
+The branch is calmer and more coherent, but it is still proving the brochure better than the signed-in personal operating system.
 
 ## Mission Fit
-The direction mostly matches EasyLife's mission: calm, practical, connected, and less experimental. The marketing pages now share a recognizable visual system, and the protected navigation work sounds aligned with Pack 1. But the current evidence still does not fully prove that EasyLife feels like one operating system after sign-in; it proves the brochure is getting prettier. Nice brochure. Now show me the product.
+The current direction matches the mission in tone: quiet, practical, connected, and less generic than earlier passes. The marketing pages now explain each module with clearer daily-use examples, and the shared visual language is more consistent across List, Calendar, Notes, and Workout. But Pack 1 is Product Spine, and the latest screenshots mostly show product marketing surfaces, not the protected HQ/app shell where the suite should actually feel connected. Confidence is lower because the visual evidence under-shows the signed-in first screen.
 
 ## Taste Check
-The best parts are the restrained palette, softer panel treatment, clearer product-specific preview cards, and less frantic copy rhythm. The interface is moving away from generic SaaS chrome and toward a quieter personal OS feel.
-
-The weak parts are hierarchy and evidence. Mobile screenshots still carry too much vertical dead air before value appears, preview cards are a little oversized, and repeated product-page structure risks making every module feel templated instead of intentionally connected. The signed-in suite spine remains under-demonstrated, which is the wrong place to be vague during Pack 1.
+The restrained teal, soft panels, heavy headings, and simple status rows feel more intentional than stock SaaS. The copy has gotten sharper and less inflated, especially on EasyList and EasyCalendar. The weak spot is hierarchy: mobile starts with a large header gap, oversized hero cards, and repeated pill/status motifs that make the pages feel a bit like four polished one-pagers instead of one working system. Nice coat, but I need to see the apartment.
 
 ## Visual Problems To Fix
-- Mobile headers leave a large quiet gap before the hero card, making the first viewport feel slower than the product promise.
-- Product preview panels are handsome but oversized on mobile, pushing useful second-level content too far down.
-- The marketing layout repeats the same two-column/card formula across modules, which helps consistency but starts to feel mechanically stamped.
-- Current-module state in the signed-in shell is not sufficiently evidenced in screenshots, so Pack 1 progress is hard to trust visually.
-- Pill rows on mobile sometimes read as decorative tags instead of useful navigation or proof.
-- Typography is strong, but several mobile hero paragraphs are too large and airy for a practical daily-use product.
-- The visual system leans heavily on pale mint, rounded cards, and soft borders; it is calm, but close to becoming sleepy.
+- Mobile pages waste too much first-viewport height between the header and hero, delaying the useful product proof.
+- Hero type is oversized on mobile, causing the page to feel like a landing page instead of a fast daily workspace.
+- The pale grid background is visible everywhere and starts to read decorative instead of functional.
+- Product proof cards reuse the same pill-in-card pattern across modules, which helps consistency but risks sameness.
+- The "Products + demo" mobile header action is unclear as a primary navigation affordance.
+- The signed-in suite spine is not sufficiently evidenced in current screenshots, despite recent AppHeader and HQ work.
+- Feature cards below the hero are clean but too evenly weighted; they do not create a strong next action or product flow.
+- Status rows inside the preview cards are useful, but some labels and badges are cramped on mobile.
 
 ## Strongest Opportunities
-- Capture and review signed-in HQ, EasyList, EasyCalendar, EasyNotes, EasyWorkout, and Settings screens as the primary design evidence.
-- Tighten the mobile first viewport so the user sees product identity, primary action, and real module status faster.
-- Make the signed-in header feel like a suite control: current app, adjacent apps, and one obvious daily-start action.
-- Give HQ a more decisive "today operating system" hierarchy instead of another pleasant panel stack.
-- Differentiate modules with functional proof surfaces, not louder colors or extra marketing copy.
+- Make the protected HQ first viewport the proof of the product: daily action first, module status second, supporting context third.
+- Reduce mobile hero scale and vertical padding so useful state appears sooner.
+- Turn the app switch/current module area into a compact suite control that feels operational, not promotional.
+- Give each module one distinct visual behavior while keeping shared structure, so consistency does not become wallpaper.
+- Use the first screen to show connected handoffs between tasks, calendar, notes, and workout instead of repeating isolated module claims.
+- Tighten the marketing header so mobile navigation feels deliberate rather than compressed.
 
 ## Priority Fix
-Fix the signed-in product spine evidence next: make the protected shell and HQ first screen visibly prove "one connected personal operating system" on desktop and 390px mobile. The next task should not add sections or polish another marketing card; it should tighten current-module state, daily-start hierarchy, and cross-module status visibility above the fold.
+Fix the first-viewport hierarchy on the signed-in HQ and app shell, then verify it visually. The next pass should make the active module, primary daily action, and two module statuses visible without scrolling on 390px mobile, with less top padding and less hero-style typography. Do not add new sections; compress, reorder, and sharpen what is already there.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer consistency improved, but visual evidence still overproves marketing polish and underproves the signed-in suite spine.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer suite consistency is visible, but the active product spine is still under-proven by screenshots.
 
 ## Designer Handoff
-Next implementer should stay inside the protected app experience. Keep the quiet palette, sturdy type, soft panels, and practical language. Change the first signed-in viewport so it behaves like a command surface: clear current module, obvious daily action, compact module statuses, and no ornamental padding pretending to be luxury. The result should feel like opening a personal operating system, not scrolling through a product tour.
+Keep the quiet teal-and-paper system, the compact status-row idea, and the plainspoken daily-life copy. Change the scale and priority: protected screens should feel like a working cockpit, not a marketing card parade. On mobile, the user should immediately see where they are, what needs attention, and one obvious next action. Desktop can keep more breathing room, but it still needs a stronger suite relationship across modules. The result should feel like opening a calm personal console, not scrolling through a tasteful product brochure.
 
 ## What Not To Do Next
-- Do not add another marketing section.
-- Do not invent new AI, backend, auth, analytics, or integration behavior.
-- Do not make the palette louder to compensate for weak hierarchy.
-- Do not add more cards inside cards.
-- Do not treat "no automated visual bugs" as design approval.
-- Do not ignore mobile first-viewport density.
-- Do not start Pack 2 until Pack 1 has signed-in screenshots that actually look like a connected suite.
+- Do not add more marketing sections.
+- Do not invent new AI claims or assistant features.
+- Do not keep polishing public pages while the signed-in spine remains under-evidenced.
+- Do not add more decorative backgrounds, badges, or pills to solve hierarchy.
+- Do not touch backend, auth, routing, packages, deployment, or persistence.
+- Do not ignore 390px mobile; this is where the hierarchy problem is most obvious.
 
 ## Next 5 Design Tasks
-- [ ] Capture fresh signed-in screenshots for HQ, EasyList, EasyCalendar, EasyNotes, EasyWorkout, and Settings on desktop and 390px mobile; do not rely on marketing pages as Pack 1 evidence.
-- [ ] Tighten the protected HQ first viewport so the daily action and at least three compact module statuses are visible on 390px mobile without adding new sections.
-- [ ] Refine AppHeader current-module state so the active app reads clearly as the suite location, not just another nav item; preserve labels and routes.
-- [ ] Reduce mobile vertical padding in the protected shell only where it delays primary action visibility; avoid global spacing churn.
-- [ ] Audit one signed-in module page for card density and nested-panel clutter; make only one small layout adjustment that improves scan speed.
+- [ ] Capture and review protected HQ mobile and desktop screenshots before changing anything; guardrail: no code changes in this task.
+- [ ] Tighten protected HQ first-viewport spacing so the primary daily action and two module statuses appear above the fold on 390px mobile; guardrail: no new sections or behavior.
+- [ ] Reduce mobile hero/header vertical padding on app-facing surfaces only; guardrail: preserve existing labels, routes, and content order unless needed for viewport fit.
+- [ ] Clarify the mobile app/header navigation affordance so current module and product switch read as controls; guardrail: do not add routes or menus.
+- [ ] Vary one module preview treatment subtly so each product has a distinct functional signal while keeping shared spacing and typography; guardrail: no new content blocks.
 
 ## Stop Or Continue
 continue but fix visual issues first
