@@ -33,3 +33,14 @@
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/styles/globals.css
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-04-25 21:50:57
+
+- Batch: 1
+- Task index: 1
+- Task: EasyList mobile refinement pass: inspect the signed-in EasyList mobile surface through existing dev visual QA and replace bulky persistent list controls with a compact TASKS/Main header row, icon actions for search/edit/manage, tap-to-reveal search/manage/edit UI, tighter stats chips, and a task list that begins noticeably higher; preserve existing list features, access flow, persistence, data models, routing, dependencies, package files, generated output, deployment config, docs report files, and root config files. [class:design risk:medium mode:single scope:app-vNext/src/features/easylist/,app-vNext/src/components/navigation/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Reason: Task-specific acceptance check failed.
+- Files restored before continuing:
+- app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx
+- app-vNext/src/styles/globals.css
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
