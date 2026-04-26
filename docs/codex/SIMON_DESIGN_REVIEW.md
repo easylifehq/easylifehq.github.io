@@ -4,54 +4,56 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is cleaner and more coherent, but it still looks more like a tidy marketing kit than a convincing signed-in personal operating system.
+The branch is cleaner and more coherent, but the proof is still too marketing-heavy for a pack that claims to be fixing the signed-in product spine.
 
 ## Mission Fit
-The direction matches the mission: calm, practical, connected, and visibly less chaotic than earlier batches. The shared header, restrained palette, tactile cards, and clearer product language help the suite feel related. The miss is Pack 1 proof: the branch keeps polishing product pages and module surfaces, while the signed-in spine still is not visually undeniable from the evidence provided.
+The direction mostly matches EasyLife's mission: calm, practical, connected, and less experimental. The marketing pages now share a recognizable visual system, and the protected navigation work sounds aligned with Pack 1. But the current evidence still does not fully prove that EasyLife feels like one operating system after sign-in; it proves the brochure is getting prettier. Nice brochure. Now show me the product.
 
 ## Taste Check
-The quiet grid background, pale panels, strong black type, and teal action color feel current and disciplined. The best parts are the direct headlines and calmer mobile stacking. The weaker parts are the repeated large rounded cards, pill overload, and hero-first composition that makes every product page feel like it went to the same SaaS finishing school and came back with a tote bag.
+The best parts are the restrained palette, softer panel treatment, clearer product-specific preview cards, and less frantic copy rhythm. The interface is moving away from generic SaaS chrome and toward a quieter personal OS feel.
+
+The weak parts are hierarchy and evidence. Mobile screenshots still carry too much vertical dead air before value appears, preview cards are a little oversized, and repeated product-page structure risks making every module feel templated instead of intentionally connected. The signed-in suite spine remains under-demonstrated, which is the wrong place to be vague during Pack 1.
 
 ## Visual Problems To Fix
-- Mobile pages start with too much dead vertical air between the header and primary content.
-- Product pages overuse the same hero card plus proof-card pattern, reducing app personality between EasyList, EasyCalendar, EasyNotes, and EasyWorkout.
-- Pills are visually heavy and numerous, especially on mobile, where they compete with the primary CTA.
-- The preview cards have oversized type and padding on mobile, making the first screen feel slower than it needs to.
-- Settings desktop has a clearer structure, but the top hero area leaves a large quiet void before useful controls.
-- The navigation shell is consistent, but it still reads as marketing navigation more than a working product command surface.
-- Screenshots still under-prove the protected HQ/app spine after multiple Pack 1 tasks.
+- Mobile headers leave a large quiet gap before the hero card, making the first viewport feel slower than the product promise.
+- Product preview panels are handsome but oversized on mobile, pushing useful second-level content too far down.
+- The marketing layout repeats the same two-column/card formula across modules, which helps consistency but starts to feel mechanically stamped.
+- Current-module state in the signed-in shell is not sufficiently evidenced in screenshots, so Pack 1 progress is hard to trust visually.
+- Pill rows on mobile sometimes read as decorative tags instead of useful navigation or proof.
+- Typography is strong, but several mobile hero paragraphs are too large and airy for a practical daily-use product.
+- The visual system leans heavily on pale mint, rounded cards, and soft borders; it is calm, but close to becoming sleepy.
 
 ## Strongest Opportunities
-- Make the signed-in HQ first viewport the unmistakable system spine: today, capture, next event, open tasks, and module jumps in one calm working surface.
-- Reduce mobile hero height by compressing badge rows, intro copy, and preview padding.
-- Give each module one distinctive but restrained interaction surface instead of repeating the same product-card choreography.
-- Turn the header into a more useful suite control on protected pages: app switcher, current module state, and one primary capture/action.
-- Use denser status rows for daily-use screens, saving big cards for genuinely important decisions.
+- Capture and review signed-in HQ, EasyList, EasyCalendar, EasyNotes, EasyWorkout, and Settings screens as the primary design evidence.
+- Tighten the mobile first viewport so the user sees product identity, primary action, and real module status faster.
+- Make the signed-in header feel like a suite control: current app, adjacent apps, and one obvious daily-start action.
+- Give HQ a more decisive "today operating system" hierarchy instead of another pleasant panel stack.
+- Differentiate modules with functional proof surfaces, not louder colors or extra marketing copy.
 
 ## Priority Fix
-Fix the signed-in product spine next. The next design task should target the protected HQ or app shell first viewport, not another marketing page: make the user immediately see "what needs attention, what is next, and where to capture" without scrolling, with compact module statuses that feel like one operating system instead of separate app promos.
+Fix the signed-in product spine evidence next: make the protected shell and HQ first screen visibly prove "one connected personal operating system" on desktop and 390px mobile. The next task should not add sections or polish another marketing card; it should tighten current-module state, daily-start hierarchy, and cross-module status visibility above the fold.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: visual consistency and mobile polish improved, but Pack 1 still lacks decisive signed-in suite-spine evidence.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer consistency improved, but visual evidence still overproves marketing polish and underproves the signed-in suite spine.
 
 ## Designer Handoff
-Keep the calm palette, strong typography, and practical language. Change the hierarchy: less hero theater, more working dashboard. The next batch should make the protected HQ/app shell feel like the center of the product, with a compact daily command surface, scan-friendly module states, and fewer decorative pills. The user should feel, in the first five seconds, "this is where my day starts" rather than "this is a nice brochure for apps I might use."
+Next implementer should stay inside the protected app experience. Keep the quiet palette, sturdy type, soft panels, and practical language. Change the first signed-in viewport so it behaves like a command surface: clear current module, obvious daily action, compact module statuses, and no ornamental padding pretending to be luxury. The result should feel like opening a personal operating system, not scrolling through a product tour.
 
 ## What Not To Do Next
-- Do not add more marketing sections.
-- Do not add more pills, badges, or soft cards to fake progress.
-- Do not redesign every module at once.
-- Do not chase a new visual theme; refine the current one.
-- Do not touch backend, auth, Firebase, deployment, packages, or data models.
+- Do not add another marketing section.
+- Do not invent new AI, backend, auth, analytics, or integration behavior.
+- Do not make the palette louder to compensate for weak hierarchy.
+- Do not add more cards inside cards.
+- Do not treat "no automated visual bugs" as design approval.
 - Do not ignore mobile first-viewport density.
-- Do not keep scoring Pack 1 from product-page screenshots alone.
+- Do not start Pack 2 until Pack 1 has signed-in screenshots that actually look like a connected suite.
 
 ## Next 5 Design Tasks
-- [ ] Protected HQ first-viewport compression: show daily focus, quick capture, and two module statuses above the fold on 390px mobile; no new backend, routes, data shapes, or broad layout rewrite.
-- [ ] Protected shell navigation polish: make the app switch/current module area feel like a working suite control, not marketing nav; keep labels short and preserve existing routes.
-- [ ] Mobile pill diet pass: reduce chip weight/count on product and module pages so CTAs and proof surfaces dominate; do not add new copy sections.
-- [ ] Settings top-area density repair: shrink the empty hero void and bring the first useful controls higher on desktop and mobile; no settings behavior changes.
-- [ ] Module preview differentiation pass: adjust one product preview card layout so it better reflects that module's actual daily use; keep shared tokens and avoid decorative novelty.
+- [ ] Capture fresh signed-in screenshots for HQ, EasyList, EasyCalendar, EasyNotes, EasyWorkout, and Settings on desktop and 390px mobile; do not rely on marketing pages as Pack 1 evidence.
+- [ ] Tighten the protected HQ first viewport so the daily action and at least three compact module statuses are visible on 390px mobile without adding new sections.
+- [ ] Refine AppHeader current-module state so the active app reads clearly as the suite location, not just another nav item; preserve labels and routes.
+- [ ] Reduce mobile vertical padding in the protected shell only where it delays primary action visibility; avoid global spacing churn.
+- [ ] Audit one signed-in module page for card density and nested-panel clutter; make only one small layout adjustment that improves scan speed.
 
 ## Stop Or Continue
 continue but fix visual issues first
