@@ -181,10 +181,10 @@ export function EasyListDashboardPage() {
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search your tasks"
           />
-          <div className="pill-row">
-            <span className="info-pill">{filteredTasks.length} shown</span>
-            <span className="info-pill">{overdueTasks.length} overdue</span>
-            <span className="info-pill">{completedTodayCount} done today</span>
+          <div className="easylist-dashboard-metrics" aria-label="Task summary">
+            <span>{filteredTasks.length} shown</span>
+            <span>{overdueTasks.length} overdue</span>
+            <span>{completedTodayCount} done today</span>
           </div>
         </div>
 
@@ -254,7 +254,10 @@ export function EasyListDashboardPage() {
 
         {error ? <p className="error-copy">{error}</p> : null}
 
-        <section className="group-block" aria-labelledby="easylist-board-heading">
+        <section
+          className={`group-block easylist-focus-board${activeView === "focus" ? " is-primary" : ""}`}
+          aria-labelledby="easylist-board-heading"
+        >
           <div className="group-heading">
             <h3 id="easylist-board-heading">{boardHeading}</h3>
             <span>
