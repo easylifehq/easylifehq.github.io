@@ -1156,8 +1156,8 @@ export function SettingsPage() {
 
           <aside className="settings-command-note" aria-label="Suite defaults guidance">
             <div>
-              <span className="settings-card-topline">Suite command map</span>
-              <strong>Shape the defaults for capture, planning, and handoffs from one place.</strong>
+              <span className="settings-card-topline">How your apps open</span>
+              <strong>Set how EasyLife opens, captures, and routes your work.</strong>
               <p>
                 These controls tune how each app starts its work while keeping the underlying tools and saved data
                 unchanged.
