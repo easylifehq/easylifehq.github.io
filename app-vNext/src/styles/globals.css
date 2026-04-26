@@ -8113,9 +8113,12 @@ button.calendar-detail-card:disabled {
 
   .marketing-page--easylist-preview .marketing-hero-preview-row strong em {
     margin-left: 0.3rem;
-    padding: 0.12rem 0.28rem;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--ui-text-muted, var(--shell-muted-text));
     font-size: 0.56rem;
-    font-weight: 780;
+    font-weight: 700;
   }
 
   .marketing-page--mobile-preview-lift .marketing-hero {
