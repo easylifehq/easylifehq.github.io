@@ -4,26 +4,26 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the mission through small UI hierarchy, mobile density, and copy cleanup work across marketing, EasyList, EasyCalendar, Settings, and shared navigation. Progress is directionally good, but Simon and Robin remain YELLOW, so the next work should address visual and copy quality before adding more scope.
+The branch is still moving toward the EasyLife 5.0 mission with small polish, copy, hierarchy, and protected-surface refinements across core suite areas. Progress is directionally good, but Simon and Robin both remain YELLOW, so the next work should address quality gates before adding broader protected utility work.
 
 ## Safety Review
-No forbidden files found. Risk is moderate review breadth: many app surfaces and shared CSS/navigation files have changed, though the working tree is clean and package/auth/Firebase/backend/deploy areas were not touched.
+No forbidden files found. Changed files stay within `app-vNext/src/`, `docs/codex/`, and `scripts/codex-guardrails.ps1`; no package, auth, Firebase, backend, secrets, deployment config, or generated output changes are listed. Risk remains moderate because several recent medium feature/design attempts were quarantined and the branch has a large accumulated diff.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: EasyList hierarchy repair, copy cleanup, EasyCalendar visual spine repair, additional copy cleanup
-- files changed: app UI and style files under `app-vNext/src/`, plus Codex docs/report files and `scripts/codex-guardrails.ps1`
-- commits added: latest checkpoint includes `1ef2fd5`, `54323d3`, visual/design/copy/security review commits through `0a3f34f`
-- queue status: no remaining unchecked tasks
+- completed tasks in this checkpoint window: EasyList signed-in hierarchy repair, copy cleanup, EasyCalendar visual spine repair, additional user-facing copy cleanup, plus Simon/visual review activity
+- files changed: 48 listed files across app UI, marketing, docs/codex reports, and guardrails
+- commits added: latest HEAD `cc77f60` plus many checkpoint/review/task commits since `main`
+- queue status: 2 unchecked tasks remain; working tree is clean
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN signal; 0 high, 0 medium, 0 low, should not block next tasks
-- Simon design review: YELLOW; should influence next tasks with repair-first visual polish
-- Robin copy review: YELLOW; should influence next tasks with copy cleanup before expansion
+- visual bug report: GREEN signal; 0 high, 0 medium, 0 low visual bugs, should not block next tasks
+- Simon design review: YELLOW; should influence next tasks with visual polish first
+- Robin copy review: YELLOW; should influence next tasks with copy cleanup first
 - Joey security review: GREEN; no security blocker for continuation
-- next-task influence: continue only with narrow visual/copy repair tasks, not new medium-risk feature work
+- overall gate influence: continue only in repair-first mode, prioritizing Simon/Robin concerns before mission-forward feature work
 
 ## Recommended Next Step
 patch first
@@ -31,11 +31,11 @@ patch first
 ## Next Batch Guidance
 - recommended next batch size: 2
 - next work mode: repair-first
-- One short visual polish task and one copy cleanup task are enough because the build is passing and the tree is clean, but Simon/Robin YELLOW should be resolved before mission-forward work resumes.
+- one sentence explaining why: Build and safety gates are clean, but Simon and Robin both request quality fixes before continuing into the remaining medium-risk protected utility tasks.
 
 ## Notes For Human Reviewer
-- Branch is clean at `0a3f34f`.
-- Build passed.
-- No unchecked tasks remain.
-- Several medium-risk mobile feature attempts were quarantined earlier; avoid reviving them unattended.
-- Prefer small shared polish/copy patches over broad product changes next.
+- Working tree is clean.
+- External build passed.
+- No forbidden scope listed.
+- Branch is broad; review accumulated UI changes carefully.
+- Recent quarantines suggest avoiding larger mobile/protected feature tasks until gates are green.
