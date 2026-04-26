@@ -155,29 +155,37 @@ export function EasyNotesLibraryPage() {
       description="Capture, resume, and organize writing from one calm workspace."
     >
         <div className="notes-command-strip" aria-label="Notes actions">
-          <button type="button" className="notes-command-button" onClick={() => void handleCreateNote()} aria-label="Add note">
-            +
-          </button>
-          <button
-            type="button"
-            className="notes-command-button"
-            onClick={() => {
-              setSearchOpen((current) => !current);
-              window.setTimeout(() => searchInputRef.current?.focus(), 0);
-            }}
-            aria-label="Search notes"
-          >
-            Search
-          </button>
-          <button
-            type="button"
-            className={`notes-command-button${toolsOpen ? " active" : ""}`}
-            onClick={() => setToolsOpen((current) => !current)}
-            aria-expanded={toolsOpen}
-            aria-controls="notes-library-tools"
-          >
-            Edit
-          </button>
+          <div className="notes-capture-group">
+            <button type="button" className="notes-command-button notes-command-button-primary" onClick={() => void handleCreateNote()}>
+              <span aria-hidden="true">+</span>
+              New note
+            </button>
+            <span className="notes-library-status">
+              {notes.length} note{notes.length === 1 ? "" : "s"} / {pinnedNotes.length} pinned
+            </span>
+          </div>
+          <div className="notes-secondary-actions">
+            <button
+              type="button"
+              className="notes-command-button"
+              onClick={() => {
+                setSearchOpen((current) => !current);
+                window.setTimeout(() => searchInputRef.current?.focus(), 0);
+              }}
+              aria-label="Search notes"
+            >
+              Search
+            </button>
+            <button
+              type="button"
+              className={`notes-command-button${toolsOpen ? " active" : ""}`}
+              onClick={() => setToolsOpen((current) => !current)}
+              aria-expanded={toolsOpen}
+              aria-controls="notes-library-tools"
+            >
+              Edit
+            </button>
+          </div>
         </div>
 
         {searchOpen ? (
