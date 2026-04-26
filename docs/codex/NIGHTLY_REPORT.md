@@ -1424,3 +1424,16 @@
 - app-vNext/src/features/marketing/routes/MarketingLandingPage.tsx
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-25 23:54:49
+
+- Task attempted: CAPTAIN PRIORITY protected-side deep module upgrade: inspect the signed-in EasyLife surfaces through the existing protected visual QA routes and make one substantial UI-only improvement to the logged-in suite shell or one core module so it feels Apple-clean, calm, magnificent, and genuinely useful; prioritize hierarchy, density, first-screen usefulness, and a deep module feel over marketing polish; preserve auth behavior, Firebase behavior, stored data shapes, routing, dependency files, package files, generated output, deployment config, secrets, and root files. [class:design risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Build result: Blocked
+- Files changed:
+- None
+- Risks or follow-up needed: Sensitive-system task requires approved Phase 5 policy/registry artifacts.
