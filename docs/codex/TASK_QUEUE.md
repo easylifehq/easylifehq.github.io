@@ -583,3 +583,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 ## Checkpoint Planner Tasks 2026-04-26 01:14:00
 
 - [x] Pack 1 - Product Spine HQ signed-in proof repair: inspect the existing protected HQ first screen and make one narrow UI-only adjustment that strengthens the daily-start hierarchy on mobile and desktop, prioritizing the primary daily action plus two compact module statuses above supporting chrome; forbidden scope: no new content, new sections, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, marketing pages, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/hq/,app-vNext/src/styles/ accept:npm.cmd run build]
+
+## Checkpoint Planner Tasks 2026-04-26 01:20:40
+
+- [ ] Pack 1 - Product Spine protected HQ first-viewport repair: inspect the existing signed-in HQ screen and make one narrow UI-only hierarchy adjustment so the daily focus/start area appears first, followed by two compact module statuses before secondary context on 390px mobile and desktop; forbidden scope: no new content, new sections, marketing copy, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/hq/,app-vNext/src/styles/ accept:npm.cmd run build]
