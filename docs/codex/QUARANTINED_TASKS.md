@@ -68,3 +68,17 @@
 - app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx
 - app-vNext/src/styles/globals.css
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-04-25 23:03:13
+
+- Batch: 1
+- Task index: 1
+- Task: Shared mobile form density pass: audit suite forms for short fields such as duration, date, time, category, priority, and small numeric inputs, then group related short fields side-by-side at mobile/tablet widths where it improves density while keeping comfortable touch targets; preserve desktop stability, data shapes, validation behavior, persistence, routing, dependencies, package files, generated output, deployment config, docs report files, and root config files. [class:design risk:medium mode:single scope:app-vNext/src/features/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Reason: Task-specific acceptance check failed.
+- Files restored before continuing:
+- app-vNext/src/features/easycalendar/components/CalendarComposer.tsx
+- app-vNext/src/features/easycalendar/components/CalendarEventDrawer.tsx
+- app-vNext/src/features/easycalendar/components/CalendarTaskBlockDrawer.tsx
+- app-vNext/src/features/easylist/components/TaskDrawer.tsx
+- app-vNext/src/styles/globals.css
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
