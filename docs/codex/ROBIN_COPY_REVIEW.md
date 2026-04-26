@@ -4,73 +4,69 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife's voice is calm and increasingly coherent, but it still leans on internal positioning phrases where concrete daily-use language would feel more trustworthy.
+EasyLife is moving toward a calm daily workspace voice, but some copy still leans on inflated system language and "AI" promises before the product can fully earn them.
 
 ## Mission Voice Fit
-The language broadly matches the mission: calm, organized, practical, and suited to a professional personal productivity suite. The strongest wording points toward everyday action: tasks, notes, calendar planning, workouts, settings, daily focus, undo, preview, and workspace. The weaker wording uses broad product-positioning phrases like "command center" and "personal operating system" in places where the user needs a plain promise about what EasyLife actually helps them do.
+The best language matches the mission well: "daily workspace," "Opening your workspace," "review-first," "editable rows," and "clear task rows" all feel useful, plain, and professional. The weaker language still sounds like internal strategy leaking into the product, especially "command center," "personal operating system," "premium," "high-tech," and repeated "AI" labels that make mock or assisted flows sound more capable than they may be.
 
 ## Delicate Wording Risks
-- "Command center" is overused and can feel inflated for a personal productivity app unless the UI truly behaves like one unified starting point.
-- "Personal operating system" is mission-useful internally, but it can sound abstract, overclaimed, or investor-deck-like in user-facing copy.
-- "Premium", "high-tech", and "Apple-clean" should stay out of product UI and marketing copy; they describe design intent, not user value.
-- "Opening your workspace." is calm, but slightly generic; it could be more specific if loading context is known.
-- "Products and demo below" was correctly identified as too rough; any similar navigation cue should be checked for student-made phrasing.
-- Repeated "suite", "workspace", "daily focus", and "module status" language can become mechanical if every surface uses the same nouns.
-- Marketing meta descriptions that promise everything in one "command center" risk sounding broader than the current signed-in HQ can prove.
+- "command center" still appears in metadata and marketing-adjacent copy; it feels corporate and overclaimed for a personal productivity suite.
+- "Products + demo" is compact but a little rough and mechanical in the mobile header.
+- "Brain dump with AI" may overpromise if the flow is local, mock, fallback, or review-only.
+- "AI Analyze Into Rows" sounds tool-like and awkward; it also implies a real AI analysis step.
+- "AI is finding the actual tasks, dates, estimates, and urgency levels" is too assertive and may mislead if results are heuristic, incomplete, or require review.
+- "Project Planner AI" and "AI project planning" sound like a finished intelligent feature rather than a guarded preview unless clearly labeled as draft-only.
+- "smarter" appears in settings/task language and can feel vague without a concrete behavior.
+- Energy labels like "Steady Heat," "Locked In," and "Big Motion" have personality, but may be too sporty for a calm professional daily workspace if overused.
 
 ## Beautiful Language Opportunities
-- Replace abstract suite language with concrete daily outcomes: "see today", "capture a note", "plan the next block", "review what is done".
-- Make HQ copy feel like a starting place, not a slogan: short labels, current state, next action.
-- Give EasyCalendar's new planning controls warmer confidence language: preview, confirm, apply, undo.
-- Make recurrence copy plain and human: "Repeat on selected weekdays" instead of technical recurrence phrasing.
-- Use calmer status labels across modules: "Today", "Next", "Ready", "Planned", "Logged" rather than decorative badges.
-- Let empty states sound useful and restrained: one sentence about what is missing, one action cue, no pep talk.
-- Keep marketing copy grounded in the actual product surfaces now visible in the branch.
+- Replace internal product-strategy phrases with concrete daily-use language: "daily workspace," "today's plan," "your suite," "review drafts," "capture area."
+- Make AI-related language more careful and human: "draft," "suggest," "review," "organize," and "prepare" are safer than "finds" or "plans."
+- Give the mobile navigation cue a smoother phrase that still stays short.
+- Make Plan My Day copy emphasize control and reversibility, not automation.
+- Make Brain Dump feel hospitable: messy input is welcome, but nothing should sound like the product will perfectly understand everything.
+- Keep status language quiet and functional: "Done today," "Active," "Due today," and "Ready to review" fit better than theatrical momentum labels.
 
 ## Priority Rewrite
-The single most important wording problem is the continued use of "command center" and "personal operating system" as user-facing proof. Nami should scan changed app and marketing copy for those phrases and replace them with concrete daily-workspace language that says what the user can see or do now: start the day, review tasks, capture notes, check the calendar, or log a workout.
+The single most important wording problem is the AI promise layer. Any user-facing copy that says AI should be rewritten to make the interaction clearly review-first, editable, and not automatic. Nami should scan EasyList Brain Dump, Settings AI Controls, EasyProjects AI planner, and Experiments AI Lab for phrases that imply real autonomous intelligence, guaranteed extraction, or data changes without review.
 
 ## Suggested Rewrites
+- Before: "Brain dump with AI"
+  After: "Organize a brain dump"
+
+- Before: "AI Analyze Into Rows"
+  After: "Draft editable rows"
+
+- Before: "AI is finding the actual tasks, dates, estimates, and urgency levels."
+  After: "Preparing editable task rows with dates and priority suggestions."
+
+- Before: "Paste a messy paragraph. AI will pull out editable task rows for you to approve."
+  After: "Paste a messy paragraph. EasyLife will draft task rows for you to review."
+
+- Before: "Products + demo"
+  After: "Products and tour"
+
 - Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one calm workspace."
+  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one daily workspace."
 
-- Before: "Opening your workspace."
-  After: "Getting your day ready."
-
-- Before: "Products and demo below"
-  After: "Explore the apps"
-
-- Before: "personal operating system"
-  After: "daily workspace"
-
-- Before: "command center"
-  After: "home base"
-
-- Before: "premium connected suite"
-  After: "connected daily workspace"
-
-- Before: "AI Command Center"
-  After: "AI Lab"
-
-- Before: "Plan My Day"
-  After: "Preview my day"
+- Before: "Project Planner AI"
+  After: "Project draft assistant"
 
 ## Voice Rules
-- Prefer concrete daily actions over abstract product claims.
-- Keep sentences short, useful, and calm.
-- Do not describe the product as "premium", "high-tech", or "Apple-like" in user-facing copy.
-- Use "workspace", "home", "today", "plan", "capture", "review", and "log" when they match the screen.
-- Avoid motivational language, cute phrasing, and inflated productivity promises.
-- Empty states should explain what is missing and point to one existing action.
-- Marketing copy should only claim what the current UI can prove.
-- Labels should sound like software a busy adult can trust.
+- Prefer concrete daily-workspace language over strategy language.
+- Do not use "command center," "personal operating system," "premium," or "high-tech" in user-facing copy.
+- Use "draft," "suggest," "review," "editable," and "undo" for assistant flows.
+- Avoid claiming the product "finds," "knows," "plans," or "automatically" does complex work unless the behavior is exact and reviewable.
+- Keep mobile labels short, but not clipped or slogan-like.
+- Let personality appear in small status moments, not primary navigation or safety-sensitive flows.
+- Write for trust first: users should always understand whether they are creating real data, reviewing a draft, or seeing a mock preview.
 
 ## Next 5 Copy Tasks
-- [ ] Replace one remaining user-facing "command center" phrase with "workspace", "home base", or a more specific action phrase; do not change internal mission docs.
-- [ ] Scan protected HQ copy and make the first-screen labels describe current state and next action, not product strategy.
-- [ ] Review EasyCalendar Plan My Day and recurrence copy for plain preview, confirm, repeat, and undo language; do not add new behavior.
-- [ ] Audit marketing hero subtitles for abstract claims and rewrite one to name the actual product workflow shown in the preview.
-- [ ] Tighten one empty state to one calm guidance sentence plus one existing action cue; avoid pep talk or new promises.
+- [ ] Replace one remaining user-facing "command center" phrase with "daily workspace" or another concrete suite phrase; guardrail: do not edit internal mission docs.
+- [ ] Rewrite EasyList Brain Dump labels so the flow says "draft" and "review" instead of overpromising AI analysis; guardrail: copy only, no behavior changes.
+- [ ] Audit Settings AI Controls copy for autonomous-sounding language; guardrail: keep all controls and meanings intact.
+- [ ] Replace "Products + demo" with a smoother mobile navigation cue; guardrail: preserve links, tap targets, and routing.
+- [ ] Review EasyProjects AI planner labels and soften them toward draft-assistant language; guardrail: do not invent capabilities or remove safety warnings.
 
 ## Stop Or Continue
 continue but fix copy first
