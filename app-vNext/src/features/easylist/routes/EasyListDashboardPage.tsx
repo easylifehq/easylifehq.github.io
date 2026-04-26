@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { PageSection } from "@/components/ui/PageSection";
 import { TaskCard } from "@/features/easylist/components/TaskCard";
@@ -22,6 +22,8 @@ export function EasyListDashboardPage() {
   const [isBulkEditing, setIsBulkEditing] = useState(false);
   const [selectedTaskIds, setSelectedTaskIds] = useState<string[]>([]);
   const [selectedTask, setSelectedTask] = useState<TaskRecord | null>(null);
+  const [pendingCompletionIds, setPendingCompletionIds] = useState<string[]>([]);
+  const completionTimersRef = useRef<Record<string, number>>({});
 
   const visibleTasks = useMemo(() => tasks.filter((task) => !task.deletedAt), [tasks]);
   const listNames = useMemo(
@@ -89,6 +91,12 @@ export function EasyListDashboardPage() {
     );
   }, [visibleTasks, activeListName]);
 
+  useEffect(() => {
+    return () => {
+      Object.values(completionTimersRef.current).forEach((timerId) => window.clearTimeout(timerId));
+    };
+  }, []);
+
   function addList() {
     const nextName = newListName.trim();
     if (!nextName) return;
@@ -116,6 +124,28 @@ export function EasyListDashboardPage() {
 
     setSelectedTaskIds([]);
     setIsBulkEditing(false);
+  }
+
+  function requestComplete(taskId: string) {
+    if (completionTimersRef.current[taskId]) return;
+
+    setPendingCompletionIds((current) => Array.from(new Set([...current, taskId])));
+    completionTimersRef.current[taskId] = window.setTimeout(() => {
+      void markComplete(taskId).finally(() => {
+        delete completionTimersRef.current[taskId];
+        setPendingCompletionIds((current) => current.filter((id) => id !== taskId));
+      });
+    }, 2600);
+  }
+
+  function cancelPendingComplete(taskId: string) {
+    const timerId = completionTimersRef.current[taskId];
+    if (timerId) {
+      window.clearTimeout(timerId);
+      delete completionTimersRef.current[taskId];
+    }
+
+    setPendingCompletionIds((current) => current.filter((id) => id !== taskId));
   }
 
   function rescheduleTask(task: TaskRecord, days: number) {
@@ -159,8 +189,9 @@ export function EasyListDashboardPage() {
   return (
     <>
       <PageSection
-        eyebrow="Tasks"
-        title={boardTitle}
+        eyebrow="EasyList"
+        title="Tasks"
+        description={`${boardTitle}: ${filteredTasks.length} open task${filteredTasks.length === 1 ? "" : "s"} shown. Search, review, or finish one item at a time.`}
       >
         <div className="easylist-smart-tabs" aria-label="Task views">
           <button type="button" className={activeView === "focus" ? "active" : ""} onClick={() => setActiveView("focus")}>
@@ -271,7 +302,9 @@ export function EasyListDashboardPage() {
                   key={task.id}
                   task={task}
                   onEdit={setSelectedTask}
-                  onComplete={markComplete}
+                  onComplete={requestComplete}
+                  isCompleting={pendingCompletionIds.includes(task.id)}
+                  onCancelComplete={cancelPendingComplete}
                   isSelected={selectedTaskIds.includes(task.id)}
                   onSelect={isBulkEditing ? selectTask : undefined}
                   showContextMeta={activeView !== "focus"}
@@ -343,7 +376,7 @@ export function EasyListDashboardPage() {
         onClose={() => setSelectedTask(null)}
         onSave={saveTask}
         onDelete={deleteTask}
-        onComplete={markComplete}
+        onComplete={requestComplete}
         onReopen={markActive}
       />
     </>

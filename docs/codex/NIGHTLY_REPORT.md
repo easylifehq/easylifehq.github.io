@@ -1654,3 +1654,19 @@
 - app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
 - app-vNext/src/features/experiments/UniversalCapture.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 15:15:58
+
+- Task attempted: CAPTAIN OVERNIGHT EasyList completion safety and header reset: rework the to-do list page header back toward a basic, readable task-app layout, and change the Finish/complete interaction so a task visibly fills/progresses or enters an easy undo state before being dumped straight into completed; make accidental completion easy to reverse without requiring the Done Today path; preserve existing data models, auth/Firebase behavior, routes, package/dependency files, generated output, deployment config, and secrets. [class:behavior risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: feature
+- Task risk: medium
+- Task mode: single
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easylist/components/TaskCard.tsx
+- app-vNext/src/features/easylist/components/TaskDrawer.tsx
+- app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
