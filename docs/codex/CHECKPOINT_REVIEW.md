@@ -4,38 +4,38 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the mission: recent work improves protected suite hierarchy, HQ daily-start clarity, shell navigation, EasyCalendar planning, EasyList completion safety, and calmer mobile/marketing density. Progress is visible and aligned with the connected-suite goal, but Simon and Robin both still want fixes before mission-forward work continues.
+The branch is moving toward the mission with focused protected-suite hierarchy, navigation, HQ, calendar, list, notes, workout, and marketing polish. Recent work supports a calmer connected-suite feel, but Simon and Robin both still flag quality issues that should be addressed before more mission-forward work.
 
 ## Safety Review
-No forbidden files, dependency files, auth, Firebase rules/config, backend, deploy config, secrets, or generated output changes found. Risk to watch: medium-scope behavior/UI changes in EasyCalendar recurrence/planning and EasyList completion/add flow should remain regression-tested.
+No forbidden files, package files, auth/Firebase/backend/deploy/secrets, or generated output changes found. Risky surface area is moderate because many app UI files changed, including calendar/list behavior-adjacent components, but the working tree is clean and build passed.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: 12 recent tasks completed, including HQ hierarchy, EasyWorkout/EasyNotes polish, EasyCalendar repairs, EasyList flow/safety, assistant-spine UI, and protected shell navigation
-- files changed: app frontend files under `app-vNext/src/`, Codex docs under `docs/codex/`, and `scripts/codex-guardrails.ps1`
-- commits added: latest HEAD `a756aba` plus multiple checkpoint, visual, Simon, Robin, Joey, planner, and task commits since base
-- queue status: clean working tree; unchecked task count is 0
+- completed tasks in this checkpoint window: 12 recent tasks completed, focused on Product Spine hierarchy, HQ first viewport, AppHeader/navigation polish, EasyCalendar chrome, EasyNotes/EasyWorkout hierarchy, and copy cleanup
+- files changed: 56 files changed since base, primarily `app-vNext/src` UI/style files plus `docs/codex` reporting files and `scripts/codex-guardrails.ps1`
+- commits added: latest HEAD is `4dd7a95` with review commits through visual, Simon, Robin, and Joey gates
+- queue status: unchecked task count is 0; remaining unchecked tasks: none
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN; 0 high, 0 medium, 0 low; should not block next tasks
-- Simon design review: YELLOW; should influence next tasks with visual repair first
-- Robin copy review: YELLOW; should influence next tasks with copy repair first
-- Joey security review: GREEN; no security blocker for continuing
-- next-task influence: repair-first work should address Simon/Robin concerns before new feature or polish expansion
+- visual bug report: GREEN influence; 0 high, 0 medium, 0 low visual bugs reported
+- Simon design review: YELLOW influence; continue, but fix visual issues first
+- Robin copy review: YELLOW influence; continue, but fix copy first
+- Joey security review: GREEN influence; safe to continue from security perspective
+- next tasks should be influenced by Simon and Robin before expanding scope
 
 ## Recommended Next Step
 patch first
 
 ## Next Batch Guidance
-- recommended next batch size: 1
+- recommended next batch size: 2
 - next work mode: repair-first
-- Run one narrow repair task because the build and safety gates are clean, but Simon and Robin both requested fixes before continuing mission-forward work.
+- Simon and Robin both returned YELLOW, so the next batch should address design/copy cleanup before taking on more mission-forward polish.
 
 ## Notes For Human Reviewer
-- Branch is clean.
+- Working tree is clean.
 - Build passed.
-- No unchecked queue items remain.
-- Review recent EasyCalendar recurrence and EasyList completion behavior manually.
-- Prioritize Simon/Robin YELLOW cleanup before adding new scope.
+- No unchecked tasks remain.
+- Branch is broad but still within mostly safe frontend/docs scope.
+- Prioritize Simon and Robin follow-up before continuing unattended.
