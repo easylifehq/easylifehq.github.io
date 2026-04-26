@@ -4,7 +4,7 @@ export const marketingProductItems: ProductsMenuItem[] = [
   {
     href: "/easyhq",
     label: "EasyHQ",
-    description: "Open the command center.",
+    description: "Open the daily workspace.",
   },
   {
     href: "/easylist",
