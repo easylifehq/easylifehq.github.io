@@ -4,38 +4,38 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission with steady protected-suite polish, calmer hierarchy, better mobile density, and more connected daily surfaces. Recent work is directionally aligned, but Simon and Robin both remain YELLOW, so the next batch should address visual/copy cleanup before continuing broader mission work.
+The branch is moving toward the EasyLife mission: recent work improves protected HQ hierarchy, EasyNotes/EasyWorkout polish, EasyCalendar planning/event flow, and EasyList add/completion flow. The direction supports a more connected daily workspace, but Simon and Robin both flagged quality follow-up before more mission expansion.
 
 ## Safety Review
-No forbidden files, dependency files, auth/Firebase/backend/deploy/secrets, or generated output changes found. Risk is moderate because recent tasks touched behavior-facing EasyCalendar and EasyList UI flows, but the reported build passed and the working tree is clean.
+No forbidden files found. Risk is moderate because recent work touched behavior-adjacent feature files in EasyCalendar and EasyList, including recurrence, planning preview/undo, brain dump classification, and completion undo states.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: 12 shown, including HQ hierarchy/mobile polish, EasyNotes/EasyWorkout visual repairs, EasyCalendar reversible planning and recurrence work, and EasyList add-flow reset
-- files changed: app-vNext source files across router, navigation, EasyCalendar, EasyList, EasyNotes, EasyWorkout, marketing, settings, HQ, experiments, globals.css, plus codex docs and guardrails script
-- commits added: latest HEAD `f7cf8c9` with many checkpoint/review/task commits since `main`
-- queue status: 3 unchecked tasks remain
+- Completed tasks in this checkpoint window: protected HQ first-viewport polish, EasyCalendar reversible Plan My Day, EasyCalendar event form/custom repeat, EasyList add-flow reset, EasyList completion safety/header reset
+- Files changed: app UI, feature, navigation, shared CSS, and codex docs files listed in checkpoint; no package/dependency or forbidden config files
+- Commits added: latest HEAD `5c3e536` plus recent review/inspection/checkpoint commits
+- Queue status: 2 unchecked medium-risk protected assistant-spine tasks remain
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN; no high, medium, or low visual bugs reported
-- Simon design review: YELLOW; should influence next tasks by prioritizing visual repair first
-- Robin copy review: YELLOW; should influence next tasks by prioritizing copy cleanup first
-- Joey security review: GREEN; does not block continuing
-- next-task influence: yes, Simon and Robin should steer the next batch before mission-forward work
+- Visual bug report: GREEN; 0 high, 0 medium, 0 low, should not block next tasks
+- Simon design review: YELLOW; continue but fix visual issues first, should influence next tasks
+- Robin copy review: YELLOW; continue but fix copy first, should influence next tasks
+- Joey security review: GREEN; continue, no security blocker
+- Next tasks should prioritize Simon/Robin repair before broad assistant-spine expansion
 
 ## Recommended Next Step
 patch first
 
 ## Next Batch Guidance
-- recommended next batch size: 2
-- next work mode: repair-first
-- Simon and Robin both request fixes first, and the remaining queue contains medium-risk behavior/design tasks that should wait until visual and copy gates are clean.
+- Recommended next batch size: 2
+- Next work mode: repair-first
+- One sentence explaining why: Build and safety gates are clear, but Simon and Robin both request quality fixes before the remaining medium-risk assistant-spine work continues.
 
 ## Notes For Human Reviewer
 - Working tree is clean.
-- Build passed.
-- No forbidden scope flagged.
-- Review gates are not fully green because Simon and Robin are YELLOW.
-- Next unchecked EasyList completion task changes behavior and should be kept narrow.
+- Build passed after recent tasks.
+- No forbidden scope detected from the changed file list.
+- Watch recurrence and completion behavior closely in manual QA.
+- Remaining tasks are broader and medium risk; keep them narrow.
