@@ -4,57 +4,58 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is finally speaking in one visual voice, but that voice still leans too hard on big rounded cards, teal pills, and polite SaaS furniture instead of a sharp personal operating system.
+EasyLife is finally starting to look like one suite, but it still leans too hard on oversized cards, pill clutter, and polite SaaS sameness when the mission wants a calm personal operating system.
 
 ## Mission Fit
-The current direction mostly matches Pack 1 - Product Spine: the product pages now feel related, the typography is clearer, and each module has a more specific promise. The problem is that the spine is still mostly expressed as repeated marketing-page structure, not as a memorable suite system. The latest screenshots prove consistency, but they do not yet prove that the signed-in product feels like one fast daily command center.
+The direction mostly matches Pack 1 - Product Spine: shared headers, repeated product framing, consistent mint-tinted surfaces, and cleaner hierarchy are pulling the apps into one family. The problem is that the family resemblance is still mostly visual styling, not a strong operating-system spine. The screenshots show public product pages more clearly than signed-in daily workflows, so confidence on the protected suite experience is lower.
 
 ## Taste Check
-The good: strong type scale, restrained color, calmer copy, consistent module previews, and fewer random elements fighting for attention. The mobile pages are readable and generally stable.
+The best parts are the restrained palette, strong type weight, calm spacing, and better product-specific promises. EasyNotes and EasyWorkout now feel more distinct than before, and the preview panels are useful enough to signal real product behavior.
 
-The weak: the design is over-dependent on the same rounded white hero card, the same mint preview panel, the same pill rows, and the same three-card feature section. It is tidy, but still a bit "template with opinions." The product wants personal OS; the current surface sometimes gives wellness SaaS wearing a planner costume.
+The weak parts are the heavy rounded-card system, repeated pill rows, and oversized mobile hero rhythm. Too many surfaces say "nice template" before they say "daily command center." The product is wearing a good coat, but it is still standing in the lobby asking where the restaurant is.
 
 ## Visual Problems To Fix
-- Mobile first viewport has too much vertical preamble before the product preview becomes useful, especially with the floating header plus large hero card stack.
-- The top mobile header is visually heavy: logo, wordmark, and "Products + demo" button consume prime space without helping the user act faster.
-- Product tag rows still read as decoration more than hierarchy; they add clutter between the CTA and the preview.
-- The preview panels repeat the same rounded title capsule, pale mint background, and row-card language across products, making modules feel related but not distinct.
-- Desktop hero layout is clean but predictable: left copy, right preview, lower feature cards. It needs one stronger system-level gesture to feel owned.
-- The lower feature sections still rely on equal-weight cards, so the eye gets a brochure grid instead of a clear editorial argument.
-- The color system is calm but too narrow: teal, mint, gray, white. It is tasteful enough, but not yet distinctive.
-- Latest visual evidence appears focused on public product pages, so confidence is lower on signed-in workflow quality across EasyList, EasyNotes, EasyCalendar, EasyWorkout, and Settings.
+- Mobile pages waste too much first-viewport height before the actual product preview becomes useful.
+- The header and hero card both use large rounded containers, creating card-on-card visual heaviness.
+- Pill rows compete with the headline and CTA instead of acting as quiet supporting metadata.
+- Preview panels repeat the same rounded capsule header treatment across products, making apps feel more interchangeable than they should.
+- Desktop marketing sections still rely on equal-width feature cards, which weakens hierarchy and makes scanning feel generic.
+- The mint background grid is calm, but it risks becoming wallpaper because every module sits on similar pale panels.
+- CTAs are readable, but their scale on mobile feels chunky relative to the rest of the hierarchy.
+- Product identity is improving, but the suite navigation still does not yet feel like the central spine of a personal OS.
 
 ## Strongest Opportunities
-- Give the suite one recognizable signed-in shell pattern: compact header, module identity, today-state summary, and one primary action per screen.
-- Make each module preview use a different information shape instead of the same list-row mockup with a swapped label.
-- Reduce pill usage by half; keep only tags that clarify product function, not tags that merely decorate.
-- Replace at least one three-card lower section with a lead statement plus two supporting proof points to create hierarchy.
-- Tighten mobile above-fold rhythm so the H1, CTA, and preview feel like one composed unit rather than stacked blocks.
-- Introduce subtle module-specific accents inside a shared system, not new palettes everywhere.
+- Turn the first signed-in view into the real product spine: a compact today-oriented shell that links tasks, notes, calendar, workouts, and settings with clear current state.
+- Replace repeated pill rows with one quieter metadata line or compact segmented treatment where the content truly needs comparison.
+- Give each product preview one distinct structural motif: calendar time rows, list queue, notes editor, workout session log, settings control groups.
+- Reduce mobile hero vertical padding so the headline, CTA, and preview all work together above the fold.
+- Make lower sections use lead-plus-support hierarchy instead of three equal cards everywhere.
+- Introduce more precise active states in navigation so moving between modules feels deliberate, not just routed.
 
 ## Priority Fix
-Fix the repeated rounded-card and pill language across the product spine. Keep the shared shell and typography, but make one product page prove a stronger hierarchy: fewer tags, quieter preview chrome, one clear product-specific UI shape, and a lower section that is not another equal-card trio. This is the fastest way to move from "consistent template" to "designed suite."
+Fix the mobile first-viewport hierarchy across the product pages. Keep the current copy and shared shell, but reduce the stacked hero/card/pill bulk so the product name, promise, primary action, and preview are visible as one composed system. The goal is not smaller for its own sake; the goal is faster comprehension and less "giant brochure card" energy.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: suite consistency improved, but repeated card and pill language still keeps the product spine from feeling premium or memorable.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: suite consistency is clearer, but repeated card and pill language still keeps Pack 1 from feeling premium or memorable.
 
 ## Designer Handoff
-Next batch should be a restraint pass, not an invention pass. Keep the clean typography, pale background, strong H1s, and shared marketing shell. Change the repeated visual grammar: remove nonessential pills, flatten one preview header into plain product chrome, and make one lower section lead with a single dominant idea instead of three equal cards. The user should feel that EasyLife is calmer, faster, and more intentional, not that another layer of decoration was added.
+Next batch should stay focused on Pack 1 and clean the product spine, not invent new surfaces. Keep the restrained palette, strong typography, concise product promises, and useful mock previews. Change the mobile rhythm: less vertical padding, fewer competing pill treatments, quieter secondary metadata, and stronger preview specificity per product. The user should feel that EasyLife is a connected daily operating system they can enter quickly, not a set of attractive landing pages asking for more scroll.
 
 ## What Not To Do Next
-- Do not add more product sections to compensate for weak hierarchy.
-- Do not introduce new illustrations, gradients, blobs, or ornamental backgrounds.
-- Do not broaden into backend, auth, routing, package, deployment, or data work.
-- Do not keep polishing only desktop; mobile is where the product either feels fast or feels padded.
-- Do not make every module preview identical just for consistency.
-- Do not start another medium-risk mobile feature pass until the visual language is less repetitive.
+- Do not add more sections to compensate for weak hierarchy.
+- Do not introduce new colors, gradients, illustrations, or decorative noise.
+- Do not redesign every product page in one broad sweep.
+- Do not touch backend, auth, persistence, routing, packages, deployment, or architecture.
+- Do not keep polishing copy while ignoring mobile composition.
+- Do not make the previews larger unless the surrounding hero bulk is reduced first.
+- Do not add more pills. The pills have had enough attention.
 
 ## Next 5 Design Tasks
-- [ ] Reduce one product marketing hero tag row to only the two most useful tags, preserving copy meaning, CTA order, links, and tap targets.
-- [ ] Rework one product preview header from a large rounded capsule into quieter product chrome, without changing layout size or adding behavior.
-- [ ] Convert one lower three-card feature section into a lead-plus-two-support layout using existing copy only, with mobile stacking checked.
-- [ ] Tighten the mobile marketing header height and spacing by a small amount while preserving brand recognition and button tap targets.
-- [ ] Give one module preview a more product-specific information shape, using existing static content only and avoiding new colors or new sections.
+- [ ] On one mobile product marketing page, reduce first-viewport vertical bulk by tightening hero padding and spacing only; preserve copy, CTAs, routing, and desktop layout.
+- [ ] Replace one nonessential mobile pill row with quieter plain-text metadata or a shorter inline treatment; do not add new content or behavior.
+- [ ] Adjust one product preview header so it uses product-specific structure instead of the same capsule title treatment; keep existing mock data and visual tokens.
+- [ ] Convert one lower marketing section from three equal cards into a lead-plus-support layout; reuse existing copy and avoid new sections.
+- [ ] Inspect one signed-in suite screen screenshot and identify the smallest visible shell/navigation hierarchy fix; limit implementation scope to spacing, labels, or active-state polish.
 
 ## Stop Or Continue
 continue but fix visual issues first
