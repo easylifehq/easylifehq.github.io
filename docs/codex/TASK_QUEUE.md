@@ -1,7 +1,3 @@
-## Supervisor Auto Repair 2026-04-25 22:17:04
-
-- [ ] Auto repair for BUDGET_STOP in Pack 1 - Product Spine: inspect the latest MAGIC_SCORECARD, QUALITY_QUARANTINE, Simon, Robin, Visual, and nightly report notes, then make exactly one smallest user-visible repair that addresses $reason; prefer reducing churn over adding features; preserve existing behavior and avoid backend, secrets, package/dependency files, deployment config, generated output, broad rewrites, and unrelated files. [class:design risk:low mode:single scope:src/,app-vNext/src/,css/,js/,wine.html,index.html]
-
 # EasyLife 5.0.0 Night Sprint 1 Queue
 
 ## Mission
