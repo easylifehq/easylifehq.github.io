@@ -571,3 +571,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 ## Checkpoint Planner Tasks 2026-04-26 00:58:59
 
 - [x] Pack 1 - Product Spine protected EasyNotes first-screen hierarchy repair: on the existing signed-in EasyNotes library page, reduce top chrome or secondary card/pill weight so the primary note capture action and one useful library status are visible earlier on desktop and mobile; forbidden scope: no editor behavior, note logic, persistence, data shapes, routing, auth, Firebase, backend, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/easynotes/,app-vNext/src/styles/]
+
+## Checkpoint Planner Tasks 2026-04-26 01:04:13
+
+- [ ] Pack 1 - Product Spine EasyWorkout marketing hero mobile density repair: at 390px, tighten the existing product-page hero spacing by reducing dead air above the hero, chip-row weight, or preview padding so the first viewport shows the headline, primary action, and one proof surface sooner; forbidden scope: no new content, new sections, routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, desktop redesign, or unrelated pages. [class:design risk:low mode:single scope:app-vNext/src/features/marketing/,app-vNext/src/styles/]
