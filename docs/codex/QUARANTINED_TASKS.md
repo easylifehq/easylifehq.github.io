@@ -44,3 +44,15 @@
 - app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx
 - app-vNext/src/styles/globals.css
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-04-25 21:55:45
+
+- Batch: 1
+- Task index: 2
+- Task: EasyList completion recovery pass: update mobile task completion behavior so completed tasks do not disappear abruptly, instead staying visible with a muted completed state and one-tap undo from the main list; keep Done Today as a review/filter summary rather than the only recovery path, preserve task data shapes and persistence behavior, and do not change access flow, routing, dependencies, package files, generated output, deployment config, docs report files, or root config files. [class:feature risk:medium mode:single scope:app-vNext/src/features/easylist/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Reason: Task-specific acceptance check failed.
+- Files restored before continuing:
+- app-vNext/src/features/easylist/components/TaskCard.tsx
+- app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx
+- app-vNext/src/styles/globals.css
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.

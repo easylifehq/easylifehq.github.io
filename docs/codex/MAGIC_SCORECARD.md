@@ -313,3 +313,27 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837\easylist-visualQa-1-mobile.png
 - Follow-up: Task-specific acceptance check failed.
+
+## 2026-04-25 21:55:45
+
+- Task: EasyList completion recovery pass: update mobile task completion behavior so completed tasks do not disappear abruptly, instead staying visible with a muted completed state and one-tap undo from the main list; keep Done Today as a review/filter summary rather than the only recovery path, preserve task data shapes and persistence behavior, and do not change access flow, routing, dependencies, package files, generated output, deployment config, docs report files, or root config files. [class:feature risk:medium mode:single scope:app-vNext/src/features/easylist/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: Pack 1 - Product Spine
+- Task class: unknown
+- Task risk: unknown
+- Changed files: 3
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: shared polish and mobile density improved, but the core suite spine still lacks a memorable signed-in hierarchy.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-210837\easylist-visualQa-1-mobile.png
+- Follow-up: Task-specific acceptance check failed.
