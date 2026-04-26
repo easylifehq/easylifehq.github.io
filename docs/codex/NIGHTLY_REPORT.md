@@ -1457,3 +1457,17 @@
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutDashboardPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Task-specific acceptance check failed.
+
+## 2026-04-26 00:31:29
+
+- Task attempted: CAPTAIN PRIORITY protected-side deep module upgrade retry after fleet acceptance-path fix: inspect the signed-in EasyLife surfaces through the existing protected visual QA routes and make one substantial UI-only improvement to the logged-in suite shell or one core module so it feels Apple-clean, calm, magnificent, and genuinely useful; prioritize hierarchy, density, first-screen usefulness, and a deep module feel over marketing polish; preserve existing access behavior, data-service behavior, stored data shapes, routing, dependency files, package files, generated output, deployment config, secrets, and root files. [class:design risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easycalendar/routes/EasyCalendarMonthPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
