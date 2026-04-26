@@ -4250,11 +4250,8 @@ textarea::placeholder {
 .calendar-type-legend span {
   display: inline-flex;
   align-items: center;
-  min-height: 28px;
-  padding: 0.22rem 0.52rem 0.22rem 0.68rem;
-  border-radius: 8px;
-  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
-  background: var(--ui-bg-card, var(--shell-card-bg));
+  min-height: 22px;
+  padding: 0.05rem 0.2rem 0.05rem 0.78rem;
   color: var(--ui-text-secondary, var(--shell-page-text));
   font-size: 0.72rem;
   font-weight: 800;
@@ -4264,9 +4261,11 @@ textarea::placeholder {
 .calendar-type-legend span::before {
   content: "";
   position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  border-radius: 8px 0 0 8px;
+  inset: 50% auto auto 0.1rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  transform: translateY(-50%);
   background: currentColor;
   opacity: 0.82;
 }

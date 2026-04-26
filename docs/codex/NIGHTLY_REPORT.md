@@ -1394,3 +1394,16 @@
 - Files changed:
 - app-vNext/src/components/navigation/marketingNavigation.ts
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-25 23:21:56
+
+- Task attempted: Pack 1 - Product Spine EasyCalendar visual spine repair: reduce one nonessential rounded-card, pill, or bordered chrome treatment in the existing signed-in EasyCalendar month or day surface so scheduled content reads first; forbidden scope: no mobile feature redesign, day-tap behavior, swipe behavior, event logic, dates, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/easycalendar/,app-vNext/src/styles/]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/features/easycalendar, app-vNext/src/styles
+- Acceptance checks: external build only
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
