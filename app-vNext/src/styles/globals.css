@@ -1109,6 +1109,36 @@ a {
   .marketing-page--grouped-workflow #workflow .marketing-card + .marketing-card {
     border-left: 1px solid var(--ui-border-subtle, var(--shell-card-border));
   }
+
+  .marketing-page--lead-features #features {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  .marketing-page--lead-features #features .marketing-card-grid {
+    grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 0.65fr);
+    gap: 0.7rem;
+  }
+
+  .marketing-page--lead-features #features .marketing-card:first-child {
+    grid-row: span 2;
+    align-content: center;
+    padding: 1.15rem;
+    background: var(--shell-input-bg);
+  }
+
+  .marketing-page--lead-features #features .marketing-card:not(:first-child) {
+    gap: 0.4rem;
+    padding: 0.8rem 0;
+    border-width: 1px 0 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .marketing-page--lead-features #features .marketing-card:nth-child(2) {
+    border-top: 0;
+  }
 }
 
 .site-footer {

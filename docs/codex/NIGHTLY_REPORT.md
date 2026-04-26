@@ -1202,3 +1202,17 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-25 18:30:32
+
+- Task attempted: Pack 1 - Product Spine product marketing lower-hierarchy repair: rework one remaining public product lower section that still reads as three equal feature cards into a clearer lead-plus-support layout using existing content only, preserving the shared shell and mobile usability. Do not add sections, rewrite copy broadly, introduce new colors, change routing, app logic, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages. [class:design risk:low mode:single scope:app-vNext/src/features/marketing/,app-vNext/src/styles/]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: external build only
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyContactsMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

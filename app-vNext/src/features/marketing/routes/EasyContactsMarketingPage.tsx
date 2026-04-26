@@ -3,6 +3,7 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyContactsMarketingPage() {
   return (
     <ProductMarketingPage
+      pageClassName="marketing-page--lead-features"
       eyebrow="EasyContacts"
       heroTitle="Remember the people attached to the work."
       heroDescription="EasyContacts keeps names, context, and follow-ups separate from the pipeline board so relationships stay clear."
