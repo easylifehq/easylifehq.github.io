@@ -11,3 +11,14 @@
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - app-vNext/src/styles/globals.css
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-04-25 20:59:10
+
+- Batch: 1
+- Task index: 1
+- Task: CAPTAIN PRIORITY dev visual QA repair: inspect EasyList, EasyNotes, EasyCalendar, EasyWorkout, and Settings through the existing dev visual QA route and make one clearly visible UI-only suite improvement in the shared shell, dashboard, or one feature screen so the app no longer looks unchanged. Preserve access behavior, persistence, data models, routing behavior, dependencies, package files, generated output, deployment config, docs report files, and root config files. [class:design risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
+- Reason: Task-specific acceptance check failed.
+- Files restored before continuing:
+- app-vNext/src/components/navigation/AppHeader.tsx
+- app-vNext/src/styles/globals.css
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.

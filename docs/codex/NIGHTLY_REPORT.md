@@ -1216,3 +1216,13 @@
 - app-vNext/src/features/marketing/routes/EasyContactsMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-25 20:59:10
+
+- Task attempted: CAPTAIN PRIORITY dev visual QA repair: inspect EasyList, EasyNotes, EasyCalendar, EasyWorkout, and Settings through the existing dev visual QA route and make one clearly visible UI-only suite improvement in the shared shell, dashboard, or one feature screen so the app no longer looks unchanged. Preserve access behavior, persistence, data models, routing behavior, dependencies, package files, generated output, deployment config, docs report files, and root config files. [class:design risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
+
+- Build result: Quarantined
+- Files changed:
+- app-vNext/src/components/navigation/AppHeader.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Task-specific acceptance check failed.
