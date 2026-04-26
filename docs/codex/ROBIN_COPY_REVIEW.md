@@ -4,72 +4,68 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife sounds calmer and more coherent than before, but some copy still leans on generic suite language, casual filler, and repeated "preview/sample/workspace" phrasing that keeps the product from feeling fully premium.
+EasyLife sounds calmer and more unified than before, but the copy still leans on repeated "command center," "workspace," "AI," and preview language that can feel generic or more promised than proven.
 
 ## Mission Voice Fit
-The language mostly matches the mission: connected, calm, useful, and professional. The strongest copy is direct and operational, such as "Opening your workspace," "Training dashboard," and "Scan scheduled events, task blocks, and open windows in order." The weaker copy repeats abstract suite terms like "workspace," "defaults," "sample," and "preview" so often that it can feel like internal product scaffolding instead of a lived-in personal operating system.
+The language mostly matches the mission: calm, professional, connected, and useful. "Opening your workspace," "Suite Controls," "App defaults," and "sample context" are good moves because they make the product feel steady rather than flashy. The weaker fit is in public marketing and AI/settings copy, where repeated "command center," "AI controls," "review-first AI," and "connected assistant" language can make EasyLife sound like a broader AI platform before the real product promise is stable.
 
 ## Delicate Wording Risks
-- "Closer to Apple Notes than a bloated workspace" is vivid, but the direct brand comparison and "bloated" jab feel less polished than the rest of the product voice.
-- "Brain dumps" is useful shorthand, but it is casual for a premium productivity suite and may cheapen the marketing preview.
-- "The stuff that quietly drains your energy" is emotionally clear, but "stuff" appears repeatedly and can make the product feel less refined.
-- "Current selection," "Sample data," "Sample daily brief," and "Assistant draft preview" are honest, but repeated sample/preview labels make the AI Lab feel unfinished.
-- "Set how EasyLife opens, captures, and routes your work" is clear, but "routes your work" may sound more technical than helpful.
-- "Send" as a status for "Block errand window" is ambiguous without context.
-- "No date" is clear, but it can read slightly bare beside the more polished metadata language elsewhere.
+- "Products + demo" is compact but feels a little internal and unfinished in a polished mobile header.
+- "Closer to Apple Notes than a bloated workspace." risks sounding comparative, dismissive, and slightly student-made.
+- "EasyLife AI stays helpful, review-first, reversible, and scoped to your account." is a strong promise for an experimental or gated assistant surface; keep it, but only where the product truly supports that behavior.
+- "Set what AI can review, suggest, draft, and never do automatically." is clear, but it sounds like active AI capability rather than future or preview controls.
+- "Pipeline get smarter" is vague and mildly hype-coded.
+- "command center" appears often enough that it may flatten product voice into a slogan instead of a precise user benefit.
+- "Sample" is better than "fake" or "mock," but repeated "sample tasks," "sample notes," and "sample events" can make the AI Lab feel synthetic.
 
 ## Beautiful Language Opportunities
-- Make Settings feel more like a control center by replacing technical phrasing with plain outcomes: what opens first, what stays visible, what tone the suite uses.
-- Keep product previews concrete, but reduce labels that sound like internal QA states: "Sample," "Preview," "Mock," and "Sandbox."
-- Replace repeated "workspace" phrasing with more specific nouns: library, board, day plan, training log, settings panel.
-- Let each product own a distinct verbal shape: EasyList should sound decisive, EasyNotes should sound quiet and fast, EasyCalendar should sound orderly, EasyWorkout should sound focused.
-- Tighten marketing hero copy by cutting broad nouns like "stuff," "noise," and "structure" where a sharper daily-use phrase is available.
-- Use fewer status pills and more natural preview language, so the static UI feels like a real moment rather than a product spec.
+- Replace generic "workspace" and "command center" repetitions with specific daily outcomes: "today's plan," "open work," "next actions," "notes ready to sort."
+- Make mobile navigation cues more graceful and less mechanical.
+- Keep AI Lab copy explicit about boundaries: preview, sample data, no API, editable draft.
+- Give each product page one sensory or structural phrase that belongs only to that app: calendar time windows, notes library, task triage, workout log.
+- Make Settings feel like a control room through plain language, not grand language.
+- Keep helper copy shorter. The best EasyLife voice is confident, quiet, and useful.
 
 ## Priority Rewrite
-The single most important wording problem is the repeated scaffold language around previews, samples, workspaces, and suite controls. Nami should turn this into a copy pass that keeps the honesty of mock/static UI but makes the user-facing language feel less provisional: fewer "sample/preview/workspace" labels, more concrete daily objects like "Today plan," "Recent notes," "Training log," and "Theme settings."
+The most important copy problem is AI capability framing. Settings and experiments should distinguish real enabled controls from sandbox previews with disciplined language, so users do not read "AI Controls" or "connected assistant" as a promise that production AI is already active, persistent, or acting on private data.
 
 ## Suggested Rewrites
+- Before: "Products + demo"
+  After: "Products"
+
 - Before: "Closer to Apple Notes than a bloated workspace."
-  After: "Fast like a simple notes app, calm enough to use every day."
+  After: "A quiet notes library for capture, review, and handoff."
 
-- Before: "Brain dumps"
-  After: "Quick capture"
+- Before: "Set what AI can review, suggest, draft, and never do automatically."
+  After: "Control how assistant previews may review, suggest, and draft."
 
-- Before: "The stuff that quietly drains your energy"
-  After: "The small obligations that steal focus"
+- Before: "EasyLife AI stays helpful, review-first, reversible, and scoped to your account."
+  After: "Assistant previews stay review-first, editable, and limited to the context you allow."
 
-- Before: "Set how EasyLife opens, captures, and routes your work."
-  After: "Choose how EasyLife opens, captures, and hands work between apps."
+- Before: "The assistant can help organize work into readable plans when the feature is enabled."
+  After: "When enabled, assistant previews can turn selected context into editable plans."
 
-- Before: "Sample daily brief"
-  After: "Daily brief example"
+- Before: "Decide how task handoffs should behave as Projects and Pipeline get smarter."
+  After: "Decide how task handoffs should behave as Projects and Pipeline become more connected."
 
-- Before: "Assistant draft preview"
-  After: "Draft response"
-
-- Before: "No date"
-  After: "Unscheduled"
-
-- Before: "Block errand window" / "Send"
-  After: "Errand window" / "Ready to plan"
+- Before: "A frontend-only sandbox for testing command flows before any connected assistant, API, or"
+  After: "A frontend-only sandbox for testing assistant flows before any real API or connected data."
 
 ## Voice Rules
-- Prefer calm, concrete product language over clever phrasing.
-- Use "sample" only when honesty requires it; otherwise name the object the user sees.
-- Avoid competitor comparisons in hero-level copy.
-- Keep humor out of core task, calendar, settings, and workout language unless it is very restrained.
-- Use specific daily-use nouns: task, note, day, session, plan, routine, setting.
-- Avoid overusing "workspace," "suite," "command center," and "preview" in adjacent surfaces.
-- Status labels should be immediately legible without surrounding context.
-- Marketing copy can be warm, but app UI copy should be shorter and more functional.
+- Prefer calm operational language over slogans.
+- Use "preview," "sample," and "sandbox" for experimental AI surfaces.
+- Do not imply AI can act, review private data, or change records unless that is already true.
+- Use "workspace" sparingly; replace it with the specific thing the user is doing.
+- Avoid comparisons to named products unless legally and tonally necessary.
+- Keep button and header copy short enough for mobile without sounding clipped.
+- Make each app's copy concrete: tasks get triage language, calendar gets time language, notes get capture/review language, workouts get session/log language.
 
 ## Next 5 Copy Tasks
-- [ ] Replace the EasyNotes Apple Notes comparison with a brand-neutral line that keeps the promise of fast, simple writing.
-- [ ] Audit product hero preview labels and replace vague statuses like "Send," "Review," and "8/10" where they do not explain the action clearly.
-- [ ] Reduce repeated "sample" and "preview" language in AI Lab while preserving clear mock-only honesty.
-- [ ] Tighten Settings copy around app defaults so each sentence explains a user outcome, not an internal system behavior.
-- [ ] Review EasyList marketing copy for casual words like "stuff" and "brain dumps," replacing only the lines that feel too informal.
+- [ ] Replace the mobile header cue "Products + demo" with a polished shorter cue; preserve links, routing, and tap targets.
+- [ ] Audit Settings AI copy for overpromises; rewrite only labels and helper text to clarify preview, review-first, and user-approved behavior.
+- [ ] Replace the EasyNotes marketing comparison to Apple Notes with a product-specific promise that does not name competitors.
+- [ ] Search changed marketing pages for repeated "command center" and replace one nonessential instance with a more specific daily-use phrase.
+- [ ] Review AI Lab sample labels and reduce repeated "sample" wording where the surrounding sandbox/no-API context already makes the boundary clear.
 
 ## Stop Or Continue
 continue but fix copy first
