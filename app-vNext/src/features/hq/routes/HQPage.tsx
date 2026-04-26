@@ -86,6 +86,30 @@ export function HQPage() {
       to: "/app/easynotes",
     };
   }, [dueTodayTasks.length, openWindows.length, overdueTasks.length]);
+  const dailySpine = [
+    {
+      label: "Now",
+      text: nextEvents[0]
+        ? `Keep ${nextEvents[0].title || "the next event"} in view.`
+        : mostUrgent
+          ? `Clear ${mostUrgentLabel}.`
+          : "Use the quiet start to choose one useful move.",
+    },
+    {
+      label: "Next",
+      text: overdueTasks.length
+        ? "Recover overdue tasks before adding more."
+        : dueTodayTasks.length
+          ? "Work the due-today list before opening a new lane."
+          : `${formatDuration(openMinutes)} remains open for a light plan.`,
+    },
+    {
+      label: "Capture",
+      text: quickWin
+        ? `A quick win is ready: ${quickWin.title}.`
+        : "Drop loose thoughts into Notes so the suite can stay orderly.",
+    },
+  ];
 
   return (
     <main className="page-wrap app-theme app-theme-easyhq">
@@ -136,6 +160,21 @@ export function HQPage() {
             </p>
           </article>
         </div>
+
+        <article className="hq-assistant-spine" aria-label="Local daily read">
+          <div>
+            <span className="settings-state-pill">Daily read</span>
+            <strong>One calm thread across the suite</strong>
+          </div>
+          <ul>
+            {dailySpine.map((item) => (
+              <li key={item.label}>
+                <span>{item.label}</span>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </article>
 
         <div className="hq-command-copy">
           <p className="eyebrow">EasyHQ</p>
