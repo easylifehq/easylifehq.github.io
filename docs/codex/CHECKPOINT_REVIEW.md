@@ -4,38 +4,38 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission with many small polish, hierarchy, mobile-density, and copy refinements across marketing and signed-in suite surfaces. Progress is visible and aligned, but Simon and Robin both remain YELLOW, so the next work should prioritize their quality gates before adding broader changes.
+The branch is moving toward the EasyLife mission with repeated small UI, hierarchy, mobile density, and copy refinements across marketing and protected app surfaces. The work supports a calmer connected suite, but Simon and Robin both still flag polish/copy follow-up before pushing forward.
 
 ## Safety Review
-No forbidden files, package/dependency files, auth, Firebase, backend, secrets, deploy config, or generated output changes found. Risk is mainly breadth: many UI files and docs have changed since base, so future batches should stay narrow.
+No forbidden high-risk files found. Changed files are frontend source, styles, docs, and guardrail script. Working tree is clean.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: EasyList signed-in hierarchy repair, copy phrase cleanup, EasyCalendar visual spine repair, and additional app/marketing copy cleanup
-- files changed: multiple `app-vNext/src` UI, marketing, settings, calendar, list, workout, navigation, style files, plus `docs/codex` reporting files and `scripts/codex-guardrails.ps1`
-- commits added: latest HEAD is `4bc6d91 Codex Robin copy review batch 2`
-- queue status: 1 unchecked task remains
+- completed tasks in this checkpoint window: 12 recent completed tasks, focused on product spine polish, mobile density, signed-in hierarchy, EasyCalendar visual cleanup, and copy cleanup
+- files changed: app-vNext frontend routes/components/styles, docs/codex reports and policy files, scripts/codex-guardrails.ps1
+- commits added: latest checkpoint includes visual, Simon, and Joey review commits through HEAD 26b85dc
+- queue status: 0 unchecked tasks remaining
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN; no high, medium, or low visual bugs reported, should not block next tasks
+- visual bug report: GREEN; no high, medium, or low visual bugs reported
 - Simon design review: YELLOW; should influence next tasks with visual polish first
 - Robin copy review: YELLOW; should influence next tasks with copy cleanup first
-- Joey security review: GREEN; continue observing scope rules
-- next-task influence: yes, Simon and Robin should steer the next batch before mission-forward expansion
+- Joey security review: GREEN; no blocker, continue allowed
+- next-task influence: Simon and Robin should steer the next batch before mission-forward work resumes
 
 ## Recommended Next Step
 patch first
 
 ## Next Batch Guidance
-- recommended next batch size: 1
+- recommended next batch size: 2
 - next work mode: repair-first
-- Run the remaining Simon protected polish task as a single narrow batch because design and copy gates are still YELLOW despite a passing build and clean tree.
+- Simon and Robin both returned YELLOW, so the next batch should resolve visible design/copy concerns before starting broader new polish.
 
 ## Notes For Human Reviewer
-- Working tree is clean.
-- Build passed.
-- Scope appears safe.
-- Several prior medium-risk mobile feature tasks were quarantined; avoid reviving them unattended.
-- Remaining task is suitable if kept UI-only and tightly scoped.
+- Build passed and tree is clean.
+- No unchecked queue remains.
+- Recent work stayed mostly within safe frontend/docs scope.
+- Prior quarantined medium-risk tasks were followed by passing retries.
+- Review concern is quality polish, not build or security.
