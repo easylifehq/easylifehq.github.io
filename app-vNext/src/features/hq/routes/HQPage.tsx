@@ -65,6 +65,11 @@ export function HQPage() {
   const mostUrgent = overdueTasks[0] || dueTodayTasks[0] || null;
   const mostUrgentLabel = overdueTasks[0]?.title || dueTodayTasks[0]?.title || "";
   const quickWin = sortActiveTasks(tasks.filter((task) => !task.completed && (task.estimatedLength || 999) <= 20))[0] || null;
+  const todaySummary = [
+    `${overdueTasks.length + dueTodayTasks.length} due`,
+    `${todayEvents.length} event${todayEvents.length === 1 ? "" : "s"}`,
+    `${formatDuration(openMinutes)} open`,
+  ];
   const startHere = useMemo(() => {
     if (overdueTasks.length || dueTodayTasks.length) {
       return {
@@ -117,12 +122,16 @@ export function HQPage() {
 
       <section className="hq-command-center" aria-labelledby="hq-title">
         <article className="hq-start-card">
-          <span className="settings-state-pill">Start here</span>
+          <span className="settings-state-pill">Next action</span>
           <strong>{startHere.label}</strong>
           <p>{startHere.reason}</p>
+          <div className="hq-today-summary" aria-label="Today summary">
+            <span>Today</span>
+            <p>{todaySummary.join(" / ")}</p>
+          </div>
           <div className="task-composer-actions">
             <Link to={startHere.to} className="primary-button">
-              Go there
+              Open {startHere.label.replace("Start in ", "")}
             </Link>
             {lastAppRoute ? (
               <Link to={lastAppRoute.path} className="button-secondary">
@@ -132,9 +141,9 @@ export function HQPage() {
           </div>
         </article>
 
-        <div className="hq-status-strip" aria-label="Today at a glance">
+        <div className="hq-status-strip" aria-label="Module status context">
           <article>
-            <span>Next</span>
+            <span>Calendar</span>
             <strong>{nextEvents[0] ? nextEvents[0].title || "Untitled event" : "Nothing scheduled"}</strong>
             <p>
               {nextEvents[0]
@@ -145,12 +154,12 @@ export function HQPage() {
             </p>
           </article>
           <article>
-            <span>Focus</span>
+            <span>Tasks</span>
             <strong>{mostUrgent ? mostUrgentLabel : quickWin ? quickWin.title : "No task is shouting"}</strong>
             <p>{overdueTasks.length ? `${overdueTasks.length} overdue` : dueTodayTasks.length ? `${dueTodayTasks.length} due today` : quickWin ? "Quick win available" : "Good room to choose."}</p>
           </article>
           <article>
-            <span>Suite</span>
+            <span>Progress</span>
             <strong>
               {activeTaskCount} open task{activeTaskCount === 1 ? "" : "s"} / {todayEvents.length} event
               {todayEvents.length === 1 ? "" : "s"}

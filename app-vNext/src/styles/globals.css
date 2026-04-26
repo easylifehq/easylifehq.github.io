@@ -5281,6 +5281,28 @@ button.calendar-detail-card:disabled {
   color: var(--ui-text-secondary, var(--shell-page-text));
 }
 
+.hq-today-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.32rem 0.55rem;
+  padding-block: 0.12rem;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.92rem;
+}
+
+.hq-today-summary span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.hq-today-summary p {
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
 .hq-status-strip {
   grid-area: status;
   display: grid;
@@ -5310,7 +5332,7 @@ button.calendar-detail-card:disabled {
   grid-row: 1 / span 2;
   align-self: center;
   color: var(--ui-text-muted, var(--shell-muted-text));
-  font-size: 0.76rem;
+  font-size: 0.68rem;
   font-weight: 850;
   text-transform: uppercase;
 }
@@ -5323,6 +5345,8 @@ button.calendar-detail-card:disabled {
 
 .hq-status-strip strong {
   color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 0.94rem;
+  font-weight: 760;
 }
 
 .hq-status-strip p {
