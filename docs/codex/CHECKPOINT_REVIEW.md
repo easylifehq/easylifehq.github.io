@@ -4,37 +4,38 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission: recent work improves suite polish, mobile density, signed-in hierarchy, and calmer copy while keeping builds green. However, Simon and Robin remain YELLOW, so the next work should address visual and copy polish before adding more feature depth.
+The branch is moving toward the EasyLife mission with many small polish, hierarchy, mobile-density, and copy refinements across marketing and signed-in suite surfaces. Progress is visible and aligned, but Simon and Robin both remain YELLOW, so the next work should prioritize their quality gates before adding broader changes.
 
 ## Safety Review
-No forbidden files or risky auth/Firebase/backend/dependency/deploy files found in the changed-file list. Risk is moderate only because the branch is broad and includes many UI surfaces plus repeated quarantined attempts.
+No forbidden files, package/dependency files, auth, Firebase, backend, secrets, deploy config, or generated output changes found. Risk is mainly breadth: many UI files and docs have changed since base, so future batches should stay narrow.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: 12 shown, mostly product spine polish, protected Settings/EasyCalendar/EasyList refinements, marketing density repairs, and copy cleanup
-- files changed: app-vNext UI/style files plus Codex docs/reporting files and guardrail script
-- commits added: latest HEAD `8d9c2f5` plus many checkpoint/review/task commits since base
-- queue status: 2 unchecked tasks remain
+- completed tasks in this checkpoint window: EasyList signed-in hierarchy repair, copy phrase cleanup, EasyCalendar visual spine repair, and additional app/marketing copy cleanup
+- files changed: multiple `app-vNext/src` UI, marketing, settings, calendar, list, workout, navigation, style files, plus `docs/codex` reporting files and `scripts/codex-guardrails.ps1`
+- commits added: latest HEAD is `4bc6d91 Codex Robin copy review batch 2`
+- queue status: 1 unchecked task remains
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN; 0 high, 0 medium, 0 low, should not block next tasks
-- Simon design review: YELLOW; should influence next tasks with visual repair first
-- Robin copy review: YELLOW; should influence next tasks with copy cleanup before broader feature work
-- Joey security review: GREEN; no security blocker for continuing
-- next-task influence: prioritize narrow repair-first work before mission-forward expansion
+- visual bug report: GREEN; no high, medium, or low visual bugs reported, should not block next tasks
+- Simon design review: YELLOW; should influence next tasks with visual polish first
+- Robin copy review: YELLOW; should influence next tasks with copy cleanup first
+- Joey security review: GREEN; continue observing scope rules
+- next-task influence: yes, Simon and Robin should steer the next batch before mission-forward expansion
 
 ## Recommended Next Step
 patch first
 
 ## Next Batch Guidance
-- recommended next batch size: 2
+- recommended next batch size: 1
 - next work mode: repair-first
-- one sentence explaining why: Build and safety are acceptable, but Simon and Robin both request cleanup before more protected-suite expansion.
+- Run the remaining Simon protected polish task as a single narrow batch because design and copy gates are still YELLOW despite a passing build and clean tree.
 
 ## Notes For Human Reviewer
 - Working tree is clean.
-- Build passed despite earlier quarantined protected-suite attempts.
-- Remaining tasks are medium-risk protected UI work and should stay tightly scoped.
-- Branch is getting broad; keep next changes small and reviewable.
+- Build passed.
+- Scope appears safe.
+- Several prior medium-risk mobile feature tasks were quarantined; avoid reviving them unattended.
+- Remaining task is suitable if kept UI-only and tightly scoped.
