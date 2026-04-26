@@ -1173,3 +1173,27 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-155856\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-155856\easylist-visualQa-1-mobile.png
 - Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 16:11:20
+
+- Task: CAPTAIN RERUN EasyCalendar planning polish: make one narrow UI-only improvement to the existing Plan My Day preview/undo or Add Calendar Event custom-repeat flow so the reversible planning behavior is easier to understand on mobile; preserve existing calendar data shapes, recurrence model limits, routing, auth/Firebase behavior, dependencies, package files, generated output, deployment config, and secrets. [class:design risk:medium mode:single scope:app-vNext/src/features/easycalendar/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: Pack 1 - Product Spine
+- Task class: design
+- Task risk: medium
+- Changed files: 2
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer suite consistency improved, but screenshots still prove marketing polish more than the signed-in product spine.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-160631
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-160631\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-160631\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-160631\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-160631\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-160631
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-160631\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-160631\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-160631\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260426-160631\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.

@@ -1752,3 +1752,17 @@
 - app-vNext/src/features/experiments/UniversalCapture.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 16:11:20
+
+- Task attempted: CAPTAIN RERUN EasyCalendar planning polish: make one narrow UI-only improvement to the existing Plan My Day preview/undo or Add Calendar Event custom-repeat flow so the reversible planning behavior is easier to understand on mobile; preserve existing calendar data shapes, recurrence model limits, routing, auth/Firebase behavior, dependencies, package files, generated output, deployment config, and secrets. [class:design risk:medium mode:single scope:app-vNext/src/features/easycalendar/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Allowed scope: app-vNext/src/features/easycalendar, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

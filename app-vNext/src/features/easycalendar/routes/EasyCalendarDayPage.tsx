@@ -450,7 +450,10 @@ export function EasyCalendarDayPage() {
 
         {appliedPlanUndo ? (
           <div className="calendar-plan-undo-card">
-            <span>Last auto-plan can still be reversed.</span>
+            <div>
+              <strong>Plan applied. Undo is still available.</strong>
+              <p>Undo removes the new suggested blocks and restores replaced suggestions.</p>
+            </div>
             <button
               type="button"
               className="ghost-button compact-button"

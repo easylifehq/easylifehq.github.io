@@ -4952,9 +4952,19 @@ button.calendar-detail-card:disabled {
 }
 
 .calendar-plan-preview-card li span,
-.calendar-plan-undo-card span {
+.calendar-plan-undo-card p {
   color: var(--ui-text-muted, #6f6057);
   font-size: 0.88rem;
+}
+
+.calendar-plan-undo-card strong {
+  display: block;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.94rem;
+}
+
+.calendar-plan-undo-card p {
+  margin: 0.18rem 0 0;
 }
 
 .calendar-plan-actions,
