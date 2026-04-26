@@ -240,19 +240,19 @@ export function EasyWorkoutDashboardPage() {
           </Link>
         </div>
 
-        <div className="workout-today-strip" aria-label="Today's workout context">
-          <article>
-            <span>Today</span>
+        <div className="workout-today-meta" aria-label="Today's workout context">
+          <span>
+            <em>Today</em>
             <strong>{todaySessions.length} workout{todaySessions.length === 1 ? "" : "s"}</strong>
-          </article>
-          <article>
-            <span>This week</span>
+          </span>
+          <span>
+            <em>This week</em>
             <strong>{weeklySessions.length} session{weeklySessions.length === 1 ? "" : "s"}</strong>
-          </article>
-          <article>
-            <span>Last logged</span>
+          </span>
+          <span>
+            <em>Last logged</em>
             <strong>{recentSessions[0]?.performedOn || "Not logged yet"}</strong>
-          </article>
+          </span>
         </div>
 
         <div className="workout-next-move" aria-label="Recommended next workout action">

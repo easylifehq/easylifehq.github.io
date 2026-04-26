@@ -6768,42 +6768,34 @@ button.calendar-detail-card:disabled {
   border-color: var(--ui-border-strong, var(--shell-card-border));
 }
 
-.workout-today-strip {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin-top: 1.1rem;
+.workout-today-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.85rem;
+  margin-top: 0.8rem;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.84rem;
 }
 
-.workout-today-strip article {
-  display: grid;
-  gap: 0.22rem;
-  align-content: start;
-  position: relative;
-  overflow: hidden;
-  min-height: 5rem;
-  padding: 0.85rem;
-  border-radius: 8px;
-  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
-  background:
-    linear-gradient(135deg, var(--shell-panel-highlight), transparent 58%),
-    var(--ui-bg-card, var(--shell-input-bg));
+.workout-today-meta span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  min-width: 0;
 }
 
-.app-theme-easyworkout .workout-today-strip article {
-  border-color: color-mix(in srgb, var(--app-accent) 24%, var(--ui-border-subtle));
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 13%, transparent), transparent 54%),
-    linear-gradient(180deg, color-mix(in srgb, var(--ui-bg-card) 90%, var(--app-accent) 10%), var(--ui-bg-card));
-  box-shadow: inset 0 1px 0 var(--shell-panel-highlight);
+.workout-today-meta span + span {
+  padding-left: 0.85rem;
+  border-left: 1px solid color-mix(in srgb, var(--ui-border-subtle) 78%, transparent);
 }
 
-.app-theme-easyworkout .workout-today-strip article::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  background: linear-gradient(180deg, var(--app-accent), color-mix(in srgb, var(--app-accent) 32%, transparent));
+.workout-today-meta em {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 850;
+  text-transform: uppercase;
 }
 
 .workout-empty-state {
@@ -6849,17 +6841,11 @@ button.calendar-detail-card:disabled {
   width: fit-content;
 }
 
-.workout-today-strip span {
-  color: var(--ui-text-muted, var(--shell-muted-text));
-  font-size: 0.74rem;
-  font-weight: 850;
-  text-transform: uppercase;
-}
-
-.workout-today-strip strong {
+.workout-today-meta strong {
   color: var(--ui-text-primary, var(--shell-heading-text));
-  font-size: 1.2rem;
-  line-height: 1.15;
+  font-size: 0.88rem;
+  font-weight: 850;
+  line-height: 1.2;
 }
 
 .workout-next-move {
@@ -7614,7 +7600,6 @@ button.calendar-detail-card:disabled {
     flex-direction: column;
   }
 
-  .workout-today-strip,
   .workout-session-strip,
   .workout-exercise-fields {
     grid-template-columns: 1fr;
@@ -8111,20 +8096,13 @@ button.calendar-detail-card:disabled {
     padding: 0.85rem;
   }
 
-  .workout-today-strip {
-    grid-template-columns: repeat(3, minmax(132px, 1fr));
-    gap: 0.55rem;
-    margin-inline: -0.1rem;
-    overflow-x: auto;
-    padding: 0 0.1rem 0.2rem;
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
+  .workout-today-meta {
+    gap: 0.32rem 0.55rem;
+    margin-top: 0.7rem;
   }
 
-  .workout-today-strip article {
-    min-width: 132px;
-    padding: 0.85rem;
-    scroll-snap-align: start;
+  .workout-today-meta span + span {
+    padding-left: 0.55rem;
   }
 
   .workout-next-move {

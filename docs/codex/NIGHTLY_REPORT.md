@@ -1524,3 +1524,17 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 00:56:51
+
+- Task attempted: Pack 1 - Product Spine protected EasyWorkout dashboard chrome repair: reduce one decorative pill/status-chip treatment on the existing signed-in EasyWorkout dashboard by converting it into quieter inline metadata so the primary training action and current plan read first; forbidden scope: no workout logic, data shapes, persistence, routing, auth, Firebase, backend, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/easyworkout/,app-vNext/src/styles/]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/features/easyworkout, app-vNext/src/styles
+- Acceptance checks: external build only
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easyworkout/routes/EasyWorkoutDashboardPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
