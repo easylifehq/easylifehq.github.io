@@ -575,3 +575,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 ## Checkpoint Planner Tasks 2026-04-26 01:04:13
 
 - [x] Pack 1 - Product Spine EasyWorkout marketing hero mobile density repair: at 390px, tighten the existing product-page hero spacing by reducing dead air above the hero, chip-row weight, or preview padding so the first viewport shows the headline, primary action, and one proof surface sooner; forbidden scope: no new content, new sections, routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, desktop redesign, or unrelated pages. [class:design risk:low mode:single scope:app-vNext/src/features/marketing/,app-vNext/src/styles/]
+
+## Checkpoint Planner Tasks 2026-04-26 01:09:01
+
+- [ ] Pack 1 - Product Spine signed-in HQ status-row hierarchy repair: on the existing HQ first screen, compress secondary module context into quieter scan-friendly status rows so the daily-focus action plus at least two module statuses are visible in the first mobile viewport; forbidden scope: no new sections, new content, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/hq/,app-vNext/src/styles/ accept:npm.cmd run build]
