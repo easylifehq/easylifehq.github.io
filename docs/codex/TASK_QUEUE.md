@@ -559,3 +559,7 @@ Execution rule: implement one selected task at a time. Keep each change reviewab
 ## Checkpoint Planner Tasks 2026-04-26 00:43:00
 
 - [x] Pack 1 - Product Spine HQ first-screen hierarchy repair: on the existing signed-in HQ page, make the main daily-focus/workspace start area visually dominant above the fold and quiet one secondary card/pill treatment so supporting context no longer competes; forbidden scope: no new features, routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/hq/,app-vNext/src/styles/]
+
+## Checkpoint Planner Tasks 2026-04-26 00:49:02
+
+- [ ] Pack 1 - Product Spine HQ mobile compression pass: reduce vertical padding and secondary chrome on the existing signed-in HQ first screen so the first mobile viewport shows the main daily action plus at least one useful suite status; forbidden scope: no new content, features, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated screens. [class:design risk:low mode:single scope:app-vNext/src/features/hq/,app-vNext/src/styles/]
