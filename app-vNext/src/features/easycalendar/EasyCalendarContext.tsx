@@ -58,14 +58,14 @@ type EasyCalendarContextValue = {
   deleteEvent: (eventId: string) => Promise<void>;
   addTaskBlock: (draft: CalendarTaskBlockDraft) => Promise<void>;
   saveTaskBlock: (blockId: string, draft: CalendarTaskBlockDraft) => Promise<void>;
-  deleteTaskBlock: (blockId: string) => Promise<void>;
+  deleteTaskBlock: (blockId: string, taskId?: string) => Promise<void>;
   addCategory: (draft: CategoryDraft) => Promise<void>;
   saveCategory: (categoryId: string, draft: CategoryDraft) => Promise<void>;
   deleteCategory: (categoryId: string) => Promise<void>;
   scheduleTask: (
     task: TaskRecord,
     draft: Pick<CalendarTaskBlockDraft, "startAt" | "endAt" | "planningState" | "userAdjusted">
-  ) => Promise<void>;
+  ) => Promise<string | null>;
   completeTaskFromCalendar: (taskId: string) => Promise<void>;
   reopenTaskFromCalendar: (taskId: string) => Promise<void>;
 };
@@ -214,12 +214,13 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         if (!user) return;
         await updateCalendarTaskBlock(user.uid, blockId, draft);
       },
-      deleteTaskBlock: async (blockId: string) => {
+      deleteTaskBlock: async (blockId: string, taskId?: string) => {
         if (!user) return;
         const matchingBlock = taskBlocks.find((taskBlock) => taskBlock.id === blockId);
         await removeCalendarTaskBlock(user.uid, blockId);
-        if (matchingBlock?.taskId) {
-          await removeLinkedCalendarBlock(user.uid, matchingBlock.taskId, blockId);
+        const linkedTaskId = matchingBlock?.taskId || taskId;
+        if (linkedTaskId) {
+          await removeLinkedCalendarBlock(user.uid, linkedTaskId, blockId);
         }
       },
       addCategory: async (draft: CategoryDraft) => {
@@ -238,7 +239,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         task: TaskRecord,
         draft: Pick<CalendarTaskBlockDraft, "startAt" | "endAt" | "planningState" | "userAdjusted">
       ) => {
-        if (!user) return;
+        if (!user) return null;
 
         const blockId = await createCalendarTaskBlock(user.uid, {
           taskId: task.id,
@@ -252,6 +253,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         });
 
         await addLinkedCalendarBlock(user.uid, task.id, blockId);
+        return blockId;
       },
       completeTaskFromCalendar: async (taskId: string) => {
         if (!user) return;

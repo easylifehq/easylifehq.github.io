@@ -4749,6 +4749,66 @@ button.calendar-detail-card:disabled {
   background: var(--ui-bg-card, var(--shell-input-bg));
 }
 
+.calendar-plan-preview-button {
+  justify-self: end;
+}
+
+.calendar-plan-preview-card,
+.calendar-plan-undo-card {
+  margin-bottom: 1rem;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  border-radius: 8px;
+  background: var(--ui-bg-card, #fffdf9);
+}
+
+.calendar-plan-preview-card {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0.9rem;
+}
+
+.calendar-plan-preview-card p {
+  margin: 0.2rem 0 0;
+  color: var(--ui-text-muted, #6f6057);
+}
+
+.calendar-plan-preview-card ol {
+  display: grid;
+  gap: 0.42rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.calendar-plan-preview-card li {
+  display: grid;
+  grid-template-columns: 8.6rem minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: baseline;
+  padding-top: 0.42rem;
+  border-top: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)) 72%, transparent);
+}
+
+.calendar-plan-preview-card li span,
+.calendar-plan-undo-card span {
+  color: var(--ui-text-muted, #6f6057);
+  font-size: 0.88rem;
+}
+
+.calendar-plan-actions,
+.calendar-plan-undo-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.calendar-plan-undo-card {
+  justify-content: space-between;
+  padding: 0.72rem 0.85rem;
+}
+
 .calendar-week-strip {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -7651,6 +7711,21 @@ button.calendar-detail-card:disabled {
 
   .calendar-day-actions {
     grid-template-columns: 1fr;
+  }
+
+  .calendar-plan-preview-button {
+    justify-self: stretch;
+  }
+
+  .calendar-plan-preview-card li {
+    grid-template-columns: 1fr;
+    gap: 0.12rem;
+  }
+
+  .calendar-plan-actions,
+  .calendar-plan-undo-card {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .hq-command-center,

@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
@@ -6,6 +6,7 @@ import { CalendarTaskBlockDrawer } from "@/features/easycalendar/components/Cale
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 import type { CalendarEventType } from "@/lib/firestore/calendarEvents";
+import type { CalendarTaskBlockRecord } from "@/lib/firestore/calendarTaskBlocks";
 import {
   addMinutes,
   buildHourlySlots,
@@ -25,6 +26,7 @@ import {
   startOfWeek,
   toDateInputValue,
   toTimeInputValue,
+  type PlannedTaskSuggestion,
 } from "@/features/easycalendar/lib/calendarUtils";
 
 type QuickCreateMode = "event" | "deadline" | "task-block";
@@ -37,6 +39,19 @@ type QuickCalendarDraft = {
   title: string;
   eventType: CalendarEventType;
   selectedTaskId: string;
+};
+
+type PlanPreview = {
+  suggestions: PlannedTaskSuggestion[];
+  replacedBlocks: CalendarTaskBlockRecord[];
+};
+
+type AppliedPlanUndo = {
+  blocks: Array<{
+    id: string;
+    taskId: string;
+  }>;
+  replacedBlocks: CalendarTaskBlockRecord[];
 };
 
 export function EasyCalendarDayPage() {
@@ -60,7 +75,10 @@ export function EasyCalendarDayPage() {
   const [quickEventMessage, setQuickEventMessage] = useState("");
   const [isSavingQuickEvent, setIsSavingQuickEvent] = useState(false);
   const [planMessage, setPlanMessage] = useState("");
+  const [planPreview, setPlanPreview] = useState<PlanPreview | null>(null);
+  const [appliedPlanUndo, setAppliedPlanUndo] = useState<AppliedPlanUndo | null>(null);
   const [isPlanning, setIsPlanning] = useState(false);
+  const [isUndoingPlan, setIsUndoingPlan] = useState(false);
   const selectedDate = useMemo(() => {
     const dateParam = searchParams.get("date");
     if (!dateParam) return startOfDay(new Date());
@@ -68,6 +86,13 @@ export function EasyCalendarDayPage() {
     const parsed = new Date(year, (month || 1) - 1, day || 1);
     return Number.isNaN(parsed.getTime()) ? startOfDay(new Date()) : startOfDay(parsed);
   }, [searchParams]);
+
+  useEffect(() => {
+    setPlanPreview(null);
+    setAppliedPlanUndo(null);
+    setPlanMessage("");
+  }, [selectedDate]);
+
   const weekStart = useMemo(() => startOfWeek(selectedDate), [selectedDate]);
   const weekDays = useMemo(() => Array.from({ length: 7 }, (_, index) => {
     const day = new Date(weekStart);
@@ -115,58 +140,115 @@ export function EasyCalendarDayPage() {
     openDate(nextDate);
   }
 
-  async function handlePlanMyDay() {
+  function handlePlanMyDayPreview() {
+    const existingSuggestedBlocks = taskBlocks.filter(
+      (taskBlock) =>
+        isSameDay(taskBlock.startAt, selectedDate) &&
+        taskBlock.planningState === "suggested" &&
+        !taskBlock.completed
+    );
+    const remainingTaskBlocks = taskBlocks.filter(
+      (taskBlock) => !existingSuggestedBlocks.some((existing) => existing.id === taskBlock.id)
+    );
+    const plan = buildPlanMyDaySuggestions(selectedDate, tasks, events, remainingTaskBlocks, {
+      wakeHour,
+      endHour: dayEndHour,
+      defaultTaskBlockMinutes: settings.easyCalendar.defaultTaskBlockMinutes,
+    });
+
+    setAppliedPlanUndo(null);
+
+    if (!plan.suggestions.length) {
+      setPlanPreview(null);
+      setPlanMessage(
+        plan.windows.length
+          ? "No good task fits were found for this day yet."
+          : "There are no open windows to place suggested work on this day."
+      );
+      return;
+    }
+
+    setPlanMessage("");
+    setPlanPreview({
+      suggestions: plan.suggestions,
+      replacedBlocks: existingSuggestedBlocks,
+    });
+  }
+
+  async function handleApplyPlanPreview() {
+    if (!planPreview) return;
+
     setIsPlanning(true);
     setPlanMessage("");
 
     try {
-      const existingSuggestedBlocks = taskBlocks.filter(
-        (taskBlock) =>
-          isSameDay(taskBlock.startAt, selectedDate) &&
-          taskBlock.planningState === "suggested" &&
-          !taskBlock.completed
-      );
-
-      if (existingSuggestedBlocks.length) {
-        await Promise.all(existingSuggestedBlocks.map((taskBlock) => deleteTaskBlock(taskBlock.id)));
+      if (planPreview.replacedBlocks.length) {
+        await Promise.all(planPreview.replacedBlocks.map((taskBlock) => deleteTaskBlock(taskBlock.id, taskBlock.taskId)));
       }
 
-      const remainingTaskBlocks = taskBlocks.filter(
-        (taskBlock) => !existingSuggestedBlocks.some((existing) => existing.id === taskBlock.id)
-      );
-      const plan = buildPlanMyDaySuggestions(selectedDate, tasks, events, remainingTaskBlocks, {
-        wakeHour,
-        endHour: dayEndHour,
-        defaultTaskBlockMinutes: settings.easyCalendar.defaultTaskBlockMinutes,
-      });
-
-      if (!plan.suggestions.length) {
-        setPlanMessage(
-          plan.windows.length
-            ? "No good task fits were found for this day yet."
-            : "There are no open windows to place suggested work on this day."
-        );
-        return;
-      }
-
-      await Promise.all(
-        plan.suggestions.map((suggestion) =>
+      const scheduleResults = await Promise.allSettled(
+        planPreview.suggestions.map((suggestion) =>
           scheduleTask(suggestion.task, {
             startAt: suggestion.startAt,
             endAt: suggestion.endAt,
             planningState: "suggested",
             userAdjusted: false,
-          })
+          }).then((blockId) => (blockId ? { id: blockId, taskId: suggestion.task.id } : null))
         )
       );
+      const blocks = scheduleResults.flatMap((result) =>
+        result.status === "fulfilled" && result.value ? [result.value] : []
+      );
+      const failedCount = scheduleResults.filter((result) => result.status === "rejected").length;
+      const hasUndoableChange = blocks.length > 0 || planPreview.replacedBlocks.length > 0;
 
+      setAppliedPlanUndo(hasUndoableChange ? { blocks, replacedBlocks: planPreview.replacedBlocks } : null);
+      setPlanPreview(null);
       setPlanMessage(
-        `Planned ${plan.suggestions.length} suggested block${
-          plan.suggestions.length === 1 ? "" : "s"
-        } for this day.`
+        failedCount
+          ? `Added ${blocks.length} suggested block${blocks.length === 1 ? "" : "s"}; ${failedCount} could not be added.${
+              hasUndoableChange ? " Undo is available below." : ""
+            }`
+          : hasUndoableChange
+            ? `Added ${blocks.length} suggested block${blocks.length === 1 ? "" : "s"}. Undo is available below.`
+            : "No suggested blocks were added."
       );
     } finally {
       setIsPlanning(false);
+    }
+  }
+
+  async function handleUndoAppliedPlan() {
+    if (!appliedPlanUndo) return;
+
+    setIsUndoingPlan(true);
+    setPlanMessage("");
+
+    try {
+      await Promise.all(appliedPlanUndo.blocks.map((block) => deleteTaskBlock(block.id, block.taskId)));
+      if (appliedPlanUndo.replacedBlocks.length) {
+        await Promise.all(
+          appliedPlanUndo.replacedBlocks.map((block) => {
+            const task = tasks.find((candidate) => candidate.id === block.taskId);
+            if (!task) return Promise.resolve(null);
+            return scheduleTask(task, {
+              startAt: block.startAt,
+              endAt: block.endAt,
+              planningState: block.planningState,
+              userAdjusted: block.userAdjusted,
+            });
+          })
+        );
+      }
+
+      setAppliedPlanUndo(null);
+      setPlanMessage(
+        appliedPlanUndo.replacedBlocks.length
+          ? "Plan undone. Your earlier suggested blocks were restored."
+          : "Plan undone. The suggested blocks were removed."
+      );
+    } finally {
+      setIsUndoingPlan(false);
     }
   }
 
@@ -318,15 +400,67 @@ export function EasyCalendarDayPage() {
 
           <button
             type="button"
-            className="primary-button"
-            onClick={() => void handlePlanMyDay()}
-            disabled={isPlanning}
+            className="ghost-button compact-button calendar-plan-preview-button"
+            onClick={handlePlanMyDayPreview}
+            disabled={isPlanning || isUndoingPlan}
           >
-            {isPlanning ? "Planning..." : "Plan My Day"}
+            Plan My Day
           </button>
         </div>
 
+        {planPreview ? (
+          <div className="calendar-plan-preview-card">
+            <div>
+              <strong>
+                Preview {planPreview.suggestions.length} suggested block{planPreview.suggestions.length === 1 ? "" : "s"}
+              </strong>
+              <p>
+                {planPreview.replacedBlocks.length
+                  ? `Applying will replace ${planPreview.replacedBlocks.length} current suggestion${
+                      planPreview.replacedBlocks.length === 1 ? "" : "s"
+                    }.`
+                  : "Review the suggested shape before anything is added."}
+              </p>
+            </div>
+            <ol>
+              {planPreview.suggestions.map((suggestion) => (
+                <li key={`${suggestion.task.id}-${suggestion.startAt.toISOString()}`}>
+                  <span>{formatTimeLabel(suggestion.startAt)} - {formatTimeLabel(suggestion.endAt)}</span>
+                  <strong>{suggestion.task.title || "Untitled task"}</strong>
+                </li>
+              ))}
+            </ol>
+            <div className="calendar-plan-actions">
+              <button type="button" className="ghost-button compact-button" onClick={() => setPlanPreview(null)}>
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="primary-button compact-button"
+                onClick={() => void handleApplyPlanPreview()}
+                disabled={isPlanning}
+              >
+                {isPlanning ? "Applying..." : "Apply plan"}
+              </button>
+            </div>
+          </div>
+        ) : null}
+
         {planMessage ? <div className="calendar-info-card">{planMessage}</div> : null}
+
+        {appliedPlanUndo ? (
+          <div className="calendar-plan-undo-card">
+            <span>Last auto-plan can still be reversed.</span>
+            <button
+              type="button"
+              className="ghost-button compact-button"
+              onClick={() => void handleUndoAppliedPlan()}
+              disabled={isUndoingPlan}
+            >
+              {isUndoingPlan ? "Undoing..." : "Undo plan"}
+            </button>
+          </div>
+        ) : null}
 
         {isOverloaded ? (
           <div className="calendar-warning-card">

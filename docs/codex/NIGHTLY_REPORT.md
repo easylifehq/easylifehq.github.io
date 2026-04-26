@@ -1606,3 +1606,18 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 03:08:24
+
+- Task attempted: CAPTAIN OVERNIGHT EasyCalendar reversible plan-my-day repair: make Plan My Day smaller, calmer, and reversible; before applying a large auto-plan, show a lightweight preview/confirmation of what the day would look like, then provide a clear one-tap undo path after applying; preserve existing calendar data shapes, Firebase/auth behavior, routing, package/dependency files, generated output, deployment config, secrets, and backend rules. [class:feature risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: feature
+- Task risk: medium
+- Task mode: single
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easycalendar/EasyCalendarContext.tsx
+- app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
