@@ -56,7 +56,7 @@ export function HQPage() {
     .filter((event) => event.startAt && startOfDay(event.startAt).getTime() === today.getTime())
     .sort((left, right) => (left.startAt?.getTime() || 0) - (right.startAt?.getTime() || 0));
   const nextEvents = todayEvents.slice(0, 3);
-  const topTasks = sortActiveTasks(tasks.filter((task) => !task.completed)).slice(0, 3);
+  const activeTaskCount = tasks.filter((task) => !task.completed).length;
   const dueTodayTasks = sortActiveTasks(tasks.filter((task) => !task.completed && isSameDate(task.dueDate, today)));
   const overdueTasks = sortActiveTasks(tasks.filter((task) => !task.completed && task.dueDate && startOfDay(task.dueDate).getTime() < today.getTime()));
   const openWindows = getOpenTimeWindowsForDay(today, events, taskBlocks);
@@ -124,6 +124,16 @@ export function HQPage() {
             <span>Focus</span>
             <strong>{mostUrgent ? mostUrgentLabel : quickWin ? quickWin.title : "No task is shouting"}</strong>
             <p>{overdueTasks.length ? `${overdueTasks.length} overdue` : dueTodayTasks.length ? `${dueTodayTasks.length} due today` : quickWin ? "Quick win available" : "Good room to choose."}</p>
+          </article>
+          <article>
+            <span>Suite</span>
+            <strong>
+              {activeTaskCount} open task{activeTaskCount === 1 ? "" : "s"} / {todayEvents.length} event
+              {todayEvents.length === 1 ? "" : "s"}
+            </strong>
+            <p>
+              {completedTodayCount} done today / {formatDuration(openMinutes)} open on calendar
+            </p>
           </article>
         </div>
 
