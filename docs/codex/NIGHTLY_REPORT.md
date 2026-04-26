@@ -1189,3 +1189,16 @@
 - Files changed:
 - app-vNext/src/features/marketing/routes/EasyNotesMarketingPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-25 18:28:16
+
+- Task attempted: Pack 1 - Product Spine EasyCalendar mobile first-viewport hierarchy repair: inspect the EasyCalendar product marketing page at 390px and make one narrow mobile-only density adjustment to reduce remaining hero/preview competition, focusing on H1/body rhythm or preview header scale while preserving copy meaning, desktop layout, links, and routing behavior. Do not change auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, app-router behavior, or unrelated pages. [class:design risk:low mode:single scope:app-vNext/src/features/marketing/,app-vNext/src/styles/]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: external build only
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

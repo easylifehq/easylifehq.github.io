@@ -145,3 +145,27 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-181644\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-181644\easylist-visualQa-1-mobile.png
 - Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-25 18:28:16
+
+- Task: Pack 1 - Product Spine EasyCalendar mobile first-viewport hierarchy repair: inspect the EasyCalendar product marketing page at 390px and make one narrow mobile-only density adjustment to reduce remaining hero/preview competition, focusing on H1/body rhythm or preview header scale while preserving copy meaning, desktop layout, links, and routing behavior. Do not change auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, app-router behavior, or unrelated pages. [class:design risk:low mode:single scope:app-vNext/src/features/marketing/,app-vNext/src/styles/]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: Pack 1 - Product Spine
+- Task class: design
+- Task risk: low
+- Changed files: 1
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: header density and preview identity improved, but the mobile hierarchy and repeated card system still keep the spine from feeling premium.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-182324
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-182324\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-182324\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-182324\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-182324\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-182324
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-182324\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-182324\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-182324\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260425-182324\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.
