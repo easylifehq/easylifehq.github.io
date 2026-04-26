@@ -1347,3 +1347,13 @@
 - app-vNext/src/features/easylist/components/TaskDrawer.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Task-specific acceptance check failed.
+
+## 2026-04-25 23:06:37
+
+- Task attempted: EasyCalendar month mobile refinement pass: make the mobile month view content-first by reducing surrounding chrome, letting the month grid dominate the viewport, adding compact day event indicators or counts, and making day taps open a focused day view; preserve calendar data shapes, event behavior, desktop layout, access flow, routing, dependencies, package files, generated output, deployment config, docs report files, and root config files. [class:feature risk:medium mode:single scope:app-vNext/src/features/easycalendar/,app-vNext/src/styles/ accept:npm.cmd run build]
+
+- Build result: Quarantined
+- Files changed:
+- app-vNext/src/features/easycalendar/routes/EasyCalendarMonthPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Task-specific acceptance check failed.
