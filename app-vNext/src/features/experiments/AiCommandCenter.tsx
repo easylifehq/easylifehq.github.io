@@ -199,7 +199,7 @@ export function AiCommandCenter() {
       <section className="ai-command-input-panel" aria-labelledby="ai-command-input-title">
         <div className="ai-command-input-copy">
           <span className="settings-card-topline">
-            <span>Command input preview</span>
+            <span>Command input</span>
             <span className="settings-state-pill">No API</span>
           </span>
           <h3 id="ai-command-input-title">Try a safe AI command</h3>
