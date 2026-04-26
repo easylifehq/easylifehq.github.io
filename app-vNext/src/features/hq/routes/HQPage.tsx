@@ -92,12 +92,6 @@ export function HQPage() {
       {error ? <p className="error-copy">{error}</p> : null}
 
       <section className="hq-command-center" aria-labelledby="hq-title">
-        <div className="hq-command-copy">
-          <p className="eyebrow">EasyHQ</p>
-          <h1 id="hq-title">Daily workspace</h1>
-          <p>Start with the next useful move. Everything else can stay quiet until you need it.</p>
-        </div>
-
         <article className="hq-start-card">
           <span className="settings-state-pill">Start here</span>
           <strong>{startHere.label}</strong>
@@ -113,31 +107,32 @@ export function HQPage() {
             ) : null}
           </div>
         </article>
-      </section>
 
-      <div className="hq-status-strip" aria-label="Today at a glance">
-        <article>
-          <span>Next</span>
-          <strong>{nextEvents[0] ? nextEvents[0].title || "Untitled event" : "Nothing scheduled"}</strong>
-          <p>
-            {nextEvents[0]
-              ? nextEvents[0].allDay
-                ? "All day"
-                : `${formatTimeLabel(nextEvents[0].startAt)} - ${formatTimeLabel(nextEvents[0].endAt)}`
-              : "The calendar is clear."}
-          </p>
-        </article>
-        <article>
-          <span>Focus</span>
-          <strong>{mostUrgent ? mostUrgentLabel : quickWin ? quickWin.title : "No task is shouting"}</strong>
-          <p>{overdueTasks.length ? `${overdueTasks.length} overdue` : dueTodayTasks.length ? `${dueTodayTasks.length} due today` : quickWin ? "Quick win available" : "Good room to choose."}</p>
-        </article>
-        <article>
-          <span>Room</span>
-          <strong>{formatDuration(openMinutes)}</strong>
-          <p>{openWindows.length >= 3 ? "Flexible day" : openWindows.length ? "Some space open" : "Mostly packed"}</p>
-        </article>
-      </div>
+        <div className="hq-status-strip" aria-label="Today at a glance">
+          <article>
+            <span>Next</span>
+            <strong>{nextEvents[0] ? nextEvents[0].title || "Untitled event" : "Nothing scheduled"}</strong>
+            <p>
+              {nextEvents[0]
+                ? nextEvents[0].allDay
+                  ? "All day"
+                  : `${formatTimeLabel(nextEvents[0].startAt)} - ${formatTimeLabel(nextEvents[0].endAt)}`
+                : "The calendar is clear."}
+            </p>
+          </article>
+          <article>
+            <span>Focus</span>
+            <strong>{mostUrgent ? mostUrgentLabel : quickWin ? quickWin.title : "No task is shouting"}</strong>
+            <p>{overdueTasks.length ? `${overdueTasks.length} overdue` : dueTodayTasks.length ? `${dueTodayTasks.length} due today` : quickWin ? "Quick win available" : "Good room to choose."}</p>
+          </article>
+        </div>
+
+        <div className="hq-command-copy">
+          <p className="eyebrow">EasyHQ</p>
+          <h1 id="hq-title">Daily workspace</h1>
+          <p>Start with the next useful move. Everything else can stay quiet until you need it.</p>
+        </div>
+      </section>
 
       <PageSection eyebrow="Move fast" title="Quick actions">
         <div className="hq-action-row">

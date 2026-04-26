@@ -4948,10 +4948,13 @@ button.calendar-detail-card:disabled {
 .hq-command-center {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.16fr) minmax(280px, 0.84fr);
-  gap: 1.15rem;
+  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+  grid-template-areas:
+    "start copy"
+    "status copy";
+  gap: 0.85rem 1.15rem;
   align-items: stretch;
-  margin-bottom: 0.85rem;
+  margin-bottom: 1rem;
 }
 
 .hq-command-center::before {
@@ -4979,12 +4982,13 @@ button.calendar-detail-card:disabled {
 }
 
 .hq-command-copy {
+  grid-area: copy;
   position: relative;
   overflow: hidden;
   display: grid;
   align-content: center;
   gap: 0.68rem;
-  min-height: clamp(15rem, 28vw, 21rem);
+  min-height: clamp(13rem, 23vw, 18rem);
   padding: clamp(1.35rem, 2.8vw, 2.25rem) clamp(1.25rem, 2.7vw, 2.15rem) clamp(1.35rem, 2.7vw, 2.15rem) clamp(1.55rem, 3vw, 2.45rem);
   background:
     linear-gradient(90deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent), transparent 34%),
@@ -5007,7 +5011,7 @@ button.calendar-detail-card:disabled {
 .hq-command-copy h1 {
   margin: 0;
   color: var(--ui-text-primary, var(--shell-heading-text));
-  font-size: clamp(2.35rem, 4.6vw, 4.1rem);
+  font-size: clamp(2.05rem, 3.8vw, 3.35rem);
   line-height: 0.95;
   letter-spacing: 0;
 }
@@ -5020,6 +5024,7 @@ button.calendar-detail-card:disabled {
 }
 
 .hq-start-card {
+  grid-area: start;
   position: relative;
   display: grid;
   align-content: center;
@@ -5054,28 +5059,33 @@ button.calendar-detail-card:disabled {
 }
 
 .hq-status-strip {
+  grid-area: status;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 0;
-  margin-bottom: 1.1rem;
+  margin-bottom: 0;
   border-block: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)) 74%, transparent);
 }
 
 .hq-status-strip article {
   display: grid;
-  gap: 0.25rem;
+  grid-template-columns: 4.8rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.08rem 0.7rem;
   min-width: 0;
-  padding: 0.78rem 0.9rem;
+  padding: 0.55rem 0.1rem;
   border-radius: 0;
   border: 0;
   background: transparent;
 }
 
 .hq-status-strip article + article {
-  border-left: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)) 70%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)) 70%, transparent);
 }
 
 .hq-status-strip span {
+  grid-row: 1 / span 2;
+  align-self: center;
   color: var(--ui-text-muted, var(--shell-muted-text));
   font-size: 0.76rem;
   font-weight: 850;
@@ -7649,6 +7659,10 @@ button.calendar-detail-card:disabled {
   }
 
   .hq-command-center {
+    grid-template-areas:
+      "start"
+      "status"
+      "copy";
     gap: 0.58rem;
     margin-bottom: 0.42rem;
   }
@@ -7663,6 +7677,7 @@ button.calendar-detail-card:disabled {
     min-height: 0;
     gap: 0.28rem;
     padding: 0.72rem 0.82rem;
+    box-shadow: none;
   }
 
   .hq-command-copy p {
@@ -7684,7 +7699,6 @@ button.calendar-detail-card:disabled {
   }
 
   .hq-status-strip {
-    grid-template-columns: 1fr;
     gap: 0;
     margin-bottom: 0.62rem;
     overflow: visible;
@@ -7704,12 +7718,9 @@ button.calendar-detail-card:disabled {
 
   .hq-status-strip article + article {
     border-top: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)) 58%, transparent);
-    border-left: 0;
   }
 
   .hq-status-strip span {
-    grid-row: 1 / span 2;
-    align-self: center;
     font-size: 0.68rem;
   }
 
