@@ -4,55 +4,54 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is becoming calmer and more coherent, but it still reads like a polished stack of app pages instead of one confident product spine.
+EasyLife is getting calmer and more coherent, but the signed-in product still reads like polished cards arranged politely instead of one decisive personal workspace.
 
 ## Mission Fit
-The current direction supports Pack 1 - Product Spine: shared language, calmer surfaces, and safer signed-in refinements are moving the suite toward one connected personal workspace. The miss is hierarchy. The product still leans too hard on repeated cards, pills, borders, and small modules, so the user sees many tidy pieces before they feel one clear system.
+The direction matches Pack 1 - Product Spine: shared language, calmer chrome, and more consistent protected surfaces are moving EasyLife toward a connected suite. The miss is hierarchy. The product promise is about helping a busy solo operator see what matters today, but the interface still spreads attention across too many equal panels. It is tidy, but not yet commanding.
 
 ## Taste Check
-The calmer copy and consistent suite treatment feel more professional than the earlier "command center" energy. Good. The protected EasyCalendar and EasyWorkout passes appear to be aiming at daily usefulness instead of marketing gloss, which is the right instinct.
+The quieter language, reduced visual noise, and safer spacing are the right move. The app is less generic than before, and the protected side is beginning to feel more like a real workspace than a demo carousel.
 
-What still feels off: too many surfaces are politely boxed, equally weighted, and visually democratic. Democracy is lovely in government, not in interface hierarchy. EasyLife needs stronger first-screen direction: one primary thing to do, secondary context beneath it, and quieter chrome around everything else.
+What still feels off: too much rounded-card repetition, too many same-weight modules, and not enough editorial discipline in the first screen. The design is behaving, but it is not leading. Very well-mannered beige energy, even when it is not beige.
 
 ## Visual Problems To Fix
-- The signed-in screens still rely on repeated rounded cards and bordered sections, making the app feel assembled from tiles rather than directed by a single shell.
-- Primary actions do not consistently dominate the first viewport; the eye has to negotiate with status pills, small summaries, and parallel panels.
-- Module identity is present, but not yet mature: EasyList, EasyCalendar, EasyNotes, EasyWorkout, and Settings feel related, not fully integrated.
-- Mobile density has improved, but the product still risks feeling cramped where controls, labels, and cards stack with similar emphasis.
-- Marketing and app surfaces are visually closer now, but the app still needs to feel deeper and more useful than the product pages.
-- Empty and overview states need sharper "what now" hierarchy, not just nicer containers.
+- Primary daily-focus areas still compete with secondary summaries instead of owning the first viewport.
+- Card borders, rounded panels, and pill treatments repeat across modules until everything has the same volume.
+- Protected pages feel visually related, but the relationship is mostly surface styling, not a stronger shared operating shell.
+- Mobile looks acceptable in automated inspection, but the density still risks feeling stacked rather than intentionally sequenced.
+- EasyCalendar and EasyWorkout improved, but they still feel like separate modules wearing the same jacket, not parts of one live system.
+- Marketing and signed-in areas now share calmer language, but the signed-in hierarchy should be more useful than the marketing promise.
 
 ## Strongest Opportunities
-- Establish a stronger signed-in shell rhythm: clear page title, one dominant daily surface, then secondary modules in quieter rows.
-- Reduce decorative chrome on core workflow pages so actual tasks, notes, events, and workouts become the visual material.
-- Give each main module one unmistakable first action above the fold, using size, placement, and spacing rather than more labels.
-- Create a shared "today" pattern across List, Calendar, Workout, and HQ so the suite feels coordinated instead of merely consistent.
-- Use fewer cards with better internal hierarchy; one great panel beats five well-behaved little boxes.
-- Treat mobile as a working surface, not a compressed desktop report.
+- Make one protected first screen feel unmistakably like "today": dominant focus area, compact supporting context, clear next action.
+- Reduce one layer of card chrome across signed-in modules so content, not containers, creates structure.
+- Create a stronger shared page rhythm: title, status strip, primary work area, secondary context.
+- Use active states and current-day/current-task cues more assertively so the product feels alive.
+- Improve mobile sequencing by making the most useful action appear before summaries and decorative structure.
 
 ## Priority Fix
-Fix the signed-in hierarchy before adding more polish. Pick one core protected screen, preferably HQ or EasyList, and make the first viewport feel like the product spine: one dominant daily-focus area, one clear primary action, and a restrained set of secondary modules underneath. Reduce competing card borders, pills, and equal-weight summaries so the user immediately knows where to start.
+Fix the protected first-screen hierarchy. Pick the signed-in surface that best represents the suite, likely EasyList or HQ, and make its main daily action visually dominant above the fold. Supporting modules should become quieter context, not equal-card neighbors. The next task should reduce container noise and establish a reusable rhythm: one clear focus, one compact status row, then secondary detail.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer suite consistency and protected-screen polish moved forward, but the product spine still lacks decisive hierarchy.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer protected polish moved forward, but the product spine still lacks decisive first-screen hierarchy.
 
 ## Designer Handoff
-Next batch should stay narrow and ruthless. Keep the calmer copy, shared spacing, and professional restraint. Change the signed-in hierarchy: make one primary daily surface visibly dominant, remove one layer of repeated card chrome, and subordinate secondary summaries with quieter type and lighter framing. The result should feel less like "here are the apps" and more like "this is your day, with the suite around it."
+Keep the current restraint, shared language, and safer spacing. Do not chase novelty. The next implementer should make the signed-in experience feel less like a gallery of modules and more like a daily operating surface: one dominant work zone, tighter supporting panels, fewer equal-weight cards, and clearer current-state cues. The user should feel, within two seconds, "this is where I start today."
 
 ## What Not To Do Next
-- Do not add more sections to prove the suite is connected.
-- Do not solve weak hierarchy with more badges, pills, or explanatory copy.
-- Do not start another broad protected-module pass across many files.
-- Do not polish marketing while the signed-in product still lacks a strong spine.
-- Do not ignore mobile; any hierarchy fix must hold on a narrow viewport.
-- Do not touch backend, auth, routing behavior, dependencies, or persistence.
+- Do not add another marketing section or product story.
+- Do not add more cards to solve weak hierarchy.
+- Do not introduce new features, integrations, backend behavior, auth, data changes, or routing changes.
+- Do not decorate the UI with extra gradients, badges, pills, or motion.
+- Do not ignore mobile just because automated inspection found no blocking bugs.
+- Do not broaden the batch across many screens; make one protected surface materially better.
 
 ## Next 5 Design Tasks
-- [ ] EasyList first-viewport hierarchy pass: make the daily-focus area the dominant surface, reduce one competing card treatment, and preserve all task behavior.
-- [ ] EasyCalendar month/day chrome reduction: remove or soften one nonessential bordered wrapper so scheduled content reads first on desktop and mobile.
-- [ ] HQ product spine pass: create a clearer top-level "today" layout using existing data only, with one primary action and restrained secondary summaries.
-- [ ] EasyWorkout dashboard hierarchy repair: make the next workout or current routine visibly primary, avoiding new data, routing, or persistence changes.
-- [ ] Settings control-center polish: improve grouping and vertical rhythm without adding new settings, account controls, auth text, or backend-facing options.
+- [ ] EasyList first-screen hierarchy pass: make the primary daily-focus area visually dominant above the fold; preserve behavior, data, routing, and existing controls.
+- [ ] Protected card chrome reduction: remove or soften one repeated border/pill/card treatment from a signed-in core module; do not change layout semantics or app logic.
+- [ ] EasyCalendar current-day emphasis pass: make today and scheduled content read before surrounding navigation chrome; no date logic or interaction changes.
+- [ ] EasyWorkout dashboard density pass: tighten secondary summaries so the next workout or recent progress reads first; no persistence or workout logic changes.
+- [ ] Mobile protected rhythm check: adjust spacing/order on one signed-in page so the first action appears before secondary summaries; no new features or route changes.
 
 ## Stop Or Continue
 continue but fix visual issues first
