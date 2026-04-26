@@ -9096,6 +9096,68 @@ button.calendar-detail-card:disabled {
     padding: 0.44rem 0.5rem;
   }
 
+  .app-theme-easylist .toolbar-row-compact {
+    align-items: stretch;
+    gap: 0.45rem;
+  }
+
+  .app-theme-easylist .toolbar-row-compact .search-input {
+    flex-basis: 100%;
+    min-height: 42px;
+  }
+
+  .app-theme-easylist .easylist-dashboard-metrics {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.3rem;
+    font-size: 0.72rem;
+  }
+
+  .app-theme-easylist .easylist-dashboard-metrics span + span {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .capture-modal.easylist-capture-modal .capture-mode-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.1rem;
+    scrollbar-width: none;
+  }
+
+  .capture-modal.easylist-capture-modal .capture-mode-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .capture-modal.easylist-capture-modal .capture-mode-button {
+    flex: 0 0 auto;
+  }
+
+  .capture-modal.easylist-capture-modal .capture-mode-button:nth-child(n + 3) {
+    opacity: 0.72;
+  }
+
+  .app-theme-easylist .task-card-vnext.completing {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .app-theme-easylist .task-card-vnext.completing .task-card-actions-quiet {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: 0.1rem;
+    padding: 0.38rem 0.46rem;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 9%, var(--ui-bg-card) 91%);
+  }
+
+  .app-theme-easylist .task-card-vnext.completing .task-card-actions-quiet .ghost-button {
+    min-width: 5.25rem;
+    min-height: 40px;
+  }
+
   .app-theme-easylist .task-card-check {
     width: 2.25rem;
     height: 2.25rem;

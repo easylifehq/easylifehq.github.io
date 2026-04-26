@@ -327,6 +327,7 @@ export function UniversalCapture() {
   const [openTarget, setOpenTarget] = useState<{ to: string; label: string } | null>(null);
   const suggestion = useMemo(() => detectCaptureType(text), [text]);
   const brainDumpEntries = useMemo(() => parseBrainDumpEntries(text), [text]);
+  const isEasyListCapture = location.pathname.startsWith("/app/easylist");
   const brainDumpSummary = useMemo(() => {
     const counts: Record<BrainDumpEntry["kind"], number> = { task: 0, event: 0, deadline: 0 };
     brainDumpEntries.forEach((entry) => {
@@ -728,7 +729,7 @@ export function UniversalCapture() {
 
       <div className={`capture-backdrop${isOpen ? " open" : ""}`} onClick={() => setIsOpen(false)} />
       <section
-        className={`capture-modal${isOpen ? " open" : ""}`}
+        className={`capture-modal${isEasyListCapture ? " easylist-capture-modal" : ""}${isOpen ? " open" : ""}`}
         aria-hidden={!isOpen}
         onKeyDown={(event) => {
           if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {

@@ -1738,3 +1738,17 @@
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 16:06:30
+
+- Task attempted: CAPTAIN RERUN EasyList mobile working pass: inspect the current EasyList signed-in task screen after the add-flow and completion-safety changes, then make one focused mobile workflow refinement so adding, brain dumping, completing, and undoing tasks feel calm and obvious without extra chrome; preserve existing storage/data shapes, routing, auth/Firebase behavior, dependencies, package files, generated output, deployment config, and secrets. [class:feature risk:medium mode:single scope:app-vNext/src/features/easylist/,app-vNext/src/features/experiments/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: feature
+- Task risk: medium
+- Task mode: single
+- Allowed scope: app-vNext/src/features/easylist, app-vNext/src/features/experiments, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/experiments/UniversalCapture.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
