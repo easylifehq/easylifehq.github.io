@@ -1136,3 +1136,17 @@
 - docs/codex/MAGIC_SCORECARD.md
 - docs/codex/NIGHTLY_REPORT.md
 - Risks or follow-up needed: Low. Recovered from interrupted loop after guardrails and external build passed.
+
+## 2026-04-25 18:15:05
+
+- Task attempted: Pack 1 - Product Spine EasyList mobile preview scale repair: inspect the existing EasyList public product hero at 390px and reduce preview row padding, row text scale, or chip weight so the preview reads like compact working app UI instead of a second hero, preserving copy meaning, links, tap targets, and desktop layout. Do not change routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages. [class:design risk:low mode:single scope:app-vNext/src/features/marketing/,app-vNext/src/styles/]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: external build only
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

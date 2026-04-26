@@ -8038,6 +8038,33 @@ button.calendar-detail-card:disabled {
     padding: 0.72rem;
   }
 
+  .marketing-page--easylist-preview .marketing-hero-preview {
+    gap: 0.3rem;
+  }
+
+  .marketing-page--easylist-preview .marketing-hero-preview-row {
+    grid-template-columns: minmax(3.75rem, 0.4fr) minmax(0, 1fr);
+    gap: 0.4rem;
+    padding: 0.34rem 0.42rem;
+  }
+
+  .marketing-page--easylist-preview .marketing-hero-preview-row span {
+    font-size: 0.62rem;
+    font-weight: 780;
+  }
+
+  .marketing-page--easylist-preview .marketing-hero-preview-row strong {
+    font-size: 0.74rem;
+    line-height: 1.14;
+  }
+
+  .marketing-page--easylist-preview .marketing-hero-preview-row strong em {
+    margin-left: 0.3rem;
+    padding: 0.12rem 0.28rem;
+    font-size: 0.56rem;
+    font-weight: 780;
+  }
+
   .marketing-page--mobile-preview-lift .marketing-hero {
     gap: 0.68rem;
     padding: 0.76rem;
