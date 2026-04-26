@@ -1163,3 +1163,16 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-25 18:21:38
+
+- Task attempted: Pack 1 - Product Spine mobile marketing header brand-density repair: inspect the shared marketing header at 390px and make one narrow CSS/component adjustment so the logo, wordmark, and right-side CTA consume less first-viewport height while preserving all links, tap targets, and routing behavior. Do not change auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, app-router behavior, or unrelated navigation. [class:design risk:low mode:single scope:app-vNext/src/components/navigation/,app-vNext/src/styles/]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/components/navigation, app-vNext/src/styles
+- Acceptance checks: external build only
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
