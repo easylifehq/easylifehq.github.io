@@ -6809,6 +6809,45 @@ button.calendar-detail-card:disabled {
   line-height: 1.15;
 }
 
+.workout-next-move {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.85rem;
+  padding: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent) 22%, var(--ui-border-subtle));
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 9%, transparent), transparent 62%),
+    var(--ui-bg-card, var(--shell-input-bg));
+  box-shadow: inset 0 1px 0 var(--shell-panel-highlight);
+}
+
+.workout-next-move div {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.workout-next-move span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.workout-next-move strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 1rem;
+}
+
+.workout-next-move p {
+  margin: 0;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
 .gym-exercise-card {
   border-radius: 16px;
 }
@@ -7975,6 +8014,16 @@ button.calendar-detail-card:disabled {
     min-width: 132px;
     padding: 0.85rem;
     scroll-snap-align: start;
+  }
+
+  .workout-next-move {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .workout-next-move .compact-button {
+    width: 100%;
+    justify-content: center;
   }
 
   .settings-app-preference-card .panel-header {

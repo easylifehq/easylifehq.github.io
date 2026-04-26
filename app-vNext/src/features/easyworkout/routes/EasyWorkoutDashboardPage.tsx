@@ -165,6 +165,60 @@ export function EasyWorkoutDashboardPage() {
   const needsAttentionMuscle = [...muscleGroupStats]
     .filter((group) => group.weeklyVolume === 0)
     .sort((left, right) => left.lastPerformedOn.localeCompare(right.lastPerformedOn))[0];
+  const firstRoutine = routines[0];
+  const nextWorkoutMove = (() => {
+    if (!sessions.length) {
+      return {
+        label: "Start here",
+        title: "Log the first workout",
+        body: "Start a live session so EasyWorkout can build your recent history, records, and coverage.",
+        actionLabel: "Start workout",
+        to: "/app/easyworkout/log?workoutMode=1",
+      };
+    }
+
+    if (todaySessions.length) {
+      return {
+        label: "Today",
+        title: "Review today's work",
+        body: `${todaySessions.length} workout${todaySessions.length === 1 ? "" : "s"} already logged today. Add details or review the latest session before you move on.`,
+        actionLabel: "Open log",
+        to: "/app/easyworkout/log",
+      };
+    }
+
+    if (needsAttentionMuscle) {
+      return {
+        label: "Coverage",
+        title: `Train ${needsAttentionMuscle.name}`,
+        body: `${needsAttentionMuscle.name} is quiet this week after last showing up ${needsAttentionMuscle.lastPerformedOn || "earlier"}. Cover the gap in your next session.`,
+        actionLabel: firstRoutine ? "Use routine" : "Start workout",
+        to: firstRoutine
+          ? `/app/easyworkout/log?routineId=${firstRoutine.id}`
+          : "/app/easyworkout/log?workoutMode=1",
+      };
+    }
+
+    if (weeklySessions.length < 4) {
+      return {
+        label: "Rhythm",
+        title: "Add one more session",
+        body: `${weeklySessions.length} session${weeklySessions.length === 1 ? "" : "s"} in the last 7 days. One focused workout would strengthen the weekly rhythm.`,
+        actionLabel: firstRoutine ? "Use routine" : "Start workout",
+        to: firstRoutine
+          ? `/app/easyworkout/log?routineId=${firstRoutine.id}`
+          : "/app/easyworkout/log?workoutMode=1",
+      };
+    }
+
+    return {
+      label: "Maintain",
+      title: "Keep the streak clean",
+      body: "Your weekly rhythm is solid. Log the next session when it happens so records and coverage stay current.",
+      actionLabel: "Log workout",
+      to: "/app/easyworkout/log?workoutMode=1",
+    };
+  })();
 
   return (
     <>
@@ -199,6 +253,17 @@ export function EasyWorkoutDashboardPage() {
             <span>Last logged</span>
             <strong>{recentSessions[0]?.performedOn || "Not logged yet"}</strong>
           </article>
+        </div>
+
+        <div className="workout-next-move" aria-label="Recommended next workout action">
+          <div>
+            <span>{nextWorkoutMove.label}</span>
+            <strong>{nextWorkoutMove.title}</strong>
+            <p>{nextWorkoutMove.body}</p>
+          </div>
+          <Link className="button-secondary compact-button" to={nextWorkoutMove.to}>
+            {nextWorkoutMove.actionLabel}
+          </Link>
         </div>
       </PageSection>
 
