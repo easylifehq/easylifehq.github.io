@@ -9,6 +9,15 @@ import {
   startOfDay,
   toDateInputValue,
 } from "@/features/easycalendar/lib/calendarUtils";
+import {
+  CUSTOM_WEEKDAYS_VALUE,
+  RECURRENCE_OPTIONS,
+  RECURRENCE_WEEKDAYS,
+  buildCustomWeekdaysRule,
+  getRepeatSelectValue,
+  getWeekdayCodeForDateInput,
+  getWeekdayCodesFromRule,
+} from "@/features/easycalendar/lib/recurrence";
 
 const EVENT_TYPES: CalendarEventType[] = [
   "class",
@@ -19,12 +28,6 @@ const EVENT_TYPES: CalendarEventType[] = [
 ];
 
 const PLANNING_STATES: PlanningState[] = ["suggested", "scheduled", "accepted"];
-const RECURRENCE_OPTIONS = [
-  { value: "", label: "Does not repeat" },
-  { value: "FREQ=DAILY", label: "Daily" },
-  { value: "FREQ=WEEKLY", label: "Weekly" },
-  { value: "FREQ=MONTHLY", label: "Monthly" },
-];
 
 export function CalendarComposer() {
   const { categories, tasks, addEvent, addTask, scheduleTask } = useEasyCalendar();
@@ -56,6 +59,29 @@ export function CalendarComposer() {
   const [isSavingTaskBlock, setIsSavingTaskBlock] = useState(false);
 
   const selectedTask = activeTasks.find((task) => task.id === selectedTaskId) || null;
+  const repeatSelectValue = getRepeatSelectValue(eventRecurrenceRule);
+  const selectedRepeatWeekdays = getWeekdayCodesFromRule(eventRecurrenceRule);
+
+  function handleRepeatChange(nextValue: string) {
+    if (nextValue === CUSTOM_WEEKDAYS_VALUE) {
+      setEventRecurrenceRule(buildCustomWeekdaysRule(
+        selectedRepeatWeekdays.length
+          ? selectedRepeatWeekdays
+          : [getWeekdayCodeForDateInput(eventDate)]
+      ));
+      return;
+    }
+
+    setEventRecurrenceRule(nextValue);
+  }
+
+  function toggleRepeatWeekday(code: string) {
+    const nextCodes = selectedRepeatWeekdays.includes(code)
+      ? selectedRepeatWeekdays.filter((selectedCode) => selectedCode !== code)
+      : [...selectedRepeatWeekdays, code];
+
+    setEventRecurrenceRule(buildCustomWeekdaysRule(nextCodes.length ? nextCodes : [code]));
+  }
 
   async function handleEventSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -83,8 +109,8 @@ export function CalendarComposer() {
         startAt,
         endAt: eventItemKind === "deadline" ? startAt : endAt,
         allDay: false,
-        isRecurring: Boolean(eventRecurrenceRule),
-        recurrenceRule: eventRecurrenceRule || null,
+        isRecurring: eventItemKind === "event" && Boolean(eventRecurrenceRule),
+        recurrenceRule: eventItemKind === "event" ? eventRecurrenceRule || null : null,
         eventType,
       });
 
@@ -159,7 +185,12 @@ export function CalendarComposer() {
           <p>Use Event for things you attend. Use Deadline for things that are due at a specific time.</p>
         </div>
 
-        <div className="task-composer-grid">
+        <div className="calendar-item-section">
+          <strong>Item details</strong>
+          <p className="helper-copy">Choose whether this is scheduled time or a due marker before filling in the matching fields.</p>
+        </div>
+
+        <div className="task-composer-grid calendar-event-details-grid">
           <label className="field-stack field-stack-wide">
             <span>Title</span>
             <input
@@ -182,20 +213,6 @@ export function CalendarComposer() {
           </label>
 
           <label className="field-stack">
-            <span>{eventItemKind === "deadline" ? "Deadline area" : "Event kind"}</span>
-            <select
-              value={eventType}
-              onChange={(event) => setEventType(event.target.value as CalendarEventType)}
-            >
-              {EVENT_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="field-stack">
             <span>Color label</span>
             <select
               value={eventCategory}
@@ -209,7 +226,18 @@ export function CalendarComposer() {
               ))}
             </select>
           </label>
+        </div>
 
+        <div className="calendar-item-section">
+          <strong>{eventItemKind === "deadline" ? "Deadline timing" : "Event timing"}</strong>
+          <p className="helper-copy">
+            {eventItemKind === "deadline"
+              ? "Deadlines use one due time and do not repeat."
+              : "Events use start and end times, with repeat options for classes and routines."}
+          </p>
+        </div>
+
+        <div className="task-composer-grid calendar-event-timing-grid">
           <label className="field-stack">
             <span>Date</span>
             <input
@@ -229,37 +257,78 @@ export function CalendarComposer() {
           </label>
 
           {eventItemKind === "event" ? (
-          <label className="field-stack">
-            <span>End</span>
-            <input
-              type="time"
-              value={eventEndTime}
-              onChange={(event) => setEventEndTime(event.target.value)}
-            />
-          </label>
+            <>
+              <label className="field-stack">
+                <span>End</span>
+                <input
+                  type="time"
+                  value={eventEndTime}
+                  onChange={(event) => setEventEndTime(event.target.value)}
+                />
+              </label>
+
+              <label className="field-stack">
+                <span>Event kind</span>
+                <select
+                  value={eventType}
+                  onChange={(event) => setEventType(event.target.value as CalendarEventType)}
+                >
+                  {EVENT_TYPES.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </>
           ) : null}
 
           {eventItemKind === "event" ? (
-          <label className="field-stack">
-            <span>Repeat</span>
-            <select
-              value={eventRecurrenceRule}
-              onChange={(event) => setEventRecurrenceRule(event.target.value)}
-            >
-              {RECURRENCE_OPTIONS.map((option) => (
-                <option key={option.value || "none"} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+            <label className="field-stack">
+              <span>Repeat</span>
+              <select
+                value={repeatSelectValue}
+                onChange={(event) => handleRepeatChange(event.target.value)}
+              >
+                {RECURRENCE_OPTIONS.map((option) => (
+                  <option key={option.value || "none"} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
           ) : null}
 
-          <p className="helper-copy field-stack-wide">
-            Events block time. Deadlines sit on the calendar as due markers and can also create a linked EasyList item.
-            Repeating classes can use Weekly.
-          </p>
+          {eventItemKind === "event" && repeatSelectValue === CUSTOM_WEEKDAYS_VALUE ? (
+            <div className="field-stack field-stack-wide">
+              <span>Repeat on</span>
+              <div className="calendar-weekday-picker" role="group" aria-label="Repeat weekdays">
+                {RECURRENCE_WEEKDAYS.map((weekday) => (
+                  <label key={weekday.code} className="weekday-toggle">
+                    <input
+                      type="checkbox"
+                      checked={selectedRepeatWeekdays.includes(weekday.code)}
+                      onChange={() => toggleRepeatWeekday(weekday.code)}
+                    />
+                    <span>{weekday.label}</span>
+                  </label>
+                ))}
+              </div>
+              <p className="helper-copy">Use this for schedules like Monday, Wednesday, and Friday.</p>
+            </div>
+          ) : null}
+        </div>
 
+        <div className="calendar-item-section">
+          <strong>{eventItemKind === "deadline" ? "EasyList deadline" : "Prep task"}</strong>
+          <p className="helper-copy">
+            {eventItemKind === "deadline"
+              ? "Optionally mirror this due marker as an EasyList deadline."
+              : "Optionally create one linked task for preparation or follow-up."}
+          </p>
+        </div>
+
+        <div className="task-composer-grid">
           <label className="inline-check field-stack-wide">
             <input
               type="checkbox"

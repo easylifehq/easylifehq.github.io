@@ -10,6 +10,15 @@ import {
   toDateInputValue,
   toTimeInputValue,
 } from "@/features/easycalendar/lib/calendarUtils";
+import {
+  CUSTOM_WEEKDAYS_VALUE,
+  RECURRENCE_OPTIONS,
+  RECURRENCE_WEEKDAYS,
+  buildCustomWeekdaysRule,
+  getRepeatSelectValue,
+  getWeekdayCodeForDateInput,
+  getWeekdayCodesFromRule,
+} from "@/features/easycalendar/lib/recurrence";
 
 const EVENT_TYPES: CalendarEventType[] = [
   "class",
@@ -17,12 +26,6 @@ const EVENT_TYPES: CalendarEventType[] = [
   "appointment",
   "personal",
   "other",
-];
-const RECURRENCE_OPTIONS = [
-  { value: "", label: "Does not repeat" },
-  { value: "FREQ=DAILY", label: "Daily" },
-  { value: "FREQ=WEEKLY", label: "Weekly" },
-  { value: "FREQ=MONTHLY", label: "Monthly" },
 ];
 
 type CalendarEventDrawerProps = {
@@ -48,6 +51,8 @@ export function CalendarEventDrawer({
   const [recurrenceRule, setRecurrenceRule] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const repeatSelectValue = getRepeatSelectValue(recurrenceRule);
+  const selectedRepeatWeekdays = getWeekdayCodesFromRule(recurrenceRule);
 
   function applyDuration(minutes: number) {
     const startAt = combineDateAndTime(eventDate, startTime);
@@ -73,6 +78,27 @@ export function CalendarEventDrawer({
 
   if (!event) return null;
   const currentEvent = event;
+
+  function handleRepeatChange(nextValue: string) {
+    if (nextValue === CUSTOM_WEEKDAYS_VALUE) {
+      setRecurrenceRule(buildCustomWeekdaysRule(
+        selectedRepeatWeekdays.length
+          ? selectedRepeatWeekdays
+          : [getWeekdayCodeForDateInput(eventDate)]
+      ));
+      return;
+    }
+
+    setRecurrenceRule(nextValue);
+  }
+
+  function toggleRepeatWeekday(code: string) {
+    const nextCodes = selectedRepeatWeekdays.includes(code)
+      ? selectedRepeatWeekdays.filter((selectedCode) => selectedCode !== code)
+      : [...selectedRepeatWeekdays, code];
+
+    setRecurrenceRule(buildCustomWeekdaysRule(nextCodes.length ? nextCodes : [code]));
+  }
 
   async function handleSave(submitEvent: FormEvent<HTMLFormElement>) {
     submitEvent.preventDefault();
@@ -174,8 +200,9 @@ export function CalendarEventDrawer({
             </label>
             ) : null}
 
+            {itemKind === "event" ? (
             <label className="field-stack">
-              <span>Type</span>
+              <span>Event kind</span>
               <select value={eventType} onChange={(changeEvent) => setEventType(changeEvent.target.value as CalendarEventType)}>
                 {EVENT_TYPES.map((type) => (
                   <option key={type} value={type}>
@@ -184,11 +211,12 @@ export function CalendarEventDrawer({
                 ))}
               </select>
             </label>
+            ) : null}
 
             {itemKind === "event" ? (
             <label className="field-stack">
               <span>Repeat</span>
-              <select value={recurrenceRule} onChange={(changeEvent) => setRecurrenceRule(changeEvent.target.value)}>
+              <select value={repeatSelectValue} onChange={(changeEvent) => handleRepeatChange(changeEvent.target.value)}>
                 {RECURRENCE_OPTIONS.map((option) => (
                   <option key={option.value || "none"} value={option.value}>
                     {option.label}
@@ -196,6 +224,25 @@ export function CalendarEventDrawer({
                 ))}
               </select>
             </label>
+            ) : null}
+
+            {itemKind === "event" && repeatSelectValue === CUSTOM_WEEKDAYS_VALUE ? (
+              <div className="field-stack field-stack-wide">
+                <span>Repeat on</span>
+                <div className="calendar-weekday-picker" role="group" aria-label="Repeat weekdays">
+                  {RECURRENCE_WEEKDAYS.map((weekday) => (
+                    <label key={weekday.code} className="weekday-toggle">
+                      <input
+                        type="checkbox"
+                        checked={selectedRepeatWeekdays.includes(weekday.code)}
+                        onChange={() => toggleRepeatWeekday(weekday.code)}
+                      />
+                      <span>{weekday.label}</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="helper-copy">Use this for schedules like Monday, Wednesday, and Friday.</p>
+              </div>
             ) : null}
 
             <label className="field-stack field-stack-wide">

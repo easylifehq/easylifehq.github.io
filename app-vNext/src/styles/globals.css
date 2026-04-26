@@ -4132,6 +4132,78 @@ textarea::placeholder {
   background: var(--ui-bg-card, var(--shell-input-bg));
 }
 
+.calendar-item-section {
+  display: grid;
+  gap: 0.2rem;
+  padding-top: 0.25rem;
+}
+
+.calendar-item-section:not(:first-of-type) {
+  border-top: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  padding-top: 0.9rem;
+}
+
+.panel-header + .calendar-item-section {
+  border-top: 0;
+  padding-top: 0.25rem;
+}
+
+.calendar-item-section strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.9rem;
+}
+
+.calendar-event-details-grid,
+.calendar-event-timing-grid {
+  align-items: end;
+}
+
+.calendar-weekday-picker {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.weekday-toggle {
+  position: relative;
+  display: grid;
+  min-height: 42px;
+  place-items: center;
+  cursor: pointer;
+}
+
+.weekday-toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.weekday-toggle span {
+  display: grid;
+  width: 100%;
+  min-height: 42px;
+  place-items: center;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  background: var(--ui-bg-card-elevated, var(--shell-card-bg-soft));
+  color: var(--ui-text-secondary, var(--shell-muted-text));
+  font-size: 0.84rem;
+  font-weight: 850;
+}
+
+.weekday-toggle input:checked + span {
+  border-color: color-mix(in srgb, var(--shell-accent) 54%, transparent);
+  background: color-mix(in srgb, var(--shell-accent) 14%, var(--ui-bg-card, var(--shell-input-bg)));
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
+.weekday-toggle input:focus-visible + span {
+  outline: 2px solid color-mix(in srgb, var(--shell-accent) 46%, transparent);
+  outline-offset: 2px;
+}
+
 .drawer-link-card {
   margin-top: 1rem;
 }
@@ -7578,6 +7650,10 @@ button.calendar-detail-card:disabled {
   .settings-focus-grid,
   .settings-quick-strip {
     grid-template-columns: 1fr;
+  }
+
+  .calendar-weekday-picker {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .settings-app-preference-grid {

@@ -1621,3 +1621,20 @@
 - app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 03:14:42
+
+- Task attempted: CAPTAIN OVERNIGHT EasyCalendar event form repair: fix the weird Add Calendar Event layout where event fields appear under deadline-oriented controls, and add a practical custom repeat choice so a user can choose specific weekdays such as Monday/Wednesday/Friday instead of only daily or weekly; keep recurrence local to the existing app model/UI where possible and do not edit Firebase rules, auth, backend config, package/dependency files, generated output, deployment config, or secrets. [class:feature risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: feature
+- Task risk: medium
+- Task mode: single
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easycalendar/components/CalendarComposer.tsx
+- app-vNext/src/features/easycalendar/components/CalendarEventDrawer.tsx
+- app-vNext/src/features/easycalendar/lib/calendarUtils.ts
+- app-vNext/src/features/easycalendar/lib/recurrence.ts
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
