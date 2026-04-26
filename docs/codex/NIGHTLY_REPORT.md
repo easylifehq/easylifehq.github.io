@@ -1552,3 +1552,17 @@
 - app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-26 01:06:59
+
+- Task attempted: Pack 1 - Product Spine EasyWorkout marketing hero mobile density repair: at 390px, tighten the existing product-page hero spacing by reducing dead air above the hero, chip-row weight, or preview padding so the first viewport shows the headline, primary action, and one proof surface sooner; forbidden scope: no new content, new sections, routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, desktop redesign, or unrelated pages. [class:design risk:low mode:single scope:app-vNext/src/features/marketing/,app-vNext/src/styles/]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: external build only
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

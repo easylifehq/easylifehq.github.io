@@ -8374,6 +8374,32 @@ button.calendar-detail-card:disabled {
     font-weight: 560;
   }
 
+  .marketing-page--easyworkout-mobile-density {
+    margin-top: -0.62rem;
+  }
+
+  .marketing-page--easyworkout-mobile-density .marketing-hero {
+    gap: 0.56rem;
+    padding: 0.56rem 0.68rem 0.62rem;
+  }
+
+  .marketing-page--easyworkout-mobile-density .marketing-hero-copy,
+  .marketing-page--easyworkout-mobile-density .marketing-hero-card {
+    gap: 0.52rem;
+  }
+
+  .marketing-page--easyworkout-mobile-density .marketing-hero-card {
+    padding: 0.64rem;
+  }
+
+  .marketing-page--easyworkout-mobile-density .marketing-hero-preview {
+    gap: 0.24rem;
+  }
+
+  .marketing-page--easyworkout-mobile-density .marketing-hero-preview-row {
+    padding-block: 0.3rem;
+  }
+
   .marketing-page--easynotes-preview .marketing-hero-preview {
     gap: 0.3rem;
   }
