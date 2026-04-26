@@ -4,69 +4,68 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife's copy is calmer and more useful than earlier passes, but it still leans on inflated suite language where concrete daily-workspace language would feel more trustworthy.
+EasyLife is moving toward a calmer, more concrete suite voice, but leftover "command center" language and repeated template-style marketing phrasing still make the product sound more abstract than useful.
 
 ## Mission Voice Fit
-The language generally matches the mission: connected, professional, calm, and practical. The best direction is the recent move away from "command center," "premium," and "high-tech" toward wording like "workspace," "daily focus," "capture," "review," and "what needs attention." The remaining issue is promise control. EasyLife should sound capable and organized, not like it is declaring itself a complete life OS before the product experience fully earns that phrase.
+The language mostly fits the mission: calm, practical, organized, and focused on daily use. Recent copy repairs that move away from "personal operating system," "premium," and "high-tech" are directionally right because EasyLife should feel trustworthy rather than inflated. The best voice for this product is specific daily-workspace language: tasks, notes, calendar plans, workouts, settings, what needs attention, what is scheduled, and what to do next.
 
 ## Delicate Wording Risks
-- "Command center" appears in meta/product language and feels overused for a personal productivity suite. It can sound more dramatic than the actual daily workflow.
-- "Personal operating system" is mission-useful internally, but risky as customer-facing copy if repeated. It sounds grand and abstract.
-- "Premium" and "high-tech" should remain review language, not product language. They describe aspiration, not user value.
-- "EasyLifeHQ product" style wording reads placeholder-like and weakens confidence.
-- Generic phrases such as "connected suite," "calm suite system," and "workspace" can become interchangeable if not anchored to tasks, notes, calendar, workouts, or settings.
-- Some sprint/report copy contains mojibake around quotes, such as corrupted smart-quote fragments. That is not user-facing app copy, but it makes review docs feel less careful.
-- AI Lab copy should keep saying "mock," "prototype," or "preview" where appropriate so it never implies real AI backend behavior.
+- "Command center" still appears in root and app metadata samples. It is not dangerous, but it feels generic, overused, and slightly too SaaS-heavy for a personal daily suite.
+- "Easy System App vNext" in app documentation sounds internal and less polished than the current EasyLife 5.0 direction.
+- Repeated phrases around "workspace," "suite," and "daily flow" risk becoming interchangeable if every product page uses the same structure.
+- "Opening your workspace." is calm, but a little vague; it could become more useful without adding noise.
+- Marketing copy should avoid promising that EasyLife reduces friction or organizes life faster unless the wording stays framed as intent, not guaranteed outcome.
+- AI Lab language should stay clearly mock/prototype oriented and avoid implying real AI behavior, external API calls, or production intelligence.
 
 ## Beautiful Language Opportunities
-- Replace abstract suite claims with concrete daily-use promises: plan the day, catch tasks, review notes, see what is scheduled, log a workout.
-- Use "workspace" when describing the whole product and "focus area" or "daily view" when describing the first signed-in screen.
-- Make empty states warmer and more useful by naming the next action, not just the missing content.
-- Give each product page more specific nouns from that app: notes, routines, timeline, tasks, settings, projects.
-- Let marketing previews sound like actual moments from a day instead of feature labels.
-- Use quieter metadata language instead of badge-like emphasis where the UI already supplies hierarchy.
+- Replace remaining "command center" wording with "daily workspace," "connected workspace," or "one place for tasks, notes, plans, and workouts."
+- Give each product page one sharper product-specific line so EasyList, EasyNotes, EasyCalendar, and EasyWorkout do not sound like the same page with swapped nouns.
+- Make loading and empty-state copy more action-oriented: what the user is about to see, what they can do next, or what belongs here.
+- Use warmer Settings language: "suite controls," "workspace preferences," and "display choices" instead of broad control-center language everywhere.
+- In marketing previews, prefer workflow moments over labels: "Today to sort," "Notes to review," "Next event," "Workout logged."
+- Keep AI experiment copy modest: "mock brief," "sample suggestion," "prototype response," and "preview only."
 
 ## Priority Rewrite
-The most important wording problem is the remaining grand positioning language: "command center," "personal operating system," "premium," and "high-tech." Nami should turn this into a targeted copy cleanup task that scans only user-facing app and marketing strings, replacing inflated labels with concrete daily-workspace wording while preserving the product promise and avoiding broad rewrites.
+The single most important wording problem to fix next is remaining "command center" and inflated product-positioning language in user-facing metadata, marketing, and app surfaces. Replace it with concrete daily-workspace copy that names what EasyLife actually brings together: tasks, notes, calendar planning, workouts, projects, and settings. This is small, reviewable, and directly supports Robin and Simon's shared concern that the product should feel useful, not brochure-like.
 
 ## Suggested Rewrites
 - Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-  After: "EasyLife keeps tasks, notes, calendar plans, workouts, projects, and pipeline work in one organized workspace."
+  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one daily workspace."
 
-- Before: "Products and demo below"
-  After: "Explore products and preview the suite"
+- Before: "Opening your workspace."
+  After: "Getting your workspace ready."
+
+- Before: "control center"
+  After: "suite settings"
 
 - Before: "AI Command Center"
   After: "AI Lab"
 
 - Before: "personal operating system"
-  After: "daily workspace"
+  After: "connected daily workspace"
 
-- Before: "premium high-tech suite"
-  After: "calm, connected workspace"
+- Before: "premium"
+  After: "polished"
 
-- Before: "Opening your workspace."
-  After: "Opening your workspace."
-
-- Before: "control center"
-  After: "settings workspace"
+- Before: "high-tech"
+  After: "clean and modern"
 
 ## Voice Rules
-- Prefer concrete daily nouns over abstract product claims.
-- Keep the voice calm, capable, and specific.
-- Do not tell users the product is premium, high-tech, magical, or an operating system.
-- Use "workspace" sparingly and support it with real app-specific context.
-- Empty states should name one clear next action.
-- Marketing copy should prove the product through concrete previews, not louder adjectives.
-- AI copy must clearly stay mock/prototype unless real backend behavior exists.
-- Avoid cute labels, dramatic labels, and repeated pill-style microcopy.
+- Name the real user benefit before the product concept.
+- Prefer concrete nouns: tasks, notes, calendar, workouts, settings, workspace.
+- Avoid inflated positioning terms: command center, personal operating system, premium, high-tech.
+- Keep sentences short, calm, and useful.
+- Make each app's copy product-specific, not template-swapped.
+- Do not imply real AI, automation, data processing, or backend behavior in mock-only areas.
+- Use hospitality in empty states: clear next action, low pressure, no cheerleading.
+- Let polish come from precision, not adjectives.
 
 ## Next 5 Copy Tasks
-- [ ] Scan user-facing strings for "command center" and replace only customer-facing uses with "workspace," "daily workspace," or a more specific app noun; do not change internal docs or mission text unless explicitly requested.
-- [ ] Review marketing hero subtitles for abstract suite claims and rewrite one to mention concrete daily actions; keep the same promise and do not add new claims.
-- [ ] Review AI Lab copy for any wording that implies real AI execution; add or preserve "mock," "prototype," or "preview" where needed.
-- [ ] Clean one empty state so it includes a short useful explanation and one existing next action; do not add functionality or new buttons.
-- [ ] Replace any remaining "premium," "high-tech," or "personal operating system" user-facing copy with quieter concrete language; preserve meaning and avoid broad rewrites.
+- [ ] Replace remaining user-facing "command center" metadata copy with "daily workspace" or another concrete phrase; do not touch internal mission docs or deployment files.
+- [ ] Audit EasyHQ, Settings, and AI Lab for "personal operating system," "premium," and "high-tech"; replace only user-facing instances with quieter daily-use language.
+- [ ] Review product marketing hero subtitles and make one app-specific sentence more concrete; do not add claims, features, testimonials, prices, or new sections.
+- [ ] Tighten loading and empty-state microcopy in one changed app surface so it names the next useful state; keep the tone calm and brief.
+- [ ] Review AI experiment labels for mock clarity; ensure copy says or implies prototype/sample behavior only, with no real AI or backend promise.
 
 ## Stop Or Continue
 continue but fix copy first
