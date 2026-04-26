@@ -94,7 +94,7 @@ export function HQPage() {
       <section className="hq-command-center" aria-labelledby="hq-title">
         <div className="hq-command-copy">
           <p className="eyebrow">EasyHQ</p>
-          <h1 id="hq-title">Command center</h1>
+          <h1 id="hq-title">Daily workspace</h1>
           <p>Start with the next useful move. Everything else can stay quiet until you need it.</p>
         </div>
 

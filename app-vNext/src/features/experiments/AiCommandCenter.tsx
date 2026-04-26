@@ -136,7 +136,7 @@ export function AiCommandCenter() {
       <div className="settings-labs-summary">
         <article>
           <span>EasyLife AI Lab</span>
-          <strong>AI Command Center</strong>
+          <strong>AI workspace lab</strong>
           <p>
             A frontend-only sandbox for testing command flows before any connected assistant, API, or
             data-writing work exists.

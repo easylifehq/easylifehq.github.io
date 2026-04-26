@@ -69,7 +69,7 @@ const themeOptions: Array<{
   {
     value: "aurora",
     label: "Aurora",
-    description: "A premium dark theme with mint, ice-blue, and soft rose accents.",
+    description: "A dark theme with mint, ice-blue, and soft rose accents.",
     tone: "Northern lights",
   },
   {
@@ -452,7 +452,7 @@ const defaultViewOptions: Array<{ value: CalendarDefaultView; label: string }> =
 ];
 
 const startupRouteOptions: Array<{ value: StartupRoute; label: string; description: string }> = [
-  { value: "/app/hq", label: "EasyHQ", description: "Start at the command center." },
+  { value: "/app/hq", label: "EasyHQ", description: "Start with today's workspace." },
   { value: "last-used", label: "Last used screen", description: "Resume where you left off." },
   { value: "/app/easylist/dashboard", label: "EasyList", description: "Open straight to your task list." },
   { value: "/app/easylist/add", label: "Add tasks", description: "Start in fast capture mode." },
