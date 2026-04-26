@@ -7633,14 +7633,67 @@ button.calendar-detail-card:disabled {
   }
 
   .hq-command-center,
-  .hq-status-strip,
   .hq-action-row {
     grid-template-columns: 1fr;
   }
 
+  .hq-command-center {
+    gap: 0.58rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .hq-command-center::before,
+  .hq-command-copy::after,
+  .hq-start-card::before {
+    display: none;
+  }
+
+  .hq-command-copy {
+    min-height: 0;
+    gap: 0.38rem;
+    padding: 0.88rem 0.92rem;
+  }
+
+  .hq-command-copy p {
+    font-size: 0.92rem;
+    line-height: 1.38;
+  }
+
+  .hq-start-card {
+    gap: 0.52rem;
+    padding: 0.82rem 0.9rem;
+  }
+
+  .hq-start-card strong {
+    font-size: 1.18rem;
+  }
+
+  .hq-start-card .task-composer-actions {
+    gap: 0.45rem;
+  }
+
+  .hq-status-strip {
+    grid-template-columns: none;
+    grid-auto-columns: minmax(12rem, 76%);
+    grid-auto-flow: column;
+    gap: 0;
+    margin-bottom: 0.7rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .hq-status-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hq-status-strip article {
+    padding: 0.62rem 0.72rem;
+  }
+
   .hq-status-strip article + article {
-    border-top: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)) 70%, transparent);
-    border-left: 0;
+    border-top: 0;
+    border-left: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)) 70%, transparent);
   }
 
   .hq-command-copy h1 {
