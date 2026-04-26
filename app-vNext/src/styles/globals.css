@@ -8029,6 +8029,20 @@ button.calendar-detail-card:disabled {
     line-height: 1.16;
   }
 
+  .marketing-page--mobile-quiet-tags .marketing-hero .marketing-points {
+    gap: 0.24rem;
+  }
+
+  .marketing-page--mobile-quiet-tags .marketing-hero-copy .marketing-points .info-pill {
+    min-height: 22px;
+    padding: 0.16rem 0.34rem;
+    background: transparent;
+    border-color: transparent;
+    color: color-mix(in srgb, var(--ui-text-muted, var(--shell-muted-text)) 76%, transparent);
+    font-size: 0.63rem;
+    font-weight: 560;
+  }
+
   .marketing-page--easynotes-preview .marketing-hero-preview {
     gap: 0.3rem;
   }

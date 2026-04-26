@@ -3,7 +3,7 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyWorkoutMarketingPage() {
   return (
     <ProductMarketingPage
-      pageClassName="marketing-page--preview-realism"
+      pageClassName="marketing-page--preview-realism marketing-page--mobile-quiet-tags"
       eyebrow="EasyWorkout"
       heroTitle="Start a workout and log without fighting the app."
       heroDescription="EasyWorkout keeps normal workout browsing separate from Gym Mode, so logging in the middle of a lift stays fast."

@@ -1236,3 +1236,17 @@
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Task-specific acceptance check failed.
+
+## 2026-04-25 21:05:53
+
+- Task attempted: Pack 1 - Product Spine mobile product tag-density repair: inspect one public product marketing hero at 390px and de-emphasize one nonessential above-fold tag/badge row so the H1 reads first and the preview reads as supporting UI, preserving product promise, primary CTA, links, tap targets, and desktop layout. Do not add sections, rewrite copy broadly, change routing, behavior, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages. [class:design risk:low mode:single scope:app-vNext/src/features/marketing/,app-vNext/src/styles/]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Allowed scope: app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: external build only
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
