@@ -12,7 +12,7 @@ export function EasyNotesMarketingPage() {
       heroCardBody="The goal is fast writing, simple structure, and a note system that stays calm enough to use every day."
       heroPreviewItems={[
         { app: "Library", detail: "Recent notes first" },
-        { app: "Meeting note", detail: "Decisions and follow-ups" },
+        { app: "Meeting note", detail: "Decisions and follow-ups", status: "Pinned" },
         { app: "Draft inbox", detail: "Rough ideas ready to refine" },
         { app: "EasyList handoff", detail: "3 action lines queued" },
       ]}
