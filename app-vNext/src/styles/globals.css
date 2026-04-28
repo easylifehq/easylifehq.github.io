@@ -8335,7 +8335,48 @@ button.calendar-detail-card:disabled {
   .app-header-main {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    padding: 0.38rem 0.5rem;
+    padding: 0.3rem 0.42rem;
+  }
+
+  .app-suite-control {
+    width: 100%;
+    max-width: 100%;
+    gap: 0.24rem;
+    padding: 0.16rem;
+    border-radius: calc(var(--shell-control-radius) + 1px);
+  }
+
+  .app-suite-control .site-brand {
+    min-height: 36px;
+    padding: 0.06rem 0.12rem;
+  }
+
+  .app-suite-control .brand-badge {
+    width: 30px;
+    height: 30px;
+    border-radius: calc(var(--shell-control-radius) - 2px);
+    font-size: 0.62rem;
+  }
+
+  .app-suite-control .site-brand-title {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: var(--ui-text-muted, var(--shell-muted-text));
+  }
+
+  .app-suite-control .app-current-label {
+    margin-top: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--ui-text-primary, var(--shell-heading-text));
+    font-size: 0.82rem;
+    line-height: 1.05;
+  }
+
+  .app-suite-control .app-current-label::before {
+    width: 0.34rem;
+    height: 0.34rem;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--shell-accent) 16%, transparent);
   }
 
   .brand-badge {
@@ -8416,6 +8457,13 @@ button.calendar-detail-card:disabled {
     width: auto;
     min-width: 0;
     white-space: nowrap;
+  }
+
+  .app-header-actions .menu-trigger-button {
+    min-height: 32px;
+    padding: 0.42rem 0.55rem;
+    border-radius: calc(var(--shell-control-radius) - 2px);
+    font-size: 0.74rem;
   }
 
   .app-header-actions > .button-secondary {
