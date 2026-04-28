@@ -1,3 +1,8 @@
+## Captain Next 2026-04-27 - Protected Assistant Direction
+
+- [ ] CAPTAIN NEXT protected assistant usefulness pass: make one visible signed-in improvement toward the personal assistant dream by improving the HQ/daily-start surface, module summary, or next-action grouping with existing local/app data only; preserve auth, Firebase rules/config, data shapes, persistence, routing behavior, dependencies, package files, generated output, deployment config, secrets, and root files. [class:design risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
+- [ ] CAPTAIN NEXT EasyLife mobile bug polish: inspect the latest EasyNotes/EasyList/Settings mobile screenshots and make one focused UI-only repair for obvious spacing, duplicated chrome, cramped controls, or unreadable select/menu states; preserve behavior, auth/Firebase, data models, routing, dependencies, package files, generated output, deployment config, secrets, and root files. [class:bugfix risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
+
 ## Captain Launch 2026-04-25 - Protected Suite Major Upgrade
 
 - [x] CAPTAIN OVERNIGHT EasyCalendar reversible plan-my-day repair: make Plan My Day smaller, calmer, and reversible; before applying a large auto-plan, show a lightweight preview/confirmation of what the day would look like, then provide a clear one-tap undo path after applying; preserve existing calendar data shapes, Firebase/auth behavior, routing, package/dependency files, generated output, deployment config, secrets, and backend rules. [class:feature risk:medium mode:single scope:app-vNext/src/ accept:npm.cmd run build]
