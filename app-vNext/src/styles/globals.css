@@ -8581,6 +8581,10 @@ button.calendar-detail-card:disabled {
     padding-bottom: 5.5rem;
   }
 
+  .app-shell-vnext:has(.settings-page) .app-header-actions .menu-trigger-button {
+    min-height: 44px;
+  }
+
   .settings-page .panel-header {
     gap: 0.45rem;
   }
