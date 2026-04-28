@@ -1850,3 +1850,17 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-28 00:40:20
+
+- Task attempted: Pack 1 - Product Spine mobile product chrome repair: slim the existing customer-facing product/demo mobile header or switcher treatment so the product hero starts higher and content reads before wrapper chrome; preserve routes, labels, links, tap targets, and desktop layout; forbidden scope: no new sections, broad redesign, behavior changes, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or signed-in HQ changes. [class:design risk:low mode:single impact:visible scope:app-vNext/src/components/navigation/,app-vNext/src/features/marketing/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/components/navigation, app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

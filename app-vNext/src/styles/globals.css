@@ -8260,7 +8260,7 @@ button.calendar-detail-card:disabled {
 @media (max-width: 560px) {
   .site-header {
     padding-inline: 0.55rem;
-    padding-top: calc(0.45rem + env(safe-area-inset-top, 0px));
+    padding-top: calc(0.22rem + env(safe-area-inset-top, 0px));
     max-width: 100vw;
     overflow: clip;
   }
@@ -8282,7 +8282,7 @@ button.calendar-detail-card:disabled {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    padding: 0.3rem 0.45rem;
+    padding: 0.18rem 0.34rem;
   }
 
   .site-header-inner,
@@ -8398,8 +8398,8 @@ button.calendar-detail-card:disabled {
   }
 
   .site-header .brand-badge {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
   }
 
   .site-brand-title {
@@ -8424,14 +8424,14 @@ button.calendar-detail-card:disabled {
     align-items: center;
     justify-content: center;
     justify-self: end;
-    min-height: 28px;
-    padding: 0.26rem 0.46rem;
-    border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+    min-height: 24px;
+    padding: 0 0.08rem;
+    border: 1px solid transparent;
     border-radius: 999px;
-    background: var(--ui-bg-card, var(--shell-card-bg-soft));
-    color: var(--ui-text-muted, var(--shell-muted-text));
-    font-size: 0.62rem;
-    font-weight: 700;
+    background: transparent;
+    color: color-mix(in srgb, var(--ui-text-muted, var(--shell-muted-text)) 76%, transparent);
+    font-size: 0.6rem;
+    font-weight: 650;
     line-height: 1.1;
     max-width: max-content;
     text-align: center;
@@ -8753,7 +8753,7 @@ button.calendar-detail-card:disabled {
   }
 
   .marketing-content {
-    padding-top: 1.35rem;
+    padding-top: 0.74rem;
     padding-inline: 0.55rem;
     width: auto;
     max-width: 100%;
