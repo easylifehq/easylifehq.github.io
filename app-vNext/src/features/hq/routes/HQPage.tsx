@@ -70,6 +70,15 @@ export function HQPage() {
     `${todayEvents.length} event${todayEvents.length === 1 ? "" : "s"}`,
     `${formatDuration(openMinutes)} open`,
   ];
+  const taskStatusLabel = overdueTasks.length
+    ? "Overdue task"
+    : dueTodayTasks.length
+      ? "Due today"
+      : quickWin
+        ? "Quick win"
+        : "Tasks";
+  const calendarStatusLabel = nextEvents[0] ? "Next event" : "Calendar";
+  const progressStatusLabel = completedTodayCount ? "Done today" : "Open room";
   const startHere = useMemo(() => {
     if (overdueTasks.length || dueTodayTasks.length) {
       return {
@@ -143,7 +152,7 @@ export function HQPage() {
 
         <div className="hq-status-strip" aria-label="Module status context">
           <article>
-            <span>Calendar</span>
+            <span>{calendarStatusLabel}</span>
             <strong>{nextEvents[0] ? nextEvents[0].title || "Untitled event" : "Nothing scheduled"}</strong>
             <p>
               {nextEvents[0]
@@ -154,12 +163,12 @@ export function HQPage() {
             </p>
           </article>
           <article>
-            <span>Tasks</span>
+            <span>{taskStatusLabel}</span>
             <strong>{mostUrgent ? mostUrgentLabel : quickWin ? quickWin.title : "No task is shouting"}</strong>
             <p>{overdueTasks.length ? `${overdueTasks.length} overdue` : dueTodayTasks.length ? `${dueTodayTasks.length} due today` : quickWin ? "Quick win available" : "Good room to choose."}</p>
           </article>
           <article>
-            <span>Progress</span>
+            <span>{progressStatusLabel}</span>
             <strong>
               {activeTaskCount} open task{activeTaskCount === 1 ? "" : "s"} / {todayEvents.length} event
               {todayEvents.length === 1 ? "" : "s"}
