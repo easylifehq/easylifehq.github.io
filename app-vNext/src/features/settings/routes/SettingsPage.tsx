@@ -937,28 +937,22 @@ export function SettingsPage() {
           </details>
         </nav>
 
-        <label className="settings-mobile-nav field-stack">
-          <span>Settings section</span>
-          <select
-            value={activeSection}
-            onChange={(event) => setActiveSection(event.target.value as SettingsSectionId)}
-          >
-            <optgroup label="Everyday">
-              {primarySections.map((section) => (
-                <option key={section.id} value={section.id}>
-                  {section.label}
-                </option>
-              ))}
-            </optgroup>
-            <optgroup label="Advanced">
-              {advancedSections.map((section) => (
-                <option key={section.id} value={section.id}>
-                  {section.label}
-                </option>
-              ))}
-            </optgroup>
-          </select>
-        </label>
+        <nav className="settings-mobile-nav" aria-label="Settings sections">
+          <span className="settings-mobile-nav-label">Settings section</span>
+          <div className="settings-mobile-nav-scroll">
+            {[...primarySections, ...advancedSections].map((section) => (
+              <button
+                key={section.id}
+                type="button"
+                className={activeSection === section.id ? "active" : ""}
+                onClick={() => setActiveSection(section.id)}
+              >
+                <span>{section.eyebrow}</span>
+                <strong>{section.label}</strong>
+              </button>
+            ))}
+          </div>
+        </nav>
 
         <div className="settings-section-content">
           <div className="settings-section-heading">
