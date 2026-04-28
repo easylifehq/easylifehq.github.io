@@ -3,12 +3,19 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyWorkoutMarketingPage() {
   return (
     <ProductMarketingPage
+      pageClassName="marketing-page--preview-realism marketing-page--mobile-quiet-tags marketing-page--easyworkout-mobile-density"
       eyebrow="EasyWorkout"
       heroTitle="Start a workout and log without fighting the app."
       heroDescription="EasyWorkout keeps normal workout browsing separate from Gym Mode, so logging in the middle of a lift stays fast."
       heroPoints={["Gym Mode", "Free-form exercises", "Routines", "Compact sets"]}
       heroCardTitle="A workout logger that gets out of the way."
       heroCardBody="Start the session, type the exercise you actually did, add grip or setup notes, and move on."
+      heroPreviewItems={[
+        { app: "Gym Mode", detail: "Start push day" },
+        { app: "Bench press", detail: "3 sets logged" },
+        { app: "Cable row", detail: "Grip note saved" },
+        { app: "Session", detail: "Ready to finish" },
+      ]}
       featuresTitle="Built around the workout moment"
       featuresDescription="The workout page stays simple on purpose: big enough to tap, compact enough to avoid endless scrolling."
       features={[
@@ -16,16 +23,19 @@ export function EasyWorkoutMarketingPage() {
           tag: "Mode",
           title: "Gym Mode",
           description: "A focused workout surface hides unrelated controls when you are actively training.",
+          details: ["Start push day", "Session controls"],
         },
         {
           tag: "Logging",
           title: "Type any exercise",
           description: "Exercise names are free-form, with notes for grips, setup, or machine details.",
+          details: ["Bench press sets", "Grip notes"],
         },
         {
           tag: "Reuse",
           title: "Routines when helpful",
           description: "Use saved routines for structure without forcing every workout through a rigid template.",
+          details: ["Saved plan", "Flexible edits"],
         },
       ]}
       stepsTitle="Log the workout with fewer interruptions"

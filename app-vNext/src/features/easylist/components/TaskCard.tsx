@@ -4,8 +4,10 @@ import { formatDate, getPriorityMeta, isDueToday, isOverdue } from "@/features/e
 type TaskCardProps = {
   task: TaskRecord;
   onEdit: (task: TaskRecord) => void;
-  onComplete: (taskId: string) => Promise<void>;
+  onComplete: (taskId: string) => void | Promise<void>;
   onReopen?: (taskId: string) => Promise<void>;
+  isCompleting?: boolean;
+  onCancelComplete?: (taskId: string) => void;
   isSelected?: boolean;
   onSelect?: (taskId: string, selected: boolean) => void;
   showContextMeta?: boolean;
@@ -16,6 +18,8 @@ export function TaskCard({
   onEdit,
   onComplete,
   onReopen,
+  isCompleting = false,
+  onCancelComplete,
   isSelected = false,
   onSelect,
   showContextMeta = false,
@@ -30,11 +34,16 @@ export function TaskCard({
       ? "Due today"
       : task.dueDate
         ? `Due ${formatDate(task.dueDate, true)}`
-        : "";
+        : task.completed
+          ? ""
+          : "No date";
   const hasLinks = Boolean(scheduledCount || task.linkedCalendarEventId || task.linkedNoteId);
 
+  const statusClass = overdue ? " overdue" : dueToday ? " due-today" : "";
+
   return (
-    <article className={`task-card-vnext task-card-dense priority-tier-${priority.tier}${task.completed ? " completed" : ""}${isSelected ? " selected" : ""}`}>
+    <article className={`task-card-vnext task-card-dense priority-tier-${priority.tier}${statusClass}${task.completed ? " completed" : ""}${isCompleting ? " completing" : ""}${isSelected ? " selected" : ""}`}>
+      {isCompleting ? <span className="task-complete-fill" aria-hidden="true" /> : null}
       {onSelect ? (
         <label className="task-card-select" aria-label={`Select ${task.title || "task"}`}>
           <input
@@ -47,8 +56,9 @@ export function TaskCard({
         <button
           type="button"
           className="task-card-check"
-          aria-label={`Complete ${task.title || "task"}`}
+          aria-label={isCompleting ? `Finishing ${task.title || "task"}` : `Complete ${task.title || "task"}`}
           onClick={() => void onComplete(task.id)}
+          disabled={isCompleting}
         />
       )}
       <button type="button" className="task-card-main" onClick={() => onEdit(task)}>
@@ -72,6 +82,14 @@ export function TaskCard({
       </button>
 
       <div className="task-card-actions task-card-actions-quiet">
+        {isCompleting && onCancelComplete ? (
+          <>
+            <span className="task-complete-status">Finishing...</span>
+            <button type="button" className="ghost-button" onClick={() => onCancelComplete(task.id)}>
+              Undo
+            </button>
+          </>
+        ) : null}
         {task.completed && onReopen ? (
           <button type="button" className="ghost-button" onClick={() => void onReopen(task.id)}>
             Reopen

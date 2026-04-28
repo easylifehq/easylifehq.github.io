@@ -13,6 +13,7 @@ import {
   DEFAULT_CATEGORIES,
   type CategoryRecord,
 } from "@/lib/firestore/categories";
+import { getWeekdayCodesFromRule } from "@/features/easycalendar/lib/recurrence";
 
 export type CalendarDayItem = {
   id: string;
@@ -188,9 +189,14 @@ function getRecurringEventOccurrence(event: CalendarEventRecord, date: Date) {
   const dateStart = startOfDay(date);
   const eventStart = startOfDay(event.startAt);
   const daysSinceStart = Math.round((dateStart.getTime() - eventStart.getTime()) / 86400000);
+  const customWeekdays = getWeekdayCodesFromRule(rule);
+  const dateWeekday = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"][date.getDay()];
   const shouldRepeat =
     (rule === "FREQ=DAILY" && daysSinceStart >= 0) ||
     (rule === "FREQ=WEEKLY" && daysSinceStart >= 0 && daysSinceStart % 7 === 0) ||
+    (rule.startsWith("FREQ=WEEKLY;BYDAY=") &&
+      daysSinceStart >= 0 &&
+      customWeekdays.includes(dateWeekday)) ||
     (rule === "FREQ=MONTHLY" &&
       date.getDate() === event.startAt.getDate() &&
       dateStart >= eventStart);

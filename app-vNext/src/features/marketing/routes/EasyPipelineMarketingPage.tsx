@@ -3,6 +3,7 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyPipelineMarketingPage() {
   return (
     <ProductMarketingPage
+      pageClassName="marketing-page--grouped-workflow"
       eyebrow="EasyPipeline"
       heroTitle="Stay on top of every application, follow-up, and opportunity."
       heroDescription="EasyPipeline turns your job search into a clearer workflow so applications, follow-ups, and outreach stop slipping through the cracks."

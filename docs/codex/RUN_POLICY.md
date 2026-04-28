@@ -52,3 +52,9 @@ Raw logs are written to `.codex-logs/`, which is excluded locally through `.git/
 ## ChatGPT Pro handoff
 
 After a run, use `scripts/codex-brief.ps1` to generate a compact project-lead brief. Paste that brief into the ChatGPT Pro project and ask it to decide whether to continue, revise the queue, or stop.
+
+## Practice branch review
+
+When reviewing a `codex/practice-*` branch the next day, start with the guardrail result, the final external build result, and the changed-file list before reading individual diffs. Confirm that the branch only touched allowed paths for the selected tasks and that docs-only tasks changed docs only.
+
+Review the diff in small slices that match the task queue order. Do not mark additional tasks complete during review; leave completion, reports, commits, and branch cleanup to the supervisor workflow.

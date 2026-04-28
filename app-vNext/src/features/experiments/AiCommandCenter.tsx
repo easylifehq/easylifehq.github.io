@@ -6,21 +6,21 @@ const mockCommands: AiCommand[] = [
   {
     title: "Plan Day",
     source: "EasyList + EasyCalendar",
-    status: "Ready mock",
-    response: "Builds a clean day plan from fake tasks, calendar blocks, and focus windows.",
+    status: "Sandbox",
+    response: "Builds a clean day plan from sample tasks, calendar blocks, and focus windows.",
     preview: "9:00 focus, 1:30 errands, 3:00 client prep",
   },
   {
     title: "Clean Up Tasks",
     source: "EasyList",
     status: "Draft only",
-    response: "Clusters a messy mock inbox into clearer categories without saving changes.",
+    response: "Clusters a sample inbox into clearer categories without saving changes.",
     preview: "Work, Home, Follow-up, Someday",
   },
   {
     title: "Summarize Notes",
     source: "EasyNotes",
-    status: "Fake data",
+    status: "Sample data",
     response: "Turns sample meeting notes into decisions, open questions, and next actions.",
     preview: "3 decisions, 2 questions, 1 next action",
   },
@@ -28,21 +28,21 @@ const mockCommands: AiCommand[] = [
     title: "Prep Calendar",
     source: "EasyCalendar",
     status: "Preview",
-    response: "Reviews a mock schedule and suggests prep notes before busy blocks.",
+    response: "Reviews a sample schedule and suggests prep notes before busy blocks.",
     preview: "Standup notes, travel buffer, agenda reminder",
   },
   {
     title: "Workout Coach",
     source: "EasyWorkout",
-    status: "Coach mock",
-    response: "Drafts a balanced workout suggestion from fake routine and recovery context.",
+    status: "Coach preview",
+    response: "Drafts a balanced workout suggestion from sample routine and recovery context.",
     preview: "Push strength, mobility finisher, lighter volume",
   },
   {
     title: "Project Focus",
     source: "EasyProjects + EasyList",
     status: "Focus mode",
-    response: "Chooses one mock project outcome and the next three tasks that support it.",
+    response: "Chooses one sample project outcome and the next three tasks that support it.",
     preview: "Ship review flow, unblock copy, prep handoff",
   },
 ];
@@ -50,34 +50,34 @@ const mockCommands: AiCommand[] = [
 const mockCommandInputResponses: AiSuggestion[] = [
   {
     prompt: "Plan my day",
-    title: "Mock day plan",
+    title: "Day plan preview",
     response: "Prioritize the proposal outline, keep the review call prepped, and move low-energy chores after the appointment buffer.",
     actions: ["9:00 deep work", "11:15 prep notes", "3:30 admin batch"],
   },
   {
     prompt: "Turn this note into tasks",
-    title: "Mock task extraction",
+    title: "Task extraction preview",
     response: "I found three editable draft tasks from the note and left the original note untouched.",
     actions: ["Draft follow-up email", "Confirm timeline", "Add budget question"],
   },
   {
     prompt: "Summarize my week",
-    title: "Mock weekly summary",
-    response: "This fake week trends toward heavy planning, two unresolved follow-ups, and one workout consistency win.",
+    title: "Weekly summary preview",
+    response: "This sample week trends toward heavy planning, two unresolved follow-ups, and one workout consistency win.",
     actions: ["2 project milestones", "4 completed tasks", "1 missed recovery day"],
   },
   {
     prompt: "Build a workout plan",
-    title: "Mock workout plan",
+    title: "Workout plan preview",
     response: "Use a balanced upper-body session today with light conditioning because the sample log shows lower-body fatigue.",
     actions: ["Push strength", "Core circuit", "10 minute mobility"],
   },
 ];
 
 const mockSignals = [
-  { label: "Mock tasks", value: "12" },
-  { label: "Mock events", value: "4" },
-  { label: "Mock notes", value: "7" },
+  { label: "Sample tasks", value: "12" },
+  { label: "Sample events", value: "4" },
+  { label: "Sample notes", value: "7" },
 ];
 
 const mockDailyBrief: AiBrief = {
@@ -86,7 +86,7 @@ const mockDailyBrief: AiBrief = {
   whatMatters: [
     "Finish the client proposal outline before the 11:30 calendar review.",
     "Confirm the appointment change so the afternoon stays flexible.",
-    "Keep the workout lighter because yesterday's fake log shows heavy lower-body volume.",
+    "Keep the workout lighter because yesterday's sample log shows heavy lower-body volume.",
   ],
   sections: [
     {
@@ -107,8 +107,8 @@ const mockDailyBrief: AiBrief = {
     },
   ],
   warnings: [
-    "Two mock tasks compete with the same 30 minute window.",
-    "One fake calendar event is missing prep notes.",
+    "Two sample tasks compete with the same 30 minute window.",
+    "One sample calendar event is missing prep notes.",
   ],
 };
 
@@ -122,8 +122,8 @@ export function AiCommandCenter() {
       mockCommandInputResponses.find((mock) => mock.prompt.toLowerCase() === normalizedPrompt) ??
       mockCommandInputResponses.find((mock) => normalizedPrompt.includes(mock.prompt.toLowerCase())) ??
       {
-        prompt: prompt.trim() || "Untitled mock command",
-        title: "Mock assistant draft",
+        prompt: prompt.trim() || "Untitled sandbox command",
+        title: "Assistant draft preview",
         response: "This sandbox would return an editable draft only. No API call runs and no EasyLife data is changed.",
         actions: ["Review suggested output", "Edit before saving", "Discard safely"],
       };
@@ -136,9 +136,9 @@ export function AiCommandCenter() {
       <div className="settings-labs-summary">
         <article>
           <span>EasyLife AI Lab</span>
-          <strong>AI Command Center</strong>
+          <strong>AI workspace lab</strong>
           <p>
-            A frontend-only sandbox for testing command flows before any real assistant, API, or
+            A frontend-only sandbox for testing command flows before any connected assistant, API, or
             data-writing work exists.
           </p>
         </article>
@@ -146,7 +146,7 @@ export function AiCommandCenter() {
           <article key={signal.label}>
             <span>{signal.label}</span>
             <strong>{signal.value}</strong>
-            <p>Fake context available to this lab preview.</p>
+            <p>Sample context available to this lab preview.</p>
           </article>
         ))}
       </div>
@@ -154,11 +154,16 @@ export function AiCommandCenter() {
       <section className="ai-daily-brief" aria-labelledby="ai-daily-brief-title">
         <div className="ai-daily-brief-hero">
           <span className="settings-card-topline">
-            <span>Fake daily brief</span>
+            <span>Sample daily brief</span>
             <span className="settings-state-pill">No API</span>
           </span>
           <h3 id="ai-daily-brief-title">{mockDailyBrief.dateLabel}</h3>
           <p>{mockDailyBrief.headline}</p>
+          <ul className="ai-lab-context-strip" aria-label="Mock EasyLife context used by this brief">
+            <li>EasyList sample tasks</li>
+            <li>EasyNotes sample notes</li>
+            <li>EasyCalendar sample events</li>
+          </ul>
         </div>
 
         <div className="ai-daily-brief-focus">
@@ -194,11 +199,11 @@ export function AiCommandCenter() {
       <section className="ai-command-input-panel" aria-labelledby="ai-command-input-title">
         <div className="ai-command-input-copy">
           <span className="settings-card-topline">
-            <span>Command input mockup</span>
-            <span className="settings-state-pill">Mock only</span>
+            <span>Command input</span>
+            <span className="settings-state-pill">No API</span>
           </span>
           <h3 id="ai-command-input-title">Try a safe AI command</h3>
-          <p>Type a command or pick a prompt to preview a fake response without calling an API.</p>
+          <p>Type a command or pick a prompt to preview an editable response without calling an API.</p>
         </div>
 
         <form
@@ -221,7 +226,7 @@ export function AiCommandCenter() {
           </div>
         </form>
 
-        <div className="ai-command-prompt-list" aria-label="Mock prompt examples">
+        <div className="ai-command-prompt-list" aria-label="Sample prompt examples">
           {mockCommandInputResponses.map((mock) => (
             <button
               key={mock.prompt}

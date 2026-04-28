@@ -37,6 +37,24 @@ export function EasyCalendarMonthPage() {
   const today = startOfDay(new Date());
   const [viewedMonth, setViewedMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const days = useMemo(() => getMonthGrid(viewedMonth), [viewedMonth]);
+  const monthDays = useMemo(
+    () => days.filter((day) => day.getMonth() === viewedMonth.getMonth()),
+    [days, viewedMonth]
+  );
+  const monthSnapshot = useMemo(() => {
+    const monthItems = monthDays.flatMap((day) => getItemsForDay(day, events, taskBlocks, categories, tasks));
+    const scheduledMinutes = monthDays.reduce(
+      (sum, day) => sum + getScheduledMinutesForDay(day, events, taskBlocks),
+      0
+    );
+    const openDayCount = monthDays.filter((day) => getScheduledMinutesForDay(day, events, taskBlocks) === 0).length;
+
+    return {
+      itemCount: monthItems.length,
+      scheduledMinutes,
+      openDayCount,
+    };
+  }, [categories, events, monthDays, taskBlocks, tasks]);
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
     [selectedBlockId, taskBlocks]
@@ -52,33 +70,61 @@ export function EasyCalendarMonthPage() {
 
   return (
     <>
-      <PageSection eyebrow="Calendar" title={new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(viewedMonth)}>
+      <PageSection
+        eyebrow="Calendar"
+        title={new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(viewedMonth)}
+        description="Scan the month, then open a day when you are ready to plan the details."
+      >
         {error ? <p className="error-copy">{error}</p> : null}
         {isLoading ? <p className="helper-copy">Loading your month...</p> : null}
-        <div className="calendar-month-command">
-          <p>Tap any date to zoom into the day. Events, deadlines, and task blocks stay visually separate so the month is easier to scan.</p>
-          <div className="calendar-inline-actions">
-            <button
-              type="button"
-              className="button-secondary compact-button"
-              onClick={() => setViewedMonth((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1))}
-            >
-              Prev
-            </button>
-            <button
-              type="button"
-              className="ghost-button compact-button"
-              onClick={() => setViewedMonth(new Date(today.getFullYear(), today.getMonth(), 1))}
-            >
-              Today
-            </button>
-            <button
-              type="button"
-              className="button-secondary compact-button"
-              onClick={() => setViewedMonth((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1))}
-            >
-              Next
-            </button>
+        <div className="calendar-month-overview">
+          <div className="calendar-month-overview-copy">
+            <span>Month desk</span>
+            <strong>
+              {monthSnapshot.itemCount
+                ? `${monthSnapshot.itemCount} scheduled item${monthSnapshot.itemCount === 1 ? "" : "s"}`
+                : "Month is open"}
+            </strong>
+            <p>
+              {monthSnapshot.itemCount
+                ? `${formatDuration(monthSnapshot.scheduledMinutes)} planned, with ${monthSnapshot.openDayCount} open day${monthSnapshot.openDayCount === 1 ? "" : "s"} still available.`
+                : "Events, deadlines, and task blocks will stay separated here for a clean planning read."}
+            </p>
+          </div>
+          <div className="calendar-month-overview-stats" aria-label="Month snapshot">
+            <span>
+              <strong>{formatDuration(monthSnapshot.scheduledMinutes)}</strong>
+              planned
+            </span>
+            <span>
+              <strong>{monthSnapshot.openDayCount}</strong>
+              open days
+            </span>
+          </div>
+          <div className="calendar-month-overview-actions">
+            <div className="calendar-inline-actions" aria-label="Month navigation">
+              <button
+                type="button"
+                className="button-secondary compact-button"
+                onClick={() => setViewedMonth((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1))}
+              >
+                Prev
+              </button>
+              <button
+                type="button"
+                className="ghost-button compact-button"
+                onClick={() => setViewedMonth(new Date(today.getFullYear(), today.getMonth(), 1))}
+              >
+                Today
+              </button>
+              <button
+                type="button"
+                className="button-secondary compact-button"
+                onClick={() => setViewedMonth((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1))}
+              >
+                Next
+              </button>
+            </div>
             <Link className="primary-button compact-button" to={`/app/easycalendar/day?date=${toDateInputValue(today)}`}>
               Open today
             </Link>

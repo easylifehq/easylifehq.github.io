@@ -69,7 +69,7 @@ const themeOptions: Array<{
   {
     value: "aurora",
     label: "Aurora",
-    description: "A premium dark theme with mint, ice-blue, and soft rose accents.",
+    description: "A dark theme with mint, ice-blue, and soft rose accents.",
     tone: "Northern lights",
   },
   {
@@ -273,7 +273,7 @@ const settingsSections: Array<{
 }> = [
   {
     id: "customize",
-    label: "Basics",
+    label: "Personalize",
     eyebrow: "Appearance",
     description: "Choose the theme, opening screen, and everyday app setup.",
     group: "basics",
@@ -294,9 +294,9 @@ const settingsSections: Array<{
   },
   {
     id: "page-settings",
-    label: "Per-app",
-    eyebrow: "Page Controls",
-    description: "Calendar defaults now, with more app controls planned.",
+    label: "Suite Controls",
+    eyebrow: "App Defaults",
+    description: "Tune the defaults that shape how each EasyLife app opens and hands work across the suite.",
     group: "advanced",
   },
   {
@@ -452,7 +452,7 @@ const defaultViewOptions: Array<{ value: CalendarDefaultView; label: string }> =
 ];
 
 const startupRouteOptions: Array<{ value: StartupRoute; label: string; description: string }> = [
-  { value: "/app/hq", label: "EasyHQ", description: "Start at the command center." },
+  { value: "/app/hq", label: "EasyHQ", description: "Start with today's workspace." },
   { value: "last-used", label: "Last used screen", description: "Resume where you left off." },
   { value: "/app/easylist/dashboard", label: "EasyList", description: "Open straight to your task list." },
   { value: "/app/easylist/add", label: "Add tasks", description: "Start in fast capture mode." },
@@ -852,7 +852,7 @@ export function SettingsPage() {
 
       <section className="settings-hero panel-section">
         <div className="panel-header">
-          <p className="eyebrow">Control Center</p>
+          <p className="eyebrow">Daily setup</p>
           <h1>Settings</h1>
           <p>
             Set up the parts of EasyLife that shape daily use first. The deeper controls are still here,
@@ -937,28 +937,22 @@ export function SettingsPage() {
           </details>
         </nav>
 
-        <label className="settings-mobile-nav field-stack">
-          <span>Settings section</span>
-          <select
-            value={activeSection}
-            onChange={(event) => setActiveSection(event.target.value as SettingsSectionId)}
-          >
-            <optgroup label="Everyday">
-              {primarySections.map((section) => (
-                <option key={section.id} value={section.id}>
-                  {section.label}
-                </option>
-              ))}
-            </optgroup>
-            <optgroup label="Advanced">
-              {advancedSections.map((section) => (
-                <option key={section.id} value={section.id}>
-                  {section.label}
-                </option>
-              ))}
-            </optgroup>
-          </select>
-        </label>
+        <nav className="settings-mobile-nav" aria-label="Settings sections">
+          <span className="settings-mobile-nav-label">Settings section</span>
+          <div className="settings-mobile-nav-scroll">
+            {[...primarySections, ...advancedSections].map((section) => (
+              <button
+                key={section.id}
+                type="button"
+                className={activeSection === section.id ? "active" : ""}
+                onClick={() => setActiveSection(section.id)}
+              >
+                <span>{section.eyebrow}</span>
+                <strong>{section.label}</strong>
+              </button>
+            ))}
+          </div>
+        </nav>
 
         <div className="settings-section-content">
           <div className="settings-section-heading">
@@ -987,26 +981,39 @@ export function SettingsPage() {
         <PageSection
           eyebrow="Appearance"
           title="Theme mode"
+          description={
+            "Tune the visual tone of the whole suite. Theme changes apply across EasyLife without changing your data or app setup."
+          }
         >
           <div id="customize" className="settings-anchor" />
-          <div className="settings-option-grid">
-            {themeOptions.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                className={`settings-choice-card settings-theme-card settings-theme-${option.value}${
-                  settings.themeMode === option.value ? " active" : ""
-                }`}
-                onClick={() => void setThemeMode(option.value)}
-              >
-                <span className="settings-card-topline">
-                  <span>{option.tone}</span>
-                  {settings.themeMode === option.value ? <span className="settings-state-pill">Active</span> : null}
-                </span>
-                <strong>{option.label}</strong>
-                <p>{option.description}</p>
-              </button>
-            ))}
+          <div className="settings-customization-console">
+            <div className="settings-theme-overview">
+              <div>
+                <span className="settings-card-topline">Current selection</span>
+                <strong>{activeTheme.label}</strong>
+                <p>{activeTheme.description}</p>
+              </div>
+              <span className="settings-state-pill">{activeTheme.tone}</span>
+            </div>
+            <div className="settings-option-grid">
+              {themeOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`settings-choice-card settings-theme-card settings-theme-${option.value}${
+                    settings.themeMode === option.value ? " active" : ""
+                  }`}
+                  onClick={() => void setThemeMode(option.value)}
+                >
+                  <span className="settings-card-topline">
+                    <span>{option.tone}</span>
+                    {settings.themeMode === option.value ? <span className="settings-state-pill">Active</span> : null}
+                  </span>
+                  <strong>{option.label}</strong>
+                  <p>{option.description}</p>
+                </button>
+              ))}
+            </div>
           </div>
         </PageSection>
         ) : null}
@@ -1124,8 +1131,8 @@ export function SettingsPage() {
 
         {activeSection === "page-settings" ? (
         <PageSection
-          eyebrow="Page controls"
-          title="App-specific settings"
+          eyebrow="Suite controls"
+          title="App defaults"
         >
           <div id="page-settings" className="settings-anchor" />
           <div className="settings-page-section-list">
@@ -1140,6 +1147,22 @@ export function SettingsPage() {
               </article>
             ))}
           </div>
+
+          <aside className="settings-command-note" aria-label="Suite defaults guidance">
+            <div>
+              <span className="settings-card-topline">How your apps open</span>
+              <strong>Set how EasyLife opens, captures, and routes your work.</strong>
+              <p>
+                These controls tune how each app starts its work while keeping the underlying tools and saved data
+                unchanged.
+              </p>
+            </div>
+            <div className="settings-command-tags" aria-label="Covered settings areas">
+              <span>Capture</span>
+              <span>Plan</span>
+              <span>Route</span>
+            </div>
+          </aside>
 
           <div className="settings-app-preference-grid">
             <section className="settings-app-preference-card">

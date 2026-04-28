@@ -5,12 +5,12 @@ export function EasyHQMarketingPage() {
     <ProductMarketingPage
       eyebrow="EasyHQ"
       heroTitle="Open the app and know where to go next."
-      heroDescription="EasyHQ is the command center: a calm launch point for the day, the next useful action, and the apps you actually use."
+      heroDescription="EasyHQ is a calm launch point for the day, the next useful action, and the apps you actually use."
       heroPoints={["Startup page", "Daily pulse", "Quick actions", "App switching"]}
       heroCardTitle="Less wandering. More starting."
       heroCardBody="HQ keeps the important entry points close so the whole suite feels like one app instead of scattered tools."
       featuresTitle="A cleaner way into the suite"
-      featuresDescription="HQ is where EasyLife turns into a daily operating system instead of a pile of pages."
+      featuresDescription="HQ is where EasyLife becomes a practical daily workspace instead of a pile of pages."
       features={[
         {
           tag: "Launch",
@@ -28,7 +28,7 @@ export function EasyHQMarketingPage() {
           description: "Install the app to your phone home screen and get back to the workspace quickly.",
         },
       ]}
-      stepsTitle="Start from the command center"
+      stepsTitle="Start from today's workspace"
       steps={[
         {
           title: "Open EasyLifeHQ",

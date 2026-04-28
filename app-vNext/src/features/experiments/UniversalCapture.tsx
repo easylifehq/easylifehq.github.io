@@ -16,10 +16,11 @@ import { auth } from "@/lib/firebase/client";
 import { useSettings } from "@/features/settings/SettingsContext";
 import type { VisibleAppId } from "@/lib/firestore/settings";
 
-type CaptureMode = "task" | "note" | "event" | "application" | "contact" | "project" | "workout";
+type CaptureMode = "task" | "brainDump" | "note" | "event" | "application" | "contact" | "project" | "workout";
 
 const captureModeAppMap: Partial<Record<CaptureMode, VisibleAppId>> = {
   task: "easylist",
+  brainDump: "easylist",
   note: "easynotes",
   event: "easycalendar",
   application: "easypipeline",
@@ -193,6 +194,100 @@ function parseEventDetails(value: string) {
   return updates;
 }
 
+type BrainDumpEntry = {
+  kind: "task" | "event" | "deadline";
+  title: string;
+  notes: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  eventType: CalendarEventType;
+};
+
+function cleanBrainDumpTitle(value: string) {
+  const dateWords = "today|tomorrow|tonight|this\\s+weekend|next\\s+week|next\\s+(?:sunday|monday|tuesday|wednesday|thursday|friday|saturday)|sunday|monday|tuesday|wednesday|thursday|friday|saturday|\\d{1,2}\\/\\d{1,2}(?:\\/\\d{2,4})?";
+
+  return value
+    .replace(/^\s*(?:[-*+]|[0-9]+[.)])\s*/, "")
+    .replace(/^\s*(?:I\s+)?(?:also\s+)?(?:need|have|should)\s+(?:to\s+)?/i, "")
+    .replace(new RegExp(`\\b(?:due|by|before)\\s+(?:${dateWords})\\b`, "gi"), "")
+    .replace(/\b(?:from\s*)?\d{1,2}(?::\d{2})?\s*(?:am|pm)?\s*(?:-|to|until)\s*\d{1,2}(?::\d{2})?\s*(?:am|pm)?\b/gi, "")
+    .replace(/\b(?:at\s*)?\d{1,2}(?::\d{2})?\s*(?:am|pm)\b/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .trim()
+    .slice(0, 140);
+}
+
+function splitBrainDumpEntries(value: string) {
+  const itemStarter = "(?:I\\s+)?(?:also\\s+)?(?:need|have|should)\\s+(?:to\\s+)?|meet(?:ing)?|appointment|class|lecture|lab|shift|dinner|lunch|interview|deadline|due|submit|turn\\s+in|finish|email|call|text|send|buy|pick|pay|review|write|study|clean|schedule";
+
+  return value
+    .replace(/\r/g, "\n")
+    .replace(/[\u2022\u2013\u2014]/g, "-")
+    .replace(new RegExp(`[.!?]\\s+(?=${itemStarter}\\b)`, "gi"), "\n")
+    .replace(/\s*;\s*/g, "\n")
+    .split(/\n+/)
+    .flatMap((line) =>
+      line.length > 70
+        ? line.split(/,\s+(?=(?:and\s+)?(?:meet|meeting|appointment|class|submit|turn in|finish|email|call|text|send|buy|pick|pay|review|write|study|clean|schedule)\b)/i)
+        : [line]
+    )
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 12);
+}
+
+function getDateTimeFromEntry(entry: BrainDumpEntry) {
+  const dateValue = entry.date || formatDateInput(new Date());
+  const startAt = new Date(`${dateValue}T${entry.startTime || "09:00"}:00`);
+  const endAt = new Date(`${dateValue}T${entry.endTime || entry.startTime || "10:00"}:00`);
+  if (endAt <= startAt) {
+    endAt.setHours(startAt.getHours() + 1);
+  }
+
+  return { startAt, endAt };
+}
+
+function classifyBrainDumpEntry(line: string): BrainDumpEntry | null {
+  const parsedEvent = parseEventDetails(line);
+  const lower = line.toLowerCase();
+  const hasDate = Boolean(parsedEvent.date) || /\b(today|tomorrow|tonight|eod|midnight|next\s+\w+|\d{1,2}\/\d{1,2})\b/.test(lower);
+  const hasTime = Boolean(parsedEvent.startTime) || /\b(?:at|from)?\s*\d{1,2}(?::\d{2})?\s*(?:am|pm)\b/.test(lower);
+  const deadlineIntent = /\b(deadline|due|submit|turn in|before|by midnight|by eod)\b/.test(lower);
+  const eventIntent = /\b(meeting|meet|appointment|class|lecture|lab|shift|dinner|lunch|call with|interview)\b/.test(lower);
+  const kind = deadlineIntent && hasDate ? "deadline" : eventIntent || hasTime ? "event" : "task";
+  const title = cleanBrainDumpTitle(line);
+
+  if (!title) return null;
+
+  return {
+    kind,
+    title,
+    notes: line,
+    date: parsedEvent.date || (hasDate ? detailsDateFallback(line) : ""),
+    startTime: parsedEvent.startTime || "09:00",
+    endTime: parsedEvent.endTime || "10:00",
+    eventType: parsedEvent.eventType || (eventIntent ? "personal" : "other"),
+  };
+}
+
+function detailsDateFallback(line: string) {
+  const text = line.toLowerCase();
+  const date = new Date();
+  if (/\btomorrow\b/.test(text)) {
+    date.setDate(date.getDate() + 1);
+    return formatDateInput(date);
+  }
+  if (/\b(today|tonight|eod|midnight)\b/.test(text)) return formatDateInput(date);
+  return "";
+}
+
+function parseBrainDumpEntries(value: string) {
+  return splitBrainDumpEntries(value)
+    .map(classifyBrainDumpEntry)
+    .filter((entry): entry is BrainDumpEntry => Boolean(entry));
+}
+
 function parseWorkoutSet(value: string) {
   const text = value.trim();
   const setMatch = text.match(/\b(\d{1,3})\s*(?:reps?|x|@)\s*(\d{1,4}(?:\.\d+)?)?\s*(?:lbs?|lb|pounds?)?\b/i);
@@ -231,6 +326,20 @@ export function UniversalCapture() {
   const [tasks, setTasks] = useState<TaskRecord[]>([]);
   const [openTarget, setOpenTarget] = useState<{ to: string; label: string } | null>(null);
   const suggestion = useMemo(() => detectCaptureType(text), [text]);
+  const brainDumpEntries = useMemo(() => parseBrainDumpEntries(text), [text]);
+  const isEasyListCapture = location.pathname.startsWith("/app/easylist");
+  const brainDumpSummary = useMemo(() => {
+    const counts: Record<BrainDumpEntry["kind"], number> = { task: 0, event: 0, deadline: 0 };
+    brainDumpEntries.forEach((entry) => {
+      counts[entry.kind] += 1;
+    });
+
+    return [
+      counts.task ? `${counts.task} task${counts.task === 1 ? "" : "s"}` : "",
+      counts.event ? `${counts.event} event${counts.event === 1 ? "" : "s"}` : "",
+      counts.deadline ? `${counts.deadline} deadline${counts.deadline === 1 ? "" : "s"}` : "",
+    ].filter(Boolean).join(", ");
+  }, [brainDumpEntries]);
   const recentCategories = useMemo(() => {
     const categoryCounts = new Map<string, number>();
     tasks.forEach((task) => {
@@ -263,12 +372,13 @@ export function UniversalCapture() {
     if (location.pathname.startsWith("/app/easycontacts")) {
       return { mode: "contact" as CaptureMode, label: "Add contact", to: "/app/easycontacts", hint: "Contacts" };
     }
-    return { mode: "task" as CaptureMode, label: "Open Add Tasks", to: "/app/easylist/add", hint: "Tasks" };
+    return { mode: "task" as CaptureMode, label: "Open full Add Task page", to: "/app/easylist/add", hint: "EasyList" };
   }, [location.pathname]);
   const captureModes = useMemo(
     () =>
       [
         ["task", "Task"],
+        ["brainDump", "Brain dump"],
         ["note", "Note"],
         ["event", "Event"],
         ["application", "Application"],
@@ -403,6 +513,71 @@ export function UniversalCapture() {
     resetFields(options.addAnother ? "Task saved. Add the next one." : "Saved as a task.", { keepOpenTarget: !options.addAnother });
   }
 
+  async function saveBrainDump(options: { addAnother?: boolean } = {}) {
+    const user = auth.currentUser;
+    const parsedEntries = parseBrainDumpEntries(text);
+    if (!user || !parsedEntries.length) return;
+
+    let taskCount = 0;
+    let eventCount = 0;
+    let deadlineCount = 0;
+
+    for (const entry of parsedEntries) {
+      if (entry.kind === "event") {
+        const { startAt, endAt } = getDateTimeFromEntry(entry);
+        await createCalendarEvent(user.uid, {
+          title: entry.title,
+          description: entry.notes,
+          categoryId: null,
+          startAt,
+          endAt,
+          allDay: false,
+          isRecurring: false,
+          recurrenceRule: null,
+          eventType: entry.eventType,
+        });
+        eventCount += 1;
+        continue;
+      }
+
+      await createTask(user.uid, {
+        itemKind: entry.kind === "deadline" ? "deadline" : "task",
+        title: entry.title,
+        notes: entry.notes,
+        category: entry.kind === "deadline" ? "Deadline" : "Inbox",
+        estimatedLength: null,
+        priorityTier: entry.kind === "deadline" ? 2 : 3,
+        priorityLabel: entry.kind === "deadline" ? "High" : "Medium",
+        dueDate: entry.date || null,
+        recurring: false,
+      });
+
+      if (entry.kind === "deadline") {
+        deadlineCount += 1;
+      } else {
+        taskCount += 1;
+      }
+    }
+
+    const parts = [
+      taskCount ? `${taskCount} task${taskCount === 1 ? "" : "s"}` : "",
+      eventCount ? `${eventCount} event${eventCount === 1 ? "" : "s"}` : "",
+      deadlineCount ? `${deadlineCount} deadline${deadlineCount === 1 ? "" : "s"}` : "",
+    ].filter(Boolean);
+
+    if (!options.addAnother) {
+      setOpenTarget(
+        eventCount && !taskCount && !deadlineCount
+          ? { to: "/app/easycalendar/day", label: "Open calendar" }
+          : { to: "/app/easylist/dashboard", label: "Open task list" }
+      );
+    }
+    resetFields(
+      options.addAnother ? "Brain dump added. Add the next one." : `Added ${parts.join(", ")}.`,
+      { keepOpenTarget: !options.addAnother }
+    );
+  }
+
   async function saveAsNote(options: { addAnother?: boolean } = {}) {
     const user = auth.currentUser;
     if (!user || !text.trim()) return;
@@ -428,6 +603,10 @@ export function UniversalCapture() {
 
     if (mode === "task") {
       await saveAsTask(options);
+      return;
+    }
+    if (mode === "brainDump") {
+      await saveBrainDump(options);
       return;
     }
     if (mode === "note") {
@@ -550,7 +729,7 @@ export function UniversalCapture() {
 
       <div className={`capture-backdrop${isOpen ? " open" : ""}`} onClick={() => setIsOpen(false)} />
       <section
-        className={`capture-modal${isOpen ? " open" : ""}`}
+        className={`capture-modal${isEasyListCapture ? " easylist-capture-modal" : ""}${isOpen ? " open" : ""}`}
         aria-hidden={!isOpen}
         onKeyDown={(event) => {
           if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
@@ -589,7 +768,7 @@ export function UniversalCapture() {
         </div>
 
         <label className="field-stack">
-          <span>{mode === "application" ? "Role" : mode === "contact" ? "Name" : mode === "event" ? "Event" : mode === "project" ? "Project" : mode === "workout" ? "Exercise and set" : "What is on your mind?"}</span>
+          <span>{mode === "application" ? "Role" : mode === "contact" ? "Name" : mode === "event" ? "Event" : mode === "brainDump" ? "Brain dump" : mode === "project" ? "Project" : mode === "workout" ? "Exercise and set" : "Task"}</span>
           <textarea
             value={text}
             onChange={(event) => {
@@ -603,7 +782,7 @@ export function UniversalCapture() {
               }
               setMessage("");
             }}
-            placeholder={mode === "workout" ? "Bench press 135 x 8" : "Type anything..."}
+            placeholder={mode === "workout" ? "Bench press 135 x 8" : mode === "brainDump" ? "Examples: submit FAFSA by Friday; meeting with Alex tomorrow at 2pm; buy groceries this weekend." : "Type anything..."}
             rows={5}
           />
         </label>
@@ -774,7 +953,17 @@ export function UniversalCapture() {
           </div>
         ) : null}
 
-        {text.trim() ? (
+        {mode === "brainDump" && text.trim() ? (
+          <div className="capture-suggestion">
+            {brainDumpSummary ? (
+              <>
+                Ready to add <strong>{brainDumpSummary}</strong>.
+              </>
+            ) : (
+              "Add one clear item per line, or separate ideas with semicolons."
+            )}
+          </div>
+        ) : text.trim() ? (
           <div className="capture-suggestion">
             This looks like a <strong>{suggestion}</strong>.
           </div>
@@ -785,16 +974,18 @@ export function UniversalCapture() {
             type="button"
             className="primary-button"
             onClick={() => void saveContextItem()}
-            disabled={!text.trim()}
+            disabled={!text.trim() || (mode === "brainDump" && brainDumpEntries.length === 0)}
           >
-            {mode === "workout" ? "Add set" : `Save ${mode}`}
+            {mode === "workout" ? "Add set" : mode === "brainDump" ? "Add brain dump" : `Save ${mode}`}
           </button>
-          <button type="button" className="button-secondary" onClick={() => void saveContextItem({ addAnother: true })} disabled={!text.trim()}>
+          <button type="button" className="button-secondary" onClick={() => void saveContextItem({ addAnother: true })} disabled={!text.trim() || (mode === "brainDump" && brainDumpEntries.length === 0)}>
             {mode === "workout" ? "Add set and another" : "Save and add another"}
           </button>
-          <button type="button" className="button-secondary" onClick={() => void saveAsNote()} disabled={!text.trim()}>
-            Save as note
-          </button>
+          {mode === "brainDump" ? null : (
+            <button type="button" className="button-secondary" onClick={() => void saveAsNote()} disabled={!text.trim()}>
+              Save as note
+            </button>
+          )}
           <Link className="ghost-button" to={screenAction.to} onClick={() => setIsOpen(false)}>
             {screenAction.label}
           </Link>

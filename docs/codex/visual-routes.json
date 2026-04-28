@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "generated": false,
+  "purpose": "Protected visual QA route coverage for Pack 1 product-spine review evidence.",
+  "viewports": ["desktop", "mobile"],
+  "routes": [
+    {
+      "id": "hq",
+      "label": "EasyHQ signed-in spine",
+      "path": "/app/hq?visualQa=1",
+      "area": "protected",
+      "requiredForSimonReview": true,
+      "evidenceFiles": {
+        "desktop": "hq-visualQa-1-desktop.png",
+        "mobile": "hq-visualQa-1-mobile.png"
+      },
+      "reviewFocus": "Signed-in suite shell, daily-start hierarchy, and compact module statuses."
+    },
+    {
+      "id": "easylist",
+      "label": "EasyList signed-in dashboard",
+      "path": "/app/easylist/dashboard?visualQa=1",
+      "area": "protected",
+      "requiredForSimonReview": false,
+      "evidenceFiles": {
+        "desktop": "easylist-visualQa-1-desktop.png",
+        "mobile": "easylist-visualQa-1-mobile.png"
+      },
+      "reviewFocus": "Task dashboard density, signed-in shell consistency, and mobile first-screen usefulness."
+    },
+    {
+      "id": "easycalendar",
+      "label": "EasyCalendar signed-in month",
+      "path": "/app/easycalendar/month?visualQa=1",
+      "area": "protected",
+      "requiredForSimonReview": false,
+      "evidenceFiles": {
+        "desktop": "easycalendar-visualQa-1-desktop.png",
+        "mobile": "easycalendar-visualQa-1-mobile.png"
+      },
+      "reviewFocus": "Calendar panel hierarchy, suite shell consistency, and mobile scanability."
+    },
+    {
+      "id": "settings",
+      "label": "Settings signed-in controls",
+      "path": "/settings?visualQa=1",
+      "area": "protected",
+      "requiredForSimonReview": false,
+      "evidenceFiles": {
+        "desktop": "settings-visualQa-1-desktop.png",
+        "mobile": "settings-visualQa-1-mobile.png"
+      },
+      "reviewFocus": "Settings control-center structure, app switcher ergonomics, and mobile tap targets."
+    }
+  ]
+}

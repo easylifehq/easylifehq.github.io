@@ -28,7 +28,7 @@ type TaskDrawerProps = {
   onClose: () => void;
   onSave: (taskId: string, draft: TaskDraft) => Promise<void>;
   onDelete: (taskId: string) => Promise<void>;
-  onComplete: (taskId: string) => Promise<void>;
+  onComplete: (taskId: string) => void | Promise<void>;
   onReopen: (taskId: string) => Promise<void>;
 };
 
@@ -458,7 +458,11 @@ export function TaskDrawer({
                   Reopen
                 </button>
               ) : (
-                <button type="button" className="ghost-button" onClick={() => void onComplete(taskId).then(onClose)}>
+                <button
+                  type="button"
+                  className="ghost-button"
+                  onClick={() => void Promise.resolve(onComplete(taskId)).then(onClose)}
+                >
                   Mark Complete
                 </button>
               )}

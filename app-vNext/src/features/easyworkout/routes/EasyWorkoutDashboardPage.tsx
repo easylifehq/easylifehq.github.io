@@ -28,9 +28,11 @@ function getEstimatedMax(weight: number, reps: number) {
 export function EasyWorkoutDashboardPage() {
   const { sessions, routines, isLoading, error, deleteSession } = useEasyWorkout();
   const { isExperimentalFeatureEnabled } = useSettings();
+  const todayKey = getDateKeyOffset(0);
   const weekThreshold = getDateKeyOffset(-6);
   const monthThreshold = getDateKeyOffset(-29);
   const recentSessions = sessions.slice(0, 4);
+  const todaySessions = sessions.filter((session) => session.performedOn === todayKey);
   const weeklySessions = sessions.filter((session) => {
     if (!session.performedOn) return false;
     return session.performedOn >= weekThreshold;
@@ -39,7 +41,6 @@ export function EasyWorkoutDashboardPage() {
     if (!session.performedOn) return false;
     return session.performedOn >= monthThreshold;
   });
-  const streak = weeklySessions.length;
   const weeklyVolume = weeklySessions.reduce((sum, session) => sum + getSessionVolume(session), 0);
   const monthlyVolume = monthlySessions.reduce((sum, session) => sum + getSessionVolume(session), 0);
   const consistencyScore = Math.min(100, Math.round((weeklySessions.length / 4) * 100));
@@ -164,13 +165,67 @@ export function EasyWorkoutDashboardPage() {
   const needsAttentionMuscle = [...muscleGroupStats]
     .filter((group) => group.weeklyVolume === 0)
     .sort((left, right) => left.lastPerformedOn.localeCompare(right.lastPerformedOn))[0];
+  const firstRoutine = routines[0];
+  const nextWorkoutMove = (() => {
+    if (!sessions.length) {
+      return {
+        label: "Start here",
+        title: "Log the first workout",
+        body: "Start a live session so EasyWorkout can build your recent history, records, and coverage.",
+        actionLabel: "Start workout",
+        to: "/app/easyworkout/log?workoutMode=1",
+      };
+    }
+
+    if (todaySessions.length) {
+      return {
+        label: "Today",
+        title: "Review today's work",
+        body: `${todaySessions.length} workout${todaySessions.length === 1 ? "" : "s"} already logged today. Add details or review the latest session before you move on.`,
+        actionLabel: "Open log",
+        to: "/app/easyworkout/log",
+      };
+    }
+
+    if (needsAttentionMuscle) {
+      return {
+        label: "Coverage",
+        title: `Train ${needsAttentionMuscle.name}`,
+        body: `${needsAttentionMuscle.name} is quiet this week after last showing up ${needsAttentionMuscle.lastPerformedOn || "earlier"}. Cover the gap in your next session.`,
+        actionLabel: firstRoutine ? "Use routine" : "Start workout",
+        to: firstRoutine
+          ? `/app/easyworkout/log?routineId=${firstRoutine.id}`
+          : "/app/easyworkout/log?workoutMode=1",
+      };
+    }
+
+    if (weeklySessions.length < 4) {
+      return {
+        label: "Rhythm",
+        title: "Add one more session",
+        body: `${weeklySessions.length} session${weeklySessions.length === 1 ? "" : "s"} in the last 7 days. One focused workout would strengthen the weekly rhythm.`,
+        actionLabel: firstRoutine ? "Use routine" : "Start workout",
+        to: firstRoutine
+          ? `/app/easyworkout/log?routineId=${firstRoutine.id}`
+          : "/app/easyworkout/log?workoutMode=1",
+      };
+    }
+
+    return {
+      label: "Maintain",
+      title: "Keep the streak clean",
+      body: "Your weekly rhythm is solid. Log the next session when it happens so records and coverage stay current.",
+      actionLabel: "Log workout",
+      to: "/app/easyworkout/log?workoutMode=1",
+    };
+  })();
 
   return (
     <>
       <PageSection
-        eyebrow="Lift Log"
-        title="Ready to train"
-        description="Open workout mode, log the lifts, and keep the rest out of the way."
+        eyebrow="EasyWorkout"
+        title="Training dashboard"
+        description="Start a session, check today's lift context, and keep the rest out of the way."
       >
         {error ? <p className="error-copy">{error}</p> : null}
         <div className="deep-module-hero">
@@ -185,19 +240,30 @@ export function EasyWorkoutDashboardPage() {
           </Link>
         </div>
 
-        <div className="workout-today-strip" aria-label="Workout snapshot">
-          <article>
-            <span>This week</span>
-            <strong>{weeklySessions.length}</strong>
-          </article>
-          <article>
-            <span>Total sessions</span>
-            <strong>{sessions.length}</strong>
-          </article>
-          <article>
-            <span>Streak</span>
-            <strong>{streak} day{streak === 1 ? "" : "s"}</strong>
-          </article>
+        <div className="workout-today-meta" aria-label="Today's workout context">
+          <span>
+            <em>Today</em>
+            <strong>{todaySessions.length} workout{todaySessions.length === 1 ? "" : "s"}</strong>
+          </span>
+          <span>
+            <em>This week</em>
+            <strong>{weeklySessions.length} session{weeklySessions.length === 1 ? "" : "s"}</strong>
+          </span>
+          <span>
+            <em>Last logged</em>
+            <strong>{recentSessions[0]?.performedOn || "Not logged yet"}</strong>
+          </span>
+        </div>
+
+        <div className="workout-next-move" aria-label="Recommended next workout action">
+          <div>
+            <span>{nextWorkoutMove.label}</span>
+            <strong>{nextWorkoutMove.title}</strong>
+            <p>{nextWorkoutMove.body}</p>
+          </div>
+          <Link className="button-secondary compact-button" to={nextWorkoutMove.to}>
+            {nextWorkoutMove.actionLabel}
+          </Link>
         </div>
       </PageSection>
 
@@ -244,7 +310,14 @@ export function EasyWorkoutDashboardPage() {
           <div className="task-list-vnext">
             {isLoading ? <p className="helper-copy">Loading workouts...</p> : null}
             {!isLoading && recentSessions.length === 0 ? (
-              <div className="empty-card-vnext">No workouts logged yet. Start a workout when you are ready, and your recent sessions will collect here.</div>
+              <div className="empty-card-vnext workout-empty-state">
+                <span>EasyWorkout history</span>
+                <strong>No workouts logged yet</strong>
+                <p>Start a session when you are ready. Your latest workouts will collect here for quick review.</p>
+                <Link className="primary-button compact-button" to="/app/easyworkout/log?workoutMode=1">
+                  Start workout
+                </Link>
+              </div>
             ) : null}
             {recentSessions.map((session) => (
               <article key={session.id} className="task-card-vnext">

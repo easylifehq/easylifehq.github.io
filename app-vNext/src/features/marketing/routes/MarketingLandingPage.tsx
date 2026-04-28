@@ -5,7 +5,7 @@ const productCards = [
     id: "easyhq",
     href: "/easyhq",
     eyebrow: "EasyHQ",
-    title: "The command center.",
+    title: "The daily workspace.",
     description:
       "Open to the page that matters, see the shape of your day, and jump into the next useful action.",
   },
@@ -100,7 +100,7 @@ export function MarketingLandingPage() {
       <section className="marketing-hero">
         <div className="marketing-hero-copy">
           <p className="eyebrow">EasyLifeHQ</p>
-          <h1>A sleek command center for the things you actually have to handle.</h1>
+          <h1>A clean workspace for the things you actually have to handle.</h1>
           <p>
             Capture the messy stuff fast, separate tasks from deadlines and fixed
             events, then open the app from your phone like it belongs there.

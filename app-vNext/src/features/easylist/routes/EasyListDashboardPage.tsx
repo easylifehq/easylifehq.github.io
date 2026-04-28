@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { PageSection } from "@/components/ui/PageSection";
 import { TaskCard } from "@/features/easylist/components/TaskCard";
@@ -22,6 +22,8 @@ export function EasyListDashboardPage() {
   const [isBulkEditing, setIsBulkEditing] = useState(false);
   const [selectedTaskIds, setSelectedTaskIds] = useState<string[]>([]);
   const [selectedTask, setSelectedTask] = useState<TaskRecord | null>(null);
+  const [pendingCompletionIds, setPendingCompletionIds] = useState<string[]>([]);
+  const completionTimersRef = useRef<Record<string, number>>({});
 
   const visibleTasks = useMemo(() => tasks.filter((task) => !task.deletedAt), [tasks]);
   const listNames = useMemo(
@@ -62,6 +64,9 @@ export function EasyListDashboardPage() {
     if (activeView === "upcoming") return upcomingTasks;
     return activeTasks;
   }, [activeTasks, activeView, focusTasks, upcomingTasks]);
+  const boardTitle = activeView === "focus" ? "Focus" : activeView === "upcoming" ? "Upcoming" : activeListName;
+  const boardHeading =
+    activeView === "focus" ? "Triage queue" : activeView === "upcoming" ? "Planned work" : `${activeListName} tasks`;
   const filteredTasks = useMemo(() => {
     const term = search.trim().toLowerCase();
     if (!term) {
@@ -85,6 +90,12 @@ export function EasyListDashboardPage() {
       })
     );
   }, [visibleTasks, activeListName]);
+
+  useEffect(() => {
+    return () => {
+      Object.values(completionTimersRef.current).forEach((timerId) => window.clearTimeout(timerId));
+    };
+  }, []);
 
   function addList() {
     const nextName = newListName.trim();
@@ -113,6 +124,28 @@ export function EasyListDashboardPage() {
 
     setSelectedTaskIds([]);
     setIsBulkEditing(false);
+  }
+
+  function requestComplete(taskId: string) {
+    if (completionTimersRef.current[taskId]) return;
+
+    setPendingCompletionIds((current) => Array.from(new Set([...current, taskId])));
+    completionTimersRef.current[taskId] = window.setTimeout(() => {
+      void markComplete(taskId).finally(() => {
+        delete completionTimersRef.current[taskId];
+        setPendingCompletionIds((current) => current.filter((id) => id !== taskId));
+      });
+    }, 2600);
+  }
+
+  function cancelPendingComplete(taskId: string) {
+    const timerId = completionTimersRef.current[taskId];
+    if (timerId) {
+      window.clearTimeout(timerId);
+      delete completionTimersRef.current[taskId];
+    }
+
+    setPendingCompletionIds((current) => current.filter((id) => id !== taskId));
   }
 
   function rescheduleTask(task: TaskRecord, days: number) {
@@ -156,8 +189,9 @@ export function EasyListDashboardPage() {
   return (
     <>
       <PageSection
-        eyebrow="Tasks"
-        title={activeView === "focus" ? "Focus" : activeView === "upcoming" ? "Upcoming" : activeListName}
+        eyebrow="EasyList"
+        title="Tasks"
+        description={`${boardTitle}: ${filteredTasks.length} open task${filteredTasks.length === 1 ? "" : "s"} shown. Search, review, or finish one item at a time.`}
       >
         <div className="easylist-smart-tabs" aria-label="Task views">
           <button type="button" className={activeView === "focus" ? "active" : ""} onClick={() => setActiveView("focus")}>
@@ -178,10 +212,10 @@ export function EasyListDashboardPage() {
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search your tasks"
           />
-          <div className="pill-row">
-            <span className="info-pill">{filteredTasks.length} shown</span>
-            <span className="info-pill">{overdueTasks.length} overdue</span>
-            <span className="info-pill">{completedTodayCount} done today</span>
+          <div className="easylist-dashboard-metrics" aria-label="Task summary">
+            <span>{filteredTasks.length} shown</span>
+            <span>{overdueTasks.length} overdue</span>
+            <span>{completedTodayCount} done today</span>
           </div>
         </div>
 
@@ -251,29 +285,52 @@ export function EasyListDashboardPage() {
 
         {error ? <p className="error-copy">{error}</p> : null}
 
-        <div className="task-list-vnext">
-          {filteredTasks.length ? (
-            filteredTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                onEdit={setSelectedTask}
-                onComplete={markComplete}
-                isSelected={selectedTaskIds.includes(task.id)}
-                onSelect={isBulkEditing ? selectTask : undefined}
-                showContextMeta={activeView !== "focus"}
-              />
-            ))
-          ) : (
-            <div className="empty-card-vnext">
-              {activeView === "focus"
-                ? "No urgent tasks right now. Add a task, check Upcoming, or pick a list to keep moving."
-                : activeView === "upcoming"
-                  ? "No upcoming tasks yet. Add due dates to planned work and they will appear here."
-                  : "This list is empty. Add a task from the Add page or choose another list."}
-            </div>
-          )}
-        </div>
+        <section
+          className={`group-block easylist-focus-board${activeView === "focus" ? " is-primary" : ""}`}
+          aria-labelledby="easylist-board-heading"
+        >
+          <div className="group-heading">
+            <h3 id="easylist-board-heading">{boardHeading}</h3>
+            <span>
+              {filteredTasks.length} task{filteredTasks.length === 1 ? "" : "s"}
+            </span>
+          </div>
+          <div className="task-list-vnext">
+            {filteredTasks.length ? (
+              filteredTasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onEdit={setSelectedTask}
+                  onComplete={requestComplete}
+                  isCompleting={pendingCompletionIds.includes(task.id)}
+                  onCancelComplete={cancelPendingComplete}
+                  isSelected={selectedTaskIds.includes(task.id)}
+                  onSelect={isBulkEditing ? selectTask : undefined}
+                  showContextMeta={activeView !== "focus"}
+                />
+              ))
+            ) : (
+              <div className="empty-card-vnext easylist-suite-empty-card">
+                <span>EasyList workspace</span>
+                <strong>
+                  {activeView === "focus"
+                    ? "Your focus queue is clear"
+                    : activeView === "upcoming"
+                      ? "No planned tasks yet"
+                      : `${activeListName} is ready for tasks`}
+                </strong>
+                <p>
+                  {activeView === "focus"
+                    ? "Next: capture one task on Add, review Upcoming, or pick a list when you are ready to keep moving."
+                    : activeView === "upcoming"
+                      ? "Next: add due dates to planned work so EasyCalendar and the rest of the suite can surface what is coming."
+                      : "Next: add a task from the Add page or choose another list to keep this workspace connected."}
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
       </PageSection>
 
       {isExperimentalFeatureEnabled("overdueTriage") && overdueTasks.length ? (
@@ -319,7 +376,7 @@ export function EasyListDashboardPage() {
         onClose={() => setSelectedTask(null)}
         onSave={saveTask}
         onDelete={deleteTask}
-        onComplete={markComplete}
+        onComplete={requestComplete}
         onReopen={markActive}
       />
     </>

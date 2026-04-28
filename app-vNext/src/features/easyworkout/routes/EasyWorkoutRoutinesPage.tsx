@@ -281,7 +281,11 @@ export function EasyWorkoutRoutinesPage() {
       >
         <div className="task-list-vnext">
           {routines.length === 0 ? (
-            <div className="empty-card-vnext">No routines yet.</div>
+            <div className="empty-card-vnext">
+              <strong>No routines saved yet</strong>
+              <p>Build one repeatable plan so common sessions stay ready to log.</p>
+              <span>Fill out the routine form above, then use Save routine.</span>
+            </div>
           ) : (
             routines.map((routine) => (
               <article key={routine.id} className="task-card-vnext">
@@ -364,10 +368,17 @@ export function EasyWorkoutRoutinesPage() {
                   <div className="task-card-copy">
                     <div className="task-card-title-row">
                       <h3>{routine.name}</h3>
-                      <span className="priority-pill-vnext">{routine.dayLabel || "Routine"}</span>
                     </div>
-                    <p>{routine.exercises.length} exercise{routine.exercises.length === 1 ? "" : "s"}</p>
-                    {routine.notes ? <small>{routine.notes}</small> : null}
+                    <div className="task-meta-row" aria-label="Routine summary">
+                      <span className="task-meta-chip">{routine.dayLabel ? `Day: ${routine.dayLabel}` : "Routine"}</span>
+                      <span className="task-meta-chip">
+                        Plan: {routine.exercises.length} exercise{routine.exercises.length === 1 ? "" : "s"}
+                      </span>
+                      {routine.exercises[0]?.exerciseName ? (
+                        <span className="task-meta-chip">First: {routine.exercises[0]?.exerciseName}</span>
+                      ) : null}
+                    </div>
+                    {routine.notes ? <small>Notes: {routine.notes}</small> : null}
                   </div>
                 )}
                 <div className="task-card-actions">

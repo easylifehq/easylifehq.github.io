@@ -3,12 +3,19 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyListMarketingPage() {
   return (
     <ProductMarketingPage
+      pageClassName="marketing-page--mobile-dense-hero marketing-page--easylist-preview marketing-page--desktop-rhythm-repair marketing-page--light-demo-band"
       eyebrow="EasyList"
       heroTitle="Clear the annoying stuff. Protect your real time."
       heroDescription="EasyList is the task system for all the small life and admin things that clutter your brain before bigger work can happen."
       heroPoints={["Brain dumps", "Flexible planner", "Archive history", "EasyCalendar handoff"]}
       heroCardTitle="A task system that keeps the noise manageable."
       heroCardBody="EasyList is where quick obligations, admin chores, reminders, and loose tasks stop living in your head and start moving."
+      heroPreviewItems={[
+        { app: "Inbox", detail: "6 quick tasks captured", status: "Review" },
+        { app: "Today", detail: "Renew registration", status: "Due" },
+        { app: "Priority", detail: "Call dentist before noon", status: "8/10" },
+        { app: "Calendar", detail: "Block errand window", status: "Send" },
+      ]}
       featuresTitle="Built for the stuff that quietly drains your energy"
       featuresDescription="It stays lightweight enough to use every day while still giving you priorities, planning, and momentum."
       features={[

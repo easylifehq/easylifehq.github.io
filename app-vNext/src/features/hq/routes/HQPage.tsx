@@ -56,7 +56,7 @@ export function HQPage() {
     .filter((event) => event.startAt && startOfDay(event.startAt).getTime() === today.getTime())
     .sort((left, right) => (left.startAt?.getTime() || 0) - (right.startAt?.getTime() || 0));
   const nextEvents = todayEvents.slice(0, 3);
-  const topTasks = sortActiveTasks(tasks.filter((task) => !task.completed)).slice(0, 3);
+  const activeTaskCount = tasks.filter((task) => !task.completed).length;
   const dueTodayTasks = sortActiveTasks(tasks.filter((task) => !task.completed && isSameDate(task.dueDate, today)));
   const overdueTasks = sortActiveTasks(tasks.filter((task) => !task.completed && task.dueDate && startOfDay(task.dueDate).getTime() < today.getTime()));
   const openWindows = getOpenTimeWindowsForDay(today, events, taskBlocks);
@@ -65,6 +65,20 @@ export function HQPage() {
   const mostUrgent = overdueTasks[0] || dueTodayTasks[0] || null;
   const mostUrgentLabel = overdueTasks[0]?.title || dueTodayTasks[0]?.title || "";
   const quickWin = sortActiveTasks(tasks.filter((task) => !task.completed && (task.estimatedLength || 999) <= 20))[0] || null;
+  const todaySummary = [
+    `${overdueTasks.length + dueTodayTasks.length} due`,
+    `${todayEvents.length} event${todayEvents.length === 1 ? "" : "s"}`,
+    `${formatDuration(openMinutes)} open`,
+  ];
+  const taskStatusLabel = overdueTasks.length
+    ? "Overdue task"
+    : dueTodayTasks.length
+      ? "Due today"
+      : quickWin
+        ? "Quick win"
+        : "Tasks";
+  const calendarStatusLabel = nextEvents[0] ? "Next event" : "Calendar";
+  const progressStatusLabel = completedTodayCount ? "Done today" : "Open room";
   const startHere = useMemo(() => {
     if (overdueTasks.length || dueTodayTasks.length) {
       return {
@@ -86,25 +100,47 @@ export function HQPage() {
       to: "/app/easynotes",
     };
   }, [dueTodayTasks.length, openWindows.length, overdueTasks.length]);
+  const dailySpine = [
+    {
+      label: "Now",
+      text: nextEvents[0]
+        ? `Keep ${nextEvents[0].title || "the next event"} in view.`
+        : mostUrgent
+          ? `Clear ${mostUrgentLabel}.`
+          : "Use the quiet start to choose one useful move.",
+    },
+    {
+      label: "Next",
+      text: overdueTasks.length
+        ? "Recover overdue tasks before adding more."
+        : dueTodayTasks.length
+          ? "Work the due-today list before opening a new lane."
+          : `${formatDuration(openMinutes)} remains open for a light plan.`,
+    },
+    {
+      label: "Capture",
+      text: quickWin
+        ? `A quick win is ready: ${quickWin.title}.`
+        : "Drop loose thoughts into Notes so the suite can stay orderly.",
+    },
+  ];
 
   return (
     <main className="page-wrap app-theme app-theme-easyhq">
       {error ? <p className="error-copy">{error}</p> : null}
 
       <section className="hq-command-center" aria-labelledby="hq-title">
-        <div className="hq-command-copy">
-          <p className="eyebrow">EasyHQ</p>
-          <h1 id="hq-title">Command center</h1>
-          <p>Start with the next useful move. Everything else can stay quiet until you need it.</p>
-        </div>
-
         <article className="hq-start-card">
-          <span className="settings-state-pill">Start here</span>
+          <span className="settings-state-pill">Next action</span>
           <strong>{startHere.label}</strong>
           <p>{startHere.reason}</p>
+          <div className="hq-today-summary" aria-label="Today summary">
+            <span>Today</span>
+            <p>{todaySummary.join(" / ")}</p>
+          </div>
           <div className="task-composer-actions">
             <Link to={startHere.to} className="primary-button">
-              Go there
+              Open {startHere.label.replace("Start in ", "")}
             </Link>
             {lastAppRoute ? (
               <Link to={lastAppRoute.path} className="button-secondary">
@@ -113,31 +149,57 @@ export function HQPage() {
             ) : null}
           </div>
         </article>
-      </section>
 
-      <div className="hq-status-strip" aria-label="Today at a glance">
-        <article>
-          <span>Next</span>
-          <strong>{nextEvents[0] ? nextEvents[0].title || "Untitled event" : "Nothing scheduled"}</strong>
-          <p>
-            {nextEvents[0]
-              ? nextEvents[0].allDay
-                ? "All day"
-                : `${formatTimeLabel(nextEvents[0].startAt)} - ${formatTimeLabel(nextEvents[0].endAt)}`
-              : "The calendar is clear."}
-          </p>
+        <div className="hq-status-strip" aria-label="Module status context">
+          <article>
+            <span>{calendarStatusLabel}</span>
+            <strong>{nextEvents[0] ? nextEvents[0].title || "Untitled event" : "Nothing scheduled"}</strong>
+            <p>
+              {nextEvents[0]
+                ? nextEvents[0].allDay
+                  ? "All day"
+                  : `${formatTimeLabel(nextEvents[0].startAt)} - ${formatTimeLabel(nextEvents[0].endAt)}`
+                : "The calendar is clear."}
+            </p>
+          </article>
+          <article>
+            <span>{taskStatusLabel}</span>
+            <strong>{mostUrgent ? mostUrgentLabel : quickWin ? quickWin.title : "No task is shouting"}</strong>
+            <p>{overdueTasks.length ? `${overdueTasks.length} overdue` : dueTodayTasks.length ? `${dueTodayTasks.length} due today` : quickWin ? "Quick win available" : "Good room to choose."}</p>
+          </article>
+          <article>
+            <span>{progressStatusLabel}</span>
+            <strong>
+              {activeTaskCount} open task{activeTaskCount === 1 ? "" : "s"} / {todayEvents.length} event
+              {todayEvents.length === 1 ? "" : "s"}
+            </strong>
+            <p>
+              {completedTodayCount} done today / {formatDuration(openMinutes)} open on calendar
+            </p>
+          </article>
+        </div>
+
+        <article className="hq-assistant-spine" aria-label="Local daily read">
+          <div>
+            <span className="settings-state-pill">Daily read</span>
+            <strong>One calm thread across the suite</strong>
+          </div>
+          <ul>
+            {dailySpine.map((item) => (
+              <li key={item.label}>
+                <span>{item.label}</span>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ul>
         </article>
-        <article>
-          <span>Focus</span>
-          <strong>{mostUrgent ? mostUrgentLabel : quickWin ? quickWin.title : "No task is shouting"}</strong>
-          <p>{overdueTasks.length ? `${overdueTasks.length} overdue` : dueTodayTasks.length ? `${dueTodayTasks.length} due today` : quickWin ? "Quick win available" : "Good room to choose."}</p>
-        </article>
-        <article>
-          <span>Room</span>
-          <strong>{formatDuration(openMinutes)}</strong>
-          <p>{openWindows.length >= 3 ? "Flexible day" : openWindows.length ? "Some space open" : "Mostly packed"}</p>
-        </article>
-      </div>
+
+        <div className="hq-command-copy">
+          <p className="eyebrow">EasyHQ</p>
+          <h1 id="hq-title">Daily workspace</h1>
+          <p>Start with the next useful move. Everything else can stay quiet until you need it.</p>
+        </div>
+      </section>
 
       <PageSection eyebrow="Move fast" title="Quick actions">
         <div className="hq-action-row">

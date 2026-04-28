@@ -3,12 +3,19 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyCalendarMarketingPage() {
   return (
     <ProductMarketingPage
+      pageClassName="marketing-page--mobile-preview-lift marketing-page--easycalendar-preview marketing-page--light-demo-band"
       eyebrow="EasyCalendar"
       heroTitle="See when your life is full and where real work still fits."
       heroDescription="EasyCalendar mixes fixed commitments with flexible task blocks so your schedule becomes something you can actually plan around."
       heroPoints={["Day and week views", "Fixed vs flexible blocks", "Open window detection", "Plan My Day"]}
       heroCardTitle="A calmer time system."
       heroCardBody="Fixed events stay solid, task blocks stay flexible, and open windows become useful space instead of guesswork."
+      heroPreviewItems={[
+        { app: "8:30 AM", detail: "Class locked" },
+        { app: "11:00 AM", detail: "Open planning window", status: "Selected" },
+        { app: "1:30 PM", detail: "Admin task block" },
+        { app: "4:00 PM", detail: "Workout buffer" },
+      ]}
       featuresTitle="Built to answer when things happen"
       featuresDescription="EasyCalendar is where the week planner actually lives, with a clear split between commitments and work you can move."
       features={[

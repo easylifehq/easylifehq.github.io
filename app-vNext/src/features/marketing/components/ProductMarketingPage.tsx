@@ -4,15 +4,24 @@ type FeatureCard = {
   title: string;
   description: string;
   tag?: string;
+  details?: string[];
+};
+
+type HeroPreviewItem = {
+  app: string;
+  detail: string;
+  status?: string;
 };
 
 type ProductMarketingPageProps = {
+  pageClassName?: string;
   eyebrow: string;
   heroTitle: string;
   heroDescription: string;
   heroPoints: string[];
   heroCardTitle: string;
   heroCardBody: string;
+  heroPreviewItems?: HeroPreviewItem[];
   featuresTitle: string;
   featuresDescription: string;
   features: FeatureCard[];
@@ -24,12 +33,14 @@ type ProductMarketingPageProps = {
 };
 
 export function ProductMarketingPage({
+  pageClassName,
   eyebrow,
   heroTitle,
   heroDescription,
   heroPoints,
   heroCardTitle,
   heroCardBody,
+  heroPreviewItems,
   featuresTitle,
   featuresDescription,
   features,
@@ -39,8 +50,18 @@ export function ProductMarketingPage({
   ctaBody,
   demoPath = [],
 }: ProductMarketingPageProps) {
+  const pageClass = pageClassName
+    ? `marketing-page marketing-page--product ${pageClassName}`
+    : "marketing-page marketing-page--product";
+  const previewItems = heroPreviewItems ?? [
+    { app: "EasyHQ", detail: "Daily pulse" },
+    { app: "EasyList", detail: "Brain dumps" },
+    { app: "EasyCalendar", detail: "Plan My Day" },
+    { app: "EasyNotes", detail: "Draft handoff to EasyList" },
+  ];
+
   return (
-    <main className="marketing-page">
+    <main className={pageClass}>
       <section id="overview" className="marketing-hero">
         <div className="marketing-hero-copy">
           <p className="eyebrow">{eyebrow}</p>
@@ -66,12 +87,23 @@ export function ProductMarketingPage({
         </div>
 
         <div className="marketing-hero-card">
-          <span className="info-pill">EasyLifeHQ product</span>
-          <h2>{heroCardTitle}</h2>
-          <p>{heroCardBody}</p>
-          <div className="marketing-card-metrics">
-            {heroPoints.slice(0, 3).map((point) => (
-              <span key={point}>{point}</span>
+          <div className="marketing-hero-preview-header">
+            <span className="info-pill">{eyebrow}</span>
+            <div>
+              <h2>{heroCardTitle}</h2>
+              <p>{heroCardBody}</p>
+            </div>
+          </div>
+
+          <div className="marketing-hero-preview" aria-label={`${eyebrow} daily structure preview`}>
+            {previewItems.map((item) => (
+              <div key={`${item.app}-${item.detail}`} className="marketing-hero-preview-row">
+                <span>{item.app}</span>
+                <strong>
+                  {item.detail}
+                  {item.status ? <em>{item.status}</em> : null}
+                </strong>
+              </div>
             ))}
           </div>
         </div>
@@ -90,6 +122,13 @@ export function ProductMarketingPage({
               {feature.tag ? <p className="eyebrow">{feature.tag}</p> : null}
               <h3>{feature.title}</h3>
               <p>{feature.description}</p>
+              {feature.details?.length ? (
+                <ul className="marketing-card-details" aria-label={`${feature.title} details`}>
+                  {feature.details.map((detail) => (
+                    <li key={detail}>{detail}</li>
+                  ))}
+                </ul>
+              ) : null}
             </article>
           ))}
         </div>

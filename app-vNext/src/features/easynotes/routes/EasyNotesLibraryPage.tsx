@@ -152,31 +152,40 @@ export function EasyNotesLibraryPage() {
     <PageSection
       eyebrow="EasyNotes"
       title="Notes"
+      description="Capture, resume, and organize writing from one calm workspace."
     >
         <div className="notes-command-strip" aria-label="Notes actions">
-          <button type="button" className="notes-command-button" onClick={() => void handleCreateNote()} aria-label="Add note">
-            +
-          </button>
-          <button
-            type="button"
-            className="notes-command-button"
-            onClick={() => {
-              setSearchOpen((current) => !current);
-              window.setTimeout(() => searchInputRef.current?.focus(), 0);
-            }}
-            aria-label="Search notes"
-          >
-            Search
-          </button>
-          <button
-            type="button"
-            className={`notes-command-button${toolsOpen ? " active" : ""}`}
-            onClick={() => setToolsOpen((current) => !current)}
-            aria-expanded={toolsOpen}
-            aria-controls="notes-library-tools"
-          >
-            Edit
-          </button>
+          <div className="notes-capture-group">
+            <button type="button" className="notes-command-button notes-command-button-primary" onClick={() => void handleCreateNote()}>
+              <span aria-hidden="true">+</span>
+              New note
+            </button>
+            <span className="notes-library-status">
+              {notes.length} note{notes.length === 1 ? "" : "s"} / {pinnedNotes.length} pinned
+            </span>
+          </div>
+          <div className="notes-secondary-actions">
+            <button
+              type="button"
+              className="notes-command-button"
+              onClick={() => {
+                setSearchOpen((current) => !current);
+                window.setTimeout(() => searchInputRef.current?.focus(), 0);
+              }}
+              aria-label="Search notes"
+            >
+              Search
+            </button>
+            <button
+              type="button"
+              className={`notes-command-button${toolsOpen ? " active" : ""}`}
+              onClick={() => setToolsOpen((current) => !current)}
+              aria-expanded={toolsOpen}
+              aria-controls="notes-library-tools"
+            >
+              Edit
+            </button>
+          </div>
         </div>
 
         {searchOpen ? (
@@ -245,7 +254,10 @@ export function EasyNotesLibraryPage() {
                       <div className="note-card-top">
                         <div>
                           <strong>{note.title.trim() || "Untitled note"}</strong>
-                          <p>{formatDate(note.updatedAt || note.createdAt)}</p>
+                          <p className="note-card-meta">
+                            <span>Updated</span>
+                            {formatDate(note.updatedAt || note.createdAt)}
+                          </p>
                         </div>
                         <div className="note-card-badges">
                           {note.folderId && folderNameById.get(note.folderId) ? (
@@ -351,16 +363,28 @@ export function EasyNotesLibraryPage() {
         {error ? <p className="error-copy">{error}</p> : null}
         {cleanupMessage ? <p className="helper-copy">{cleanupMessage}</p> : null}
 
+        <div className="group-heading" aria-label="Notes library results">
+          <div>
+            <h3>{hasFilters ? "Filtered library" : "Library"}</h3>
+            <div className="note-card-meta">
+              <span>{hasFilters ? "Showing" : "Review"}</span>
+              {hasFilters ? "Matches your current search or folder" : "All notes sorted by latest update"}
+            </div>
+          </div>
+          <span>{filteredNotes.length}</span>
+        </div>
+
         <div className="notes-library-grid">
           {isLoading ? <p className="helper-copy">Loading your notes...</p> : null}
 
           {!isLoading && filteredNotes.length === 0 ? (
-            <div className="empty-card-vnext notes-empty-card">
+            <div className="empty-card-vnext notes-empty-card notes-suite-empty-card">
+              <span className="notes-empty-suite-label">EasyNotes workspace</span>
               <strong>{hasFilters ? "No notes match this view" : "No notes yet"}</strong>
               <p className="helper-copy">
                 {hasFilters
-                  ? "Try a different search or folder, or clear the filters."
-                  : "Capture a thought, meeting note, or rough draft. Your newest notes will collect here."}
+                  ? "Try a different search or folder, or clear filters to return to your full EasyNotes workspace."
+                  : "Capture a thought, meeting note, or rough draft here. Your latest notes will be ready to review when you return."}
               </p>
             </div>
           ) : null}
@@ -377,14 +401,17 @@ export function EasyNotesLibraryPage() {
                   checked={selectedNoteIds.includes(note.id)}
                   onChange={() => toggleSelectedNote(note.id)}
                 />
-                <span>Select</span>
+                <span>Select note</span>
               </label>
               ) : null}
               <Link to={`/app/easynotes/${note.id}`} className="note-card-link">
               <div className="note-card-top">
                 <div>
                   <strong>{note.title.trim() || "Untitled note"}</strong>
-                  <p>{formatDate(note.updatedAt || note.createdAt)}</p>
+                  <p className="note-card-meta">
+                    <span>Updated</span>
+                    {formatDate(note.updatedAt || note.createdAt)}
+                  </p>
                 </div>
                 <div className="note-card-badges">
                   {note.folderId && folderNameById.get(note.folderId) ? (

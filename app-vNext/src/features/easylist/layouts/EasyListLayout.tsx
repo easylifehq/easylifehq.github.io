@@ -4,7 +4,6 @@ import { EasyListProvider } from "@/features/easylist/EasyListContext";
 
 const links = [
   { to: "/app/easylist/dashboard", label: "Lists" },
-  { to: "/app/easylist/add", label: "Add" },
 ];
 
 export function EasyListLayout() {

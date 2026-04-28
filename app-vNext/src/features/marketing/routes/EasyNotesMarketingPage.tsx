@@ -3,12 +3,19 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyNotesMarketingPage() {
   return (
     <ProductMarketingPage
+      pageClassName="marketing-page--open-features marketing-page--easynotes-preview"
       eyebrow="EasyNotes"
       heroTitle="Write first. Sort it out later."
       heroDescription="EasyNotes is for brain dumps, meeting notes, rough drafts, and fast thought capture with a calm mobile-first writing experience."
       heroPoints={["Mobile-friendly", "Clean note list", "Minimal formatting", "Draft handoff to EasyList"]}
       heroCardTitle="Closer to Apple Notes than a bloated workspace."
       heroCardBody="The goal is fast writing, simple structure, and a note system that stays calm enough to use every day."
+      heroPreviewItems={[
+        { app: "Library", detail: "Recent notes first" },
+        { app: "Meeting note", detail: "Decisions and follow-ups", status: "Pinned" },
+        { app: "Draft inbox", detail: "Rough ideas ready to refine" },
+        { app: "EasyList handoff", detail: "3 action lines queued" },
+      ]}
       featuresTitle="Notes that stay simple on purpose"
       featuresDescription="Enough structure to be useful, not so much that the interface gets in your way."
       features={[

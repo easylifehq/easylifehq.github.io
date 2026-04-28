@@ -328,10 +328,10 @@ export function buildMotivationData(completedTodayCount: number, activeTasks: Ta
   }
 
   return {
-    title: `${completedTodayCount} handled today. Monster behavior.`,
+    title: `${completedTodayCount} handled today. Strong finish.`,
     body: activeTasks.length
-      ? "The list is getting bullied in the best way. Finish one more meaningful thing and call it a powerful day."
-      : "Board looks clean. Nothing useless is left hanging over your head.",
+      ? "The list is noticeably lighter. Finish one more meaningful thing and call it a powerful day."
+      : "Board looks clean. Nothing important is hanging over your head.",
     bestStreak: `${completedTodayCount} tasks cleared`,
     topCategory,
     tone: "Runway Cleared",
