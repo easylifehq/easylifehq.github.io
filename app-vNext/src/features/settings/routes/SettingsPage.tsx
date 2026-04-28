@@ -852,7 +852,7 @@ export function SettingsPage() {
 
       <section className="settings-hero panel-section">
         <div className="panel-header">
-          <p className="eyebrow">Control Center</p>
+          <p className="eyebrow">Daily setup</p>
           <h1>Settings</h1>
           <p>
             Set up the parts of EasyLife that shape daily use first. The deeper controls are still here,
