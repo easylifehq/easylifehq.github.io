@@ -1878,3 +1878,11 @@
 - Files changed:
 - app-vNext/src/components/navigation/MarketingHeader.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-28 00:49:04
+
+- Task attempted: Pack 1 - Product Spine signed-in evidence repair: capture or update the protected HQ visual QA route coverage so Simon can judge the signed-in spine from HQ mobile and desktop evidence, using existing visual QA/reporting patterns only; forbidden scope: no product UI changes, routing behavior changes, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, root config files, or unrelated reports. [class:test risk:low mode:single impact:standard scope:app-vNext/src/,docs/codex/ accept:npm.cmd run build]
+- Build result: Passed
+- Files changed:
+- docs/codex/visual-routes.json
+- Risks or follow-up needed: Low. Recovered from interrupted loop after guardrails and external build passed.
