@@ -4,37 +4,38 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife 5.0 mission: recent work keeps tightening protected HQ, signed-in suite chrome, marketing density, copy, and visual QA coverage. The latest batch supports a calmer connected workspace without touching forbidden systems.
+The branch is moving toward the EasyLife 5.0 mission: recent work tightened the protected HQ first viewport, reduced decorative chrome, improved concrete daily-workspace copy, and preserved the connected-suite direction. The queue is now empty, but Simon and Robin still have YELLOW follow-up signals that should shape any next batch.
 
 ## Safety Review
-No risky behavior found. Changed files stay in safe frontend and `docs/codex/` areas; no auth, Firebase, backend, dependency, deployment, secret, package, or generated-output files are listed.
+No unsafe scope found. Changed files stay in frontend UI/style and `docs/codex/` reporting areas; no auth, Firebase, backend, dependency, deploy, secret, or generated-output files are listed.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: one visible protected assistant-spine/HQ improvement, with recent supporting UI/copy/visual QA tasks already completed.
-- Files changed: frontend UI/style files plus `docs/codex/` review/report files.
-- Commits added: 16 commits since base, latest `628420c Codex checkpoint batch 1 task 1`.
-- Queue status: clean working tree; unchecked task count is 0.
+- Completed tasks in this checkpoint window: protected HQ assistant-spine repair, HQ mobile proof polish, AppHeader mobile suite-control polish, marketing/header density polish, copy repairs, visual QA evidence/report updates, and related product-spine documentation updates.
+- Files changed: frontend UI/style files under `app-vNext/src/` plus `docs/codex/` review/report files.
+- Commits added: 21 commits since base, ending at `4a0302e`.
+- Queue status: clean; unchecked task count is 0.
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN influence; 0 high, 0 medium, 0 low issues.
-- Simon design review: YELLOW influence; next work should fix visual/design issues first if continuing.
-- Robin copy review: YELLOW influence; next work should fix copy concerns first if continuing.
-- Joey security review: GREEN influence; no security blocker.
-- Next-task influence: Simon and Robin remain non-blocking but should shape any future queued work.
+- Visual bug report: GREEN signal; high 0, medium 0, low 0, so no visual bug should block parking.
+- Simon design review: YELLOW; continue but fix visual issues first, so future tasks should remain repair-first/design-polish oriented.
+- Robin copy review: YELLOW; continue but fix copy first, so future tasks should prioritize concrete wording and remove remaining builder-style phrasing.
+- Joey security review: GREEN; no security blocker indicated.
+- Influence on next tasks: Simon and Robin should guide the next task selection if work resumes, but they do not force a RED stop because build, tree, and visual bug status are clean.
 
 ## Recommended Next Step
 stop for human review
 
 ## Next Batch Guidance
-- Recommended next batch size: 1
+- Recommended next batch size: 2
 - Next work mode: repair-first
-- Simon and Robin are still YELLOW even though the queue is empty and build is passing, so any future work should be a single focused repair rather than broader mission expansion.
+- Simon and Robin remain YELLOW, so any resumed work should be small, focused polish/copy repair rather than broader mission expansion.
 
 ## Notes For Human Reviewer
-- Branch is clean and build-passing.
-- No unchecked tasks remain.
-- No blocking visual or security issues are reported.
-- Human review should inspect the latest HQ assistant-spine change and decide whether Simon/Robin YELLOW items are acceptable for parking.
+- Working tree is clean.
+- Build passed.
+- Queue is empty.
+- No high or medium visual bugs reported.
+- Review gate debt is qualitative polish/copy, not a build or safety blocker.
