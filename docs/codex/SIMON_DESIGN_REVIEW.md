@@ -4,53 +4,57 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is calmer and more coherent, but the product is still wearing too much wrapper chrome before it lets the actual suite breathe.
+The branch is calmer and more coherent, but it still dresses simple product pages in too much wrapper chrome and repeated identity furniture.
 
 ## Mission Fit
-The direction matches Pack 1 - Product Spine: shared headers, quiet teal system language, and repeated module preview cards are making EasyLife feel more like one suite instead of random feature pages. The problem is proof. The freshest screenshots still mostly show marketing/demo routes, and those routes lead with a big global header plus another oversized product intro, so the "personal operating system" mission is visible but slightly buried under presentation furniture.
+The direction supports Pack 1 - Product Spine: the marketing pages now feel more related, the palette is restrained, and the product previews explain daily use better than before. It is not yet a fully convincing personal operating system because the suite shell still competes with the actual module story, especially on mobile where the header, hero card, chips, and preview panel all arrive as separate layers instead of one confident product surface.
 
 ## Taste Check
-The best parts are the restrained color system, tactile panels, heavier typography, and module cards that feel related across EasyList, EasyNotes, EasyCalendar, and EasyWorkout. The copy is more concrete than before, which helps. What feels off: the mobile hero cards are huge, the top route controls are visually loud, and some page sections repeat identity instead of advancing the user. The design is no longer generic SaaS sludge, but it still has a demo-shell smell. Very trade-show booth in a nice coat.
+The best parts are the quiet teal system, strong type contrast, tactile cards, and concrete daily-workflow copy like "See when your life is full" and "Write first. Sort it out later." EasyCalendar feels closest to premium because the preview content has a real job and the hierarchy is clean.
+
+The weaker parts are the repeated module labels, pill clutter, heavy bordered containers, and a faint generic SaaS wrapper smell. The pages are trying to be calm, but sometimes they look like calm inside a shipping box. EasyList still exposes "EasyCalendar handoff," which reads like internal workflow language, not customer-facing product clarity.
 
 ## Visual Problems To Fix
-- Mobile marketing/demo routes show a prominent header card, then immediately another large product identity card, creating stacked chrome before useful content.
-- The "Products + demo" control on mobile competes with the product page hero instead of quietly supporting navigation.
-- Hero spacing on mobile is still too tall across EasyList, EasyCalendar, EasyNotes, and EasyWorkout, pushing the most useful preview below a lot of brand repetition.
-- The repeated pill-style product labels inside preview cards duplicate the page identity and add visual weight without much information.
-- Settings mobile has a reported small tap target for the Apps menu trigger, and the header cluster feels cramped against the page frame.
-- The marketing pages are visually more proven than the signed-in HQ spine, which weakens confidence that Pack 1 is truly solved.
-- Several cards use similar border, background, and pill treatments, so hierarchy sometimes flattens: everything whispers at the same volume.
+- Mobile customer-facing routes still begin with a large rounded navigation slab before the product page starts; the actual module experience is pushed down and feels wrapped instead of immediate.
+- Product identity repeats too many times: top brand, hero eyebrow, preview pill label, and sometimes feature section labeling all restate the same idea.
+- The hero chip rows are visually loud on mobile; they create a secondary navigation-looking layer without enough payoff.
+- Preview cards use the same pale green panel treatment across products, which helps consistency but also makes modules feel templated rather than distinct.
+- EasyList mobile still has "EasyCalendar handoff" as a chip, which is clunky and builder-facing.
+- Several mobile preview rows are tight: labels, values, and status pills compete in narrow white rows, especially EasyList and EasyNotes.
+- Desktop pages have solid spacing, but the large white hero card inside a full page wrapper makes the route feel like a demo page rather than the product itself.
+- Feature sections below the hero repeat the card-and-eyebrow formula, which risks making every page feel assembled from the same kit.
 
 ## Strongest Opportunities
-- Make the signed-in shell the design source of truth: HQ, Settings, and core app routes should define the suite feeling, with marketing pages borrowing from them.
-- Collapse mobile route chrome into a quieter, slimmer bar so the product/demo content starts faster.
-- Give each module preview one distinctive functional signal, not just a repeated label and list rows.
-- Tighten first viewport density so mobile users see identity, value, primary action, and one useful product proof without scrolling past ceremony.
-- Standardize a compact page-header pattern for protected routes, then use it everywhere before inventing more section layouts.
+- Make the mobile route shell quieter so the first viewport belongs to the product promise and preview, not navigation chrome.
+- Reduce each product hero to one identity moment: either the eyebrow or the preview label, not both.
+- Give each module preview a more specific shape: calendar should feel scheduled, notes should feel editorial, list should feel scannable, workout should feel fast and tap-first.
+- Replace remaining internal words like "handoff" with user-visible outcomes such as "Send to calendar" or "Turn notes into tasks."
+- Tighten mobile preview rows with simpler status treatment and fewer competing typographic weights.
+- Let the signed-in product spine lead the next visual push; marketing polish is useful, but the mission is one connected operating system.
 
 ## Priority Fix
-Reduce mobile chrome before adding anything else. Specifically, slim the top route header and product switcher treatment on customer-facing/demo routes, then tighten the first hero card so the module preview appears sooner. The next task should remove repeated identity weight, not decorate around it.
+The single most important design problem is repeated route chrome on customer-facing product pages. On mobile, slim the top navigation and remove redundant product identity inside the hero/preview stack so the user sees one clean product story: product name, promise, action, and functional preview. Do not add sections. Subtract labels, quiet the chip row, and make the preview feel like the first real artifact.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: suite consistency is better, but loud route chrome and under-proven signed-in hierarchy keep it from feeling finished.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
 
 ## Designer Handoff
-Keep the quiet teal palette, sturdy typography, and shared card language. Change the mobile page structure: header controls should become background utility, not the first thing the user studies. The main content should feel like "I opened a useful life system" within one glance, not "I entered a demo wrapper." Preserve the calm, practical tone, but sharpen hierarchy so the product surface wins over the frame.
+Next implementer should treat this as a subtraction pass, not another polish pass. Keep the current typography, teal accent, clean cards, and concrete daily-life copy. Change the mobile hierarchy by reducing wrapper chrome, removing repeated product labels inside previews, and making chip rows less dominant. The result should feel like opening a useful product page, not walking through a nicely formatted product brochure.
 
 ## What Not To Do Next
-- Do not add more sections to marketing pages.
-- Do not add more pills, badges, or explanatory labels to solve hierarchy.
-- Do not redesign the whole suite at once.
-- Do not chase novelty with gradients, illustrations, or louder color.
-- Do not move into backend, auth, settings logic, integrations, analytics, or package work.
-- Do not ignore mobile because desktop looks acceptable.
+- Do not add more marketing sections to solve a hierarchy problem.
+- Do not introduce new colors, gradients, illustrations, or decorative texture.
+- Do not make the cards rounder or softer; the issue is repetition, not insufficient friendliness.
+- Do not touch backend, auth, data, routing behavior, packages, deployment, or integrations.
+- Do not ignore mobile; the mobile first viewport is where the clutter is most expensive.
+- Do not rename everything at once; fix the most visible repeated labels and internal phrases first.
 
 ## Next 5 Design Tasks
-- [ ] Tighten mobile marketing/demo header chrome so the product hero starts higher; preserve routes, labels, and behavior.
-- [ ] Reduce duplicated product identity inside module preview cards; keep one clear module label and one functional proof.
-- [ ] Fix the Settings mobile Apps trigger tap target to at least 44px high without changing menu behavior.
-- [ ] Capture fresh signed-in HQ mobile and desktop screenshots and judge Pack 1 against those, not only marketing pages.
-- [ ] Normalize first-card spacing across EasyList, EasyCalendar, EasyNotes, and EasyWorkout with a small CSS-only pass; no new content.
+- [ ] Mobile product chrome trim: reduce the customer-facing mobile header height/visual weight while preserving all labels, routes, and 44px tap targets.
+- [ ] Preview identity cleanup: remove one redundant product-name pill from each marketing preview where the hero eyebrow already names the product; do not add new content.
+- [ ] EasyList copy cleanup: replace visible "handoff" language with concrete user-facing action language; keep meaning and avoid new feature claims.
+- [ ] Mobile preview row tightening: adjust spacing and status pill scale inside one product preview so labels and values do not compete on 390px screens.
+- [ ] Feature section restraint pass: reduce repeated eyebrow/card emphasis in one marketing feature section without changing layout structure or adding sections.
 
 ## Stop Or Continue
 continue but fix visual issues first
