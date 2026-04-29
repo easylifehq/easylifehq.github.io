@@ -1974,3 +1974,18 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-29 02:33:22
+
+- Task attempted: User pain: A mobile user still sees repeated brochure-like feature eyebrows and card chrome before the actual EasyLife product story feels simple. Target: Pack 1 - Product Spine, one existing customer-facing marketing feature section in `app-vNext/src/features/marketing/` plus related `app-vNext/src/styles/`. Change: make a subtraction-only feature-section restraint pass by shortening or demoting one repeated eyebrow/card treatment so the product name, promise, primary action, and functional preview remain the clear first story. Remove/simplify: remove, demote, or combine one redundant eyebrow/card/chip layer; preserve existing routes, labels, links, tap targets, desktop layout, hero promise, preview content, and teal visual system. Guardrails: frontend UI/copy only; no new sections, features, claims, routing changes, auth, Firebase, backend, persistence, data shapes, dependencies, package files, generated output, deployment config, secrets, root files, docs report edits, broad redesign, or unrelated screens; must fit simplicity phase and improve Before/After Judgment by reducing competing choices and wrapper chrome. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect the affected route at 390px and verify the feature section reads as supporting context instead of a second hero, with no clipped text and no tap target under 44px. [class:design risk:low mode:single impact:visible scope:app-vNext/src/features/marketing/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
