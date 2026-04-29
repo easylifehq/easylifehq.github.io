@@ -8929,6 +8929,16 @@ button.calendar-detail-card:disabled {
     line-height: 1.15;
   }
 
+  .marketing-page--easynotes-preview .marketing-hero-preview-row strong em {
+    margin-left: 0.28rem;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--ui-text-muted, var(--shell-muted-text));
+    font-size: 0.56rem;
+    font-weight: 700;
+  }
+
   .marketing-page--mobile-dense-hero .marketing-hero {
     gap: 0.72rem;
     padding: 0.72rem;

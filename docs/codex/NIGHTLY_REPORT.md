@@ -1960,3 +1960,17 @@
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-29 02:24:23
+
+- Task attempted: User pain: A mobile user wastes attention parsing cramped preview rows where labels, values, and status pills compete before the product story is clear. Target: Pack 1 - Product Spine, one existing EasyNotes or EasyList marketing preview in `app-vNext/src/features/marketing/` plus related `app-vNext/src/styles/`. Change: tighten one 390px preview row by reducing status-pill scale, simplifying row spacing, or demoting one metadata treatment so the preview reads as one useful artifact under the product promise. Remove/simplify: remove or demote one competing pill/label treatment; preserve existing routes, hero promise, primary CTA, tap targets, preview meaning, desktop layout, and current teal visual system. Guardrails: frontend-only subtraction pass; no new sections, new product claims, new features, broad redesign, routing changes, auth, Firebase, backend, persistence, data shapes, dependencies, package files, generated output, deployment config, root files, docs report edits, or unrelated screens; must fit simplicity phase and improve Before/After Judgment by making the mobile first viewport calmer with fewer competing choices. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect the affected route at 390px and verify the product name/promise and preview content read before decorative metadata, with no clipped text or smaller-than-44px interactive targets. [class:design risk:low mode:single impact:visible scope:app-vNext/src/features/marketing/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
