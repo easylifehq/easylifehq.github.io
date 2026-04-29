@@ -1886,3 +1886,19 @@
 - Files changed:
 - docs/codex/visual-routes.json
 - Risks or follow-up needed: Low. Recovered from interrupted loop after guardrails and external build passed.
+
+## 2026-04-28 18:33:03
+
+- Task attempted: Pack 1 - Product Spine module preview identity repair: reduce one remaining duplicated product label or pill treatment inside an EasyList, EasyCalendar, EasyNotes, or EasyWorkout marketing preview card and replace it with quieter functional context using existing content only; forbidden scope: no new sections, new claims, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated pages. [class:design risk:low mode:single impact:visible scope:app-vNext/src/features/marketing/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

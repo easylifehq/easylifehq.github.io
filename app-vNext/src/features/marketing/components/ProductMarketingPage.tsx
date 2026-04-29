@@ -21,6 +21,7 @@ type ProductMarketingPageProps = {
   heroPoints: string[];
   heroCardTitle: string;
   heroCardBody: string;
+  heroPreviewContext?: string;
   heroPreviewItems?: HeroPreviewItem[];
   featuresTitle: string;
   featuresDescription: string;
@@ -40,6 +41,7 @@ export function ProductMarketingPage({
   heroPoints,
   heroCardTitle,
   heroCardBody,
+  heroPreviewContext,
   heroPreviewItems,
   featuresTitle,
   featuresDescription,
@@ -88,7 +90,9 @@ export function ProductMarketingPage({
 
         <div className="marketing-hero-card">
           <div className="marketing-hero-preview-header">
-            <span className="info-pill">{eyebrow}</span>
+            <span className={heroPreviewContext ? "marketing-hero-preview-context" : "info-pill"}>
+              {heroPreviewContext ?? eyebrow}
+            </span>
             <div>
               <h2>{heroCardTitle}</h2>
               <p>{heroCardBody}</p>

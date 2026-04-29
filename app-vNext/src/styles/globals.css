@@ -828,6 +828,13 @@ a {
   gap: 0.7rem;
 }
 
+.marketing-hero-preview-context {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  font-weight: 760;
+  letter-spacing: 0;
+}
+
 .marketing-hero-card h2,
 .marketing-card h3 {
   margin: 0;
