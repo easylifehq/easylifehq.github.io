@@ -82,21 +82,24 @@ export function HQPage() {
   const startHere = useMemo(() => {
     if (overdueTasks.length || dueTodayTasks.length) {
       return {
-        label: "Start in EasyList",
-        reason: `${overdueTasks.length + dueTodayTasks.length} task${overdueTasks.length + dueTodayTasks.length === 1 ? "" : "s"} need attention.`,
+        label: "Review due tasks",
+        reason: `${overdueTasks.length + dueTodayTasks.length} task${overdueTasks.length + dueTodayTasks.length === 1 ? "" : "s"} need attention before the day fills up.`,
+        buttonLabel: "Open EasyList",
         to: "/app/easylist/dashboard",
       };
     }
     if (openWindows.length >= 3) {
       return {
-        label: "Start in EasyCalendar",
-        reason: "You have open room that could use a light plan.",
+        label: "Plan open time",
+        reason: "You have open room that could use a light plan before adding more.",
+        buttonLabel: "Open Calendar",
         to: "/app/easycalendar/day",
       };
     }
     return {
-      label: "Start in EasyNotes",
-      reason: "Everything looks calm, so a quick brain dump is a good next move.",
+      label: "Capture the next note",
+      reason: "Everything looks calm, so a quick note can keep loose thoughts out of the way.",
+      buttonLabel: "Open Notes",
       to: "/app/easynotes",
     };
   }, [dueTodayTasks.length, openWindows.length, overdueTasks.length]);
@@ -132,11 +135,8 @@ export function HQPage() {
       <section className="hq-command-center" aria-labelledby="hq-title">
         <article className="hq-start-card">
           <div className="hq-start-heading">
-            <div>
-              <p className="eyebrow">EasyHQ</p>
-              <h1 id="hq-title">Daily workspace</h1>
-            </div>
-            <span>Next action</span>
+            <h1 id="hq-title">Daily workspace</h1>
+            <span>Suggested next action</span>
           </div>
           <strong>{startHere.label}</strong>
           <p>{startHere.reason}</p>
@@ -146,7 +146,7 @@ export function HQPage() {
           </div>
           <div className="task-composer-actions">
             <Link to={startHere.to} className="primary-button">
-              Open {startHere.label.replace("Start in ", "")}
+              {startHere.buttonLabel}
             </Link>
             {lastAppRoute ? (
               <Link to={lastAppRoute.path} className="button-secondary">
@@ -187,8 +187,8 @@ export function HQPage() {
 
         <article className="hq-assistant-spine" aria-label="Local daily read">
           <div>
-            <span className="settings-state-pill">Daily read</span>
-            <strong>One calm thread across the suite</strong>
+            <strong>Daily read</strong>
+            <p>One calm thread across tasks, calendar, and notes.</p>
           </div>
           <ul>
             {dailySpine.map((item) => (
@@ -284,7 +284,7 @@ export function HQPage() {
             </article>
             {isExperimentalFeatureEnabled("startHere") ? (
               <article className="mini-panel-vnext start-here-card">
-                <span>Start Here</span>
+                <span>Next action</span>
                 <strong>{startHere.label}</strong>
                 <p>{startHere.reason}</p>
                 <Link to={startHere.to} className="primary-button compact-button">
