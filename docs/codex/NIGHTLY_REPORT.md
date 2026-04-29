@@ -2010,3 +2010,18 @@
 - app-vNext/src/features/marketing/routes/MarketingLandingPage.tsx
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - Risks or follow-up needed: Implementation guardrails failed.
+
+## 2026-04-29 11:16:21
+
+- Task attempted: User pain: The mobile product pages still spend too much first-screen attention on wrapper chrome before the useful module story. Target: Simon priority fix in `app-vNext/src/components/navigation/`, `app-vNext/src/features/marketing/`, and `app-vNext/src/styles/`. Change: make one subtraction pass that reduces customer-facing mobile header/chip/preview identity weight while preserving 44px tap targets and the current route structure. Remove/simplify: remove or demote one redundant product-name pill, chip row emphasis, or repeated identity cue; preserve current routes, labels, primary CTA, desktop stability, and teal visual system. Guardrails: frontend UI/style only; no new sections, new claims, behavior changes, auth, Firebase, backend, persistence, data shapes, package/dependency files, generated output, deployment config, root files, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect a 390px marketing route and verify product name, promise, action, and preview appear with less competing chrome. [class:design risk:low mode:single impact:visible scope:app-vNext/src/components/navigation/,app-vNext/src/features/marketing/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/components/navigation, app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

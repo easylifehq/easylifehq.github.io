@@ -1784,3 +1784,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
 - Debug checkpoint result: FAIL (failed)
+
+## 2026-04-29 11:16:21
+
+- Task: User pain: The mobile product pages still spend too much first-screen attention on wrapper chrome before the useful module story. Target: Simon priority fix in `app-vNext/src/components/navigation/`, `app-vNext/src/features/marketing/`, and `app-vNext/src/styles/`. Change: make one subtraction pass that reduces customer-facing mobile header/chip/preview identity weight while preserving 44px tap targets and the current route structure. Remove/simplify: remove or demote one redundant product-name pill, chip row emphasis, or repeated identity cue; preserve current routes, labels, primary CTA, desktop stability, and teal visual system. Guardrails: frontend UI/style only; no new sections, new claims, behavior changes, auth, Firebase, backend, persistence, data shapes, package/dependency files, generated output, deployment config, root files, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect a 390px marketing route and verify product name, promise, action, and preview appear with less competing chrome. [class:design risk:low mode:single impact:visible scope:app-vNext/src/components/navigation/,app-vNext/src/features/marketing/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: Pack 1 - Product Spine
+- Task class: design
+- Task risk: low
+- Changed files: 2
+- Materiality signal: impact=visible, surface-files=2, structural-files=2, source-lines=30, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.

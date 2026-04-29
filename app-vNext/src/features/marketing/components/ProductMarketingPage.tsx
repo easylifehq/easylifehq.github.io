@@ -90,7 +90,7 @@ export function ProductMarketingPage({
 
         <div className="marketing-hero-card">
           <div className="marketing-hero-preview-header">
-            <span className={heroPreviewContext ? "marketing-hero-preview-context" : "info-pill"}>
+            <span className={heroPreviewContext ? "marketing-hero-preview-context" : "info-pill marketing-hero-preview-product"}>
               {heroPreviewContext ?? eyebrow}
             </span>
             <div>
