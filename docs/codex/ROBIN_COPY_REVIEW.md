@@ -4,72 +4,73 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife sounds calmer and more concrete than before, but a few customer-facing phrases still feel like internal builder language instead of a polished daily workspace for the user.
+EasyLife is moving toward a calmer, more concrete product voice, but several visible strings still sound like internal builder notes instead of clear customer-facing outcomes.
 
 ## Mission Voice Fit
-The voice mostly matches the mission: clean, useful, professional, and oriented around tasks, notes, calendar planning, workouts, and settings as one suite. The strongest copy uses concrete nouns like workspace, tasks, notes, calendar, today, and settings. The weaker copy still leans on vague product-stage language such as "command center", "demo", "proof", "handoff", and "polish", which makes the app feel less like a lived-in personal system and more like a build review.
+The strongest copy fits the mission when it uses plain daily-life nouns: tasks, notes, calendar planning, workouts, workspace, daily action, module status. That language supports EasyLife as a connected personal suite without overclaiming. The weaker copy still leans on internal/product-process words like "handoff", "proof", "polish", "demo", and "command center", which make the experience feel assembled rather than lived in.
 
 ## Delicate Wording Risks
-- "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center." overstates the product metaphor and feels generic. "Command center" has already been flagged as too broad for this brand.
-- "Products + demo" is functional but blunt. It sounds like a route label for reviewers, not a polished navigation cue for a customer.
-- "Start with" can be clear in context, but as a standalone proof-card label it risks sounding like an instruction fragment.
-- "Quick proof of what you have actually done recently." is useful in meaning, but "proof" feels defensive and slightly cold for a workout surface.
-- "EasyLife polish pass", "Ship polish", and "Research, Build, Polish..." read like internal production tasks. If surfaced to users as seed data, they make the product feel student-made.
-- "Calendar handoff" sounds like internal workflow language. It needs a concrete user outcome if visible.
-- "prep handoff" in the AI experiment sample is builder language and vague for a user-facing mock.
-- "Builds a clean day plan from sample tasks..." is acceptable in an experiment, but "sample" repeats heavily and makes the mock feel less real.
+- "EasyCalendar handoff" reads like internal workflow language. A user does not know what is being handed off, by whom, or what they get.
+- "Calendar handoff" in EasyProjects has the same issue. It should name the concrete outcome, such as preparing calendar time or turning project work into scheduled blocks.
+- "Start with" can be fine in a sentence, but as a standalone phrase in login/proof-style UI it can feel like builder shorthand unless the next action is explicit.
+- "Proof" in class names is harmless, but any visible proof language should be watched. It can make marketing feel defensive or salesy.
+- "Polish" in sample content and project titles feels internal to Codex/product work. If visible to users, it makes EasyLife sound like a software build tracker instead of a personal workspace.
+- "Sample data" is acceptable inside experiments, but customer-facing product pages should prefer "Example day", "Example note", or "Example plan" if the content is visible.
+- "Command center" in root meta copy overstates the product and sounds generic SaaS. It is less warm and useful than "workspace" or "suite".
+- "Prep handoff" in AI experiment preview is vague. It does not say whether the user gets a task list, calendar block, brief, or note.
 
 ## Beautiful Language Opportunities
-- Replace "command center" with "daily workspace", "one place", or "connected workspace" where the promise is about organizing life rather than controlling it.
-- Make mobile navigation cues sound like product navigation, not demo scaffolding.
-- Replace "proof" with warmer concrete language: "Recent work", "Recent progress", "What you finished", or "Training history".
-- Replace "polish" seed content with believable personal tasks or product-neutral daily work.
-- Replace "handoff" with the actual destination or result: "Calendar prep", "Event notes", "Next review", or "Plan ready for tomorrow".
-- In experiments, make mock copy feel clearly sandboxed without repeating "sample" in every card.
+- Replace internal process nouns with guest-facing or user-facing objects: task list, calendar block, note, daily plan, project brief, workout log.
+- Let product pages use one clear promise per module: EasyList helps choose next tasks, EasyCalendar helps see the day, EasyNotes helps capture and sort thoughts, EasyWorkout helps log training.
+- Use "today", "next", "planned", "saved", "ready", and "review" carefully because they tell the user what state their life is in.
+- Make experiments copy feel clearly mock-only without sounding technical: "Example day" is warmer than "Sample data".
+- The marketing hero previews can sound more real by naming ordinary moments: "Morning tasks", "Lunch block", "Workout logged", "Notes to review".
+- Settings copy can continue moving toward control-center clarity by naming the exact setting and result, not the abstract system quality.
 
 ## Priority Rewrite
-The single most important wording problem is the remaining cluster of internal product-review language: "command center", "demo", "proof", "handoff", and "polish". These words undercut the mission because they describe the building or proving of EasyLife rather than the user's daily outcome. Nami should queue a small copy-only pass that replaces these with concrete daily-workspace language in visible app and marketing strings only.
+Fix all remaining visible "handoff" language first. It is the clearest voice break because it sounds like a builder-to-builder transfer, not a user outcome. Nami should scan only user-facing app and marketing strings, replace "handoff" with concrete action language, and avoid broad rewrites or new claims.
 
 ## Suggested Rewrites
-- Before: "Products + demo"
-  After: "Explore products"
-
-- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one connected workspace."
-
-- Before: "Quick proof of what you have actually done recently."
-  After: "A quick look at your recent training progress."
-
-- Before: "Calendar handoff"
+- Before: "EasyCalendar handoff"
   After: "Calendar prep"
 
-- Before: "Ship review flow, unblock copy, prep handoff"
-  After: "Review launch notes, clear copy blockers, prep tomorrow"
+- Before: "Calendar handoff"
+  After: "Add time to calendar"
 
-- Before: "EasyLife polish pass"
-  After: "Review EasyLife updates"
+- Before: "prep handoff"
+  After: "prep the next plan"
+
+- Before: "Start with"
+  After: "Start your workspace"
+
+- Before: "Sample data"
+  After: "Example day"
+
+- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
+  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one calm workspace."
 
 - Before: "Ship polish"
-  After: "Prepare release notes"
+  After: "Final review"
 
-- Before: "Builds a clean day plan from sample tasks, calendar blocks, and focus windows."
-  After: "Drafts a day plan from mock tasks, calendar blocks, and focus windows."
+- Before: "Research, Build, Polish..."
+  After: "Research, build, review..."
 
 ## Voice Rules
-- Prefer concrete product nouns: task, note, calendar event, workout, setting, project, day plan, workspace.
-- Avoid broad metaphor as value prop: command center, operating system, premium, high-tech.
-- Avoid builder language in visible UI: demo, proof, polish, handoff, workflow, artifact.
-- Make every sentence answer: who is this for, what should they do, and what do they get?
-- Keep the tone calm and capable, not cute, salesy, or over-explanatory.
-- Use experiment labels sparingly; make mocks honest without making every line feel fake.
-- Button and nav copy should name the user action, not the implementation surface.
+- Use concrete product nouns before abstract product nouns.
+- Say what the user can do and what changes after they do it.
+- Avoid "handoff", "proof", "polish", "demo", "workflow", and "command center" in visible customer-facing copy unless the surrounding sentence makes the outcome concrete.
+- Keep the voice calm, capable, and direct. Do not inflate simple organization features into grand claims.
+- Prefer "workspace", "daily plan", "calendar block", "task list", "note", "project brief", and "workout log".
+- For experiment UI, make mock status clear with "example" language, not technical or sales language.
+- Do not add claims about AI, automation, productivity gains, integrations, or reliability unless the product already proves them.
+- Keep CTA and helper copy short enough to scan on mobile.
 
 ## Next 5 Copy Tasks
-- [ ] Replace remaining visible "command center" metadata or UI copy with "connected workspace" or another concrete daily-workspace phrase; do not edit forbidden root deploy files unless explicitly approved.
-- [ ] Rewrite the mobile marketing cue "Products + demo" to a polished navigation label under 20 characters; preserve links, routes, and tap targets.
-- [ ] Replace visible "proof" language in workout or auth surfaces with concrete progress language; do not add claims or performance promises.
-- [ ] Review seed/mock content for "polish" and replace only visible examples with believable daily tasks; keep data shape and behavior unchanged.
-- [ ] Replace "handoff" in visible labels or experiment mock copy with the concrete outcome, such as prep, notes, review, or plan; avoid broad rewrites.
+- [ ] Replace visible "handoff" strings in EasyProjects and experiments with concrete action language; do not change behavior, routes, or data.
+- [ ] Replace visible "command center" meta/product copy with "workspace" or "suite" language; do not edit forbidden root production files unless explicitly approved.
+- [ ] Review visible "polish" sample/project strings and change only user-facing examples to "review" or "final review"; leave internal docs alone.
+- [ ] Review experiment labels that say "Sample data" and change visible UI labels to "Example day" or "Example plan"; keep mock-only meaning clear.
+- [ ] Check login and marketing proof-style language for standalone "Start with" or "proof" phrasing; rewrite only if the user action or outcome is unclear.
 
 ## Stop Or Continue
 continue but fix copy first
