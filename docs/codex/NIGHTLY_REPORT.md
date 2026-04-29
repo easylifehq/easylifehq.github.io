@@ -2025,3 +2025,17 @@
 - app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-29 17:21:56
+
+- Task attempted: Auto recovery retry: make a smaller safe slice of the quarantined task 'User pain: EasyLife still sounds too much like an internal product build in spots, which weakens the personal assistant direction. Target: visible user-facing copy in `app-vNext/src/`, especially marketing, experiments, EasyProjects, and HQ surfaces named by Robin. Change: replace remaining visible "handoff", "command center", "polish", "proof", "demo", or "sample data" language with concrete daily-life nouns like ca' that avoids the failure reason 'Implementation guardrails failed.'; change only one narrow UI/content/module area, prefer deleting awkward complexity over adding new systems, and do not touch backend, auth, payments, Firebase rules/config, package/dependency files, generated output, deployment config, secrets, or unrelated files. [class:copy risk:low mode:single scope:app-vNext/src]
+- Task class: copy
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src
+- Acceptance checks: external build only
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/experiments/AiCommandCenter.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

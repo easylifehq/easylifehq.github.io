@@ -7,43 +7,43 @@ const mockCommands: AiCommand[] = [
     title: "Plan Day",
     source: "EasyList + EasyCalendar",
     status: "Sandbox",
-    response: "Builds a clean day plan from sample tasks, calendar blocks, and focus windows.",
+    response: "Builds a clean day plan from today's tasks, calendar blocks, and focus windows.",
     preview: "9:00 focus, 1:30 errands, 3:00 client prep",
   },
   {
     title: "Clean Up Tasks",
     source: "EasyList",
     status: "Draft only",
-    response: "Clusters a sample inbox into clearer categories without saving changes.",
+    response: "Clusters a household task list into clearer categories without saving changes.",
     preview: "Work, Home, Follow-up, Someday",
   },
   {
     title: "Summarize Notes",
     source: "EasyNotes",
-    status: "Sample data",
-    response: "Turns sample meeting notes into decisions, open questions, and next actions.",
+    status: "Meeting notes",
+    response: "Turns meeting notes into decisions, open questions, and next actions.",
     preview: "3 decisions, 2 questions, 1 next action",
   },
   {
     title: "Prep Calendar",
     source: "EasyCalendar",
     status: "Preview",
-    response: "Reviews a sample schedule and suggests prep notes before busy blocks.",
+    response: "Reviews a daily schedule and suggests prep notes before busy blocks.",
     preview: "Standup notes, travel buffer, agenda reminder",
   },
   {
     title: "Workout Coach",
     source: "EasyWorkout",
     status: "Coach preview",
-    response: "Drafts a balanced workout suggestion from sample routine and recovery context.",
+    response: "Drafts a balanced workout suggestion from a recent routine and recovery notes.",
     preview: "Push strength, mobility finisher, lighter volume",
   },
   {
     title: "Project Focus",
     source: "EasyProjects + EasyList",
     status: "Focus mode",
-    response: "Chooses one sample project outcome and the next three tasks that support it.",
-    preview: "Ship review flow, unblock copy, prep handoff",
+    response: "Chooses one home project outcome and the next three tasks that support it.",
+    preview: "Ship review flow, unblock copy, prep next plan",
   },
 ];
 
@@ -63,21 +63,21 @@ const mockCommandInputResponses: AiSuggestion[] = [
   {
     prompt: "Summarize my week",
     title: "Weekly summary preview",
-    response: "This sample week trends toward heavy planning, two unresolved follow-ups, and one workout consistency win.",
+    response: "This week trends toward heavy planning, two unresolved follow-ups, and one workout consistency win.",
     actions: ["2 project milestones", "4 completed tasks", "1 missed recovery day"],
   },
   {
     prompt: "Build a workout plan",
     title: "Workout plan preview",
-    response: "Use a balanced upper-body session today with light conditioning because the sample log shows lower-body fatigue.",
+    response: "Use a balanced upper-body session today with light conditioning because the workout log shows lower-body fatigue.",
     actions: ["Push strength", "Core circuit", "10 minute mobility"],
   },
 ];
 
 const mockSignals = [
-  { label: "Sample tasks", value: "12" },
-  { label: "Sample events", value: "4" },
-  { label: "Sample notes", value: "7" },
+  { label: "Today's tasks", value: "12" },
+  { label: "Calendar events", value: "4" },
+  { label: "Recent notes", value: "7" },
 ];
 
 const mockDailyBrief: AiBrief = {
@@ -86,7 +86,7 @@ const mockDailyBrief: AiBrief = {
   whatMatters: [
     "Finish the client proposal outline before the 11:30 calendar review.",
     "Confirm the appointment change so the afternoon stays flexible.",
-    "Keep the workout lighter because yesterday's sample log shows heavy lower-body volume.",
+    "Keep the workout lighter because yesterday's workout log shows heavy lower-body volume.",
   ],
   sections: [
     {
@@ -107,8 +107,8 @@ const mockDailyBrief: AiBrief = {
     },
   ],
   warnings: [
-    "Two sample tasks compete with the same 30 minute window.",
-    "One sample calendar event is missing prep notes.",
+    "Two tasks compete with the same 30 minute window.",
+    "One calendar event is missing prep notes.",
   ],
 };
 
@@ -146,7 +146,7 @@ export function AiCommandCenter() {
           <article key={signal.label}>
             <span>{signal.label}</span>
             <strong>{signal.value}</strong>
-            <p>Sample context available to this lab preview.</p>
+            <p>Today's context available to this lab preview.</p>
           </article>
         ))}
       </div>
@@ -154,15 +154,15 @@ export function AiCommandCenter() {
       <section className="ai-daily-brief" aria-labelledby="ai-daily-brief-title">
         <div className="ai-daily-brief-hero">
           <span className="settings-card-topline">
-            <span>Sample daily brief</span>
+            <span>Today</span>
             <span className="settings-state-pill">No API</span>
           </span>
           <h3 id="ai-daily-brief-title">{mockDailyBrief.dateLabel}</h3>
           <p>{mockDailyBrief.headline}</p>
-          <ul className="ai-lab-context-strip" aria-label="Mock EasyLife context used by this brief">
-            <li>EasyList sample tasks</li>
-            <li>EasyNotes sample notes</li>
-            <li>EasyCalendar sample events</li>
+          <ul className="ai-lab-context-strip" aria-label="EasyLife context used by this brief">
+            <li>EasyList tasks</li>
+            <li>EasyNotes notes</li>
+            <li>EasyCalendar events</li>
           </ul>
         </div>
 
@@ -226,7 +226,7 @@ export function AiCommandCenter() {
           </div>
         </form>
 
-        <div className="ai-command-prompt-list" aria-label="Sample prompt examples">
+        <div className="ai-command-prompt-list" aria-label="Prompt ideas">
           {mockCommandInputResponses.map((mock) => (
             <button
               key={mock.prompt}
