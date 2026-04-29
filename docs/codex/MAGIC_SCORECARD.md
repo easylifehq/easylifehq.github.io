@@ -1532,3 +1532,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
 - Debug checkpoint result: WARN (passed)
+
+## 2026-04-28 18:38:25
+
+- Task: Pack 1 - Product Spine EasyList marketing subtraction repair: remove or demote the visible “EasyCalendar handoff” chip/label into quieter “Calendar prep” functional context so the 390px before/after shows fewer chip-like choices and a calmer product story; preserve the hero promise, primary CTA, preview content, routes, links, tap targets, and desktop layout; forbidden scope: no new sections, broad rewrites, new claims, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated pages. [class:design risk:low mode:single impact:visible scope:app-vNext/src/features/marketing/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: Pack 1 - Product Spine
+- Task class: design
+- Task risk: low
+- Changed files: 1
+- Materiality signal: impact=visible, surface-files=1, structural-files=1, source-lines=3, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.

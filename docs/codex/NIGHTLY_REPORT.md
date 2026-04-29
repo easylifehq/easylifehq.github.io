@@ -1916,3 +1916,17 @@
 - Files changed:
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutDashboardPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-04-28 18:38:25
+
+- Task attempted: Pack 1 - Product Spine EasyList marketing subtraction repair: remove or demote the visible “EasyCalendar handoff” chip/label into quieter “Calendar prep” functional context so the 390px before/after shows fewer chip-like choices and a calmer product story; preserve the hero promise, primary CTA, preview content, routes, links, tap targets, and desktop layout; forbidden scope: no new sections, broad rewrites, new claims, behavior, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, docs report files, root config files, or unrelated pages. [class:design risk:low mode:single impact:visible scope:app-vNext/src/features/marketing/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
