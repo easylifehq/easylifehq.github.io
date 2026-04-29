@@ -131,7 +131,13 @@ export function HQPage() {
 
       <section className="hq-command-center" aria-labelledby="hq-title">
         <article className="hq-start-card">
-          <span className="settings-state-pill">Next action</span>
+          <div className="hq-start-heading">
+            <div>
+              <p className="eyebrow">EasyHQ</p>
+              <h1 id="hq-title">Daily workspace</h1>
+            </div>
+            <span>Next action</span>
+          </div>
           <strong>{startHere.label}</strong>
           <p>{startHere.reason}</p>
           <div className="hq-today-summary" aria-label="Today summary">
@@ -193,12 +199,6 @@ export function HQPage() {
             ))}
           </ul>
         </article>
-
-        <div className="hq-command-copy">
-          <p className="eyebrow">EasyHQ</p>
-          <h1 id="hq-title">Daily workspace</h1>
-          <p>Start with the next useful move. Everything else can stay quiet until you need it.</p>
-        </div>
       </section>
 
       <PageSection eyebrow="Move fast" title="Quick actions">

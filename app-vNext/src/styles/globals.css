@@ -5213,8 +5213,7 @@ button.calendar-detail-card:disabled {
   grid-template-columns: minmax(320px, 1.05fr) minmax(260px, 0.95fr);
   grid-template-areas:
     "start status"
-    "spine spine"
-    "copy copy";
+    "spine spine";
   gap: 0.85rem 1.15rem;
   align-items: stretch;
   margin-bottom: 1rem;
@@ -5235,55 +5234,12 @@ button.calendar-detail-card:disabled {
   pointer-events: none;
 }
 
-.hq-command-copy,
 .hq-start-card {
   min-width: 0;
   border-radius: 8px;
   border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
   background: var(--ui-bg-card-elevated, #fffdf9);
   box-shadow: var(--shell-card-shadow);
-}
-
-.hq-command-copy {
-  grid-area: copy;
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  align-content: start;
-  gap: 0.38rem;
-  min-height: 0;
-  padding: 0.95rem 1.05rem;
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent), transparent 34%),
-    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 12%, transparent), transparent 62%),
-    var(--ui-bg-card-elevated, #fffdf9);
-}
-
-.hq-command-copy::after {
-  content: "";
-  position: absolute;
-  inset: auto 1rem 1rem auto;
-  width: min(34%, 13rem);
-  height: 36%;
-  border-right: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 20%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 20%, transparent);
-  opacity: 0.75;
-  pointer-events: none;
-}
-
-.hq-command-copy h1 {
-  margin: 0;
-  color: var(--ui-text-primary, var(--shell-heading-text));
-  font-size: clamp(1.45rem, 2.1vw, 2rem);
-  line-height: 1.02;
-  letter-spacing: 0;
-}
-
-.hq-command-copy p {
-  max-width: 46rem;
-  margin: 0;
-  color: var(--ui-text-secondary, var(--shell-page-text));
-  font-size: 1rem;
 }
 
 .hq-start-card {
@@ -5299,17 +5255,6 @@ button.calendar-detail-card:disabled {
     var(--ui-bg-card-elevated, #fffdf9);
 }
 
-.hq-start-card::before {
-  content: "";
-  position: absolute;
-  inset: 0.7rem 0.7rem auto auto;
-  width: 2.25rem;
-  height: 3px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 52%, transparent);
-  pointer-events: none;
-}
-
 .hq-start-card strong {
   color: var(--ui-text-primary, var(--shell-heading-text));
   font-size: clamp(1.35rem, 2vw, 1.75rem);
@@ -5319,6 +5264,34 @@ button.calendar-detail-card:disabled {
 .hq-start-card p {
   margin: 0;
   color: var(--ui-text-secondary, var(--shell-page-text));
+}
+
+.hq-start-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.hq-start-heading h1 {
+  margin: 0.1rem 0 0;
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: clamp(1.55rem, 2.25vw, 2.05rem);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.hq-start-heading p {
+  margin: 0;
+}
+
+.hq-start-heading span {
+  flex: 0 0 auto;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  font-weight: 850;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .hq-today-summary {
@@ -8084,33 +8057,31 @@ button.calendar-detail-card:disabled {
     grid-template-areas:
       "start"
       "status"
-      "spine"
-      "copy";
+      "spine";
     gap: 0.46rem;
     margin-bottom: 0.3rem;
   }
 
-  .hq-command-center::before,
-  .hq-command-copy::after,
-  .hq-start-card::before {
+  .hq-command-center::before {
     display: none;
-  }
-
-  .hq-command-copy {
-    min-height: 0;
-    gap: 0.28rem;
-    padding: 0.72rem 0.82rem;
-    box-shadow: none;
-  }
-
-  .hq-command-copy p {
-    font-size: 0.92rem;
-    line-height: 1.38;
   }
 
   .hq-start-card {
     gap: 0.28rem;
     padding: 0.52rem 0.64rem;
+  }
+
+  .hq-start-heading {
+    gap: 0.55rem;
+  }
+
+  .hq-start-heading h1 {
+    font-size: 1.34rem;
+    line-height: 1.08;
+  }
+
+  .hq-start-heading span {
+    font-size: 0.62rem;
   }
 
   .hq-start-card strong {
@@ -8200,11 +8171,6 @@ button.calendar-detail-card:disabled {
   .hq-assistant-spine p {
     font-size: 0.8rem;
     line-height: 1.24;
-  }
-
-  .hq-command-copy h1 {
-    font-size: 1.36rem;
-    line-height: 1.08;
   }
 
   .hq-summary-grid,
