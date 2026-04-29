@@ -1742,3 +1742,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
 - Debug checkpoint result: FAIL (failed)
+
+## 2026-04-29 10:42:02
+
+- Task: User pain: EasyLife still sounds too much like an internal product build in spots, which weakens the personal assistant direction. Target: visible user-facing copy in `app-vNext/src/`, especially marketing, experiments, EasyProjects, and HQ surfaces named by Robin. Change: replace remaining visible "handoff", "command center", "polish", "proof", "demo", or "sample data" language with concrete daily-life nouns like calendar block, task list, project brief, workout log, example day, daily plan, and workspace. Remove/simplify: remove one internal/process phrase without adding claims or expanding copy; preserve behavior, routes, auth/Firebase behavior, data shapes, desktop layout, and the current calm identity. Guardrails: frontend copy only; no backend, auth, Firebase rules/config, real AI/API calls, package/dependency files, generated output, deployment config, secrets, root files, broad redesign, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: search visible source for the replaced terms and verify any remaining instances are internal identifiers, docs, or non-customer-visible. [class:copy risk:low mode:single impact:visible scope:app-vNext/src/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: Pack 1 - Product Spine
+- Task class: unknown
+- Task risk: unknown
+- Changed files: 13
+- Materiality signal: impact=standard, surface-files=13, structural-files=13, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
+- Follow-up: Implementation guardrails failed.

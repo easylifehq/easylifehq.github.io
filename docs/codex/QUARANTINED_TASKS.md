@@ -126,3 +126,25 @@
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutDashboardPage.tsx
 - app-vNext/src/styles/globals.css
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-04-29 10:42:02
+
+- Batch: 1
+- Task index: 1
+- Task: User pain: EasyLife still sounds too much like an internal product build in spots, which weakens the personal assistant direction. Target: visible user-facing copy in `app-vNext/src/`, especially marketing, experiments, EasyProjects, and HQ surfaces named by Robin. Change: replace remaining visible "handoff", "command center", "polish", "proof", "demo", or "sample data" language with concrete daily-life nouns like calendar block, task list, project brief, workout log, example day, daily plan, and workspace. Remove/simplify: remove one internal/process phrase without adding claims or expanding copy; preserve behavior, routes, auth/Firebase behavior, data shapes, desktop layout, and the current calm identity. Guardrails: frontend copy only; no backend, auth, Firebase rules/config, real AI/API calls, package/dependency files, generated output, deployment config, secrets, root files, broad redesign, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: search visible source for the replaced terms and verify any remaining instances are internal identifiers, docs, or non-customer-visible. [class:copy risk:low mode:single impact:visible scope:app-vNext/src/ accept:npm.cmd run build]
+- Reason: Implementation guardrails failed.
+- Files restored before continuing:
+- app-vNext/src/features/auth/routes/LoginPage.tsx
+- app-vNext/src/features/easynotes/EasyNotesContext.tsx
+- app-vNext/src/features/easyprojects/EasyProjectsContext.tsx
+- app-vNext/src/features/easyprojects/routes/EasyProjectDetailPage.tsx
+- app-vNext/src/features/easyprojects/routes/EasyProjectsTimelinePage.tsx
+- app-vNext/src/features/experiments/AiCommandCenter.tsx
+- app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyNotesMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyProjectsMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/EasyStatisticsMarketingPage.tsx
+- app-vNext/src/features/marketing/routes/MarketingLandingPage.tsx
+- app-vNext/src/features/settings/routes/SettingsPage.tsx
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
