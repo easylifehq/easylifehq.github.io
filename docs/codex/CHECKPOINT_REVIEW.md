@@ -4,38 +4,38 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife 5.0 mission: recent work tightened the protected HQ first viewport, reduced decorative chrome, improved concrete daily-workspace copy, and preserved the connected-suite direction. The queue is now empty, but Simon and Robin still have YELLOW follow-up signals that should shape any next batch.
+The branch is moving toward the EasyLife 5.0 mission with focused frontend polish: protected HQ hierarchy, signed-in chrome, marketing preview density, copy cleanup, and mobile tap-target repair all support a calmer connected suite.
 
 ## Safety Review
-No unsafe scope found. Changed files stay in frontend UI/style and `docs/codex/` reporting areas; no auth, Firebase, backend, dependency, deploy, secret, or generated-output files are listed.
+No risky files or forbidden-scope changes found. Changes stayed in `app-vNext/src` UI/style areas and `docs/codex`.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: protected HQ assistant-spine repair, HQ mobile proof polish, AppHeader mobile suite-control polish, marketing/header density polish, copy repairs, visual QA evidence/report updates, and related product-spine documentation updates.
-- Files changed: frontend UI/style files under `app-vNext/src/` plus `docs/codex/` review/report files.
-- Commits added: 21 commits since base, ending at `4a0302e`.
-- Queue status: clean; unchecked task count is 0.
+- Completed tasks in this checkpoint window: 12 shown, all checked off
+- Files changed: frontend UI/style files plus Codex review/report docs
+- Commits added: 25 commits since base, HEAD `a68d58d`
+- Queue status: clean, no unchecked tasks remain
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN signal; high 0, medium 0, low 0, so no visual bug should block parking.
-- Simon design review: YELLOW; continue but fix visual issues first, so future tasks should remain repair-first/design-polish oriented.
-- Robin copy review: YELLOW; continue but fix copy first, so future tasks should prioritize concrete wording and remove remaining builder-style phrasing.
-- Joey security review: GREEN; no security blocker indicated.
-- Influence on next tasks: Simon and Robin should guide the next task selection if work resumes, but they do not force a RED stop because build, tree, and visual bug status are clean.
+- Visual bug report: GREEN; 0 high, 0 medium, 0 low; should not block next tasks
+- Simon design review: YELLOW; should influence next tasks if work continues
+- Robin copy review: YELLOW; should influence next tasks if work continues
+- Joey security review: GREEN; no security blocker
+- Overall gate influence: no stop signal, but Simon/Robin polish concerns remain relevant
 
 ## Recommended Next Step
 stop for human review
 
 ## Next Batch Guidance
-- Recommended next batch size: 2
+- Recommended next batch size: 1
 - Next work mode: repair-first
-- Simon and Robin remain YELLOW, so any resumed work should be small, focused polish/copy repair rather than broader mission expansion.
+- One sentence explaining why: The queue is empty and build-passing, but Simon and Robin still mark polish/copy as YELLOW, so any future batch should start with one narrow repair after human inspection.
 
 ## Notes For Human Reviewer
 - Working tree is clean.
 - Build passed.
-- Queue is empty.
+- No unchecked tasks remain.
 - No high or medium visual bugs reported.
-- Review gate debt is qualitative polish/copy, not a build or safety blocker.
+- Human review should focus on Simon/Robin YELLOW concerns before adding new mission-forward work.
