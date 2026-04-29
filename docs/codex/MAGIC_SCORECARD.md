@@ -1515,3 +1515,20 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-000352\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-000352\easylist-visualQa-1-mobile.png
 - Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## Batch 2 QA - 2026-04-28 18:36:18
+
+- Active work pack: Pack 1 - Product Spine
+- Batch impact mode: standard
+- Fresh QA evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
+- Checkpoint verdict: YELLOW
+- Simon verdict: YELLOW
+- Robin verdict: YELLOW
+- Joey verdict: GREEN
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
+- Debug checkpoint result: WARN (passed)
