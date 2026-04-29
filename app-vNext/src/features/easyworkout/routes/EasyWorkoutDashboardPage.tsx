@@ -305,7 +305,7 @@ export function EasyWorkoutDashboardPage() {
         <PageSection
           eyebrow="Recent"
           title="Latest sessions"
-          description="Quick proof of what you have actually done recently."
+          description="A quick look at your recent training progress."
         >
           <div className="task-list-vnext">
             {isLoading ? <p className="helper-copy">Loading workouts...</p> : null}
