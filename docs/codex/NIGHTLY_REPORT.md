@@ -2140,3 +2140,18 @@
 - app-vNext/src/features/marketing/routes/MarketingLandingPage.tsx
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - Risks or follow-up needed: Implementation guardrails failed.
+
+## 2026-05-01 15:13:56
+
+- Task attempted: User pain: After the protected modules improve, the public pages should hint at a calm personal assistant without crowding the working app story. Target: customer-facing marketing/product pages in `app-vNext/src/features/marketing/` and related `app-vNext/src/styles/`. Change: make one subtraction-first pass that reduces brochure-like repeated feature eyebrows, chip rows, or preview identity labels while keeping the product promise and primary action clear. First screen: product name, promise, action, and functional preview should read before secondary feature explanations. Remove/simplify: demote or combine one redundant eyebrow/card/chip layer; preserve existing routes, labels, links, tap targets, desktop layout, preview content, and teal visual system. Guardrails: frontend UI/copy/style only; no new sections, features, claims, routing changes, auth, Firebase, backend, persistence, data shapes, dependencies, package files, generated output, deployment config, secrets, root files, docs report edits, broad redesign, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect one affected marketing route at 390px and verify it feels like a simple product doorway, not a second dashboard. [class:design risk:low mode:single impact:visible surface:public scope:app-vNext/src/features/marketing/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/marketing, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: large
+- Build result: Quarantined
+- Files changed:
+- None
+- Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.
