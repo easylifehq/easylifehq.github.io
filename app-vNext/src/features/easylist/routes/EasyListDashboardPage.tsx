@@ -201,7 +201,7 @@ export function EasyListDashboardPage() {
       <PageSection
         eyebrow="EasyList"
         title="Tasks"
-        description="Start with the next item in the queue. Open controls when you need to search, switch lists, or edit in bulk."
+        description="Open the next task. Use controls when you need to search, switch lists, or edit in bulk."
       >
         <section className="easylist-action-queue" aria-label="Task action queue">
           <div className="easylist-action-main">
