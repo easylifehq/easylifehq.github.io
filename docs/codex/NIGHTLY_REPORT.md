@@ -2185,3 +2185,18 @@
 - Files changed:
 - None
 - Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.
+
+## 2026-05-01 17:25:33
+
+- Task attempted: User pain: the previous task was quarantined before implementation because Large Phase 3 task requires a concrete slice plan before implementation., so the ship needs one small visible repair instead of another broad pass. Target: app-vNext/src/features/hq/. Change: make exactly one narrow safe slice that improves a visible UI, interaction, or copy area; prefer deleting awkward complexity over adding new systems. First screen: keep the current primary screen job dominant and move any repaired detail/helper content behind the existing clear action. Remove/simplify: one repeated label, one oversized chrome area, one vague phrase, or one confusing interaction in the current surface only. Guardrails: no backend, no auth, no payments, no Firebase rules/config, no package/dependency files, no generated output, no deployment config, no secrets, and no unrelated files. Acceptance: npm.cmd run build. Check: run the acceptance command and confirm the changed screen has one clearer visible outcome without expanding scope. [class:design risk:low mode:single impact:visible surface:mixed scope:app-vNext/src/features/hq,app-vNext/src/components/navigation,app-vNext/src/styles accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/hq, app-vNext/src/components/navigation, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
