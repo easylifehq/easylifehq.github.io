@@ -2155,3 +2155,18 @@
 - Files changed:
 - None
 - Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.
+
+## 2026-05-01 15:13:56
+
+- Task attempted: User pain: The revamp needs a final cohesion pass so the suite feels intentional instead of a chain of unrelated repairs. Target: the highest-impact protected route touched by this revamp plus shared styles in `app-vNext/src/`. Change: make one small finish pass for spacing, typography, mobile row density, or cross-module visual consistency based on the latest Simon/Robin/visual evidence. First screen: keep the primary job dominant and remove friction that is obvious in a quick phone check. Remove/simplify: one noisy status treatment, duplicated label, crowded row, or extra explanatory line; preserve behavior, routes, auth, Firebase, data shapes, persistence, dependencies, package files, generated output, deployment config, secrets, root files, and unrelated modules. Guardrails: frontend UI/copy/style only; no backend, auth, Firebase rules/config, real AI/API calls, package/dependency files, generated output, deployment config, broad redesign, docs report edits, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect the latest protected visual QA route and verify the page is calmer, more useful, and still readable on 390px mobile. [class:design risk:low mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Implementation scale: large
+- Build result: Quarantined
+- Files changed:
+- None
+- Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.
