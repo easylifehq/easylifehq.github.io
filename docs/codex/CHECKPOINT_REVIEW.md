@@ -4,39 +4,40 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission with small protected-side and marketing polish improvements that make the suite feel calmer, more connected, and more assistant-like. Work remains queued, especially EasyNotes, assistant-voice copy, marketing subtraction, and final cohesion.
+The branch is moving toward the EasyLife 5.0 mission: recent completed work improves protected module hierarchy, calmer mobile surfaces, and more assistant-like daily flow. Progress is credible, but Simon/Robin remain YELLOW and there are still 2 medium visual issues plus 5 unchecked tasks.
 
 ## Safety Review
-No forbidden or high-risk files found in the current changed-file list. Working tree is clean, package/dependency/auth/Firebase/backend/deploy/secret files are not changed.
+No forbidden committed file changes found. Current changed files stay within app UI/style and `docs/codex/`. Quarantined broad tasks were correctly stopped before landing.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: EasyList dashboard assistant-flow polish and EasyCalendar month/planning clarity polish
-- files changed: EasyCalendar, EasyList, EasyWorkout, HQ, marketing/product pages, experiment copy, global styles, and Codex docs
-- commits added: latest HEAD is `c499f09` with multiple checkpoint commits since `main`
-- queue status: 6 unchecked tasks remain
+- Completed tasks in this checkpoint window: EasyList dashboard hierarchy, EasyCalendar planning clarity, EasyNotes capture/review hierarchy, marketing/product chrome and copy repairs, HQ/protected evidence and review docs.
+- Files changed: UI/style files under `app-vNext/src/features/`, `app-vNext/src/styles/globals.css`, and `docs/codex/` review/planning docs.
+- Commits added: latest HEAD `dcd0fde` plus prior checkpoint/review/task commits since `main`.
+- Queue status: 5 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks
-- Simon design review: YELLOW; should influence next tasks toward visual repair/subtraction first
-- Robin copy review: YELLOW; should influence next tasks toward concrete assistant-language cleanup
-- accessibility review: missing; should be added before parking as ship-ready
-- performance review: missing; should be added before parking as ship-ready
-- Joey security review: GREEN; no blocking security signal
-- Franky formula review: missing; likely non-blocking unless spreadsheets/formulas enter scope
-- product truth: missing config but `ok: True`; no RED blocker
+- Visual bug report: YELLOW influence; 0 high, 2 medium, 10 low, so next work should reduce visual/copy polish debt.
+- Simon design review: YELLOW influence; continue but fix visual issues first.
+- Robin copy review: YELLOW influence; continue but fix copy first.
+- Accessibility review: missing; should be added before final ship confidence.
+- Performance review: missing; should be added before final ship confidence.
+- Joey security review: GREEN; no blocking security signal.
+- Franky formula review: missing; likely not relevant unless spreadsheet/formula surfaces are touched.
+- Product truth: MISSING but `ok: True`; no `PRODUCT_TRUTH.md` configured, not blocking under provided status.
 
 ## Recommended Next Step
-continue
+patch first
 
 ## Next Batch Guidance
-- recommended next batch size: 2
-- next work mode: repair-first
-- Use small queued repair slices because Simon and Robin are YELLOW, two broad tasks were quarantined for needing clearer slices, and there is still mission-forward unchecked work.
+- Recommended next batch size: 2
+- Next work mode: repair-first
+- The next batch should address one Simon visual issue and one Robin copy issue before continuing broader mission-forward polish.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Not ship-ready because 6 tasks remain and several review gates are missing.
-- Avoid broad protected-side revamp tasks; continue with narrow EasyNotes, copy, or shell/HQ slices.
+- Verdict is YELLOW due to review gates and medium visual issues, not build safety.
+- Product truth is missing but not RED.
+- Remaining queue is safe-looking, but several tasks are recovery slices after broad/quarantined attempts.
