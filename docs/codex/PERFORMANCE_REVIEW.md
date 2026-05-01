@@ -1,6 +1,6 @@
 ﻿# Performance Review
 
-Generated: 2026-05-01 15:14:00
+Generated: 2026-05-01 17:37:54
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
@@ -24,19 +24,19 @@ Percy checked deterministic performance risks: oversized build artifacts, missin
 - No build artifacts found.
 
 ## Findings
-- [INFO] `app-vNext/src/styles/globals.css:211` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `app-vNext/src/styles/globals.css:210` - Blur filter found; keep usage limited on large/fixed surfaces.
   `backdrop-filter: blur(16px);`
-- [INFO] `app-vNext/src/styles/globals.css:330` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `app-vNext/src/styles/globals.css:301` - Blur filter found; keep usage limited on large/fixed surfaces.
   `backdrop-filter: blur(18px);`
-- [INFO] `app-vNext/src/styles/globals.css:358` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `app-vNext/src/styles/globals.css:329` - Blur filter found; keep usage limited on large/fixed surfaces.
   `-webkit-backdrop-filter: blur(22px) saturate(1.08);`
-- [INFO] `app-vNext/src/styles/globals.css:359` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `app-vNext/src/styles/globals.css:330` - Blur filter found; keep usage limited on large/fixed surfaces.
   `backdrop-filter: blur(22px) saturate(1.08);`
-- [INFO] `app-vNext/src/styles/globals.css:1390` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `app-vNext/src/styles/globals.css:1361` - Blur filter found; keep usage limited on large/fixed surfaces.
   `-webkit-backdrop-filter: blur(18px) saturate(1.08);`
-- [INFO] `app-vNext/src/styles/globals.css:1391` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `app-vNext/src/styles/globals.css:1362` - Blur filter found; keep usage limited on large/fixed surfaces.
   `backdrop-filter: blur(18px) saturate(1.08);`
-- [INFO] `app-vNext/src/styles/globals.css:5050` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `app-vNext/src/styles/globals.css:5021` - Blur filter found; keep usage limited on large/fixed surfaces.
   `backdrop-filter: blur(12px);`
 - [INFO] `assets/index-HceE6n6y.css:1` - Blur filter found; keep usage limited on large/fixed surfaces.
   `:root{color-scheme:light;font-family:var(--shell-body-font, "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif);line-height:1.5;font-weight:400;color:#1f2528;background:#f3f...`
