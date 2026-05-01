@@ -2170,3 +2170,18 @@
 - Files changed:
 - None
 - Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.
+
+## 2026-05-01 17:14:35
+
+- Task attempted: User pain: EasyLife cannot continue unattended because the accessibility review is RED for deterministic issues in app-vNext and scanner noise from legacy/generated surfaces. Target: app-vNext/src/features/easycalendar/routes/EasyCalendarWeekPage.tsx, app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx, app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx, app-vNext/src/features/easyprojects/routes/EasyProjectDetailPage.tsx, app-vNext/src/features/experiments/UniversalCapture.tsx, app-vNext/src/styles/globals.css, and docs/codex/ACCESSIBILITY_REVIEW.md if rerun output changes. Change: add programmatic labels to the listed unlabeled app-vNext inputs and replace removed focus outlines with an accessible focus treatment; do not touch old-site or generated assets. First screen: preserve the current protected assistant hierarchy while making inputs and focus states accessible to keyboard and assistive tech users. Remove/simplify: no visual redesign; only repair deterministic RED accessibility blockers. Guardrails: no backend, no auth, no Firebase rules/config, no package/dependency files, no generated output, no deployment config, no secrets, no old-site edits, no broad refactors, and no unrelated files. Acceptance: from app-vNext, run npm.cmd run build; then run the fleet accessibility review for EasyLife and confirm app-vNext RED blockers are resolved or quarantined as scanner scope issues. Check: EasyLife launch doctor no longer blocks on accessibility RED. [class:bugfix risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/easycalendar/routes/EasyCalendarWeekPage.tsx,app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx,app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx,app-vNext/src/features/easyprojects/routes/EasyProjectDetailPage.tsx,app-vNext/src/features/experiments/UniversalCapture.tsx,app-vNext/src/styles/globals.css,docs/codex/ACCESSIBILITY_REVIEW.md accept:npm.cmd run build]
+- Task class: bugfix
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/easycalendar/routes/EasyCalendarWeekPage.tsx, app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx, app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx, app-vNext/src/features/easyprojects/routes/EasyProjectDetailPage.tsx, app-vNext/src/features/experiments/UniversalCapture.tsx, app-vNext/src/styles/globals.css, docs/codex/ACCESSIBILITY_REVIEW.md
+- Acceptance checks: npm.cmd run build
+- Implementation scale: large
+- Build result: Quarantined
+- Files changed:
+- None
+- Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.
