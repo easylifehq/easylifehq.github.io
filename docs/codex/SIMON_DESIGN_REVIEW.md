@@ -4,55 +4,54 @@
 YELLOW
 
 ## One-Sentence Read
-The branch is calmer and more coherent than before, but EasyLife still looks too much like a polished brochure wrapped around an app instead of one daily operating surface.
+EasyLife is finally starting to behave like one calm suite, but the first screens still talk too much and make the user sort through page furniture before they feel the daily assistant.
 
 ## Mission Fit
-The direction partially matches the mission: the module pages now share a visual language, clearer copy, and a more restrained teal system, which helps the suite feel connected. The miss is Pack 1: the signed-in product spine is still not dominant enough. The first screens keep explaining modules with large marketing cards, repeated labels, and feature bands before proving the daily assistant job.
+The current direction matches the mission in fragments: shared navigation, calmer module surfaces, and more restrained language are moving EasyLife toward a connected personal operating system. The miss is information staging. Pack 1 is Product Spine, and the spine is still soft because HQ, Settings, and the module first screens expose too many headings, controls, and explanatory layers before the user gets one clear daily next action.
 
 ## Taste Check
-The best parts are the quieter colors, tactile rounded panels, stronger module previews, and less frantic copy. EasyList, EasyCalendar, EasyNotes, and EasyWorkout now feel like siblings.
+The stronger work is the subtraction: less brochure noise, slightly quieter navigation, and more consistent module polish. That is the right taste lane for EasyLife: practical, tactile, not trying to be a startup landing page in a blazer.
 
-The weak parts are the oversized hero typography, pill overload, repeated identity chrome, and too many card containers stacked like a product tour. The interface has taste, but it is still wearing its pitch deck jacket indoors.
+What still feels off is the dashboard instinct. Six headings above the fold on multiple app routes is not "productive"; it is a committee meeting. Settings is the worst offender with 203 words and 12 controls above the fold, which makes the control center feel like paperwork instead of calm command.
 
 ## Visual Problems To Fix
-- The customer-facing module routes repeat page identity: top nav says EasyLifeHQ, the hero repeats EasyLifeHQ or the module name, then the preview card repeats the module again. This creates double-header energy.
-- Mobile module pages have a heavy header slab followed immediately by a heavy hero slab, so the actual product example feels buried under wrapper chrome.
-- The first viewport on marketing/module pages exposes too many headings and label systems at once: eyebrow, giant title, CTAs, chips, preview card heading, preview rows, then a feature section.
-- Settings desktop violates the staging contract: the first screen shows too many controls and cards before one clear daily setup action wins.
-- Settings mobile stacks large cards with large type, making the page feel like a scroll of configuration blocks rather than a calm control center.
-- Product chips are visually loud for secondary information; they compete with primary action and preview content.
-- The hero typography is too large on mobile for a utility product. It feels dramatic instead of fast.
-- Preview cards are helpful, but their labels sometimes read as internal product taxonomy rather than immediate user outcomes.
+- Settings overloads the first viewport with too many words and too many controls, directly violating the information-staging contract.
+- The root, EasyList, EasyNotes, EasyCalendar, and EasyWorkout screens each show too many competing headings above the fold, so the visual hierarchy becomes a stack of section intros instead of one daily job.
+- The product still has repeated page identity behavior: app shell, route title, module intro, and local panels all restate where the user is instead of getting them into the task.
+- Route chrome is quieter than before, but it still competes with the actual working surface on customer-facing and protected routes.
+- Module cards are visually related now, but several first screens still read as inventories of available features rather than a staged assistant workflow.
+- Mobile confidence is not yet proven enough from the summary; screenshots exist, but the recurring desktop heading overload suggests mobile likely inherits cramped hierarchy unless deliberately checked.
 
 ## Strongest Opportunities
-- Make the signed-in HQ and Settings first screens behave like the real product spine: one next action, today context, compact module status, then quiet navigation.
-- Reduce route chrome across public module pages so the product name, promise, action, and preview are the only first-screen priorities.
-- Convert feature-chip rows into quieter metadata or hide some behind progressive disclosure.
-- Establish one shared page shell rule: one page title, one primary action, one compact status preview, no repeated identity label.
-- Tighten mobile type scale so the product feels like a tool people use daily, not a billboard.
+- Make HQ the unmistakable daily start: one next action, today context, and compact module status, no feature catalog energy.
+- Turn Settings into a quiet control center by grouping secondary controls behind fewer visible sections.
+- Standardize module first screens around a single top hierarchy pattern: title, one useful next action, compact status, then details below.
+- Reduce repeated labels and intro copy across AppHeader and route headers so navigation feels like infrastructure, not a second product page.
+- Use progressive disclosure more aggressively: detail rows, metadata, and helper explanations should appear after the user chooses a module or opens a panel.
 
 ## Priority Fix
-Reduce repeated chrome and heading overload before adding anything else. Start with one visible route family and enforce a single identity layer: keep the top navigation, keep one page title, keep the primary CTA, but demote or remove duplicate module pills, secondary chip rows, and repeated preview labels that restate the same thing. Nami should turn this into a small subtraction task, not a redesign.
+Fix the first-screen hierarchy across the protected app, starting with Settings and then the repeated six-heading pattern on root and core module routes. The next task should not add sections, previews, or copy polish; it should remove or demote visible headings, helper text, and secondary controls until the first viewport has one dominant daily job, one obvious action, and only compact status signals. This is the Product Spine blocker.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: module surfaces are calmer and more related, but repeated chrome and first-screen overload still block the product spine.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: visible cohesion improved, but first-screen overload and repeated chrome still prevent a strong personal operating system spine.
 
 ## Designer Handoff
-Next batch should be a subtraction pass. Keep the teal identity, the tactile cards, the useful preview rows, and the calmer copy. Change the hierarchy: one title per screen, fewer chips, quieter nav, smaller mobile hero type, and Settings staged around one daily setup action before deeper controls. The user should feel "I know what to do next," not "I am being shown every feature in the suite."
+For the next batch, act like an editor, not a decorator. Keep the current calm visual system, shared nav direction, and module relationships. Change the first-screen structure: reduce headings, compress or hide secondary controls, and make the top of each protected route answer "what should I do next today?" before it explains the module. The user should feel guided, not briefed.
 
 ## What Not To Do Next
-- Do not add more sections to solve clarity; the problem is too much first-screen material already.
-- Do not make the cards more decorative; the hierarchy needs discipline, not more styling.
-- Do not broaden into backend, auth, settings behavior, data, or package work.
-- Do not keep polishing copy while leaving repeated route chrome intact.
-- Do not ignore mobile; the mobile screens are where the wrapper problem becomes most obvious.
+- Do not add another dashboard section to solve a hierarchy problem.
+- Do not create more chips, pills, badges, or status labels above the fold.
+- Do not broaden into backend, auth, integrations, packages, or architecture.
+- Do not polish marketing pages while the protected first screen still feels overloaded.
+- Do not treat copy cleanup as a substitute for visual staging.
+- Do not ignore mobile; every reduced first screen needs a 390px check.
 
 ## Next 5 Design Tasks
-- [ ] Reduce repeated identity on one public module route: keep top nav and one hero title, remove or demote duplicate module pills and repeated labels; no route, behavior, or dependency changes.
-- [ ] Repair Settings first-screen staging: make one daily setup action dominant and move secondary setup cards lower; keep existing controls and data behavior unchanged.
-- [ ] Tighten mobile hero scale on module pages: reduce oversized heading/body rhythm while preserving readability and 44px tap targets.
-- [ ] Quiet feature-chip rows across one route: keep only the two most useful chips or restyle them as low-emphasis metadata; do not add new copy claims.
-- [ ] Recheck visual screenshots for repeated headers and heading count after the subtraction pass; only accept if the first viewport has one clear primary job.
+- [ ] Settings first-screen reduction: reduce above-the-fold controls and helper copy so Settings opens as a calm control center with one primary settings group visible; do not change settings behavior or add new options.
+- [ ] Root HQ hierarchy pass: reduce competing headings above the fold and make one daily next action visually dominant; preserve existing routes and data.
+- [ ] EasyList first-screen staging: demote one repeated heading or secondary status group so the next task action reads first; no logic or persistence changes.
+- [ ] EasyNotes first-screen staging: make capture or recent review the first readable job and move metadata/detail language lower; keep editor behavior unchanged.
+- [ ] EasyCalendar first-screen staging: reduce competing headings in the planning view so today or the next calendar decision leads; do not touch recurrence or calendar data behavior.
 
 ## Stop Or Continue
 continue but fix visual issues first
