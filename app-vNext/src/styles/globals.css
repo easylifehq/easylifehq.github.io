@@ -70,7 +70,6 @@
   --easy-viewport-height: 100dvh;
   --easy-keyboard-inset: 0px;
 }
-
 *,
 *::before,
 *::after {
@@ -1660,7 +1659,7 @@ a {
 .search-input:focus {
   border-color: var(--ui-border-strong, var(--shell-input-border));
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--shell-accent) 16%, transparent);
-  outline: none;
+  outline: 2px solid transparent;
 }
 
 input::placeholder,
@@ -2190,7 +2189,7 @@ textarea::placeholder {
 .view-button-vnext:focus-visible {
   border-color: var(--ui-border-strong, var(--shell-card-border));
   color: var(--ui-text-primary, var(--shell-page-text));
-  outline: none;
+  outline: 2px solid transparent;
 }
 
 .notes-library-toolbar {
@@ -2614,7 +2613,7 @@ textarea::placeholder {
 
 .notes-body-field textarea:focus,
 .notes-title-field input:focus {
-  outline: none;
+  outline: 2px solid transparent;
 }
 
 .notes-meta-row {

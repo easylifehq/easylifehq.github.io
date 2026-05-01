@@ -9,7 +9,6 @@ function isFollowUpNeeded(value: string) {
   if (!value) return false;
   return value <= new Date().toISOString().split("T")[0];
 }
-
 const emptyDraft: ContactDraft = {
   fullName: "",
   relationship: "",
@@ -243,7 +242,7 @@ export function EasyContactsPage() {
 
       <PageSection eyebrow="Directory" title="Your network" description="Search, scan, and open any person when you want the full details.">
         <div className="toolbar-row">
-          <input className="search-input" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search contacts" />
+          <input className="search-input" aria-label="Search contacts" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search contacts" />
         </div>
 
         {isLoading ? <p className="helper-copy">Loading contacts...</p> : null}

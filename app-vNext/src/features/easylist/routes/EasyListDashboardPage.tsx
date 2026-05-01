@@ -12,7 +12,6 @@ import type { TaskRecord } from "@/lib/firestore/tasks";
 function toDateInputValue(date: Date) {
   return date.toISOString().split("T")[0];
 }
-
 export function EasyListDashboardPage() {
   const { tasks, isLoading, error, saveTask, markComplete, markActive, deleteTask } = useEasyList();
   const { isExperimentalFeatureEnabled } = useSettings();
@@ -262,6 +261,7 @@ export function EasyListDashboardPage() {
               <input
                 type="search"
                 className="search-input"
+                aria-label="Search your tasks"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Search your tasks"
@@ -294,6 +294,7 @@ export function EasyListDashboardPage() {
                   <summary>Manage lists</summary>
                   <div className="easylist-new-list">
                     <input
+                      aria-label="New list name"
                       value={newListName}
                       onChange={(event) => setNewListName(event.target.value)}
                       placeholder="New list"

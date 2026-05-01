@@ -86,7 +86,6 @@ function detectCaptureType(value: string) {
   }
   return "task";
 }
-
 function priorityLabel(priority: 1 | 2 | 3 | 4 | 5) {
   return {
     1: "Urgent",
@@ -792,6 +791,7 @@ export function UniversalCapture() {
             <label className="field-stack">
               <span>Category</span>
               <input
+                aria-label="Task category"
                 value={details.taskCategory}
                 onChange={(event) => setDetails((current) => ({ ...current, taskCategory: event.target.value }))}
                 placeholder="Inbox"

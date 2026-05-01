@@ -195,6 +195,7 @@ export function EasyCalendarWeekPage() {
               >
                 <input
                   type="color"
+                  aria-label={`Change ${category.name} color`}
                   value={category.color}
                   onChange={(event) => {
                     const draft = {
@@ -216,6 +217,7 @@ export function EasyCalendarWeekPage() {
                 <label className="field-stack calendar-category-name-edit">
                   <span>Category</span>
                   <input
+                    aria-label={`Rename ${category.name} category`}
                     value={categoryDrafts[category.id] ?? category.name}
                     onChange={(event) =>
                       setCategoryDrafts((current) => ({ ...current, [category.id]: event.target.value }))

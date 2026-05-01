@@ -192,7 +192,7 @@ export function EasyProjectDetailPage() {
           description="Use sections for milestones, phases, or groups of work."
         >
           <form className="task-composer-actions" onSubmit={handleAddSection}>
-            <input name="title" className="search-input" placeholder="Research, Build, Polish..." />
+            <input name="title" className="search-input" aria-label="Section title" placeholder="Research, build, review..." />
             <button type="submit" className="primary-button">Add section</button>
           </form>
         </PageSection>
@@ -223,7 +223,7 @@ export function EasyProjectDetailPage() {
 
               {editingSectionId === section.id ? (
                 <form className="task-composer-actions" onSubmit={(event) => void handleSaveSection(event, section.id)}>
-                  <input value={editingSectionTitle} onChange={(event) => setEditingSectionTitle(event.target.value)} className="search-input" />
+                  <input value={editingSectionTitle} onChange={(event) => setEditingSectionTitle(event.target.value)} className="search-input" aria-label="Edit section title" />
                   <button type="button" className="ghost-button" onClick={() => setEditingSectionId("")}>
                     Cancel
                   </button>
