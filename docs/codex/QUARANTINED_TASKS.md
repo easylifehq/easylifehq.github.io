@@ -158,3 +158,13 @@
 - Files restored before continuing:
 - None
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-01 14:45:12
+
+- Batch: 1
+- Task index: 2
+- Task: User pain: The signed-in shell still competes with the daily work surface, especially on mobile. Target: shared protected navigation and suite chrome in `app-vNext/src/components/navigation/` and related `app-vNext/src/styles/`. Change: make the app switcher/current-module treatment quieter and faster to scan while keeping all existing routes, labels, menu behavior, and 44px tap targets. First screen: the current module and next useful action should appear before any heavy wrapper feel. Remove/simplify: reduce one duplicate module label, oversized nav slab, or chip-like identity cue; preserve route behavior, labels, auth, Firebase, data shapes, persistence, desktop layout, and current visual system. Guardrails: frontend UI/style only; no backend, auth, Firebase rules/config, real AI/API calls, data-shape changes, package/dependency files, generated output, deployment config, secrets, root files, new routes, broad redesign, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect protected mobile routes and verify the shell feels like a working control, not a product wrapper. [class:design risk:low mode:single impact:visible surface:app scope:app-vNext/src/components/navigation/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Reason: Large Phase 3 task requires a concrete slice plan before implementation.
+- Files restored before continuing:
+- None
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.

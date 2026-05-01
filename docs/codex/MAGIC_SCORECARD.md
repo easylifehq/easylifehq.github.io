@@ -1889,3 +1889,24 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
 - Follow-up: Large Phase 3 task requires a concrete slice plan before implementation.
+
+## 2026-05-01 14:45:12
+
+- Task: User pain: The signed-in shell still competes with the daily work surface, especially on mobile. Target: shared protected navigation and suite chrome in `app-vNext/src/components/navigation/` and related `app-vNext/src/styles/`. Change: make the app switcher/current-module treatment quieter and faster to scan while keeping all existing routes, labels, menu behavior, and 44px tap targets. First screen: the current module and next useful action should appear before any heavy wrapper feel. Remove/simplify: reduce one duplicate module label, oversized nav slab, or chip-like identity cue; preserve route behavior, labels, auth, Firebase, data shapes, persistence, desktop layout, and current visual system. Guardrails: frontend UI/style only; no backend, auth, Firebase rules/config, real AI/API calls, data-shape changes, package/dependency files, generated output, deployment config, secrets, root files, new routes, broad redesign, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect protected mobile routes and verify the shell feels like a working control, not a product wrapper. [class:design risk:low mode:single impact:visible surface:app scope:app-vNext/src/components/navigation/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: Pack 1 - Product Spine
+- Task class: design
+- Task risk: low
+- Changed files: 0
+- Materiality signal: impact=visible, surface-files=0, structural-files=0, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
+- Before visual evidence:
+- None recorded before task.
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
+- Follow-up: Large Phase 3 task requires a concrete slice plan before implementation.
