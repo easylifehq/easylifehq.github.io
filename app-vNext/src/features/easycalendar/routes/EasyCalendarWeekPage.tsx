@@ -68,14 +68,11 @@ export function EasyCalendarWeekPage() {
 
   return (
     <>
-      <PageSection eyebrow="Week" title="Calendar">
+      <PageSection eyebrow="Calendar" title="Week plan">
         {error ? <p className="error-copy">{error}</p> : null}
-        <div className="calendar-month-command">
-          <p>Use week view when you want the wider scan, then jump back into a day from month view.</p>
-          <div className="calendar-inline-actions">
-            <Link to="/app/easycalendar/month" className="button-secondary compact-button">Month</Link>
-            <Link to="/app/easycalendar/day" className="ghost-button compact-button">Today</Link>
-          </div>
+        <div className="calendar-inline-actions">
+          <Link to="/app/easycalendar/month" className="button-secondary compact-button">Month</Link>
+          <Link to="/app/easycalendar/day" className="ghost-button compact-button">Today</Link>
         </div>
         <div className="quiet-metrics-row" aria-label="Week snapshot">
           <span>{events.length} events</span>
