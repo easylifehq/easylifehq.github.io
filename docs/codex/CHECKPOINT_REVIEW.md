@@ -4,40 +4,39 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife mission: recent work has focused on calmer protected HQ hierarchy, reduced chrome, mobile product-page restraint, and more concrete daily-workspace language. Progress is meaningful, but the next work should stay narrowly sliced because two broad revamp tasks were quarantined for needing a concrete slice plan.
+The branch is moving toward the EasyLife mission with small protected-side and marketing polish improvements that make the suite feel calmer, more connected, and more assistant-like. Work remains queued, especially EasyNotes, assistant-voice copy, marketing subtraction, and final cohesion.
 
 ## Safety Review
-No forbidden or high-risk file changes found in the current changed-file list. Working tree is clean, build passed, and quarantined broad tasks made no file changes.
+No forbidden or high-risk files found in the current changed-file list. Working tree is clean, package/dependency/auth/Firebase/backend/deploy/secret files are not changed.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: 12 shown recently, including HQ/app-shell hierarchy polish, marketing chrome reduction, Settings tap-target repair, protected HQ evidence update, and copy cleanup.
-- Files changed: frontend UI/copy/style files under `app-vNext/src/` plus Codex docs/report files.
-- Commits added: yes, through `ac9751d`.
-- Queue status: 8 unchecked tasks remain.
+- completed tasks in this checkpoint window: EasyList dashboard assistant-flow polish and EasyCalendar month/planning clarity polish
+- files changed: EasyCalendar, EasyList, EasyWorkout, HQ, marketing/product pages, experiment copy, global styles, and Codex docs
+- commits added: latest HEAD is `c499f09` with multiple checkpoint commits since `main`
+- queue status: 6 unchecked tasks remain
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks.
-- Simon design review: YELLOW, continue but fix visual issues first; should shape next tasks toward narrow visual repair.
-- Robin copy review: YELLOW, continue but fix copy first; should shape next tasks toward concrete assistant-language cleanup.
-- Accessibility review: missing; should be filled before ship-ready judgment.
-- Performance review: missing; should be filled before ship-ready judgment.
-- Joey security review: GREEN; no blocking signal.
-- Franky formula review: missing; likely not relevant unless spreadsheet/formula surfaces are touched, but still incomplete as a gate.
-- Product truth: MISSING but `product truth ok` is true; no configured `PRODUCT_TRUTH.md`, so not a blocker under current inputs.
+- visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks
+- Simon design review: YELLOW; should influence next tasks toward visual repair/subtraction first
+- Robin copy review: YELLOW; should influence next tasks toward concrete assistant-language cleanup
+- accessibility review: missing; should be added before parking as ship-ready
+- performance review: missing; should be added before parking as ship-ready
+- Joey security review: GREEN; no blocking security signal
+- Franky formula review: missing; likely non-blocking unless spreadsheets/formulas enter scope
+- product truth: missing config but `ok: True`; no RED blocker
 
 ## Recommended Next Step
 continue
 
 ## Next Batch Guidance
-- Recommended next batch size: 1
-- Next work mode: repair-first
-- Use a single narrow visual or copy slice because Simon and Robin are both YELLOW and the last broad protected-side tasks were quarantined for insufficient slicing.
+- recommended next batch size: 2
+- next work mode: repair-first
+- Use small queued repair slices because Simon and Robin are YELLOW, two broad tasks were quarantined for needing clearer slices, and there is still mission-forward unchecked work.
 
 ## Notes For Human Reviewer
-- Build is passing and the tree is clean.
-- Not ship-ready because 8 unchecked tasks remain.
-- Broad Phase 3 revamp tasks should be decomposed before implementation.
-- Missing accessibility, performance, and Franky review gates should be resolved before final parking.
+- Build passed and working tree is clean.
+- Not ship-ready because 6 tasks remain and several review gates are missing.
+- Avoid broad protected-side revamp tasks; continue with narrow EasyNotes, copy, or shell/HQ slices.
