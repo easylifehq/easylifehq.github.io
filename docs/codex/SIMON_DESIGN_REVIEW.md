@@ -4,57 +4,55 @@
 YELLOW
 
 ## One-Sentence Read
-The branch is calmer and more coherent, but it still dresses simple product pages in too much wrapper chrome and repeated identity furniture.
+The branch is calmer and more coherent than before, but EasyLife still looks too much like a polished brochure wrapped around an app instead of one daily operating surface.
 
 ## Mission Fit
-The direction supports Pack 1 - Product Spine: the marketing pages now feel more related, the palette is restrained, and the product previews explain daily use better than before. It is not yet a fully convincing personal operating system because the suite shell still competes with the actual module story, especially on mobile where the header, hero card, chips, and preview panel all arrive as separate layers instead of one confident product surface.
+The direction partially matches the mission: the module pages now share a visual language, clearer copy, and a more restrained teal system, which helps the suite feel connected. The miss is Pack 1: the signed-in product spine is still not dominant enough. The first screens keep explaining modules with large marketing cards, repeated labels, and feature bands before proving the daily assistant job.
 
 ## Taste Check
-The best parts are the quiet teal system, strong type contrast, tactile cards, and concrete daily-workflow copy like "See when your life is full" and "Write first. Sort it out later." EasyCalendar feels closest to premium because the preview content has a real job and the hierarchy is clean.
+The best parts are the quieter colors, tactile rounded panels, stronger module previews, and less frantic copy. EasyList, EasyCalendar, EasyNotes, and EasyWorkout now feel like siblings.
 
-The weaker parts are the repeated module labels, pill clutter, heavy bordered containers, and a faint generic SaaS wrapper smell. The pages are trying to be calm, but sometimes they look like calm inside a shipping box. EasyList still exposes "EasyCalendar handoff," which reads like internal workflow language, not customer-facing product clarity.
+The weak parts are the oversized hero typography, pill overload, repeated identity chrome, and too many card containers stacked like a product tour. The interface has taste, but it is still wearing its pitch deck jacket indoors.
 
 ## Visual Problems To Fix
-- Mobile customer-facing routes still begin with a large rounded navigation slab before the product page starts; the actual module experience is pushed down and feels wrapped instead of immediate.
-- Product identity repeats too many times: top brand, hero eyebrow, preview pill label, and sometimes feature section labeling all restate the same idea.
-- The hero chip rows are visually loud on mobile; they create a secondary navigation-looking layer without enough payoff.
-- Preview cards use the same pale green panel treatment across products, which helps consistency but also makes modules feel templated rather than distinct.
-- EasyList mobile still has "EasyCalendar handoff" as a chip, which is clunky and builder-facing.
-- Several mobile preview rows are tight: labels, values, and status pills compete in narrow white rows, especially EasyList and EasyNotes.
-- Desktop pages have solid spacing, but the large white hero card inside a full page wrapper makes the route feel like a demo page rather than the product itself.
-- Feature sections below the hero repeat the card-and-eyebrow formula, which risks making every page feel assembled from the same kit.
+- The customer-facing module routes repeat page identity: top nav says EasyLifeHQ, the hero repeats EasyLifeHQ or the module name, then the preview card repeats the module again. This creates double-header energy.
+- Mobile module pages have a heavy header slab followed immediately by a heavy hero slab, so the actual product example feels buried under wrapper chrome.
+- The first viewport on marketing/module pages exposes too many headings and label systems at once: eyebrow, giant title, CTAs, chips, preview card heading, preview rows, then a feature section.
+- Settings desktop violates the staging contract: the first screen shows too many controls and cards before one clear daily setup action wins.
+- Settings mobile stacks large cards with large type, making the page feel like a scroll of configuration blocks rather than a calm control center.
+- Product chips are visually loud for secondary information; they compete with primary action and preview content.
+- The hero typography is too large on mobile for a utility product. It feels dramatic instead of fast.
+- Preview cards are helpful, but their labels sometimes read as internal product taxonomy rather than immediate user outcomes.
 
 ## Strongest Opportunities
-- Make the mobile route shell quieter so the first viewport belongs to the product promise and preview, not navigation chrome.
-- Reduce each product hero to one identity moment: either the eyebrow or the preview label, not both.
-- Give each module preview a more specific shape: calendar should feel scheduled, notes should feel editorial, list should feel scannable, workout should feel fast and tap-first.
-- Replace remaining internal words like "handoff" with user-visible outcomes such as "Send to calendar" or "Turn notes into tasks."
-- Tighten mobile preview rows with simpler status treatment and fewer competing typographic weights.
-- Let the signed-in product spine lead the next visual push; marketing polish is useful, but the mission is one connected operating system.
+- Make the signed-in HQ and Settings first screens behave like the real product spine: one next action, today context, compact module status, then quiet navigation.
+- Reduce route chrome across public module pages so the product name, promise, action, and preview are the only first-screen priorities.
+- Convert feature-chip rows into quieter metadata or hide some behind progressive disclosure.
+- Establish one shared page shell rule: one page title, one primary action, one compact status preview, no repeated identity label.
+- Tighten mobile type scale so the product feels like a tool people use daily, not a billboard.
 
 ## Priority Fix
-The single most important design problem is repeated route chrome on customer-facing product pages. On mobile, slim the top navigation and remove redundant product identity inside the hero/preview stack so the user sees one clean product story: product name, promise, action, and functional preview. Do not add sections. Subtract labels, quiet the chip row, and make the preview feel like the first real artifact.
+Reduce repeated chrome and heading overload before adding anything else. Start with one visible route family and enforce a single identity layer: keep the top navigation, keep one page title, keep the primary CTA, but demote or remove duplicate module pills, secondary chip rows, and repeated preview labels that restate the same thing. Nami should turn this into a small subtraction task, not a redesign.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: module surfaces are calmer and more related, but repeated chrome and first-screen overload still block the product spine.
 
 ## Designer Handoff
-Next implementer should treat this as a subtraction pass, not another polish pass. Keep the current typography, teal accent, clean cards, and concrete daily-life copy. Change the mobile hierarchy by reducing wrapper chrome, removing repeated product labels inside previews, and making chip rows less dominant. The result should feel like opening a useful product page, not walking through a nicely formatted product brochure.
+Next batch should be a subtraction pass. Keep the teal identity, the tactile cards, the useful preview rows, and the calmer copy. Change the hierarchy: one title per screen, fewer chips, quieter nav, smaller mobile hero type, and Settings staged around one daily setup action before deeper controls. The user should feel "I know what to do next," not "I am being shown every feature in the suite."
 
 ## What Not To Do Next
-- Do not add more marketing sections to solve a hierarchy problem.
-- Do not introduce new colors, gradients, illustrations, or decorative texture.
-- Do not make the cards rounder or softer; the issue is repetition, not insufficient friendliness.
-- Do not touch backend, auth, data, routing behavior, packages, deployment, or integrations.
-- Do not ignore mobile; the mobile first viewport is where the clutter is most expensive.
-- Do not rename everything at once; fix the most visible repeated labels and internal phrases first.
+- Do not add more sections to solve clarity; the problem is too much first-screen material already.
+- Do not make the cards more decorative; the hierarchy needs discipline, not more styling.
+- Do not broaden into backend, auth, settings behavior, data, or package work.
+- Do not keep polishing copy while leaving repeated route chrome intact.
+- Do not ignore mobile; the mobile screens are where the wrapper problem becomes most obvious.
 
 ## Next 5 Design Tasks
-- [ ] Mobile product chrome trim: reduce the customer-facing mobile header height/visual weight while preserving all labels, routes, and 44px tap targets.
-- [ ] Preview identity cleanup: remove one redundant product-name pill from each marketing preview where the hero eyebrow already names the product; do not add new content.
-- [ ] EasyList copy cleanup: replace visible "handoff" language with concrete user-facing action language; keep meaning and avoid new feature claims.
-- [ ] Mobile preview row tightening: adjust spacing and status pill scale inside one product preview so labels and values do not compete on 390px screens.
-- [ ] Feature section restraint pass: reduce repeated eyebrow/card emphasis in one marketing feature section without changing layout structure or adding sections.
+- [ ] Reduce repeated identity on one public module route: keep top nav and one hero title, remove or demote duplicate module pills and repeated labels; no route, behavior, or dependency changes.
+- [ ] Repair Settings first-screen staging: make one daily setup action dominant and move secondary setup cards lower; keep existing controls and data behavior unchanged.
+- [ ] Tighten mobile hero scale on module pages: reduce oversized heading/body rhythm while preserving readability and 44px tap targets.
+- [ ] Quiet feature-chip rows across one route: keep only the two most useful chips or restyle them as low-emphasis metadata; do not add new copy claims.
+- [ ] Recheck visual screenshots for repeated headers and heading count after the subtraction pass; only accept if the first viewport has one clear primary job.
 
 ## Stop Or Continue
 continue but fix visual issues first
