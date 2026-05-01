@@ -2039,3 +2039,18 @@
 - Files changed:
 - app-vNext/src/features/experiments/AiCommandCenter.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-01 14:45:11
+
+- Task attempted: User pain: EasyLife still needs an overall protected-side revamp so it feels like one personal assistant home instead of a bundle of separate tools. Target: the signed-in HQ first screen and shared app shell in `app-vNext/src/features/hq/`, `app-vNext/src/components/navigation/`, and related `app-vNext/src/styles/`. Change: reshape the first protected viewport around one assistant-style daily start surface with a clear next action, today context, and two compact module signals using existing local/app data only. First screen: daily next action, today context, and compact module status must be dominant before secondary navigation, explanation, or decorative chrome. Remove/simplify: demote or combine one repeated header/card/pill layer that makes the signed-in app feel like separate modules; preserve routes, existing auth behavior, Firebase config/rules, local data shapes, persistence, desktop stability, and the current calm teal identity. Guardrails: frontend UI/copy/style only; no backend, auth, Firebase rules/config, real AI/API calls, data-shape changes, package/dependency files, generated output, deployment config, secrets, root files, broad architecture rewrite, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect `/app/hq?visualQa=1` at 390px and desktop and verify the first viewport reads as a personal assistant start screen, not a module directory. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/hq/,app-vNext/src/components/navigation/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/hq, app-vNext/src/components/navigation, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: large
+- Build result: Quarantined
+- Files changed:
+- None
+- Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.

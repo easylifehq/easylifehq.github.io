@@ -1,6 +1,6 @@
 # Sensitive Systems Review
 
-Generated: 2026-04-29 17:22:27
+Generated: 2026-05-01 14:45:11
 
 ## Verdict
 
@@ -14,5 +14,6 @@ GREEN
 
 - Auth changes require AUTH_POLICY.md and AUTH_APPROVAL.md.
 - Payment changes require PAYMENT_RISK.md and PAYMENT_APPROVAL.md.
-- External services require EXTERNAL_SERVICES.md.
+- External services and env-var additions require approved EXTERNAL_SERVICES.md.
+- Deployment config changes require DEPLOYMENT_RISK.md and DEPLOYMENT_APPROVAL.md.
 - Production credentials and payment activation remain human-controlled.
