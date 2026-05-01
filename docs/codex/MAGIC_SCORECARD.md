@@ -2011,3 +2011,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
 - Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-01 15:11:42
+
+- Task: User pain: EasyLife's visible language still needs one broader assistant-voice pass after the screen hierarchy improves. Target: user-facing copy in `app-vNext/src/`, prioritizing HQ, protected modules, marketing, experiments, and EasyProjects strings named by Robin. Change: replace remaining visible builder/process words like "handoff", "proof", "polish", "demo", "sample data", and "command center" with concrete daily-life language such as calendar block, task list, project brief, workout log, example day, daily plan, and workspace. First screen: visible copy should describe what the user can do today, not how the product was built. Remove/simplify: replace or remove one internal phrase at a time without adding new claims or longer explanation; preserve behavior, routes, auth, Firebase, data shapes, persistence, desktop layout, and existing product meaning. Guardrails: frontend copy only; no mission docs, internal reports, backend, auth, Firebase rules/config, real AI/API calls, package/dependency files, generated output, deployment config, secrets, root files, broad rewrites, or unrelated churn. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: search visible source for the replaced terms and verify remaining instances are internal identifiers, docs, or non-customer-visible. [class:copy risk:low mode:single impact:visible surface:mixed scope:app-vNext/src/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: Pack 1 - Product Spine
+- Task class: unknown
+- Task risk: unknown
+- Changed files: 15
+- Materiality signal: impact=standard, surface-files=15, structural-files=15, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: quieter previews and copy are better, but repeated route chrome and product-label pills still keep the spine from feeling fully resolved.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260428-183434\easylist-visualQa-1-mobile.png
+- Follow-up: Implementation guardrails failed.
