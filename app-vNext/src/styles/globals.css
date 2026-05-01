@@ -4618,20 +4618,20 @@ textarea::placeholder {
   display: grid;
   align-content: center;
   gap: 0.18rem;
-  min-height: 4.15rem;
-  padding: 0.65rem;
+  min-height: 3.35rem;
+  padding: 0.44rem 0.55rem;
   border-radius: 8px;
-  border: 1px solid color-mix(in srgb, var(--app-accent) 14%, var(--ui-border-subtle));
-  background: color-mix(in srgb, var(--ui-bg-card) 84%, white 16%);
+  border: 1px solid color-mix(in srgb, var(--app-accent) 8%, var(--ui-border-subtle));
+  background: color-mix(in srgb, var(--ui-bg-card) 56%, transparent);
   color: var(--ui-text-muted, var(--shell-muted-text));
-  font-size: 0.74rem;
-  font-weight: 850;
+  font-size: 0.7rem;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
 .calendar-month-overview-stats strong {
   color: var(--ui-text-primary, var(--shell-heading-text));
-  font-size: 1rem;
+  font-size: 0.94rem;
   line-height: 1;
   text-transform: none;
 }
@@ -8373,8 +8373,8 @@ button.calendar-detail-card:disabled {
   }
 
   .calendar-month-overview-stats span {
-    min-height: 3.65rem;
-    padding: 0.55rem;
+    min-height: 2.9rem;
+    padding: 0.38rem 0.45rem;
   }
 
   .calendar-month-overview-actions .calendar-inline-actions {

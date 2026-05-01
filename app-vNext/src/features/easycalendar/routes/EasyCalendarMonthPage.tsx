@@ -15,6 +15,10 @@ import {
   toDateInputValue,
 } from "@/features/easycalendar/lib/calendarUtils";
 
+function formatDecisionDate(date: Date) {
+  return new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric" }).format(date);
+}
+
 function getMonthGrid(date: Date) {
   const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
   const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -55,6 +59,45 @@ export function EasyCalendarMonthPage() {
       openDayCount,
     };
   }, [categories, events, monthDays, taskBlocks, tasks]);
+  const isViewingCurrentMonth =
+    viewedMonth.getFullYear() === today.getFullYear() && viewedMonth.getMonth() === today.getMonth();
+  const todayItems = isViewingCurrentMonth ? getItemsForDay(today, events, taskBlocks, categories, tasks) : [];
+  const todayScheduledMinutes = isViewingCurrentMonth ? getScheduledMinutesForDay(today, events, taskBlocks) : 0;
+  const hasTodayScheduledTime = todayScheduledMinutes > 0;
+  const nextOpenDay = useMemo(() => {
+    const firstRelevantDay = isViewingCurrentMonth ? today : monthDays[0] ?? today;
+
+    return (
+      monthDays.find(
+        (day) =>
+          day >= firstRelevantDay &&
+          getScheduledMinutesForDay(day, events, taskBlocks) === 0
+      ) || null
+    );
+  }, [events, isViewingCurrentMonth, monthDays, taskBlocks, today]);
+  const overviewLabel = isViewingCurrentMonth ? "Today" : "Next open day";
+  const overviewTitle = isViewingCurrentMonth
+    ? hasTodayScheduledTime
+      ? `Today has ${formatDuration(todayScheduledMinutes)} planned`
+      : todayItems.length
+        ? "Today has reminders, no time blocked"
+      : "Today is open"
+    : nextOpenDay
+      ? `${formatDecisionDate(nextOpenDay)} is open`
+      : "This month is already planned";
+  const overviewCopy = isViewingCurrentMonth
+    ? todayItems.length
+      ? `${todayItems.length} item${todayItems.length === 1 ? "" : "s"} on today's calendar. Open today to adjust the plan before filling the rest of the month.`
+      : "Plan today first, then use the month grid for the rest of the month."
+    : nextOpenDay
+      ? `Plan ${formatDecisionDate(nextOpenDay)} next, then use the month grid when you need details.`
+      : "Use a day card when you need to review details or make room.";
+  const overviewActionDate = isViewingCurrentMonth ? today : nextOpenDay || monthDays[0] || today;
+  const overviewActionLabel = isViewingCurrentMonth
+    ? "Open today"
+    : nextOpenDay
+      ? "Open next day"
+      : "Open first day";
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
     [selectedBlockId, taskBlocks]
@@ -79,17 +122,9 @@ export function EasyCalendarMonthPage() {
         {isLoading ? <p className="helper-copy">Loading your month...</p> : null}
         <div className="calendar-month-overview">
           <div className="calendar-month-overview-copy">
-            <span>Month desk</span>
-            <strong>
-              {monthSnapshot.itemCount
-                ? `${monthSnapshot.itemCount} scheduled item${monthSnapshot.itemCount === 1 ? "" : "s"}`
-                : "Month is open"}
-            </strong>
-            <p>
-              {monthSnapshot.itemCount
-                ? `${formatDuration(monthSnapshot.scheduledMinutes)} planned, with ${monthSnapshot.openDayCount} open day${monthSnapshot.openDayCount === 1 ? "" : "s"} still available.`
-                : "Events, deadlines, and task blocks will stay separated here for a clean planning read."}
-            </p>
+            <span>{overviewLabel}</span>
+            <strong>{overviewTitle}</strong>
+            <p>{overviewCopy}</p>
           </div>
           <div className="calendar-month-overview-stats" aria-label="Month snapshot">
             <span>
@@ -125,8 +160,11 @@ export function EasyCalendarMonthPage() {
                 Next
               </button>
             </div>
-            <Link className="primary-button compact-button" to={`/app/easycalendar/day?date=${toDateInputValue(today)}`}>
-              Open today
+            <Link
+              className="primary-button compact-button"
+              to={`/app/easycalendar/day?date=${toDateInputValue(overviewActionDate)}`}
+            >
+              {overviewActionLabel}
             </Link>
           </div>
         </div>

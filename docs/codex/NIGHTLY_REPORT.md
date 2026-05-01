@@ -2085,3 +2085,19 @@
 - app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-01 15:04:57
+
+- Task attempted: User pain: EasyCalendar should feel like planning the day with the assistant, not managing a dense calendar utility. Target: the signed-in EasyCalendar month/planning surface and related styles in `app-vNext/src/features/easycalendar/` and `app-vNext/src/styles/`. Change: make one existing planning or schedule summary easier to understand at first glance, especially around today, preview, or undo context. First screen: the current day or next calendar decision should read before secondary controls and dense metadata. Remove/simplify: demote one cramped row, repeated status cue, or over-explained control group; preserve calendar data shapes, recurrence behavior, routes, auth, Firebase, dependencies, package files, generated output, deployment config, and secrets. Guardrails: frontend UI/copy/style only; no backend, auth, Firebase rules/config, persistence changes, data-shape changes, real AI/API calls, package/dependency files, generated output, deployment config, root files, or unrelated modules. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect `/app/easycalendar/month?visualQa=1` at 390px and verify the next planning decision is clearer and calmer. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/easycalendar/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/easycalendar, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easycalendar/routes/EasyCalendarMonthPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
