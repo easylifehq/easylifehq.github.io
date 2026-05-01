@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { PageSection } from "@/components/ui/PageSection";
 import { TaskCard } from "@/features/easylist/components/TaskCard";
@@ -37,8 +38,12 @@ export function EasyListDashboardPage() {
       ),
     [visibleTasks, activeListName]
   );
+  const allOpenTasks = useMemo(
+    () => sortActiveTasks(visibleTasks.filter((task) => !task.completed)),
+    [visibleTasks]
+  );
   const focusTasks = useMemo(() => {
-    const sorted = sortActiveTasks(visibleTasks.filter((task) => !task.completed));
+    const sorted = allOpenTasks;
     const overdue = sorted.filter(isOverdue);
     const dueToday = sorted.filter((task) => isDueToday(task) && !isOverdue(task));
     const highUrgency = sorted.filter(
@@ -48,7 +53,7 @@ export function EasyListDashboardPage() {
     return [...overdue, ...dueToday, ...highUrgency].filter(
       (task, index, array) => array.findIndex((candidate) => candidate.id === task.id) === index
     );
-  }, [visibleTasks]);
+  }, [allOpenTasks]);
   const upcomingTasks = useMemo(() => {
     const today = startOfDay(new Date());
     return sortActiveTasks(
@@ -78,6 +83,11 @@ export function EasyListDashboardPage() {
     );
   }, [baseTasks, search]);
   const completedTodayCount = useMemo(() => visibleTasks.filter(isCompletedToday).length, [visibleTasks]);
+  const openTaskCount = allOpenTasks.length;
+  const dueTodayCount = useMemo(
+    () => visibleTasks.filter((task) => !task.completed && isDueToday(task) && !isOverdue(task)).length,
+    [visibleTasks]
+  );
   const overdueTasks = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -90,6 +100,7 @@ export function EasyListDashboardPage() {
       })
     );
   }, [visibleTasks, activeListName]);
+  const nextQueueTask = focusTasks[0] ?? upcomingTasks[0] ?? activeTasks[0] ?? allOpenTasks[0] ?? null;
 
   useEffect(() => {
     return () => {
@@ -191,95 +202,139 @@ export function EasyListDashboardPage() {
       <PageSection
         eyebrow="EasyList"
         title="Tasks"
-        description={`${boardTitle}: ${filteredTasks.length} open task${filteredTasks.length === 1 ? "" : "s"} shown. Search, review, or finish one item at a time.`}
+        description="Start with the next item in the queue. Open controls when you need to search, switch lists, or edit in bulk."
       >
-        <div className="easylist-smart-tabs" aria-label="Task views">
-          <button type="button" className={activeView === "focus" ? "active" : ""} onClick={() => setActiveView("focus")}>
-            Focus
-          </button>
-          <button type="button" className={activeView === "upcoming" ? "active" : ""} onClick={() => setActiveView("upcoming")}>
-            Upcoming
-          </button>
-          <button type="button" className={activeView === "lists" ? "active" : ""} onClick={() => setActiveView("lists")}>
-            Lists
-          </button>
-        </div>
-        <div className="toolbar-row toolbar-row-compact">
-          <input
-            type="search"
-            className="search-input"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search your tasks"
-          />
-          <div className="easylist-dashboard-metrics" aria-label="Task summary">
-            <span>{filteredTasks.length} shown</span>
-            <span>{overdueTasks.length} overdue</span>
-            <span>{completedTodayCount} done today</span>
+        <section className="easylist-action-queue" aria-label="Task action queue">
+          <div className="easylist-action-main">
+            <span>Next up</span>
+            {nextQueueTask ? (
+              <>
+                <strong>{nextQueueTask.title || "Untitled task"}</strong>
+                <p>Tap the circle on a task to finish it. Undo appears before it clears.</p>
+                <button type="button" className="primary-button compact-button" onClick={() => setSelectedTask(nextQueueTask)}>
+                  Review task
+                </button>
+              </>
+            ) : (
+              <>
+                <strong>Capture the next task</strong>
+                <p>Add one clear item now, then come back here to work the queue.</p>
+                <Link className="primary-button compact-button" to="/app/easylist/add">
+                  Add task
+                </Link>
+              </>
+            )}
           </div>
-        </div>
+          <div className="easylist-action-stats" aria-label="Compact list state">
+            <span>
+              <strong>{openTaskCount}</strong>
+              open
+            </span>
+            <span>
+              <strong>{dueTodayCount}</strong>
+              due today
+            </span>
+            <span>
+              <strong>{completedTodayCount}</strong>
+              done today
+            </span>
+          </div>
+        </section>
 
-        {activeView === "lists" ? (
-          <div className="easylist-list-bar">
-            <div className="easylist-list-tabs" aria-label="Task lists">
-              {listNames.map((name) => (
+        <details className="easylist-control-drawer">
+          <summary>
+            View, search, and edit
+            <span>{boardTitle}: {filteredTasks.length} shown</span>
+          </summary>
+          <div className="easylist-control-body">
+            <div className="easylist-smart-tabs" aria-label="Task views">
+              <button type="button" className={activeView === "focus" ? "active" : ""} onClick={() => setActiveView("focus")}>
+                Focus
+              </button>
+              <button type="button" className={activeView === "upcoming" ? "active" : ""} onClick={() => setActiveView("upcoming")}>
+                Upcoming
+              </button>
+              <button type="button" className={activeView === "lists" ? "active" : ""} onClick={() => setActiveView("lists")}>
+                Lists
+              </button>
+            </div>
+            <div className="toolbar-row toolbar-row-compact">
+              <input
+                type="search"
+                className="search-input"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search your tasks"
+              />
+              <div className="easylist-dashboard-metrics" aria-label="Task summary">
+                <span>{overdueTasks.length} overdue</span>
+                <span>{completedTodayCount} done today</span>
+              </div>
+            </div>
+
+            {activeView === "lists" ? (
+              <div className="easylist-list-bar">
+                <div className="easylist-list-tabs" aria-label="Task lists">
+                  {listNames.map((name) => (
+                    <button
+                      key={name}
+                      type="button"
+                      className={activeListName === name ? "active" : ""}
+                      onClick={() => {
+                        setActiveListName(name);
+                        setSelectedTaskIds([]);
+                      }}
+                    >
+                      {name}
+                      <span>{visibleTasks.filter((task) => (task.listName || "Main") === name && !task.completed).length}</span>
+                    </button>
+                  ))}
+                </div>
+                <details className="easylist-manage-lists">
+                  <summary>Manage lists</summary>
+                  <div className="easylist-new-list">
+                    <input
+                      value={newListName}
+                      onChange={(event) => setNewListName(event.target.value)}
+                      placeholder="New list"
+                    />
+                    <button type="button" className="button-secondary compact-button" onClick={addList}>
+                      Add list
+                    </button>
+                  </div>
+                </details>
+              </div>
+            ) : null}
+
+            <details className="easylist-edit-panel">
+              <summary>{isBulkEditing ? "Editing list" : "Edit and batch actions"}</summary>
+              <div className="easylist-bulk-bar">
                 <button
-                  key={name}
                   type="button"
-                  className={activeListName === name ? "active" : ""}
+                  className={isBulkEditing ? "primary-button compact-button" : "button-secondary compact-button"}
                   onClick={() => {
-                    setActiveListName(name);
+                    setIsBulkEditing((value) => !value);
                     setSelectedTaskIds([]);
                   }}
                 >
-                  {name}
-                  <span>{visibleTasks.filter((task) => (task.listName || "Main") === name && !task.completed).length}</span>
+                  {isBulkEditing ? "Done editing" : "Start editing"}
                 </button>
-              ))}
-            </div>
-            <details className="easylist-manage-lists">
-              <summary>Manage lists</summary>
-              <div className="easylist-new-list">
-                <input
-                  value={newListName}
-                  onChange={(event) => setNewListName(event.target.value)}
-                  placeholder="New list"
-                />
-                <button type="button" className="button-secondary compact-button" onClick={addList}>
-                  Add list
-                </button>
+                {isBulkEditing ? (
+                  <>
+                    <span className="info-pill">{selectedTaskIds.length} selected</span>
+                    <button type="button" className="button-secondary compact-button" onClick={() => setSelectedTaskIds(filteredTasks.map((task) => task.id))}>
+                      Select visible
+                    </button>
+                    <button type="button" className="button-secondary compact-button" onClick={() => void runBulkAction("complete")}>
+                      Complete
+                    </button>
+                    <button type="button" className="ghost-button compact-button" onClick={() => void runBulkAction("delete")}>
+                      Delete
+                    </button>
+                  </>
+                ) : null}
               </div>
             </details>
-          </div>
-        ) : null}
-
-        <details className="easylist-edit-panel">
-          <summary>{isBulkEditing ? "Editing list" : "Edit and batch actions"}</summary>
-          <div className="easylist-bulk-bar">
-            <button
-              type="button"
-              className={isBulkEditing ? "primary-button compact-button" : "button-secondary compact-button"}
-              onClick={() => {
-                setIsBulkEditing((value) => !value);
-                setSelectedTaskIds([]);
-              }}
-            >
-              {isBulkEditing ? "Done editing" : "Start editing"}
-            </button>
-            {isBulkEditing ? (
-              <>
-                <span className="info-pill">{selectedTaskIds.length} selected</span>
-                <button type="button" className="button-secondary compact-button" onClick={() => setSelectedTaskIds(filteredTasks.map((task) => task.id))}>
-                  Select visible
-                </button>
-                <button type="button" className="button-secondary compact-button" onClick={() => void runBulkAction("complete")}>
-                  Complete
-                </button>
-                <button type="button" className="ghost-button compact-button" onClick={() => void runBulkAction("delete")}>
-                  Delete
-                </button>
-              </>
-            ) : null}
           </div>
         </details>
 
