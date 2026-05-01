@@ -382,32 +382,6 @@ const settingsFocusCards: Array<{
   },
 ];
 
-const settingsQuickActions: Array<{
-  section: SettingsSectionId;
-  label: string;
-  title: string;
-  description: string;
-}> = [
-  {
-    section: "customize",
-    label: "Start here",
-    title: "Set your opening screen",
-    description: "Make the app open where you actually begin your day.",
-  },
-  {
-    section: "install",
-    label: "Phone",
-    title: "Add to home screen",
-    description: "Use the fast iPhone install path and keep it close.",
-  },
-  {
-    section: "notifications",
-    label: "Reminders",
-    title: "Choose what can interrupt you",
-    description: "Keep the useful alerts and leave the rest quiet.",
-  },
-];
-
 const pageSettingsSections: Array<{
   id: string;
   label: string;
@@ -887,20 +861,6 @@ export function SettingsPage() {
           </article>
         </div>
 
-        <div className="settings-quick-strip">
-          {settingsQuickActions.map((card) => (
-            <button
-              key={card.title}
-              type="button"
-              className={`settings-quick-card${activeSection === card.section ? " active" : ""}`}
-              onClick={() => setActiveSection(card.section)}
-            >
-              <span>{card.label}</span>
-              <strong>{card.title}</strong>
-              <p>{card.description}</p>
-            </button>
-          ))}
-        </div>
       </section>
 
       <section className="settings-section-shell">

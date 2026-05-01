@@ -6519,8 +6519,7 @@ button.calendar-detail-card:disabled {
 .settings-status-grid,
 .settings-layout-grid,
 .settings-labs-summary,
-.settings-baseline-grid,
-.settings-quick-strip {
+.settings-baseline-grid {
   display: grid;
   gap: 0.9rem;
 }
@@ -6572,47 +6571,6 @@ button.calendar-detail-card:disabled {
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 16%, transparent), transparent 58%),
     var(--ui-bg-card-elevated, var(--shell-card-bg));
-}
-
-.settings-quick-strip {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-column: 1 / -1;
-  margin-top: 1rem;
-}
-
-.settings-quick-card {
-  display: grid;
-  gap: 0.35rem;
-  min-width: 0;
-  padding: 0.95rem;
-  text-align: left;
-  border-radius: 8px;
-  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
-  background: color-mix(in srgb, var(--ui-bg-card-elevated, var(--shell-card-bg)) 90%, var(--app-accent) 10%);
-  transition: transform var(--shell-motion-fast), box-shadow var(--shell-motion-fast), border-color var(--shell-motion-fast);
-}
-
-.settings-quick-card span {
-  color: var(--ui-text-muted, var(--shell-muted-text));
-  font-size: 0.76rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.settings-quick-card strong,
-.settings-quick-card p {
-  margin: 0;
-}
-
-.settings-quick-card p {
-  color: var(--ui-text-muted, var(--shell-muted-text));
-}
-
-.settings-quick-card.active,
-.settings-quick-card:hover {
-  border-color: var(--ui-border-strong, var(--shell-card-border));
-  box-shadow: 0 14px 26px rgba(34, 29, 24, 0.08);
-  transform: translateY(-1px);
 }
 
 .settings-layout-grid {
@@ -7973,8 +7931,7 @@ button.calendar-detail-card:disabled {
   .settings-labs-summary,
   .settings-baseline-grid,
   .settings-option-grid,
-  .settings-focus-grid,
-  .settings-quick-strip {
+  .settings-focus-grid {
     grid-template-columns: 1fr;
   }
 
@@ -8614,11 +8571,6 @@ button.calendar-detail-card:disabled {
     line-height: 1.45;
   }
 
-  .settings-quick-strip {
-    grid-template-columns: 1fr;
-    gap: 0.65rem;
-  }
-
   .settings-section-shell {
     gap: 0.75rem;
     padding: 0.6rem;
@@ -8632,8 +8584,7 @@ button.calendar-detail-card:disabled {
     gap: 0.8rem;
   }
 
-  .settings-status-card,
-  .settings-quick-card {
+  .settings-status-card {
     padding: 0.78rem;
   }
 
