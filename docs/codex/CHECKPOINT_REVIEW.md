@@ -1,43 +1,43 @@
 # Checkpoint Review
 
 ## Verdict
-RED
+YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission through visible suite cohesion work on EasyList, EasyCalendar, EasyNotes, EasyWorkout, HQ, marketing, and shared styles. However, the current checkpoint is blocked by a RED accessibility review and unresolved queued repair work, so it is not ready to continue unattended.
+The branch is moving toward the EasyLife mission with small protected-app and marketing polish passes that make the suite calmer, more connected, and more assistant-like. Progress is real, but Simon, Robin, accessibility, and visual QA still show non-blocking repair work.
 
 ## Safety Review
-No forbidden files, dependency files, auth/Firebase/backend/deploy/secrets, or generated outputs are listed as changed. Risk is concentrated in broad UI/style touchpoints across `app-vNext/src/` and the unresolved accessibility blocker.
+No forbidden or high-risk files found in the changed-file list. Working tree is clean. One quarantined copy attempt touched auth/context/settings-adjacent files, but those changes were not retained.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: 12 shown, including protected module hierarchy repairs, marketing/copy subtraction passes, and accessibility review/report setup.
-- Files changed: app UI/style files across EasyCalendar, EasyList, EasyNotes, EasyWorkout, HQ, marketing, experiments, plus `docs/codex/` review/planning documents.
-- Commits added: latest HEAD is `4d5e0c1`; multiple checkpoint, QA, review, quarantine, and repair commits exist since `main`.
-- Queue status: 6 unchecked tasks remain.
+- Completed tasks in this checkpoint window: EasyList hierarchy polish, EasyCalendar planning polish, EasyNotes capture/review polish, accessibility blocker repair, HQ narrow repair, AppHeader narrow repair.
+- Files changed: app-vNext UI/style files across navigation, HQ, EasyCalendar, EasyList, EasyNotes, EasyContacts, EasyProjects, EasyWorkout, marketing, experiments, plus docs/codex review and operating docs.
+- Commits added: latest HEAD `0a5106e` plus prior checkpoint/task commits on this branch.
+- Queue status: 4 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: YELLOW influence; 0 high, 2 medium, 10 low, so next work should account for medium visual polish debt.
-- Simon design review: YELLOW influence; continue only after visual issues are fixed first.
-- Robin copy review: YELLOW influence; copy cleanup should shape upcoming safe slices.
-- Accessibility review: RED blocker; stop for human accessibility review before unattended continuation.
-- Performance review: GREEN; no blocking influence.
-- Joey security review: GREEN; no blocking influence.
-- Franky formula review: missing; no formula signal available.
-- Product truth: MISSING but `ok: True`; no configured product-truth blocker.
+- Visual bug report: YELLOW influence; 0 high, 2 medium, 10 low, so next work should reduce medium visual issues.
+- Simon design review: YELLOW influence; continue but fix visual issues first.
+- Robin copy review: YELLOW influence; continue but fix copy first.
+- Accessibility review: YELLOW influence; patch warnings soon, not a hard stop.
+- Performance review: GREEN no blocker.
+- Joey security review: GREEN no blocker.
+- Franky formula review: missing; no formula blocker indicated, but status should be restored if relevant.
+- Product truth: MISSING but `ok: True`; no stop condition because no PRODUCT_TRUTH.md is configured.
 
 ## Recommended Next Step
-stop for human review
+patch first
 
 ## Next Batch Guidance
-- Recommended next batch size: 1
+- Recommended next batch size: 2
 - Next work mode: repair-first
-- Accessibility is RED and the queue contains recovery tasks, so the next batch should be a single tightly scoped accessibility repair or human-reviewed unblock step.
+- Use two narrow repairs because the build is clean and the queue has safe work, but Simon/Robin/visual/accessibility YELLOW signals should shape the next tasks before broader mission-forward polish continues.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Accessibility gate explicitly says stop for human accessibility review.
-- Remaining queue is not empty: 6 unchecked tasks.
-- Avoid broad Phase 3 tasks; prior broad attempts were quarantined for lacking a concrete slice plan.
+- Not ready for GREEN because 4 unchecked tasks remain and visual/copy/accessibility reviews are YELLOW.
+- Prefer small scoped repairs over broad revamp tasks.
+- Watch for guardrail failures on broad copy scans.
