@@ -25,13 +25,12 @@ export function AppHeader() {
   return (
     <header className="app-header">
       <div className="app-header-main">
-        <div className="app-suite-control" role="group" aria-label="EasyLife suite switcher">
+        <div className="app-suite-control" role="group" aria-label={`EasyLife suite switcher, current app ${currentApp}`}>
           <div className="app-header-brand">
             <Link to="/app/hq" className="site-brand" aria-label="Go to EasyHQ">
               <span className="brand-badge">EL</span>
               <div>
                 <strong className="site-brand-title">EasyLifeHQ</strong>
-                <p className="app-current-label">{currentApp}</p>
               </div>
             </Link>
           </div>

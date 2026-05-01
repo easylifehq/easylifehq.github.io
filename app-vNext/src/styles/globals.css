@@ -293,34 +293,6 @@ a {
   display: none;
 }
 
-.app-current-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.32rem;
-  width: fit-content;
-  max-width: 100%;
-  margin: 0.2rem 0 0;
-  padding: 0.16rem 0.48rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--shell-accent) 13%, transparent);
-  color: color-mix(in srgb, var(--shell-accent-strong) 82%, var(--shell-page-text) 18%);
-  font-size: 0.78rem;
-  font-weight: 700;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.app-current-label::before {
-  content: "";
-  flex: 0 0 auto;
-  width: 0.42rem;
-  height: 0.42rem;
-  border-radius: 999px;
-  background: var(--shell-accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--shell-accent) 16%, transparent);
-}
-
 .site-header,
 .app-header {
   position: sticky;
@@ -8446,21 +8418,6 @@ button.calendar-detail-card:disabled {
     color: var(--ui-text-muted, var(--shell-muted-text));
   }
 
-  .app-suite-control .app-current-label {
-    margin-top: 0;
-    padding: 0;
-    background: transparent;
-    color: var(--ui-text-primary, var(--shell-heading-text));
-    font-size: 0.82rem;
-    line-height: 1.05;
-  }
-
-  .app-suite-control .app-current-label::before {
-    width: 0.34rem;
-    height: 0.34rem;
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--shell-accent) 16%, transparent);
-  }
-
   .brand-badge {
     width: 34px;
     height: 34px;
@@ -8503,15 +8460,6 @@ button.calendar-detail-card:disabled {
 
   .site-mobile-cue {
     display: none;
-  }
-
-  .app-current-label {
-    display: inline-flex;
-    margin-top: 0.05rem;
-    padding: 0.12rem 0.38rem;
-    font-size: 0.72rem;
-    font-weight: 800;
-    line-height: 1.1;
   }
 
   .app-header-actions .products-menu {
