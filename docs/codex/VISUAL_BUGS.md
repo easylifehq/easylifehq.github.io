@@ -1,9 +1,9 @@
 # Visual Bug Report
 
-Generated: 2026-05-01 15:12:00
+Generated: 2026-05-01 17:32:00
 Project: EasyLife
 Status: No Blocking Visual Bugs
-Artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-151143
+Artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-173144
 
 ## Summary
 
@@ -23,7 +23,7 @@ Contract: C:\Dev\easylifehq.github.io\docs\codex\INFORMATION_STAGING.md
 - How deeper information opens: the user follows module navigation, action buttons, tabs, panels, detail rows, drawers, or existing routes after the daily start surface has made the next useful action clear.
 
 - [MEDIUM] First screen looks overloaded for the documented information-staging contract. (/settings?visualQa=1, desktop)
-  - Evidence: 203 words and 11 interactive controls above the fold
+  - Evidence: 203 words and 12 interactive controls above the fold
 - [LOW] First screen has too many competing headings for a calm staged layout. (/, desktop)
   - Evidence: 6 headings above the fold
 - [LOW] First screen has too many competing headings for a calm staged layout. (/easylist?visualQa=1, desktop)
@@ -40,38 +40,38 @@ Contract: C:\Dev\easylifehq.github.io\docs\codex\INFORMATION_STAGING.md
 1. [MEDIUM] information-staging-overload on /settings?visualQa=1 (desktop)
    - Selector: `first-screen`
    - Issue: First screen looks overloaded for the documented information-staging contract.
-   - Evidence: 203 words and 11 interactive controls above the fold
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-151143\settings-visualQa-1-desktop.png
+   - Evidence: 203 words and 12 interactive controls above the fold
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-173144\settings-visualQa-1-desktop.png
 
 2. [LOW] information-staging-too-many-headings on / (desktop)
    - Selector: `first-screen`
    - Issue: First screen has too many competing headings for a calm staged layout.
    - Evidence: 6 headings above the fold
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-151143\root-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-173144\root-desktop.png
 
 3. [LOW] information-staging-too-many-headings on /easylist?visualQa=1 (desktop)
    - Selector: `first-screen`
    - Issue: First screen has too many competing headings for a calm staged layout.
    - Evidence: 6 headings above the fold
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-151143\easylist-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-173144\easylist-visualQa-1-desktop.png
 
 4. [LOW] information-staging-too-many-headings on /easynotes?visualQa=1 (desktop)
    - Selector: `first-screen`
    - Issue: First screen has too many competing headings for a calm staged layout.
    - Evidence: 6 headings above the fold
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-151143\easynotes-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-173144\easynotes-visualQa-1-desktop.png
 
 5. [LOW] information-staging-too-many-headings on /easycalendar?visualQa=1 (desktop)
    - Selector: `first-screen`
    - Issue: First screen has too many competing headings for a calm staged layout.
    - Evidence: 6 headings above the fold
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-151143\easycalendar-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-173144\easycalendar-visualQa-1-desktop.png
 
 6. [LOW] information-staging-too-many-headings on /easyworkout?visualQa=1 (desktop)
    - Selector: `first-screen`
    - Issue: First screen has too many competing headings for a calm staged layout.
    - Evidence: 6 headings above the fold
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-151143\easyworkout-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260501-173144\easyworkout-visualQa-1-desktop.png
 
 ## Suggested Task Queue Wording
 
