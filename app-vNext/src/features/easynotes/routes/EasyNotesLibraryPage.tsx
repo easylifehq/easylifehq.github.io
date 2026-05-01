@@ -150,18 +150,17 @@ export function EasyNotesLibraryPage() {
 
   return (
     <PageSection
-      eyebrow="EasyNotes"
-      title="Notes"
-      description="Capture, resume, and organize writing from one calm workspace."
+      title="Capture a thought"
+      description="Start a note now. Recent writing stays close for review when you come back."
     >
         <div className="notes-command-strip" aria-label="Notes actions">
           <div className="notes-capture-group">
             <button type="button" className="notes-command-button notes-command-button-primary" onClick={() => void handleCreateNote()}>
               <span aria-hidden="true">+</span>
-              New note
+              Write a note
             </button>
             <span className="notes-library-status">
-              {notes.length} note{notes.length === 1 ? "" : "s"} / {pinnedNotes.length} pinned
+              {notes.length ? "Review recent notes below" : "Start here, sort later"}
             </span>
           </div>
           <div className="notes-secondary-actions">
@@ -363,13 +362,15 @@ export function EasyNotesLibraryPage() {
         {error ? <p className="error-copy">{error}</p> : null}
         {cleanupMessage ? <p className="helper-copy">{cleanupMessage}</p> : null}
 
-        <div className="group-heading" aria-label="Notes library results">
+        <div className="group-heading notes-library-results-heading" aria-label="Notes library results">
           <div>
-            <h3>{hasFilters ? "Filtered library" : "Library"}</h3>
-            <div className="note-card-meta">
-              <span>{hasFilters ? "Showing" : "Review"}</span>
-              {hasFilters ? "Matches your current search or folder" : "All notes sorted by latest update"}
-            </div>
+            <h3>{hasFilters ? "Filtered notes" : "Browse all notes"}</h3>
+            {hasFilters ? (
+              <div className="note-card-meta">
+                <span>Showing</span>
+                Matches your current search or folder
+              </div>
+            ) : null}
           </div>
           <span>{filteredNotes.length}</span>
         </div>

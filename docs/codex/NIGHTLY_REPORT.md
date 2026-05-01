@@ -2101,3 +2101,19 @@
 - app-vNext/src/features/easycalendar/routes/EasyCalendarMonthPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-01 15:08:35
+
+- Task attempted: User pain: EasyNotes should feel like quick capture and later sorting inside the assistant, not a separate notes product. Target: signed-in EasyNotes surfaces and related styles in `app-vNext/src/features/easynotes/` and `app-vNext/src/styles/`. Change: improve one capture-or-review hierarchy moment so writing a thought, finding recent notes, or turning notes into action feels more immediate. First screen: note capture or recent review must be the obvious job before secondary library chrome. Remove/simplify: demote one repeated label, metadata pill, or heavy card treatment; preserve editor behavior, note persistence, routes, auth, Firebase, data shapes, dependencies, package files, generated output, deployment config, and secrets. Guardrails: frontend UI/copy/style only; no backend, auth, Firebase rules/config, persistence changes, data-shape changes, real AI/API calls, package/dependency files, generated output, deployment config, root files, or unrelated modules. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect the EasyNotes protected route at mobile width and verify capture/review feels like part of one daily assistant. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/easynotes/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/easynotes, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
