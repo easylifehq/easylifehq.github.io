@@ -75,7 +75,7 @@ export function EasyProjectsTimelinePage() {
       </PageSection>
 
       <PageSection
-        eyebrow="Calendar handoff"
+        eyebrow="Calendar prep"
         title="Schedule a project task"
         description="Use the same task-block system that EasyCalendar already understands."
       >

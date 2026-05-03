@@ -99,7 +99,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
       setProjects([
         {
           id: "visual-project",
-          title: "EasyLife polish launch",
+          title: "Weekly planning review",
           description: "A seeded QA project for checking detail and timeline layouts without Firestore data.",
           targetDate: "2026-04-18",
           status: "active",
@@ -111,7 +111,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         {
           id: "visual-section-1",
           projectId: "visual-project",
-          title: "Ship polish",
+          title: "Finish project brief",
           order: 1,
           createdAt: new Date("2026-04-12T09:05:00"),
           updatedAt: new Date("2026-04-12T09:05:00"),
@@ -132,7 +132,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
           sectionId: "visual-section-1",
           taskId: "visual-task-1",
           order: 1,
-          parentLabel: "Ship polish",
+          parentLabel: "Finish project brief",
           createdAt: new Date("2026-04-12T09:15:00"),
           updatedAt: new Date("2026-04-12T09:15:00"),
         },
