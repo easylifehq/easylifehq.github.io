@@ -125,7 +125,7 @@ export function MarketingLandingPage() {
 
         <div className="marketing-hero-card">
           <span className="info-pill">4.x mobile core</span>
-          <h2>Built around daily use, not a settings maze.</h2>
+          <p className="marketing-hero-card-title">Built around daily use, not a settings maze.</p>
           <p>
             Pick your startup page, add EasyLife to your iPhone home screen, keep
             reminders local, and export your data when you want a safety check.
