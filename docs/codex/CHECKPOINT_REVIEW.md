@@ -1,43 +1,43 @@
 # Checkpoint Review
 
 ## Verdict
-YELLOW
+RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission through small protected-app and marketing polish repairs that reduce chrome, clarify daily-workspace language, and improve accessibility. It is not fully parked because Simon, Robin, accessibility, and visual review still identify non-blocking follow-up work.
+The branch is moving toward the EasyLife mission through small frontend polish, copy, accessibility, and suite-cohesion repairs. However, it is not ready to continue unattended because Joey security review is RED and explicitly calls for human security review.
 
 ## Safety Review
-No forbidden high-risk files found. Changes are limited to `app-vNext/src` UI/style surfaces and `docs/codex` reports; no auth, Firebase, backend, dependency, deployment, secret, or generated-output changes are listed.
+Risk found: `app-vNext/src/features/auth/AuthContext.tsx` changed since base, which is sensitive under the mission’s forbidden-scope rules. Joey security review is RED, so this must be reviewed before more work continues.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: several small recovery repairs for HQ, AppHeader, EasyList copy, marketing chrome, Settings, and EasyCalendar accessibility/UI.
-- Files changed: protected app UI, marketing components/routes, shared globals CSS, and Codex review/report docs.
-- Commits added: yes, up to `637d033 Codex performance review batch 3`.
-- Queue status: empty; unchecked task count is 0.
+- Completed tasks in this checkpoint window: 12 recent tasks shown, including HQ, navigation, EasyList, EasyCalendar, EasyNotes, accessibility, marketing, settings, and copy repairs.
+- Files changed: multiple `app-vNext/src` UI/context/style files and `docs/codex` review/planning files.
+- Commits added: latest HEAD is `b30ba6f Codex Joey security review batch 1`.
+- Queue status: 2 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: YELLOW influence; 0 high, 2 medium, 10 low, so next work should address medium visual issues.
-- Simon design review: YELLOW influence; continue but fix visual issues first.
-- Robin copy review: YELLOW influence; continue but fix copy first.
-- Accessibility review: YELLOW influence; patch accessibility warnings soon.
-- Performance review: GREEN; no blocking influence.
-- Joey security review: GREEN; no blocking influence.
-- Franky formula review: missing; no formula-specific blocker identified, but status should be restored if formulas become relevant.
-- Product truth: missing config, `ok: True`; no RED product-truth blocker.
+- Visual bug report: 0 high, 0 medium, 10 low; should inform polish but does not block by itself.
+- Simon design review: YELLOW, continue but fix visual issues first; should influence next tasks.
+- Robin copy review: YELLOW, continue but fix copy first; should influence next tasks.
+- Accessibility review: YELLOW, patch warnings soon; should influence near-term tasks.
+- Performance review: GREEN, no blocking influence.
+- Joey security review: RED, stop for human security review; blocks unattended continuation.
+- Franky formula review: missing; should be completed if formula/spreadsheet surfaces are relevant.
+- Product truth: missing config, `product truth ok: True`; no RED product-truth blocker.
 
 ## Recommended Next Step
-patch first
+stop for human review
 
 ## Next Batch Guidance
-- Recommended next batch size: 2
+- Recommended next batch size: 1
 - Next work mode: repair-first
-- Focus the next batch on the concrete YELLOW gates: one medium visual issue and one Robin/accessibility warning, keeping scope narrow because the queue is empty and the branch is otherwise clean.
+- Joey’s RED security gate and sensitive auth-context change need human review before any mission-forward queued work resumes.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Queue is empty, but review gates are not all GREEN.
-- Product truth file is not configured.
-- Medium visual issues are the clearest reason not to park as GREEN yet.
+- Do not continue unattended until Joey RED is resolved.
+- Two safe-looking unchecked tasks remain: Settings density and EasyProjects copy cleanup.
+- Review `AuthContext.tsx` changes carefully against forbidden-scope rules.
