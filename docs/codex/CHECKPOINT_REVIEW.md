@@ -4,29 +4,29 @@
 RED
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife mission with small, visible polish and copy repairs across Settings, EasyProjects, marketing, accessibility, and protected app surfaces. However, it is not ready to continue unattended because Joey security review is RED and explicitly calls for human security review.
+The branch has moved EasyLife toward the mission with many small UI/copy/accessibility repairs across the protected suite, marketing pages, and docs. However, progress should not continue unattended because Joey security review is RED and explicitly calls for human security review.
 
 ## Safety Review
-Risk found: Joey security gate is RED. Changed files include sensitive-adjacent app contexts such as auth-related context files, but the provided status does not identify a specific unsafe diff. Human review should inspect Joey’s security findings before more unattended work.
+Risk found: security gate is RED. Changed-file scope includes sensitive-adjacent auth/session files such as `app-vNext/src/features/auth/AuthContext.tsx`, so human review is required before more unattended work.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: multiple small repair-lane tasks completed, including Settings first-viewport cleanup, EasyProjects copy repair, marketing chrome/copy reductions, and accessibility-related fixes.
-- Files changed: app-vNext source files and docs/codex review/report files changed since base.
-- Commits added: latest HEAD is `0123fb1` (`Codex Joey security review batch 1`) with many Codex checkpoint/review commits since base.
+- Completed tasks in this checkpoint window: 12 recent completed tasks shown, including marketing chrome reduction, copy cleanup, EasyList/EasyCalendar/EasyNotes hierarchy work, and accessibility repairs.
+- Files changed: app-vNext UI/context/style files plus docs/codex review and operating docs.
+- Commits added: latest HEAD is `8a0b299 Codex Joey security review batch 1`; many commits exist since base.
 - Queue status: 2 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low. Should not block next tasks.
-- Simon design review: YELLOW; continue but fix visual issues first. Should influence next tasks.
-- Robin copy review: YELLOW; continue but fix copy first. Should influence next tasks.
-- Accessibility review: YELLOW; patch accessibility warnings soon. Should influence next tasks.
-- Performance review: GREEN; continue. No blocking influence.
-- Joey security review: RED; stop for human security review. Blocking.
-- Franky formula review: missing. No formula-specific signal available.
-- Product truth: MISSING config, `ok: True`; no blocking Product Truth RED.
+- Visual bug report: YELLOW signal, 0 high / 3 medium / 0 low; should influence next tasks after security review.
+- Simon design review: YELLOW, continue but fix visual issues first; should influence next tasks.
+- Robin copy review: YELLOW, continue but fix copy first; should influence next tasks.
+- Accessibility review: YELLOW, patch warnings soon; should influence next tasks.
+- Performance review: GREEN; no blocker.
+- Joey security review: RED, stop for human security review; blocks unattended continuation.
+- Franky formula review: missing; should be resolved if spreadsheet/formula surfaces become relevant.
+- Product truth: MISSING but `product truth ok` is true; no PRODUCT_TRUTH.md configured.
 
 ## Recommended Next Step
 stop for human review
@@ -34,10 +34,11 @@ stop for human review
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Joey’s RED security gate is blocking unattended continuation, so the next action should be a narrow human-reviewed security assessment before any mission-forward queue work.
+- The next batch should wait on human security review, then repair the highest-confidence gate issue before returning to mission-forward Settings or EasyProjects queue work.
 
 ## Notes For Human Reviewer
-- Build passed and working tree is clean.
-- Do not continue unattended until Joey RED is understood.
-- Two queued tasks remain: Settings density repair and EasyProjects copy cleanup.
-- Simon, Robin, and accessibility remain YELLOW but non-blocking after security is cleared.
+- Working tree is clean.
+- Build passed.
+- Joey RED is the decisive blocker.
+- Two safe-looking unchecked tasks remain, but should not run until security review clears.
+- Product truth file is not configured.
