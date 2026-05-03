@@ -5772,6 +5772,7 @@ button.calendar-detail-card:disabled {
 }
 
 .assistant-home .hq-start-card {
+  grid-area: auto;
   min-height: 15rem;
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--app-accent, #4d7f6f) 10%, transparent), transparent 48%),
@@ -5779,6 +5780,7 @@ button.calendar-detail-card:disabled {
 }
 
 .assistant-home .hq-status-strip {
+  grid-area: auto;
   grid-column: 1 / -1;
 }
 
@@ -7574,6 +7576,12 @@ button.calendar-detail-card:disabled {
 }
 
 .app-shell-vnext:has(.settings-page) .capture-fab {
+  display: none;
+}
+
+.app-shell-vnext:has(.command-center-page) .capture-fab,
+.app-shell-vnext:has(.assistant-home) .capture-fab,
+.app-shell-vnext:has(.email-triage-hero) .capture-fab {
   display: none;
 }
 
