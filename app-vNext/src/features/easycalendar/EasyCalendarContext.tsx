@@ -184,7 +184,7 @@ function getPreviewEvents(): CalendarEventRecord[] {
     {
       id: "preview-event-1",
       title: "Team standup",
-      description: "Quick blockers and handoffs.",
+      description: "Quick follow-ups and calendar prep.",
       itemKind: "event",
       categoryId: "work",
       startAt: todayAt(10, 0),

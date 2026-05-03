@@ -237,7 +237,7 @@ export function EasyProjectDetailPage() {
                   <div className="task-composer-grid project-task-create-grid">
                     <label className="field-stack">
                       <span>Task</span>
-                      <input name="title" placeholder="Build onboarding screen" />
+                      <input name="title" placeholder="Finish project brief" />
                     </label>
                     <label className="field-stack">
                       <span>Due date</span>

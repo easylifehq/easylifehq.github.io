@@ -51,7 +51,7 @@ const visualQaApplications: ApplicationRecord[] = [
     nextFollowUp: "2026-05-06",
     location: "Remote",
     link: "",
-    notes: "Prep two examples: messy workflow cleanup and mobile-first demo polish.",
+    notes: "Prep two examples: clean up a task list and plan a mobile review.",
     contactName: "Jordan Lee",
     contactEmail: "jordan@example.com",
     createdAt: new Date("2026-04-25T11:00:00"),

@@ -795,10 +795,7 @@ export function SettingsPage() {
         <div className="panel-header">
           <p className="eyebrow">Daily setup</p>
           <h1>Settings</h1>
-          <p>
-            Set up the parts of EasyLife that shape daily use first. The deeper controls are still here,
-            but they do not need to crowd the main path.
-          </p>
+          <p>Adjust the settings that shape today.</p>
         </div>
       </section>
 
@@ -862,7 +859,6 @@ export function SettingsPage() {
           <div className="settings-section-heading">
             <p className="eyebrow">{activeSectionConfig.eyebrow}</p>
             <h2>{activeSectionConfig.label}</h2>
-            <p>{activeSectionConfig.description}</p>
           </div>
 
       <div className="settings-layout-grid">
@@ -1182,8 +1178,8 @@ export function SettingsPage() {
             <section className="settings-app-preference-card">
               <div className="panel-header">
                 <p className="eyebrow">Routing</p>
-                <h3>Cross-app handoffs</h3>
-                <p>Decide how task handoffs should behave as Projects and Pipeline get smarter.</p>
+                <h3>Cross-app planning</h3>
+                <p>Decide how task follow-ups should move between Projects and Pipeline.</p>
               </div>
               <label className="field-stack">
                 <span>Project routing</span>
