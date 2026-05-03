@@ -350,38 +350,6 @@ const settingsSections: Array<{
   },
 ];
 
-const settingsFocusCards: Array<{
-  section: SettingsSectionId;
-  label: string;
-  title: string;
-  description: string;
-}> = [
-  {
-    section: "customize",
-    label: "Look and feel",
-    title: "Themes and app tone",
-    description: "Pick a quieter work theme or a more expressive one.",
-  },
-  {
-    section: "install",
-    label: "Phone setup",
-    title: "Home-screen install",
-    description: "Add EasyLife to your phone and choose where it opens.",
-  },
-  {
-    section: "notifications",
-    label: "Reminders",
-    title: "Task and calendar alerts",
-    description: "Control permission, quiet hours, and reminder categories.",
-  },
-  {
-    section: "data",
-    label: "Safety",
-    title: "Export and health check",
-    description: "Download your data and check for stale links.",
-  },
-];
-
 const pageSettingsSections: Array<{
   id: string;
   label: string;
@@ -919,21 +887,6 @@ export function SettingsPage() {
             <p className="eyebrow">{activeSectionConfig.eyebrow}</p>
             <h2>{activeSectionConfig.label}</h2>
             <p>{activeSectionConfig.description}</p>
-          </div>
-
-          <div className="settings-focus-grid" aria-label="Common settings shortcuts">
-            {settingsFocusCards.map((card) => (
-              <button
-                key={card.title}
-                type="button"
-                className={activeSection === card.section ? "active" : ""}
-                onClick={() => setActiveSection(card.section)}
-              >
-                <span>{card.label}</span>
-                <strong>{card.title}</strong>
-                <p>{card.description}</p>
-              </button>
-            ))}
           </div>
 
       <div className="settings-layout-grid">
