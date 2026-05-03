@@ -4,54 +4,54 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is calmer and more coherent than before, but the first screen still behaves like a polite feature dump wearing a nice sweater.
+EasyLife is finally starting to look like one calm product, but the first screens still talk too much and make the personal operating system feel buried under its own interface furniture.
 
 ## Mission Fit
-The direction matches the EasyLife mission in broad terms: shared navigation, calmer module surfaces, and more consistent language are pushing toward one connected personal operating system. The miss is information staging. Pack 1 is about the product spine, and the current first-screen pattern still asks the user to parse too many headings, panels, and module signals before it gives them one clear thing to do today.
+The direction matches the mission in broad shape: shared shell work, calmer route patterns, and repeated suite language are moving EasyLife toward a connected personal operating system. The miss is information staging. The protected first screen is supposed to make today's next action obvious, but the current evidence still shows too many headings, too many controls, and too much route-level explanation competing before the user knows what to do next.
 
 ## Taste Check
-The restrained product tone, quieter module framing, and suite-wide polish are the strongest taste signals. The app is starting to feel less like disconnected experiments and more like a professional personal workspace.
+The improved cohesion is real: the suite appears more related, quieter, and less like separate experiments stitched together. That is the right lane for EasyLife.
 
-What still feels off: too many page surfaces are trying to be helpful at once. Six headings above the fold across the protected routes is not calm hierarchy; it is dashboard anxiety in a cardigan. The repeated shell/header/page intro pattern also risks making each route feel buried under its own explanation instead of immediately usable.
+What still feels off is the dashboard instinct. Six headings above the fold across core routes is not calm, it is a committee meeting. Settings on mobile exposing 13 controls above the fold is especially rough: useful settings should feel controlled, not spilled. The product needs more restraint, stronger hierarchy, and fewer equal-weight panels trying to prove they belong.
 
 ## Visual Problems To Fix
-- The protected first screens expose too many competing headings above the fold on `/`, `/easylist`, `/easynotes`, `/easycalendar`, and `/easyworkout`.
-- The app shell, route title, and module intro still stack into repeated page identity in places, making the actual working surface feel one layer too deep.
-- Primary daily action hierarchy is not dominant enough; compact module status competes with the main job instead of supporting it.
-- Desktop layouts are cleaner than before, but the first viewport still reads as a collection of panels rather than a guided daily start.
-- Mobile confidence is decent but not complete; the same information density that feels merely busy on desktop can become cramped and heavy on a phone.
-- Some recent changes touch sensitive or broad areas outside pure visual polish, which weakens trust in the design loop even when the visible result improves.
+- The first screen still has too many competing headings on `/`, `/easylist`, `/easynotes`, `/easycalendar`, and `/easyworkout`, which weakens the daily-start hierarchy.
+- `/settings` on mobile exposes 13 interactive controls above the fold, making the control center feel busy before it feels trustworthy.
+- Core app routes still lean toward module overview density instead of one clear daily job followed by secondary actions.
+- The route chrome is calmer than before, but it still risks repeating the page identity instead of letting the actual product surface lead.
+- The design still overuses first-screen summary panels as proof of usefulness; the user should feel guided, not briefed by five departments.
+- Mobile staging remains the weak point: controls and headings appear before the layout has earned that much user attention.
 
 ## Strongest Opportunities
-- Turn HQ into the unmistakable daily start: one next action, today's context, and only a few quiet module signals.
-- Demote secondary module summaries into a compact rail, tabs, or below-fold section so the first viewport has a single visual center.
-- Make route chrome quieter: the app should know where the user is without announcing it three times.
-- Standardize one page-header pattern across EasyList, EasyNotes, EasyCalendar, EasyWorkout, and Settings.
-- Use density deliberately: fewer visible cards, stronger labels, and clearer active states will feel more premium than adding more helpful blocks.
+- Turn HQ into a true daily start surface: one next action, today context, then compact module signals.
+- Reduce each module first screen to a primary action plus a small status strip; move detail into tabs, rows, drawers, or lower-page content.
+- Make Settings feel like a suite control center by grouping controls into fewer visible sections with quieter secondary actions.
+- Establish a tighter shared page header pattern: one title, one sentence max, one primary action, then content.
+- Use visual weight more aggressively: fewer equal cards, clearer primary panel, smaller secondary modules.
 
 ## Priority Fix
-Fix first-screen hierarchy before any new polish. On the protected HQ route, reduce above-the-fold headings to one primary page idea plus one clear next action, then demote module summaries and helper context below the fold or behind existing navigation/actions. Nami should treat this as subtraction, not redesign: remove repeated intro language, compress status cards, and make the daily action visually own the first viewport.
+Fix information staging on the first screen before adding anything else. Start with `/settings` mobile because 13 above-fold controls is the loudest evidence, then apply the same discipline to the core routes: one primary job, one obvious next action, compact status, and everything else demoted below the fold or behind existing controls. The next batch should subtract visible competition, not invent another panel.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: suite cohesion is better, but first-screen overload still blocks the product spine.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: suite cohesion improved, but first-screen overload still blocks a strong product spine.
 
 ## Designer Handoff
-Next batch should be a hierarchy cleanup, not another feature or broad cohesion pass. Keep the calmer shared shell, restrained color, and more professional module tone. Change the first viewport so it feels like a personal assistant opening to today's next move: one primary action, one date/context cue, and a small number of supporting module signals. The user should feel guided, not briefed by committee.
+Keep the calmer shared visual language and the suite-level navigation direction. Change the first-screen hierarchy: make each route feel like it knows the user's immediate job, then reveal the rest progressively. Settings should become quieter and more grouped, not more explanatory. The result should feel like opening a personal assistant that already knows what matters today, not a control room asking the user to scan every switch.
 
 ## What Not To Do Next
-- Do not add more sections to explain the suite.
-- Do not add another dashboard row, metric strip, or module inventory.
-- Do not make the header louder to solve navigation clarity.
-- Do not polish five routes at once; fix one first-screen pattern cleanly.
-- Do not touch backend, auth, Firebase, package files, deployment, or data behavior.
-- Do not ignore mobile; the hierarchy repair must hold at phone width.
+- Do not add more dashboard sections to prove the suite is connected.
+- Do not solve this with new colors, gradients, icons, or decorative polish.
+- Do not add more route intro copy; reduce and sharpen what is already there.
+- Do not expand backend, auth, settings behavior, or data scope.
+- Do not ignore mobile; mobile is where the hierarchy problem becomes obvious.
+- Do not treat low visual bug severity as permission to keep the clutter.
 
 ## Next 5 Design Tasks
-- [ ] HQ first-screen hierarchy pass: reduce above-the-fold headings to one dominant page idea and one next action; do not add new cards or routes.
-- [ ] App header quieting pass: remove or demote one repeated route label where the shell and page title duplicate each other; preserve navigation behavior.
-- [ ] EasyList first viewport staging: keep the main task action dominant and move secondary summaries below the first screen; no logic or data changes.
-- [ ] EasyCalendar first viewport staging: make today's schedule context primary and compress helper/status panels; maintain existing controls.
-- [ ] Mobile density check for the repaired route: verify no cramped controls, clipped labels, or stacked heading clutter at 390px width; adjust spacing only.
+- [ ] Reduce `/settings?visualQa=1` mobile above-fold controls to the primary setting action plus compact grouped entry points; do not change settings behavior.
+- [ ] Simplify the HQ first screen to one daily next action, today context, and compact module status; do not add new modules or claims.
+- [ ] On `/easylist?visualQa=1`, remove or demote one competing above-fold heading so the main list action owns the first viewport.
+- [ ] On `/easynotes?visualQa=1`, compress secondary note/library detail below the first-screen primary capture or review action.
+- [ ] On `/easycalendar?visualQa=1`, reduce above-fold heading competition and keep the next scheduled block or planning action visually dominant.
 
 ## Stop Or Continue
 continue but fix visual issues first
