@@ -915,24 +915,27 @@ export function SettingsPage() {
           eyebrow="Startup"
           title="Opening screen"
         >
-          <div className="settings-toggle-list">
-            <label className="field-stack">
-              <span>Open EasyLife to</span>
-              <select
-                value={settings.startupRoute}
-                onChange={(event) => void setStartupRoute(event.target.value as StartupRoute)}
-              >
-                {startupRouteOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <p className="helper-copy">
-              {startupRouteOptions.find((option) => option.value === settings.startupRoute)?.description}
-            </p>
-          </div>
+          <details className="advanced-disclosure">
+            <summary>Change opening screen</summary>
+            <div className="settings-toggle-list">
+              <label className="field-stack">
+                <span>Open EasyLife to</span>
+                <select
+                  value={settings.startupRoute}
+                  onChange={(event) => void setStartupRoute(event.target.value as StartupRoute)}
+                >
+                  {startupRouteOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <p className="helper-copy">
+                {startupRouteOptions.find((option) => option.value === settings.startupRoute)?.description}
+              </p>
+            </div>
+          </details>
         </PageSection>
         ) : null}
 
