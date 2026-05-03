@@ -856,20 +856,25 @@ export function SettingsPage() {
         </nav>
 
         <nav className="settings-mobile-nav" aria-label="Settings sections">
-          <span className="settings-mobile-nav-label">Settings section</span>
-          <div className="settings-mobile-nav-scroll">
-            {[...primarySections, ...advancedSections].map((section) => (
-              <button
-                key={section.id}
-                type="button"
-                className={activeSection === section.id ? "active" : ""}
-                onClick={() => setActiveSection(section.id)}
-              >
-                <span>{section.eyebrow}</span>
-                <strong>{section.label}</strong>
-              </button>
+          <label className="settings-mobile-nav-label" htmlFor="settings-mobile-section">
+            Settings section
+          </label>
+          <select
+            id="settings-mobile-section"
+            value={activeSection}
+            onChange={(event) => setActiveSection(event.target.value as SettingsSectionId)}
+          >
+            {primarySections.map((section) => (
+              <option key={section.id} value={section.id}>
+                {section.label}
+              </option>
             ))}
-          </div>
+            {advancedSections.map((section) => (
+              <option key={section.id} value={section.id}>
+                Advanced: {section.label}
+              </option>
+            ))}
+          </select>
         </nav>
 
         <div className="settings-section-content">
