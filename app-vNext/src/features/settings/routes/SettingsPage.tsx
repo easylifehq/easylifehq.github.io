@@ -801,23 +801,24 @@ export function SettingsPage() {
 
       <section className="settings-section-shell">
         <nav className="settings-side-nav" aria-label="Settings sections">
-          <div className="settings-side-group">
-            <p className="eyebrow">Everyday</p>
-            {primarySections.map((section) => (
-              <button
-                key={section.id}
-                type="button"
-                className={activeSection === section.id ? "active" : ""}
-                onClick={() => setActiveSection(section.id)}
-              >
-                <span>{section.eyebrow}</span>
-                <strong>{section.label}</strong>
-              </button>
-            ))}
-          </div>
-          <details className="settings-side-details">
-            <summary>Advanced controls</summary>
+          <details className="settings-side-details settings-section-picker">
+            <summary>Change section</summary>
+            <div className="settings-side-group">
+              <p className="eyebrow">Everyday</p>
+              {primarySections.map((section) => (
+                <button
+                  key={section.id}
+                  type="button"
+                  className={activeSection === section.id ? "active" : ""}
+                  onClick={() => setActiveSection(section.id)}
+                >
+                  <span>{section.eyebrow}</span>
+                  <strong>{section.label}</strong>
+                </button>
+              ))}
+            </div>
             <div className="settings-side-group settings-side-group-advanced">
+              <p className="eyebrow">Advanced</p>
               {advancedSections.map((section) => (
                 <button
                   key={section.id}
