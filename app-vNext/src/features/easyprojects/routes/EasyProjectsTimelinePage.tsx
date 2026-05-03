@@ -56,7 +56,7 @@ export function EasyProjectsTimelinePage() {
       <PageSection
         eyebrow="Planning"
         title={`${project.title} timeline`}
-        description="See the remaining workload and push project tasks into EasyCalendar."
+        description="See the remaining workload and place project tasks on your calendar."
       >
         <div className="stats-grid">
           <article className="stat-card-vnext">

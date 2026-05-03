@@ -2596,3 +2596,18 @@
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-03 12:21:41
+
+- Task attempted: User pain: EasyProjects sample/timeline copy still sounds like internal shipping work, which weakens trust in the personal assistant product. Target: Pack 1 - Product Spine visible EasyProjects copy in `app-vNext/src/features/easyprojects/` only. Change: replace one visible `polish`, `ship`, or `Calendar handoff` sample/timeline phrase with concrete user language such as `Weekly planning review`, `Finish project brief`, or `Calendar prep` while keeping the same UI and data fields. First screen: preserve the current protected daily job and do not add new copy above the fold; any copy touched must describe a real user task rather than product-build process. Remove/simplify: remove one internal/process phrase without adding claims, longer explanations, new examples, or extra controls; preserve behavior, routes, persistence, data shapes, auth/Firebase behavior, desktop layout, and current project flow. Guardrails: copy-only app repair; no marketing pages, broad source scan, backend, auth, Firebase rules/config, package/dependency files, generated output, deployment config, secrets, root files, docs report edits, or unrelated modules. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: run `rg -n "polish|ship|handoff" app-vNext/src/features/easyprojects` and verify any remaining matches are non-visible identifiers or intentionally unchanged non-user-facing text. [class:copy risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/easyprojects/ accept:npm.cmd run build]
+- Task class: copy
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/easyprojects
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easyprojects/routes/EasyProjectsTimelinePage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
