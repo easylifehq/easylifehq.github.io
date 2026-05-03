@@ -4,56 +4,59 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is finally speaking in one calmer product voice, but Settings still walks onstage carrying every prop it owns.
+EasyLife is becoming more coherent and calmer, but it still reads too much like a polished product brochure instead of a signed-in personal operating system.
 
 ## Mission Fit
-The current direction mostly supports Pack 1 - Product Spine: the marketing/product pages now share a recognizable shell, muted palette, chunky tactile cards, and concrete daily-use language across EasyList, EasyCalendar, EasyNotes, and EasyWorkout. That is good movement toward a connected personal operating system. The miss is information staging: Settings, which should feel like a quiet control center, still exposes too many controls and labels above the fold before the user understands the one setup action that matters today.
+The direction supports Pack 1 better than before: shared typography, teal system color, compact preview panels, and repeated module structure make the suite feel more connected. The problem is mission hierarchy. The mission says the first protected screen should help the user know what to do next today, but the reviewed surfaces still spend too much energy explaining modules, selling features, and repeating product framing. Useful, yes. Personal operating system, not yet. It is wearing a nice blazer but still handing out flyers.
 
 ## Taste Check
-The best parts are the restrained teal system color, the soft grid background, the bold product headlines, and the consistent preview-card pattern across the product pages. It feels less like random app pages and more like a suite with a shared spine.
+The best parts are the restraint, consistent card treatment, quiet teal, strong type scale, and more concrete product language. The module previews feel practical and much less generic than earlier SaaS mush.
 
-The weaker parts are the repeated chrome and over-declared structure. Settings has a header, a hero intro, a left rail, a section opener, and a full theme chooser all visible immediately. That is not calm control-center hierarchy; that is a clipboard with a border-radius budget. The marketing pages are cleaner, but the nav still feels a little heavy and brand-repetitive for pages that need to sell the actual app surface quickly.
+What is off: the pages lean heavily on oversized marketing hero composition, repeated cards, feature bands, and pill clusters. On mobile, the typography is confident but slightly heavy, and the first screen becomes a tall stack of explanation before the user reaches action. The background grid is tidy but a little too "template demo"; it does not yet feel deeply personal or lived-in.
 
 ## Visual Problems To Fix
-- Settings desktop exposes 15 interactive controls above the fold, which violates the documented first-screen job and makes the page feel busy before it feels useful.
-- Settings repeats page identity too many times: top app chrome, "Daily setup", "Settings", left rail category labels, "Personalize", and "Theme mode" all compete for first-read ownership.
-- The Settings left rail is visually loud for a page whose primary job should be one daily setup action; it reads like permanent admin navigation before the user has any context.
-- The Theme mode panel appears too early and too large; choosing between visual modes is detail content, not the first screen's main event.
-- Product marketing pages share a nice system, but the first viewport still spends a lot of space on nav and wrapper chrome before the specific product value gets room to breathe.
-- Mobile product pages are usable, but hero typography is very large and pushes the preview/demo content down; the product proof arrives later than it should.
-- Preview cards are consistent, but several pill rows feel decorative rather than necessary; they risk becoming feature tags instead of helping the next action.
+- The top route chrome is visually loud: the header sits in its own large rounded panel, then the hero sits in another large rounded panel, so the actual product content feels buried under wrapper furniture.
+- Mobile first screens are too tall before meaningful action depth; the user sees brand, headline, copy, buttons, tags, and preview before any compact "what next today" structure appears.
+- The same marketing pattern repeats across EasyList, EasyCalendar, EasyNotes, and EasyWorkout, which helps consistency but also makes the suite feel like cloned landing pages instead of distinct working tools.
+- CTA hierarchy is not aligned with the product mission: "Start Free" and "See Features" dominate, while daily-use actions and signed-in next steps are not the visual anchor.
+- Pill tags are overused in the hero area; they create early clutter and make the page feel like it is inventorying features instead of guiding one next action.
+- Desktop has too much ceremonial whitespace above the hero, especially under the header; the first screen spends premium space on air and chrome rather than product value.
+- Preview cards are useful but too explanatory; they show mini feature lists rather than a sharper live state like "today", "next", "recent", or "waiting".
+- Mobile preview rows have tight label/value/status spacing, especially in EasyList and EasyNotes, where small status words sit close to heavier text and feel cramped.
+- The repeated "Features" section immediately below each hero reinforces brochure behavior; it should be quieter or pushed deeper unless the route is explicitly public marketing.
+- Settings remains a known risk area from the recent review trail: if it still exposes too many controls in the first viewport, it breaks information staging for the suite control center.
 
 ## Strongest Opportunities
-- Make Settings start with one compact "Daily setup" card: current opening screen, theme summary, notification status, and one primary action.
-- Move theme choices, install controls, account details, and advanced controls behind tabs, accordions, or the existing category navigation.
-- Tighten the app shell so customer-facing product pages show product identity first, then supporting proof, without oversized route chrome.
-- Convert product preview cards from decorative examples into stronger "what I do next" moments: capture task, plan block, write note, start workout.
-- Keep the shared visual language, but reduce repeated labels so the suite feels confident instead of constantly introducing itself.
+- Turn the protected HQ first screen into a true daily start surface: one next action, today context, and four compact module signals.
+- Make public product pages quieter by reducing route chrome and letting the product preview carry more of the story.
+- Replace feature-pill clusters with one or two purposeful secondary actions, then move the rest behind tabs, accordions, or deeper sections.
+- Give each module one distinctive working preview: EasyList should feel like a live triage list, EasyCalendar like a day plan, EasyNotes like recent capture, EasyWorkout like session state.
+- Tighten mobile type scale and spacing so the pages feel designed for thumb use, not merely desktop content stacked vertically.
+- Add more visible active state and "today" language across app surfaces so the suite feels current, not static.
 
 ## Priority Fix
-Fix Settings first. The next pass should reduce the first viewport to one clear daily setup surface with one primary action and a few compact status signals, then push theme selection and advanced controls below the fold or behind a selected panel. The page should feel like "set up the way EasyLife behaves today", not "browse every preference category before breakfast."
+Reduce first-screen chrome and marketing repetition before adding anything else. The next pass should make the first viewport feel like a usable EasyLife start point: smaller header, quieter route controls, one dominant daily action, compact module status, and fewer feature pills. Keep the calm visual system, but stop making every route introduce itself like it just walked on stage.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: suite cohesion is clearer, but Settings still breaks information staging with first-screen control overload.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: shared suite styling is clearer, but first-screen hierarchy still behaves too much like repeated marketing pages.
 
 ## Designer Handoff
-Keep the current shared visual system: teal accents, paper-like surfaces, compact cards, strong type, and grounded daily-life copy. For the next batch, subtract before styling. Settings needs hierarchy surgery, not more polish: one calm first-screen card, quieter side navigation, fewer visible buttons, and progressive disclosure for theme/install/account/advanced details. The result should feel like opening a personal assistant's control center, not configuring enterprise software in a hallway.
+Keep the current typography, restrained teal, soft panels, and concrete language. Change the hierarchy. Compress the global header, reduce repeated hero furniture, and make the first visible content answer "what should I do next today?" before it explains every module. Public pages can still sell the product, but they should feel like product-led demos, not a tour brochure. The user should feel that EasyLife is already organizing their day, not asking them to admire its feature list.
 
 ## What Not To Do Next
-- Do not add more Settings sections.
-- Do not add another dashboard or command-center layer.
-- Do not make the theme picker more visually expressive before it is staged correctly.
-- Do not touch backend, auth, persistence, deployment, packages, or account logic.
-- Do not ignore mobile just because the current reported bug is desktop.
-- Do not solve overload with smaller text; solve it by showing less at once.
-- Do not add more product-page feature cards until the first-screen hierarchy is cleaner.
+- Do not add more sections below the heroes; the issue is hierarchy, not content volume.
+- Do not create another dashboard full of cards; one next action beats twelve equal widgets.
+- Do not make the teal system louder or add decorative gradients to compensate for weak structure.
+- Do not keep repeating the same hero, pill, preview, features pattern across every module without sharper product-specific state.
+- Do not touch backend, auth, packages, deployment, analytics, or data logic to solve a visual staging problem.
+- Do not ignore mobile; the mobile first screen is where the current marketing weight is most obvious.
 
 ## Next 5 Design Tasks
-- [ ] Settings first-screen staging: collapse Theme mode choices below the fold or behind the selected Appearance panel; keep one primary setup action visible and do not change settings behavior.
-- [ ] Settings rail cleanup: reduce the left rail's visual weight with quieter type, tighter grouping, and a clear active state; do not add new categories.
-- [ ] Settings hero trim: shorten the "Daily setup" intro area so the first useful control appears sooner; preserve the current message but remove redundant page identity.
-- [ ] Product mobile hero check: reduce mobile hero type or spacing only enough to bring the product preview higher; do not rewrite page content or add sections.
-- [ ] Product nav quiet pass: remove repeated brand/page labels where the same identity appears twice in the first viewport; keep navigation usable and do not change routes.
+- [ ] Compress the app/site header height and visual weight on desktop and mobile without changing routes or auth behavior.
+- [ ] Replace one hero pill cluster with a quieter secondary-action row, keeping no more than two visible actions in the first viewport.
+- [ ] Rework the HQ first viewport to show one daily next action, today context, and compact module status before feature explanation.
+- [ ] Tighten mobile preview row spacing so labels, values, and status chips do not crowd each other at narrow widths.
+- [ ] Move one repeated "Features" intro band lower or behind an existing action so the page stops explaining itself twice.
 
 ## Stop Or Continue
 continue but fix visual issues first
