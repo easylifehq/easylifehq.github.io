@@ -4,6 +4,14 @@ import { AppProviders } from "./app/providers/AppProviders";
 import { AppRouter } from "./app/router";
 import "./styles/globals.css";
 
+if (import.meta.env.DEV && window.location.hostname === "127.0.0.1") {
+  window.location.replace(
+    new URL(
+      `${window.location.protocol}//localhost:${window.location.port}${window.location.pathname}${window.location.search}${window.location.hash}`
+    )
+  );
+}
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AppProviders>
