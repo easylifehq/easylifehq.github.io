@@ -158,6 +158,13 @@ export function HQPage() {
       visible: isAppVisible("easylist"),
     },
     {
+      label: "Email",
+      title: "Triage",
+      detail: "Pull real asks out of inbox noise before they slip.",
+      to: "/app/easylist/email",
+      visible: isAppVisible("easylist"),
+    },
+    {
       label: "Calendar",
       title: nextEvents[0] ? nextEvents[0].title || "Next event" : "Open day",
       detail: nextOpenWindow
@@ -287,6 +294,10 @@ export function HQPage() {
           <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
             <strong>Add task</strong>
             <p>Turn a loose obligation into one clear next action.</p>
+          </Link>
+          <Link className="hq-link-card" to="/app/easylist/email">
+            <strong>Scan email</strong>
+            <p>Review likely replies, bills, meetings, and archive noise.</p>
           </Link>
           <Link className="hq-link-card" to="/app/easynotes/new">
             <strong>Blank note</strong>

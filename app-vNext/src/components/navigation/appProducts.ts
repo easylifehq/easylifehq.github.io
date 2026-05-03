@@ -15,7 +15,7 @@ export const appProductItems: AppProductItem[] = [
     appId: "easylist",
     href: "/app/easylist/add",
     label: "EasyList",
-    description: "Tasks",
+    description: "Tasks + email",
   },
   {
     appId: "easynotes",

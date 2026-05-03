@@ -227,6 +227,73 @@ const projectPlanningInstructions = [
   "Do not create vague filler tasks like 'work on project'. Make every task something the user can act on.",
 ].join(" ");
 
+function getFirebaseBearerToken(request) {
+  const authHeader = request.get("authorization") || "";
+  return authHeader.startsWith("Bearer ") ? authHeader.slice("Bearer ".length) : "";
+}
+
+async function verifySignedInRequest(request, response, actionName) {
+  const token = getFirebaseBearerToken(request);
+
+  if (!token) {
+    response.status(401).json({ error: `Sign in before using ${actionName}.` });
+    return null;
+  }
+
+  try {
+    return await admin.auth().verifyIdToken(token);
+  } catch (error) {
+    logger.warn(`Rejected unauthenticated ${actionName} request`, error);
+    response.status(401).json({ error: "Your session could not be verified." });
+    return null;
+  }
+}
+
+function clampGmailMaxResults(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return 15;
+  return Math.max(1, Math.min(Math.floor(parsed), 25));
+}
+
+function getGmailHeader(payload, headerName) {
+  const headers = Array.isArray(payload?.headers) ? payload.headers : [];
+  const found = headers.find((header) => String(header.name || "").toLowerCase() === headerName.toLowerCase());
+  return String(found?.value || "").trim();
+}
+
+function buildGmailUrl(path, params = {}) {
+  const url = new URL(`https://gmail.googleapis.com/gmail/v1/users/me/${path}`);
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach((item) => url.searchParams.append(key, String(item)));
+    } else if (value !== undefined && value !== null && value !== "") {
+      url.searchParams.set(key, String(value));
+    }
+  });
+
+  return url;
+}
+
+async function fetchGmailJson(accessToken, path, params) {
+  const gmailResponse = await fetch(buildGmailUrl(path, params), {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      Accept: "application/json",
+    },
+  });
+  const body = await gmailResponse.json().catch(() => ({}));
+
+  if (!gmailResponse.ok) {
+    const error = new Error(body?.error?.message || "Gmail request failed.");
+    error.status = gmailResponse.status;
+    error.code = body?.error?.status || body?.error?.code || "gmail_error";
+    throw error;
+  }
+
+  return body;
+}
+
 exports.analyzeTaskBrainDump = onRequest(
   {
     cors: allowedCorsOrigins,
@@ -334,6 +401,89 @@ exports.analyzeTaskBrainDump = onRequest(
     } catch (error) {
       logger.error("Task analysis request failed", error);
       response.status(500).json({ error: "Task analysis failed. Try again in a moment." });
+    }
+  }
+);
+
+exports.syncGmailTriage = onRequest(
+  {
+    cors: allowedCorsOrigins,
+    timeoutSeconds: 60,
+    memory: "256MiB",
+  },
+  async (request, response) => {
+    if (request.method === "OPTIONS") {
+      response.status(204).send("");
+      return;
+    }
+
+    if (request.method !== "POST") {
+      response.status(405).json({ error: "Use POST." });
+      return;
+    }
+
+    const verifiedUser = await verifySignedInRequest(request, response, "Gmail sync");
+    if (!verifiedUser) return;
+
+    const accessToken = String(request.body?.accessToken || request.get("x-gmail-access-token") || "").trim();
+    const query = String(request.body?.query || "in:inbox newer_than:30d -category:promotions").trim();
+    const maxResults = clampGmailMaxResults(request.body?.maxResults);
+
+    if (!accessToken) {
+      response.status(400).json({ error: "Connect Gmail before syncing." });
+      return;
+    }
+
+    if (query.length > 512) {
+      response.status(413).json({ error: "Gmail query is too long." });
+      return;
+    }
+
+    try {
+      const searchResult = await fetchGmailJson(accessToken, "messages", {
+        q: query,
+        maxResults,
+      });
+
+      const messageIds = Array.isArray(searchResult.messages) ? searchResult.messages.slice(0, maxResults) : [];
+      const messages = await Promise.all(
+        messageIds.map(async (message) => {
+          const gmailMessage = await fetchGmailJson(accessToken, `messages/${encodeURIComponent(message.id)}`, {
+            format: "metadata",
+            metadataHeaders: ["From", "Subject", "Date"],
+          });
+
+          const receivedAtMs = Number(gmailMessage.internalDate);
+          return {
+            id: String(gmailMessage.id || message.id),
+            threadId: String(gmailMessage.threadId || ""),
+            from: getGmailHeader(gmailMessage.payload, "From") || "Unknown sender",
+            subject: getGmailHeader(gmailMessage.payload, "Subject") || "No subject",
+            receivedAt: Number.isFinite(receivedAtMs) ? new Date(receivedAtMs).toISOString() : getGmailHeader(gmailMessage.payload, "Date"),
+            snippet: String(gmailMessage.snippet || "").replace(/\s+/g, " ").trim(),
+            labels: Array.isArray(gmailMessage.labelIds) ? gmailMessage.labelIds.map(String) : [],
+          };
+        })
+      );
+
+      response.status(200).json({
+        syncedAt: new Date().toISOString(),
+        uid: verifiedUser.uid,
+        query,
+        messages,
+      });
+    } catch (error) {
+      logger.error("Gmail sync failed", {
+        status: error.status || 500,
+        code: error.code || "unknown",
+      });
+
+      if (error.status === 401 || error.status === 403) {
+        response.status(401).json({ error: "Reconnect Gmail and approve inbox access." });
+        return;
+      }
+
+      response.status(502).json({ error: "Gmail sync failed. Try again in a moment." });
     }
   }
 );

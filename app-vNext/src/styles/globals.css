@@ -3660,6 +3660,208 @@ textarea::placeholder {
   margin-top: 0.15rem;
 }
 
+.email-triage-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: end;
+}
+
+.email-triage-hero h2 {
+  margin: 0.45rem 0 0;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.email-triage-hero p,
+.email-suggestion-card p,
+.email-draft-panel p,
+.email-integration-grid p {
+  margin: 0;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.email-triage-actions,
+.email-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: flex-end;
+}
+
+.email-triage-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.email-import-panel,
+.email-triage-stats article,
+.email-integration-grid article,
+.email-draft-panel,
+.email-suggestion-card {
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  background: var(--ui-bg-card, var(--shell-card-bg-soft));
+}
+
+.email-triage-stats article {
+  display: grid;
+  gap: 0.2rem;
+  min-height: 76px;
+  padding: 0.82rem;
+}
+
+.email-triage-stats span,
+.email-suggestion-meta span,
+.email-draft-panel span,
+.email-integration-grid span {
+  color: var(--shell-accent-strong);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.email-triage-stats strong {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.email-suggestion-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.email-suggestion-card {
+  display: grid;
+  gap: 0.72rem;
+  padding: 0.95rem;
+  transition:
+    border-color var(--shell-motion-fast),
+    transform var(--shell-motion-fast),
+    background var(--shell-motion-fast);
+}
+
+.email-suggestion-card-tasked,
+.email-suggestion-card-drafted,
+.email-suggestion-card-archived {
+  border-color: color-mix(in srgb, var(--shell-accent) 44%, var(--ui-border-subtle) 56%);
+  background: color-mix(in srgb, var(--shell-accent-soft) 54%, var(--ui-bg-card) 46%);
+}
+
+.email-suggestion-meta,
+.email-suggestion-main,
+.email-task-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.email-suggestion-main {
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.email-suggestion-main p {
+  margin: 0 0 0.14rem;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.88rem;
+}
+
+.email-suggestion-main h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.email-suggestion-main strong {
+  display: block;
+  margin-top: 0.28rem;
+}
+
+.email-task-preview span {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.42rem 0.58rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  background: var(--ui-bg-card-elevated, var(--shell-card-bg));
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.email-card-actions {
+  justify-content: flex-start;
+}
+
+.email-card-actions .primary-button,
+.email-card-actions .button-secondary,
+.email-card-actions .ghost-button {
+  min-height: 38px;
+  padding: 0.55rem 0.72rem;
+}
+
+.email-import-panel {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.95rem;
+}
+
+.email-import-panel textarea {
+  width: 100%;
+  min-height: 190px;
+  resize: vertical;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  padding: 0.85rem;
+  background: var(--ui-bg-input, #fff);
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
+.email-draft-panel {
+  display: grid;
+  gap: 0.72rem;
+  padding: 0.95rem;
+}
+
+.email-draft-panel > div {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.email-draft-panel textarea {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  padding: 0.85rem;
+  background: var(--ui-bg-input, #fff);
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
+.email-integration-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.email-integration-grid article {
+  display: grid;
+  gap: 0.48rem;
+  padding: 0.95rem;
+}
+
+.email-integration-grid strong {
+  font-size: 1rem;
+}
+
 .easylist-action-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -9697,6 +9899,25 @@ button.calendar-detail-card:disabled {
 }
 
 @media (max-width: 760px) {
+  .email-triage-hero,
+  .email-integration-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .email-triage-actions,
+  .email-card-actions {
+    justify-content: stretch;
+  }
+
+  .email-triage-actions > *,
+  .email-card-actions > * {
+    flex: 1 1 9rem;
+  }
+
+  .email-triage-stats {
+    grid-template-columns: 1fr;
+  }
+
   .task-rows-shell {
     overflow-x: visible;
   }

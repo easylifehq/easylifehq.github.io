@@ -75,6 +75,10 @@ const EasyListInboxPage = lazyNamed(
   () => import("@/features/easylist/routes/EasyListInboxPage"),
   "EasyListInboxPage"
 );
+const EasyListEmailPage = lazyNamed(
+  () => import("@/features/easylist/routes/EasyListEmailPage"),
+  "EasyListEmailPage"
+);
 const EasyListDeletedPage = lazyNamed(
   () => import("@/features/easylist/routes/EasyListDeletedPage"),
   "EasyListDeletedPage"
@@ -254,6 +258,7 @@ export function AppRouter() {
               <Route index element={<Navigate to="/app/easylist/dashboard" replace />} />
               <Route path="dashboard" element={<EasyListDashboardPage />} />
               <Route path="add" element={<EasyListInboxPage />} />
+              <Route path="email" element={<EasyListEmailPage />} />
               <Route path="inbox" element={<Navigate to="/app/easylist/add" replace />} />
               <Route path="today" element={<Navigate to="/app/easylist/dashboard" replace />} />
               <Route path="upcoming" element={<Navigate to="/app/easylist/dashboard" replace />} />
