@@ -797,6 +797,22 @@ export function SettingsPage() {
           <h1>Settings</h1>
           <p>Adjust the settings that shape today.</p>
         </div>
+        <div className="settings-status-grid" aria-label="Current suite status">
+          <article className="settings-status-card">
+            <span>Signed in</span>
+            <strong>{auth.currentUser?.email || user?.email || "EasyLife account"}</strong>
+          </article>
+          <article className="settings-status-card">
+            <span>Theme</span>
+            <strong>{activeTheme.label}</strong>
+          </article>
+          <article className="settings-status-card">
+            <span>Opens to</span>
+            <strong>
+              {startupRouteOptions.find((option) => option.value === settings.startupRoute)?.label || "EasyHQ"}
+            </strong>
+          </article>
+        </div>
       </section>
 
       <section className="settings-section-shell">
@@ -857,10 +873,12 @@ export function SettingsPage() {
         </nav>
 
         <div className="settings-section-content">
-          <div className="settings-section-heading">
-            <p className="eyebrow">{activeSectionConfig.eyebrow}</p>
-            <h2>{activeSectionConfig.label}</h2>
-          </div>
+          {activeSection === "customize" ? null : (
+            <div className="settings-section-heading">
+              <p className="eyebrow">{activeSectionConfig.eyebrow}</p>
+              <h2>{activeSectionConfig.label}</h2>
+            </div>
+          )}
 
       <div className="settings-layout-grid">
         {activeSection === "customize" ? (

@@ -2580,3 +2580,19 @@
 - Files changed:
 - app-vNext/src/features/settings/routes/SettingsPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-03 12:03:15
+
+- Task attempted: User pain: Settings wastes first-screen attention with 203 words and 12 controls before Spencer can see the control-center job. Target: Pack 1 - Product Spine `/settings?visualQa=1`, `app-vNext/src/features/settings/routes/SettingsPage.tsx`, and only directly required `app-vNext/src/styles/globals.css`. Change: reduce the Settings first viewport by demoting one secondary settings/control cluster or helper-copy block behind existing page structure so one primary settings group leads. First screen: the signed-in Settings control-center job, one clear primary settings group, and compact suite status must be dominant before secondary controls or explanations. Remove/simplify: remove or hide one above-the-fold helper paragraph, repeated heading, or secondary control cluster; preserve all settings behavior, labels that affect meaning, routes, data shapes, and tap targets. Guardrails: frontend-only shape repair; no backend, auth, Firebase rules/config, package/dependency files, generated output, deployment config, secrets, root files, new settings options, routing changes, broad redesign, docs report edits, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect `/settings?visualQa=1` on desktop and 390px mobile and confirm the first viewport is visibly lighter and no longer reads as an overloaded settings inventory. [class:design risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/settings/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/settings, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/settings/routes/SettingsPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

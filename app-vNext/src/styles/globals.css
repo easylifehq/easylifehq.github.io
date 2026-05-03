@@ -6679,8 +6679,11 @@ button.calendar-detail-card:disabled {
 
 .settings-status-card strong,
 .settings-labs-summary strong {
+  min-width: 0;
   color: var(--ui-text-primary, var(--shell-page-text));
   font-size: 1.05rem;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
 }
 
 .settings-status-card p,

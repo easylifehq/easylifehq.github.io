@@ -3049,3 +3049,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: RED
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: product pages look more cohesive, but they still behave like feature brochures instead of a daily assistant spine.
 - Debug checkpoint result: not-run (not-run)
+
+## 2026-05-03 12:03:15
+
+- Task: User pain: Settings wastes first-screen attention with 203 words and 12 controls before Spencer can see the control-center job. Target: Pack 1 - Product Spine `/settings?visualQa=1`, `app-vNext/src/features/settings/routes/SettingsPage.tsx`, and only directly required `app-vNext/src/styles/globals.css`. Change: reduce the Settings first viewport by demoting one secondary settings/control cluster or helper-copy block behind existing page structure so one primary settings group leads. First screen: the signed-in Settings control-center job, one clear primary settings group, and compact suite status must be dominant before secondary controls or explanations. Remove/simplify: remove or hide one above-the-fold helper paragraph, repeated heading, or secondary control cluster; preserve all settings behavior, labels that affect meaning, routes, data shapes, and tap targets. Guardrails: frontend-only shape repair; no backend, auth, Firebase rules/config, package/dependency files, generated output, deployment config, secrets, root files, new settings options, routing changes, broad redesign, docs report edits, or unrelated screens. Acceptance: from `app-vNext`, run `npm.cmd run build`. Check: inspect `/settings?visualQa=1` on desktop and 390px mobile and confirm the first viewport is visibly lighter and no longer reads as an overloaded settings inventory. [class:design risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/settings/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: Pack 1 - Product Spine
+- Task class: design
+- Task risk: low
+- Changed files: 2
+- Materiality signal: impact=visible, surface-files=2, structural-files=2, source-lines=29, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: product pages look more cohesive, but they still behave like feature brochures instead of a daily assistant spine.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-115140
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-115140\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-115140\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-115140\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-115140\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-115140
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-115140\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-115140\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-115140\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-115140\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.
