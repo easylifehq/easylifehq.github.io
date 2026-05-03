@@ -103,18 +103,98 @@ export function HQPage() {
       to: "/app/easynotes",
     };
   }, [dueTodayTasks.length, openWindows.length, overdueTasks.length]);
+
+  const dayPhase = new Date().getHours() < 12 ? "Morning" : new Date().getHours() < 17 ? "Afternoon" : "Evening";
+  const attentionItems = [
+    overdueTasks[0]
+      ? {
+          label: "Recover",
+          title: overdueTasks[0].title,
+          detail: "This is behind. Handle, reschedule, or intentionally release it.",
+          to: "/app/easylist/dashboard",
+        }
+      : null,
+    dueTodayTasks[0]
+      ? {
+          label: "Due today",
+          title: dueTodayTasks[0].title,
+          detail: `${dueTodayTasks.length} due item${dueTodayTasks.length === 1 ? "" : "s"} still need a decision.`,
+          to: "/app/easylist/dashboard",
+        }
+      : null,
+    nextEvents[0]
+      ? {
+          label: "Next on calendar",
+          title: nextEvents[0].title || "Untitled event",
+          detail: nextEvents[0].allDay
+            ? "All day"
+            : `${formatTimeLabel(nextEvents[0].startAt)} - ${formatTimeLabel(nextEvents[0].endAt)}`,
+          to: "/app/easycalendar/day",
+        }
+      : null,
+    quickWin
+      ? {
+          label: "Tiny win",
+          title: quickWin.title,
+          detail: `${quickWin.estimatedLength || 20} minutes. Good for a small gap.`,
+          to: "/app/easylist/dashboard",
+        }
+      : null,
+  ].filter((item): item is { label: string; title: string; detail: string; to: string } => Boolean(item)).slice(0, 3);
+  const assistantRead = overdueTasks.length
+    ? "There is one small recovery thread. Clear that first, then the day gets easier."
+    : dueTodayTasks.length > 3
+      ? "Today has enough moving parts. Pick one list, one time block, and keep the rest quiet."
+      : nextEvents.length
+        ? "The calendar has shape. Use the open windows for the work that would otherwise leak."
+        : "The day is open. Capture the loose ends now so they do not become noise later.";
+  const nextOpenWindow = openWindows[0];
+  const systems = [
+    {
+      label: "List",
+      title: `${activeTaskCount} open`,
+      detail: mostUrgent ? mostUrgentLabel : "Nothing urgent is waiting.",
+      to: "/app/easylist/dashboard",
+      visible: isAppVisible("easylist"),
+    },
+    {
+      label: "Calendar",
+      title: nextEvents[0] ? nextEvents[0].title || "Next event" : "Open day",
+      detail: nextOpenWindow
+        ? `${formatDuration(nextOpenWindow.minutes)} open around ${formatTimeLabel(nextOpenWindow.startAt)}`
+        : `${todayEvents.length} event${todayEvents.length === 1 ? "" : "s"} today`,
+      to: "/app/easycalendar/day",
+      visible: isAppVisible("easycalendar"),
+    },
+    {
+      label: "Notes",
+      title: "Capture",
+      detail: "Park the messy thought before it becomes another task.",
+      to: "/app/easynotes/new",
+      visible: isAppVisible("easynotes"),
+    },
+    {
+      label: "Projects",
+      title: "Longer arc",
+      detail: "Keep plans connected to tasks without crowding today.",
+      to: "/app/easyprojects",
+      visible: isAppVisible("easyprojects"),
+    },
+  ];
   return (
     <main className="page-wrap app-theme app-theme-easyhq">
       {error ? <p className="error-copy">{error}</p> : null}
 
-      <section className="hq-command-center" aria-labelledby="hq-title">
+      <section className="assistant-home" aria-labelledby="hq-title">
         <article className="hq-start-card">
           <div className="hq-start-heading">
-            <h1 id="hq-title">Daily workspace</h1>
-            <span>Suggested next action</span>
+            <div>
+              <p>{dayPhase} brief</p>
+              <h1 id="hq-title">Start with what needs your attention.</h1>
+            </div>
+            <span>EasyLifeHQ</span>
           </div>
-          <strong>{startHere.label}</strong>
-          <p>{startHere.reason}</p>
+          <strong>{assistantRead}</strong>
           <div className="hq-today-summary" aria-label="Today summary">
             <span>Today</span>
             <p>{todaySummary.join(" / ")}</p>
@@ -129,6 +209,15 @@ export function HQPage() {
               </Link>
             ) : null}
           </div>
+        </article>
+
+        <article className="assistant-next-card" aria-labelledby="assistant-next-title">
+          <span>Next best move</span>
+          <h2 id="assistant-next-title">{startHere.label}</h2>
+          <p>{startHere.reason}</p>
+          <Link to={startHere.to} className="primary-button">
+            {startHere.buttonLabel}
+          </Link>
         </article>
 
         <div className="hq-status-strip" aria-label="Module status context">
@@ -159,33 +248,60 @@ export function HQPage() {
             </p>
           </article>
         </div>
-
       </section>
 
-      <PageSection eyebrow="Move fast" title="Quick actions">
+      <PageSection eyebrow="Attention" title="The things EasyLife would keep from slipping">
+        <div className="assistant-attention-list">
+          {attentionItems.length ? (
+            attentionItems.map((item) => (
+              <Link className="assistant-attention-item" to={item.to} key={`${item.label}-${item.title}`}>
+                <span>{item.label}</span>
+                <strong>{item.title}</strong>
+                <p>{item.detail}</p>
+              </Link>
+            ))
+          ) : (
+            <article className="assistant-attention-item">
+              <span>Clear</span>
+              <strong>No loose end is demanding the first move.</strong>
+              <p>Use capture or calendar to give the open day a little structure.</p>
+            </article>
+          )}
+        </div>
+      </PageSection>
+
+      <PageSection eyebrow="Systems" title="Keep modules quiet until they are useful">
+        <div className="assistant-system-grid">
+          {systems
+            .filter((system) => system.visible)
+            .map((system) => (
+              <Link className="hq-link-card" to={system.to} key={system.label}>
+                <span>{system.label}</span>
+                <strong>{system.title}</strong>
+                <p>{system.detail}</p>
+              </Link>
+            ))}
+        </div>
+      </PageSection>
+
+      <PageSection eyebrow="Capture" title="Fast ways to put a thought somewhere safe">
         <div className="hq-action-row">
-          {isAppVisible("easylist") ? (
-            <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
-              <strong>Add task</strong>
-              <p>Capture what is on your mind.</p>
-            </Link>
-          ) : null}
-          {isAppVisible("easynotes") ? (
-            <Link className="hq-link-card" to="/app/easynotes/new">
-              <strong>Blank note</strong>
-              <p>Start writing immediately.</p>
-            </Link>
-          ) : null}
-          {isAppVisible("easycalendar") ? (
-            <Link className="hq-link-card" to="/app/easycalendar/day">
-              <strong>Today</strong>
-              <p>See the day in time.</p>
-            </Link>
-          ) : null}
+          <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
+            <strong>Add task</strong>
+            <p>Turn a loose obligation into one clear next action.</p>
+          </Link>
+          <Link className="hq-link-card" to="/app/easynotes/new">
+            <strong>Blank note</strong>
+            <p>Use this when the thought is still too messy to become a task.</p>
+          </Link>
+          <Link className="hq-link-card" to="/app/easycalendar/day">
+            <strong>Today</strong>
+            <p>Place work in time when the list is no longer enough.</p>
+          </Link>
           {isAppVisible("easyworkout") ? (
             <Link className="hq-link-card" to="/app/easyworkout/log?workoutMode=1">
-              <strong>Start workout</strong>
-              <p>Open workout mode.</p>
+              <strong>Workout</strong>
+              <p>Log a session without leaving the day view behind.</p>
             </Link>
           ) : null}
         </div>

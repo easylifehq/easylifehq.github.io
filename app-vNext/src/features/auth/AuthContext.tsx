@@ -26,9 +26,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const isVisualQa = import.meta.env.DEV && new URLSearchParams(window.location.search).get("visualQa") === "1";
-    if (isVisualQa) {
-      setUser({ uid: "visual-qa" } as User);
+    const params = new URLSearchParams(window.location.search);
+    const isLocalPreview =
+      import.meta.env.DEV && (params.get("visualQa") === "1" || params.get("demo") === "1");
+    if (isLocalPreview) {
+      setUser({ uid: "local-preview", email: "preview@easylife.local" } as User);
       setIsLoading(false);
       return;
     }

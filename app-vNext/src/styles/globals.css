@@ -5360,6 +5360,96 @@ button.calendar-detail-card:disabled {
   gap: 0.9rem;
 }
 
+.assistant-home {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+  gap: 0.9rem;
+  align-items: stretch;
+}
+
+.assistant-home .hq-start-card {
+  min-height: 15rem;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--app-accent, #4d7f6f) 10%, transparent), transparent 48%),
+    var(--ui-bg-card-elevated, #fffdf9);
+}
+
+.assistant-home .hq-status-strip {
+  grid-column: 1 / -1;
+}
+
+.assistant-next-card {
+  display: grid;
+  align-content: center;
+  gap: 0.7rem;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  border-radius: 8px;
+  background: var(--ui-bg-card, var(--shell-card-bg-soft));
+}
+
+.assistant-next-card span,
+.assistant-attention-item span,
+.assistant-system-grid .hq-link-card span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.assistant-next-card h2 {
+  margin: 0;
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 1.35rem;
+  line-height: 1.12;
+}
+
+.assistant-next-card p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+}
+
+.assistant-next-card .primary-button {
+  justify-self: start;
+}
+
+.assistant-attention-list,
+.assistant-system-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.assistant-system-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.assistant-attention-item {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.9rem;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  border-radius: 8px;
+  background: var(--ui-bg-card, #fffdf9);
+  color: inherit;
+  text-decoration: none;
+}
+
+.assistant-attention-item strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  line-height: 1.2;
+}
+
+.assistant-attention-item p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
 .hq-start-heading h1 {
   margin: 0.1rem 0 0;
   color: var(--ui-text-primary, var(--shell-heading-text));
@@ -8088,8 +8178,23 @@ button.calendar-detail-card:disabled {
   }
 
   .hq-command-center,
+  .assistant-home,
+  .assistant-attention-list,
+  .assistant-system-grid,
   .hq-action-row {
     grid-template-columns: 1fr;
+  }
+
+  .assistant-home .hq-status-strip {
+    grid-column: auto;
+  }
+
+  .assistant-next-card {
+    padding: 0.78rem;
+  }
+
+  .assistant-next-card h2 {
+    font-size: 1.08rem;
   }
 
   .hq-command-center {

@@ -76,7 +76,180 @@ const EasyCalendarContext = createContext<EasyCalendarContextValue | undefined>(
 
 function isVisualQaMode() {
   if (!import.meta.env.DEV) return false;
-  return new URLSearchParams(window.location.search).get("visualQa") === "1";
+  const params = new URLSearchParams(window.location.search);
+  return params.get("visualQa") === "1" || params.get("demo") === "1";
+}
+
+function todayAt(hours: number, minutes = 0) {
+  const date = new Date();
+  date.setHours(hours, minutes, 0, 0);
+  return date;
+}
+
+function getPreviewTasks(): TaskRecord[] {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+
+  return [
+    {
+      id: "preview-task-1",
+      itemKind: "task",
+      title: "Send the project update before lunch",
+      notes: "Keep it short: what moved, what is blocked, and what needs a decision.",
+      listName: "Today",
+      category: "Work",
+      estimatedLength: 18,
+      priorityTier: 2,
+      priorityLabel: "Important",
+      dueDate: todayAt(0),
+      linkedCalendarEventId: null,
+      linkedNoteId: null,
+      recurring: false,
+      completed: false,
+      completedAt: null,
+      deletedAt: null,
+      linkedCalendarBlockIds: ["preview-block-1"],
+      createdAt: null,
+      updatedAt: null,
+    },
+    {
+      id: "preview-task-2",
+      itemKind: "task",
+      title: "Reply to Maya about Friday plans",
+      notes: "Waiting on a simple yes/no before the day gets noisy.",
+      listName: "Follow-ups",
+      category: "Personal",
+      estimatedLength: 8,
+      priorityTier: 3,
+      priorityLabel: "Soon",
+      dueDate: yesterday,
+      linkedCalendarEventId: null,
+      linkedNoteId: null,
+      recurring: false,
+      completed: false,
+      completedAt: null,
+      deletedAt: null,
+      linkedCalendarBlockIds: [],
+      createdAt: null,
+      updatedAt: null,
+    },
+    {
+      id: "preview-task-3",
+      itemKind: "task",
+      title: "Collect three notes for the assistant revamp",
+      notes: "Pull the useful bits from scattered thoughts into one note.",
+      listName: "Projects",
+      category: "EasyLife",
+      estimatedLength: 20,
+      priorityTier: 4,
+      priorityLabel: "Focus",
+      dueDate: todayAt(0),
+      linkedCalendarEventId: null,
+      linkedNoteId: null,
+      recurring: false,
+      completed: false,
+      completedAt: null,
+      deletedAt: null,
+      linkedCalendarBlockIds: [],
+      createdAt: null,
+      updatedAt: null,
+    },
+    {
+      id: "preview-task-4",
+      itemKind: "task",
+      title: "Walk after the 3 PM call",
+      notes: "Small reset before the second work block.",
+      listName: "Health",
+      category: "Workout",
+      estimatedLength: 15,
+      priorityTier: 6,
+      priorityLabel: "Nice",
+      dueDate: null,
+      linkedCalendarEventId: null,
+      linkedNoteId: null,
+      recurring: false,
+      completed: false,
+      completedAt: null,
+      deletedAt: null,
+      linkedCalendarBlockIds: [],
+      createdAt: null,
+      updatedAt: null,
+    },
+  ];
+}
+
+function getPreviewEvents(): CalendarEventRecord[] {
+  return [
+    {
+      id: "preview-event-1",
+      title: "Team standup",
+      description: "Quick blockers and handoffs.",
+      itemKind: "event",
+      categoryId: "work",
+      startAt: todayAt(10, 0),
+      endAt: todayAt(10, 30),
+      allDay: false,
+      isRecurring: false,
+      recurrenceRule: null,
+      eventType: "work",
+      linkedTaskId: null,
+      createdAt: null,
+      updatedAt: null,
+    },
+    {
+      id: "preview-event-2",
+      title: "Deep work block",
+      description: "Quiet build time.",
+      itemKind: "event",
+      categoryId: "work",
+      startAt: todayAt(13, 0),
+      endAt: todayAt(14, 30),
+      allDay: false,
+      isRecurring: false,
+      recurrenceRule: null,
+      eventType: "work",
+      linkedTaskId: null,
+      createdAt: null,
+      updatedAt: null,
+    },
+    {
+      id: "preview-event-3",
+      title: "Check-in call",
+      description: "Decision and next steps.",
+      itemKind: "event",
+      categoryId: "personal",
+      startAt: todayAt(15, 0),
+      endAt: todayAt(15, 25),
+      allDay: false,
+      isRecurring: false,
+      recurrenceRule: null,
+      eventType: "appointment",
+      linkedTaskId: null,
+      createdAt: null,
+      updatedAt: null,
+    },
+  ];
+}
+
+function getPreviewTaskBlocks(): CalendarTaskBlockRecord[] {
+  return [
+    {
+      id: "preview-block-1",
+      taskId: "preview-task-1",
+      titleSnapshot: "Send the project update before lunch",
+      categoryId: "Work",
+      startAt: todayAt(11, 0),
+      endAt: todayAt(11, 25),
+      isFlexible: true,
+      planningState: "scheduled",
+      userAdjusted: true,
+      completed: false,
+      completedAt: null,
+      createdAt: null,
+      updatedAt: null,
+    },
+  ];
 }
 
 export function EasyCalendarProvider({ children }: { children: ReactNode }) {
@@ -94,9 +267,9 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (isVisualQaMode()) {
       setCategories([]);
-      setEvents([]);
-      setTaskBlocks([]);
-      setTasks([]);
+      setEvents(getPreviewEvents());
+      setTaskBlocks(getPreviewTaskBlocks());
+      setTasks(getPreviewTasks());
       setCategoriesLoading(false);
       setEventsLoading(false);
       setTaskBlocksLoading(false);

@@ -43,7 +43,7 @@ function getVisualQaSettings(): UserShellSettings | null {
   if (!import.meta.env.DEV) return null;
 
   const params = new URLSearchParams(window.location.search);
-  if (params.get("visualQa") !== "1") return null;
+  if (params.get("visualQa") !== "1" && params.get("demo") !== "1") return null;
 
   const theme = params.get("theme");
   const themeMode: ThemeMode =
