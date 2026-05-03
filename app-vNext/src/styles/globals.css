@@ -1193,6 +1193,16 @@ a {
   border-bottom-color: currentColor;
 }
 
+.app-content:has(.settings-page) .site-footer {
+  margin-top: clamp(3rem, 10vh, 5rem);
+}
+
+.app-content:has(.settings-page) .site-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
 .page-wrap {
   display: grid;
   gap: 1rem;
