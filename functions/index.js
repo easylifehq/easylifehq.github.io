@@ -261,6 +261,14 @@ function getGmailHeader(payload, headerName) {
   return String(found?.value || "").trim();
 }
 
+function base64UrlEncode(value) {
+  return Buffer.from(value, "utf8").toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+function foldEmailHeader(value) {
+  return String(value || "").replace(/[\r\n]+/g, " ").trim();
+}
+
 function buildGmailUrl(path, params = {}) {
   const url = new URL(`https://gmail.googleapis.com/gmail/v1/users/me/${path}`);
 
@@ -275,12 +283,15 @@ function buildGmailUrl(path, params = {}) {
   return url;
 }
 
-async function fetchGmailJson(accessToken, path, params) {
+async function fetchGmailJson(accessToken, path, params, options = {}) {
   const gmailResponse = await fetch(buildGmailUrl(path, params), {
+    method: options.method || "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
       Accept: "application/json",
+      ...(options.body ? { "Content-Type": "application/json" } : {}),
     },
+    ...(options.body ? { body: JSON.stringify(options.body) } : {}),
   });
   const body = await gmailResponse.json().catch(() => ({}));
 
@@ -484,6 +495,91 @@ exports.syncGmailTriage = onRequest(
       }
 
       response.status(502).json({ error: "Gmail sync failed. Try again in a moment." });
+    }
+  }
+);
+
+exports.createGmailDraft = onRequest(
+  {
+    cors: allowedCorsOrigins,
+    timeoutSeconds: 60,
+    memory: "256MiB",
+  },
+  async (request, response) => {
+    if (request.method === "OPTIONS") {
+      response.status(204).send("");
+      return;
+    }
+
+    if (request.method !== "POST") {
+      response.status(405).json({ error: "Use POST." });
+      return;
+    }
+
+    const verifiedUser = await verifySignedInRequest(request, response, "Gmail draft creation");
+    if (!verifiedUser) return;
+
+    const accessToken = String(request.body?.accessToken || request.get("x-gmail-access-token") || "").trim();
+    const to = foldEmailHeader(request.body?.to);
+    const subject = foldEmailHeader(request.body?.subject);
+    const body = String(request.body?.body || "").trim();
+    const threadId = String(request.body?.threadId || "").trim();
+
+    if (!accessToken) {
+      response.status(400).json({ error: "Connect Gmail before creating a draft." });
+      return;
+    }
+
+    if (!to || !subject || !body) {
+      response.status(400).json({ error: "Draft recipient, subject, and body are required." });
+      return;
+    }
+
+    if (to.length > 500 || subject.length > 300 || body.length > 12000) {
+      response.status(413).json({ error: "Draft content is too long." });
+      return;
+    }
+
+    const raw = base64UrlEncode(
+      [
+        `To: ${to}`,
+        `Subject: ${subject}`,
+        "MIME-Version: 1.0",
+        'Content-Type: text/plain; charset="UTF-8"',
+        "Content-Transfer-Encoding: 8bit",
+        "",
+        body,
+      ].join("\r\n")
+    );
+
+    try {
+      const draft = await fetchGmailJson(accessToken, "drafts", undefined, {
+        method: "POST",
+        body: {
+          message: {
+            raw,
+            ...(threadId ? { threadId } : {}),
+          },
+        },
+      });
+
+      response.status(200).json({
+        draftId: String(draft.id || ""),
+        messageId: String(draft.message?.id || ""),
+        threadId: String(draft.message?.threadId || threadId || ""),
+      });
+    } catch (error) {
+      logger.error("Gmail draft creation failed", {
+        status: error.status || 500,
+        code: error.code || "unknown",
+      });
+
+      if (error.status === 401 || error.status === 403) {
+        response.status(401).json({ error: "Reconnect Gmail and approve draft access." });
+        return;
+      }
+
+      response.status(502).json({ error: "Gmail draft creation failed. Try again in a moment." });
     }
   }
 );
