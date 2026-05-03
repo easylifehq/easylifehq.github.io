@@ -806,10 +806,17 @@ a {
   letter-spacing: 0;
 }
 
-.marketing-hero-card h2,
+.marketing-hero-card-title,
 .marketing-card h3 {
   margin: 0;
   overflow-wrap: break-word;
+}
+
+.marketing-hero-card-title {
+  color: var(--ui-text-strong, var(--shell-text));
+  font-size: 1rem;
+  font-weight: 760;
+  line-height: 1.14;
 }
 
 .marketing-hero-preview {
@@ -8919,7 +8926,7 @@ button.calendar-detail-card:disabled {
   .marketing-card p,
   .marketing-hero-card p,
   .marketing-card h3,
-  .marketing-hero-card h2,
+  .marketing-hero-card-title,
   .panel-header h1,
   .panel-header h2,
   .panel-header p {
@@ -9013,7 +9020,7 @@ button.calendar-detail-card:disabled {
     font-size: 0.64rem;
   }
 
-  .marketing-page--preview-realism .marketing-hero-card h2 {
+  .marketing-page--preview-realism .marketing-hero-card-title {
     font-size: 0.98rem;
     line-height: 1.12;
   }
@@ -9203,7 +9210,7 @@ button.calendar-detail-card:disabled {
     gap: 0.42rem;
   }
 
-  .marketing-page--easycalendar-preview .marketing-hero-card h2 {
+  .marketing-page--easycalendar-preview .marketing-hero-card-title {
     font-size: 0.88rem;
     line-height: 1.08;
   }
