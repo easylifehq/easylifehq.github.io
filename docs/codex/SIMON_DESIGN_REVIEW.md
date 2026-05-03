@@ -4,57 +4,53 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is becoming calmer and more coherent, but the product spine is still wearing too much chrome and too many repeated labels like it is afraid the user forgot where they clicked.
+EasyLife is finally finding a calm suite language, but Settings is still wearing too much chrome for a product that promised "what should I do next today?"
 
 ## Mission Fit
-The direction partially matches the mission: shared typography, pale grid surfaces, teal accents, rounded panels, and consistent product-page patterns now make the suite feel more related. But Pack 1 is supposed to make EasyLife feel like one personal operating system, and the current screenshots still skew toward repeated marketing/product explanation rather than a signed-in daily start surface that says, "Here is what needs attention today." Settings is the clearest staging miss: it should feel like a quiet control center, but it exposes too much structure too early.
+The direction mostly matches the mission: the visual system is cleaner, more connected, and more professional across EasyList, EasyCalendar, EasyNotes, and Settings. The problem is focus. Pack 1 is Product Spine, and the spine should make the signed-in daily operating system feel immediate. Settings still behaves like a configuration page with too many visible controls above the fold, while the marketing/product pages still read more like polished brochures than proof of one connected personal OS.
 
 ## Taste Check
-The good: the visual system has restraint, the palette is calm, the typography has weight, and the module mock panels feel more tactile than generic SaaS. EasyList and EasyNotes now have sharper, more human copy, and the product cards have a recognizable family resemblance.
+The good: the paper-like background, restrained teal accents, firm typography, pill tags, and softened panels are moving toward a recognizable EasyLife house style. EasyList and EasyCalendar now have stronger first-screen confidence and less generic SaaS perfume.
 
-The off: the hierarchy is too loud too often. The giant marketing headlines, oversized mobile type, repeated "Features" sections, pills, and wrapper navigation make every route feel like a brochure page instead of a useful personal assistant suite. The pale grid is pleasant, but when every section sits in a bordered white slab, the page starts to feel boxed-in. Settings in particular has "I reorganized my closet by putting every label on the outside" energy.
+The off: the design still loves explaining itself. Settings has a nice calm surface, then immediately asks the user to parse navigation, section chrome, accordions, support links, and multiple panels. The footer support link is skinny and awkward. The product pages are better, but still oversized and sales-led; useful, yes, but not yet "open this and run your day."
 
 ## Visual Problems To Fix
-- Settings desktop exposes 17 interactive controls above the fold, violating the documented first-screen staging contract.
-- Settings repeats page identity: top app chrome, "Daily Setup / Settings" hero, "Settings Section / Personalize" selector, then another "Appearance / Personalize" panel. That is too many signs pointing at the same room.
-- Settings mobile uses oversized type and heavy stacked panels, making a control surface feel inflated rather than efficient.
-- The "Report a Bug / Suggest an Improvement" link is visually weak and flagged as a small tap target on desktop.
-- Product marketing routes repeat the same structure across modules: large nav, big hero card, CTA pair, pill row, right-side demo card, then another "Features" band. Consistent, yes; a little too template-stamped, also yes.
-- Mobile product pages push the actual example card below large headline, long support copy, CTAs, and pills, delaying the proof of the product.
-- The top route chrome competes with the demo surfaces on customer-facing product pages; the user sees navigation architecture before they feel the product.
-- Cards and panels are stacked with similar border weight, so primary action, proof, and secondary explanation sometimes have the same visual volume.
+- Settings exposes 17 interactive controls above the fold on desktop, which violates the information staging contract and makes the page feel busier than the mission allows.
+- Settings has repeated page identity: global shell says EasyLifeHQ, the page title says Settings, the left rail says Change section, the content header says Personalize, and the first card says Theme mode. That is a lot of labeling before the user gets one useful control.
+- The Settings support link, "Report a Bug / Suggest an Improvement", is visually undersized and reads like a forgotten footer legal link instead of a usable support action.
+- Settings uses stacked wrapper panels: page hero, section shell, subheader panel, card panel, inner current-selection panel, and accordion panels. The real control is buried under a little bureaucracy parade.
+- Marketing pages still lead with large hero explanation and feature chips before proving the working app connection. It is handsome, but it still smells faintly like a launch page template.
+- Mobile marketing screenshots show improved hierarchy, but the first screen remains long and dense; tags and secondary panels compete with the primary product promise.
 
 ## Strongest Opportunities
-- Make HQ and Settings obey the first-screen contract ruthlessly: one daily action, one today context, a few compact module signals, then deeper controls.
-- Reduce product-page chrome so the module promise and live example feel like the hero, not the nav system around it.
-- Create a tighter suite spine: one shared app shell pattern, one shared route header pattern, and fewer one-off intro bands.
-- Let the demo panels carry more product proof above the fold, especially on mobile.
-- Use progressive disclosure in Settings: show current state first, hide choice lists and explanations behind clear controls.
-- Keep the human copy direction from EasyList and EasyNotes; it is much better than platform language.
+- Make Settings a compact control center: one calm heading, one primary setting group open, the rest collapsed behind clear section controls.
+- Reduce repeated labels across the shell and page body so each route has one confident identity moment, not four.
+- Bring the signed-in daily assistant idea forward: Settings should support the suite, not become a destination that explains the suite again.
+- Make marketing pages show one concrete mini workflow earlier, especially the connection between list, calendar, and notes.
+- Keep the tactile notebook language, but sharpen it with more whitespace discipline and fewer nested containers.
 
 ## Priority Fix
-Fix Settings information staging first. Collapse the repeated "Settings / Personalize / Appearance / Theme mode" stack into a quieter control-center first screen: one compact Settings header, one current setup summary, one primary control group, and secondary sections tucked behind the existing section selector or disclosure rows. The goal is fewer visible controls above the fold, less repeated identity, and a screen that feels like daily setup, not a settings inventory.
+Fix Settings information staging next. Above the fold should show a simple Settings title, one short sentence, the active section selector, and only the current primary control group. Move secondary controls, explanatory detail, support links, and inactive setting groups behind collapsed sections or lower on the page. Nami should treat this as chrome reduction, not a redesign.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: shared visual language is clearer, but Settings and product pages still over-explain instead of leading with the daily operating-system job.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: suite styling is clearer, but Settings still overloads the first screen and weakens the daily operating-system spine.
 
 ## Designer Handoff
-Next batch should subtract before it adds. Keep the calm notebook palette, strong typography, tactile panels, and concrete life-management language. Change the hierarchy: demote route chrome, remove repeated intro bands, reduce pill/action clutter, and make the first viewport prove the product through one focused daily action or one convincing module example. The user should feel less like they are touring a suite and more like they have opened a calm assistant that already knows what needs attention.
+Keep the calm paper surface, teal accent, strong black type, and compact rounded controls. Change the hierarchy: fewer wrappers, fewer repeated labels, fewer visible actions at once. Settings should feel like a quiet control room, not a filing cabinet with all drawers open. The user should feel, "I can adjust the suite quickly and leave," not "I have entered the preferences department."
 
 ## What Not To Do Next
-- Do not add more marketing sections to solve a hierarchy problem.
-- Do not add new dashboard widgets before the first-screen staging is cleaner.
-- Do not make Settings denser by exposing more controls at once.
-- Do not introduce new colors, gradients, or decorative noise to create excitement.
-- Do not change backend, auth, routing, packages, or data behavior for a visual repair.
-- Do not ignore mobile; the current type and panel scale need discipline there.
+- Do not add another Settings section to compensate for the current clutter.
+- Do not add more feature cards to marketing pages before the app spine is clearer.
+- Do not make the Settings page more decorative; the issue is hierarchy, not ornament.
+- Do not touch auth, backend, package, deployment, or data behavior while fixing visual staging.
+- Do not ignore mobile after desktop passes; the current visual language can get heavy quickly on small screens.
 
 ## Next 5 Design Tasks
-- [ ] Settings staging repair: reduce above-the-fold controls to a compact header, one current-state summary, and one primary section control; do not add new settings or change behavior.
-- [ ] Settings mobile scale pass: reduce oversized headings and panel padding so the first screen feels like a control surface, not a poster; preserve existing labels and actions.
-- [ ] Product page chrome reduction: make the top navigation quieter on EasyList, EasyNotes, EasyCalendar, and EasyWorkout pages; do not remove essential navigation.
-- [ ] Mobile product proof lift: move or tighten the hero support content so the module example card appears sooner; do not add new sections.
-- [ ] Panel hierarchy pass: adjust border/shadow/spacing so primary content reads above secondary feature cards; keep the existing palette and component family.
+- [ ] Settings first-screen reduction: keep one Settings title, one current section, and one primary control group above the fold; move inactive/detail controls behind existing disclosure patterns.
+- [ ] Settings support action polish: turn the footer support link into a properly sized quiet button or move it into a lower support section; do not place it above primary settings.
+- [ ] Settings wrapper audit: remove or flatten one layer of nested panel styling so controls do not feel buried; preserve existing behavior.
+- [ ] Product page first-proof pass: on one marketing route, bring a concrete app workflow preview higher than secondary feature explanation; do not add new sections.
+- [ ] Mobile hierarchy check: verify EasyNotes, EasyList, EasyCalendar, and Settings have no clipped text, crowded tag rows, or competing first-screen actions after the Settings cleanup.
 
 ## Stop Or Continue
 continue but fix visual issues first
