@@ -6894,6 +6894,10 @@ button.calendar-detail-card:disabled {
   display: none;
 }
 
+.settings-side-details:not([open]) > .settings-side-group {
+  display: none;
+}
+
 .settings-side-group-advanced {
   margin-top: 0.2rem;
 }
