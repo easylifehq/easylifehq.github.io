@@ -1,9 +1,9 @@
 # Visual Bug Report
 
-Generated: 2026-05-03 10:49:47
+Generated: 2026-05-03 10:59:49
 Project: EasyLife
 Status: No Blocking Visual Bugs
-Artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-104930
+Artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-105931
 
 ## Summary
 
@@ -31,13 +31,13 @@ Contract: C:\Dev\easylifehq.github.io\docs\codex\INFORMATION_STAGING.md
    - Selector: `a`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 250x21px Report a Bug / Suggest an Improvement
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-104930\settings-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-105931\settings-visualQa-1-desktop.png
 
 2. [MEDIUM] information-staging-too-many-actions on /settings?visualQa=1 (desktop)
    - Selector: `first-screen`
    - Issue: First screen exposes too many actions before the user reaches the primary job.
    - Evidence: 17 interactive controls above the fold
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-104930\settings-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260503-105931\settings-visualQa-1-desktop.png
 
 ## Suggested Task Queue Wording
 
