@@ -4,29 +4,29 @@
 RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission through repeated small UI, copy, accessibility, and suite-cohesion passes across HQ, Settings, EasyList, EasyCalendar, EasyNotes, marketing, and shared styles. However, the checkpoint is blocked by Joey's RED security review and remaining queued work.
+The branch is still moving toward the EasyLife mission with repeated small UI, copy, accessibility, and hierarchy repairs across the protected app and marketing surfaces. However, it is not ready to continue unattended because the security review gate is RED.
 
 ## Safety Review
-Risk found: `app-vNext/src/features/auth/AuthContext.tsx` is changed since base, which intersects forbidden auth/session scope. Joey also returned RED with `stop for human security review`.
+Risk found: Joey security review is RED with explicit next step to stop for human security review. Working tree is clean, but changed files include auth-adjacent code such as `app-vNext/src/features/auth/AuthContext.tsx`, so the security stop should be respected.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: 12 shown, mostly small design/copy/accessibility repair passes.
-- Files changed: broad app and docs surface, including `app-vNext/src/` feature routes, shared navigation/styles, contexts, and `docs/codex/` reports.
-- Commits added: latest HEAD is `ea5cf73 Codex Joey security review batch 1`.
-- Queue status: 2 unchecked tasks remain.
+- Completed tasks in this checkpoint window: 12 shown, mostly small design, copy, accessibility, and recovery repairs
+- Files changed: app UI, shared styles, marketing/protected feature surfaces, and `docs/codex/*` review/report files
+- Commits added: latest HEAD is `c430b88` (`Codex Simon design review batch 1`)
+- Queue status: 2 unchecked tasks remain
 
 ## Follow-Up Gate Status
-- Visual bug report: YELLOW influence; 0 high, 2 medium issues should shape next visual repair.
-- Simon design review: YELLOW influence; continue only after visual issues are addressed.
-- Robin copy review: YELLOW influence; copy cleanup remains relevant.
-- Accessibility review: YELLOW influence; patch warnings soon.
-- Performance review: GREEN; no blocking influence.
-- Joey security review: RED influence; stop for human security review.
-- Franky formula review: missing; no formula signal available.
-- Product truth: missing config, marked ok; no blocking product-truth RED.
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low, no next-task pressure
+- Simon design review: YELLOW; should influence next tasks with visual fixes first
+- Robin copy review: YELLOW; should influence next tasks with copy cleanup first
+- Accessibility review: YELLOW; should influence soon but is not the current hard stop
+- Performance review: GREEN; no blocking influence
+- Joey security review: RED; blocks unattended continuation and requires human security review
+- Franky formula review: missing; no formula signal available
+- Product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured
 
 ## Recommended Next Step
 stop for human review
@@ -34,10 +34,10 @@ stop for human review
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Security review is RED and auth-adjacent files changed, so the next batch should be a single focused human-guided security/scope review before mission-forward work resumes.
+- Security review is RED and explicit about stopping, so the next batch should only happen after a human clears or scopes the security concern.
 
 ## Notes For Human Reviewer
-- Build is passing and working tree is clean.
+- Build passed and working tree is clean.
 - Do not continue unattended until Joey RED is resolved.
-- Inspect `AuthContext.tsx` changes against forbidden auth/session scope.
-- Two safe queued tasks remain: Settings first-viewport cleanup and EasyProjects copy cleanup.
+- Two safe-looking tasks remain: Settings first-viewport cleanup and EasyProjects copy cleanup.
+- Product truth is not configured, but not marked failing.
