@@ -866,9 +866,6 @@ export function SettingsPage() {
         <PageSection
           eyebrow="Appearance"
           title="Theme mode"
-          description={
-            "Tune the visual tone of the whole suite. Theme changes apply across EasyLife without changing your data or app setup."
-          }
         >
           <div id="customize" className="settings-anchor" />
           <div className="settings-customization-console">
@@ -882,6 +879,9 @@ export function SettingsPage() {
             </div>
             <details className="advanced-disclosure">
               <summary>Choose another theme</summary>
+              <p className="helper-copy">
+                Theme changes apply across EasyLife without changing your data or app setup.
+              </p>
               <div className="settings-option-grid">
                 {themeOptions.map((option) => (
                   <button
