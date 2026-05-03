@@ -4,29 +4,29 @@
 RED
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife mission through small frontend, copy, accessibility, and polish repairs across the protected app and marketing surfaces. However, it cannot continue unattended because Joey’s security review is RED and explicitly says to stop for human security review.
+The branch is still moving toward the EasyLife mission through small suite-polish, copy, accessibility, Settings, EasyProjects, marketing, and module hierarchy repairs. However, it is not ready to continue unattended because Joey’s security review is RED and explicitly calls for human security review.
 
 ## Safety Review
-Risk found: `app-vNext/src/features/auth/AuthContext.tsx` is changed since base, and auth/session handling is forbidden mission scope unless explicitly approved. Joey also returned RED, so this needs human security review before more unattended work.
+Risk found: Joey security review is RED. No dirty working tree or forbidden package/dependency/deploy changes are reported, but security gate status blocks unattended continuation.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: 12 recent completed repairs shown, including mobile product chrome, assistant copy, EasyList, EasyCalendar, EasyNotes, accessibility, HQ, navigation, marketing, settings, and EasyProjects repair slices.
-- Files changed: broad app and docs changes since base, including protected app routes, contexts, marketing pages, global styles, and review/report docs.
-- Commits added: many commits since base; current HEAD is `9fbe12f` (`Codex Joey security review batch 1`).
+- Completed tasks in this checkpoint window: recent repair-lane tasks for Settings, EasyProjects copy, marketing, and product-spine polish completed with passing builds.
+- Files changed: multiple `app-vNext/src/` UI/copy/style files and `docs/codex/` review/control documents since base.
+- Commits added: latest HEAD is `9db8ff4` (`Codex Joey security review batch 1`) with many prior checkpoint/review commits since base.
 - Queue status: 2 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low visual bugs, should not block next tasks.
-- Simon design review: YELLOW; continue only after visual issues are fixed, should shape next design work.
-- Robin copy review: YELLOW; continue only after copy issues are fixed, should shape next copy work.
-- Accessibility review: YELLOW; patch warnings soon, should influence upcoming repair work.
-- Performance review: GREEN; does not need to shape next tasks.
-- Joey security review: RED; stop for human security review, blocks unattended continuation.
-- Franky formula review: missing; no formula-specific signal available.
-- Product truth: MISSING but `product truth ok` is true; no `PRODUCT_TRUTH.md` configured.
+- Visual bug report: YELLOW influence; 2 medium visual issues should shape next work.
+- Simon design review: YELLOW influence; continue only after visual issues are fixed first.
+- Robin copy review: YELLOW influence; copy cleanup should remain prioritized.
+- Accessibility review: YELLOW influence; patch warnings soon.
+- Performance review: GREEN; no blocker.
+- Joey security review: RED; stop for human security review.
+- Franky formula review: missing; should be completed if formula/spreadsheet logic becomes relevant.
+- Product truth: missing config, but `product truth ok` is true; no RED product-truth block reported.
 
 ## Recommended Next Step
 stop for human review
@@ -34,10 +34,10 @@ stop for human review
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- One security-focused human review should happen before any mission-forward queue work because Joey is RED and auth-related files changed since base.
+- Joey’s RED security gate overrides the passing build and clean tree, so the next batch should not proceed until a human reviews or clears the security concern.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Security gate is the blocker.
-- Review `AuthContext.tsx` changes closely against forbidden auth/session scope.
-- Two safe-looking unchecked tasks remain, but should wait until Joey is cleared.
+- Security review is the blocking signal.
+- Two unchecked tasks remain: Settings first-viewport cleanup and EasyProjects internal-process copy cleanup.
+- Visual/design/copy/accessibility gates are YELLOW but appear repairable after security is cleared.
