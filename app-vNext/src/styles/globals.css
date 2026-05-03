@@ -3973,6 +3973,33 @@ textarea::placeholder {
   gap: 0.78rem;
 }
 
+.command-example-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.command-example-chip {
+  min-height: 38px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 999px;
+  padding: 0.48rem 0.72rem;
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, #fff) 84%, transparent);
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 760;
+  text-align: left;
+  cursor: pointer;
+}
+
+.command-example-chip:hover,
+.command-example-chip:focus-visible {
+  border-color: color-mix(in srgb, var(--shell-accent) 55%, var(--ui-border-subtle) 45%);
+  background: color-mix(in srgb, var(--shell-accent-soft) 58%, var(--ui-bg-card-elevated) 42%);
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
 .command-palette-panel textarea {
   width: 100%;
   min-height: 112px;
@@ -3986,6 +4013,9 @@ textarea::placeholder {
 
 .command-preview-card {
   padding: 0.95rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--shell-accent-soft) 58%, transparent), transparent 62%),
+    color-mix(in srgb, var(--ui-bg-card-elevated, #fff) 88%, transparent);
 }
 
 .command-preview-card strong {
@@ -10114,6 +10144,24 @@ button.calendar-detail-card:disabled {
 
   .email-triage-stats {
     grid-template-columns: 1fr;
+  }
+
+  .command-example-row {
+    flex-wrap: nowrap;
+    margin-inline: -0.15rem;
+    padding: 0 0.15rem 0.15rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .command-example-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .command-example-chip {
+    flex: 0 0 auto;
+    max-width: 82vw;
+    white-space: nowrap;
   }
 
   .task-rows-shell {
