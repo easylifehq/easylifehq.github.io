@@ -3896,6 +3896,157 @@ textarea::placeholder {
   font-size: 1rem;
 }
 
+.command-center-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.command-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.52fr);
+  gap: 1rem;
+  align-items: stretch;
+  padding: 1.1rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: var(--shell-panel-radius);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--shell-accent-soft) 72%, transparent), transparent 58%),
+    var(--ui-bg-section, var(--shell-card-bg));
+  box-shadow: var(--shell-card-shadow);
+}
+
+.command-hero h1 {
+  max-width: 12ch;
+  margin: 0.3rem 0;
+  font-size: clamp(2rem, 7vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.command-hero p,
+.command-hero-readout p,
+.command-preview-card p,
+.command-flow-grid p,
+.command-context-grid p,
+.command-metric-grid p {
+  margin: 0;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.command-hero-readout,
+.command-preview-card,
+.command-metric-grid article,
+.command-flow-grid article,
+.command-context-grid a {
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, #fff) 86%, transparent);
+}
+
+.command-hero-readout {
+  display: grid;
+  align-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.command-hero-readout span,
+.command-preview-card > span,
+.command-metric-grid span,
+.command-flow-grid span,
+.command-context-grid span {
+  color: var(--shell-accent-strong);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.command-hero-readout strong {
+  font-size: 1.35rem;
+  line-height: 1.1;
+}
+
+.command-palette-panel,
+.command-preview-card {
+  display: grid;
+  gap: 0.78rem;
+}
+
+.command-palette-panel textarea {
+  width: 100%;
+  min-height: 112px;
+  resize: vertical;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  padding: 0.88rem;
+  background: var(--ui-bg-input, #fff);
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
+.command-preview-card {
+  padding: 0.95rem;
+}
+
+.command-preview-card strong {
+  font-size: 1.08rem;
+}
+
+.command-layer-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 0.45rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: var(--shell-panel-radius);
+  background: color-mix(in srgb, var(--ui-bg-section, #fff) 82%, transparent);
+}
+
+.command-layer-tabs .toggle-button.active {
+  border-color: color-mix(in srgb, var(--shell-accent) 52%, var(--ui-border-subtle) 48%);
+  background: color-mix(in srgb, var(--shell-accent-soft) 74%, var(--ui-bg-card-elevated) 26%);
+}
+
+.command-metric-grid,
+.command-flow-grid,
+.command-context-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.command-metric-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.command-flow-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.command-context-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.command-metric-grid article,
+.command-flow-grid article,
+.command-context-grid a {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.95rem;
+}
+
+.command-metric-grid strong,
+.command-flow-grid strong,
+.command-context-grid strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 1.1rem;
+  line-height: 1.15;
+}
+
+.command-metric-grid strong {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
 .easylist-action-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -9935,7 +10086,11 @@ button.calendar-detail-card:disabled {
 @media (max-width: 760px) {
   .email-triage-hero,
   .email-integration-grid,
-  .email-sync-options {
+  .email-sync-options,
+  .command-hero,
+  .command-metric-grid,
+  .command-flow-grid,
+  .command-context-grid {
     grid-template-columns: 1fr;
   }
 

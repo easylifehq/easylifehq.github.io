@@ -12,6 +12,11 @@ export const appProductItems: AppProductItem[] = [
     description: "Home",
   },
   {
+    href: "/app/command",
+    label: "Command",
+    description: "AI cockpit",
+  },
+  {
     appId: "easylist",
     href: "/app/easylist/add",
     label: "EasyList",

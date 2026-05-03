@@ -140,6 +140,10 @@ const EasyStatisticsPage = lazyNamed(
   "EasyStatisticsPage"
 );
 const HQPage = lazyNamed(() => import("@/features/hq/routes/HQPage"), "HQPage");
+const CommandCenterPage = lazyNamed(
+  () => import("@/features/hq/routes/CommandCenterPage"),
+  "CommandCenterPage"
+);
 const EasyCalendarMarketingPage = lazyNamed(
   () => import("@/features/marketing/routes/EasyCalendarMarketingPage"),
   "EasyCalendarMarketingPage"
@@ -254,6 +258,7 @@ export function AppRouter() {
           <Route path="/app" element={<AuthenticatedLayout />}>
             <Route index element={<StartupRedirect />} />
             <Route path="hq" element={<HQPage />} />
+            <Route path="command" element={<CommandCenterPage />} />
             <Route path="easylist" element={<EasyListLayout />}>
               <Route index element={<Navigate to="/app/easylist/dashboard" replace />} />
               <Route path="dashboard" element={<EasyListDashboardPage />} />

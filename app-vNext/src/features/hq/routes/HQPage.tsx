@@ -221,6 +221,9 @@ export function HQPage() {
                   Resume {lastAppRoute.label}
                 </Link>
               ) : null}
+              <Link to="/app/command" className="button-secondary">
+                Command Center
+              </Link>
             </div>
           </div>
         </article>
