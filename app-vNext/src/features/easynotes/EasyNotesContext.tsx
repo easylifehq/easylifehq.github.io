@@ -88,21 +88,35 @@ function isEmptyUntitledNote(note: NoteRecord) {
 
 function isVisualQaMode() {
   if (!import.meta.env.DEV) return false;
-  return new URLSearchParams(window.location.search).get("visualQa") === "1";
+  const params = new URLSearchParams(window.location.search);
+  return params.get("visualQa") === "1" || params.get("demo") === "1";
 }
 
 const visualQaNotes: NoteRecord[] = [
   {
-    id: "visual-note",
-    title: "Launch notes and next actions",
+    id: "visual-note-brief",
+    title: "Sunday reset brief",
     tags: ["inbox", "planning"],
     folderId: "",
     pinned: true,
     bodyHtml: "",
     bodyText:
-      "Review the EasyLife polish pass\nFollow up on deployment notes\nSchedule a final mobile QA check\nDraft a short product update",
-    createdAt: new Date("2026-04-12T09:00:00"),
-    updatedAt: new Date("2026-04-12T10:30:00"),
+      "Clear the overdue reply first\nPut the project update into a noon block\nUse the empty afternoon window for one focused pass\nSave errands for after the walk",
+    createdAt: new Date("2026-05-03T08:40:00"),
+    updatedAt: new Date("2026-05-03T09:12:00"),
+    deletedAt: null,
+  },
+  {
+    id: "visual-note-assistant",
+    title: "Personal assistant revamp ideas",
+    tags: ["product", "assistant"],
+    folderId: "",
+    pinned: false,
+    bodyHtml: "",
+    bodyText:
+      "Keep the home screen calm\nLead with the next useful move\nMake modules feel like rooms, not dashboards\nSeed examples so empty states do not look abandoned",
+    createdAt: new Date("2026-05-02T17:15:00"),
+    updatedAt: new Date("2026-05-02T18:05:00"),
     deletedAt: null,
   },
 ];

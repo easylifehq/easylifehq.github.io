@@ -1730,39 +1730,39 @@ textarea::placeholder {
 }
 
 .shell-theme-candy {
-  --shell-accent: #ff5fb2;
-  --shell-accent-strong: #d63f8d;
-  --shell-accent-soft: #ffe4f2;
-  --shell-bg-top: #ffdff1;
-  --shell-bg-bottom: #ffbfe1;
+  --shell-accent: #df5f9f;
+  --shell-accent-strong: #b8457e;
+  --shell-accent-soft: #fae4f0;
+  --shell-bg-top: #f9e7f0;
+  --shell-bg-bottom: #f5c7dd;
   --shell-header-bg: rgba(255, 235, 246, 0.9);
-  --shell-header-border: rgba(214, 63, 141, 0.24);
-  --shell-button-bg: #ff4aa6;
-  --shell-button-border: #ff4aa6;
+  --shell-header-border: rgba(184, 69, 126, 0.2);
+  --shell-button-bg: #d94893;
+  --shell-button-border: #d94893;
   --shell-button-text: #ffffff;
-  --shell-brand-gradient: linear-gradient(135deg, #ff4aa6 0%, #ff8ed1 54%, #ffd768 100%);
-  --shell-card-bg: rgba(255, 241, 248, 0.9);
-  --shell-card-bg-soft: #ffe8f4;
-  --shell-card-border: rgba(214, 63, 141, 0.2);
-  --shell-chip-bg: #ffd3ea;
-  --shell-chip-text: #a12568;
+  --shell-brand-gradient: linear-gradient(135deg, #d94893 0%, #ef78b2 58%, #f1b875 100%);
+  --shell-card-bg: rgba(255, 247, 251, 0.92);
+  --shell-card-bg-soft: #fae8f1;
+  --shell-card-border: rgba(184, 69, 126, 0.18);
+  --shell-chip-bg: #f7d6e7;
+  --shell-chip-text: #7d2b57;
   --shell-input-bg: rgba(255, 248, 252, 0.96);
-  --shell-input-border: rgba(214, 63, 141, 0.18);
+  --shell-input-border: rgba(184, 69, 126, 0.16);
   --shell-drawer-bg: #fff4fa;
   --shell-body-font: "Trebuchet MS", "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shell-display-font: "Verdana", "Trebuchet MS", "Aptos Display", sans-serif;
   --shell-card-radius: 8px;
-  --shell-card-shadow: 0 24px 58px rgba(221, 62, 144, 0.22);
+  --shell-card-shadow: 0 20px 48px rgba(129, 66, 98, 0.14);
   --shell-panel-highlight: rgba(255, 255, 255, 0.72);
-  --shell-grid-line: rgba(255, 95, 178, 0.13);
-  --shell-status-glow: rgba(255, 214, 104, 0.24);
+  --shell-grid-line: rgba(184, 69, 126, 0.09);
+  --shell-status-glow: rgba(232, 178, 113, 0.16);
   --shell-hover-lift: translateY(-3px) scale(1.01);
   --shell-page-text: #5d1f45;
   --shell-heading-text: #471535;
   --shell-muted-text: #8f4971;
-  --shell-page-overlay-1: rgba(255, 82, 171, 0.38);
-  --shell-page-overlay-2: rgba(255, 214, 107, 0.26);
-  --shell-page-overlay-3: rgba(255, 255, 255, 0.3);
+  --shell-page-overlay-1: rgba(222, 99, 159, 0.22);
+  --shell-page-overlay-2: rgba(238, 192, 133, 0.18);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.36);
   --shell-motion-fast: 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   --shell-motion-panel: 0.28s cubic-bezier(0.22, 1, 0.36, 1);
   --ui-bg-page: #ffc6e4;
@@ -5362,7 +5362,7 @@ button.calendar-detail-card:disabled {
 
 .assistant-home {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+  grid-template-columns: 1fr;
   gap: 0.9rem;
   align-items: stretch;
 }
@@ -5378,9 +5378,9 @@ button.calendar-detail-card:disabled {
   grid-column: 1 / -1;
 }
 
+.assistant-next-inline,
 .assistant-next-card {
   display: grid;
-  align-content: center;
   gap: 0.7rem;
   min-width: 0;
   padding: 1rem;
@@ -5389,6 +5389,22 @@ button.calendar-detail-card:disabled {
   background: var(--ui-bg-card, var(--shell-card-bg-soft));
 }
 
+.assistant-next-inline {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  margin-top: 0.2rem;
+}
+
+.assistant-next-inline .task-composer-actions {
+  justify-content: flex-end;
+}
+
+.assistant-next-inline .primary-button,
+.assistant-next-inline .button-secondary {
+  white-space: nowrap;
+}
+
+.assistant-next-inline span,
 .assistant-next-card span,
 .assistant-attention-item span,
 .assistant-system-grid .hq-link-card span {
@@ -5399,6 +5415,7 @@ button.calendar-detail-card:disabled {
   text-transform: uppercase;
 }
 
+.assistant-next-inline h2,
 .assistant-next-card h2 {
   margin: 0;
   color: var(--ui-text-primary, var(--shell-heading-text));
@@ -5406,6 +5423,7 @@ button.calendar-detail-card:disabled {
   line-height: 1.12;
 }
 
+.assistant-next-inline p,
 .assistant-next-card p {
   margin: 0;
   color: var(--ui-text-secondary, var(--shell-page-text));
@@ -7106,6 +7124,32 @@ button.calendar-detail-card:disabled {
   touch-action: manipulation;
 }
 
+.app-shell-vnext .app-header {
+  width: min(1080px, calc(100% - 2rem));
+  margin-top: 0.45rem;
+  border-radius: 8px;
+}
+
+.app-shell-vnext .app-header-main {
+  padding: 0.46rem 0.68rem;
+}
+
+.app-shell-vnext .app-suite-control {
+  max-width: 25rem;
+}
+
+.app-shell-vnext .capture-fab {
+  min-height: 48px;
+  padding: 0 1rem;
+  opacity: 0.88;
+  box-shadow: 0 12px 30px rgba(34, 29, 24, 0.14);
+}
+
+.app-shell-vnext .capture-fab:hover,
+.app-shell-vnext .capture-fab:focus-visible {
+  opacity: 1;
+}
+
 .app-shell-vnext:has(.settings-page) .capture-fab {
   display: none;
 }
@@ -7808,10 +7852,10 @@ button.calendar-detail-card:disabled {
 
 .app-shell-vnext.shell-theme-candy .brand-badge,
 .app-shell-vnext.shell-theme-candy .primary-button {
-  background: linear-gradient(135deg, #e53492 0%, #ff78c4 54%, #ffd768 100%);
+  background: linear-gradient(135deg, #d94893 0%, #ef78b2 58%, #f1b875 100%);
   border-color: color-mix(in srgb, var(--shell-accent) 64%, #ffd768 36%);
   box-shadow:
-    0 12px 26px rgba(221, 62, 144, 0.22),
+    0 10px 22px rgba(221, 62, 144, 0.14),
     0 0 0 1px rgba(255, 214, 104, 0.2);
 }
 
@@ -8195,6 +8239,10 @@ button.calendar-detail-card:disabled {
 
   .assistant-next-card h2 {
     font-size: 1.08rem;
+  }
+
+  .assistant-next-inline {
+    grid-template-columns: 1fr;
   }
 
   .hq-command-center {
@@ -9668,6 +9716,53 @@ button.calendar-detail-card:disabled {
 
   .capture-modal .task-composer-actions .primary-button {
     grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 1180px) {
+  .task-rows-shell {
+    overflow-x: visible;
+  }
+
+  .task-row-grid-header {
+    display: none;
+  }
+
+  .task-row-card {
+    min-width: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 0.65rem;
+  }
+
+  .task-row-card .field-stack {
+    min-width: 0;
+  }
+
+  .task-row-card .field-stack span {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    color: var(--ui-text-muted, var(--shell-muted-text));
+    font-size: 0.72rem;
+    font-weight: 850;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .task-row-card .task-row-field:first-child,
+  .task-row-card .task-row-field:nth-child(6),
+  .task-row-actions {
+    grid-column: 1 / -1;
+  }
+
+  .task-row-actions {
+    display: grid;
+  }
+
+  .task-row-actions .ghost-button {
+    width: 100%;
   }
 }
 

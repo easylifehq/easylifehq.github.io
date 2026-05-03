@@ -78,7 +78,8 @@ const EasyProjectsContext = createContext<EasyProjectsContextValue | undefined>(
 
 function isVisualQaMode() {
   if (!import.meta.env.DEV) return false;
-  return new URLSearchParams(window.location.search).get("visualQa") === "1";
+  const params = new URLSearchParams(window.location.search);
+  return params.get("visualQa") === "1" || params.get("demo") === "1";
 }
 
 export function EasyProjectsProvider({ children }: { children: ReactNode }) {

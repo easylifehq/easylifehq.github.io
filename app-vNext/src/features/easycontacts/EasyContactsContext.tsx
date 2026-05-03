@@ -28,6 +28,53 @@ type EasyContactsContextValue = {
 
 const EasyContactsContext = createContext<EasyContactsContextValue | undefined>(undefined);
 
+function isVisualQaMode() {
+  if (!import.meta.env.DEV) return false;
+  const params = new URLSearchParams(window.location.search);
+  return params.get("visualQa") === "1" || params.get("demo") === "1";
+}
+
+const visualQaContacts: ContactRecord[] = [
+  {
+    id: "visual-contact-maya",
+    fullName: "Maya Chen",
+    relationship: "Friend",
+    company: "Northline Studio",
+    role: "Producer",
+    email: "maya@example.com",
+    phone: "",
+    linkedinUrl: "",
+    source: "Friday plans",
+    status: "warm",
+    relatedOpportunityIds: [],
+    lastContactedAt: "2026-04-28",
+    nextFollowUpAt: "2026-05-03",
+    notes: "Reply today, then move the thread out of the overdue lane.",
+    archived: false,
+    createdAt: new Date("2026-04-20T10:00:00"),
+    updatedAt: new Date("2026-05-03T09:00:00"),
+  },
+  {
+    id: "visual-contact-jordan",
+    fullName: "Jordan Lee",
+    relationship: "Recruiter",
+    company: "Cedar Labs",
+    role: "Talent partner",
+    email: "jordan@example.com",
+    phone: "",
+    linkedinUrl: "",
+    source: "Pipeline",
+    status: "active",
+    relatedOpportunityIds: ["visual-app-cedar"],
+    lastContactedAt: "2026-05-01",
+    nextFollowUpAt: "2026-05-06",
+    notes: "Send a concise follow-up after the product interview.",
+    archived: false,
+    createdAt: new Date("2026-04-22T14:00:00"),
+    updatedAt: new Date("2026-05-01T16:15:00"),
+  },
+];
+
 export function EasyContactsProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [contacts, setContacts] = useState<ContactRecord[]>([]);
@@ -35,6 +82,13 @@ export function EasyContactsProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (isVisualQaMode()) {
+      setContacts(visualQaContacts);
+      setIsLoading(false);
+      setError("");
+      return;
+    }
+
     if (!user) {
       setContacts([]);
       setIsLoading(false);

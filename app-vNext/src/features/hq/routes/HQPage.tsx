@@ -199,25 +199,23 @@ export function HQPage() {
             <span>Today</span>
             <p>{todaySummary.join(" / ")}</p>
           </div>
-          <div className="task-composer-actions">
-            <Link to={startHere.to} className="primary-button">
-              {startHere.buttonLabel}
-            </Link>
-            {lastAppRoute ? (
-              <Link to={lastAppRoute.path} className="button-secondary">
-                Resume {lastAppRoute.label}
+          <div className="assistant-next-inline" aria-labelledby="assistant-next-title">
+            <div>
+              <span>Next best move</span>
+              <h2 id="assistant-next-title">{startHere.label}</h2>
+              <p>{startHere.reason}</p>
+            </div>
+            <div className="task-composer-actions">
+              <Link to={startHere.to} className="primary-button">
+                {startHere.buttonLabel}
               </Link>
-            ) : null}
+              {lastAppRoute ? (
+                <Link to={lastAppRoute.path} className="button-secondary">
+                  Resume {lastAppRoute.label}
+                </Link>
+              ) : null}
+            </div>
           </div>
-        </article>
-
-        <article className="assistant-next-card" aria-labelledby="assistant-next-title">
-          <span>Next best move</span>
-          <h2 id="assistant-next-title">{startHere.label}</h2>
-          <p>{startHere.reason}</p>
-          <Link to={startHere.to} className="primary-button">
-            {startHere.buttonLabel}
-          </Link>
         </article>
 
         <div className="hq-status-strip" aria-label="Module status context">

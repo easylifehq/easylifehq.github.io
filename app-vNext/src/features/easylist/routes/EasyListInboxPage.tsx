@@ -21,7 +21,7 @@ export function EasyListInboxPage() {
       <PageSection
         eyebrow="Capture"
         title="Add task"
-        description="Write one or more clear task rows here. Use the floating Add button for Brain Dump."
+        description="Write one or more clear task rows. Details stay optional until the task needs them."
       >
         <div className="easylist-list-picker">
           <label className="field-stack">

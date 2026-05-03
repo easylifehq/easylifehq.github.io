@@ -39,6 +39,17 @@ const visualQaExperimentalFeatures: ExperimentalFeatureId[] = [
   "gymMode",
 ];
 
+const demoVisibleApps: VisibleAppId[] = [
+  "easylist",
+  "easynotes",
+  "easycalendar",
+  "easypipeline",
+  "easycontacts",
+  "easyprojects",
+  "easyworkout",
+  "easystatistics",
+];
+
 function getVisualQaSettings(): UserShellSettings | null {
   if (!import.meta.env.DEV) return null;
 
@@ -61,6 +72,7 @@ function getVisualQaSettings(): UserShellSettings | null {
   return {
     ...defaultShellSettings,
     themeMode,
+    visibleApps: demoVisibleApps,
     experimentalFeatures: visualQaExperimentalFeatures,
   };
 }
