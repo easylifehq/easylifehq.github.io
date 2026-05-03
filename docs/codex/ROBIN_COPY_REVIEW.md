@@ -4,77 +4,70 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is close to a calm daily workspace voice, but visible copy still leaks internal build language and first-screen explanation that makes the product feel less trustworthy than it should.
+EasyLife is closer to a calm daily workspace voice, but visible and seeded copy still leaks internal build language like "command center", "handoff", "demo", "proof", "polish", and "workflow".
 
 ## Mission Voice Fit
-The mission asks for a connected, professional personal operating system that helps the user act faster without clutter. The strongest copy now uses concrete daily nouns like workspace, daily plan, task list, calendar prep, recent notes, and workout log. The weaker copy still sounds like a product team talking to itself: "command center", "demo", "proof", "handoff", "polish", "sample data", "workflow", and "Start with" appear in places that can read as builder language rather than buyer or user language. For EasyLife, the voice should feel like a quiet assistant surfacing the next useful move, not a brochure explaining the suite or a sprint note describing implementation.
+The best current language fits the mission when it uses concrete daily nouns: tasks, notes, calendar planning, workouts, projects, settings, workspace, daily plan, and next action. That voice supports a professional personal assistant product. The weak spots still sound like a product team describing a build, not a person using EasyLife to organize a day. Settings and protected surfaces need especially strict staging: the user should see what to adjust or do next, not a broad inventory of controls or internal suite language.
 
 ## Delicate Wording Risks
-- "command center" in root/app metadata overstates the product and feels like generic SaaS positioning instead of a personal daily workspace.
-- "demo" in visible or query-adjacent contexts risks making the app feel fake or temporary. Keep it internal only.
-- "proof" in `auth-proof-card` may be harmless as a class name, but any visible "proof" language should be avoided because it sounds like sales evidence rather than user value.
-- "Start with" can be fine in onboarding, but in app copy it can sound instructional and vague unless the action is concrete.
-- "Quick blockers and handoffs." in EasyCalendar sample copy sounds like workplace process language, not a personal calendar note.
-- "messy workflow cleanup and mobile-first demo polish" sounds entirely internal and should not appear in user-visible sample data.
-- "Build onboarding screen" is plausible in a project tool, but it leans product-team-specific; EasyLife should use broader personal or work planning examples unless the surrounding context is explicitly software projects.
-- "Nothing completed yet this week. Start with one small win." is clear but a little motivational-generic; it should point to a concrete action if there is room.
-- First-screen copy still risks feature-inventory behavior: too many headings, labels, and explanatory fragments make the product explain itself before helping the user act.
-- Staff/internal style words like "handoff", "polish", and "workflow" should not appear as standalone value props or sample content unless the reader and outcome are concrete.
+- "command center" appears in public metadata and conflicts with the current operating mode, which forbids generic command-center framing.
+- "Quick blockers and handoffs." sounds like internal team process language, not a personal calendar item.
+- "Prep two examples: messy workflow cleanup and mobile-first demo polish." combines several builder-facing words and reads like a Codex task, not user data.
+- "auth-proof-card" may be a class name, but any visible "proof" framing near login would feel salesy and defensive.
+- "Start with" can be fine in context, but it should be attached to a concrete action, such as "Start with today's list" or "Start with one task."
+- "sample data" and "demo" are acceptable in internal visual QA hooks, but should not appear in customer-visible examples.
+- "workflow" is too vague as a standalone benefit; use "task list", "calendar block", "project brief", or "note review" when visible.
+- "polish" and "ship" in EasyProjects examples sound like product-build process unless the project is explicitly software work.
 
 ## Beautiful Language Opportunities
-- Replace suite-positioning nouns with daily-life nouns: workspace, day plan, task list, calendar block, note, project brief, workout log.
-- Let HQ copy sound like an assistant opening the day: one next action, today context, and a compact reason why it matters.
-- Make Settings copy feel like a control center by naming the setting group and outcome, not describing the system broadly.
-- Make EasyProjects examples feel like real user work: "Weekly planning review", "Finish project brief", "Calendar prep", "Budget check", "Trip outline".
-- Make EasyCalendar sample copy more temporal and practical: "Review blockers before the 2:00 block" or "Prep notes before the afternoon call."
-- Shorten marketing page support copy so the product name, promise, action, and preview carry the first screen.
-- Use warmer but restrained empty states: "No notes yet. Capture the thought before it gets away." is better than broad motivation.
-- Keep module labels distinct by job: tasks are action, notes are capture, calendar is time, workout is energy, settings are control.
+- Replace internal process words with daily-life nouns: "Calendar prep", "Project brief", "Today plan", "Workout log", "Recent notes".
+- Let the protected HQ first screen speak in verbs: "Review today", "Plan the next block", "Capture a thought", "Finish one task".
+- Settings copy can become calmer by naming outcomes: "Choose what appears in your suite", "Set your default view", "Adjust theme and display".
+- EasyProjects can feel more personal if sample tasks sound like real planning work instead of release work.
+- Public metadata should describe EasyLife as a workspace, not a command center.
+- Low-content copy should be short, direct, and action-led: one sentence of context, one clear next move.
 
 ## Priority Rewrite
-The single most important wording problem is visible internal/process language in sample and product copy. Nami should replace one phrase at a time, starting with "command center", "handoff", "demo", "proof", "polish", and "workflow" where they appear in rendered strings or sample data. The replacement should name the user object and outcome, such as "daily workspace", "calendar prep", "example day", "project brief", "task list", or "workout log", without adding claims or longer explanation.
+Fix the remaining visible builder/process vocabulary across app seed data and public metadata, starting with "command center", "handoff", "demo", "proof", "polish", "ship", and vague "workflow" uses. Replace each with concrete user-facing nouns tied to daily planning, without adding longer explanations or new product claims.
 
 ## Suggested Rewrites
 - Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-  After: "EasyLife keeps tasks, notes, calendar planning, workouts, and projects in one daily workspace."
+  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and daily plans in one workspace."
 
 - Before: "Quick blockers and handoffs."
-  After: "Review blockers before the next calendar block."
+  After: "Quick blockers and calendar prep."
 
 - Before: "Prep two examples: messy workflow cleanup and mobile-first demo polish."
-  After: "Prep two examples: task list cleanup and mobile planning review."
+  After: "Prep two examples: clean up the task list and review the mobile plan."
+
+- Before: "Start with"
+  After: "Start with today's list"
 
 - Before: "Build onboarding screen"
   After: "Finish project brief"
 
 - Before: "Nothing completed yet this week. Start with one small win."
-  After: "Nothing completed yet this week. Choose one task to finish today."
-
-- Before: "Products and demo below"
-  After: "Products below"
+  After: "Nothing completed yet this week. Choose one small task to finish."
 
 - Before: "Calendar handoff"
   After: "Calendar prep"
 
-- Before: "sample data"
-  After: "example day"
-
 ## Voice Rules
-- Prefer concrete nouns: task list, note, calendar block, project brief, workout log, setting, daily plan.
-- Avoid internal build words in visible copy: demo, proof, handoff, polish, workflow, command center, sample data.
-- First-screen copy should answer: what should I do next, why today, and where do I go if needed.
-- Keep primary labels short and concrete; move explanation into secondary panels or detail views.
-- Do not make broad AI, automation, productivity, or certainty claims unless the product visibly supports them.
-- Separate marketing copy from app copy: public pages may explain; the signed-in app should help the user act.
-- Empty states should offer one clear next action, not a motivational slogan.
-- Use calm confidence, not hype: useful, specific, restrained.
+- Use concrete daily-life nouns before abstract product nouns.
+- Keep first-screen copy short: one job, one next action, one useful status.
+- Avoid "command center", "personal operating system", "premium", "high-tech", "proof", "handoff", "polish", and "workflow" in visible copy.
+- Separate internal QA language from user-facing examples.
+- Prefer "workspace", "daily plan", "task list", "note", "calendar block", "project brief", and "workout log".
+- Do not make the app sound predictive or magical unless the visible UI shows the source and limits.
+- Public pages may explain the product; working app screens should use direct task labels.
+- Empty states should answer: what is empty, what should I do, and what happens next?
 
 ## Next 5 Copy Tasks
-- [ ] Replace the visible "command center" metadata/app copy with "daily workspace" or another concrete suite noun; guardrail: do not edit auth, routing, package files, or generated output.
-- [ ] In EasyCalendar sample strings, replace "handoff" with "calendar prep" or a concrete event-prep phrase; guardrail: copy-only, preserve data fields and behavior.
-- [ ] In EasyPipeline sample notes, replace "workflow cleanup" and "demo polish" with user-facing task language; guardrail: do not broaden into a source-wide rewrite.
-- [ ] In EasyProjects visible placeholders/sample tasks, replace product-build examples like "Build onboarding screen" with general project examples; guardrail: keep the same UI and field length.
-- [ ] Review the signed-in first screen for repeated headings and helper lines, then remove or shorten one explanatory line; guardrail: keep one next action and today context dominant.
+- [ ] Replace the public metadata phrase "one command center" with "one workspace"; guardrail: metadata copy only, no routing or config behavior changes.
+- [ ] In `EasyCalendarContext`, replace visible "handoffs" seed copy with concrete calendar language; guardrail: copy-only, keep object fields and behavior unchanged.
+- [ ] In `EasyPipelineContext`, replace "workflow cleanup", "demo", and "polish" sample notes with daily workspace examples; guardrail: one seeded note only, no data-shape changes.
+- [ ] In EasyProjects visible examples, replace one "ship", "polish", or "Calendar handoff" phrase with a user task like "Finish project brief" or "Calendar prep"; guardrail: copy-only in `easyprojects`.
+- [ ] Review login and onboarding visible strings for "proof" and vague "Start with" language; guardrail: visible text only, no auth logic or route changes.
 
 ## Stop Or Continue
 continue but fix copy first
