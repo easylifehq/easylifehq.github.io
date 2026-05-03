@@ -4,53 +4,50 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is finally finding a calm suite language, but Settings is still wearing too much chrome for a product that promised "what should I do next today?"
+EasyLife is becoming calmer and more unified, but Settings is still acting like a control-room brochure when the mission needs a quiet personal operating system.
 
 ## Mission Fit
-The direction mostly matches the mission: the visual system is cleaner, more connected, and more professional across EasyList, EasyCalendar, EasyNotes, and Settings. The problem is focus. Pack 1 is Product Spine, and the spine should make the signed-in daily operating system feel immediate. Settings still behaves like a configuration page with too many visible controls above the fold, while the marketing/product pages still read more like polished brochures than proof of one connected personal OS.
+The current direction mostly matches Pack 1 - Product Spine: shared styling is clearer, the core modules feel more related, and the product is moving away from disconnected feature pages. The miss is information staging. The protected first screen is supposed to help the user know what to do next today, but Settings still exposes too many controls above the fold and weakens the sense of one calm daily assistant.
 
 ## Taste Check
-The good: the paper-like background, restrained teal accents, firm typography, pill tags, and softened panels are moving toward a recognizable EasyLife house style. EasyList and EasyCalendar now have stronger first-screen confidence and less generic SaaS perfume.
-
-The off: the design still loves explaining itself. Settings has a nice calm surface, then immediately asks the user to parse navigation, section chrome, accordions, support links, and multiple panels. The footer support link is skinny and awkward. The product pages are better, but still oversized and sales-led; useful, yes, but not yet "open this and run your day."
+The suite polish is improving: restrained styling, more consistent surfaces, and clearer module rhythm are all moving in the right direction. What still feels off is the tendency to show too much product machinery too early. Sixteen interactive controls above the fold on Settings is not calm, it is a cockpit with a migraine. The app needs stronger hierarchy, fewer equal-weight actions, and more confidence that secondary controls can live one click deeper.
 
 ## Visual Problems To Fix
-- Settings exposes 17 interactive controls above the fold on desktop, which violates the information staging contract and makes the page feel busier than the mission allows.
-- Settings has repeated page identity: global shell says EasyLifeHQ, the page title says Settings, the left rail says Change section, the content header says Personalize, and the first card says Theme mode. That is a lot of labeling before the user gets one useful control.
-- The Settings support link, "Report a Bug / Suggest an Improvement", is visually undersized and reads like a forgotten footer legal link instead of a usable support action.
-- Settings uses stacked wrapper panels: page hero, section shell, subheader panel, card panel, inner current-selection panel, and accordion panels. The real control is buried under a little bureaucracy parade.
-- Marketing pages still lead with large hero explanation and feature chips before proving the working app connection. It is handsome, but it still smells faintly like a launch page template.
-- Mobile marketing screenshots show improved hierarchy, but the first screen remains long and dense; tags and secondary panels compete with the primary product promise.
+- Settings exposes 16 interactive controls above the desktop fold, which violates the first-screen contract and makes the page feel busy before the user knows the primary job.
+- The Settings first viewport still reads as a full inventory of controls instead of a focused control center with one clear next action.
+- Secondary settings actions compete visually with primary page intent; too many controls share similar weight.
+- The product spine remains a little too explanatory across app and marketing surfaces, with repeated product framing still louder than daily use.
+- The current route chrome is improving, but any remaining wrapper-like framing must stay quiet so the actual app surface is not buried under navigation and explanation.
 
 ## Strongest Opportunities
-- Make Settings a compact control center: one calm heading, one primary setting group open, the rest collapsed behind clear section controls.
-- Reduce repeated labels across the shell and page body so each route has one confident identity moment, not four.
-- Bring the signed-in daily assistant idea forward: Settings should support the suite, not become a destination that explains the suite again.
-- Make marketing pages show one concrete mini workflow earlier, especially the connection between list, calendar, and notes.
-- Keep the tactile notebook language, but sharpen it with more whitespace discipline and fewer nested containers.
+- Turn Settings into a true suite control center: one prominent status or recommendation, one primary action, and grouped secondary sections below.
+- Make the HQ and module first screens feel like a connected morning surface, not a directory of app capabilities.
+- Use progressive disclosure more aggressively: advanced preferences, explanations, and dense control clusters should move behind tabs, accordions, or secondary panels.
+- Keep pushing shared card, heading, button, and spacing patterns so EasyList, EasyNotes, EasyCalendar, EasyWorkout, and Settings feel like siblings.
+- Tighten mobile hierarchy after desktop staging is fixed; mobile will punish every unnecessary control faster than desktop.
 
 ## Priority Fix
-Fix Settings information staging next. Above the fold should show a simple Settings title, one short sentence, the active section selector, and only the current primary control group. Move secondary controls, explanatory detail, support links, and inactive setting groups behind collapsed sections or lower on the page. Nami should treat this as chrome reduction, not a redesign.
+Fix the Settings first viewport. Reduce the above-the-fold action count and establish one dominant Settings job: show the user's current suite setup state and one obvious next adjustment. Demote secondary controls into grouped sections below the fold or behind existing disclosure patterns. Nami should treat this as a staging repair, not a redesign.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: suite styling is clearer, but Settings still overloads the first screen and weakens the daily operating-system spine.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: suite styling is clearer, but Settings still overloads the first screen and blurs the daily operating-system spine.
 
 ## Designer Handoff
-Keep the calm paper surface, teal accent, strong black type, and compact rounded controls. Change the hierarchy: fewer wrappers, fewer repeated labels, fewer visible actions at once. Settings should feel like a quiet control room, not a filing cabinet with all drawers open. The user should feel, "I can adjust the suite quickly and leave," not "I have entered the preferences department."
+For the next batch, subtract before adding. Keep the calmer shared visual language, the tighter module consistency, and the professional restraint. Change Settings from a dense control surface into a composed control center: primary status, one main action, then quieter grouped preferences. The user should feel, "I know what this controls and what to adjust next," not "I have been handed the admin panel for my own life."
 
 ## What Not To Do Next
-- Do not add another Settings section to compensate for the current clutter.
-- Do not add more feature cards to marketing pages before the app spine is clearer.
-- Do not make the Settings page more decorative; the issue is hierarchy, not ornament.
-- Do not touch auth, backend, package, deployment, or data behavior while fixing visual staging.
-- Do not ignore mobile after desktop passes; the current visual language can get heavy quickly on small screens.
+- Do not add more Settings sections to solve a hierarchy problem.
+- Do not introduce new dashboard widgets, AI claims, or product explanation blocks.
+- Do not make the route chrome louder with more pills, bars, badges, or helper text.
+- Do not touch backend, auth, Firebase, packages, deployment, or settings behavior.
+- Do not ignore mobile after reducing desktop clutter; the fix must hold on narrow screens.
 
 ## Next 5 Design Tasks
-- [ ] Settings first-screen reduction: keep one Settings title, one current section, and one primary control group above the fold; move inactive/detail controls behind existing disclosure patterns.
-- [ ] Settings support action polish: turn the footer support link into a properly sized quiet button or move it into a lower support section; do not place it above primary settings.
-- [ ] Settings wrapper audit: remove or flatten one layer of nested panel styling so controls do not feel buried; preserve existing behavior.
-- [ ] Product page first-proof pass: on one marketing route, bring a concrete app workflow preview higher than secondary feature explanation; do not add new sections.
-- [ ] Mobile hierarchy check: verify EasyNotes, EasyList, EasyCalendar, and Settings have no clipped text, crowded tag rows, or competing first-screen actions after the Settings cleanup.
+- [ ] Reduce Settings above-the-fold controls to one primary action plus a small number of quiet secondary links; do not change settings behavior or persistence.
+- [ ] Group lower-priority Settings controls below the first viewport or behind existing disclosure UI; preserve labels and avoid adding new features.
+- [ ] Recheck Settings mobile after the staging fix; ensure no clipped text, cramped controls, or stacked action clutter.
+- [ ] Audit the app header and route chrome for repeated page identity; remove or quiet duplicated labels without changing navigation.
+- [ ] Compare EasyList, EasyNotes, EasyCalendar, EasyWorkout, and Settings headers for spacing and hierarchy consistency; make only small visual alignment fixes.
 
 ## Stop Or Continue
 continue but fix visual issues first
