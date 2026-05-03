@@ -817,16 +817,6 @@ export function SettingsPage() {
             <strong>{enabledApps.length} of {appVisibilityOptions.length}</strong>
             <p>Keep the suite lean, then turn on more tools when you want them.</p>
           </article>
-          <article className="settings-status-card">
-            <span>Reminders</span>
-            <strong>{settings.notifications.enabled ? "On" : "Off"}</strong>
-            <p>{notificationPermission}</p>
-          </article>
-          <article className="settings-status-card">
-            <span>Phone</span>
-            <strong>{mobileRuntime.runtimeLabel}</strong>
-            <p>{mobileRuntime.installLabel}</p>
-          </article>
         </div>
 
       </section>
