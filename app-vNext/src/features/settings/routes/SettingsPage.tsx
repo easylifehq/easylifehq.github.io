@@ -631,7 +631,6 @@ export function SettingsPage() {
     updateAssistantSettings,
   } = useSettings();
 
-  const enabledApps = appVisibilityOptions.filter((app) => isAppVisible(app.id));
   const enabledExperiments = experimentalFeatureOptions.filter((feature) =>
     isExperimentalFeatureEnabled(feature.id)
   );
@@ -801,24 +800,6 @@ export function SettingsPage() {
             but they do not need to crowd the main path.
           </p>
         </div>
-        <div className="settings-status-grid">
-          <article className="settings-status-card">
-            <span>Theme</span>
-            <strong>{activeTheme.label}</strong>
-            <p>{activeTheme.tone}</p>
-          </article>
-          <article className="settings-status-card">
-            <span>Startup</span>
-            <strong>{startupRouteOptions.find((option) => option.value === settings.startupRoute)?.label || "EasyHQ"}</strong>
-            <p>Where EasyLife opens after login or install.</p>
-          </article>
-          <article className="settings-status-card">
-            <span>Visible apps</span>
-            <strong>{enabledApps.length} of {appVisibilityOptions.length}</strong>
-            <p>Keep the suite lean, then turn on more tools when you want them.</p>
-          </article>
-        </div>
-
       </section>
 
       <section className="settings-section-shell">
