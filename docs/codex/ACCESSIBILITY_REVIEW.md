@@ -1,6 +1,6 @@
 ﻿# Accessibility Review
 
-Generated: 2026-05-05 16:19:57
+Generated: 2026-05-05 16:31:08
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
@@ -132,11 +132,11 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
                     type="submit"
                     className="primary-button"
                     disabled={isPlanning || (!plannerTitle.trim() && !plannerDescription.tr...`
-- [YELLOW] `app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx:338` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx:354` - Icon-style button may need an accessible label.
   `<button type="button" className="button-secondary" onClick={parseWorkoutPaste} disabled={!workoutPaste.trim()}>`
-- [YELLOW] `app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx:393` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx:409` - Icon-style button may need an accessible label.
   `<button type="button" className="ghost-button compact-button" onClick={removeBlankExerciseBoxes}>`
-- [YELLOW] `app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx:490` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx:506` - Icon-style button may need an accessible label.
   `<button
                       type="button"
                       className="button-secondary"
@@ -156,7 +156,7 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
   `<button className="button-secondary" type="button" onClick={scheduleNextMove} disabled={!nextMove || !openWindows[0]}>`
 - [YELLOW] `app-vNext/src/features/hq/routes/CommandCenterPage.tsx:369` - Icon-style button may need an accessible label.
   `<button className="primary-button" type="button" onClick={saveCommandTask}>`
-- [YELLOW] `app-vNext/src/features/hq/routes/HQPage.tsx:443` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/hq/routes/HQPage.tsx:453` - Icon-style button may need an accessible label.
   `<button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>`
 - [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1296` - Icon-style button may need an accessible label.
   `<button type="button" className="primary-button" onClick={handleExportAll}>`
@@ -166,7 +166,7 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
   `<button type="button" className="primary-button" onClick={handleOpenInstallShare}>`
 - [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1528` - Icon-style button may need an accessible label.
   `<button type="button" className="button-secondary" onClick={handleSendTestNotification}>`
-- [INFO] `app-vNext/src/styles/globals.css:11027` - Reduced-motion handling is present.
+- [INFO] `app-vNext/src/styles/globals.css:11088` - Reduced-motion handling is present.
   `@media (prefers-reduced-motion: reduce) {`
 
 ## Stop Or Continue
