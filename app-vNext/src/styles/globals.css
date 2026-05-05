@@ -543,6 +543,9 @@ a {
 }
 
 .menu-panel.open {
+  max-height: min(70vh, 520px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -557,6 +560,38 @@ a {
   border: 1px solid transparent;
   border-radius: 8px;
   transition: background var(--shell-motion-fast), border-color var(--shell-motion-fast), color var(--shell-motion-fast), transform var(--shell-motion-fast);
+}
+
+.menu-link-group {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.menu-link-group + .menu-link-group {
+  margin-top: 0.32rem;
+  padding-top: 0.38rem;
+  border-top: 1px solid color-mix(in srgb, var(--shell-card-border) 72%, transparent);
+}
+
+.menu-link-group-header {
+  display: grid;
+  gap: 0.08rem;
+  padding: 0.28rem 0.7rem 0.2rem;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.menu-link-group-header strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.76rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.menu-link-group-header span,
+.menu-link-description {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.78rem;
+  line-height: 1.28;
 }
 
 .menu-link-card:hover {
@@ -581,6 +616,11 @@ a {
 .menu-link-card span {
   color: var(--shell-muted-text);
   font-size: 0.82rem;
+}
+
+.menu-link-card .menu-link-description {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.78rem;
 }
 
 .menu-link-card .menu-link-title {
@@ -7871,6 +7911,20 @@ button.calendar-detail-card:disabled {
 .settings-labs-grid {
   display: grid;
   gap: 1rem;
+}
+
+.settings-app-groups {
+  display: grid;
+  gap: 1rem;
+}
+
+.settings-app-group {
+  display: grid;
+  gap: 0.8rem;
+  padding: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--shell-card-border) 84%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--shell-card-bg-soft) 76%, transparent);
 }
 
 .settings-side-nav {

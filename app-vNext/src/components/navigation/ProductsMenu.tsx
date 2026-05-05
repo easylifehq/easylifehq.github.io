@@ -5,6 +5,8 @@ export type ProductsMenuItem = {
   href: string;
   label: string;
   description: string;
+  group?: string;
+  groupDescription?: string;
   isRoute?: boolean;
 };
 
@@ -21,9 +23,31 @@ export function ProductsMenu({
   label = "Products",
   className = "",
   panelClassName = "",
+  showDescriptions = false,
 }: ProductsMenuProps) {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const hasGroups = items.some((item) => item.group);
+  const shouldShowDescriptions = showDescriptions || hasGroups;
+  const groupedItems = items.reduce<Array<{ label: string; description?: string; items: ProductsMenuItem[] }>>(
+    (groups, item) => {
+      const label = item.group ?? "";
+      const existingGroup = groups.find((group) => group.label === label);
+
+      if (existingGroup) {
+        existingGroup.items.push(item);
+        return groups;
+      }
+
+      groups.push({
+        label,
+        description: item.groupDescription,
+        items: [item],
+      });
+      return groups;
+    },
+    []
+  );
 
   function isCurrentItem(item: ProductsMenuItem) {
     if (item.isRoute === false) return false;
@@ -94,33 +118,45 @@ export function ProductsMenu({
             Close
           </button>
         </div>
-        {items.map((item) => {
-          const isCurrent = isCurrentItem(item);
+        {(hasGroups ? groupedItems : [{ label: "", items }]).map((group) => (
+          <div key={group.label || "all"} className={hasGroups ? "menu-link-group" : undefined}>
+            {group.label ? (
+              <div className="menu-link-group-header">
+                <strong>{group.label}</strong>
+                {group.description ? <span>{group.description}</span> : null}
+              </div>
+            ) : null}
+            {group.items.map((item) => {
+              const isCurrent = isCurrentItem(item);
 
-          return item.isRoute === false ? (
-            <a
-              key={item.href}
-              href={item.href}
-              className="menu-link-card"
-              onClick={() => setIsOpen(false)}
-            >
-              <strong>{item.label}</strong>
-            </a>
-          ) : (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={`menu-link-card${isCurrent ? " active" : ""}`}
-              aria-current={isCurrent ? "page" : undefined}
-              onClick={() => setIsOpen(false)}
-            >
-              <span className="menu-link-title">
-                <strong>{item.label}</strong>
-                {isCurrent ? <span className="menu-link-status">Current</span> : null}
-              </span>
-            </Link>
-          );
-        })}
+              return item.isRoute === false ? (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="menu-link-card"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <strong>{item.label}</strong>
+                  {shouldShowDescriptions ? <span className="menu-link-description">{item.description}</span> : null}
+                </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={`menu-link-card${isCurrent ? " active" : ""}`}
+                  aria-current={isCurrent ? "page" : undefined}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <span className="menu-link-title">
+                    <strong>{item.label}</strong>
+                    {isCurrent ? <span className="menu-link-status">Current</span> : null}
+                  </span>
+                  {shouldShowDescriptions ? <span className="menu-link-description">{item.description}</span> : null}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </div>
     </div>
   );

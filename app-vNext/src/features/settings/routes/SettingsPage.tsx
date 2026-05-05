@@ -96,55 +96,72 @@ const appVisibilityOptions: Array<{
   id: VisibleAppId;
   label: string;
   description: string;
-  home: string;
+  home: "Daily" | "Optional";
 }> = [
   {
     id: "easylist",
     label: "EasyList",
-    description: "Core: quick task capture and the main list.",
-    home: "Core",
+    description: "Quick task capture and the main list.",
+    home: "Daily",
   },
   {
     id: "easynotes",
     label: "EasyNotes",
-    description: "Core: fast notes and rough thoughts.",
-    home: "Core",
+    description: "Fast notes and rough thoughts.",
+    home: "Daily",
   },
   {
     id: "easycalendar",
     label: "EasyCalendar",
-    description: "Core: today, fixed events, and time blocks.",
-    home: "Core",
+    description: "Today, fixed events, and time blocks.",
+    home: "Daily",
   },
   {
     id: "easyworkout",
     label: "EasyWorkout",
-    description: "Core: fast workout logging, with stats as a bonus.",
-    home: "Core",
+    description: "Fast workout logging, with stats as a bonus.",
+    home: "Daily",
   },
   {
     id: "easystatistics",
     label: "EasyStatistics",
-    description: "Core: progress, trends, and deeper cross-app stats.",
-    home: "Core",
+    description: "Progress, trends, and deeper cross-app stats.",
+    home: "Optional",
   },
   {
     id: "easypipeline",
     label: "EasyPipeline",
-    description: "Optional: applications, follow-ups, and job-search momentum.",
+    description: "Applications, follow-ups, and job-search momentum.",
     home: "Optional",
   },
   {
     id: "easycontacts",
     label: "EasyContacts",
-    description: "Optional: people, relationship reminders, and networking context.",
+    description: "People, relationship reminders, and networking context.",
     home: "Optional",
   },
   {
     id: "easyprojects",
     label: "EasyProjects",
-    description: "Optional: sections, milestones, synced tasks, and AI planning.",
+    description: "Sections, milestones, and synced tasks.",
     home: "Optional",
+  },
+];
+
+const appVisibilityGroups: Array<{
+  id: "Daily" | "Optional";
+  title: string;
+  description: string;
+}> = [
+  {
+    id: "Daily",
+    title: "Daily spine",
+    description: "Keep these close to Today, tasks, notes, calendar, and workout logging.",
+  },
+  {
+    id: "Optional",
+    title: "Optional support",
+    description: "Show these when projects, follow-ups, contacts, or stats matter this week.",
   },
 ];
 
@@ -1234,32 +1251,48 @@ export function SettingsPage() {
         {activeSection === "apps" ? (
         <PageSection
           eyebrow="Suite"
-          title="Visible apps"
+          title="Workspace apps"
+          description="Choose what appears in More without making optional modules compete with your daily tools."
         >
           <div id="apps" className="settings-anchor" />
           {isLoading ? <p className="helper-copy">Loading your preferences...</p> : null}
 
-          <div className="settings-toggle-list settings-app-list">
-            {appVisibilityOptions.map((app) => {
-              const enabled = isAppVisible(app.id);
-              return (
-                <label key={app.id} className={`settings-toggle-row${enabled ? " active" : ""}`}>
+          <div className="settings-app-groups">
+            {appVisibilityGroups.map((group) => (
+              <section key={group.id} className="settings-app-group">
+                <div className="settings-lab-group-header">
                   <div>
-                    <span className="settings-card-topline">
-                      <span>{app.home}</span>
-                      <span className="settings-state-pill">{enabled ? "Shown" : "Hidden"}</span>
-                    </span>
-                    <strong>{app.label}</strong>
-                    <p>{app.description}</p>
+                    <span className="eyebrow">{group.id}</span>
+                    <strong>{group.title}</strong>
                   </div>
-                  <input
-                    type="checkbox"
-                    checked={enabled}
-                    onChange={() => void toggleVisibleApp(app.id)}
-                  />
-                </label>
-              );
-            })}
+                  <p>{group.description}</p>
+                </div>
+                <div className="settings-toggle-list settings-app-list">
+                  {appVisibilityOptions
+                    .filter((app) => app.home === group.id)
+                    .map((app) => {
+                      const enabled = isAppVisible(app.id);
+                      return (
+                        <label key={app.id} className={`settings-toggle-row${enabled ? " active" : ""}`}>
+                          <div>
+                            <span className="settings-card-topline">
+                              <span>{app.home}</span>
+                              <span className="settings-state-pill">{enabled ? "Shown" : "Hidden"}</span>
+                            </span>
+                            <strong>{app.label}</strong>
+                            <p>{app.description}</p>
+                          </div>
+                          <input
+                            type="checkbox"
+                            checked={enabled}
+                            onChange={() => void toggleVisibleApp(app.id)}
+                          />
+                        </label>
+                      );
+                    })}
+                </div>
+              </section>
+            ))}
           </div>
         </PageSection>
         ) : null}

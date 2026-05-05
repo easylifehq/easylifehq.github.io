@@ -36,7 +36,7 @@ export function AppHeader() {
           </div>
 
           <div className="app-header-actions">
-            <ProductsMenu items={visibleItems} label="Apps" />
+            <ProductsMenu items={visibleItems} label="More" />
           </div>
         </div>
       </div>
