@@ -101,6 +101,27 @@ const schoolPlanner = {
   ],
 };
 
+const laterPlans = [
+  {
+    label: "School week",
+    title: "Review study load before it spills into today.",
+    detail: "Keep assignments and exam prep visible, then add only the next task or calendar block.",
+    to: "/app/easylist/add",
+  },
+  {
+    label: "Notes to action",
+    title: "Revisit recent notes for one follow-up.",
+    detail: "Look for a note that needs a task, reply, or calendar hold before it goes stale.",
+    to: "/app/easynotes",
+  },
+  {
+    label: "Lighter day",
+    title: "Protect capacity when the calendar gets full.",
+    detail: "Use a light plan and keep workouts as a short log when the day is already loaded.",
+    to: "/app/easycalendar/day",
+  },
+];
+
 type TodayContextItem = {
   label: string;
   title: string;
@@ -569,6 +590,25 @@ export function HQPage() {
             </article>
           )}
         </div>
+      </PageSection>
+
+      <PageSection eyebrow="Future Plans" title="Ideas to revisit without crowding today">
+        <section className="hq-later-plans" aria-label="Future plans">
+          <div className="hq-later-plans-copy">
+            <span>Future plans</span>
+            <strong>Keep useful ideas parked until today has room.</strong>
+            <p>These example ideas cover school, notes, and capacity. Nothing is saved until you choose where it belongs.</p>
+          </div>
+          <div className="hq-later-plans-list">
+            {laterPlans.map((plan) => (
+              <Link to={plan.to} className="hq-later-plan" key={plan.label}>
+                <span>{plan.label}</span>
+                <strong>{plan.title}</strong>
+                <p>{plan.detail}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
       </PageSection>
 
       <PageSection eyebrow="More" title="School plan without crowding today">
