@@ -2725,3 +2725,18 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 01:28:08
+
+- Task attempted: Phase 2 - Surface/card restraint pass: make one small frontend-only pass that reduces nested-card or heavy-surface feeling on a high-traffic protected screen while preserving the Phase 1 spine. Prefer subtraction, lighter boundaries, and better spacing over adding decoration. Guardrails: app-vNext/src UI/style only; no backend, auth, Firebase, data-shape, package/dependency, generated output, deploy config, old-site, root files, or feature additions. Acceptance: from `app-vNext`, run `npm.cmd run build`; verify the screen feels more intentional and less cluttered. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

@@ -5881,12 +5881,16 @@ button.calendar-detail-card:disabled {
 }
 
 .app-theme-easyhq:not(.command-center-page) > .panel-section {
-  padding: 0.82rem 0.9rem 0.9rem;
+  padding: 0.95rem 0 0.05rem;
+  border-width: 1px 0 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .app-theme-easyhq:not(.command-center-page) > .panel-section .panel-header {
   gap: 0.18rem;
-  margin-bottom: 0.72rem;
+  margin-bottom: 0.62rem;
 }
 
 .app-theme-easyhq:not(.command-center-page) > .panel-section .panel-header h2 {
