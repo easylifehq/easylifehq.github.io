@@ -4,40 +4,40 @@
 RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission with small protected-app UI, copy, accessibility, and visual-system refinements. However, it is not ready to park as shippable because Joey security review is RED and explicitly calls for human security review.
+The branch is moving toward the EasyLife mission with small protected-app polish and Phase 3 Today Engine work. The latest completed slice improves the HQ next-best-move surface, which supports the connected personal OS direction.
 
 ## Safety Review
-Security review is the blocking signal. Changed files are mostly frontend and `docs/codex`, but `app-vNext/src/features/auth/routes/LoginPage.tsx` is a sensitive surface and should be inspected by a human before further unattended work.
+Security review is blocking: Joey verdict is RED with next step “stop for human security review.” No forbidden file changes or dirty working tree were reported.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: 12 recent completed tasks shown, including Phase 1/2 visual polish, accessibility repairs, HQ/Login/EasyStatistics/EasyNotes refinements, and docs/report updates
-- files changed: 20 files changed since base, including app UI files, shared styles, and Codex review docs
-- commits added: many checkpoint/review/task commits since base, latest HEAD `b83968e`
-- queue status: clean working tree, unchecked task count 0
+- Completed tasks in this checkpoint window: Phase 3 Today next-best-move slice
+- Files changed: `app-vNext/src/features/hq/routes/HQPage.tsx` plus existing branch changes listed in app and docs surfaces
+- Commits added: latest HEAD `ac48bc5` plus prior checkpoint/review/task commits since base
+- Queue status: 4 unchecked tasks remain
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN signal; 0 high, 0 medium, 0 low; does not need to shape next tasks
-- Simon design review: YELLOW; should influence next tasks with visual issues first
-- Robin copy review: YELLOW; should influence next tasks with copy cleanup first
-- accessibility review: YELLOW; should influence next tasks with accessibility warnings soon
-- performance review: GREEN; no immediate next-task pressure
-- Joey security review: RED; blocks unattended continuation and requires human security review
-- Franky formula review: missing; no formula blocker shown, but should be filled before final ship if formulas/spreadsheets matter
-- Product truth: MISSING but `product truth ok: True`; no configured blocker
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks
+- Simon design review: YELLOW; continue but fix visual issues first, should influence next UI slices
+- Robin copy review: YELLOW; continue but fix copy first, should influence next copy-visible work
+- Accessibility review: YELLOW; patch warnings soon, should influence upcoming implementation
+- Performance review: GREEN; no immediate impact
+- Joey security review: RED; must stop for human security review
+- Franky formula review: missing; not applicable unless formulas/spreadsheets enter scope, but status should be completed or explicitly waived
+- Product truth: MISSING but marked ok; no `PRODUCT_TRUTH.md` configured
 
 ## Recommended Next Step
 stop for human review
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Joey security is RED and the branch touched an auth route, so the next step should be a narrow human-led security inspection or patch before any mission-forward work.
+- Recommended next batch size: 1
+- Next work mode: repair-first
+- Human security review must clear the Joey RED gate before continuing queued Phase 3 work.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Queue is empty, so this is a review/park point rather than an execution backlog.
-- Security review is the only hard blocker in the provided gates.
-- Inspect `app-vNext/src/features/auth/routes/LoginPage.tsx` carefully before approving continuation.
+- Joey RED is the blocker despite no reported unsafe file changes.
+- Four Phase 3 tasks remain queued.
+- Product truth file is not configured.
