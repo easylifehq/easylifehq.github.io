@@ -1,10 +1,10 @@
-# Phase State
+﻿# Phase State
 
-Current Phase: phase-3-today-engine
+Current Phase: phase-4-command-layer
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
 Primary Action: Open Today, see the next best move, and capture or clear one item.
-Showable Moment: The protected side opens to a useful Today surface that answers what matters now.
+Showable Moment: EasyLife feels faster because common actions are reachable through a calm command layer.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
 Complexity Budget: Protected first viewport: one daily action, compact today context, quiet module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
@@ -13,11 +13,11 @@ Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired
 Phase Model Policy: judgment-heavy
 Parking State: ACTIVE
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: Today answers what Spencer should do now with a next best move, today context, calendar pressure, due work, and fast capture without becoming a dashboard dump.
-Next Phase Criteria: Move to Phase 4 Command Layer when the Today surface is coherent and the next work is about fast command/capture behavior.
+Done Signal: The command layer supports quick add, plan my day, what am I forgetting, email-to-task entry, study-plan entry, and short time-window actions without crowding Today.
+Next Phase Criteria: Move to Phase 5 Inbox Intelligence when command/capture entry points are coherent and the next work is email-derived tasks/events/follow-ups.
 Repair Trigger: none
-Repair Return Phase: phase-3-today-engine
-Updated At: 2026-05-05 01:00:00
+Repair Return Phase: phase-4-command-layer
+Updated At: 2026-05-05 13:34:55
 
 ## Phase Order
 
@@ -60,3 +60,4 @@ repair is an interrupt lane, not a normal destination. Any phase can enter repai
 - Honor human taste notes.
 - Use stronger judgment for Shape, Simplicity, and Polish.
 - Park review-ready ships instead of continuing to generate improvements.
+
