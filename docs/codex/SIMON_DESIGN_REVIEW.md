@@ -4,56 +4,56 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is cleaner and calmer than before, but the visible work still feels like polished module brochures pretending to be a personal operating system.
+The branch is cleaner and more coherent than before, but it is still presenting EasyLife like a polished brochure rack instead of proving the daily operating-system spine.
 
 ## Mission Fit
-The direction partially matches the EasyLife mission: the shared palette, typography, card language, and module samples are beginning to feel like one suite. The miss is strategic hierarchy. Pack 1 is Product Spine, and the screenshots mostly show EasyList, EasyNotes, EasyCalendar, and EasyWorkout landing pages with "Start Free" CTAs, feature sections, and demo rows. That may sell the product, but it does not prove the signed-in daily start point: one next action, today context, and compact module status. Confidence is lower because current screenshots do not show the protected HQ/Today surface where the mission actually lives.
+The direction partially matches the mission: the module pages now share a calm visual language, restrained palette, strong type, and consistent cards. That supports "one suite." But Pack 1 is Product Spine, and the screenshots mostly show public/product explanation pages for EasyCalendar, EasyList, EasyNotes, and EasyWorkout, not the signed-in daily start surface. The mission says the first screen should help the user understand what to do next today; current evidence still says "here are four product pages." Very tidy, very polite, still dodging the main job.
 
 ## Taste Check
-The good: the off-white shell, teal accent, compact sample rows, restrained borders, and sober type direction are a real improvement. It no longer looks like a toy dashboard, thank God.
+The best taste move is restraint: the soft green-gray background, compact preview panels, and confident black headline type feel calmer than generic SaaS confetti. The product has a recognizable tone now.
 
-The weak: the pages are too templated. Every module repeats the same hero, same nav, same CTA pair, same pill row, same feature block rhythm. The result is tidy but generic, like someone bought one nice outfit and made every app wear it. Mobile is readable, but the first screen is still long, salesy, and heavy before the user sees actual utility.
+The weak part is hierarchy discipline. Every route uses the same oversized hero formula, the same "Start Free / See Features" CTA rhythm, the same pill stack, and the same feature band. It looks consistent, yes, but also templated. The interface is wearing a nice suit to explain itself instead of letting the actual product work.
 
 ## Visual Problems To Fix
-- The top chrome repeats identity: logo block says "EasyLifeHQ", the hero immediately repeats a module identity, then the page sells the same product again with feature bands.
-- The customer-facing module routes feel buried inside a large wrapper panel plus a second content panel, which makes the real product example feel like a mockup inside packaging.
-- "Start Free" and "See Features" dominate every module first screen, competing with the product job and making the routes feel like marketing pages instead of connected app surfaces.
-- The mobile first viewport is too tall and too text-heavy: headline, paragraph, CTAs, pills, and demo card all stack before the user gets a useful next move.
-- The pale grid background is controlled, but across every page it starts to read as default system wallpaper rather than a distinct EasyLife environment.
-- The sample cards are useful, but their rows are visually similar across modules; EasyList, EasyNotes, Calendar, and Workout need clearer product-specific interaction cues.
-- The feature sections repeat "FEATURES" as a loud label after the hero already announces the module. This is route chrome doing jazz hands.
-- The latest Phase 5 inbox approval and draft-reply work is not visible in the provided screenshots, so the strongest recent product idea is not evidenced visually.
+- The module pages repeat page identity too much: EasyLifeHQ appears in the top chrome, then again as brand text, then each module gets a giant eyebrow and hero. It feels like route chrome plus demo page chrome fighting for oxygen.
+- The first viewport is still dominated by marketing explanation and CTAs, not a signed-in daily next action. That violates the Information Staging contract for the working app surface.
+- "Start Free" appears across app/module surfaces and makes the product feel like acquisition marketing rather than a personal operating system the user is already inside.
+- Desktop layouts are clean but over-carded: large white hero card, preview card, feature card, and repeated mini cards create a box-in-box presentation instead of a lived-in workspace.
+- Mobile type is too large in several hero sections, especially body copy; the screens feel readable but heavy, with too much vertical scrolling before utility appears.
+- The preview panels are useful, but they are still static product props. They do not yet feel like actionable module status or a connected Today flow.
+- EasyWorkout's mobile tag row loses the pill styling seen elsewhere and reads like loose tab text, which weakens system consistency.
+- EasyList's tone is sharper and more human than the others, but "annoying stuff" plus "Start Free" creates a weird mix of premium personal tool and landing-page hustle.
 
 ## Strongest Opportunities
-- Make HQ/Today the design proof: one daily next action, one capture entry, and four compact module status signals should be the first visible story.
-- Replace repeated "Start Free" marketing CTAs on app-like module routes with quieter product actions such as "Open EasyList", "Capture task", or "Review inbox" where appropriate.
-- Give each module one distinctive working interaction in the hero sample instead of the same four-row preview pattern everywhere.
-- Tighten mobile hero density by reducing headline scale, trimming pills, and letting the main product sample appear sooner.
-- Build a clearer suite spine: shared shell, quiet nav, active module state, and cross-module handoff cues that feel functional, not promotional.
+- Convert the protected HQ first screen into the evidence piece: one next action, today context, and compact module status should be visually unmistakable.
+- Replace public-page CTAs on signed-in/module demo surfaces with quieter app actions like "Open Today," "Add task," "Capture note," or "Review queue."
+- Let each module inherit a shared shell but vary the working preview enough to show its real job, not just a matching marketing template.
+- Reduce hero scale on mobile and bring the preview/work surface higher so utility arrives before the second screen.
+- Use one connected status strip across modules: tasks due, notes captured, calendar windows, workout state. That would make the suite feel connected instead of merely branded.
 
 ## Priority Fix
-Fix the route hierarchy before adding anything else: reduce the repeated marketing chrome on module pages and make the first screen show the actual EasyLife operating spine. The next design task should either capture HQ/Today screenshots and repair that first viewport, or convert one module hero from sales page to usable product surface with a quiet action, compact status, and one clear next move.
+Fix the product spine before adding another surface: the first signed-in/HQ screen needs to visually prove "what should I do next today" with one dominant daily action, compact today context, and quiet module status. Strip acquisition-style CTAs and repeated explanatory chrome from app-facing routes, then make the working preview/action area arrive above the fold on mobile. Nami should treat this as subtraction and hierarchy repair, not a new dashboard feature.
 
 ## Magic Improvement Score
-SCORE: 2; DIRECTION: flat; ACTIVE_PACK: Pack 1 - Product Spine; REASON: polish improved, but the visual evidence still repeats module marketing pages instead of proving the daily operating-system spine.
+SCORE: 2; DIRECTION: flat; ACTIVE_PACK: Pack 1 - Product Spine; REASON: visual consistency improved, but the evidence still shows polished module marketing instead of the daily operating spine.
 
 ## Designer Handoff
-Keep the restrained palette, strong type, soft panels, and calm row-based previews. Change the hierarchy: the user should feel "I know what to do today" before they feel "I am reading product copy." Quiet the global nav, reduce repeated identity labels, trim CTAs, and make the first viewport more operational. The desired result is a personal assistant workspace that feels immediately useful, not a suite brochure with nicer manners.
+Keep the palette, the heavier headline confidence, the soft preview panels, and the calmer card language. Change the screen priority. The next batch should make EasyLife feel already in use: Today first, one clear action, then compact signals from List, Notes, Calendar, and Workout. Product explanation should step back behind route navigation or secondary sections. The user should feel "I know what to do next," not "I have read four tasteful brochures."
 
 ## What Not To Do Next
-- Do not add more feature sections.
-- Do not add another dashboard card cluster to compensate for weak hierarchy.
-- Do not make the palette louder or introduce decorative gradients.
-- Do not keep polishing module brochures while HQ/Today remains under-evidenced.
-- Do not expand Phase 5 email intelligence before the approval queue is visually proven and security review is cleared.
-- Do not ignore mobile density; this product lives or dies on quick scanning.
+- Do not add more feature sections to make the modules feel richer.
+- Do not add new marketing copy to explain the suite.
+- Do not make a bigger dashboard with every module control visible at once.
+- Do not introduce more decorative cards, badges, or pill rows.
+- Do not change backend, auth, data models, routing architecture, packages, or deployment.
+- Do not ignore mobile; the current mobile layouts are readable but too vertically expensive.
 
 ## Next 5 Design Tasks
-- [ ] Capture and review HQ/Today desktop and 390px mobile screenshots; do not change code, just prove whether the first screen contract is visible.
-- [ ] Reduce one module page's first-screen chrome by removing or quieting one repeated label, CTA, or pill row; keep behavior unchanged.
-- [ ] Tighten one mobile module hero so the product preview appears higher without clipping text or shrinking tap targets.
-- [ ] Convert one repeated sample row pattern into a module-specific action cue; keep data mock/local and avoid new logic.
-- [ ] Audit "Start Free" usage on signed-in or app-like routes and replace only one inappropriate instance with a quieter existing action label.
+- [ ] Replace signed-in/module "Start Free" style CTAs with app-appropriate actions, with no auth, routing, backend, or package changes.
+- [ ] Reduce mobile hero typography and spacing on one module page so the preview/action surface appears earlier, without changing content structure.
+- [ ] Tighten the EasyLifeHQ header on module pages by removing repeated brand/title noise, while preserving navigation and current routes.
+- [ ] Make one HQ/Today section show a single dominant next action plus compact module status, using existing/mock data only and no new systems.
+- [ ] Normalize the module preview/tag styling across EasyList, EasyNotes, EasyCalendar, and EasyWorkout, with special attention to EasyWorkout mobile.
 
 ## Stop Or Continue
 continue but fix visual issues first
