@@ -1,10 +1,10 @@
 # Phase State
 
-Current Phase: phase-2-visual-system
+Current Phase: phase-3-today-engine
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
 Primary Action: Open Today, see the next best move, and capture or clear one item.
-Showable Moment: The protected side keeps the unified Life OS spine and now starts to look sleek, calm, high-tech, and intentionally designed.
+Showable Moment: The protected side opens to a useful Today surface that answers what matters now.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
 Complexity Budget: Protected first viewport: one daily action, compact today context, quiet module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
@@ -13,10 +13,10 @@ Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired
 Phase Model Policy: judgment-heavy
 Parking State: ACTIVE
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: The default protected app visual system feels sleek, calm, high-tech, mobile-comfortable, and consistent without candy overload or dashboard clutter.
-Next Phase Criteria: Move to Phase 3 Today Engine when the visual foundation is coherent and remaining work is about the main Today decision surface.
+Done Signal: Today answers what Spencer should do now with a next best move, today context, calendar pressure, due work, and fast capture without becoming a dashboard dump.
+Next Phase Criteria: Move to Phase 4 Command Layer when the Today surface is coherent and the next work is about fast command/capture behavior.
 Repair Trigger: none
-Repair Return Phase: phase-2-visual-system
+Repair Return Phase: phase-3-today-engine
 Updated At: 2026-05-05 01:00:00
 
 ## Phase Order
