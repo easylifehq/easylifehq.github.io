@@ -1,6 +1,6 @@
 ﻿# Accessibility Review
 
-Generated: 2026-05-05 17:10:59
+Generated: 2026-05-05 17:19:48
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
@@ -111,12 +111,12 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
             onClick={handleRev...`
 - [YELLOW] `app-vNext/src/features/easynotes/routes/EasyNotesEditorPage.tsx:260` - Icon-style button may need an accessible label.
   `<button type="button" className="button-secondary compact-button" onClick={handleProcessNote}>`
-- [YELLOW] `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx:167` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx:184` - Icon-style button may need an accessible label.
   `<button
               type="button"
               className="notes-command-button"
               onClick={() => {`
-- [YELLOW] `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx:344` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx:362` - Icon-style button may need an accessible label.
   `<button
                 type="button"
                 className="ghost-button compact-button"
@@ -171,7 +171,7 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
   `<button type="button" className="primary-button" onClick={handleOpenInstallShare}>`
 - [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1528` - Icon-style button may need an accessible label.
   `<button type="button" className="button-secondary" onClick={handleSendTestNotification}>`
-- [INFO] `app-vNext/src/styles/globals.css:11135` - Reduced-motion handling is present.
+- [INFO] `app-vNext/src/styles/globals.css:11143` - Reduced-motion handling is present.
   `@media (prefers-reduced-motion: reduce) {`
 
 ## Stop Or Continue
