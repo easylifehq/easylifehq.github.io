@@ -272,3 +272,13 @@
 - Files restored before continuing:
 - None
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-05 13:16:44
+
+- Batch: 1
+- Task index: 1
+- Task: Phase 3 - Today Engine review packet: after Phase 3 implementation slices, run build/static checks, inspect key protected Today routes, and write `docs/codex/PHASE_3_REVIEW.md` with changed files, route evidence, bugs, and whether Phase 4 is ready. Do not start Phase 4. Guardrails: docs/codex plus tiny bugfixes only if required by Phase 3 checks; no backend, auth, Firebase, dependencies, deploy, generated output, old-site, root files, or broad feature work. Acceptance: `npm.cmd run build` from `app-vNext` passes and Phase 3 review doc exists. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/,app-vNext/src/ accept:npm.cmd run build]
+- Reason: Implementation guardrails failed.
+- Files restored before continuing:
+- docs/codex/PHASE_3_REVIEW.md
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
