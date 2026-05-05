@@ -484,6 +484,7 @@ export function HQPage() {
             <p>
               Start with {schoolNextAssignment.course}: {schoolNextAssignment.title.toLowerCase()} due {schoolNextAssignment.due.toLowerCase()}.
             </p>
+            <small>No school item is saved until you review and add it in EasyList or EasyCalendar.</small>
           </article>
           <div className="hq-study-load" aria-label="Heavy week view">
             <div className="hq-study-load-header">
@@ -518,6 +519,10 @@ export function HQPage() {
                   <strong>{assignment.title}</strong>
                   <p>{assignment.course} / Due {assignment.due}</p>
                   <small>{assignment.estimate}</small>
+                  <div className="hq-school-actions" aria-label={`Review ${assignment.title} options`}>
+                    <Link to="/app/easylist/add">Review as task</Link>
+                    <Link to="/app/easycalendar/day">Find calendar room</Link>
+                  </div>
                 </article>
               ))}
             </div>
@@ -528,6 +533,10 @@ export function HQPage() {
                   <strong>{exam.title}</strong>
                   <p>{exam.course} / {exam.date}</p>
                   <small>{exam.prep}</small>
+                  <div className="hq-school-actions" aria-label={`Review ${exam.title} options`}>
+                    <Link to="/app/easylist/add">Plan study task</Link>
+                    <Link to="/app/easycalendar/day">Review calendar block</Link>
+                  </div>
                 </article>
               ))}
               <article className="hq-school-item hq-school-note">
