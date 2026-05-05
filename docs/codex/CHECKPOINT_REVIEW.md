@@ -4,40 +4,40 @@
 RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission: recent work improved Today/HQ, command/capture flow, and Inbox Intelligence surfaces with small frontend-only changes. However, the current checkpoint cannot continue unattended because Joey security review is RED.
+The branch is moving toward the EasyLife mission with visible frontend work around Today/HQ, command capture, and inbox approval flows. However, the checkpoint cannot continue unattended because Joey security review is RED and explicitly calls for human security review.
 
 ## Safety Review
-Joey security review is RED and explicitly recommends stopping for human security review. No forbidden changed files are evident from the file list, and the working tree is clean.
+Joey security gate is RED. No forbidden file changes are listed, the working tree is clean, and changed files appear limited to `app-vNext/src` plus `docs/codex`, but the security stop signal blocks unattended continuation.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: Phase 5 inbox approval queue UI, email classification language, and safe reply draft affordance
-- files changed: `app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx`, `app-vNext/src/features/hq/routes/HQPage.tsx`, `app-vNext/src/styles/globals.css`, plus review/report docs
-- commits added: latest HEAD `113794c` and multiple prior checkpoint/review commits since `main`
-- queue status: 1 unchecked task remains, `Phase 5 - Inbox Intelligence review packet`
+- Completed tasks in this checkpoint window: Phase 5 inbox approval queue UI, email classification language, safe reply draft affordance; Phase 5 review packet was quarantined.
+- Files changed: app UI files in HQ, EasyList email, EasyNotes context, EasyStatistics, UniversalCapture, LoginPage, globals CSS, plus multiple `docs/codex` review/report files.
+- Commits added: latest HEAD `a585249` plus many checkpoint/review/implementation commits since `main`.
+- Queue status: 1 unchecked task remains.
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN signal, 0 high / 0 medium / 0 low; does not need to shape next task
-- Simon design review: YELLOW; fix visual issues first when work resumes
-- Robin copy review: YELLOW; copy cleanup should influence next tasks
-- accessibility review: YELLOW; patch warnings soon
-- performance review: GREEN; no blocking influence
-- Joey security review: RED; blocks unattended continuation
-- Franky formula review: missing; should be completed if formulas/spreadsheets become relevant
-- Product truth: MISSING but `ok: True`; no configured product truth file
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low issues, should not drive next work.
+- Simon design review: YELLOW; continue but fix visual issues first, should shape next tasks.
+- Robin copy review: YELLOW; continue but fix copy first, should shape next tasks.
+- Accessibility review: YELLOW; patch accessibility warnings soon, should shape next tasks.
+- Performance review: GREEN; no blocking influence.
+- Joey security review: RED; stop for human security review.
+- Franky formula review: missing; no formula-specific signal available.
+- Product truth: MISSING but `product truth ok` is true; no `PRODUCT_TRUTH.md` configured.
 
 ## Recommended Next Step
 stop for human review
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Joey security is RED, so the next batch should not proceed until a human reviews or clears the security gate.
+- Recommended next batch size: 1
+- Next work mode: repair-first
+- Joey’s RED security gate must be resolved or explicitly cleared before mission-forward work continues.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Product truth is not configured.
-- One proof task remains for `PHASE_5_REVIEW.md`.
-- Do not start Phase 6 before Phase 5 review packet is complete.
+- Joey security review is the blocking signal.
+- Phase 5 review packet was quarantined for implementation guardrails.
+- One unchecked recovery-style task remains in the queue.
