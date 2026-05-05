@@ -3473,3 +3473,19 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-011901\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-011901\easylist-visualQa-1-mobile.png
 - Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## Batch 1 QA - 2026-05-05 01:30:14
+
+- Active work pack: Pack 1 - Product Spine
+- Batch impact mode: visible
+- Fresh QA evidence:
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-012808\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-012808\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-012808\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-012808\easylist-visualQa-1-mobile.png
+- Checkpoint verdict: RED
+- Simon verdict: YELLOW
+- Robin verdict: YELLOW
+- Joey verdict: RED
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer styling and hierarchy are real improvements, but the active pack is still under-proven because HQ first-screen evidence is missing and visible routes remain marketing-led.
+- Debug checkpoint result: not-run (not-run)
