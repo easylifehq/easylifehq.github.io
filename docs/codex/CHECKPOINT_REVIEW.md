@@ -4,41 +4,40 @@
 RED
 
 ## Progress Against Mission
-The branch continues moving EasyLife toward a calmer connected personal operating system, with completed Phase 6 school-planner work and prior Today, command, inbox, and visual-system improvements. However, review cannot clear because Joey security review is RED and explicitly calls for human security review.
+The branch is moving toward the EasyLife mission with visible Phase 7 progress on capacity and coach integration, while preserving the connected-suite direction. However, the security gate is RED and explicitly asks for human review, so the branch should not continue unattended.
 
 ## Safety Review
-Sensitive risk signal found: Joey security verdict is RED. Changed files include safe frontend/docs areas overall, but `app-vNext/src/features/auth/routes/LoginPage.tsx` is changed since base and should receive human scrutiny because auth-related feature files are forbidden unless explicitly approved.
+Risk found: `app-vNext/src/features/auth/routes/LoginPage.tsx` changed since base, which is within auth-related surface and is forbidden unless explicitly approved. Joey security review is RED and blocks unattended continuation.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: Phase 6 school planner surface, study load view, school-to-calendar/task affordance, plus a follow-up small HQ repair after the Phase 6 review packet was quarantined
-- files changed: multiple `app-vNext/src` UI/style files and `docs/codex` review/status files
-- commits added: latest HEAD `a74957d` plus many checkpoint/review/phase commits since base
-- queue status: 0 unchecked tasks; working tree clean
+- Completed tasks in this checkpoint window: Phase 7 capacity signal slice.
+- Files changed: `EasyWorkoutDashboardPage.tsx`, `HQPage.tsx`, `globals.css`, plus accumulated app/docs changes since base.
+- Commits added: latest HEAD `d68b4e7` plus many checkpoint/review/phase commits since `main`.
+- Queue status: 3 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN signal; 0 high, 0 medium, 0 low, should not shape next tasks
-- Simon design review: YELLOW; continue but fix visual issues first, should influence next polish work
-- Robin copy review: YELLOW; continue but fix copy first, should influence next copy pass
-- accessibility review: YELLOW; patch warnings soon, should influence next repair work
-- performance review: GREEN; no immediate influence
-- Joey security review: RED; must stop for human security review
-- Franky formula review: missing; no formula-specific influence, but missing gate should be noted
-- Product truth: missing configuration but `ok: True`; no configured blocker
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks.
+- Simon design review: YELLOW; continue only after fixing visual issues first.
+- Robin copy review: YELLOW; copy cleanup should influence next tasks.
+- Accessibility review: YELLOW; patch warnings soon.
+- Performance review: GREEN; no blocking influence.
+- Joey security review: RED; stop for human security review.
+- Franky formula review: missing; no formula-specific signal available.
+- Product truth: MISSING but `ok: True`; no `PRODUCT_TRUTH.md` configured.
 
 ## Recommended Next Step
 stop for human review
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Human review should first resolve the RED security gate and inspect the auth-adjacent changed file before any mission-forward work continues.
+- Recommended next batch size: 1
+- Next work mode: repair-first
+- The security RED and auth-surface change require human review before any mission-forward work resumes.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Queue is empty, so parking is appropriate.
-- Joey RED is the blocking signal.
-- Review `app-vNext/src/features/auth/routes/LoginPage.tsx` carefully against forbidden auth scope.
-- Phase review packet tasks repeatedly hit “Implementation guardrails failed,” even though follow-up repair tasks passed.
+- Security gate is the blocker.
+- Check why `app-vNext/src/features/auth/routes/LoginPage.tsx` changed against forbidden scope.
+- Three Phase 7 tasks remain unchecked.
