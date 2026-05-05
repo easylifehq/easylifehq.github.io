@@ -1,10 +1,10 @@
 # Phase State
 
-Current Phase: phase-1-product-spine
+Current Phase: phase-2-visual-system
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
 Primary Action: Open Today, see the next best move, and capture or clear one item.
-Showable Moment: The protected side feels like one sleek, calm, high-tech Life OS instead of separate unfinished tools.
+Showable Moment: The protected side keeps the unified Life OS spine and now starts to look sleek, calm, high-tech, and intentionally designed.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
 Complexity Budget: Protected first viewport: one daily action, compact today context, quiet module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
@@ -13,11 +13,11 @@ Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired
 Phase Model Policy: judgment-heavy
 Parking State: ACTIVE
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: EasyLife reads as one Life OS, the Today/Calendar/Tasks/Notes/Coach/Inbox/More direction is visible, optional modules are quieter but reachable, and Phase 1 review is clean.
-Next Phase Criteria: Move to Phase 2 Visual System when the product spine is coherent and remaining work is mostly visual language, spacing, typography, and theme-token refinement.
+Done Signal: The default protected app visual system feels sleek, calm, high-tech, mobile-comfortable, and consistent without candy overload or dashboard clutter.
+Next Phase Criteria: Move to Phase 3 Today Engine when the visual foundation is coherent and remaining work is about the main Today decision surface.
 Repair Trigger: none
-Repair Return Phase: phase-1-product-spine
-Updated At: 2026-05-04 23:45:00
+Repair Return Phase: phase-2-visual-system
+Updated At: 2026-05-05 01:00:00
 
 ## Phase Order
 
