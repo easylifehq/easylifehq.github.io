@@ -222,3 +222,13 @@
 - Files restored before continuing:
 - None
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-04 23:15:05
+
+- Batch: 1
+- Task index: 1
+- Task: Phase 1 - Unified shell/navigation slice: using `docs/codex/EASYLIFE_NEXT_VARIATION_ROADMAP.md` and `docs/codex/PHASE_1_PRODUCT_SPINE_PLAN.md`, make one small frontend-only improvement that moves the protected shell toward `Today`, `Calendar`, `Tasks`, `Notes`, `Coach`, `Inbox`, and `More` without starting visual-system redesign. Preserve existing routes and behavior. Guardrails: app-vNext/src UI/copy/style only; no backend, auth, Firebase rules/config, persistence/data-shape changes, package/dependency files, generated output, deploy config, old-site, root production files, or broad rewrites. Acceptance: from `app-vNext`, run `npm.cmd run build`; verify old app areas remain reachable. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Reason: Large Phase 3 task requires a concrete slice plan before implementation.
+- Files restored before continuing:
+- None
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.

@@ -2611,3 +2611,18 @@
 - Files changed:
 - app-vNext/src/features/easyprojects/routes/EasyProjectsTimelinePage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-04 23:15:05
+
+- Task attempted: Phase 1 - Unified shell/navigation slice: using `docs/codex/EASYLIFE_NEXT_VARIATION_ROADMAP.md` and `docs/codex/PHASE_1_PRODUCT_SPINE_PLAN.md`, make one small frontend-only improvement that moves the protected shell toward `Today`, `Calendar`, `Tasks`, `Notes`, `Coach`, `Inbox`, and `More` without starting visual-system redesign. Preserve existing routes and behavior. Guardrails: app-vNext/src UI/copy/style only; no backend, auth, Firebase rules/config, persistence/data-shape changes, package/dependency files, generated output, deploy config, old-site, root production files, or broad rewrites. Acceptance: from `app-vNext`, run `npm.cmd run build`; verify old app areas remain reachable. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Implementation scale: large
+- Build result: Quarantined
+- Files changed:
+- None
+- Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.
