@@ -4,71 +4,69 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is moving toward calm daily-assistant language, but a few visible and semi-visible phrases still sound like a product build, a demo shell, or a generic suite pitch.
+EasyLife is closer to a calm daily workspace, but a few visible and metadata-adjacent phrases still sound like internal product framing instead of a useful personal assistant.
 
 ## Mission Voice Fit
-The strongest current language fits the mission when it names concrete daily use: tasks, notes, calendar planning, workouts, today context, next move, workspace, and capture. That voice supports a connected personal operating system without becoming grandiose. The weaker voice appears when EasyLife describes itself as a "command center" or when internal review language like "proof", "demo", "sample", and "polish" leaks near app surfaces. For this product, the buyer and signed-in user should hear a practical daily workspace, not a build process or showcase.
+The protected Today/HQ direction fits the mission when it names a next move, today context, and quick capture in concrete language. The strongest voice is practical and calm: "Opening your workspace," "daily plan," "capture note," and module-specific nouns all support the personal assistant position. The weaker voice appears where EasyLife still uses broad builder/product language like "command center," "proof," "demo," and "sample," which makes the product feel inspected rather than lived in.
 
 ## Delicate Wording Risks
-- "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center." feels generic and too SaaS-like. It also conflicts with the current mode rule against command-center framing.
-- "command center" is too corporate for the mission and makes the product sound like an admin dashboard rather than a personal daily assistant.
-- "pipeline work" may be unclear to normal personal-productivity users unless EasyPipeline is a public-facing concept they already understand.
-- Root and app meta descriptions repeat the same command-center promise. Even if not primary screen copy, it is customer-facing enough to fix.
-- "demo" in route/query logic appears mostly internal, but any visible use of "demo" should be replaced with "example day", "preview", or "workspace" depending on context.
-- "proof" appears in a class name, not visible copy, but repeated proof language in reviews has already trained the task queue toward builder-speak. Avoid carrying it into UI labels.
-- "sample" appears in internal IDs for email examples. IDs are not a copy issue, but visible email example labels should avoid "sample data" and prefer "example thread" or a concrete email subject.
-- The changed file list includes `LoginPage.tsx`, an auth-adjacent surface. Any customer-facing auth copy should stay plain and should not imply new account, security, sync, or backend capabilities.
+- "command center" in public metadata overstates the product and sounds like generic SaaS infrastructure rather than a personal daily workspace.
+- "proof" in `auth-proof-card` appears to be a class name, not visible copy, but it should not become visible text.
+- "demo" appears mostly in query parameters and dev-only contexts. Keep it out of customer-facing labels.
+- "sample" appears in internal IDs on EasyList Email. Acceptable as an identifier, but guest/user-facing examples should say "example" or use a concrete item name.
+- "Plan my day" is clear, but it can become too magical if paired with AI-style claims. Keep it deterministic and local.
+- "What am I forgetting" is useful but emotionally loaded. It works as a command only if the output is framed as a checklist or possible gaps, not certainty.
+- Any remaining "proof," "handoff," "polish," or "command center" copy should be treated as builder language unless it is clearly internal code.
 
 ## Beautiful Language Opportunities
-- Replace suite-pitch language with daily-life language: "Start your day", "Review today", "Capture a thought", "Plan the next block", "Open your task list".
-- Make Today/HQ copy more decisive: one next move, one reason, one action.
-- Use "workspace" carefully as a supporting noun, not a standalone value prop.
-- Public marketing pages can feel warmer by showing what the user gets in one sentence instead of naming every module.
-- Empty states should say what to do next, not what the app contains.
-- Experiments and mock surfaces should say "example" only where needed, then quickly use concrete content such as "Morning plan", "Project brief", or "Workout log".
-- Settings copy can become more premium by using short control-center labels and avoiding explanatory paragraphs above the fold.
+- Replace broad suite language with daily nouns: workspace, task list, calendar block, note, workout log, project brief, daily plan.
+- Make command copy feel like a quiet utility: "Capture something," "Review today," "Add a task," "Open calendar."
+- Let Today/HQ copy sound like a start point, not a product pitch.
+- Use "example day" instead of "demo" when showing mock or seeded data to a user.
+- Use "calendar prep" instead of "handoff" when describing moving task context toward planning.
+- Keep first-screen labels short, then put explanation only inside expanded panels or detail states.
 
 ## Priority Rewrite
-Fix the remaining "command center" meta description in root and app entry surfaces. It is short, visible enough to matter, and directly violates the current EasyLife voice direction. Replace it with a concrete daily-workspace sentence that names the user outcome without making the app sound like a dashboard or claiming intelligence it has not proven.
+The most important wording problem is the remaining "command center" framing in public metadata and any visible app copy. EasyLife should not introduce itself as infrastructure. It should introduce itself as a calm workspace for today's tasks, notes, calendar, workouts, and projects.
 
 ## Suggested Rewrites
-1. Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-   After: "EasyLife brings tasks, notes, calendar planning, workouts, and projects into one calm daily workspace."
+- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
+  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and follow-ups in one daily workspace."
 
-2. Before: "command center"
-   After: "daily workspace"
+- Before: "Command palette"
+  After: "Quick actions"
 
-3. Before: "pipeline work"
-   After: "project follow-up"
+- Before: "What am I forgetting"
+  After: "Check for gaps"
 
-4. Before: "Opening your workspace."
-   After: "Opening EasyLife."
+- Before: "demo"
+  After: "example day"
 
-5. Before: "sample data"
-   After: "example day"
+- Before: "sample data"
+  After: "example items"
 
-6. Before: "demo"
-   After: "preview" for public pages, or "example" for mock-only app states
+- Before: "proof"
+  After: "preview" or "example"
 
-7. Before: "proof"
-   After: "route evidence" in internal docs, or remove entirely from customer-facing UI
+- Before: "Calendar handoff"
+  After: "Calendar prep"
 
 ## Voice Rules
-- Use concrete daily nouns: task list, note, calendar block, workout log, project brief, daily plan, workspace.
-- Keep primary labels short and action-facing.
-- Do not use "command center", "personal operating system", "premium", "high-tech", "proof", "handoff", or "polish" in visible product copy.
-- Separate public explanation from working-app labels.
-- First-screen copy should answer: what should I do next today?
-- Do not list every module when one next action would orient the user faster.
-- Avoid fake intelligence claims. Use "suggested", "next", "today", and "based on your current list" only when the UI visibly supports it.
-- Prefer calm usefulness over excitement.
+- Prefer concrete daily-life nouns over product-platform nouns.
+- Keep the protected first screen task-led: one next move, today context, quick capture.
+- Use "workspace" instead of "command center" for public and app-facing copy.
+- Use "example" instead of "demo" or "sample" when the user can see it.
+- Avoid AI certainty. Say what the app can help organize, not what it knows.
+- Keep command labels short and verb-led.
+- Do not explain the whole suite on the first screen.
+- Separate internal/dev labels from user-facing language.
 
 ## Next 5 Copy Tasks
-- [ ] Replace the meta description phrase "one command center" in root/app entry surfaces with "one calm daily workspace"; do not add new claims or edit auth, build, deploy, or package files.
-- [ ] Review the protected HQ first viewport and shorten one helper sentence so it names the next action before module context; do not add new sections or controls.
-- [ ] Scan visible UI strings in `app-vNext/src/features/marketing/` for "demo", "proof", "polish", and "handoff"; replace only one clearly customer-facing instance with concrete daily-workspace language.
-- [ ] Review EasyProjects visible example copy for build-process language such as "ship" or "polish"; replace one phrase with a real user task label like "Finish project brief" or "Weekly planning review".
-- [ ] Review UniversalCapture visible labels and helper text for staging; keep capture copy short, concrete, and secondary to Today rather than turning the first screen into a feature explanation.
+- [ ] Replace public metadata "command center" with "daily workspace"; do not change routing, auth, or generated output unless the supervisor explicitly selects that file.
+- [ ] Audit visible HQ command labels for "What am I forgetting" and ensure nearby copy frames results as possible gaps, not certainty.
+- [ ] Check EasyList Email visible examples for "sample" language; replace only visible text with "example" or concrete email names.
+- [ ] Review command palette labels and keep the first four actions concrete: Add task, Capture note, Plan today, Check for gaps.
+- [ ] Search app-facing JSX strings for "demo," "proof," "handoff," and "polish"; change only visible customer copy, leaving internal identifiers alone.
 
 ## Stop Or Continue
 continue but fix copy first
