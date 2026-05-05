@@ -4,29 +4,29 @@
 RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission: recent Phase 3 work improves the protected Today/HQ surface with clearer next-best-move, context, and capture prominence. However, it cannot continue unattended because Joey security review is RED and explicitly calls for human review.
+The branch is moving toward the EasyLife mission: recent Phase 3 work focused the protected Today/HQ surface around next move, context, capture, and mobile scan quality. However, the checkpoint cannot continue unattended because Joey security review is RED and asks for human security review.
 
 ## Safety Review
-Risky behavior found: security gate is RED. No forbidden files, dependency files, backend, Firebase, deploy, secrets, or generated output changes are listed.
+Risk found: Joey security review is RED. No forbidden-scope file changes are obvious from the changed file list, and the working tree is clean.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: Phase 3 Today next-best-move, Today context stack, and fast capture prominence slices.
-- Files changed: `HQPage.tsx`, `UniversalCapture.tsx`, `globals.css`, plus review/report docs and prior app UI files since base.
-- Commits added: latest HEAD `b747043`; many checkpoint/review commits exist since `main`.
-- Queue status: 2 unchecked tasks remain.
+- Completed tasks in this checkpoint window: Phase 3 Today next-best-move, Today context stack, fast capture prominence, and Today mobile scan slices.
+- Files changed: app-vNext HQ, UniversalCapture, EasyNotes context, EasyStatistics, LoginPage, globals.css, and codex docs/review artifacts.
+- Commits added: multiple checkpoint/review/task commits through HEAD `9afcb93`.
+- Queue status: 1 unchecked task remains, the Phase 3 Today Engine review packet.
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks.
-- Simon design review: YELLOW, continue but fix visual issues first; should shape next UI work.
-- Robin copy review: YELLOW, continue but fix copy first; should shape next copy/UI task.
-- Accessibility review: YELLOW, patch warnings soon; should influence near-term repair.
-- Performance review: GREEN; no blocker.
-- Joey security review: RED, stop for human security review; blocks unattended continuation.
-- Franky formula review: missing; should be completed if formulas/spreadsheets are relevant.
-- Product truth: MISSING but `ok=True`; no PRODUCT_TRUTH.md configured, not blocking by itself.
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low visual bugs.
+- Simon design review: YELLOW; should influence next tasks with visual fixes first.
+- Robin copy review: YELLOW; should influence next tasks with copy cleanup.
+- Accessibility review: YELLOW; patch accessibility warnings soon.
+- Performance review: GREEN; no blocking influence.
+- Joey security review: RED; stop for human security review.
+- Franky formula review: missing; note gap, but no formula-specific blocker provided.
+- Product truth: missing config, reported ok; no PRODUCT_TRUTH.md configured.
 
 ## Recommended Next Step
 stop for human review
@@ -34,10 +34,10 @@ stop for human review
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Resolve or clear the Joey security RED before any mission-forward work, then continue with the remaining Phase 3 mobile scan slice.
+- The next unattended work should wait until the security RED is reviewed or cleared; if resumed, handle only the smallest concrete gate-driven repair.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Security review is the blocker.
-- Two Phase 3 tasks remain unchecked.
-- No high or medium visual bugs are reported.
+- Security gate is the blocker.
+- One Phase 3 review packet task remains unchecked.
+- Product truth file is not configured.
