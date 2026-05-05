@@ -3893,6 +3893,18 @@ textarea::placeholder {
   gap: 0.18rem;
 }
 
+.email-draft-approval {
+  gap: 0.32rem;
+  padding: 0.78rem;
+  border: 1px solid color-mix(in srgb, var(--shell-accent) 34%, var(--ui-border-subtle) 66%);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--shell-accent-soft) 58%, var(--ui-bg-card) 42%);
+}
+
+.email-draft-approval strong {
+  font-size: 0.95rem;
+}
+
 .email-draft-panel textarea {
   width: 100%;
   min-height: 180px;

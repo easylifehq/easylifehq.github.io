@@ -40,7 +40,7 @@ const suggestionKindLabels: Record<EmailSuggestionKind, string> = {
 const suggestionStateLabels: Record<EmailSuggestionState, string> = {
   ready: "Needs review",
   approved: "Approved",
-  drafted: "Reply draft ready",
+  drafted: "Draft awaiting approval",
   kept: "Kept visible",
   ignored: "Dismissed",
 };
@@ -296,7 +296,7 @@ export function EasyListEmailPage() {
   function handleDraftReply(suggestion: EmailSuggestion) {
     setStates((current) => ({ ...current, [suggestion.id]: "drafted" }));
     setSelectedDraftId(suggestion.id);
-    setStatusMessage("Reply draft prepared locally for review. No Gmail draft was created.");
+    setStatusMessage("Reply draft prepared for approval. Nothing is sent from this screen.");
   }
 
   function handleKeepVisible(suggestion: EmailSuggestion) {
@@ -315,11 +315,11 @@ export function EasyListEmailPage() {
       <PageSection
         eyebrow="Email triage"
         title="Approve inbox suggestions before anything changes"
-        description="Review local email examples as Task, Deadline, Event, and Follow-up suggestions. Nothing is sent or archived until you approve it."
+        description="Review email examples as Task, Deadline, Event, and Follow-up suggestions. Nothing is sent or archived until you approve it."
       >
         <div className="email-triage-hero">
           <div>
-            <span className="settings-state-pill">Local preview</span>
+            <span className="settings-state-pill">Inbox review</span>
             <h2>One queue, four decisions.</h2>
             <p>
               Each card names the suggestion type, source, and next safe step. Send and archive actions still need a
@@ -375,7 +375,7 @@ export function EasyListEmailPage() {
           />
           <div className="task-composer-actions">
             <span className="helper-copy">
-              Use separators like three dashes between emails. This preview does not connect to Gmail.
+              Use separators like three dashes between emails. Nothing is sent or archived from this screen.
             </span>
             <button className="primary-button" type="button" onClick={handleImportEmails} disabled={!importText.trim()}>
               Import to review
@@ -423,7 +423,7 @@ export function EasyListEmailPage() {
                   </button>
                   {suggestion.replyDraft ? (
                     <button className="button-secondary" type="button" onClick={() => handleDraftReply(suggestion)}>
-                      {state === "drafted" ? "Reply draft ready" : "Prepare reply draft"}
+                      {state === "drafted" ? "Draft awaiting approval" : "Prepare draft for approval"}
                     </button>
                   ) : null}
                   <button className="button-secondary" type="button" onClick={() => handleKeepVisible(suggestion)}>
@@ -440,8 +440,12 @@ export function EasyListEmailPage() {
       </PageSection>
 
       {selectedDraft ? (
-        <PageSection eyebrow="Draft" title="Prepared reply draft">
+        <PageSection eyebrow="Reply draft" title="Draft awaiting approval">
           <div className="email-draft-panel">
+            <div className="email-draft-approval">
+              <strong>Approval required before send</strong>
+              <p>Review this text first. Nothing is sent from EasyLife, and no mail draft is created here.</p>
+            </div>
             <div>
               <span>To</span>
               <strong>{selectedDraft.from}</strong>
@@ -452,13 +456,13 @@ export function EasyListEmailPage() {
             </div>
             <textarea readOnly value={selectedDraft.replyDraft || ""} rows={7} aria-label="Prepared reply draft" />
             <p className="helper-copy">
-              This is a local reply preview. Sending would require a separate Gmail review step in a later phase.
+              Prepared for review only. Copy or rewrite it yourself when you are ready to send.
             </p>
           </div>
         </PageSection>
       ) : null}
 
-      <PageSection eyebrow="Later" title="What a real Gmail connection should still ask">
+      <PageSection eyebrow="Safety" title="Before any inbox action changes mail">
         <div className="email-integration-grid">
           <article>
             <span>1</span>
@@ -467,12 +471,12 @@ export function EasyListEmailPage() {
           </article>
           <article>
             <span>2</span>
-            <strong>Stage locally</strong>
-            <p>Let the user approve rows, prepare reply drafts, or keep messages visible from one queue.</p>
+            <strong>Prepare for review</strong>
+            <p>Approve suggestions, prepare replies, or keep messages visible from one queue.</p>
           </article>
           <article>
             <span>3</span>
-            <strong>Ask again</strong>
+            <strong>Confirm before send or archive</strong>
             <p>Require a second clear approval before any real send or archive action exists.</p>
           </article>
         </div>
