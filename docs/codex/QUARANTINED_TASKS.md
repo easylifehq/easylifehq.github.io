@@ -312,3 +312,13 @@
 - Files restored before continuing:
 - docs/codex/PHASE_6_REVIEW.md
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-05 16:36:43
+
+- Batch: 1
+- Task index: 1
+- Task: Phase 7 - Capacity And Coach review packet: run checks and write docs/codex/PHASE_7_REVIEW.md. Do not start Phase 8. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/,app-vNext/src/ accept:npm.cmd run build]
+- Reason: Implementation guardrails failed.
+- Files restored before continuing:
+- docs/codex/PHASE_7_REVIEW.md
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
