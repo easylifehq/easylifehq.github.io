@@ -52,7 +52,7 @@ const quickActions = [
     to: "/app/easycalendar/day",
   },
   {
-    label: "What am I forgetting?",
+    label: "Check what is still open",
     detail: "Review the loose ends.",
     to: "/app/command",
   },
