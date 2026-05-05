@@ -16,6 +16,23 @@ function formatDate(value: Date | null) {
   }).format(value);
 }
 
+function getMemoryCue(value: Date | null) {
+  if (!value) return "Recent";
+
+  const ageInDays = Math.floor((Date.now() - value.getTime()) / 86400000);
+
+  if (ageInDays <= 2) return "Recent";
+  if (ageInDays >= 14) return "Review soon";
+
+  return "";
+}
+
+function renderMemoryCue(value: Date | null) {
+  const cue = getMemoryCue(value);
+
+  return cue ? <em className="note-memory-cue">{cue}</em> : null;
+}
+
 export function EasyNotesLibraryPage() {
   const navigate = useNavigate();
   const {
@@ -235,6 +252,7 @@ export function EasyNotesLibraryPage() {
                           <p className="note-card-meta">
                             <span>Updated</span>
                             {formatDate(note.updatedAt || note.createdAt)}
+                            {renderMemoryCue(note.updatedAt || note.createdAt)}
                           </p>
                         </div>
                         <div className="note-card-badges">
@@ -418,6 +436,7 @@ export function EasyNotesLibraryPage() {
                   <p className="note-card-meta">
                     <span>Updated</span>
                     {formatDate(note.updatedAt || note.createdAt)}
+                    {renderMemoryCue(note.updatedAt || note.createdAt)}
                   </p>
                 </div>
                 <div className="note-card-badges">

@@ -2507,6 +2507,14 @@ textarea::placeholder {
   text-transform: uppercase;
 }
 
+.note-memory-cue {
+  flex: 0 0 auto;
+  font-style: normal;
+  color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 64%, var(--ui-text-muted, #6a5d53));
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
 .note-card-top {
   min-width: 0;
 }
