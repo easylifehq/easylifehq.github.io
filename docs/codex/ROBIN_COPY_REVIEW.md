@@ -4,75 +4,74 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is moving toward calm daily-assistant language, but visible copy still mixes buyer-facing product pitch, builder/demo language, and working-app labels in ways that weaken trust.
+EasyLife is calmer and more concrete than before, but visible and near-visible copy still sometimes speaks like a product build or brochure instead of a trusted daily workspace.
 
 ## Mission Voice Fit
-The best current language fits the mission: "Choose today's next move.", "Capture anything", "Open task list", "Review inbox", and "No school item is saved until you review..." are concrete, useful, and calm. The weaker language still comes from product-studio framing: "Demo Path", "Show this first", "Presentation flow", "proof", "workflow", "handoff", and public CTAs like "Start Free" create a brochure layer around what should feel like a signed-in daily workspace. The voice should keep moving from selling and explaining toward direct daily action.
+The mission asks for a connected, professional personal operating system that helps the user know what to do next without clutter. The best current language, such as "Opening your workspace" and the newer task, deadline, event, follow-up, draft reply labels, fits that promise well. The remaining weak spots are phrases like "command center," "demo," "proof," "sample," and brochure-style route framing, which make EasyLife sound more like a pitch or test environment than a personal assistant app. The copy should keep moving toward concrete daily nouns: today, task list, calendar block, note, workout log, school week, capacity, draft reply, and workspace.
 
 ## Delicate Wording Risks
-- "command center" remains in `404.html` and `app-vNext/index.html` metadata; it is generic SaaS language and conflicts with the quieter daily workspace direction.
-- "Demo Path", "Show this first", and "Presentation flow" sound like instructions to the builder or presenter, not helpful copy for the user.
-- "Draft handoff to EasyList", "EasyList handoff", and "Capture, refine, then hand off" still read like internal process language. Use "task drafts", "send to tasks", or "turn notes into tasks".
-- "Start Free", "See Features", and "Get Started" are acceptable on public marketing pages, but they should not appear on signed-in or demo-like working routes where the user expects actions.
-- "proof" appears in class naming and public copy around "visible proof of what got done"; the visible phrase feels salesy and slightly defensive.
-- "Workflow" is overused in marketing navigation and descriptions. It can be clear in moderation, but as a primary label it feels corporate and less personal than "Plan", "Steps", "Daily flow", or "Routine".
-- "AI workspace lab" risks sounding like a prototype surface rather than a stable product area. If visible, it should be staged clearly as an experiment.
-- "Sync Gmail" and "Create Gmail drafts" are risky if the app does not actually perform connected Gmail actions in production. Use approval-first, non-sending language unless the feature is real.
-- "No school item is saved until you review and add it..." is good for safety, but it should be near any school-to-task/calendar controls, not only in the lead card.
-- "example email" is honest but stiff. It should become "sample inbox item" or "example inbox item" so it reads like a local preview, not fake customer data.
+- "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center." overstates the product posture and uses generic SaaS language. "Command center" is too corporate and broad for the calm personal assistant voice.
+- Public and app-like surfaces still appear to use "Start Free" and "See Features" in places where the experience should feel like working software, not a sales page.
+- "Proof" appears in `auth-proof-card`. If not visible, it is harmless as a class name, but it signals nearby copy should be checked for product-validation language.
+- "Demo" appears in route/query support and may be internal, but any visible use of "demo" should be replaced with "example day," "preview," or "workspace" depending on context.
+- "Sample" appears in EasyList email candidate ids. If ids are not visible, no issue; if any related label says "sample data," it should become "example inbox" or "example message."
+- "Pipeline work" in public metadata feels vague and business-tool oriented. For this mission, "projects" or "follow-ups" is clearer.
+- The repeated phase/review language around "proof," "handoff," "polish," and "workflow" should stay out of user-facing surfaces. These are builder words, not buyer or user words.
+- Any copy that introduces school planner, inbox intelligence, or capacity signals must avoid implying real AI, prediction, email automation, or calendar/task persistence unless those behaviors are actually present.
 
 ## Beautiful Language Opportunities
-- The HQ opening line can become warmer and more specific without adding claims: keep "Choose today's next move" and pair it with short action language.
-- Inbox language is close; strengthen it by making every action approval-first: "Review suggestion", "Prepare draft", "Keep visible", "Dismiss".
-- School planner copy can feel more useful by emphasizing study load and review before save, not the novelty of the planner.
-- Marketing pages should replace internal module movement words with guest-clear product verbs: capture, review, plan, send to tasks, add to calendar.
-- The public metadata should say "daily workspace" instead of "command center".
-- The product feature sections need fewer labels that explain the product and more labels that describe what the user does.
+- Replace "command center" with "daily workspace" or "one place for today's tasks, notes, plans, and follow-ups."
+- Make the Today/HQ first screen sound less like a module index and more like a daily assistant: "Next move," "Today," "Open room," "Capture quickly," "Review calendar."
+- Use "draft reply" and "requires approval" consistently wherever email-derived reply affordances appear.
+- For capacity and coach language, use humble deterministic framing: "Capacity signal," "Based on today's tasks and workout plan," "Light," "Normal," "Push."
+- For school planning, keep copy practical: "Heavy week," "Next assignment," "Study block," "Add as task," "Plan a calendar block."
+- Marketing pages should use shorter, calmer product promises and let the preview carry the detail.
+- Empty and low-content states can become warmer by naming the next action directly: "Add the first task," "Capture a note," "Plan one block."
 
 ## Priority Rewrite
-Fix the remaining builder/demo/process vocabulary in visible surfaces before the next polish pass. The most important targets are "Demo Path", "Show this first", "Presentation flow", "handoff", "proof", "workflow", and any Gmail language that implies real sync/send behavior. Nami should turn this into a copy-only task that changes one narrow surface at a time, preserving routes and behavior.
+The single most important wording problem is "command center" and adjacent brochure language in public metadata and app-like route framing. Replace it with concrete daily-workspace language everywhere it is visible or used in metadata, then check nearby copy for "demo," "proof," "sample data," "handoff," and "polish" so the product no longer sounds like an internal build.
 
 ## Suggested Rewrites
-- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and follow-ups in one daily workspace."
+1. Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
+   After: "EasyLife keeps tasks, notes, calendar plans, workouts, projects, and follow-ups in one daily workspace."
 
-- Before: "Draft handoff to EasyList"
-  After: "Send task drafts to EasyList"
+2. Before: "Start Free"
+   After: "Open EasyLife"
 
-- Before: "EasyList handoff"
-  After: "Task drafts"
+3. Before: "See Features"
+   After: "See how it works"
 
-- Before: "Capture, refine, then hand off"
-  After: "Capture, refine, then send to tasks"
+4. Before: "sample data"
+   After: "example day"
 
-- Before: "Demo Path"
-  After: "First things to try"
+5. Before: "demo"
+   After: "preview" or "example"
 
-- Before: "Show this first"
-  After: "Start with these moments"
+6. Before: "proof"
+   After: "preview" or "example"
 
-- Before: "Use these moments to explain the product without wandering through every setting."
-  After: "Start here when you want the fastest read on how EasyLife fits your day."
+7. Before: "Plan intensity modes"
+   After: "Choose today's pace"
 
-- Before: "Sync Gmail"
-  After: "Review inbox items"
+8. Before: "Fitness coach connection"
+   After: "Connect workouts to today"
 
 ## Voice Rules
-- Use working-app verbs: add, capture, review, plan, open, prepare, keep, dismiss.
-- Prefer concrete nouns: task list, note, calendar block, inbox item, draft reply, study block, project brief.
-- Do not use builder words in customer-facing copy: demo, proof, handoff, polish, presentation flow, show this first.
-- Do not imply real Gmail sync, sending, archiving, AI action, or saving unless the feature truly does it.
-- Keep the first screen focused on one next move, today context, and compact status.
-- Marketing copy can explain; app copy should help the user act.
-- Use "workspace" sparingly and only when it has a concrete object nearby.
-- Keep safety language plain: "Review before saving", "No send action happens here", "Prepare draft only".
+- Lead with what the user can do today, not what the product contains.
+- Prefer concrete nouns: task list, calendar block, note, workout log, school week, draft reply, workspace.
+- Avoid builder words in visible copy: proof, handoff, polish, workflow, demo, sample data, command center.
+- Keep primary labels short: Today, Tasks, Calendar, Notes, Coach, Inbox, More.
+- Use secondary text only to clarify the action or outcome.
+- Never imply real AI, email automation, predictions, or persistence unless the feature truly does it.
+- For computed capacity or intensity language, show humility: "based on," "signal," "today," "suggested," not certainty.
+- Separate marketing copy from app copy. Public pages may explain; protected app surfaces should help the user act.
 
 ## Next 5 Copy Tasks
-- [ ] Replace public metadata "command center" with "daily workspace"; guardrail: metadata copy only, no root production config or generated output unless explicitly allowed.
-- [ ] Rename the visible HQ "Presentation flow", "Demo Path", and "Show this first" copy to user-facing daily language; guardrail: copy-only, preserve details behavior.
-- [ ] Replace EasyNotes "handoff" language with "task drafts" or "send to tasks"; guardrail: no behavior or route changes.
-- [ ] Audit Gmail/inbox visible labels for overclaims like "Sync Gmail" or "Create Gmail drafts"; guardrail: use approval-first copy unless the action is real.
-- [ ] Replace one remaining public "workflow" primary nav or heading label with a concrete label such as "Plan", "Daily flow", or "Steps"; guardrail: do not broaden into a marketing rewrite.
+- [ ] Replace visible "command center" in public metadata or UI strings with "daily workspace"; do not change routes, behavior, or product claims.
+- [ ] Search visible `app-vNext/src` copy for "demo," "proof," and "sample data"; replace only customer-facing instances with "preview," "example," or "example day."
+- [ ] Review HQ/Today copy and ensure the first screen names one next move, one today context, and one capture action without feature-inventory language.
+- [ ] Review EasyList email approval copy and confirm every candidate action says task, deadline, event, follow-up, keep visible, or draft reply, with approval language for replies.
+- [ ] Review Phase 7 capacity and intensity copy so Light, Normal, and Push read as user-selected plan modes, not predictive advice or AI certainty.
 
 ## Stop Or Continue
 continue but fix copy first
