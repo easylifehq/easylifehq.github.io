@@ -1,16 +1,11 @@
 import { useMemo, useState } from "react";
-import { GoogleAuthProvider, linkWithPopup, reauthenticateWithPopup } from "firebase/auth";
 import { Link } from "react-router-dom";
-import { LoadingState } from "@/components/feedback/LoadingState";
 import { PageSection } from "@/components/ui/PageSection";
-import { useEasyList } from "@/features/easylist/EasyListContext";
 import { getPriorityMeta } from "@/features/easylist/lib/taskUtils";
-import { auth } from "@/lib/firebase/client";
-import type { PriorityTier, TaskDraft } from "@/lib/firestore/tasks";
+import type { PriorityTier } from "@/lib/firestore/tasks";
 
-type EmailSuggestionKind = "task" | "reply" | "bill" | "meeting";
-type EmailSuggestionState = "ready" | "tasked" | "drafted" | "archived" | "ignored";
-type GmailQueryMode = "action" | "unread" | "school" | "meetings";
+type EmailSuggestionKind = "task" | "deadline" | "event" | "follow-up";
+type EmailSuggestionState = "ready" | "approved" | "drafted" | "kept" | "ignored";
 
 type EmailSuggestion = {
   id: string;
@@ -27,10 +22,6 @@ type EmailSuggestion = {
   confidence: "High" | "Medium" | "Low";
   recommendedAction: string;
   replyDraft?: string;
-  gmailMessageId?: string;
-  gmailThreadId?: string;
-  gmailLabels?: string[];
-  gmailDraftId?: string;
 };
 
 type ParsedEmailSeed = {
@@ -39,48 +30,10 @@ type ParsedEmailSeed = {
   body: string;
 };
 
-type GmailSyncMessage = {
-  id: string;
-  threadId: string;
-  from: string;
-  subject: string;
-  receivedAt: string;
-  snippet: string;
-  labels: string[];
-};
-
-const gmailSyncUrl =
-  import.meta.env.VITE_GMAIL_SYNC_URL || "https://us-central1-pipeline-2f422.cloudfunctions.net/syncGmailTriage";
-const gmailDraftUrl =
-  import.meta.env.VITE_GMAIL_DRAFT_URL || "https://us-central1-pipeline-2f422.cloudfunctions.net/createGmailDraft";
-
-const gmailQueryModes: Record<GmailQueryMode, { label: string; query: string; helper: string }> = {
-  action: {
-    label: "Action inbox",
-    query: "in:inbox newer_than:30d -category:promotions",
-    helper: "Recent inbox minus promotions.",
-  },
-  unread: {
-    label: "Unread",
-    query: "in:inbox is:unread newer_than:30d -category:promotions",
-    helper: "Messages you have not opened yet.",
-  },
-  school: {
-    label: "School",
-    query: 'in:inbox newer_than:60d (from:(edu) OR professor OR assignment OR exam OR final OR homework OR "Canvas")',
-    helper: "Class, professor, assignment, and final-related threads.",
-  },
-  meetings: {
-    label: "Meetings",
-    query: "in:inbox newer_than:30d (meeting OR calendar OR invite OR available OR appointment OR call)",
-    helper: "Likely scheduling and meeting setup mail.",
-  },
-};
-
 const sampleSuggestions: EmailSuggestion[] = [
   {
     id: "sample-final",
-    kind: "reply",
+    kind: "follow-up",
     from: "Professor",
     subject: "Final exam confirmation",
     receivedAt: "Today",
@@ -91,13 +44,13 @@ const sampleSuggestions: EmailSuggestion[] = [
     estimatedLength: 5,
     priorityTier: 2,
     confidence: "High",
-    recommendedAction: "Draft a short reply and keep the thread visible until sent.",
+    recommendedAction: "Draft a short reply and keep the thread visible until you answer.",
     replyDraft:
       "Hi Professor,\n\nThank you for clarifying. I would like to take the final.\n\nBest,\nSpencer",
   },
   {
     id: "sample-meeting",
-    kind: "meeting",
+    kind: "event",
     from: "League commissioner",
     subject: "Meeting tomorrow",
     receivedAt: "Yesterday",
@@ -112,7 +65,7 @@ const sampleSuggestions: EmailSuggestion[] = [
   },
   {
     id: "sample-container",
-    kind: "bill",
+    kind: "deadline",
     from: "Service reminder",
     subject: "Late fee assessed",
     receivedAt: "Today",
@@ -132,13 +85,13 @@ const sampleSuggestions: EmailSuggestion[] = [
     subject: "Promotions and listing alerts",
     receivedAt: "This week",
     summary: "Repeated automated updates do not need a reply and should stay out of the inbox.",
-    taskTitle: "Archive obvious automated inbox noise",
+    taskTitle: "Review obvious automated inbox noise",
     category: "Admin",
     dueDate: null,
     estimatedLength: 10,
     priorityTier: 8,
     confidence: "Medium",
-    recommendedAction: "Archive in batches, never delete by default.",
+    recommendedAction: "Keep visible if it matters, otherwise dismiss from this local review.",
   },
 ];
 
@@ -163,9 +116,9 @@ function splitImportedEmails(text: string): ParsedEmailSeed[] {
 function inferKind(text: string): EmailSuggestionKind {
   const lower = text.toLowerCase();
 
-  if (/\b(meeting|calendar|tomorrow|available|join|appointment|call)\b/.test(lower)) return "meeting";
-  if (/\b(invoice|statement|payment|billing|fee|charge|due back|late)\b/.test(lower)) return "bill";
-  if (/\b(reply|respond|let me know|confirm|question|can you|would you)\b/.test(lower)) return "reply";
+  if (/\b(meeting|calendar|tomorrow|available|join|appointment|call)\b/.test(lower)) return "event";
+  if (/\b(invoice|statement|payment|billing|fee|charge|due back|late|deadline|due)\b/.test(lower)) return "deadline";
+  if (/\b(reply|respond|let me know|confirm|question|can you|would you|follow up|follow-up)\b/.test(lower)) return "follow-up";
   return "task";
 }
 
@@ -199,8 +152,8 @@ function inferPriority(kind: EmailSuggestionKind, text: string): PriorityTier {
   const lower = text.toLowerCase();
 
   if (/\b(urgent|asap|late fee|overdue|blocked|cannot|must)\b/.test(lower)) return 2;
-  if (kind === "bill") return 3;
-  if (kind === "reply" || kind === "meeting") return 4;
+  if (kind === "deadline") return 3;
+  if (kind === "follow-up" || kind === "event") return 4;
   if (/\b(newsletter|promo|sale|update|digest|recap)\b/.test(lower)) return 9;
   return 6;
 }
@@ -212,7 +165,7 @@ function inferCategory(kind: EmailSuggestionKind, text: string) {
   if (/\b(rent|apartment|lease|landlord|maintenance)\b/.test(lower)) return "Home";
   if (/\b(payment|invoice|statement|card|charge|fee)\b/.test(lower)) return "Finance";
   if (/\b(interview|resume|job|application)\b/.test(lower)) return "Work";
-  if (kind === "meeting") return "Calendar";
+  if (kind === "event") return "Calendar";
   return "Admin";
 }
 
@@ -222,13 +175,13 @@ function cleanTaskTitle(subject: string, kind: EmailSuggestionKind) {
     .replace(/\s+/g, " ")
     .trim();
 
-  if (kind === "reply") return `Reply about ${cleaned}`;
-  if (kind === "bill") return `Handle ${cleaned}`;
-  if (kind === "meeting") return `Prepare for ${cleaned}`;
+  if (kind === "follow-up") return `Reply about ${cleaned}`;
+  if (kind === "deadline") return `Handle ${cleaned}`;
+  if (kind === "event") return `Prepare for ${cleaned}`;
   return cleaned || "Review imported email";
 }
 
-function buildReplyDraft(seed: ParsedEmailSeed) {
+function buildReplyDraft() {
   return `Hi,\n\nThanks for reaching out. I saw this and will follow up shortly.\n\nBest,\nSpencer`;
 }
 
@@ -245,51 +198,23 @@ function buildImportedSuggestion(seed: ParsedEmailSeed, index: number): EmailSug
     receivedAt: "Imported",
     summary: seed.body
       ? seed.body.slice(0, 190).replace(/\s+/g, " ").trim()
-      : "Imported from Gmail text for review.",
+      : "Imported email text for review.",
     taskTitle: cleanTaskTitle(seed.subject, kind),
     category: inferCategory(kind, combined),
     dueDate: inferDueDate(combined),
-    estimatedLength: kind === "reply" ? 8 : kind === "meeting" ? 15 : kind === "bill" ? 20 : 10,
+    estimatedLength: kind === "follow-up" ? 8 : kind === "event" ? 15 : kind === "deadline" ? 20 : 10,
     priorityTier,
     confidence: kind === "task" ? "Medium" : "High",
     recommendedAction:
-      kind === "reply"
+      kind === "follow-up"
         ? "Draft a reply, then decide whether this should become a task."
-        : kind === "bill"
+        : kind === "deadline"
           ? "Create a task and keep the email visible until handled."
-          : kind === "meeting"
+          : kind === "event"
             ? "Create a prep task and check the calendar."
-            : "Review once, then task or archive.",
-    replyDraft: kind === "reply" ? buildReplyDraft(seed) : undefined,
+            : "Review once, then approve, keep visible, or dismiss.",
+    replyDraft: kind === "follow-up" ? buildReplyDraft() : undefined,
   };
-}
-
-function buildGmailSuggestion(message: GmailSyncMessage, index: number): EmailSuggestion {
-  const imported = buildImportedSuggestion(
-    {
-      from: message.from || "Gmail",
-      subject: message.subject || "No subject",
-      body: message.snippet || "No preview available.",
-    },
-    index
-  );
-
-  return {
-    ...imported,
-    id: `gmail-${message.id}`,
-    receivedAt: message.receivedAt ? new Date(message.receivedAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : "Gmail",
-    summary: message.snippet || imported.summary,
-    gmailMessageId: message.id,
-    gmailThreadId: message.threadId,
-    gmailLabels: message.labels,
-  };
-}
-
-function extractEmailAddress(value: string) {
-  const bracketMatch = value.match(/<([^>]+)>/);
-  if (bracketMatch?.[1]) return bracketMatch[1].trim();
-  const emailMatch = value.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
-  return emailMatch?.[0] || value;
 }
 
 function addDays(date: Date, days: number) {
@@ -305,62 +230,32 @@ function toDateInputValue(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-function buildTaskDraft(suggestion: EmailSuggestion): TaskDraft {
-  return {
-    itemKind: suggestion.kind === "bill" || suggestion.dueDate ? "deadline" : "task",
-    title: suggestion.taskTitle,
-    listName: "Email",
-    category: suggestion.category,
-    dueDate: suggestion.dueDate,
-    estimatedLength: suggestion.estimatedLength,
-    priorityTier: suggestion.priorityTier,
-    priorityLabel: getPriorityMeta(suggestion.priorityTier).label,
-    notes: [
-      `From: ${suggestion.from}`,
-      `Subject: ${suggestion.subject}`,
-      suggestion.summary,
-      `Recommended action: ${suggestion.recommendedAction}`,
-    ].join("\n"),
-    recurring: false,
-  };
-}
-
 export function EasyListEmailPage() {
-  const { addTask, isLoading, error } = useEasyList();
   const [isScanning, setIsScanning] = useState(false);
-  const [isGmailConnecting, setIsGmailConnecting] = useState(false);
-  const [isGmailSyncing, setIsGmailSyncing] = useState(false);
-  const [isCreatingDraftId, setIsCreatingDraftId] = useState<string | null>(null);
-  const [gmailAccessToken, setGmailAccessToken] = useState<string | null>(null);
-  const [gmailConnectedEmail, setGmailConnectedEmail] = useState<string | null>(null);
-  const [gmailQueryMode, setGmailQueryMode] = useState<GmailQueryMode>("action");
   const [states, setStates] = useState<Record<string, EmailSuggestionState>>({});
   const [suggestions, setSuggestions] = useState<EmailSuggestion[]>(sampleSuggestions);
   const [importText, setImportText] = useState("");
   const [selectedDraftId, setSelectedDraftId] = useState<string | null>(null);
-  const [statusMessage, setStatusMessage] = useState("Ready to review a safe sample scan.");
+  const [statusMessage, setStatusMessage] = useState("Ready to review example inbox items.");
 
   const visibleSuggestions = useMemo(
     () => suggestions.filter((suggestion) => states[suggestion.id] !== "ignored"),
     [states, suggestions]
   );
   const readyCount = visibleSuggestions.filter((suggestion) => !states[suggestion.id] || states[suggestion.id] === "ready").length;
-  const taskCount = Object.values(states).filter((state) => state === "tasked").length;
-  const archivedCount = Object.values(states).filter((state) => state === "archived").length;
+  const approvedCount = Object.values(states).filter((state) => state === "approved").length;
+  const keptCount = Object.values(states).filter((state) => state === "kept").length;
   const selectedDraft = suggestions.find((suggestion) => suggestion.id === selectedDraftId && suggestion.replyDraft);
+  const queueTypes: EmailSuggestionKind[] = ["task", "deadline", "event", "follow-up"];
 
-  if (isLoading) {
-    return <LoadingState label="Loading email triage..." />;
-  }
-
-  async function handleScan() {
+  function handleScan() {
     setIsScanning(true);
-    setStatusMessage("Scanning for direct asks, deadlines, bills, meetings, and safe-to-archive noise...");
+    setStatusMessage("Refreshing example asks, deadlines, events, and follow-ups...");
     window.setTimeout(() => {
       setStates({});
       setSuggestions(sampleSuggestions);
       setIsScanning(false);
-      setStatusMessage("Sample scan ready. Real Gmail sync should land here as a review queue, not auto-save tasks.");
+      setStatusMessage("Example inbox ready. Nothing was sent, archived, or saved automatically.");
     }, 520);
   }
 
@@ -378,168 +273,25 @@ export function EasyListEmailPage() {
     setStatusMessage(`Imported ${imported.length} email${imported.length === 1 ? "" : "s"} into the review queue.`);
   }
 
-  async function handleConnectGmail() {
-    const currentUser = auth.currentUser;
-
-    if (!currentUser || currentUser.uid === "local-preview") {
-      setStatusMessage("Sign in with a real EasyLife account before connecting Gmail.");
-      return;
-    }
-
-    const provider = new GoogleAuthProvider();
-    provider.addScope("https://www.googleapis.com/auth/gmail.readonly");
-    provider.addScope("https://www.googleapis.com/auth/gmail.compose");
-    provider.setCustomParameters({ prompt: "consent" });
-
-    setIsGmailConnecting(true);
-
-    try {
-      let result;
-
-      try {
-        result = await linkWithPopup(currentUser, provider);
-      } catch (linkError) {
-        if ((linkError as { code?: string }).code !== "auth/provider-already-linked") {
-          throw linkError;
-        }
-        result = await reauthenticateWithPopup(currentUser, provider);
-      }
-
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-
-      if (!credential?.accessToken) {
-        setStatusMessage("Gmail connected, but Google did not return inbox access. Try reconnecting.");
-        return;
-      }
-
-      setGmailAccessToken(credential.accessToken);
-      setGmailConnectedEmail(result.user.email || currentUser.email || "Connected Gmail");
-      setStatusMessage("Gmail connected for this session. Sync will still ask before creating tasks or drafts.");
-    } catch (connectError) {
-      const code = (connectError as { code?: string }).code || "";
-      setStatusMessage(
-        code === "auth/credential-already-in-use"
-          ? "That Google account is already linked to another EasyLife login."
-          : "Gmail connection was not completed."
-      );
-    } finally {
-      setIsGmailConnecting(false);
-    }
+  function handleApprove(suggestion: EmailSuggestion) {
+    setStates((current) => ({ ...current, [suggestion.id]: "approved" }));
+    setStatusMessage(`Approved "${suggestion.taskTitle}" as a local ${suggestion.kind} candidate.`);
   }
 
-  async function handleSyncGmail() {
-    const currentUser = auth.currentUser;
-
-    if (!currentUser || currentUser.uid === "local-preview") {
-      setStatusMessage("Sign in with a real EasyLife account before syncing Gmail.");
-      return;
-    }
-
-    if (!gmailAccessToken) {
-      setStatusMessage("Connect Gmail first, then sync.");
-      return;
-    }
-
-    setIsGmailSyncing(true);
-    setStatusMessage("Syncing recent inbox messages into the review queue...");
-
-    try {
-      const idToken = await currentUser.getIdToken();
-      const response = await fetch(gmailSyncUrl, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${idToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          accessToken: gmailAccessToken,
-          query: gmailQueryModes[gmailQueryMode].query,
-          maxResults: 20,
-        }),
-      });
-      const body = await response.json();
-
-      if (!response.ok) {
-        throw new Error(body?.error || "Gmail sync failed.");
-      }
-
-      const imported: EmailSuggestion[] = Array.isArray(body.messages) ? body.messages.map(buildGmailSuggestion) : [];
-
-      setSuggestions((current) => {
-        const existingIds = new Set(current.map((suggestion) => suggestion.id));
-        return [...imported.filter((suggestion) => !existingIds.has(suggestion.id)), ...current];
-      });
-      setStatusMessage(
-        imported.length
-          ? `Synced ${imported.length} ${gmailQueryModes[gmailQueryMode].label.toLowerCase()} message${imported.length === 1 ? "" : "s"} into the review queue.`
-          : "Gmail synced, but no matching inbox messages were found."
-      );
-    } catch (syncError) {
-      setStatusMessage((syncError as Error).message || "Gmail sync failed. Reconnect and try again.");
-    } finally {
-      setIsGmailSyncing(false);
-    }
-  }
-
-  async function handleCreateTask(suggestion: EmailSuggestion) {
-    await addTask(buildTaskDraft(suggestion));
-    setStates((current) => ({ ...current, [suggestion.id]: "tasked" }));
-    setStatusMessage(`Added "${suggestion.taskTitle}" to the Email list.`);
-  }
-
-  async function handleDraftReply(suggestion: EmailSuggestion) {
-    if (!gmailAccessToken || !auth.currentUser || auth.currentUser.uid === "local-preview") {
-      setStates((current) => ({ ...current, [suggestion.id]: "drafted" }));
-      setSelectedDraftId(suggestion.id);
-      setStatusMessage("Reply staged locally. Connect Gmail to create this as a real Gmail draft.");
-      return;
-    }
-
-    setIsCreatingDraftId(suggestion.id);
+  function handleDraftReply(suggestion: EmailSuggestion) {
+    setStates((current) => ({ ...current, [suggestion.id]: "drafted" }));
     setSelectedDraftId(suggestion.id);
-    setStatusMessage("Creating a Gmail draft for review...");
-
-    try {
-      const idToken = await auth.currentUser.getIdToken();
-      const response = await fetch(gmailDraftUrl, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${idToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          accessToken: gmailAccessToken,
-          to: extractEmailAddress(suggestion.from),
-          subject: `Re: ${suggestion.subject.replace(/^(re|fw|fwd)\s*:\s*/i, "")}`,
-          body: suggestion.replyDraft,
-          threadId: suggestion.gmailThreadId,
-        }),
-      });
-      const body = await response.json();
-
-      if (!response.ok) {
-        throw new Error(body?.error || "Gmail draft creation failed.");
-      }
-
-      setSuggestions((current) =>
-        current.map((item) => (item.id === suggestion.id ? { ...item, gmailDraftId: body.draftId || "created" } : item))
-      );
-      setStates((current) => ({ ...current, [suggestion.id]: "drafted" }));
-      setStatusMessage("Gmail draft created. Open Gmail to review and send it yourself.");
-    } catch (draftError) {
-      setStatusMessage((draftError as Error).message || "Gmail draft creation failed.");
-    } finally {
-      setIsCreatingDraftId(null);
-    }
+    setStatusMessage("Reply staged locally for review. No Gmail draft was created.");
   }
 
-  function handleArchive(suggestion: EmailSuggestion) {
-    setStates((current) => ({ ...current, [suggestion.id]: "archived" }));
-    setStatusMessage(`Marked "${suggestion.subject}" as safe to archive.`);
+  function handleKeepVisible(suggestion: EmailSuggestion) {
+    setStates((current) => ({ ...current, [suggestion.id]: "kept" }));
+    setStatusMessage(`Kept "${suggestion.subject}" visible in this local review queue.`);
   }
 
   function handleIgnore(suggestion: EmailSuggestion) {
     setStates((current) => ({ ...current, [suggestion.id]: "ignored" }));
+    setSelectedDraftId((current) => (current === suggestion.id ? null : current));
     setStatusMessage(`Dismissed "${suggestion.subject}" from this review.`);
   }
 
@@ -547,32 +299,21 @@ export function EasyListEmailPage() {
     <>
       <PageSection
         eyebrow="Email triage"
-        title="Turn inbox noise into a short review queue"
-        description="Scan for actual obligations, draft replies for approval, archive obvious noise, and send only approved tasks into EasyList."
+        title="Approve inbox suggestions before anything changes"
+        description="Review local email examples as task, deadline, event, and follow-up candidates. Nothing is sent, archived, or saved automatically."
       >
         <div className="email-triage-hero">
           <div>
-            <span className="settings-state-pill">Gmail-ready</span>
-            <h2>Review first, then act.</h2>
+            <span className="settings-state-pill">Local preview</span>
+            <h2>One queue, four decisions.</h2>
             <p>
-              EasyLife should never spray your inbox into tasks. It should show the likely asks, explain why they matter,
-              and wait for your approval before saving, drafting, or archiving.
+              Each card names the proposed action, the reason, and the next approval step. Real Gmail send and archive
+              actions stay out of this phase.
             </p>
           </div>
           <div className="email-triage-actions">
             <button className="primary-button" type="button" onClick={handleScan} disabled={isScanning}>
-              {isScanning ? "Scanning..." : "Scan sample inbox"}
-            </button>
-            <button className="button-secondary" type="button" onClick={handleConnectGmail} disabled={isGmailConnecting}>
-              {gmailAccessToken ? "Reconnect Gmail" : isGmailConnecting ? "Connecting..." : "Connect Gmail"}
-            </button>
-            <button
-              className="button-secondary"
-              type="button"
-              onClick={handleSyncGmail}
-              disabled={!gmailAccessToken || isGmailSyncing}
-            >
-              {isGmailSyncing ? "Syncing..." : "Sync Gmail"}
+              {isScanning ? "Refreshing..." : "Review example inbox"}
             </button>
             <Link className="button-secondary" to="/app/easylist/dashboard">
               Open Email list
@@ -585,37 +326,29 @@ export function EasyListEmailPage() {
             <strong>{readyCount}</strong>
           </article>
           <article>
-            <span>Tasks made</span>
-            <strong>{taskCount}</strong>
+            <span>Approved</span>
+            <strong>{approvedCount}</strong>
           </article>
           <article>
-            <span>Archive plan</span>
-            <strong>{archivedCount}</strong>
+            <span>Kept visible</span>
+            <strong>{keptCount}</strong>
           </article>
         </div>
-        <div className="email-sync-options" aria-label="Gmail sync focus">
-          {(Object.keys(gmailQueryModes) as GmailQueryMode[]).map((mode) => (
-            <button
-              className={mode === gmailQueryMode ? "toggle-button active" : "toggle-button"}
-              key={mode}
-              type="button"
-              onClick={() => setGmailQueryMode(mode)}
-            >
-              <strong>{gmailQueryModes[mode].label}</strong>
-              <span>{gmailQueryModes[mode].helper}</span>
-            </button>
+        <div className="email-approval-lanes" aria-label="Approval queue candidate types">
+          {queueTypes.map((kind) => (
+            <article key={kind}>
+              <span>{kind}</span>
+              <strong>{visibleSuggestions.filter((suggestion) => suggestion.kind === kind).length}</strong>
+            </article>
           ))}
         </div>
-        <p className="helper-copy">
-          {gmailConnectedEmail ? `Connected: ${gmailConnectedEmail}. ` : ""}
-          {statusMessage}
-        </p>
+        <p className="helper-copy">{statusMessage}</p>
       </PageSection>
 
       <PageSection
         eyebrow="Bridge"
-        title="Import real Gmail summaries"
-        description="Paste one or more email snippets. EasyLife will classify them locally so you can approve tasks, drafts, or archive decisions."
+        title="Paste email summaries"
+        description="Paste one or more snippets. EasyLife classifies them locally so you can approve task, deadline, event, or follow-up candidates."
       >
         <div className="email-import-panel">
           <textarea
@@ -627,7 +360,7 @@ export function EasyListEmailPage() {
           />
           <div className="task-composer-actions">
             <span className="helper-copy">
-              Use separators like three dashes between emails. This stays on-device until a real Gmail sync endpoint is added.
+              Use separators like three dashes between emails. This preview does not connect to Gmail.
             </span>
             <button className="primary-button" type="button" onClick={handleImportEmails} disabled={!importText.trim()}>
               Import to review
@@ -636,9 +369,7 @@ export function EasyListEmailPage() {
         </div>
       </PageSection>
 
-      {error ? <p className="error-copy">{error}</p> : null}
-
-      <PageSection eyebrow="Review" title="Suggested inbox actions">
+      <PageSection eyebrow="Review" title="Approval queue">
         <div className="email-suggestion-list">
           {visibleSuggestions.map((suggestion) => {
             const state = states[suggestion.id] || "ready";
@@ -670,27 +401,18 @@ export function EasyListEmailPage() {
                   <button
                     className="primary-button"
                     type="button"
-                    onClick={() => handleCreateTask(suggestion)}
-                    disabled={state === "tasked"}
+                    onClick={() => handleApprove(suggestion)}
+                    disabled={state === "approved"}
                   >
-                    {state === "tasked" ? "Task added" : "Add task"}
+                    {state === "approved" ? "Approved" : `Approve ${suggestion.kind}`}
                   </button>
                   {suggestion.replyDraft ? (
-                    <button
-                      className="button-secondary"
-                      type="button"
-                      onClick={() => handleDraftReply(suggestion)}
-                      disabled={isCreatingDraftId === suggestion.id}
-                    >
-                      {isCreatingDraftId === suggestion.id
-                        ? "Creating..."
-                        : suggestion.gmailDraftId
-                          ? "Draft created"
-                          : "Draft reply"}
+                    <button className="button-secondary" type="button" onClick={() => handleDraftReply(suggestion)}>
+                      {state === "drafted" ? "Draft staged" : "Stage reply"}
                     </button>
                   ) : null}
-                  <button className="button-secondary" type="button" onClick={() => handleArchive(suggestion)}>
-                    Archive
+                  <button className="button-secondary" type="button" onClick={() => handleKeepVisible(suggestion)}>
+                    Keep visible
                   </button>
                   <button className="ghost-button" type="button" onClick={() => handleIgnore(suggestion)}>
                     Ignore
@@ -715,28 +437,28 @@ export function EasyListEmailPage() {
             </div>
             <textarea readOnly value={selectedDraft.replyDraft || ""} rows={7} aria-label="Draft reply" />
             <p className="helper-copy">
-              The finished integration should create a Gmail draft first and require a second approval before sending.
+              This is a local reply preview. Sending would require a separate Gmail review step in a later phase.
             </p>
           </div>
         </PageSection>
       ) : null}
 
-      <PageSection eyebrow="Integration plan" title="What the real Gmail connection should do">
+      <PageSection eyebrow="Later" title="What a real Gmail connection should still ask">
         <div className="email-integration-grid">
           <article>
             <span>1</span>
-            <strong>Read safely</strong>
-            <p>Pull recent unread and important inbox threads, excluding promotions and known notification noise.</p>
+            <strong>Review first</strong>
+            <p>Show likely tasks, deadlines, events, and follow-ups before anything changes.</p>
           </article>
           <article>
             <span>2</span>
-            <strong>Classify</strong>
-            <p>Separate tasks, replies, bills, meetings, FYI, and archive-only messages with confidence labels.</p>
+            <strong>Stage locally</strong>
+            <p>Let the user approve rows, draft replies, or keep messages visible from one queue.</p>
           </article>
           <article>
             <span>3</span>
-            <strong>Ask first</strong>
-            <p>Require approval before creating tasks, archiving, drafting, or sending email.</p>
+            <strong>Ask again</strong>
+            <p>Require a second clear approval before any real send or archive action exists.</p>
           </article>
         </div>
       </PageSection>

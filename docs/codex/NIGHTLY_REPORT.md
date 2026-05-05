@@ -2959,3 +2959,20 @@
 - Files changed:
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 14:30:41
+
+- Task attempted: Phase 5 - Inbox approval queue UI: improve or add a frontend-only approval queue surface for email-derived task, deadline, event, and follow-up candidates using existing/mock/local data only. No real Gmail send/archive automation in this phase. Acceptance: npm.cmd run build from app-vNext. [class:feature risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/easylist/,app-vNext/src/features/hq/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: feature
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/easylist, app-vNext/src/features/hq, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

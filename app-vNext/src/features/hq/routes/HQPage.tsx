@@ -260,8 +260,8 @@ export function HQPage() {
     },
     {
       label: "Email",
-      title: "Triage",
-      detail: "Pull real asks out of inbox noise before they slip.",
+      title: "Approval queue",
+      detail: "Review task, deadline, event, and follow-up suggestions before anything changes.",
       to: "/app/easylist/email",
       visible: isAppVisible("easylist"),
     },
@@ -396,8 +396,8 @@ export function HQPage() {
             <p>Turn a loose obligation into one clear next action.</p>
           </Link>
           <Link className="hq-link-card" to="/app/easylist/email">
-            <strong>Scan email</strong>
-            <p>Review likely replies, bills, meetings, and archive noise.</p>
+            <strong>Review inbox</strong>
+            <p>Approve task, deadline, event, and follow-up suggestions from example email.</p>
           </Link>
           <Link className="hq-link-card" to="/app/easynotes/new">
             <strong>Blank note</strong>

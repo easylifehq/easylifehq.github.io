@@ -3698,6 +3698,7 @@ textarea::placeholder {
 }
 
 .email-import-panel,
+.email-approval-lanes article,
 .email-triage-stats article,
 .email-integration-grid article,
 .email-draft-panel,
@@ -3715,6 +3716,7 @@ textarea::placeholder {
 }
 
 .email-triage-stats span,
+.email-approval-lanes span,
 .email-suggestion-meta span,
 .email-draft-panel span,
 .email-integration-grid span {
@@ -3727,6 +3729,28 @@ textarea::placeholder {
 
 .email-triage-stats strong {
   font-size: 1.75rem;
+  line-height: 1;
+}
+
+.email-approval-lanes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.62rem;
+  margin-top: 0.9rem;
+}
+
+.email-approval-lanes article {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.68rem 0.78rem;
+}
+
+.email-approval-lanes strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 1.2rem;
   line-height: 1;
 }
 
@@ -3779,9 +3803,9 @@ textarea::placeholder {
     background var(--shell-motion-fast);
 }
 
-.email-suggestion-card-tasked,
+.email-suggestion-card-approved,
 .email-suggestion-card-drafted,
-.email-suggestion-card-archived {
+.email-suggestion-card-kept {
   border-color: color-mix(in srgb, var(--shell-accent) 44%, var(--ui-border-subtle) 56%);
   background: color-mix(in srgb, var(--shell-accent-soft) 54%, var(--ui-bg-card) 46%);
 }
@@ -10414,6 +10438,7 @@ button.calendar-detail-card:disabled {
 @media (max-width: 760px) {
   .email-triage-hero,
   .email-integration-grid,
+  .email-approval-lanes,
   .email-sync-options,
   .command-hero,
   .command-metric-grid,
