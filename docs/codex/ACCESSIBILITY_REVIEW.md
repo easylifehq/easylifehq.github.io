@@ -1,6 +1,6 @@
 ﻿# Accessibility Review
 
-Generated: 2026-05-05 15:40:31
+Generated: 2026-05-05 15:48:27
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
