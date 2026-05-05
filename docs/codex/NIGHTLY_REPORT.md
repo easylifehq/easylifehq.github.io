@@ -2740,3 +2740,18 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 01:36:00
+
+- Task attempted: Phase 2 - Mobile visual comfort pass: make one focused frontend-only improvement to mobile spacing, tap targets, or first-viewport density on the protected app shell or a core module. Preserve behavior and navigation. Guardrails: app-vNext/src UI/style only; no backend, auth, Firebase, persistence, package/dependency, generated output, deploy config, old-site, root files, or broad rewrites. Acceptance: from `app-vNext`, run `npm.cmd run build`; inspect at 390px and confirm the first viewport is readable and not cramped. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Implementation scale: large
+- Build result: Quarantined
+- Files changed:
+- None
+- Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.

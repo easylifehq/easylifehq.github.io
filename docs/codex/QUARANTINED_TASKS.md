@@ -252,3 +252,13 @@
 - Files restored before continuing:
 - docs/codex/PHASE_1_REVIEW.md
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-05 01:36:01
+
+- Batch: 1
+- Task index: 1
+- Task: Phase 2 - Mobile visual comfort pass: make one focused frontend-only improvement to mobile spacing, tap targets, or first-viewport density on the protected app shell or a core module. Preserve behavior and navigation. Guardrails: app-vNext/src UI/style only; no backend, auth, Firebase, persistence, package/dependency, generated output, deploy config, old-site, root files, or broad rewrites. Acceptance: from `app-vNext`, run `npm.cmd run build`; inspect at 390px and confirm the first viewport is readable and not cramped. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Reason: Large Phase 3 task requires a concrete slice plan before implementation.
+- Files restored before continuing:
+- None
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
