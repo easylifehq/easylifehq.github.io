@@ -5969,6 +5969,77 @@ button.calendar-detail-card:disabled {
   line-height: 1.35;
 }
 
+.hq-school-planner {
+  display: grid;
+  gap: 0.82rem;
+}
+
+.hq-school-lead {
+  display: grid;
+  gap: 0.34rem;
+  padding: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 24%, var(--ui-border-subtle) 76%);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 10%, transparent), transparent 62%),
+    var(--ui-bg-card-elevated, #fffdf9);
+}
+
+.hq-school-lead span,
+.hq-school-columns > div > span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hq-school-lead strong,
+.hq-school-item strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  line-height: 1.18;
+}
+
+.hq-school-lead p,
+.hq-school-item p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  line-height: 1.32;
+}
+
+.hq-school-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.78rem;
+}
+
+.hq-school-columns > div {
+  display: grid;
+  align-content: start;
+  gap: 0.55rem;
+}
+
+.hq-school-item {
+  display: grid;
+  gap: 0.22rem;
+  min-width: 0;
+  padding: 0.72rem;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  border-radius: 8px;
+  background: var(--ui-bg-card, #fffdf9);
+}
+
+.hq-school-item small {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.hq-school-note {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 28%, var(--ui-border-subtle) 72%);
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 7%, var(--ui-bg-card, #fffdf9) 93%);
+}
+
 .hq-start-heading h1 {
   margin: 0.1rem 0 0;
   color: var(--ui-text-primary, var(--shell-heading-text));
@@ -9132,6 +9203,16 @@ button.calendar-detail-card:disabled {
   .hq-link-grid,
   .onboarding-steps-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hq-school-columns {
+    grid-template-columns: 1fr;
+    gap: 0.62rem;
+  }
+
+  .hq-school-lead,
+  .hq-school-item {
+    padding: 0.68rem;
   }
 
   .notes-library-toolbar,

@@ -63,6 +63,23 @@ const quickActions = [
   },
 ];
 
+const schoolPlanner = {
+  courses: [
+    { code: "BIO 210", name: "Microbiology", cadence: "Lab Tue / lecture Thu", focus: "Prep culture notes" },
+    { code: "MATH 132", name: "Calculus II", cadence: "Problem set week", focus: "Integration review" },
+    { code: "ENG 241", name: "Modern Fiction", cadence: "Seminar Friday", focus: "Draft discussion notes" },
+  ],
+  assignments: [
+    { course: "BIO 210", title: "Lab worksheet", due: "Tonight", estimate: "35 min" },
+    { course: "MATH 132", title: "Section 7 problem set", due: "Thu", estimate: "50 min" },
+    { course: "ENG 241", title: "Reading response", due: "Fri", estimate: "25 min" },
+  ],
+  exams: [
+    { course: "MATH 132", title: "Quiz 4", date: "Wed", prep: "Formula sheet pass" },
+    { course: "BIO 210", title: "Unit exam", date: "Next Tue", prep: "Two study blocks" },
+  ],
+};
+
 type TodayContextItem = {
   label: string;
   title: string;
@@ -289,6 +306,9 @@ export function HQPage() {
       visible: isAppVisible("easyprojects"),
     },
   ];
+  const schoolNextAssignment = schoolPlanner.assignments[0];
+  const schoolNextExam = schoolPlanner.exams[0];
+
   function openNaturalCapture() {
     window.dispatchEvent(new Event("easylife:open-capture"));
   }
@@ -434,6 +454,54 @@ export function HQPage() {
             </article>
           )}
         </div>
+      </PageSection>
+
+      <PageSection eyebrow="More" title="School plan without crowding today">
+        <section className="hq-school-planner" aria-label="School planner example">
+          <article className="hq-school-lead">
+            <span>School week</span>
+            <strong>{schoolPlanner.courses.length} courses / {schoolPlanner.assignments.length} assignments / {schoolPlanner.exams.length} exams</strong>
+            <p>
+              Start with {schoolNextAssignment.course}: {schoolNextAssignment.title.toLowerCase()} due {schoolNextAssignment.due.toLowerCase()}.
+            </p>
+          </article>
+          <div className="hq-school-columns">
+            <div>
+              <span>Courses</span>
+              {schoolPlanner.courses.map((course) => (
+                <article key={course.code} className="hq-school-item">
+                  <strong>{course.code} / {course.name}</strong>
+                  <p>{course.cadence}</p>
+                  <small>{course.focus}</small>
+                </article>
+              ))}
+            </div>
+            <div>
+              <span>Assignments</span>
+              {schoolPlanner.assignments.map((assignment) => (
+                <article key={`${assignment.course}-${assignment.title}`} className="hq-school-item">
+                  <strong>{assignment.title}</strong>
+                  <p>{assignment.course} / Due {assignment.due}</p>
+                  <small>{assignment.estimate}</small>
+                </article>
+              ))}
+            </div>
+            <div>
+              <span>Exams</span>
+              {schoolPlanner.exams.map((exam) => (
+                <article key={`${exam.course}-${exam.title}`} className="hq-school-item">
+                  <strong>{exam.title}</strong>
+                  <p>{exam.course} / {exam.date}</p>
+                  <small>{exam.prep}</small>
+                </article>
+              ))}
+              <article className="hq-school-item hq-school-note">
+                <strong>Suggested focus</strong>
+                <p>{schoolNextExam.course} needs a short review before the next open calendar block fills.</p>
+              </article>
+            </div>
+          </div>
+        </section>
       </PageSection>
 
       <PageSection eyebrow="Systems" title="Keep modules quiet until they are useful">
