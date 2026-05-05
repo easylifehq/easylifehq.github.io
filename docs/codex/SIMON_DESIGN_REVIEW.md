@@ -4,57 +4,53 @@
 YELLOW
 
 ## One-Sentence Read
-The surface is calmer and more coherent than before, but EasyLife still reads too much like a product brochure wearing an app costume.
+EasyLife is getting calmer and more coherent, but the protected HQ spine is still under-proven and the visible surfaces still smell a little too much like demo chrome pretending to be product.
 
 ## Mission Fit
-The direction partially matches the mission: the shared visual language is starting to feel like one suite, with consistent cards, restrained color, and cleaner typography across EasyList, EasyNotes, EasyCalendar, and EasyWorkout. But Pack 1 is about the product spine, and the strongest required evidence is the protected HQ first screen; the current screenshot set shows mostly public module marketing pages, not the signed-in daily start surface. Confidence is lower because the HQ spine is still under-proven visually.
+The direction matches the EasyLife mission: calmer tokens, tighter typography, and today-first HQ work all support a connected personal operating system. The miss is evidence and hierarchy. Pack 1 is about the product spine, and the latest visual evidence is mostly module routes, not the signed-in first screen where the suite promise has to land.
 
 ## Taste Check
-The calmer green-gray palette, softer panel treatment, and heavier editorial headings are an improvement over candy SaaS gloss. The pages have a more tactile, practical feel, and the module preview cards are doing useful work.
+The calmer global styling is the right move: less candy, less toy, more professional daily tool. The typography pass also sounds mission-aligned because EasyLife needs scan speed, not dashboard theater.
 
-The weak part is hierarchy. Every module page is still shouting with a huge hero, repeated product identity, feature pills, CTA buttons, and a second feature band before the user sees much actual utility. It is clean, yes, but it is clean in the way a lobby is clean before anyone tells you where the room is.
+What still feels off is the product framing. Repeated reviews keep calling out marketing-led route chrome and missing HQ proof, which means the design may be improving screens without proving the actual first-screen experience. No automated visual bugs is nice, but that is table stakes, not taste.
 
 ## Visual Problems To Fix
-- The screenshots show repeated page identity: a top EasyLifeHQ brand bar, then a large module label like EASYLIST or EASYCALENDAR, then another branded hero story. This makes the actual product page feel buried under route chrome.
-- The desktop first viewport is dominated by marketing navigation and hero framing instead of a working personal operating system surface.
-- Mobile pages spend too much vertical space on giant headings, CTA buttons, and feature chips before showing the useful module preview.
-- The "Start Free" and "See Features" CTAs are visually loud on every module page, which competes with the mission of a calm personal assistant product.
-- Feature chips wrap into bulky rows on mobile and create extra visual noise without adding much decision value.
-- The module preview cards are useful, but they sit inside a brochure hero instead of feeling like the actual product interface.
-- The background grid is tasteful enough, but combined with large white cards and multiple bordered panels, it risks making each route feel like a framed demo slide instead of a lived-in app.
-- The latest visual evidence does not include a protected HQ screenshot, so the most important first-screen contract is not proven.
+- The HQ first screen is not sufficiently represented in the screenshot evidence, so the active Product Spine pack is being judged through secondary module routes.
+- Route/demo chrome appears to compete with the product surface; navigation should be useful and quiet, not a second headline system.
+- The module pages still risk reading as separate polished cards rather than one connected suite if shared status, navigation, and hierarchy are not visible across routes.
+- The first-screen contract is still fragile: one daily next action must dominate before module inventory, product explanation, or broad feature signaling.
+- The current improvements are mostly token and rhythm refinements; those help, but they do not yet guarantee that the user immediately understands what to do next today.
+- Repeated page identity remains a risk: if a route header, wrapper title, and module title all say the same thing, the real product page feels buried.
 
 ## Strongest Opportunities
-- Make the protected HQ route the design source of truth: one daily next action, today context, and compact module status should lead the whole system.
-- Reduce public module chrome so module pages feel like product surfaces first and marketing pages second.
-- Turn the module preview cards into stronger app-like proof: denser, quieter, more usable, less "sample block in a hero."
-- On mobile, bring the first useful action higher by shrinking hero typography, demoting chips, and reducing CTA weight.
-- Establish a quieter route header pattern that can work across HQ, Tasks, Notes, Calendar, Coach, Inbox, and More without repeating labels.
+- Make the protected HQ route the proof surface: one next action, today context, and compact module status should feel inevitable within the first viewport.
+- Reduce demo wrapper chrome around customer-facing or product-demo routes so the actual app surface gets visual priority.
+- Use one suite-level navigation pattern across EasyList, EasyNotes, EasyCalendar, and EasyWorkout, with active state doing more work than page titles.
+- Let module status cards become compact signals, not large dashboard blocks; the user should scan them in seconds.
+- Push secondary controls into quieter rows, tabs, or detail panels instead of letting every module shout at first load.
 
 ## Priority Fix
-Fix the repeated chrome and brochure-first hierarchy before adding anything else. The next slice should reduce the top-of-page load on one customer-facing module route or the protected HQ surface: keep one clear page identity, demote or remove redundant feature chips/CTA weight, and move the actual daily/product preview higher in the first viewport. The user should feel "I can use this" before they feel "someone is pitching this to me."
+Prove the HQ spine visually. The next task should capture and tune the protected opening route specifically: reduce any repeated title/header/demo wrapper chrome, make the single daily next action the dominant first-viewport object, and keep module status compact below it. Do not add sections. Do not add more product explanation. Make the first screen feel like a personal assistant opening its notebook, not a brochure introducing itself again.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer tokens and module consistency improved, but the HQ spine is still not visually proven and public route chrome overwhelms the app story.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer tokens and hierarchy help, but the core HQ product spine is still not visually proven.
 
 ## Designer Handoff
-Next implementer: stay small and subtract. Keep the calmer palette, card softness, and practical module preview language. Change the first-screen hierarchy: one identity, one primary action, one useful product proof. Make route navigation quieter, reduce CTA/button dominance, and stop letting chips and feature labels behave like confetti with a pension plan. The result should feel like opening a focused personal assistant, not scrolling a landing page for four separate apps.
+Keep the calmer visual tokens and tighter heading rhythm. Next, aim the work at hierarchy subtraction: fewer repeated labels, quieter route controls, smaller secondary panels, stronger active state, and one unmistakable daily action at the top of HQ. The user should feel oriented in under five seconds: "Here is today, here is the next useful move, and the rest of my life system is nearby."
 
 ## What Not To Do Next
-- Do not add more sections to explain the product.
-- Do not create new feature cards, dashboards, or promotional blocks.
-- Do not make the palette more decorative or more gradient-heavy.
-- Do not touch backend, auth, Firebase, packages, deployment, analytics, or settings behavior.
-- Do not start a broad shell redesign while the first-screen chrome problem is still visible.
-- Do not ignore mobile; the mobile first viewport is where the hierarchy problem gets expensive.
-- Do not mistake "no visual bugs detected" for "good hierarchy."
+- Do not add another dashboard section to solve a hierarchy problem.
+- Do not introduce new feature cards, claims, AI language, or product tour copy.
+- Do not keep polishing secondary module routes while HQ remains visually unproven.
+- Do not make route navigation louder with pills, banners, or oversized wrappers.
+- Do not ignore mobile; Pack 1 fails if the first viewport becomes cramped on 390px.
 
 ## Next 5 Design Tasks
-- [ ] Capture and review the protected HQ route at desktop and 390px mobile; guardrail: evidence only, no implementation, and confirm whether one daily next action leads the first viewport.
-- [ ] On one module route, remove or demote one repeated identity/chrome element above the fold; guardrail: preserve route behavior, links, and all existing content below the fold.
-- [ ] Reduce mobile hero height on one module route by tightening heading, CTA, or chip spacing; guardrail: no font scaling by viewport width and no clipped text.
-- [ ] Convert one loud secondary CTA or chip row into quieter secondary navigation; guardrail: keep tap targets usable and keep the primary action obvious.
-- [ ] Strengthen one module preview card so it reads more like working app state and less like marketing illustration; guardrail: no new features, no fake integrations, no backend claims.
+- [ ] Capture HQ desktop and 390px mobile screenshots after build; guardrail: evidence must include the protected first screen, not only module routes.
+- [ ] Remove or demote one repeated HQ title/header/helper line; guardrail: preserve routes, behavior, and existing data.
+- [ ] Tighten the HQ first action block so it is visually dominant above module status; guardrail: do not add new sections or claims.
+- [ ] Quiet one route-level navigation/control strip that competes with a module page title; guardrail: controls must remain discoverable and tappable.
+- [ ] Review mobile first viewport for clipped text, stacked chrome, and oversized cards; guardrail: fix only spacing/type/chrome, no layout rewrite.
 
 ## Stop Or Continue
 continue but fix visual issues first
