@@ -19,11 +19,11 @@
   --shell-button-bg: #24766f;
   --shell-button-border: #24766f;
   --shell-button-text: #ffffff;
-  --shell-brand-gradient: linear-gradient(135deg, #1f2528 0%, #24766f 56%, #7966d2 100%);
+  --shell-brand-gradient: linear-gradient(135deg, #1f2528 0%, #24766f 64%, #2f3f3d 100%);
   --shell-card-bg: rgba(255, 255, 255, 0.94);
   --shell-card-bg-soft: #f1f6f4;
   --shell-card-border: rgba(35, 48, 51, 0.13);
-  --shell-chip-bg: #e3f1ee;
+  --shell-chip-bg: #edf3f1;
   --shell-chip-text: #19544f;
   --shell-input-bg: #fbfdfc;
   --shell-input-border: rgba(35, 48, 51, 0.15);
@@ -41,7 +41,7 @@
   --ui-text-secondary: #344144;
   --ui-text-muted: #5c696b;
   --ui-text-placeholder: #667477;
-  --ui-pill-bg: #e3f1ee;
+  --ui-pill-bg: #edf3f1;
   --ui-pill-text: #19544f;
   --ui-button-primary-bg: #24766f;
   --ui-button-primary-text: #ffffff;
@@ -56,17 +56,17 @@
   --shell-card-shadow: 0 18px 44px rgba(24, 35, 38, 0.1);
   --shell-control-shadow: 0 10px 24px rgba(24, 35, 38, 0.09);
   --shell-panel-highlight: rgba(255, 255, 255, 0.72);
-  --shell-grid-line: rgba(36, 118, 111, 0.075);
-  --shell-status-glow: rgba(36, 118, 111, 0.17);
+  --shell-grid-line: rgba(35, 48, 51, 0.045);
+  --shell-status-glow: rgba(36, 118, 111, 0.12);
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.18s ease;
   --shell-motion-panel: 0.24s ease;
   --shell-page-text: #1f2528;
   --shell-heading-text: #171d20;
   --shell-muted-text: #5c696b;
-  --shell-page-overlay-1: rgba(36, 118, 111, 0.1);
-  --shell-page-overlay-2: rgba(121, 102, 210, 0.08);
-  --shell-page-overlay-3: rgba(255, 255, 255, 0.44);
+  --shell-page-overlay-1: rgba(36, 118, 111, 0.06);
+  --shell-page-overlay-2: rgba(35, 48, 51, 0.04);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.5);
   --easy-viewport-height: 100dvh;
   --easy-keyboard-inset: 0px;
 }
@@ -1215,11 +1215,11 @@ a {
   --app-accent-soft: #fff2e7;
   --app-accent-border: rgba(199, 114, 63, 0.2);
   --app-accent-text: #8a5b38;
-  --app-panel-bg: color-mix(in srgb, var(--ui-bg-section) 88%, var(--app-accent) 12%);
-  --app-panel-border: color-mix(in srgb, var(--ui-border-subtle) 78%, var(--app-accent) 22%);
-  --app-stat-bg: color-mix(in srgb, var(--ui-bg-card) 86%, var(--app-accent) 14%);
-  --app-stat-border: color-mix(in srgb, var(--ui-border-subtle) 68%, var(--app-accent) 32%);
-  --app-chip-bg: color-mix(in srgb, var(--ui-pill-bg) 82%, var(--app-accent) 18%);
+  --app-panel-bg: color-mix(in srgb, var(--ui-bg-section) 94%, var(--app-accent) 6%);
+  --app-panel-border: color-mix(in srgb, var(--ui-border-subtle) 86%, var(--app-accent) 14%);
+  --app-stat-bg: color-mix(in srgb, var(--ui-bg-card) 92%, var(--app-accent) 8%);
+  --app-stat-border: color-mix(in srgb, var(--ui-border-subtle) 78%, var(--app-accent) 22%);
+  --app-chip-bg: color-mix(in srgb, var(--ui-pill-bg) 92%, var(--app-accent) 8%);
   --app-chip-text: var(--ui-pill-text);
 }
 
@@ -1332,11 +1332,11 @@ a {
 }
 
 .app-theme {
-  --app-panel-bg: color-mix(in srgb, var(--ui-bg-section) 88%, var(--app-accent) 12%);
-  --app-panel-border: color-mix(in srgb, var(--ui-border-subtle) 78%, var(--app-accent) 22%);
-  --app-stat-bg: color-mix(in srgb, var(--ui-bg-card) 86%, var(--app-accent) 14%);
-  --app-stat-border: color-mix(in srgb, var(--ui-border-subtle) 68%, var(--app-accent) 32%);
-  --app-chip-bg: color-mix(in srgb, var(--ui-pill-bg) 82%, var(--app-accent) 18%);
+  --app-panel-bg: color-mix(in srgb, var(--ui-bg-section) 94%, var(--app-accent) 6%);
+  --app-panel-border: color-mix(in srgb, var(--ui-border-subtle) 86%, var(--app-accent) 14%);
+  --app-stat-bg: color-mix(in srgb, var(--ui-bg-card) 92%, var(--app-accent) 8%);
+  --app-stat-border: color-mix(in srgb, var(--ui-border-subtle) 78%, var(--app-accent) 22%);
+  --app-chip-bg: color-mix(in srgb, var(--ui-pill-bg) 92%, var(--app-accent) 8%);
   --app-chip-text: var(--ui-pill-text);
 }
 
@@ -1699,11 +1699,11 @@ textarea::placeholder {
   --shell-button-bg: #24766f;
   --shell-button-border: #24766f;
   --shell-button-text: #ffffff;
-  --shell-brand-gradient: linear-gradient(135deg, #1f2528 0%, #24766f 56%, #7966d2 100%);
+  --shell-brand-gradient: linear-gradient(135deg, #1f2528 0%, #24766f 64%, #2f3f3d 100%);
   --shell-card-bg: rgba(255, 255, 255, 0.96);
   --shell-card-bg-soft: #f1f6f4;
   --shell-card-border: rgba(35, 48, 51, 0.16);
-  --shell-chip-bg: #e3f1ee;
+  --shell-chip-bg: #edf3f1;
   --shell-chip-text: #19544f;
   --shell-input-bg: #ffffff;
   --shell-input-border: rgba(35, 48, 51, 0.18);
@@ -1713,17 +1713,17 @@ textarea::placeholder {
   --shell-card-radius: 8px;
   --shell-card-shadow: 0 18px 44px rgba(24, 35, 38, 0.1);
   --shell-panel-highlight: rgba(255, 255, 255, 0.78);
-  --shell-grid-line: rgba(36, 118, 111, 0.075);
-  --shell-status-glow: rgba(36, 118, 111, 0.17);
+  --shell-grid-line: rgba(35, 48, 51, 0.045);
+  --shell-status-glow: rgba(36, 118, 111, 0.12);
   --shell-hover-lift: translateY(-2px);
   --shell-motion-fast: 0.18s ease;
   --shell-motion-panel: 0.24s ease;
   --shell-page-text: #1f2528;
   --shell-heading-text: #171d20;
   --shell-muted-text: #5c696b;
-  --shell-page-overlay-1: rgba(36, 118, 111, 0.1);
-  --shell-page-overlay-2: rgba(121, 102, 210, 0.08);
-  --shell-page-overlay-3: rgba(255, 255, 255, 0.52);
+  --shell-page-overlay-1: rgba(36, 118, 111, 0.06);
+  --shell-page-overlay-2: rgba(35, 48, 51, 0.04);
+  --shell-page-overlay-3: rgba(255, 255, 255, 0.56);
   --ui-bg-page: #e8eeeb;
   --ui-bg-section: rgba(255, 255, 255, 0.96);
   --ui-bg-card: #f2f7f5;
@@ -1738,7 +1738,7 @@ textarea::placeholder {
   --ui-text-secondary: #344144;
   --ui-text-muted: #5c696b;
   --ui-text-placeholder: #667477;
-  --ui-pill-bg: #e3f1ee;
+  --ui-pill-bg: #edf3f1;
   --ui-pill-text: #19544f;
   --ui-button-primary-bg: #24766f;
   --ui-button-primary-text: #ffffff;
