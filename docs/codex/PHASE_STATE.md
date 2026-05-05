@@ -1,6 +1,6 @@
 # Phase State
 
-Current Phase: phase-0-stabilize-and-brief
+Current Phase: phase-1-product-spine
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
 Primary Action: Open Today, see the next best move, and capture or clear one item.
@@ -11,13 +11,13 @@ Complexity Budget: Protected first viewport: one daily action, compact today con
 Before/After Judgment: Each task must make the signed-in product visibly clearer, calmer, more useful, or easier to undo than the previous inspected state.
 Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, with optional fun themes later
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_PHASE_1_AFTER_BRIEF
+Parking State: ACTIVE
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: The roadmap, brief, phase commands, and Phase 1 task packet are present and agree on the same product direction.
-Next Phase Criteria: Move to Phase 1 Product Spine when the fleet has clear implementation slices for unified navigation, module grouping, and a Today-first structure.
+Done Signal: EasyLife reads as one Life OS, the Today/Calendar/Tasks/Notes/Coach/Inbox/More direction is visible, optional modules are quieter but reachable, and Phase 1 review is clean.
+Next Phase Criteria: Move to Phase 2 Visual System when the product spine is coherent and remaining work is mostly visual language, spacing, typography, and theme-token refinement.
 Repair Trigger: none
-Repair Return Phase: phase-0-stabilize-and-brief
-Updated At: 2026-05-04 23:20:00
+Repair Return Phase: phase-1-product-spine
+Updated At: 2026-05-04 23:45:00
 
 ## Phase Order
 
