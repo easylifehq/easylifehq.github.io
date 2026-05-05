@@ -221,8 +221,8 @@ export function HQPage() {
                   Resume {lastAppRoute.label}
                 </Link>
               ) : null}
-              <Link to="/app/command" className="button-secondary">
-                Command Center
+              <Link to="/app/easylist/add" className="button-secondary">
+                Add task
               </Link>
             </div>
           </div>
@@ -258,6 +258,33 @@ export function HQPage() {
         </div>
       </section>
 
+      <PageSection eyebrow="Capture" title="Fast ways to put a thought somewhere safe">
+        <div className="hq-action-row">
+          <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
+            <strong>Add task</strong>
+            <p>Turn a loose obligation into one clear next action.</p>
+          </Link>
+          <Link className="hq-link-card" to="/app/easylist/email">
+            <strong>Scan email</strong>
+            <p>Review likely replies, bills, meetings, and archive noise.</p>
+          </Link>
+          <Link className="hq-link-card" to="/app/easynotes/new">
+            <strong>Blank note</strong>
+            <p>Use this when the thought is still too messy to become a task.</p>
+          </Link>
+          <Link className="hq-link-card" to="/app/easycalendar/day">
+            <strong>Today</strong>
+            <p>Place work in time when the list is no longer enough.</p>
+          </Link>
+          {isAppVisible("easyworkout") ? (
+            <Link className="hq-link-card" to="/app/easyworkout/log?workoutMode=1">
+              <strong>Workout</strong>
+              <p>Log a session without leaving the day view behind.</p>
+            </Link>
+          ) : null}
+        </div>
+      </PageSection>
+
       <PageSection eyebrow="Attention" title="The things EasyLife would keep from slipping">
         <div className="assistant-attention-list">
           {attentionItems.length ? (
@@ -288,34 +315,7 @@ export function HQPage() {
                 <strong>{system.title}</strong>
                 <p>{system.detail}</p>
               </Link>
-            ))}
-        </div>
-      </PageSection>
-
-      <PageSection eyebrow="Capture" title="Fast ways to put a thought somewhere safe">
-        <div className="hq-action-row">
-          <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
-            <strong>Add task</strong>
-            <p>Turn a loose obligation into one clear next action.</p>
-          </Link>
-          <Link className="hq-link-card" to="/app/easylist/email">
-            <strong>Scan email</strong>
-            <p>Review likely replies, bills, meetings, and archive noise.</p>
-          </Link>
-          <Link className="hq-link-card" to="/app/easynotes/new">
-            <strong>Blank note</strong>
-            <p>Use this when the thought is still too messy to become a task.</p>
-          </Link>
-          <Link className="hq-link-card" to="/app/easycalendar/day">
-            <strong>Today</strong>
-            <p>Place work in time when the list is no longer enough.</p>
-          </Link>
-          {isAppVisible("easyworkout") ? (
-            <Link className="hq-link-card" to="/app/easyworkout/log?workoutMode=1">
-              <strong>Workout</strong>
-              <p>Log a session without leaving the day view behind.</p>
-            </Link>
-          ) : null}
+          ))}
         </div>
       </PageSection>
 

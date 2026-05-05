@@ -2641,3 +2641,18 @@
 - Files changed:
 - None
 - Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.
+
+## 2026-05-05 00:06:19
+
+- Task attempted: Phase 1 - Today-first first viewport slice: make one small frontend-only improvement to the protected opening surface so the first viewport emphasizes one next move, today context, and fast capture before secondary app inventory. Keep existing data sources and behavior. Guardrails: app-vNext/src UI/copy/style only; no backend, auth, Firebase, persistence, data-shape, package/dependency, generated output, deploy config, old-site, root files, or broad rewrites. Acceptance: from `app-vNext`, run `npm.cmd run build`; inspect the protected opening route at desktop and 390px mobile and verify it reads as one Life OS, not a feature dump. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
