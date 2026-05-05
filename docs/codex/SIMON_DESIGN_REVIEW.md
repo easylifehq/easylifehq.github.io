@@ -4,55 +4,56 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is cleaner and more coherent than before, but it is still dressed like a product brochure when the mission asks for a daily personal operating system.
+EasyLife is calmer and more coherent than before, but the visible product still behaves like a tidy brochure for modules instead of a personal operating system that helps me start my day.
 
 ## Mission Fit
-The direction partially matches the mission: shared color, typography, card rhythm, and module language are finally starting to make EasyList, EasyNotes, EasyCalendar, and EasyWorkout feel related. The problem is hierarchy. Pack 1 is Product Spine, and the current surfaces still lead with marketing-page structure: big pitch headline, "Start Free", "See Features", feature blocks, and product proof panels. A signed-in EasyLife experience should open on what the user should do today, not explain why the app exists.
+The direction partially matches the mission. The shared typography, teal accent, pale grid background, cards, chips, and navigation make the suite feel related, which supports Pack 1. The problem is hierarchy: the reviewed screens lead with module marketing pages for EasyList, EasyNotes, EasyCalendar, and EasyWorkout, while the mission asks for one connected daily operating spine. The user should feel "here is what to do next today"; instead they get "here is another product page with features." Polite, but still a little showroom-floor.
 
 ## Taste Check
-The best part is the restraint: soft green, quiet borders, roomy type, and consistent module previews feel calmer than generic SaaS blue-purple nonsense. The module copy has more personality, especially EasyList and EasyNotes. But the layout is still too page-template obvious. Every route feels like the same landing-page mold wearing a different badge. Premium personal software should feel composed and useful; this sometimes feels like a tasteful brochure trapped in a dashboard shell.
+The restrained palette, strong type scale, soft panels, and consistent preview blocks feel current and professional. The best moments are the calm mock previews: task rows, calendar blocks, note handoffs, and workout log snippets make the suite feel tactile.
+
+What feels off is the repeated brochure structure. Every route uses the same giant hero, CTA pair, pill row, and feature band. That makes the suite consistent, yes, but also generic. The mobile screens especially feel oversized: the header, hero, buttons, pills, and preview all fight for the first viewport. The layout is clean, but not yet sharp.
 
 ## Visual Problems To Fix
-- The first viewport is still dominated by public-facing pitch elements: oversized headline, supporting paragraph, "Start Free", "See Features", and feature chips.
-- Repeated page identity is visible: EasyLifeHQ appears in the header while each route immediately repeats a large product/module identity block, making the actual product feel buried under wrapper chrome.
-- The top navigation is louder than it needs to be for a working app; "Products" and "Get Started" compete with the module content instead of staying quiet.
-- Module pages use nearly identical hero-card formulas, so EasyList, EasyNotes, EasyCalendar, and EasyWorkout feel skinned rather than genuinely shaped around different daily jobs.
-- Mobile screenshots show very large type and generous padding pushing useful content down; the first screen spends too much space selling the module before showing the working surface.
-- The pale grid background plus stacked white panels creates a showroom feeling, not a personal assistant surface.
-- Feature sections appear too early and too heavily; they read as product inventory instead of progressive disclosure.
-- The latest More/settings organization is not visible in the provided screenshots, so confidence on that specific Phase 9 improvement is lower.
+- The customer-facing product routes repeat the same identity pattern: top EasyLifeHQ chrome, module label, giant headline, CTA pair, pill row, preview card, then a "Features" band. The route structure is too loud and makes the actual product feel buried.
+- Mobile header chrome consumes too much vertical space before the user reaches the route content; it reads like a second hero wrapper instead of quiet navigation.
+- The primary CTAs are identical across module pages, which makes "Start Free" and "See Features" feel pasted on rather than context-aware.
+- The hero headlines are huge and sometimes dominate the page at the expense of useful preview content; the app promise becomes poster copy instead of workflow clarity.
+- The feature sections below the hero repeat the same card pattern and labels, so each module starts to feel like a themed template rather than a distinct daily tool.
+- The mobile chip rows are visually heavy and crowded; they add inventory noise before the user sees enough practical value.
+- The page background grid is calm, but when paired with stacked white cards it creates a boxed-in demo wrapper feeling.
+- The screenshots do not show enough of the protected HQ/Future Plans dock, so confidence is lower on whether the actual signed-in first screen now satisfies the daily action contract.
 
 ## Strongest Opportunities
-- Convert the protected first screen into a daily start surface: one next action, today context, and compact module status before any feature explanation.
-- Quiet the global route chrome so navigation supports the product instead of announcing itself twice.
-- Give each core module a distinct working shape: list should feel like triage, notes like capture and review, calendar like time fit, workout like logging momentum.
-- Move marketing-style feature proof below the fold or behind a secondary "About this module" affordance.
-- Use the More hub as a calm utility drawer, not another product catalog.
-- Tighten mobile first screens so one useful action is visible without a scroll marathon.
+- Turn the protected HQ into the true product spine: one daily next action, today context, and compact status from list, notes, calendar, and workout.
+- Reduce product-route chrome so public/module pages show a useful working preview earlier, not a repeated pitch shell.
+- Make each module's first screen express its job through one primary interaction: capture a task, write a note, place a calendar block, start a workout.
+- Replace repeated CTA language with quieter, route-specific actions that feel like using the app, not entering a funnel.
+- Use progressive disclosure more aggressively: chips, feature cards, and secondary explanations can sit lower or behind tabs once the main workflow is clear.
 
 ## Priority Fix
-Replace the brochure-first module hero pattern with an app-first daily operating spine. On HQ and core routes, the first viewport should show the user's immediate job and compact state, while product explanation, feature cards, and "why this exists" copy move below the fold or behind a quieter secondary action. This is the difference between "nice site" and "I can run my day from here."
+Fix the repeated brochure shell before adding anything else. On the main product/module routes, reduce the loud top chrome and repeated hero apparatus so the first viewport is anchored by a practical EasyLife workflow preview, not "Start Free / See Features / feature pills" repeated four ways. Keep the shared suite style, but make the useful product surface arrive faster.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: More/navigation organization appears directionally useful, but the visible core routes still lead with marketing hierarchy instead of a daily operating spine.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: navigation and module organization are more coherent, but the visible experience still leans module brochure instead of daily operating spine.
 
 ## Designer Handoff
-Next batch should subtract chrome and re-stage information, not add another polished section. Keep the restrained palette, chunky readable type, soft panels, and concrete life-management copy. Change the first-screen hierarchy: lead with today's next action, a compact status row, and one primary control; make module switching available but quieter; push feature explanation and product claims down. The user should feel "I know what to do next" within three seconds, not "I have arrived at a handsome sales page."
+Next batch should subtract chrome, not invent new surfaces. Keep the restrained teal, pale background, strong type, and compact preview rows. Change the hierarchy: make HQ and module routes feel like working surfaces first, with one obvious next action and secondary details pushed down or behind existing controls. The user should feel that EasyLife is ready to help them handle today, not that they have entered a nice catalog of apps.
 
 ## What Not To Do Next
-- Do not add more feature sections.
-- Do not make the More hub visually richer before the primary spine is fixed.
-- Do not add new dashboard cards just to prove modules are connected.
-- Do not increase color, gradients, badges, or decorative chrome.
-- Do not treat mobile as a scaled-down desktop brochure.
-- Do not change backend, auth, payments, analytics, deployment, packages, or architecture to solve a design hierarchy problem.
+- Do not add more feature sections to prove the suite is powerful.
+- Do not create another dashboard band, dock, or module list before fixing first-screen hierarchy.
+- Do not make the palette louder to compensate for weak structure.
+- Do not keep repeating "Start Free" and "See Features" as the dominant action pattern on every module.
+- Do not ignore mobile; the current mobile pages are clean but too swollen.
+- Do not touch backend, auth, payments, deployment, analytics, package files, or data behavior.
 
 ## Next 5 Design Tasks
-- [ ] Restage HQ first viewport around one daily next action, today context, and compact module status; do not add new features or new data dependencies.
-- [ ] Reduce header and route chrome so EasyLifeHQ/product identity is not repeated twice in the first viewport; preserve navigation behavior.
-- [ ] Move "Start Free", "See Features", and feature-chip language out of signed-in working routes or below the primary work surface; do not alter auth or routing logic.
-- [ ] Tighten one mobile core route so the first useful control and one state preview appear before deep scrolling; keep text readable and avoid clipped controls.
-- [ ] Review the More menu visually with screenshots and make optional modules quieter than EasyList, EasyNotes, EasyCalendar, EasyWorkout, and Settings; no new sections.
+- [ ] Reduce mobile header height on product/module routes while preserving brand recognition and navigation access.
+- [ ] Replace one repeated module hero CTA pair with a route-specific primary action and one quieter secondary action; do not add new routes or logic.
+- [ ] Move one module's pill inventory below the preview or behind an existing section control; keep the first viewport focused on the preview.
+- [ ] Tighten one module hero so the practical preview appears higher on mobile; do not change backend behavior or data models.
+- [ ] Audit the protected HQ first screen against INFORMATION_STAGING.md and remove one visible element that competes with the daily next action.
 
 ## Stop Or Continue
 continue but fix visual issues first
