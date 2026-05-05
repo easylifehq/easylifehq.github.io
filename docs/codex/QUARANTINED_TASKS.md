@@ -232,3 +232,13 @@
 - Files restored before continuing:
 - None
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-04 23:18:53
+
+- Batch: 1
+- Task index: 1
+- Task: Phase 1 - More/module visibility slice: make one small frontend-only improvement that groups optional modules behind a quieter More-style entry point or status surface while keeping core daily modules obvious. Do not remove reachable paths. Guardrails: app-vNext/src UI/copy/style only; no backend, auth, Firebase, persistence, package/dependency, generated output, deploy config, old-site, root files, or broad rewrites. Acceptance: from `app-vNext`, run `npm.cmd run build`; verify optional modules are discoverable but not crowding the primary daily path. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Reason: Large Phase 3 task requires a concrete slice plan before implementation.
+- Files restored before continuing:
+- None
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
