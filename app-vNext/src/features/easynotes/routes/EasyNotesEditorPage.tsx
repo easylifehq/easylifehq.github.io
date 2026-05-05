@@ -38,6 +38,8 @@ export function EasyNotesEditorPage() {
   const hydratedNoteIdRef = useRef<string | null>(null);
   const noteMetaRef = useRef({ tags: [] as string[], pinned: false });
   const lastSavedDraftRef = useRef({ noteId: "", title: "", bodyText: "", folderId: "" });
+  const actionSuggestions = useMemo(() => extractActionSuggestions(bodyText), [bodyText]);
+  const reviewCount = actionSuggestions.length;
 
   useEffect(() => {
     if (!note) return;
@@ -53,6 +55,9 @@ export function EasyNotesEditorPage() {
     setBodyText(note.bodyText);
     setFolderId(note.folderId);
     setSaveMessage("");
+    setProcessorMessage("");
+    setSuggestions([]);
+    setActionsOpen(false);
     hydratedNoteIdRef.current = note.id;
     lastSavedDraftRef.current = {
       noteId: note.id,
@@ -140,12 +145,30 @@ export function EasyNotesEditorPage() {
     );
   }
 
+  function handleReviewFollowUps() {
+    if (actionsOpen) {
+      setProcessorMessage("");
+      setSuggestions([]);
+      setActionsOpen(false);
+      return;
+    }
+
+    const nextSuggestions = extractActionSuggestions(bodyText);
+    setActionsOpen(true);
+    setSuggestions(nextSuggestions);
+    setProcessorMessage(
+      nextSuggestions.length
+        ? `Review ${nextSuggestions.length} follow-up${nextSuggestions.length === 1 ? "" : "s"} before adding.`
+        : "No clear follow-up found yet. You can still add each note line as a task."
+    );
+  }
+
   async function handleCreateTasksFromNote() {
     if (!note || isCreatingTasks) return;
     setIsCreatingTasks(true);
     const count = await createTaskDraftsFromText({
       noteTitle: title || note.title,
-      text: suggestions.length ? suggestions.join("\n") : bodyText,
+      text: actionSuggestions.length ? actionSuggestions.join("\n") : bodyText,
     });
     setIsCreatingTasks(false);
     setSuggestions([]);
@@ -184,10 +207,11 @@ export function EasyNotesEditorPage() {
           {saveMessage ? <span>{saveMessage}</span> : null}
           <button
             type="button"
-            className={`button-secondary compact-button${actionsOpen ? " active" : ""}`}
-            onClick={() => setActionsOpen((current) => !current)}
+            className={`button-secondary compact-button notes-review-action-button${actionsOpen ? " active" : ""}`}
+            onClick={handleReviewFollowUps}
+            disabled={!actionsOpen && !bodyText.trim()}
           >
-            Actions
+            {actionsOpen ? "Hide follow-ups" : `Review follow-ups${reviewCount ? ` (${reviewCount})` : ""}`}
           </button>
         </div>
       </div>
@@ -205,7 +229,11 @@ export function EasyNotesEditorPage() {
         <label className="notes-body-field">
           <textarea
             value={bodyText}
-            onChange={(event) => setBodyText(event.target.value)}
+            onChange={(event) => {
+              setBodyText(event.target.value);
+              setSuggestions([]);
+              setProcessorMessage("");
+            }}
             placeholder="Start writing..."
             rows={Math.max(28, bodyText.split(/\r?\n/).length + 4)}
           />
@@ -213,11 +241,24 @@ export function EasyNotesEditorPage() {
 
         {actionsOpen ? (
           <aside className="advanced-disclosure notes-editor-action-panel">
-            <strong>Use this note</strong>
+            <div className="notes-action-panel-heading">
+              <strong>Turn note into follow-ups</strong>
+              <p className="helper-copy">
+                Review what should become tasks. Nothing is added to EasyList until you approve.
+              </p>
+              {processorMessage ? <p className="helper-copy">{processorMessage}</p> : null}
+            </div>
+            {suggestions.length ? (
+              <div className="notes-action-review-list" aria-label="Suggested follow-ups">
+                {suggestions.map((suggestion, index) => (
+                  <span key={`${suggestion}-${index}`}>{suggestion}</span>
+                ))}
+              </div>
+            ) : null}
             <div className="notes-editor-action-grid">
               {isExperimentalFeatureEnabled("notesProcessor") ? (
                 <button type="button" className="button-secondary compact-button" onClick={handleProcessNote}>
-                  Process note
+                  Find action lines
                 </button>
               ) : null}
               <button
@@ -226,7 +267,7 @@ export function EasyNotesEditorPage() {
                 onClick={() => void handleCreateTasksFromNote()}
                 disabled={isCreatingTasks || !bodyText.trim()}
               >
-                {isCreatingTasks ? "Sending..." : "Make tasks"}
+                {isCreatingTasks ? "Adding..." : "Add follow-ups to EasyList"}
               </button>
               <button
                 type="button"
@@ -234,7 +275,7 @@ export function EasyNotesEditorPage() {
                 onClick={() => void handleCreateProjectFromNote()}
                 disabled={isCreatingProject || !bodyText.trim()}
               >
-                {isCreatingProject ? "Creating..." : "Make project"}
+                {isCreatingProject ? "Creating..." : "Create project"}
               </button>
             </div>
             <label className="field-stack notes-editor-folder-field">
@@ -259,7 +300,7 @@ export function EasyNotesEditorPage() {
           </aside>
         ) : null}
 
-        {isExperimentalFeatureEnabled("notesProcessor") && (processorMessage || suggestions.length) ? (
+        {!actionsOpen && isExperimentalFeatureEnabled("notesProcessor") && (processorMessage || suggestions.length) ? (
           <aside className="notes-processor-panel">
             <div>
               <p className="eyebrow">Experimental</p>

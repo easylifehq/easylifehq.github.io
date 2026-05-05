@@ -2655,6 +2655,36 @@ textarea::placeholder {
   gap: 0.85rem;
 }
 
+.notes-review-action-button {
+  white-space: nowrap;
+}
+
+.notes-action-panel-heading {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.notes-action-panel-heading .helper-copy {
+  margin: 0;
+}
+
+.notes-action-review-list {
+  display: grid;
+  gap: 0.4rem;
+  max-height: 180px;
+  overflow: auto;
+}
+
+.notes-action-review-list span {
+  padding: 0.48rem 0.58rem;
+  border-radius: 10px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-empty, var(--shell-card-bg-soft));
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.88rem;
+  font-weight: 780;
+}
+
 .notes-editor-action-grid {
   display: flex;
   gap: 0.65rem;
