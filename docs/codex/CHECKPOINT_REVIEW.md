@@ -4,29 +4,29 @@
 RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission through small protected-side polish, especially the HQ today-first surface and EasyNotes context work. However, it is not ready to continue unattended because the security review gate is RED.
+The branch is moving toward the EasyLife mission with small protected-app polish, copy, accessibility, and Phase 2 visual-token work. However, progress is blocked by Joey’s RED security review signal, so it should not continue unattended.
 
 ## Safety Review
-Joey security review is RED with “stop for human security review.” No forbidden file changes are listed, the working tree is clean, and changed files are within app/docs scope, but the explicit security stop is blocking.
+Joey security review is RED and explicitly calls for human security review. No forbidden-scope files are listed, and the working tree is clean.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: 12 shown, including HQ today-first polish, EasyNotes context work, accessibility/copy/design review batches, and docs/report updates.
-- Files changed: `app-vNext/src/features/easynotes/EasyNotesContext.tsx`, `app-vNext/src/features/hq/routes/HQPage.tsx`, and multiple `docs/codex/*` review/report files.
-- Commits added: 43 commits since base, ending at `1113862`.
-- Queue status: unchecked task count is 0; queue is empty.
+- Completed tasks in this checkpoint window: 12 recent completed tasks shown, including Phase 1 today-first work, accessibility repair, Settings cleanup, EasyProjects copy repair, EasyNotes repair, and Phase 2 visual token refinement.
+- Files changed: app UI/style/docs files only; notable app files include `HQPage.tsx`, `EasyNotesContext.tsx`, and `globals.css`.
+- Commits added: latest HEAD `4af81e2`; multiple Codex checkpoint/review/task commits exist since base.
+- Queue status: 4 unchecked Phase 2 tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN influence; no high/medium/low visual bugs reported.
-- Simon design review: YELLOW influence; fix visual/design issues before more mission work.
-- Robin copy review: YELLOW influence; copy cleanup should shape next tasks.
-- Accessibility review: YELLOW influence; patch accessibility warnings soon.
-- Performance review: GREEN influence; no performance blocker.
-- Joey security review: RED influence; blocks unattended continuation and requires human security review.
-- Franky formula review: missing influence; no formula signal available.
-- Product truth: MISSING but `ok: True`; no configured `PRODUCT_TRUTH.md`, not a blocker by itself.
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not shape next tasks.
+- Simon design review: YELLOW; continue but fix visual issues first, should influence next visual-system tasks.
+- Robin copy review: YELLOW; continue but fix copy first, should influence next copy-facing work.
+- Accessibility review: YELLOW; patch warnings soon, should influence next repair work.
+- Performance review: GREEN; no blocking influence.
+- Joey security review: RED; stop for human security review, blocks unattended continuation.
+- Franky formula review: missing; no direct influence unless spreadsheet/formula surfaces enter scope.
+- Product truth: MISSING but `ok: True`; no PRODUCT_TRUTH.md configured, not blocking by given status.
 
 ## Recommended Next Step
 stop for human review
@@ -34,11 +34,10 @@ stop for human review
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- The next batch should not start until Joey’s RED security gate is reviewed, then any confirmed security concern should be repaired as the only task.
+- Joey’s RED security gate must be resolved or cleared by a human before mission-forward Phase 2 work continues.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Queue is empty.
-- Product truth is missing but not marked RED.
-- Joey security review is the blocking signal.
-- Simon, Robin, and accessibility remain YELLOW follow-up debt.
+- Queue is not empty: 4 Phase 2 tasks remain.
+- No visual bug severity is currently reported.
+- Main blocker is Joey RED security review, not build or visual QA.
