@@ -277,7 +277,6 @@ export function HQPage() {
               <p>{dayPhase} brief</p>
               <h1 id="hq-title">Choose today&apos;s next move.</h1>
             </div>
-            <span>EasyLifeHQ</span>
           </div>
           <strong>{assistantRead}</strong>
           <div className="hq-today-summary" aria-label="Today summary">
