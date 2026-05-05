@@ -1,6 +1,6 @@
 ﻿# Accessibility Review
 
-Generated: 2026-05-05 14:32:14
+Generated: 2026-05-05 14:39:51
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
@@ -100,9 +100,9 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
                   type="button"
                   className={isBulkEditing ? "primary-button compact-button" : "button-secondary compact-button"}
                   onClick=...`
-- [YELLOW] `app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx:315` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx:330` - Icon-style button may need an accessible label.
   `<button className="primary-button" type="button" onClick={handleScan} disabled={isScanning}>`
-- [YELLOW] `app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx:365` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx:380` - Icon-style button may need an accessible label.
   `<button className="primary-button" type="button" onClick={handleImportEmails} disabled={!importText.trim()}>`
 - [YELLOW] `app-vNext/src/features/easynotes/routes/EasyNotesEditorPage.tsx:219` - Icon-style button may need an accessible label.
   `<button type="button" className="button-secondary compact-button" onClick={handleProcessNote}>`
