@@ -282,3 +282,13 @@
 - Files restored before continuing:
 - docs/codex/PHASE_3_REVIEW.md
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-05 14:06:59
+
+- Batch: 1
+- Task index: 1
+- Task: Phase 4 - Command Layer review packet: run checks and write docs/codex/PHASE_4_REVIEW.md with changed files, route evidence, bugs, and Phase 5 readiness. Do not start Phase 5. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/,app-vNext/src/ accept:npm.cmd run build]
+- Reason: Implementation guardrails failed.
+- Files restored before continuing:
+- docs/codex/PHASE_4_REVIEW.md
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
