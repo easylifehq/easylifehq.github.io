@@ -296,7 +296,7 @@ export function EasyListEmailPage() {
   function handleDraftReply(suggestion: EmailSuggestion) {
     setStates((current) => ({ ...current, [suggestion.id]: "drafted" }));
     setSelectedDraftId(suggestion.id);
-    setStatusMessage("Reply draft prepared for approval. Nothing is sent from this screen.");
+    setStatusMessage("Reply draft ready to review. Nothing is sent or created in mail.");
   }
 
   function handleKeepVisible(suggestion: EmailSuggestion) {
@@ -375,7 +375,7 @@ export function EasyListEmailPage() {
           />
           <div className="task-composer-actions">
             <span className="helper-copy">
-              Use separators like three dashes between emails. Nothing is sent or archived from this screen.
+              Paste emails here to review possible tasks, events, and replies. EasyLife will not send or archive anything.
             </span>
             <button className="primary-button" type="button" onClick={handleImportEmails} disabled={!importText.trim()}>
               Import to review
