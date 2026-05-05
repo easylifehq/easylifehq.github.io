@@ -4,29 +4,29 @@
 RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission with visible Phase 8 Notes and Memory work completed: capture/review hierarchy, note-to-action affordance, and stale/recent memory cues. However, the checkpoint cannot continue normally because Joey security review is RED and explicitly calls for human security review.
+The branch has moved meaningfully toward the EasyLife mission with Phase 8 Notes and Memory work completed and build passing, but it is not ready to continue unattended because Joey security review is RED and calls for human review.
 
 ## Safety Review
-Risk found: Joey security review is RED. Also note that `app-vNext/src/features/auth/routes/LoginPage.tsx` is changed since base, which is sensitive under the mission guardrails and should be inspected by a human even though the working tree is clean.
+Risk found: Joey security review is RED with next step “stop for human security review.” Also note `app-vNext/src/features/auth/routes/LoginPage.tsx` changed since base, which is sensitive under the mission’s forbidden-scope guidance and should be inspected by a human.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: Phase 8 Notes capture/review hierarchy, Note-to-action affordance, Stale/recent memory cue
-- Files changed: EasyNotes pages, EasyList email page, HQ, EasyWorkout, UniversalCapture, globals CSS, LoginPage, and multiple `docs/codex` review/state files
-- Commits added: latest HEAD `d5e99b1` plus many checkpoint/review/phase commits since `main`
-- Queue status: 1 unchecked task remains, `Phase 8 - Notes And Memory review packet`
+- Completed tasks in this checkpoint window: 12 shown, including Phase 8 notes capture/review hierarchy, note-to-action affordance, and stale/recent memory cue.
+- Files changed: app UI files across auth, EasyList, EasyNotes, EasyStatistics, EasyWorkout, UniversalCapture, HQ, global styles, and multiple `docs/codex` review/report files.
+- Commits added: latest HEAD is `04a39e7` (`Codex accessibility review batch 1`) with many commits since `main`.
+- Queue status: 1 unchecked recovery task remains.
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN; no high, medium, or low visual bugs reported; should not block next tasks
-- Simon design review: YELLOW; should influence next tasks with visual fixes first
-- Robin copy review: YELLOW; should influence next tasks with copy cleanup first
-- Accessibility review: YELLOW; should influence next tasks with accessibility warnings soon
-- Performance review: GREEN; no next-task constraint
-- Joey security review: RED; blocks normal continuation and requires human security review
-- Franky formula review: missing; no formula-specific signal available
-- Product truth: missing but `ok: True`; no configured `PRODUCT_TRUTH.md`
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low issues; should not shape next tasks.
+- Simon design review: YELLOW; continue but fix visual issues first; should influence next tasks.
+- Robin copy review: YELLOW; continue but fix copy first; should influence next tasks.
+- Accessibility review: YELLOW; patch accessibility warnings soon; should influence next tasks.
+- Performance review: GREEN; no blocking influence.
+- Joey security review: RED; must stop for human security review.
+- Franky formula review: missing; should be noted but not the primary blocker unless formulas are in scope.
+- Product truth: MISSING but `Product truth ok: True`; no configured blocker.
 
 ## Recommended Next Step
 stop for human review
@@ -34,11 +34,10 @@ stop for human review
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Security is the active blocking gate, and the changed auth-adjacent file should be inspected before any mission-forward Phase 8 review work continues.
+- Joey’s RED security gate and the auth file change need human inspection before unattended work continues.
 
 ## Notes For Human Reviewer
-- Working tree is clean.
-- Build passed.
-- Joey security verdict is the reason for RED.
-- Inspect `LoginPage.tsx` change against forbidden auth scope.
-- Remaining queue item is documentation/proof only: `PHASE_8_REVIEW.md`.
+- Build passed and working tree is clean.
+- Security review is the blocking signal.
+- Inspect `app-vNext/src/features/auth/routes/LoginPage.tsx` carefully against forbidden auth-scope rules.
+- One unchecked recovery task remains, but it should wait until the security gate is cleared.
