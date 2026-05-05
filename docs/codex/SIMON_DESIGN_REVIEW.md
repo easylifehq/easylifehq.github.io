@@ -4,60 +4,54 @@
 YELLOW
 
 ## One-Sentence Read
-The pages are cleaner and more confident, but EasyLife still presents itself like a suite brochure instead of a daily personal operating system.
+EasyLife is getting cleaner at the component level, but the product still reads like a tidy module directory instead of a calm daily operating system.
 
 ## Mission Fit
-The visual system is moving toward calm, professional, and connected, but the direction still misses the Pack 1 spine. The screenshots show product marketing pages for EasyCalendar, EasyList, EasyNotes, and EasyWorkout, while the mission asks the signed-in user to understand what to do next today. The current first screen explains modules; it does not yet behave like a daily assistant start surface.
+The direction partially matches the mission: the notes, workout, and HQ surfaces are accumulating more useful daily cues, and the visual language is becoming more consistent. The miss is still structural. Pack 1 is about the product spine, and the first impression needs to answer "what should I do next today?" before it starts presenting modules, modes, status fragments, or product framing. Right now the suite feels improved, but not yet inevitable.
 
 ## Taste Check
-The best parts are the restrained palette, strong typography, tactile cards, and consistent module framing. The teal, soft borders, and spacious panels feel more intentional than generic SaaS gray soup.
+The better parts are the quieter notes hierarchy, recent/stale memory cues, and the push toward shared panels and calmer daily language. Those moves feel more like a personal operating system and less like a toy dashboard.
 
-The weak part is hierarchy discipline. Every route uses the same giant headline, CTA buttons, tags, hero sample panel, and feature section pattern. It is polished, yes, but it is also very "template demo page." The product is wearing a nice coat and still standing in the wrong lobby.
+What still feels off: the HQ/command-center framing is too loud for the mission, and some surfaces still have that demo-app habit of explaining themselves while also showing the actual tool. Darling, we do not need the app to introduce itself twice before breakfast. The product should feel self-evident through hierarchy, not through stacked labels and status boxes.
 
 ## Visual Problems To Fix
-- The first viewport is brochure-first: giant product headlines, "Start Free," "See Features," and tags dominate before any real daily action appears.
-- The header repeats EasyLifeHQ identity twice in the logo lockup, which creates small but visible brand redundancy.
-- The route chrome is louder than it needs to be for a working product: "Products" and "Get Started" compete with the actual module experience.
-- The same hero structure repeats across Calendar, List, Notes, and Workout, making the suite feel cloned rather than connected.
-- On mobile, the hero copy and CTA area consume too much height before the user sees useful state or action.
-- Feature sections appear too early and too large for the active mission; they explain benefits instead of helping the user act.
-- The sample panels look like static sales proof, not connected live module status.
-- EasyNotes has the strongest recent improvement, but its "Closer to Apple Notes" framing is still comparative marketing language, not product-native confidence.
-- EasyWorkout's tag row becomes plain text on mobile while other modules keep pill treatments, so the shared system is not fully consistent.
-- There is no visible daily operating spine tying tasks, notes, calendar, and workout together in the reviewed screenshots.
+- The protected first screen still risks feeling module-first: compact app areas, capacity signals, notes, workouts, and controls compete before one daily action fully owns the viewport.
+- HQ and Command Center naming creates repeated page identity pressure; if both route chrome and the page body announce the same command-center idea, the actual assistant surface feels buried.
+- Some helper content appears too close to primary content instead of living behind a clear action, which weakens progressive disclosure.
+- The suite has cleaner individual panels, but the hierarchy between "today", "capture", "review", and "module status" is not yet crisp enough.
+- Visual QA reports no blocking bugs, but no bugs is not the same as strong design. The page can be technically clean and still strategically mushy.
+- The recent recovery slices are very small, so the visible polish improved locally without changing the larger first-screen read.
 
 ## Strongest Opportunities
-- Convert the first screen from product explanation to a "Today" operating surface with one primary next action and compact module signals.
-- Make module pages feel like working surfaces first, with marketing copy pushed below the fold or removed from signed-in flows.
-- Replace repeated CTA pairs with contextual actions: add task, capture note, review schedule, start workout.
-- Use the sample panels as real status blocks, not decorative proof cards.
-- Tighten mobile hierarchy so the user sees action, state, and module context in the first screen without a long scroll.
-- Keep the calm visual language, but make the layout behave less like a landing page and more like a personal assistant.
+- Make HQ feel like a true daily start: one next action, one today context line, three compact status signals maximum.
+- Reduce command-center chrome and repeated labels so the user's day, not the product's architecture, becomes the hero.
+- Turn module cards into quiet status indicators with direct verbs, not mini brochures.
+- Keep EasyNotes momentum by making capture and review feel connected to EasyList without showing too much internal machinery.
+- Unify mobile rhythm: same order, same primary action, fewer stacked explanation bands.
 
 ## Priority Fix
-Reduce the brochure chrome on the module routes and bring the daily operating spine forward. The next batch should make at least one primary surface show today's next action, today context, and compact module status before product claims, feature cards, or "Start Free" style CTAs. This is the Pack 1 blocker.
+Fix the HQ first-screen hierarchy before adding another feature slice. Nami should reduce route chrome, repeated "command center" identity, and secondary module noise so the first viewport has one dominant daily action, one short today context, and a restrained row of module status. The goal is not a prettier dashboard; it is a start surface that tells a busy solo operator exactly where to begin.
 
 ## Magic Improvement Score
-SCORE: 2; DIRECTION: flat; ACTIVE_PACK: Pack 1 - Product Spine; REASON: visual polish improved locally, but the branch still prioritizes module marketing over the daily operating spine.
+SCORE: 2; DIRECTION: flat; ACTIVE_PACK: Pack 1 - Product Spine; REASON: local UI polish improved, but the active pack is still blocked by module-first hierarchy instead of a daily operating spine.
 
 ## Designer Handoff
-Keep the typography, restrained teal system, soft panel language, and calm spacing. Change the hierarchy. Treat EasyLife as a signed-in personal assistant, not four product landing pages in matching outfits. The next implementer should quiet the global route chrome, remove repeated sales CTAs from working surfaces, and turn the top of the experience into a daily action surface with one obvious job. The user should feel, "I know what to do next," not "I have arrived at the features page."
+Next batch should be subtraction-led. Keep the calmer panel styling, the notes review cues, and the concrete daily-language direction. Change the HQ/Command Center surface so it stops performing as a product index: demote secondary module cards, remove duplicated labels, tighten the header, and make the primary daily action visually dominant on desktop and mobile. The user should feel, "I know what to do next," not "I have entered a nicely organized control room."
 
 ## What Not To Do Next
-- Do not add more feature sections.
-- Do not create another module hero using the same template.
-- Do not add more tags, badges, or explanatory pills to solve hierarchy.
-- Do not make the dashboard larger or more decorative.
-- Do not touch backend, auth, Firebase, package files, deployment, analytics, or account logic.
-- Do not ignore mobile; this design currently spends too much mobile height on explanation.
-- Do not chase novelty before fixing the daily start surface.
+- Do not add more sections to HQ.
+- Do not add another status card, mode chip, coach panel, or explanatory wrapper before simplifying the first screen.
+- Do not make the command-center idea louder with bigger headings or more nav pills.
+- Do not chase visual novelty with gradients, decorative motion, or marketing-style hero treatment.
+- Do not ignore mobile; stacked helper content is where this product will start feeling cramped.
+- Do not touch backend, auth, Firebase, packages, deployment, or broad architecture while solving a visual hierarchy problem.
 
 ## Next 5 Design Tasks
-- [ ] Quiet the signed-in route chrome: reduce repeated EasyLifeHQ identity and make global actions secondary without changing routing or auth behavior.
-- [ ] Replace one module's "Start Free" and "See Features" hero CTAs with contextual working actions, keeping the change local and reviewable.
-- [ ] Convert one static hero sample panel into a compact daily status block using existing local data or mock UI only.
-- [ ] Tighten mobile first-screen spacing on one route so primary action and status appear sooner, with no clipped text or horizontal overflow.
-- [ ] Move one oversized feature/explanation section lower in the page hierarchy or behind an existing control, without adding new sections.
+- [ ] HQ chrome reduction: remove or demote one repeated route/page label, with no routing, auth, data, or package changes.
+- [ ] HQ first action pass: make one daily next action visually dominant above module status, with no new feature logic.
+- [ ] Module status trim: reduce one module card or status cluster to a compact signal plus one verb, preserving existing behavior.
+- [ ] Mobile first-viewport check: tighten spacing and ordering so the primary daily action appears before secondary module detail, with no overflow.
+- [ ] Notes-to-daily connection polish: keep the note action affordance quiet and place supporting explanation behind an existing action or detail state.
 
 ## Stop Or Continue
 continue but fix visual issues first
