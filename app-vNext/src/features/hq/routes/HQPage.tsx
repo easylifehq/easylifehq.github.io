@@ -197,7 +197,7 @@ export function HQPage() {
           <div className="hq-start-heading">
             <div>
               <p>{dayPhase} brief</p>
-              <h1 id="hq-title">Start with what needs your attention.</h1>
+              <h1 id="hq-title">Choose today&apos;s next move.</h1>
             </div>
             <span>EasyLifeHQ</span>
           </div>
