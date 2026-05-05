@@ -2326,6 +2326,23 @@ textarea::placeholder {
   margin-bottom: 1rem;
 }
 
+.notes-review-block {
+  padding: 0.78rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 28%, var(--ui-border-subtle, var(--shell-card-border)));
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent-soft, var(--shell-chip-bg)) 42%, transparent), transparent 52%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 92%, white 8%);
+}
+
+.notes-review-block .group-heading {
+  align-items: flex-start;
+}
+
+.notes-review-block .group-heading h3 {
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
 .notes-library-results-heading {
   margin-top: 1.15rem;
   padding-top: 0.75rem;

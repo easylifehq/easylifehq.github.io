@@ -150,17 +150,17 @@ export function EasyNotesLibraryPage() {
 
   return (
     <PageSection
-      title="Capture a thought"
-      description="Start a note now. Recent writing stays close for review when you come back."
+      title="Capture note"
+      description="Write the thought now. Recent notes are next for review."
     >
         <div className="notes-command-strip" aria-label="Notes actions">
           <div className="notes-capture-group">
             <button type="button" className="notes-command-button notes-command-button-primary" onClick={() => void handleCreateNote()}>
               <span aria-hidden="true">+</span>
-              Write a note
+              Capture note
             </button>
             <span className="notes-library-status">
-              {notes.length ? "Review recent notes below" : "Start here, sort later"}
+              {notes.length ? "Review recent below" : "Capture first, sort later"}
             </span>
           </div>
           <div className="notes-secondary-actions">
@@ -214,36 +214,15 @@ export function EasyNotesLibraryPage() {
 
         {!searchOpen ? (
           <div className="notes-library-overview">
-            {pinnedNotes.length ? (
-              <section className="group-block">
-                <div className="group-heading">
-                  <h3>Pinned</h3>
-                  <span>{pinnedNotes.length}</span>
-                </div>
-                <div className="notes-library-grid notes-library-grid-featured">
-                  {pinnedNotes.slice(0, 4).map((note) => (
-                    <article key={note.id} className="note-card-vnext note-card-selectable note-card-featured">
-                      <Link to={`/app/easynotes/${note.id}`} className="note-card-link">
-                        <div className="note-card-top">
-                          <div>
-                            <strong>{note.title.trim() || "Untitled note"}</strong>
-                            <p>{formatDate(note.updatedAt || note.createdAt)}</p>
-                          </div>
-                          <div className="note-card-badges">
-                            <span className="note-pin-badge">Pinned</span>
-                          </div>
-                        </div>
-                        <p className="note-card-body">{note.bodyText.trim() || "No content yet."}</p>
-                      </Link>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-
-            <section className="group-block">
+            <section className="group-block notes-review-block">
               <div className="group-heading">
-                <h3>Recent</h3>
+                <div>
+                  <h3>Review recent</h3>
+                  <p className="note-card-meta">
+                    <span>Last touched</span>
+                    Keep active notes moving
+                  </p>
+                </div>
                 <span>{recentNotes.length}</span>
               </div>
               <div className="notes-library-grid notes-library-grid-recent">
@@ -271,6 +250,33 @@ export function EasyNotesLibraryPage() {
                 ))}
               </div>
             </section>
+
+            {pinnedNotes.length ? (
+              <section className="group-block">
+                <div className="group-heading">
+                  <h3>Pinned reference</h3>
+                  <span>{pinnedNotes.length}</span>
+                </div>
+                <div className="notes-library-grid notes-library-grid-featured">
+                  {pinnedNotes.slice(0, 4).map((note) => (
+                    <article key={note.id} className="note-card-vnext note-card-selectable note-card-featured">
+                      <Link to={`/app/easynotes/${note.id}`} className="note-card-link">
+                        <div className="note-card-top">
+                          <div>
+                            <strong>{note.title.trim() || "Untitled note"}</strong>
+                            <p>{formatDate(note.updatedAt || note.createdAt)}</p>
+                          </div>
+                          <div className="note-card-badges">
+                            <span className="note-pin-badge">Pinned</span>
+                          </div>
+                        </div>
+                        <p className="note-card-body">{note.bodyText.trim() || "No content yet."}</p>
+                      </Link>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
           </div>
         ) : null}
 
@@ -364,7 +370,7 @@ export function EasyNotesLibraryPage() {
 
         <div className="group-heading notes-library-results-heading" aria-label="Notes library results">
           <div>
-            <h3>{hasFilters ? "Filtered notes" : "Browse all notes"}</h3>
+            <h3>{hasFilters ? "Filtered notes" : "All notes"}</h3>
             {hasFilters ? (
               <div className="note-card-meta">
                 <span>Showing</span>
