@@ -259,7 +259,7 @@ export function EasyStatisticsPage() {
       ? `${stats.overdue.length} task${stats.overdue.length === 1 ? "" : "s"} need recovery first.`
       : stats.completedThisWeek.length > 0
         ? `${stats.completedThisWeek.length} task${stats.completedThisWeek.length === 1 ? "" : "s"} finished this week. Keep the rhythm.`
-        : "Nothing completed yet this week. Start with one small win.";
+        : "No completed items this week. Choose one task to finish today.";
   const lifeScore =
     stats.completedThisWeek.length +
     stats.workoutsThisWeek.length * 2 +
