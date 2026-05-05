@@ -6,6 +6,7 @@ import {
   formatDuration,
   formatTimeLabel,
   getOpenTimeWindowsForDay,
+  getScheduledMinutesForDay,
   startOfDay,
 } from "@/features/easycalendar/lib/calendarUtils";
 import { isCompletedToday, sortActiveTasks } from "@/features/easylist/lib/taskUtils";
@@ -107,6 +108,8 @@ type TodayContextItem = {
   to: string;
 };
 
+type CapacityLevel = "Light" | "Steady" | "Full";
+
 function isSameDate(left: Date | null, right: Date) {
   return Boolean(left && startOfDay(left).getTime() === startOfDay(right).getTime());
 }
@@ -128,10 +131,41 @@ export function HQPage() {
   const overdueTasks = sortActiveTasks(tasks.filter((task) => !task.completed && task.dueDate && startOfDay(task.dueDate).getTime() < today.getTime()));
   const openWindows = getOpenTimeWindowsForDay(today, events, taskBlocks);
   const openMinutes = openWindows.reduce((sum, window) => sum + window.minutes, 0);
+  const scheduledMinutes = getScheduledMinutesForDay(today, events, taskBlocks);
   const completedTodayCount = tasks.filter(isCompletedToday).length;
   const mostUrgent = overdueTasks[0] || dueTodayTasks[0] || null;
   const mostUrgentLabel = overdueTasks[0]?.title || dueTodayTasks[0]?.title || "";
   const quickWin = sortActiveTasks(tasks.filter((task) => !task.completed && (task.estimatedLength || 999) <= 20))[0] || null;
+  const dueTaskMinutes = [...overdueTasks, ...dueTodayTasks].reduce(
+    (sum, task) => sum + (task.estimatedLength || 25),
+    0
+  );
+  const pressureScore = dueTaskMinutes + scheduledMinutes + overdueTasks.length * 30 - completedTodayCount * 10;
+  const capacityLevel: CapacityLevel = pressureScore >= openMinutes + 90 || overdueTasks.length >= 3
+    ? "Full"
+    : pressureScore >= Math.max(120, openMinutes * 0.55) || dueTodayTasks.length >= 3
+      ? "Steady"
+      : "Light";
+  const capacityRead = {
+    Light: {
+      title: "Light capacity",
+      detail: isAppVisible("easyworkout")
+        ? "There is room for one meaningful task and a workout later."
+        : "There is room for one meaningful task without crowding the day.",
+    },
+    Steady: {
+      title: "Steady capacity",
+      detail: isAppVisible("easyworkout")
+        ? "Pick one due item first, then keep training short or routine-based."
+        : "Pick one due item first, then keep the rest of the plan narrow.",
+    },
+    Full: {
+      title: "Full capacity",
+      detail: isAppVisible("easyworkout")
+        ? "Recover the urgent work first. Make the workout a light log if it still fits."
+        : "Recover urgent work first and avoid adding extra commitments.",
+    },
+  }[capacityLevel];
   const todaySummary = [
     `${overdueTasks.length + dueTodayTasks.length} due`,
     `${todayEvents.length} event${todayEvents.length === 1 ? "" : "s"}`,
@@ -350,6 +384,16 @@ export function HQPage() {
             <span>Today</span>
             <p>{todaySummary.join(" / ")}</p>
           </div>
+          <div className={`hq-capacity-signal capacity-${capacityLevel.toLowerCase()}`} aria-label="Today capacity signal">
+            <div>
+              <span>Capacity</span>
+              <strong>{capacityRead.title}</strong>
+              <p>{capacityRead.detail}</p>
+            </div>
+            <small>
+              {formatDuration(dueTaskMinutes)} due work / {formatDuration(scheduledMinutes)} scheduled
+            </small>
+          </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
             <span>Capture anything</span>
             <strong>Type a task, note, event, or deadline</strong>
@@ -417,14 +461,9 @@ export function HQPage() {
             <p>{overdueTasks.length ? `${overdueTasks.length} overdue` : dueTodayTasks.length ? `${dueTodayTasks.length} due today` : quickWin ? "Quick win available" : "Good room to choose."}</p>
           </article>
           <article className="hq-status-secondary">
-            <span>{progressStatusLabel}</span>
-            <strong>
-              {activeTaskCount} open task{activeTaskCount === 1 ? "" : "s"} / {todayEvents.length} event
-              {todayEvents.length === 1 ? "" : "s"}
-            </strong>
-            <p>
-              {completedTodayCount} done today / {formatDuration(openMinutes)} open on calendar
-            </p>
+            <span>Capacity</span>
+            <strong>{capacityRead.title}</strong>
+            <p>{capacityLevel === "Full" ? "Protect the day." : `${progressStatusLabel}: ${completedTodayCount} done today.`}</p>
           </article>
         </div>
       </section>

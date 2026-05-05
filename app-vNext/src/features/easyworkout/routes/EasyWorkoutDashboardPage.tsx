@@ -25,6 +25,8 @@ function getEstimatedMax(weight: number, reps: number) {
   return Math.round(weight * (36 / Math.max(37 - reps, 1)));
 }
 
+type TrainingCapacity = "Ready" | "Steady" | "Recover";
+
 export function EasyWorkoutDashboardPage() {
   const { sessions, routines, isLoading, error, deleteSession } = useEasyWorkout();
   const { isExperimentalFeatureEnabled } = useSettings();
@@ -44,6 +46,39 @@ export function EasyWorkoutDashboardPage() {
   const weeklyVolume = weeklySessions.reduce((sum, session) => sum + getSessionVolume(session), 0);
   const monthlyVolume = monthlySessions.reduce((sum, session) => sum + getSessionVolume(session), 0);
   const consistencyScore = Math.min(100, Math.round((weeklySessions.length / 4) * 100));
+  const lastSession = recentSessions[0];
+  const daysSinceLastSession = lastSession?.performedOn
+    ? Math.max(
+        0,
+        Math.round((new Date(todayKey).getTime() - new Date(lastSession.performedOn).getTime()) / 86400000)
+      )
+    : null;
+  const firstRoutine = routines[0];
+  const trainingCapacity: TrainingCapacity = todaySessions.length
+    ? "Recover"
+    : weeklySessions.length >= 4
+      ? "Steady"
+      : daysSinceLastSession === null || daysSinceLastSession >= 2
+        ? "Ready"
+        : "Steady";
+  const trainingCapacityRead = {
+    Ready: {
+      title: "Ready for a full session",
+      detail: firstRoutine
+        ? "Use a saved routine and keep the first working set honest."
+        : "Start a focused session and let the log build the plan.",
+    },
+    Steady: {
+      title: "Keep it steady",
+      detail: weeklySessions.length >= 4
+        ? "The week already has rhythm. Train, but avoid chasing extra volume."
+        : "A normal session fits. Keep the plan simple and log what happens.",
+    },
+    Recover: {
+      title: "Recovery signal",
+      detail: "You already trained today. Review the log before adding more volume.",
+    },
+  }[trainingCapacity];
 
   const topLifts = Object.values(
     sessions.reduce<Record<string, { exerciseName: string; weight: number; reps: number }>>(
@@ -165,7 +200,6 @@ export function EasyWorkoutDashboardPage() {
   const needsAttentionMuscle = [...muscleGroupStats]
     .filter((group) => group.weeklyVolume === 0)
     .sort((left, right) => left.lastPerformedOn.localeCompare(right.lastPerformedOn))[0];
-  const firstRoutine = routines[0];
   const nextWorkoutMove = (() => {
     if (!sessions.length) {
       return {
@@ -253,6 +287,17 @@ export function EasyWorkoutDashboardPage() {
             <em>Last logged</em>
             <strong>{recentSessions[0]?.performedOn || "Not logged yet"}</strong>
           </span>
+        </div>
+
+        <div className={`workout-capacity-signal capacity-${trainingCapacity.toLowerCase()}`} aria-label="Training capacity signal">
+          <div>
+            <span>Coach capacity</span>
+            <strong>{trainingCapacityRead.title}</strong>
+            <p>{trainingCapacityRead.detail}</p>
+          </div>
+          <small>
+            {weeklySessions.length} this week / {daysSinceLastSession === null ? "no recent log" : `${daysSinceLastSession}d since last`}
+          </small>
         </div>
 
         <div className="workout-next-move" aria-label="Recommended next workout action">

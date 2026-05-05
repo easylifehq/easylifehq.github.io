@@ -5823,6 +5823,65 @@ button.calendar-detail-card:disabled {
   color: var(--ui-text-secondary, var(--shell-page-text));
 }
 
+.hq-capacity-signal,
+.workout-capacity-signal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.72rem 0.82rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 22%, var(--ui-border-subtle));
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent), transparent 64%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg-soft)) 92%, white 8%);
+  box-shadow: inset 0 1px 0 var(--shell-panel-highlight);
+}
+
+.hq-capacity-signal div,
+.workout-capacity-signal div {
+  display: grid;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.hq-capacity-signal span,
+.workout-capacity-signal span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.68rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.hq-capacity-signal strong,
+.workout-capacity-signal strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 0.96rem;
+  line-height: 1.14;
+}
+
+.hq-capacity-signal p,
+.workout-capacity-signal p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.hq-capacity-signal small,
+.workout-capacity-signal small {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.capacity-full,
+.capacity-recover {
+  border-color: color-mix(in srgb, #b45309 30%, var(--ui-border-subtle));
+}
+
 .hq-start-heading {
   display: flex;
   align-items: flex-start;
@@ -9159,6 +9218,29 @@ button.calendar-detail-card:disabled {
 
   .hq-natural-capture strong {
     font-size: 0.82rem;
+  }
+
+  .hq-capacity-signal,
+  .workout-capacity-signal {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    padding: 0.5rem 0.58rem;
+  }
+
+  .hq-capacity-signal strong,
+  .workout-capacity-signal strong {
+    font-size: 0.82rem;
+  }
+
+  .hq-capacity-signal p,
+  .workout-capacity-signal p {
+    font-size: 0.72rem;
+  }
+
+  .hq-capacity-signal small,
+  .workout-capacity-signal small {
+    text-align: left;
+    white-space: normal;
   }
 
   .hq-context-stack summary {
