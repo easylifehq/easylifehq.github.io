@@ -3268,3 +3268,19 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-000619\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-000619\easylist-visualQa-1-mobile.png
 - Follow-up: Implementation guardrails failed.
+
+## Batch 1 QA - 2026-05-05 00:29:46
+
+- Active work pack: Pack 1 - Product Spine
+- Batch impact mode: showpiece
+- Fresh QA evidence:
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-002743\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-002743\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-002743\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-002743\easylist-visualQa-1-mobile.png
+- Checkpoint verdict: RED
+- Simon verdict: YELLOW
+- Robin verdict: YELLOW
+- Joey verdict: RED
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: the today-first work is aimed at the right mission, but visual proof is incomplete and the visible routes still over-index on marketing chrome.
+- Debug checkpoint result: not-run (not-run)
