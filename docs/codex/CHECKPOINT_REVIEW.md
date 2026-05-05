@@ -4,29 +4,29 @@
 RED
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife mission: recent work advanced Phase 5 inbox intelligence with a frontend-only approval queue and continued the connected personal operating system direction. However, review gates are not clear because Joey security review is RED and requires human security review before more unattended work.
+The branch is moving toward the EasyLife mission with visible Phase 5 Inbox Intelligence work: approval queue UI and clearer email classification language. However, the security gate is RED, so progress should not continue unattended.
 
 ## Safety Review
-Risk found: Joey security review is RED with next step `stop for human security review`. No forbidden changed files are evident from the file list, and the working tree is clean.
+Joey security review is RED with next step: stop for human security review. No dirty working tree or forbidden file changes are reported, but the security gate is blocking.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: Phase 5 Inbox approval queue UI
-- Files changed: `app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx`, `app-vNext/src/features/hq/routes/HQPage.tsx`, `app-vNext/src/styles/globals.css`, plus codex review/state docs
-- Commits added: latest HEAD `d3fcf17` plus prior checkpoint/review/task commits since base
-- Queue status: 3 unchecked tasks remain
+- Completed tasks in this checkpoint window: Phase 5 Inbox approval queue UI; Phase 5 Email classification language.
+- Files changed: `app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx`, `app-vNext/src/features/hq/routes/HQPage.tsx`, `app-vNext/src/styles/globals.css`, plus review/report docs.
+- Commits added: latest HEAD `c8e17cf` and prior checkpoint/review commits since base.
+- Queue status: 2 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN; no high, medium, or low visual issues reported
-- Simon design review: YELLOW; should influence next tasks, fix visual issues first
-- Robin copy review: YELLOW; should influence next tasks, fix copy first
-- Accessibility review: YELLOW; should influence next tasks, patch warnings soon
-- Performance review: GREEN; no blocker
-- Joey security review: RED; blocks unattended continuation and requires human security review
-- Franky formula review: missing; no formula-specific signal available
-- Product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not drive next task.
+- Simon design review: YELLOW; continue but fix visual issues first; should influence next tasks.
+- Robin copy review: YELLOW; continue but fix copy first; should influence next tasks.
+- Accessibility review: YELLOW; patch warnings soon; should influence next tasks.
+- Performance review: GREEN; no blocking influence.
+- Joey security review: RED; blocks unattended continuation and requires human security review.
+- Franky formula review: missing; note as incomplete, but no formula blocker reported.
+- Product truth: missing config, `Product truth ok: True`; no Product truth RED blocker.
 
 ## Recommended Next Step
 stop for human review
@@ -34,10 +34,10 @@ stop for human review
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Security review is RED, so the next action should be a focused human-reviewed security disposition before continuing queued Phase 5 work.
+- Human security review must clear Joey’s RED gate before the remaining Phase 5 draft affordance or review packet work continues.
 
 ## Notes For Human Reviewer
-- Build passed and working tree is clean.
-- Do not continue unattended until Joey RED is resolved or explicitly waived.
-- Remaining Phase 5 tasks look mission-forward but should wait behind the security gate.
-- Product truth is not configured, so there is no product-truth blocker.
+- Working tree is clean.
+- Build passed.
+- Two Phase 5 tasks remain unchecked.
+- Security review is the active blocker despite otherwise low visual/build risk.
