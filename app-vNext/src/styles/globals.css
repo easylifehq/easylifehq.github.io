@@ -8951,7 +8951,8 @@ button.calendar-detail-card:disabled {
   .hq-natural-capture {
     grid-template-columns: 1fr;
     gap: 0.12rem;
-    padding: 0.46rem 0.56rem;
+    min-height: 50px;
+    padding: 0.52rem 0.62rem;
   }
 
   .hq-natural-capture span {
@@ -9367,6 +9368,29 @@ button.calendar-detail-card:disabled {
   .capture-fab::after {
     content: "+";
     font-size: 1.45rem;
+    line-height: 1;
+  }
+
+  .app-shell-vnext:has(.assistant-home) .capture-fab {
+    left: 50%;
+    right: auto;
+    bottom: calc(4.7rem + env(safe-area-inset-bottom, 0px));
+    width: min(26rem, calc(100vw - 1.5rem - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
+    min-width: 0;
+    min-height: 54px;
+    padding: 0 1rem;
+    border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 28%, var(--ui-border-subtle) 72%);
+    background: color-mix(in srgb, var(--ui-bg-card-elevated, #fffdf9) 90%, var(--app-accent, var(--shell-accent)) 10%);
+    color: var(--ui-text-primary, var(--shell-heading-text));
+    font-size: 0;
+    box-shadow: 0 12px 28px rgba(34, 29, 24, 0.16);
+    transform: translateX(-50%);
+  }
+
+  .app-shell-vnext:has(.assistant-home) .capture-fab::after {
+    content: "Quick capture";
+    font-size: 0.9rem;
+    font-weight: 850;
     line-height: 1;
   }
 
