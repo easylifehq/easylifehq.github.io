@@ -52,6 +52,8 @@ export function EasyWorkoutLogPage() {
   );
   const [workoutPaste, setWorkoutPaste] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
+  const todayKey = new Date().toISOString().split("T")[0];
+  const todayLoggedCount = sessions.filter((session) => session.performedOn === todayKey).length;
 
   const selectedRoutine = useMemo(
     () => routines.find((routine) => routine.id === selectedRoutineId) || null,
@@ -320,6 +322,20 @@ export function EasyWorkoutLogPage() {
         </div>
 
         {error ? <p className="error-copy">{error}</p> : null}
+        <div className="workout-plan-bridge workout-log-plan-bridge" aria-label="Daily plan connection">
+          <div className="workout-plan-bridge-copy">
+            <span>Daily plan</span>
+            <strong>{todayLoggedCount ? `${todayLoggedCount} workout${todayLoggedCount === 1 ? "" : "s"} logged today` : "Save the session, then return to Today"}</strong>
+            <p>
+              {todayLoggedCount
+                ? "Review progress before adding more work to the day."
+                : "The log keeps training progress separate from the Today surface until you need it."}
+            </p>
+          </div>
+          <Link className="ghost-button compact-button" to="/app/hq">
+            Today
+          </Link>
+        </div>
       <form className="task-composer" onSubmit={handleSaveSession}>
         {!isFocusedWorkoutMode ? (
         <details className="advanced-disclosure workout-advanced-tools">

@@ -3136,3 +3136,21 @@
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 16:29:24
+
+- Task attempted: Phase 7 - Fitness coach connection: make workout logging/progress feel connected to the daily plan without overcrowding Today. Acceptance: npm.cmd run build from app-vNext. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/easyworkout/,app-vNext/src/features/hq/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/easyworkout, app-vNext/src/features/hq, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easyworkout/routes/EasyWorkoutDashboardPage.tsx
+- app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

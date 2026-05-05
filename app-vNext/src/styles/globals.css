@@ -8474,6 +8474,55 @@ button.calendar-detail-card:disabled {
   line-height: 1.45;
 }
 
+.workout-plan-bridge {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.78rem;
+  padding: 0.72rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent) 16%, var(--ui-border-subtle));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg-soft)) 94%, white 6%);
+}
+
+.workout-plan-bridge-copy {
+  display: grid;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.workout-plan-bridge span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.68rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.workout-plan-bridge strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 0.96rem;
+  line-height: 1.16;
+}
+
+.workout-plan-bridge p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.84rem;
+  line-height: 1.36;
+}
+
+.workout-plan-bridge-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+.workout-log-plan-bridge {
+  margin-bottom: 0.8rem;
+}
+
 .gym-exercise-card {
   border-radius: 16px;
 }
@@ -9978,6 +10027,18 @@ button.calendar-detail-card:disabled {
     gap: 0.75rem;
   }
 
+  .workout-plan-bridge {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .workout-plan-bridge-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .workout-plan-bridge-actions .compact-button,
   .workout-next-move .compact-button {
     width: 100%;
     justify-content: center;

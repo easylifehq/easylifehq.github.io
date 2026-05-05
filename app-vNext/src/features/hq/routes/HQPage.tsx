@@ -384,6 +384,16 @@ export function HQPage() {
       to: "/app/easyprojects",
       visible: isAppVisible("easyprojects"),
     },
+    {
+      label: "Workout",
+      title: capacityLevel === "Full" ? "Light log if it fits" : "Training can stay connected",
+      detail:
+        capacityLevel === "Full"
+          ? "Open the logger later without adding more pressure to Today."
+          : "Use the workout log to keep training progress tied to the daily plan.",
+      to: "/app/easyworkout/dashboard",
+      visible: isAppVisible("easyworkout"),
+    },
   ];
   const schoolNextAssignment = schoolPlanner.assignments[0];
   const schoolNextExam = schoolPlanner.exams[0];
@@ -534,8 +544,8 @@ export function HQPage() {
           </Link>
           {isAppVisible("easyworkout") ? (
             <Link className="hq-link-card" to="/app/easyworkout/log?workoutMode=1">
-              <strong>Workout</strong>
-              <p>Log a session without leaving the day view behind.</p>
+              <strong>Workout log</strong>
+              <p>Record training as part of the daily plan, then come back to Today.</p>
             </Link>
           ) : null}
         </div>

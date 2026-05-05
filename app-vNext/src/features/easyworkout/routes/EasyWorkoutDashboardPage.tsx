@@ -158,6 +158,31 @@ export function EasyWorkoutDashboardPage() {
     { label: "7 days", sessions: weeklySessions.length, volume: weeklyVolume },
     { label: "30 days", sessions: monthlySessions.length, volume: monthlyVolume },
   ];
+  const dailyPlanRead = todaySessions.length
+    ? {
+        label: "Logged today",
+        title: "Today already has training progress.",
+        detail: "Review the log, then return to Today before adding more volume.",
+        actionLabel: "Review log",
+        to: "/app/easyworkout/log",
+      }
+    : trainingCapacity === "Recover"
+      ? {
+          label: "Protect the plan",
+          title: "Keep any extra work light.",
+          detail: "Use the logger only if the rest of the day still has room.",
+          actionLabel: "Open Today",
+          to: "/app/hq",
+        }
+      : {
+          label: "Fits today",
+          title: firstRoutine ? "Use a saved routine when the day opens." : "Start a short session when the day opens.",
+          detail: "The workout log can hold the session without taking over the daily plan.",
+          actionLabel: firstRoutine ? "Use routine" : "Start workout",
+          to: firstRoutine
+            ? `/app/easyworkout/log?routineId=${firstRoutine.id}`
+            : "/app/easyworkout/log?workoutMode=1",
+        };
   const muscleGroups = sessions.reduce<
     Record<
       string,
@@ -298,6 +323,22 @@ export function EasyWorkoutDashboardPage() {
           <small>
             {weeklySessions.length} this week / {daysSinceLastSession === null ? "no recent log" : `${daysSinceLastSession}d since last`}
           </small>
+        </div>
+
+        <div className="workout-plan-bridge" aria-label="Workout connection to daily plan">
+          <div className="workout-plan-bridge-copy">
+            <span>{dailyPlanRead.label}</span>
+            <strong>{dailyPlanRead.title}</strong>
+            <p>{dailyPlanRead.detail}</p>
+          </div>
+          <div className="workout-plan-bridge-actions">
+            <Link className="button-secondary compact-button" to={dailyPlanRead.to}>
+              {dailyPlanRead.actionLabel}
+            </Link>
+            <Link className="ghost-button compact-button" to="/app/hq">
+              Today
+            </Link>
+          </div>
         </div>
 
         <div className="workout-next-move" aria-label="Recommended next workout action">
