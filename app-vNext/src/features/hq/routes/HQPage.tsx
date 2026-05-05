@@ -338,7 +338,7 @@ export function HQPage() {
             <strong>{mostUrgent ? mostUrgentLabel : quickWin ? quickWin.title : "No task is shouting"}</strong>
             <p>{overdueTasks.length ? `${overdueTasks.length} overdue` : dueTodayTasks.length ? `${dueTodayTasks.length} due today` : quickWin ? "Quick win available" : "Good room to choose."}</p>
           </article>
-          <article>
+          <article className="hq-status-secondary">
             <span>{progressStatusLabel}</span>
             <strong>
               {activeTaskCount} open task{activeTaskCount === 1 ? "" : "s"} / {todayEvents.length} event

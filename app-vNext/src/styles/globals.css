@@ -8938,6 +8938,10 @@ button.calendar-detail-card:disabled {
     border-top: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)) 58%, transparent);
   }
 
+  .hq-status-strip .hq-status-secondary {
+    display: none;
+  }
+
   .hq-status-strip span {
     font-size: 0.64rem;
   }

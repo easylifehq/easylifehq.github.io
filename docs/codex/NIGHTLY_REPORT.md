@@ -2847,3 +2847,19 @@
 - app-vNext/src/features/experiments/UniversalCapture.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 13:07:35
+
+- Task attempted: Phase 3 - Today mobile scan slice: make one focused mobile-first repair to the Today/HQ first viewport so the next move, today context, and capture entry fit comfortably at 390px. Guardrails: frontend UI/style only; no backend, auth, Firebase, persistence, package/dependency, generated output, deploy config, old-site, root files, or broad redesign. Acceptance: from `app-vNext`, run `npm.cmd run build`; inspect at 390px and confirm Today is not a dashboard dump. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/hq/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/hq, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
