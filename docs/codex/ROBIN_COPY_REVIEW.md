@@ -4,77 +4,75 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is getting calmer and more concrete, but visible copy still slips into builder, brochure, and internal-process language instead of consistently sounding like a personal daily workspace.
+EasyLife is getting closer to a calm daily workspace, but several new labels still sound like internal product scaffolding or implied intelligence instead of concrete help the user can trust.
 
 ## Mission Voice Fit
-The best copy fits the mission when it uses plain nouns like tasks, notes, calendar, workout log, daily plan, workspace, follow-up, and draft reply. Those words support a connected personal assistant product without overpromising. The weaker copy still leans on "command center", "demo", "proof", "sample data", "polish", and "handoff", which makes EasyLife sound like a build artifact or sales page rather than a tool a signed-in user opens to decide what to do next today.
+The language mostly fits the mission when it says "today", "workspace", "task list", "calendar", "notes", "workout", and "capture". Those nouns support the personal assistant position without overexplaining it. The weaker fit appears around phase language that may leak into the product voice: "command layer", "Inbox Intelligence", "capacity signal", "coach", "approval queue", "plan intensity", and "What am I forgetting" can sound either too technical or too smart for a deterministic, frontend-only app unless the UI clearly shows the source, action, and user approval path.
 
 ## Delicate Wording Risks
-- "command center" appears in public metadata and still feels too generic SaaS for EasyLife. It suggests a broad platform claim instead of a calm daily workspace.
-- "demo" appears in route/query logic and may be internal, but any visible use should be replaced with "example day", "preview", or "workspace example" depending on context.
-- "proof" appears in `auth-proof-card`; if this is only a class name it is harmless, but any visible "proof" phrasing would feel builder-facing and salesy.
-- "sample data" and `sample-*` identifiers are probably internal, but visible labels should not say "sample data"; users should see "example email", "example day", or "suggested item".
-- "handoff" remains a known risk because it sounds like internal service-process language unless the reader, action, and result are concrete.
-- "polish" and "ship" are not appropriate in visible user tasks. They frame EasyLife around product work instead of the user's life.
-- "Start Free" and "See Features" are still cited in design evidence as repeated above-the-fold language. On signed-in surfaces, this is a staging failure and should not appear.
-- "personal operating system" and "high-tech" should remain mission shorthand only, not customer-facing or app-facing copy.
-- "manager-ready", "ready for service", "workflow", and "handoff" should stay out of visible app copy unless tied to a specific user action and outcome.
+- "Command center" still appears in public metadata in `404.html` and `app-vNext/index.html`; it is a generic SaaS phrase and conflicts with the quieter daily workspace direction.
+- "What am I forgetting" is useful but risky if it appears as a confident assistant action without source context. It should read as a check of visible tasks, notes, calendar, and follow-ups, not a promise of omniscience.
+- "Inbox Intelligence" sounds like AI/backend classification. For a mock/local approval surface, use plainer labels such as "Inbox review" or "Suggested from email".
+- "Capacity signal" is internal product language. Customer-facing copy should say "Today's load", "Room today", or "How full today looks".
+- "Coach" can be warm, but it risks overstating guidance if the app is only recalculating local task/calendar/workout context. Pair it with concrete controls and avoid advice-heavy language.
+- "Plan intensity" is slightly abstract. "Light day", "Normal day", and "Push day" are clearer if the UI explains what changes.
+- "Approval queue" is staff/internal workflow language. In user-facing copy, "Review suggestions" or "Choose what to add" is more natural.
+- "Draft reply" is good if it clearly says it will not send without approval. Any label that implies auto-send or email automation would be risky.
+- "Sample data" and `sample-*` identifiers are not automatically visible, but any rendered copy should say "Example day", "Example email", or "Example plan" instead.
+- The changed auth login file is not a copy issue by itself, but "proof" language on login surfaces should be treated carefully. It can sound like a sales artifact rather than a trustworthy sign-in page.
 
 ## Beautiful Language Opportunities
-- Replace broad identity claims with daily utility: "Plan today", "Capture a thought", "Review the next block", "Clear the task list".
-- Give Today/HQ copy a calmer assistant voice: one next action, one reason, one easy path forward.
-- Rename mock or prototype surfaces as examples only when visible: "Example day", "Example email", "Suggested plan".
-- Use module-specific nouns so pages stop feeling interchangeable: task list, note, calendar block, workout log, study load, draft reply.
-- Keep candidate labels short and concrete: task, deadline, event, follow-up, keep visible, draft reply.
-- Make school and coach copy humble: "suggested focus", "capacity signal", "plan intensity", not "coach knows" or "AI decides".
-- Use progressive disclosure in labels. Primary labels should be short; explanatory copy belongs inside detail panels, previews, or review rows.
+- Rename internal-feeling assistant features around daily-life nouns: "Today", "Daily plan", "Task list", "Calendar prep", "Inbox review", "Study load", "Workout log".
+- Make every smart-sounding action show its evidence: "From today's tasks", "Based on visible calendar blocks", "Suggested from this email".
+- Keep the first screen terse: one next move, one reason, one action.
+- Use warm but restrained copy for capacity: "A full day. Keep the plan light." is more human than "High capacity signal".
+- For school planning, favor practical labels: "Due this week", "Exam window", "Study block", "Turn into task", "Add calendar block".
+- For inbox review, keep the promise modest: "Review suggested tasks and replies before anything is added."
 
 ## Priority Rewrite
-The most important wording problem is the remaining builder/brochure vocabulary in visible surfaces and metadata. Nami should prioritize a narrow copy pass that replaces "command center", visible "demo", "proof", "sample data", "handoff", "polish", and "ship" with concrete daily-workspace nouns, while leaving internal identifiers alone unless they render into the UI.
+The most important wording problem is the smart-feature vocabulary around command, intelligence, capacity, coach, and approval. These labels should be converted into concrete daily actions with visible user control: what source is being checked, what suggestion is being made, and what the user can approve. This will keep EasyLife from sounding like a fake AI layer while preserving the personal assistant direction.
 
 ## Suggested Rewrites
-- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-  After: "EasyLife keeps tasks, notes, calendar planning, workouts, and projects in one daily workspace."
+- Before: "command center"
+  After: "daily workspace"
 
-- Before: "Products and demo below"
-  After: "Browse the apps"
+- Before: "Inbox Intelligence"
+  After: "Inbox review"
 
-- Before: "EasyCalendar handoff"
-  After: "Calendar prep"
+- Before: "capacity signal"
+  After: "Today's load"
+
+- Before: "approval queue"
+  After: "Review suggestions"
+
+- Before: "What am I forgetting"
+  After: "Check today's loose ends"
+
+- Before: "Plan intensity"
+  After: "Choose today pace"
+
+- Before: "Draft reply"
+  After: "Prepare reply for review"
 
 - Before: "sample data"
   After: "example day"
 
-- Before: "proof"
-  After: "preview" or "example", depending on whether the user sees it.
-
-- Before: "polish project"
-  After: "Finish project brief"
-
-- Before: "ship timeline"
-  After: "Weekly planning review"
-
-- Before: "command center"
-  After: "daily workspace"
-
 ## Voice Rules
-- Lead with what the user can do today.
-- Use concrete nouns: task list, note, calendar block, workout log, project brief, study load, draft reply.
-- Avoid internal build words in visible UI: demo, proof, sample data, polish, ship, handoff.
-- Keep primary labels short and useful.
-- Put explanation behind the user's next action, not before it.
-- Separate marketing copy from working app copy.
-- Signed-in screens should never sound like a sales page.
-- Do not imply real AI, backend automation, email sending, or prediction unless the feature is actually present and approved.
-- For scenario or coach language, say "suggested", "signal", "based on", and "review" instead of certainty language.
-- Prefer calm practical warmth over cleverness.
+- Lead with what the user can do today, not what the system is.
+- Use concrete nouns: task, note, calendar block, study block, workout log, reply draft, suggestion.
+- Do not imply prediction, memory, or AI judgment unless the visible source and limitation are shown.
+- Keep smart actions approval-based: review, choose, add, prepare, open.
+- Avoid builder terms in visible copy: command layer, proof, polish, handoff, sample data, workflow.
+- Keep primary labels short; put explanations behind secondary text or detail panels.
+- Marketing copy can explain the product, but app copy should use direct task labels.
+- If a control changes assumptions, name what changes and what stays fixed.
 
 ## Next 5 Copy Tasks
-- [ ] Replace the public metadata phrase "one command center" with "one daily workspace"; guardrail: metadata copy only, no route or behavior changes.
-- [ ] Scan visible JSX strings for "demo", "proof", and "sample data"; guardrail: change only rendered user-facing text, not query params, class names, or internal IDs.
-- [ ] Review the signed-in HQ first viewport for sales-language leftovers; guardrail: remove "Start Free", "See Features", or product-promise phrasing if present, without adding new sections.
-- [ ] Review EasyProjects visible examples for "polish", "ship", and "handoff"; guardrail: replace one internal-process phrase with a concrete user task and keep the same data shape.
-- [ ] Review Phase 7 capacity and coach labels for overconfidence; guardrail: use "capacity signal", "suggested focus", and "plan intensity" without implying prediction or automated advice.
+- [ ] Replace visible "command center" metadata with "daily workspace" or similarly concrete language; do not touch auth, deploy config, generated output, or package files unless explicitly approved.
+- [ ] Audit the new Today/HQ capacity copy and replace "capacity signal" with "Today's load" or "Room today"; include a short source cue such as tasks, calendar, or workout only if already visible.
+- [ ] Rename any visible "Inbox Intelligence" or "approval queue" copy to "Inbox review" and "Review suggestions"; preserve all behavior and do not imply automatic email action.
+- [ ] Review "What am I forgetting" and rewrite it as "Check today's loose ends" unless the UI clearly explains the local sources being checked.
+- [ ] Review school and coach labels for over-advice; keep labels practical, such as "Study block", "Due this week", "Light day", "Normal day", and "Push day", with no claims of prediction.
 
 ## Stop Or Continue
 continue but fix copy first
