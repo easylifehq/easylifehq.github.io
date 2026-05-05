@@ -48,7 +48,7 @@ const intentMeta: Record<CommandIntent, { label: string; routeLabel: string }> =
   calendar: { label: "Calendar", routeLabel: "Calendar" },
   note: { label: "Note", routeLabel: "Notes" },
   project: { label: "Project", routeLabel: "Projects" },
-  review: { label: "Review", routeLabel: "Command Center" },
+  review: { label: "Review", routeLabel: "Today Review" },
   contact: { label: "Contact", routeLabel: "Contacts" },
   workout: { label: "Workout", routeLabel: "Workout" },
 };
@@ -302,7 +302,7 @@ export function CommandCenterPage() {
 
       <section className="command-hero" aria-labelledby="command-title">
         <div>
-          <p className="eyebrow">Today Command Center</p>
+          <p className="eyebrow">Today</p>
           <h1 id="command-title">One calm cockpit. Layers underneath.</h1>
           <p>
             EasyLife reads your day, chooses a next move, and keeps deeper systems tucked one tap away.
@@ -382,7 +382,7 @@ export function CommandCenterPage() {
         </div>
       </PageSection>
 
-      <section className="command-layer-tabs" aria-label="Command Center layers">
+      <section className="command-layer-tabs" aria-label="Today review layers">
         {[
           ["today", "Today"],
           ["review", "Review Queue"],
