@@ -4,74 +4,72 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is getting calmer and more concrete, but visible copy still slips into builder language, AI promise language, and broad workspace framing before the daily user action is fully clear.
+EasyLife is moving toward a calm daily workspace voice, but visible and semi-visible copy still mixes user language with builder terms like "command center", "demo", "proof", and "sample".
 
 ## Mission Voice Fit
-The best current language fits the mission well: "Capture anything", "Plan my day", "Opening your workspace", and the Today/HQ next-move framing feel useful, personal, and direct. The weaker copy still sounds like a product team narrating the system: "command center", "workflow", "demo", "proof", "handoff", "AI workspace lab", and "Start with..." pull EasyLife back toward an internal build or marketing tour instead of a calm daily assistant.
+The strongest copy fits the mission when it says what the user can do next today: capture a note, review a task list, approve an inbox item, plan a calendar block, or open the workspace. The weaker copy still frames EasyLife like a product build or feature tour instead of a signed-in personal assistant surface. For the current Phase 5 inbox work, the voice should be especially plain and trust-building: what was found, what type it is, what action is safe, and what requires approval.
 
 ## Delicate Wording Risks
-- "command center" in `404.html` and `app-vNext/index.html` is broad SaaS language and conflicts with the softer personal workspace direction.
-- "AI cockpit" in app navigation sounds overblown and less trustworthy than a concrete module label.
-- "Workflow" as a marketing nav label is generic and does not tell the buyer what they get.
-- "Start Free" remains prominent on product pages; if these routes are being used as product proof for the signed-in experience, it reads like marketing chrome instead of app copy.
-- "EasyNotes" copy still includes "Draft handoff to EasyList", "EasyList handoff", and "Capture, refine, then hand off"; "handoff" is internal process language, not user benefit.
-- "AI workspace lab" and "A frontend-only sandbox..." are clear internally, but customer-facing experiments should avoid builder framing unless the page is explicitly a developer lab.
-- "Ready to review a safe sample scan" and "Scan sample inbox" sound like demo scaffolding. If visible to users, use "example inbox" or "review example messages."
-- "Start with today's workspace" is close, but "Start with X" can sound like instructions to the builder unless paired with a concrete user action.
-- "The assistant can help organize work..." and similar Settings AI copy risks promising capability without showing exactly what is computed, drafted, or reviewed.
-- "AI Analyze Into Rows" is awkward and mechanical. It should be a user action, not an implementation label.
+- "command center" appears in public meta copy and is too generic SaaS for EasyLife's current direction.
+- "demo" is acceptable in internal route flags, but should not appear as customer-facing UI language.
+- "proof" in `auth-proof-card` appears internal as a class name, but the word should not surface in visible login copy.
+- "sample" IDs in the inbox candidate queue are likely internal, but visible copy must say "example" only when the user needs to know data is not real.
+- Any "approval queue" wording must avoid implying real email automation, Gmail access, sending, archiving, or classification certainty.
+- Inbox candidate language can become risky if it sounds like the system has already decided the correct action. Prefer "Looks like" or neutral labels over confident automation language.
+- "Keep visible" is clear but slightly odd as a candidate type. It may need a warmer visible label like "Keep in inbox" or "Leave visible" if that matches the UI action.
+- "Draft reply" must clearly mean "prepare for review", not "send".
+- Repeated product phrases like "personal operating system" and "command center" still risk making the app sound broad before it feels useful.
+- Customer-facing first-screen copy should avoid builder words such as "handoff", "polish", "proof", "workflow", "sample data", and "demo".
 
 ## Beautiful Language Opportunities
-- Replace "command center" with "daily workspace" or "one calm workspace" wherever it is public-facing.
-- Turn generic "workflow" labels into concrete nouns: "Daily plan", "Task list", "Calendar prep", "Project brief", "Inbox review."
-- Make AI language humbler and more review-based: "Draft suggestions", "Review before saving", "Example output", "Manual fallback."
-- Keep the HQ first screen in verbs and nouns: "Plan today", "Capture a thought", "Review next task", "Open calendar block."
-- Let marketing pages use product promise sparingly, then move quickly to functional previews.
-- Make experiments copy clearly separate from production app copy: "Example command" is safer than "AI command" when the behavior is mock or preview-only.
+- Make the inbox surface feel careful and humane: "Review before anything changes" is stronger than automation language.
+- Use concrete type labels: "Task", "Deadline", "Event", "Follow-up", "Keep in inbox", "Draft reply".
+- Add short outcome copy near approval actions: "Add to EasyList", "Put on calendar", "Save reply draft", "Leave as email".
+- Let Today copy stay brief: one next move, one today context line, and one capture action.
+- Replace broad suite language with daily-life nouns: "today", "task list", "calendar block", "note", "reply draft", "follow-up", "workspace".
+- Use progressive disclosure for inbox explanation. The first screen should not explain classification logic.
 
 ## Priority Rewrite
-Fix the remaining customer-facing builder/process words next, especially "command center", "workflow", "handoff", "proof", "demo", and "sample" where they appear in visible strings or metadata. The next Nami task should be a narrow copy-only pass over marketing, HQ, EasyNotes, EasyList Email, and experiment labels, replacing one phrase at a time with concrete daily-life nouns without adding new claims or longer explanations.
+The most important wording problem to fix next is the Phase 5 inbox classification language. Every candidate must make clear that EasyLife is proposing a safe, reviewable action, not taking action on email. Nami should update visible labels and helper text so the user sees the candidate type, the source, the proposed next step, and the approval requirement in plain language.
 
 ## Suggested Rewrites
-- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and follow-ups in one calm workspace."
+- Before: "command center"
+  After: "daily workspace"
 
-- Before: "Draft handoff to EasyList"
-  After: "Action lines for EasyList"
+- Before: "Approval queue"
+  After: "Review inbox suggestions"
 
-- Before: "Capture, refine, then hand off"
-  After: "Capture, clean up, then turn into action"
+- Before: "Email classification"
+  After: "Suggested email actions"
 
-- Before: "Workflow"
-  After: "Daily plan"
+- Before: "Draft reply"
+  After: "Prepare reply draft"
 
-- Before: "AI cockpit"
-  After: "Assistant tools"
+- Before: "Keep visible"
+  After: "Keep in inbox"
 
-- Before: "AI workspace lab"
-  After: "Assistant preview"
+- Before: "sample data"
+  After: "example day"
 
-- Before: "Scan sample inbox"
-  After: "Review example inbox"
-
-- Before: "AI Analyze Into Rows"
-  After: "Create editable task rows"
+- Before: "No real Gmail send/archive automation"
+  After: "Nothing is sent or archived until you approve it."
 
 ## Voice Rules
-- Use concrete daily-life nouns before product abstractions: task list, calendar block, note, project brief, workout log, inbox review.
-- Avoid builder words in visible copy: demo, proof, handoff, polish, workflow, artifact, command center.
-- Keep first-screen copy short: one next action, today context, then compact status.
-- Treat AI as draft, review, or example output unless real connected behavior is visible and reversible.
-- Separate marketing promise from app action. Public pages may explain; signed-in app screens should tell the user what to do next.
-- Prefer verbs that match the actual UI: capture, review, plan, open, add, log, draft.
-- Do not make the app sound more certain than it is. Use "suggest", "draft", "example", and "review before saving" where appropriate.
+- Use concrete daily-life nouns before product abstractions.
+- Say what the user can do, what changes, and what stays unchanged.
+- For inbox intelligence, make approval visible near every action.
+- Do not imply sending, archiving, deleting, scheduling, or task creation has happened before user approval.
+- Keep first-screen labels short; move explanations into details, drawers, or secondary text.
+- Avoid builder language in visible UI: "demo", "proof", "handoff", "polish", "workflow", "sample data".
+- Prefer "suggested", "review", "prepare", and "approve" over "automate", "decide", "process", or "classify".
+- Keep the tone calm and professional, not clever.
 
 ## Next 5 Copy Tasks
-- [ ] Replace public "command center" metadata with "calm workspace"; guardrail: metadata/copy only, no app logic or config behavior changes.
-- [ ] Rename one visible "Workflow" marketing nav or section label to a concrete user noun; guardrail: preserve anchors and routing behavior.
-- [ ] Replace EasyNotes "handoff" phrases with action-oriented note/task language; guardrail: copy only, no data or conversion behavior changes.
-- [ ] Soften one visible AI label from capability claim to review-first draft language; guardrail: do not add new AI promises or implementation details.
-- [ ] Replace one visible "sample" or "demo" inbox/action phrase with "example" language; guardrail: keep mock/demo behavior unchanged.
+- [ ] Replace visible "command center" meta/product copy with "daily workspace" or another concrete phrase; do not touch internal docs or config unless the text is customer-facing.
+- [ ] Review `EasyListEmailPage.tsx` visible candidate labels and standardize them to "Task", "Deadline", "Event", "Follow-up", "Keep in inbox", and "Prepare reply draft"; do not change data shapes or behavior.
+- [ ] Add or refine one short approval reassurance near inbox suggestions: "Nothing is sent or archived until you approve it"; do not add claims about Gmail automation.
+- [ ] Search visible UI strings for "demo", "proof", "polish", "handoff", and "sample data"; replace only one customer-facing instance per task with concrete daily-workspace language.
+- [ ] Tighten the inbox empty or low-content state so it names the next action and outcome in one sentence; avoid explaining the system or classification process.
 
 ## Stop Or Continue
 continue but fix copy first
