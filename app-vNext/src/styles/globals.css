@@ -5976,6 +5976,44 @@ button.calendar-detail-card:disabled {
   line-height: 1.25;
 }
 
+.hq-natural-capture {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.58rem 0.72rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 24%, var(--ui-border-subtle) 76%);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 6%, var(--ui-bg-card, #fffdf9) 94%);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.hq-natural-capture:hover,
+.hq-natural-capture:focus-visible {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 46%, var(--ui-border-subtle) 54%);
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 10%, var(--ui-bg-card, #fffdf9) 90%);
+}
+
+.hq-natural-capture span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.68rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.hq-natural-capture strong {
+  min-width: 0;
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 0.92rem;
+  font-weight: 760;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+}
+
 .hq-context-stack {
   border: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)) 78%, transparent);
   border-radius: 8px;
@@ -8908,6 +8946,20 @@ button.calendar-detail-card:disabled {
   .hq-today-summary p {
     font-size: 0.82rem;
     line-height: 1.2;
+  }
+
+  .hq-natural-capture {
+    grid-template-columns: 1fr;
+    gap: 0.12rem;
+    padding: 0.46rem 0.56rem;
+  }
+
+  .hq-natural-capture span {
+    font-size: 0.62rem;
+  }
+
+  .hq-natural-capture strong {
+    font-size: 0.82rem;
   }
 
   .hq-context-stack summary {

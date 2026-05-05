@@ -449,6 +449,10 @@ export function UniversalCapture() {
   }
 
   useEffect(() => {
+    function handleOpenCapture() {
+      openCapture();
+    }
+
     function handleShortcut(event: KeyboardEvent) {
       const target = event.target as HTMLElement | null;
       const isTyping =
@@ -468,8 +472,12 @@ export function UniversalCapture() {
       }
     }
 
+    window.addEventListener("easylife:open-capture", handleOpenCapture);
     window.addEventListener("keydown", handleShortcut);
-    return () => window.removeEventListener("keydown", handleShortcut);
+    return () => {
+      window.removeEventListener("easylife:open-capture", handleOpenCapture);
+      window.removeEventListener("keydown", handleShortcut);
+    };
   }, [captureModes, isAppVisible, screenAction.mode]);
 
   useEffect(() => {

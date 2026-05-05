@@ -289,6 +289,10 @@ export function HQPage() {
       visible: isAppVisible("easyprojects"),
     },
   ];
+  function openNaturalCapture() {
+    window.dispatchEvent(new Event("easylife:open-capture"));
+  }
+
   return (
     <main className="page-wrap app-theme app-theme-easyhq">
       {error ? <p className="error-copy">{error}</p> : null}
@@ -306,6 +310,10 @@ export function HQPage() {
             <span>Today</span>
             <p>{todaySummary.join(" / ")}</p>
           </div>
+          <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
+            <span>Capture anything</span>
+            <strong>Type a task, note, event, or deadline</strong>
+          </button>
           <details className="hq-context-stack">
             <summary>
               <span>Context</span>
