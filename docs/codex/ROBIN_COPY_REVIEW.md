@@ -4,75 +4,74 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is close to a calm daily workspace, but visible copy still slips into internal product language and generic command-center framing.
+EasyLife is moving toward a calm daily workspace voice, but visible copy still leaks internal product-building language and marketing-stage framing where the user needs direct action language.
 
 ## Mission Voice Fit
-The strongest language points toward the right mission: tasks, notes, calendar planning, workouts, projects, settings, workspace, and daily plan are concrete enough for a personal assistant suite. The weaker language still frames EasyLife as a tool being demonstrated rather than a place the user opens to act on today. Phrases like "command center", "proof", "demo", "sample data", "Start with", and "One calm cockpit. Layers underneath." make the app sound staged, promotional, or internally constructed instead of trustworthy and lived-in.
+The best language fits the mission when it uses concrete daily nouns: tasks, notes, calendar planning, workouts, projects, workspace, and today. That voice supports a connected personal assistant product. The weaker language still says "command center", "demo", "proof", "sample", "start with", and "personal operating system", which makes the product feel like a pitch, prototype, or internal build review instead of a trustworthy daily tool.
 
 ## Delicate Wording Risks
-- "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center." sounds generic SaaS and feature-inventory heavy. It also puts "pipeline work" beside personal-life modules without explaining the user benefit.
-- "Today Command Center", "Command Palette", and "Type anything" make the protected first screen feel like a system console instead of a daily assistant surface.
-- "One calm cockpit. Layers underneath." is too stylized and abstract for the first screen. It does not answer what the user should do or what they get.
-- "Start Free" and "See Features" are acceptable on public pages, but if they dominate module pages they push the experience toward acquisition copy before the product example is clear.
-- "Start with" can sound like instruction copy from a builder rather than a user-facing state. It needs a concrete action or object after it.
-- "proof" in visible class-adjacent auth copy may be harmless as a class name, but any visible "proof" language should be avoided unless it names specific evidence.
-- "demo" and "sample data" are acceptable only in dev/internal contexts. Customer-facing surfaces should say "example day", "example task list", or "preview".
-- "screen" language in visible sample note text risks sounding like product critique rather than a real user's note.
-- Repeated "Products", "Features", and module identity labels make public pages feel like a brochure loop instead of a connected app doorway.
+- "command center" in public metadata overstates the product and sounds like generic SaaS positioning rather than a calm personal workspace.
+- "personal operating system" is mission language, but it should not become customer-facing hero or app copy unless the screen actually behaves like one daily start surface.
+- "demo" and "sample data" are acceptable in internal route/query logic, but visible UI should say "example day", "example task", "example note", or "workspace preview".
+- "proof" in class names is harmless, but any visible "proof" language would feel like builder evidence instead of buyer value.
+- "Start with one small win" is understandable, but slightly motivational and generic. It could be more useful if tied to the next concrete action.
+- "Opening your workspace" is calm and good. Keep this direction.
+- "Make modules feel like rooms, not dashboards" is lovely as internal seed copy, but should not be visible as product instruction unless framed as a note example.
+- Repeated marketing CTA language such as "Start Free" and "See Features" conflicts with the protected first-screen contract when the signed-in user needs a next action, not a sales path.
+- The copy still risks feature-dump staging: module labels, feature chips, and explanatory page intros can crowd the first screen before the user sees what to do today.
 
 ## Beautiful Language Opportunities
-- Rename protected first-screen command language around "Today", "Next up", "Add to today", "Capture a thought", or "Plan the next block".
-- Replace broad suite promises with concrete daily outcomes: "See today, capture what comes up, and move between tasks, notes, calendar, and workouts without losing your place."
-- Make empty states warmer and more useful with one clear action, not an explanation of the system.
-- Let module names stay short in primary navigation: Today, Calendar, Tasks, Notes, Coach, Inbox, More.
-- Use "workspace" carefully as a supporting noun, not a standalone value prop.
-- Public module previews can sound more real by using concrete rows like "Calendar prep", "Weekly planning review", "Workout log", and "Project brief".
-- Settings copy should say what the control changes and where the user will feel it, not describe the page as a control center too often.
+- Replace platform nouns with daily nouns: "workspace", "today", "task list", "calendar block", "recent notes", "workout log", "project brief".
+- Make the protected HQ first screen read like a useful morning surface: one next move, today context, and compact module status.
+- Use shorter primary labels: "Today", "Tasks", "Calendar", "Notes", "Coach", "Inbox", "More".
+- Move explanatory copy below the first action. The first viewport should not define EasyLife; it should help the user act.
+- Give empty states a precise next step: "Add a task", "Write a quick note", "Review today's calendar", "Log a workout".
+- Make public copy calmer by showing concrete use instead of claiming system breadth.
 
 ## Priority Rewrite
-The most important wording problem is the protected first-screen "command center" frame. Nami should replace repeated command/cockpit/palette language with concrete Today language: one next move, one capture action, and compact module status. The copy should make the signed-in user feel they are opening today's workspace, not testing a product control panel.
+Fix the remaining customer-facing "command center", "demo", "proof", "polish", "handoff", and "sample data" language before more visual polish. Nami should make one narrow visible-copy pass in `app-vNext/src/`, replacing only rendered user-facing instances with concrete daily-workspace nouns while leaving internal identifiers, query params, class names, and docs alone.
 
 ## Suggested Rewrites
 - Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and settings in one daily workspace."
-
-- Before: "Today Command Center"
-  After: "Today"
-
-- Before: "Command Palette"
-  After: "Quick capture"
-
-- Before: "Type anything"
-  After: "Add a task, note, event, or workout idea"
-
-- Before: "One calm cockpit. Layers underneath."
-  After: "Start with today. Keep the rest close."
+  After: "EasyLife keeps tasks, notes, calendar planning, workouts, and projects in one calm workspace."
 
 - Before: "Start with one small win."
-  After: "Choose one small task for today."
+  After: "Add one task for today."
 
 - Before: "sample data"
   After: "example day"
 
+- Before: "demo"
+  After: "preview" or "example"
+
 - Before: "Calendar handoff"
   After: "Calendar prep"
 
+- Before: "proof"
+  After: "workspace preview"
+
+- Before: "polish"
+  After: "clean up the task list"
+
+- Before: "personal operating system"
+  After: "daily workspace"
+
 ## Voice Rules
-- Lead with the user's day, not the product architecture.
-- Use concrete nouns: task list, note, calendar block, workout log, project brief, daily plan, settings.
-- Avoid "command center", "cockpit", "proof", "handoff", "polish", "workflow", "sample data", and customer-facing "demo".
-- Keep first-screen labels short: Today, Next up, Capture, Calendar, Tasks, Notes, Coach, Inbox, More.
-- Do not explain every module above the fold.
-- Separate public marketing copy from app copy. Marketing can explain; the signed-in app should direct action.
-- Empty states should answer: what is missing, what can I do next, what will happen.
-- Never turn uncertainty or mock content into a real product claim.
+- Lead with what the user can do today.
+- Use concrete nouns over product abstractions.
+- Keep primary labels short and task-oriented.
+- Do not explain the whole suite on the first screen.
+- Keep marketing copy separate from signed-in app copy.
+- Avoid builder words in visible UI: "demo", "proof", "handoff", "polish", "sample data", "workflow".
+- Use calm confidence, not hype.
+- Preserve uncertainty and example status when content is mock or illustrative.
 
 ## Next 5 Copy Tasks
-- [ ] Replace one visible "command center" phrase in app or public copy with "daily workspace" or a more concrete Today label; do not touch internal docs or identifiers.
-- [ ] Rename one protected first-screen "Command Palette" or command-adjacent label to "Quick capture" or another concrete action label; keep behavior unchanged.
-- [ ] Replace one visible "demo", "sample data", or "proof" phrase with "example day", "preview", or specific evidence language; avoid new claims.
-- [ ] Tighten one public module hero so the product name, promise, primary action, and preview appear before feature-inventory copy; do not add sections.
-- [ ] Review one empty or low-content state and rewrite it to name the next user action in one sentence; avoid builder words and broad product promises.
+- [ ] Replace the visible meta description phrase "one command center" with "one calm workspace"; do not change internal docs or package files.
+- [ ] Search rendered JSX strings in `app-vNext/src/` for "demo", "proof", "handoff", "polish", and "sample data"; replace one visible instance only and ignore class names, ids, query params, and internal identifiers.
+- [ ] Review the protected HQ first viewport and shorten one explanatory sentence so it names the next user action before suite explanation.
+- [ ] Review one empty or low-content state and make the next step concrete, using an existing action only.
+- [ ] Review marketing hero CTA-adjacent copy and demote one feature-list sentence that competes with product name, promise, action, and preview.
 
 ## Stop Or Continue
 continue but fix copy first
