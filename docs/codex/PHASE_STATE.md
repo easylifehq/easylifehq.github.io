@@ -1,10 +1,10 @@
 ﻿# Phase State
 
-Current Phase: phase-7-capacity-and-coach
+Current Phase: phase-8-notes-and-memory
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
 Primary Action: Open Today, see the next best move, and capture or clear one item.
-Showable Moment: EasyLife helps choose a realistic plan based on day load, energy, and workouts.
+Showable Moment: Notes feel connected to action, memory, and follow-up rather than a separate drawer.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
 Complexity Budget: Protected first viewport: one daily action, compact today context, quiet module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
@@ -13,11 +13,11 @@ Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired
 Phase Model Policy: judgment-heavy
 Parking State: ACTIVE
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: Capacity/Coach shows daily capacity, light/normal/push planning, workout/recovery signal, and fitness coach context without preachiness.
-Next Phase Criteria: Move to Phase 8 Notes And Memory when capacity and coach feel connected to Today.
+Done Signal: Notes support quick capture, recent review, search/browse hierarchy, and visible paths to turn notes into actions.
+Next Phase Criteria: Move to Phase 9 Optional Power Modules when notes feel connected and the next work is optional depth without clutter.
 Repair Trigger: none
-Repair Return Phase: phase-7-capacity-and-coach
-Updated At: 2026-05-05 16:05:28
+Repair Return Phase: phase-8-notes-and-memory
+Updated At: 2026-05-05 16:55:39
 
 ## Phase Order
 
@@ -60,6 +60,7 @@ repair is an interrupt lane, not a normal destination. Any phase can enter repai
 - Honor human taste notes.
 - Use stronger judgment for Shape, Simplicity, and Polish.
 - Park review-ready ships instead of continuing to generate improvements.
+
 
 
 
