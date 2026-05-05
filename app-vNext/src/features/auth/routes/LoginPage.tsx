@@ -79,7 +79,7 @@ export function LoginPage() {
             </p>
           </div>
           <div className="auth-proof-card">
-            <span>Start with</span>
+            <span>Open today</span>
             <strong>List + Notes + Calendar</strong>
             <p>Add the rest when the day needs more structure.</p>
           </div>
