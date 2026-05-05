@@ -4,29 +4,29 @@
 RED
 
 ## Progress Against Mission
-The branch has been moving toward the EasyLife mission through small protected-app polish, copy cleanup, accessibility repair, and Phase 1 planning. Current progress is blocked by a security review stop signal, not by build or working-tree state.
+The branch is moving toward the EasyLife mission with small, frontend-focused polish, especially the protected HQ today-first surface. However, it is not ready to continue unattended because Joey security review is RED and explicitly calls for human security review.
 
 ## Safety Review
-Joey security review is RED and explicitly says stop for human security review. No forbidden file changes are listed in this checkpoint, and the working tree is clean.
+No forbidden file changes found in the provided working tree summary. Risk is the blocking Joey security review signal, not the changed file list.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: two Phase 1 tasks were quarantined before implementation; no new code landed from those attempts.
-- Files changed: docs/codex review and state files changed since base; working tree is currently clean.
-- Commits added: latest HEAD is `69bcd8b` (`Codex accessibility review batch 1`), with multiple prior review/report commits since base.
-- Queue status: 3 unchecked tasks remain.
+- Completed tasks in this checkpoint window: Phase 1 today-first first viewport slice for protected HQ.
+- Files changed: `app-vNext/src/features/hq/routes/HQPage.tsx`; docs/report files also differ since base.
+- Commits added: latest HEAD `90731fe` plus prior review/checkpoint commits since base.
+- Queue status: 2 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low visual bugs.
-- Simon design review: YELLOW; should influence next tasks with visual fixes first.
-- Robin copy review: YELLOW; should influence next tasks with copy cleanup first.
-- Accessibility review: YELLOW; patch warnings soon.
-- Performance review: GREEN; does not block next tasks.
-- Joey security review: RED; blocks unattended continuation and requires human security review.
-- Franky formula review: missing; should be completed if formulas/spreadsheets become relevant.
-- Product truth: MISSING but `ok: True`; no configured `PRODUCT_TRUTH.md`, not blocking by itself.
+- Visual bug report: GREEN influence; no high/medium/low visual bugs reported.
+- Simon design review: YELLOW influence; fix visual issues first.
+- Robin copy review: YELLOW influence; fix copy before broad continuation.
+- Accessibility review: YELLOW influence; patch accessibility warnings soon.
+- Performance review: GREEN influence; no next-task blocker.
+- Joey security review: RED influence; stop for human security review.
+- Franky formula review: missing influence; should be filled if formulas/spreadsheets matter, otherwise note as absent.
+- Product truth: missing config, ok true; no configured blocker.
 
 ## Recommended Next Step
 stop for human review
@@ -34,10 +34,11 @@ stop for human review
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Security review is RED, so the next batch should be a single human-directed repair or verification step before mission-forward work resumes.
+- The next action should resolve or clear the Joey RED security gate before any mission-forward queue work continues.
 
 ## Notes For Human Reviewer
-- Build passed and working tree is clean.
-- Joey security gate is the blocker.
-- Two Phase 1 tasks were quarantined as too large and need smaller slice planning.
-- Product truth is not configured.
+- Working tree is clean.
+- Build passed.
+- Queue is not empty: 2 tasks remain.
+- Joey RED overrides otherwise healthy build/visual status.
+- Product truth is not configured: `No PRODUCT_TRUTH.md configured.`
