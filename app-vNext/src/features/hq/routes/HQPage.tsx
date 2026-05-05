@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
@@ -109,6 +109,29 @@ type TodayContextItem = {
 };
 
 type CapacityLevel = "Light" | "Steady" | "Full";
+type PlanIntensityMode = "Light" | "Normal" | "Push";
+
+const planIntensityModes: Array<{
+  mode: PlanIntensityMode;
+  label: string;
+  detail: string;
+}> = [
+  {
+    mode: "Light",
+    label: "Protect room",
+    detail: "Keep one must-do item, one small capture, and a short workout log only if it fits.",
+  },
+  {
+    mode: "Normal",
+    label: "One focus block",
+    detail: "Handle the next move, keep the calendar honest, and leave space for normal training.",
+  },
+  {
+    mode: "Push",
+    label: "Add a stretch block",
+    detail: "Use this only after the first move is handled and the day still feels open.",
+  },
+];
 
 function isSameDate(left: Date | null, right: Date) {
   return Boolean(left && startOfDay(left).getTime() === startOfDay(right).getTime());
@@ -120,6 +143,7 @@ export function HQPage() {
   const mobileRuntime = useMobileRuntime();
   const lastAppRoute = useLastAppRoute();
   const showPlanningPreview = isExperimentalFeatureEnabled("dailyReview");
+  const [planIntensity, setPlanIntensity] = useState<PlanIntensityMode>("Normal");
   const today = startOfDay(new Date());
 
   const todayEvents = events
@@ -166,6 +190,7 @@ export function HQPage() {
         : "Recover urgent work first and avoid adding extra commitments.",
     },
   }[capacityLevel];
+  const selectedPlanIntensity = planIntensityModes.find((item) => item.mode === planIntensity) || planIntensityModes[1];
   const todaySummary = [
     `${overdueTasks.length + dueTodayTasks.length} due`,
     `${todayEvents.length} event${todayEvents.length === 1 ? "" : "s"}`,
@@ -393,6 +418,27 @@ export function HQPage() {
             <small>
               {formatDuration(dueTaskMinutes)} due work / {formatDuration(scheduledMinutes)} scheduled
             </small>
+          </div>
+          <div className="hq-plan-intensity" aria-label="Choose today's pace">
+            <div className="hq-plan-intensity-copy">
+              <span>Choose today&apos;s pace</span>
+              <strong>{planIntensity}</strong>
+              <p>{selectedPlanIntensity.detail}</p>
+            </div>
+            <div className="hq-plan-intensity-controls" role="group" aria-label="Plan intensity">
+              {planIntensityModes.map((item) => (
+                <button
+                  type="button"
+                  key={item.mode}
+                  className={item.mode === planIntensity ? "is-active" : ""}
+                  aria-pressed={item.mode === planIntensity}
+                  onClick={() => setPlanIntensity(item.mode)}
+                >
+                  <strong>{item.mode}</strong>
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
             <span>Capture anything</span>

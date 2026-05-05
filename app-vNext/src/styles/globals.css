@@ -5882,6 +5882,88 @@ button.calendar-detail-card:disabled {
   border-color: color-mix(in srgb, #b45309 30%, var(--ui-border-subtle));
 }
 
+.hq-plan-intensity {
+  display: grid;
+  grid-template-columns: minmax(0, 0.74fr) minmax(17rem, 1fr);
+  gap: 0.72rem;
+  align-items: stretch;
+  padding: 0.72rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 18%, var(--ui-border-subtle));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg-soft)) 94%, white 6%);
+}
+
+.hq-plan-intensity-copy {
+  display: grid;
+  align-content: center;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.hq-plan-intensity-copy span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.68rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.hq-plan-intensity-copy strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 1rem;
+  line-height: 1.12;
+}
+
+.hq-plan-intensity-copy p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.hq-plan-intensity-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.42rem;
+  min-width: 0;
+}
+
+.hq-plan-intensity-controls button {
+  display: grid;
+  align-content: center;
+  gap: 0.16rem;
+  min-width: 0;
+  min-height: 3.4rem;
+  padding: 0.54rem 0.58rem;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  border-radius: 8px;
+  background: var(--ui-bg-card-elevated, #fffdf9);
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  text-align: left;
+  cursor: pointer;
+}
+
+.hq-plan-intensity-controls button.is-active {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 44%, var(--ui-border-subtle));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 12%, transparent), transparent 72%),
+    var(--ui-bg-card-elevated, #fffdf9);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--app-accent, var(--shell-accent)) 18%, transparent);
+}
+
+.hq-plan-intensity-controls strong {
+  color: inherit;
+  font-size: 0.88rem;
+  line-height: 1.05;
+}
+
+.hq-plan-intensity-controls span {
+  overflow-wrap: anywhere;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.68rem;
+  font-weight: 750;
+  line-height: 1.15;
+}
+
 .hq-start-heading {
   display: flex;
   align-items: flex-start;
@@ -9241,6 +9323,38 @@ button.calendar-detail-card:disabled {
   .workout-capacity-signal small {
     text-align: left;
     white-space: normal;
+  }
+
+  .hq-plan-intensity {
+    grid-template-columns: 1fr;
+    gap: 0.48rem;
+    padding: 0.52rem;
+  }
+
+  .hq-plan-intensity-copy strong {
+    font-size: 0.86rem;
+  }
+
+  .hq-plan-intensity-copy p {
+    font-size: 0.72rem;
+    line-height: 1.28;
+  }
+
+  .hq-plan-intensity-controls {
+    gap: 0.28rem;
+  }
+
+  .hq-plan-intensity-controls button {
+    min-height: 3rem;
+    padding: 0.44rem 0.42rem;
+  }
+
+  .hq-plan-intensity-controls strong {
+    font-size: 0.78rem;
+  }
+
+  .hq-plan-intensity-controls span {
+    font-size: 0.6rem;
   }
 
   .hq-context-stack summary {

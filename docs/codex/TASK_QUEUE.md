@@ -843,7 +843,7 @@ pm.cmd run build. [class:feature risk:medium mode:single impact:visible surface:
 ## EasyLife Next Variation Phase 7 - Capacity And Coach 2026-05-05
 
 - [x] Phase 7 - Capacity signal slice: add or refine a local deterministic capacity signal on Today/Coach using calendar/task/workout context where available. No backend/schema changes. Acceptance: npm.cmd run build from app-vNext. [class:feature risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/hq/,app-vNext/src/features/easyworkout/,app-vNext/src/styles/ accept:npm.cmd run build]
-- [ ] Phase 7 - Plan intensity modes: add or refine Light/Normal/Push plan UI copy and controls as local UI only. Acceptance: npm.cmd run build from app-vNext. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- [x] Phase 7 - Plan intensity modes: add or refine Light/Normal/Push plan UI copy and controls as local UI only. Acceptance: npm.cmd run build from app-vNext. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
 - [ ] Phase 7 - Fitness coach connection: make workout logging/progress feel connected to the daily plan without overcrowding Today. Acceptance: npm.cmd run build from app-vNext. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/easyworkout/,app-vNext/src/features/hq/,app-vNext/src/styles/ accept:npm.cmd run build]
 - [ ] Phase 7 - Capacity And Coach review packet: run checks and write docs/codex/PHASE_7_REVIEW.md. Do not start Phase 8. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/,app-vNext/src/ accept:npm.cmd run build]
 
