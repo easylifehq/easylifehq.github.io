@@ -2976,3 +2976,18 @@
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 14:37:44
+
+- Task attempted: Phase 5 - Email classification language: make candidate types clear and calm: task, deadline, event, follow-up, keep visible, draft reply. Preserve behavior and data shapes. Acceptance: npm.cmd run build from app-vNext. [class:copy risk:low mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: copy
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

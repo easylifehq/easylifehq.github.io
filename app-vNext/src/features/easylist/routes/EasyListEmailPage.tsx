@@ -30,6 +30,21 @@ type ParsedEmailSeed = {
   body: string;
 };
 
+const suggestionKindLabels: Record<EmailSuggestionKind, string> = {
+  task: "Task",
+  deadline: "Deadline",
+  event: "Event",
+  "follow-up": "Follow-up",
+};
+
+const suggestionStateLabels: Record<EmailSuggestionState, string> = {
+  ready: "Needs review",
+  approved: "Approved",
+  drafted: "Reply draft ready",
+  kept: "Kept visible",
+  ignored: "Dismissed",
+};
+
 const sampleSuggestions: EmailSuggestion[] = [
   {
     id: "sample-final",
@@ -207,9 +222,9 @@ function buildImportedSuggestion(seed: ParsedEmailSeed, index: number): EmailSug
     confidence: kind === "task" ? "Medium" : "High",
     recommendedAction:
       kind === "follow-up"
-        ? "Draft a reply, then decide whether this should become a task."
+        ? "Prepare a reply draft, then decide whether this should become a task."
         : kind === "deadline"
-          ? "Create a task and keep the email visible until handled."
+          ? "Create a task and keep the email in view until handled."
           : kind === "event"
             ? "Create a prep task and check the calendar."
             : "Review once, then approve, keep visible, or dismiss.",
@@ -255,7 +270,7 @@ export function EasyListEmailPage() {
       setStates({});
       setSuggestions(sampleSuggestions);
       setIsScanning(false);
-      setStatusMessage("Example inbox ready. Nothing was sent, archived, or saved automatically.");
+      setStatusMessage("Example inbox ready. Nothing is sent or archived until you approve it.");
     }, 520);
   }
 
@@ -275,13 +290,13 @@ export function EasyListEmailPage() {
 
   function handleApprove(suggestion: EmailSuggestion) {
     setStates((current) => ({ ...current, [suggestion.id]: "approved" }));
-    setStatusMessage(`Approved "${suggestion.taskTitle}" as a local ${suggestion.kind} candidate.`);
+    setStatusMessage(`Approved "${suggestion.taskTitle}" as a local ${suggestionKindLabels[suggestion.kind]} suggestion.`);
   }
 
   function handleDraftReply(suggestion: EmailSuggestion) {
     setStates((current) => ({ ...current, [suggestion.id]: "drafted" }));
     setSelectedDraftId(suggestion.id);
-    setStatusMessage("Reply staged locally for review. No Gmail draft was created.");
+    setStatusMessage("Reply draft prepared locally for review. No Gmail draft was created.");
   }
 
   function handleKeepVisible(suggestion: EmailSuggestion) {
@@ -300,15 +315,15 @@ export function EasyListEmailPage() {
       <PageSection
         eyebrow="Email triage"
         title="Approve inbox suggestions before anything changes"
-        description="Review local email examples as task, deadline, event, and follow-up candidates. Nothing is sent, archived, or saved automatically."
+        description="Review local email examples as Task, Deadline, Event, and Follow-up suggestions. Nothing is sent or archived until you approve it."
       >
         <div className="email-triage-hero">
           <div>
             <span className="settings-state-pill">Local preview</span>
             <h2>One queue, four decisions.</h2>
             <p>
-              Each card names the proposed action, the reason, and the next approval step. Real Gmail send and archive
-              actions stay out of this phase.
+              Each card names the suggestion type, source, and next safe step. Send and archive actions still need a
+              separate approval.
             </p>
           </div>
           <div className="email-triage-actions">
@@ -334,10 +349,10 @@ export function EasyListEmailPage() {
             <strong>{keptCount}</strong>
           </article>
         </div>
-        <div className="email-approval-lanes" aria-label="Approval queue candidate types">
+        <div className="email-approval-lanes" aria-label="Inbox suggestion types">
           {queueTypes.map((kind) => (
             <article key={kind}>
-              <span>{kind}</span>
+              <span>{suggestionKindLabels[kind]}</span>
               <strong>{visibleSuggestions.filter((suggestion) => suggestion.kind === kind).length}</strong>
             </article>
           ))}
@@ -348,7 +363,7 @@ export function EasyListEmailPage() {
       <PageSection
         eyebrow="Bridge"
         title="Paste email summaries"
-        description="Paste one or more snippets. EasyLife classifies them locally so you can approve task, deadline, event, or follow-up candidates."
+        description="Paste one or more snippets. EasyLife suggests Task, Deadline, Event, or Follow-up actions for your review."
       >
         <div className="email-import-panel">
           <textarea
@@ -369,7 +384,7 @@ export function EasyListEmailPage() {
         </div>
       </PageSection>
 
-      <PageSection eyebrow="Review" title="Approval queue">
+      <PageSection eyebrow="Review" title="Review inbox suggestions">
         <div className="email-suggestion-list">
           {visibleSuggestions.map((suggestion) => {
             const state = states[suggestion.id] || "ready";
@@ -377,7 +392,7 @@ export function EasyListEmailPage() {
             return (
               <article className={`email-suggestion-card email-suggestion-card-${state}`} key={suggestion.id}>
                 <div className="email-suggestion-meta">
-                  <span>{suggestion.kind}</span>
+                  <span>{suggestionKindLabels[suggestion.kind]}</span>
                   <span>{suggestion.confidence} confidence</span>
                   <span>{suggestion.receivedAt}</span>
                 </div>
@@ -387,7 +402,7 @@ export function EasyListEmailPage() {
                     <h3>{suggestion.subject}</h3>
                     <strong>{suggestion.taskTitle}</strong>
                   </div>
-                  <span className="info-pill">{state}</span>
+                  <span className="info-pill">{suggestionStateLabels[state]}</span>
                 </div>
                 <p>{suggestion.summary}</p>
                 <div className="email-task-preview">
@@ -404,11 +419,11 @@ export function EasyListEmailPage() {
                     onClick={() => handleApprove(suggestion)}
                     disabled={state === "approved"}
                   >
-                    {state === "approved" ? "Approved" : `Approve ${suggestion.kind}`}
+                    {state === "approved" ? "Approved" : `Approve ${suggestionKindLabels[suggestion.kind]}`}
                   </button>
                   {suggestion.replyDraft ? (
                     <button className="button-secondary" type="button" onClick={() => handleDraftReply(suggestion)}>
-                      {state === "drafted" ? "Draft staged" : "Stage reply"}
+                      {state === "drafted" ? "Reply draft ready" : "Prepare reply draft"}
                     </button>
                   ) : null}
                   <button className="button-secondary" type="button" onClick={() => handleKeepVisible(suggestion)}>
@@ -425,7 +440,7 @@ export function EasyListEmailPage() {
       </PageSection>
 
       {selectedDraft ? (
-        <PageSection eyebrow="Draft" title="Reply ready for approval">
+        <PageSection eyebrow="Draft" title="Prepared reply draft">
           <div className="email-draft-panel">
             <div>
               <span>To</span>
@@ -435,7 +450,7 @@ export function EasyListEmailPage() {
               <span>Subject</span>
               <strong>Re: {selectedDraft.subject}</strong>
             </div>
-            <textarea readOnly value={selectedDraft.replyDraft || ""} rows={7} aria-label="Draft reply" />
+            <textarea readOnly value={selectedDraft.replyDraft || ""} rows={7} aria-label="Prepared reply draft" />
             <p className="helper-copy">
               This is a local reply preview. Sending would require a separate Gmail review step in a later phase.
             </p>
@@ -453,7 +468,7 @@ export function EasyListEmailPage() {
           <article>
             <span>2</span>
             <strong>Stage locally</strong>
-            <p>Let the user approve rows, draft replies, or keep messages visible from one queue.</p>
+            <p>Let the user approve rows, prepare reply drafts, or keep messages visible from one queue.</p>
           </article>
           <article>
             <span>3</span>
