@@ -4,76 +4,67 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is moving toward calm daily-assistant language, but the inbox and HQ copy still exposes too much prototype, builder, and future-integration language to the user.
+EasyLife is moving toward calmer daily-assistant language, but a few visible phrases still sound like internal product scaffolding or safety disclaimers instead of direct user outcomes.
 
 ## Mission Voice Fit
-The strongest copy now fits the mission: "Choose today's next move," "Capture anything," "Open task list," "Review inbox," "Task," "Deadline," "Event," and "Follow-up" are concrete and useful. The product sounds less like a generic dashboard and more like a daily workspace. The weak spots are staging and audience: copy like "Local preview," "example inbox," "What a real Gmail connection should still ask," "later phase," and "Presentation flow" reads as instructions to the builder or reviewer instead of useful product language for a signed-in user.
+The language mostly fits the mission of a clean, trustworthy personal workspace: "daily plan", "workspace", "reply draft", "approval", and concrete candidate types are stronger than older command-center or demo language. The weak spots are staging and audience. Some copy still explains the system mechanics before the user knows the next action, and the app still carries a few builder-facing words in likely public surfaces, especially "command center" in metadata and blunt no-send/no-archive disclaimers in the inbox screen.
 
 ## Delicate Wording Risks
-- "Local preview" is honest, but too prototype-facing for the main inbox surface. It tells the user about implementation state before it tells them what to do.
-- "Review local email examples" and "Review example inbox" make the inbox queue feel like test data, not a usable review surface.
-- "This preview does not connect to Gmail" is clear, but it belongs in secondary safety copy, not as a prominent product statement.
-- "This is a local reply preview. Sending would require a separate Gmail review step in a later phase." is too builder-facing. "Later phase" should not be visible product copy.
-- "What a real Gmail connection should still ask" sounds like a product spec, not an app section.
-- "Stage locally" is internal/process language. The user wants to know what they can review, keep, or approve.
-- "Let the user approve rows" speaks about the user instead of to the user.
-- "Presentation flow" is internal/demo language and should not appear in the working app, even inside a disclosure.
-- "The things EasyLife would keep from slipping" is slightly over-personified and vague. It implies assistant intelligence without naming the concrete output.
-- "No task is shouting" is cute. It may be acceptable once, but repeated playful metaphors can cheapen the otherwise professional voice.
-- Root and app meta descriptions still use "command center," which conflicts with the current move toward concrete daily-workspace language.
+- `command center` in public metadata sounds generic SaaS and conflicts with the calmer personal assistant position.
+- "Nothing is sent from this screen" is clear, but it reads like implementation copy. A user needs to know they stay in control, not how the screen behaves internally.
+- "Nothing is sent or archived from this screen" is safe but heavy. It foregrounds fear before the value of reviewing email-derived items.
+- "Reply draft prepared for approval" is accurate, but slightly procedural. It could be warmer and more action-oriented.
+- `sample-final`, `sample-meeting`, `sample-container`, and `sample-noise` appear to be internal IDs, not visible copy. Keep them internal only.
+- `demo` and `proof` in component names or dev flags are not copy blockers if they are not rendered, but they should not leak into visible UI.
+- Simon's review shows repeated "Start Free", "See Features", "FEATURES", and module identity labels may still make module pages feel like brochures rather than daily tools.
 
 ## Beautiful Language Opportunities
-- Replace prototype labels with calm safety language: "Example inbox" can become "Inbox review" or "Practice queue" depending on whether it is truly mock-only.
-- The inbox queue can sound more premium by focusing on decision verbs: "review," "approve," "keep," "dismiss," "prepare reply."
-- HQ has a strong first sentence in "Choose today's next move." The surrounding copy should stay equally direct and avoid cleverness.
-- "Open room" is useful but could be warmer and clearer as "Free time today" or "Open calendar time."
-- "Follow-up hint" could become "Follow-up" or "Needs reply" to reduce abstraction.
-- "Ask again" is good in spirit but slightly vague. "Confirm before send or archive" is clearer.
-- "The things EasyLife would keep from slipping" could become "Needs attention" or "Review before it slips."
+- Replace broad suite claims with specific user nouns: task list, calendar block, note, daily plan, workout log, project brief, reply draft.
+- Soften safety copy by putting the user in control: "Review before anything changes" is better than "Nothing is sent from this screen."
+- Make inbox intelligence feel practical by naming the work: "Approve email items", "Keep as follow-up", "Draft a reply", "Add deadline".
+- Keep the first screen spare: one next move, one today context line, one capture entry.
+- Public pages can be more graceful by reducing repeated CTA and feature-label language, then letting the product preview do more of the explaining.
 
 ## Priority Rewrite
-The single most important wording problem is the inbox page exposing prototype and future-build language. Nami should convert the page from "local preview / example / later phase / real Gmail connection" language into user-facing approval language: "Inbox review," "Example items," "Nothing sends or archives here," "Prepare reply for review," and "Confirm before any future send or archive action." Keep the safety promise, but stop narrating the implementation roadmap.
+The most important wording problem to fix next is the visible safety language around inbox and draft replies. It is good that EasyLife does not imply automatic sending or archiving, but the current phrasing sounds like a developer warning. Rewrite those strings so the user understands the concrete outcome: drafts are prepared for review, email items wait for approval, and nothing changes until the user confirms.
 
 ## Suggested Rewrites
-- Before: "Local preview"
-  After: "Inbox review"
+- Before: "Reply draft prepared for approval. Nothing is sent from this screen."
+  After: "Reply draft ready to review. You choose what happens next."
 
-- Before: "Review local email examples as Task, Deadline, Event, and Follow-up suggestions."
-  After: "Review email examples as tasks, deadlines, events, and follow-ups."
+- Before: "Use separators like three dashes between emails. Nothing is sent or archived from this screen."
+  After: "Separate emails with three dashes. Review each item before anything changes."
 
-- Before: "This is a local reply preview. Sending would require a separate Gmail review step in a later phase."
-  After: "This reply is only prepared for review. Nothing is sent from this screen."
+- Before: "command center"
+  After: "daily workspace"
 
-- Before: "What a real Gmail connection should still ask"
-  After: "Before any inbox action changes mail"
+- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
+  After: "EasyLife keeps tasks, notes, calendar planning, workouts, and projects in one daily workspace."
 
-- Before: "Stage locally"
-  After: "Prepare for review"
+- Before: "Start Free"
+  After: "Open workspace"
 
-- Before: "Let the user approve rows, prepare reply drafts, or keep messages visible from one queue."
-  After: "Approve suggestions, prepare replies, or keep messages visible from one queue."
+- Before: "See Features"
+  After: "See how it works"
 
-- Before: "Presentation flow"
-  After: "Daily setup path"
-
-- Before: "The things EasyLife would keep from slipping"
-  After: "Needs attention"
+- Before: "FEATURES"
+  After: "What this helps with"
 
 ## Voice Rules
-- Use direct task nouns: task, deadline, event, follow-up, reply draft, calendar block, note, list, today.
-- Do not show implementation state as primary copy. Put mock, local, preview, and future integration caveats in helper text only when needed.
-- Address the user directly or describe the action plainly. Do not write "the user" in visible app copy.
-- Keep safety copy concrete: "Nothing is sent," "Nothing is archived," "Approve first," "Prepared for review."
-- Avoid builder words in the app: demo, proof, polish, handoff, workflow, local preview, later phase, real connection.
-- Use short primary labels and place explanations behind details, helper text, or secondary sections.
-- Keep playful phrases rare. Prefer calm clarity over cute personality.
+- Lead with what the user can do today, not what the system contains.
+- Prefer concrete nouns over platform nouns: task, note, calendar block, reply draft, follow-up, daily plan.
+- Keep safety language calm and user-controlled, not defensive or technical.
+- Avoid "command center", "proof", "handoff", "polish", "demo", "sample data", and "workflow" in visible copy unless the context is explicitly internal.
+- Do not explain every module on the first screen.
+- Public marketing copy may explain; protected app copy should direct action.
+- Button labels should name the action, not the product promise.
 
 ## Next 5 Copy Tasks
-- [ ] Replace the inbox page's prominent "Local preview," "example inbox," and "local email examples" labels with user-facing review language; keep one short safety note that no mail is sent or archived.
-- [ ] Rewrite the reply draft helper text to remove "later phase" and "Gmail review step"; preserve the safety meaning that sending does not happen here.
-- [ ] Rewrite the "Later" integration section so it addresses user decisions, not future implementation; avoid "real Gmail connection," "Stage locally," and "Let the user."
-- [ ] Replace "Presentation flow" in HQ with a concrete daily label; do not add new copy or move the section above the first-screen daily action.
-- [ ] Search visible source for "command center," "demo," "proof," "handoff," and "polish"; change only customer-facing strings, leaving internal identifiers untouched.
+- [ ] Replace the public metadata phrase "command center" with "daily workspace"; do not touch routing, auth, build output, or deployment files.
+- [ ] Rewrite the inbox disclaimer "Nothing is sent or archived from this screen" into user-control language; keep the safety meaning intact.
+- [ ] Rewrite the draft status message so it says the reply draft is ready to review; do not imply sending, automation, or external email behavior.
+- [ ] Audit one protected first screen for visible "demo", "proof", "handoff", "polish", "sample data", or "command center"; change only one visible phrase and leave internal identifiers alone.
+- [ ] Review one marketing module page for repeated "Start Free", "See Features", or "FEATURES" language; replace only one inappropriate instance with a concrete product action.
 
 ## Stop Or Continue
 continue but fix copy first
