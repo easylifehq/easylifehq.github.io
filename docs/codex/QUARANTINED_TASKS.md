@@ -262,3 +262,13 @@
 - Files restored before continuing:
 - None
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-05 01:46:02
+
+- Batch: 1
+- Task index: 1
+- Task: Phase 2 - Visual-system review packet: after Phase 2 implementation slices, run build/static checks, inspect key protected routes, and write `docs/codex/PHASE_2_REVIEW.md` with changed files, route evidence, visual risks, and whether Phase 3 is ready. Do not start Phase 3. Guardrails: docs/codex plus tiny bugfixes only if required by Phase 2 checks; no backend, auth, Firebase, dependencies, deploy, generated output, old-site, root files, or broad feature work. Acceptance: `npm.cmd run build` from `app-vNext` passes and Phase 2 review doc exists. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/,app-vNext/src/ accept:npm.cmd run build]
+- Reason: Large Phase 3 task requires a concrete slice plan before implementation.
+- Files restored before continuing:
+- None
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
