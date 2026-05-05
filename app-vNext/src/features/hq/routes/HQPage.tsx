@@ -297,8 +297,8 @@ export function HQPage() {
     },
     {
       label: "Email",
-      title: "Approval queue",
-      detail: "Review task, deadline, event, and follow-up suggestions before anything changes.",
+      title: "Review email suggestions",
+      detail: "Approve task, deadline, event, and follow-up suggestions before anything changes.",
       to: "/app/easylist/email",
       visible: isAppVisible("easylist"),
     },
