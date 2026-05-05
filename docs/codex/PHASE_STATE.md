@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: repair
+Current Phase: phase-0-stabilize-and-brief
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
-Product Promise: EasyLife helps one person start the day, capture tasks/notes/events, and recover from mistakes without fighting the app.
-Primary Action: Open the signed-in HQ or current module and take the next daily action.
-Showable Moment: The protected side feels like a calm connected daily assistant instead of separate unfinished tools.
+Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
+Primary Action: Open Today, see the next best move, and capture or clear one item.
+Showable Moment: The protected side feels like one sleek, calm, high-tech Life OS instead of separate unfinished tools.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Protected first viewport: one daily action, compact module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
+Complexity Budget: Protected first viewport: one daily action, compact today context, quiet module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
 Before/After Judgment: Each task must make the signed-in product visibly clearer, calmer, more useful, or easier to undo than the previous inspected state.
-Human Taste Note: Apple-clean, useful, obvious progress, personal assistant direction
+Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, with optional fun themes later
 Phase Model Policy: judgment-heavy
-Parking State: ACTIVE
+Parking State: READY_FOR_PHASE_1_AFTER_BRIEF
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: Signed-in HQ and active modules feel meaningfully upgraded, mobile controls are readable, and remaining work is no longer obvious from a quick phone check.
-Next Phase Criteria: Move to simplicity when the protected assistant spine is coherent and remaining tasks are mostly density, wording, or small interaction repairs.
-Repair Trigger: LOOPING_QUALITY: repair active pack before fresh work
-Repair Return Phase: shape
-Updated At: 2026-05-03 11:28:38
+Done Signal: The roadmap, brief, phase commands, and Phase 1 task packet are present and agree on the same product direction.
+Next Phase Criteria: Move to Phase 1 Product Spine when the fleet has clear implementation slices for unified navigation, module grouping, and a Today-first structure.
+Repair Trigger: none
+Repair Return Phase: phase-0-stabilize-and-brief
+Updated At: 2026-05-04 23:20:00
 
 ## Phase Order
 
