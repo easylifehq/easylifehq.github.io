@@ -1,10 +1,10 @@
 ﻿# Phase State
 
-Current Phase: phase-5-inbox-intelligence
+Current Phase: phase-6-school-planner
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
 Primary Action: Open Today, see the next best move, and capture or clear one item.
-Showable Moment: Email becomes a quiet source of tasks, deadlines, events, follow-ups, and drafts for approval.
+Showable Moment: EasyLife can turn class deadlines and exams into a calm study plan surface.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
 Complexity Budget: Protected first viewport: one daily action, compact today context, quiet module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
@@ -13,11 +13,11 @@ Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired
 Phase Model Policy: judgment-heavy
 Parking State: ACTIVE
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: Inbox surfaces task/deadline/event/follow-up candidates and an approval queue without auto-sending, auto-archiving, or changing backend/auth.
-Next Phase Criteria: Move to Phase 6 School Planner when inbox intelligence has safe approval flows and the next work is class/deadline planning.
+Done Signal: School planning has course, assignment, exam, study-load, and heavy-week surfaces using safe local/mock data without schema/backend changes.
+Next Phase Criteria: Move to Phase 7 Capacity And Coach when school planning is visible and the next work is realistic daily capacity.
 Repair Trigger: none
-Repair Return Phase: phase-5-inbox-intelligence
-Updated At: 2026-05-05 14:25:06
+Repair Return Phase: phase-6-school-planner
+Updated At: 2026-05-05 15:15:17
 
 ## Phase Order
 
@@ -60,5 +60,6 @@ repair is an interrupt lane, not a normal destination. Any phase can enter repai
 - Honor human taste notes.
 - Use stronger judgment for Shape, Simplicity, and Polish.
 - Park review-ready ships instead of continuing to generate improvements.
+
 
 
