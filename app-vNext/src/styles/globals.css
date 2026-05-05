@@ -6007,6 +6007,61 @@ button.calendar-detail-card:disabled {
   line-height: 1.32;
 }
 
+.hq-study-load {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.8fr) minmax(0, 2.2fr);
+  gap: 0.68rem;
+  align-items: stretch;
+  padding: 0.68rem;
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card, #fffdf9) 88%, var(--app-accent, var(--shell-accent)) 12%);
+}
+
+.hq-study-load-header {
+  display: grid;
+  align-content: center;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.hq-study-load-header span,
+.hq-study-load-item span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hq-study-load-header strong,
+.hq-study-load-item strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  line-height: 1.14;
+}
+
+.hq-study-load-track {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.hq-study-load-item {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+  padding: 0.56rem 0.62rem;
+  border-left: 2px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 45%, var(--ui-border-subtle) 55%);
+  background: color-mix(in srgb, var(--ui-bg-card, #fffdf9) 78%, transparent);
+}
+
+.hq-study-load-item p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.82rem;
+  line-height: 1.28;
+}
+
 .hq-school-columns {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -9208,6 +9263,21 @@ button.calendar-detail-card:disabled {
   .hq-school-columns {
     grid-template-columns: 1fr;
     gap: 0.62rem;
+  }
+
+  .hq-study-load {
+    grid-template-columns: 1fr;
+    gap: 0.52rem;
+    padding: 0.6rem;
+  }
+
+  .hq-study-load-track {
+    grid-template-columns: 1fr;
+    gap: 0.42rem;
+  }
+
+  .hq-study-load-item {
+    padding: 0.48rem 0.56rem;
   }
 
   .hq-school-lead,

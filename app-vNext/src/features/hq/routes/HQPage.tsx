@@ -78,6 +78,26 @@ const schoolPlanner = {
     { course: "MATH 132", title: "Quiz 4", date: "Wed", prep: "Formula sheet pass" },
     { course: "BIO 210", title: "Unit exam", date: "Next Tue", prep: "Two study blocks" },
   ],
+  load: [
+    {
+      day: "Tonight",
+      weight: "Heavy",
+      item: "BIO 210 lab worksheet",
+      focus: "Finish the worksheet before opening later-week reading.",
+    },
+    {
+      day: "Wed",
+      weight: "Exam",
+      item: "MATH 132 Quiz 4",
+      focus: "Review formulas, then attempt two mixed practice problems.",
+    },
+    {
+      day: "Thu-Fri",
+      weight: "Steady",
+      item: "Problem set and reading response",
+      focus: "Split the work into one math block and one writing pass.",
+    },
+  ],
 };
 
 type TodayContextItem = {
@@ -465,6 +485,21 @@ export function HQPage() {
               Start with {schoolNextAssignment.course}: {schoolNextAssignment.title.toLowerCase()} due {schoolNextAssignment.due.toLowerCase()}.
             </p>
           </article>
+          <div className="hq-study-load" aria-label="Heavy week view">
+            <div className="hq-study-load-header">
+              <span>Heavy week</span>
+              <strong>Upcoming load and focus</strong>
+            </div>
+            <div className="hq-study-load-track">
+              {schoolPlanner.load.map((loadItem) => (
+                <article key={`${loadItem.day}-${loadItem.item}`} className="hq-study-load-item">
+                  <span>{loadItem.day} / {loadItem.weight}</span>
+                  <strong>{loadItem.item}</strong>
+                  <p>{loadItem.focus}</p>
+                </article>
+              ))}
+            </div>
+          </div>
           <div className="hq-school-columns">
             <div>
               <span>Courses</span>
