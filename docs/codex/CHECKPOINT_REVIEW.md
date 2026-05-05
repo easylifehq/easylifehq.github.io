@@ -4,40 +4,40 @@
 RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission with visible Phase 5 Inbox Intelligence work: approval queue UI and clearer email classification language. However, the security gate is RED, so progress should not continue unattended.
+The branch is moving toward the EasyLife mission: recent work improved Today/HQ, command/capture flow, and Inbox Intelligence surfaces with small frontend-only changes. However, the current checkpoint cannot continue unattended because Joey security review is RED.
 
 ## Safety Review
-Joey security review is RED with next step: stop for human security review. No dirty working tree or forbidden file changes are reported, but the security gate is blocking.
+Joey security review is RED and explicitly recommends stopping for human security review. No forbidden changed files are evident from the file list, and the working tree is clean.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: Phase 5 Inbox approval queue UI; Phase 5 Email classification language.
-- Files changed: `app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx`, `app-vNext/src/features/hq/routes/HQPage.tsx`, `app-vNext/src/styles/globals.css`, plus review/report docs.
-- Commits added: latest HEAD `c8e17cf` and prior checkpoint/review commits since base.
-- Queue status: 2 unchecked tasks remain.
+- completed tasks in this checkpoint window: Phase 5 inbox approval queue UI, email classification language, and safe reply draft affordance
+- files changed: `app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx`, `app-vNext/src/features/hq/routes/HQPage.tsx`, `app-vNext/src/styles/globals.css`, plus review/report docs
+- commits added: latest HEAD `113794c` and multiple prior checkpoint/review commits since `main`
+- queue status: 1 unchecked task remains, `Phase 5 - Inbox Intelligence review packet`
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not drive next task.
-- Simon design review: YELLOW; continue but fix visual issues first; should influence next tasks.
-- Robin copy review: YELLOW; continue but fix copy first; should influence next tasks.
-- Accessibility review: YELLOW; patch warnings soon; should influence next tasks.
-- Performance review: GREEN; no blocking influence.
-- Joey security review: RED; blocks unattended continuation and requires human security review.
-- Franky formula review: missing; note as incomplete, but no formula blocker reported.
-- Product truth: missing config, `Product truth ok: True`; no Product truth RED blocker.
+- visual bug report: GREEN signal, 0 high / 0 medium / 0 low; does not need to shape next task
+- Simon design review: YELLOW; fix visual issues first when work resumes
+- Robin copy review: YELLOW; copy cleanup should influence next tasks
+- accessibility review: YELLOW; patch warnings soon
+- performance review: GREEN; no blocking influence
+- Joey security review: RED; blocks unattended continuation
+- Franky formula review: missing; should be completed if formulas/spreadsheets become relevant
+- Product truth: MISSING but `ok: True`; no configured product truth file
 
 ## Recommended Next Step
 stop for human review
 
 ## Next Batch Guidance
-- Recommended next batch size: 1
-- Next work mode: repair-first
-- Human security review must clear Joey’s RED gate before the remaining Phase 5 draft affordance or review packet work continues.
+- recommended next batch size: 1
+- next work mode: repair-first
+- Joey security is RED, so the next batch should not proceed until a human reviews or clears the security gate.
 
 ## Notes For Human Reviewer
-- Working tree is clean.
-- Build passed.
-- Two Phase 5 tasks remain unchecked.
-- Security review is the active blocker despite otherwise low visual/build risk.
+- Build passed and working tree is clean.
+- Product truth is not configured.
+- One proof task remains for `PHASE_5_REVIEW.md`.
+- Do not start Phase 6 before Phase 5 review packet is complete.
