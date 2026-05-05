@@ -1,6 +1,6 @@
 ﻿# Accessibility Review
 
-Generated: 2026-05-05 17:39:14
+Generated: 2026-05-05 17:52:38
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
@@ -163,15 +163,15 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
   `<button className="primary-button" type="button" onClick={saveCommandTask}>`
 - [YELLOW] `app-vNext/src/features/hq/routes/HQPage.tsx:453` - Icon-style button may need an accessible label.
   `<button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>`
-- [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1296` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1329` - Icon-style button may need an accessible label.
   `<button type="button" className="primary-button" onClick={handleExportAll}>`
-- [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1299` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1332` - Icon-style button may need an accessible label.
   `<button type="button" className="button-secondary" onClick={handleCopySummary}>`
-- [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1391` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1424` - Icon-style button may need an accessible label.
   `<button type="button" className="primary-button" onClick={handleOpenInstallShare}>`
-- [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1528` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1561` - Icon-style button may need an accessible label.
   `<button type="button" className="button-secondary" onClick={handleSendTestNotification}>`
-- [INFO] `app-vNext/src/styles/globals.css:11143` - Reduced-motion handling is present.
+- [INFO] `app-vNext/src/styles/globals.css:11197` - Reduced-motion handling is present.
   `@media (prefers-reduced-motion: reduce) {`
 
 ## Stop Or Continue
