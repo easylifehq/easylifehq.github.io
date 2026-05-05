@@ -40,6 +40,13 @@ const demoPath = [
   },
 ];
 
+type TodayContextItem = {
+  label: string;
+  title: string;
+  detail: string;
+  to: string;
+};
+
 function isSameDate(left: Date | null, right: Date) {
   return Boolean(left && startOfDay(left).getTime() === startOfDay(right).getTime());
 }
@@ -120,6 +127,63 @@ export function HQPage() {
   }, [dueTodayTasks, openWindows, overdueTasks, quickWin]);
 
   const dayPhase = new Date().getHours() < 12 ? "Morning" : new Date().getHours() < 17 ? "Afternoon" : "Evening";
+  const nextOpenWindow = openWindows[0];
+  const followUpTasks = sortActiveTasks(
+    tasks.filter((task) => {
+      if (task.completed || task.deletedAt) return false;
+      const searchableText = `${task.title} ${task.notes} ${task.category} ${task.listName}`.toLowerCase();
+      return /\b(email|reply|respond|follow up|follow-up|call|text|message)\b/.test(searchableText);
+    })
+  );
+  const contextSignals = [
+    overdueTasks.length || dueTodayTasks.length
+      ? {
+          label: overdueTasks.length ? "Due recovery" : "Due work",
+          title: overdueTasks.length
+            ? `${overdueTasks.length} overdue`
+            : `${dueTodayTasks.length} due today`,
+          detail: mostUrgentLabel || "Open the list and choose the next step.",
+          to: "/app/easylist/dashboard",
+        }
+      : null,
+    nextEvents[0]
+      ? {
+          label: todayEvents.length >= 3 ? "Calendar pressure" : "Calendar",
+          title: nextEvents[0].title || "Untitled event",
+          detail: nextEvents[0].allDay
+            ? "All day"
+            : `${formatTimeLabel(nextEvents[0].startAt)} - ${formatTimeLabel(nextEvents[0].endAt)}`,
+          to: "/app/easycalendar/day",
+        }
+      : null,
+    followUpTasks[0]
+      ? {
+          label: "Follow-up hint",
+          title: followUpTasks[0].title || "Untitled follow-up",
+          detail: followUpTasks[0].dueDate ? "Already dated in the list." : "No date yet. Decide whether it belongs today.",
+          to: "/app/easylist/email",
+        }
+      : null,
+    nextOpenWindow
+      ? {
+          label: "Open room",
+          title: `${formatDuration(nextOpenWindow.minutes)} open`,
+          detail: `Starts around ${formatTimeLabel(nextOpenWindow.startAt)}`,
+          to: "/app/easycalendar/day",
+        }
+      : null,
+  ].filter((item): item is TodayContextItem => Boolean(item));
+  const contextItems = (contextSignals.length
+    ? contextSignals
+    : [
+        {
+          label: "Open room",
+          title: "No pressure is standing out",
+          detail: "Capture a loose thought or keep the day open.",
+          to: "/app/easylist/add",
+        },
+      ]).slice(0, 3);
+  const contextLead = contextItems[0]?.title || "No pressure is standing out.";
   const attentionItems = [
     overdueTasks[0]
       ? {
@@ -163,7 +227,6 @@ export function HQPage() {
       : nextEvents.length
         ? "The calendar has shape. Use the open windows for the work that would otherwise leak."
         : "The day is open. Capture the loose ends now so they do not become noise later.";
-  const nextOpenWindow = openWindows[0];
   const systems = [
     {
       label: "List",
@@ -221,6 +284,21 @@ export function HQPage() {
             <span>Today</span>
             <p>{todaySummary.join(" / ")}</p>
           </div>
+          <details className="hq-context-stack">
+            <summary>
+              <span>Context</span>
+              <strong>{contextLead}</strong>
+            </summary>
+            <div>
+              {contextItems.map((item) => (
+                <Link to={item.to} key={`${item.label}-${item.title}`}>
+                  <span>{item.label}</span>
+                  <strong>{item.title}</strong>
+                  <p>{item.detail}</p>
+                </Link>
+              ))}
+            </div>
+          </details>
           <div className="assistant-next-inline" aria-labelledby="assistant-next-title">
             <div>
               <span>Next best move</span>

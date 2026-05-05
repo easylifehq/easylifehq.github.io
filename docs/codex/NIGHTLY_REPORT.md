@@ -2815,3 +2815,19 @@
 - Files changed:
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 12:48:42
+
+- Task attempted: Phase 3 - Today context stack slice: add or refine one compact Today context group for due work, calendar pressure, email/follow-up hints, or open room using existing app/local data. Keep it short and progressively disclosed. Guardrails: frontend-only app-vNext/src work; no backend, auth, Firebase rules/config, persistence/data-shape changes, dependencies, generated output, deploy config, old-site, root files, or real external AI/API calls. Acceptance: from `app-vNext`, run `npm.cmd run build`; verify Today is useful in a 30-second check. [class:feature risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/hq/,app-vNext/src/features/easylist/,app-vNext/src/features/easycalendar/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: feature
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/hq, app-vNext/src/features/easylist, app-vNext/src/features/easycalendar, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
