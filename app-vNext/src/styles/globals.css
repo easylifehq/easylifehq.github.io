@@ -5880,6 +5880,27 @@ button.calendar-detail-card:disabled {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.app-theme-easyhq:not(.command-center-page) > .panel-section {
+  padding: 0.82rem 0.9rem 0.9rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) > .panel-section .panel-header {
+  gap: 0.18rem;
+  margin-bottom: 0.72rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) > .panel-section .panel-header h2 {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: clamp(1.02rem, 1.35vw, 1.2rem);
+  line-height: 1.16;
+}
+
+.app-theme-easyhq:not(.command-center-page) > .panel-section .panel-header .eyebrow {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.68rem;
+  font-weight: 850;
+}
+
 .assistant-attention-item {
   display: grid;
   gap: 0.35rem;
@@ -5895,6 +5916,10 @@ button.calendar-detail-card:disabled {
 .assistant-attention-item strong {
   color: var(--ui-text-primary, var(--shell-heading-text));
   line-height: 1.2;
+}
+
+.app-theme-easyhq:not(.command-center-page) .assistant-attention-item strong {
+  font-size: 0.96rem;
 }
 
 .assistant-attention-item p {
@@ -5997,6 +6022,16 @@ button.calendar-detail-card:disabled {
   margin: 0;
   color: var(--ui-text-secondary, var(--shell-page-text));
   font-size: 0.9rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) .assistant-system-grid .hq-link-card {
+  gap: 0.28rem;
+  padding: 0.72rem 0.78rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) .assistant-system-grid .hq-link-card strong {
+  font-size: 0.98rem;
+  line-height: 1.18;
 }
 
 .hq-assistant-spine {
