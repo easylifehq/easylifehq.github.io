@@ -1,10 +1,10 @@
 ﻿# Phase State
 
-Current Phase: phase-6-school-planner
+Current Phase: phase-7-capacity-and-coach
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
 Primary Action: Open Today, see the next best move, and capture or clear one item.
-Showable Moment: EasyLife can turn class deadlines and exams into a calm study plan surface.
+Showable Moment: EasyLife helps choose a realistic plan based on day load, energy, and workouts.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
 Complexity Budget: Protected first viewport: one daily action, compact today context, quiet module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
@@ -13,11 +13,11 @@ Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired
 Phase Model Policy: judgment-heavy
 Parking State: ACTIVE
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: School planning has course, assignment, exam, study-load, and heavy-week surfaces using safe local/mock data without schema/backend changes.
-Next Phase Criteria: Move to Phase 7 Capacity And Coach when school planning is visible and the next work is realistic daily capacity.
+Done Signal: Capacity/Coach shows daily capacity, light/normal/push planning, workout/recovery signal, and fitness coach context without preachiness.
+Next Phase Criteria: Move to Phase 8 Notes And Memory when capacity and coach feel connected to Today.
 Repair Trigger: none
-Repair Return Phase: phase-6-school-planner
-Updated At: 2026-05-05 15:15:17
+Repair Return Phase: phase-7-capacity-and-coach
+Updated At: 2026-05-05 16:05:28
 
 ## Phase Order
 
@@ -60,6 +60,7 @@ repair is an interrupt lane, not a normal destination. Any phase can enter repai
 - Honor human taste notes.
 - Use stronger judgment for Shape, Simplicity, and Polish.
 - Park review-ready ships instead of continuing to generate improvements.
+
 
 
 
