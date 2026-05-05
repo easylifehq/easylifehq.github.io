@@ -4,40 +4,40 @@
 RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission through small protected-app polish, especially HQ, EasyNotes, and shared visual-system refinements. However, the checkpoint cannot continue unattended because Joey security review is RED and asks for human security review.
+The branch is moving toward the EasyLife mission through small protected-app polish, calmer visual tokens, hierarchy cleanup, HQ/Login/EasyNotes adjustments, and passed builds. Progress is blocked from continuing unattended because the security review gate is RED and asks for human review.
 
 ## Safety Review
-No forbidden or sensitive files are shown in the changed-file list. Risk is the blocking Joey security verdict, not the visible file scope.
+Joey security review is RED with next step `stop for human security review`. No forbidden file changes are evident from the changed-file list, and the working tree is clean.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: 12 recent completed tasks shown, including HQ/EasyNotes copy/UI repairs, accessibility repair, Settings cleanup, Phase 1 review work, and Phase 2 visual refinements
-- files changed: app UI/styles plus docs/codex reports; working tree is clean
-- commits added: latest HEAD `51e768c` plus prior Codex review/task commits since base
-- queue status: 2 unchecked tasks remain
+- Completed tasks in this checkpoint window: several small UI/design/copy/accessibility/documentation review tasks completed; latest passed task changed `app-vNext/src/features/auth/routes/LoginPage.tsx`.
+- Files changed: app UI files under auth, EasyNotes, HQ, shared globals CSS, plus codex review/report docs.
+- Commits added: latest HEAD `cca46ba`; many checkpoint/review/task commits exist since `main`.
+- Queue status: 1 unchecked task remains.
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN influence; no high/medium/low issues reported
-- Simon design review: YELLOW influence; fix visual issues first
-- Robin copy review: YELLOW influence; fix copy first
-- accessibility review: YELLOW influence; patch warnings soon
-- performance review: GREEN influence; no blocker
-- Joey security review: RED influence; stop for human security review
-- Franky formula review: missing influence; confirm whether formula review is required
-- Product truth: MISSING but `ok: True`; no configured product truth file
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low issues; should not block next tasks.
+- Simon design review: YELLOW; continue only after visual issues are considered first.
+- Robin copy review: YELLOW; copy polish should shape next tasks.
+- Accessibility review: YELLOW; patch warnings soon.
+- Performance review: GREEN; no blocking influence.
+- Joey security review: RED; must stop for human security review.
+- Franky formula review: missing; should be filled if formula/spreadsheet logic becomes relevant.
+- Product truth: MISSING config but `ok: True`; no PRODUCT_TRUTH.md configured, not currently blocking by itself.
 
 ## Recommended Next Step
 stop for human review
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Joey security is RED and must be cleared before mission-forward unattended work resumes.
+- Recommended next batch size: 1
+- Next work mode: repair-first
+- Security review is RED and explicitly calls for human review, so no mission-forward unattended work should proceed until that gate is resolved.
 
 ## Notes For Human Reviewer
-- Build passed and tree is clean.
-- Do not continue unattended until Joey RED is reviewed.
-- Two unchecked recovery tasks remain, but they should wait behind the security gate.
-- Product truth is not configured: `No PRODUCT_TRUTH.md configured.`
+- Build passed and working tree is clean.
+- Joey security RED is the blocking signal.
+- One unchecked task remains, but continuing unattended would ignore the security gate.
+- Recent quarantines repeatedly cite large/vague Phase 3-style scope needing concrete slice planning.
