@@ -40,6 +40,29 @@ const demoPath = [
   },
 ];
 
+const quickActions = [
+  {
+    label: "Add task",
+    detail: "Start a clear next action.",
+    to: "/app/easylist/add",
+  },
+  {
+    label: "Plan my day",
+    detail: "Open today in calendar.",
+    to: "/app/easycalendar/day",
+  },
+  {
+    label: "What am I forgetting?",
+    detail: "Review the loose ends.",
+    to: "/app/command",
+  },
+  {
+    label: "Capture note",
+    detail: "Park a thought quickly.",
+    to: "/app/easynotes/new",
+  },
+];
+
 type TodayContextItem = {
   label: string;
   title: string;
@@ -298,6 +321,14 @@ export function HQPage() {
               ))}
             </div>
           </details>
+          <nav className="hq-quick-actions" aria-label="Quick actions">
+            {quickActions.map((action) => (
+              <Link to={action.to} key={action.label}>
+                <strong>{action.label}</strong>
+                <span>{action.detail}</span>
+              </Link>
+            ))}
+          </nav>
           <div className="assistant-next-inline" aria-labelledby="assistant-next-title">
             <div>
               <span>Next best move</span>
