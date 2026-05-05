@@ -4,41 +4,40 @@
 RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission with visible frontend progress across Today/HQ, EasyNotes, EasyList, workout, school planning, and shared styles. The work appears aligned with a connected, calmer personal operating system, but security review is blocking release confidence.
+The branch is still moving toward the EasyLife mission: recent work improves the connected suite feel, More hub organization, notes, coach, and Today surfaces. However, review gates are not clear enough to continue unattended because Joey security review is RED and requests human security review.
 
 ## Safety Review
-Joey security review is RED with a next step of stop for human security review. Also note one changed file is `app-vNext/src/features/auth/routes/LoginPage.tsx`, which is in sensitive/auth-adjacent scope and should be inspected before continuing.
+Joey security review is the blocking risk signal. No forbidden files, dependency files, backend, Firebase, deploy, or generated output changes are listed, and the working tree is clean.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: 12 recent completed tasks shown, including Phase 6, Phase 7, Phase 8 slices and recovery repairs
-- files changed: app frontend files under `app-vNext/src/` plus Codex review/status docs under `docs/codex/`
-- commits added: latest HEAD `b2234fa` plus many checkpoint/review/task commits since base
-- queue status: empty, 0 unchecked tasks remain
+- Completed tasks in this checkpoint window: Phase 9 More hub organization completed; recent Phase 8 and Phase 7 slices also completed.
+- Files changed: navigation, settings, HQ, notes, workout, UniversalCapture, globals CSS, and docs/codex review/state files.
+- Commits added: latest HEAD `0ad6746` plus many prior Codex checkpoint/review commits since base.
+- Queue status: 3 unchecked Phase 9 tasks remain.
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN; 0 high, 0 medium, 0 low, should not shape next tasks
-- Simon design review: YELLOW; continue but fix visual issues first, should influence next tasks if work resumes
-- Robin copy review: YELLOW; continue but fix copy first, should influence next tasks if work resumes
-- accessibility review: YELLOW; patch accessibility warnings soon, should influence next tasks if work resumes
-- performance review: GREEN; no blocker
-- Joey security review: RED; stop for human security review, blocks continuation
-- Franky formula review: missing; likely not applicable unless spreadsheet/formula surfaces are in scope, but missing status should be noted
-- Product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured, not blocking by provided status
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks.
+- Simon design review: YELLOW; visual issues should be fixed before broad new work.
+- Robin copy review: YELLOW; copy polish should influence the next task.
+- Accessibility review: YELLOW; patch accessibility warnings soon.
+- Performance review: GREEN; no next-task constraint.
+- Joey security review: RED; stop for human security review.
+- Franky formula review: missing; no formula signal available.
+- Product truth: MISSING but marked ok; no `PRODUCT_TRUTH.md` configured.
 
 ## Recommended Next Step
 stop for human review
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Joey security is RED and auth-adjacent files changed, so the next action should be a narrow human-led security/auth scope review before any mission-forward work.
+- Recommended next batch size: 1
+- Next work mode: repair-first
+- Continue only after human security review clears Joey’s RED gate; then take one small queued Phase 9 slice or targeted review-gate repair.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Queue is empty.
-- Security gate is the blocker.
-- Inspect `LoginPage.tsx` and Joey’s security findings first.
-- Review Simon, Robin, and accessibility YELLOW items before starting new feature work.
+- RED is driven by Joey security review, not build failure.
+- Three Phase 9 tasks remain unchecked.
+- Simon, Robin, and accessibility are YELLOW and should shape the next unattended batch after security review.
