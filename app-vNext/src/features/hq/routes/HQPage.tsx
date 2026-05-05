@@ -419,9 +419,9 @@ export function HQPage() {
             <span>Today</span>
             <p>{todaySummary.join(" / ")}</p>
           </div>
-          <div className={`hq-capacity-signal capacity-${capacityLevel.toLowerCase()}`} aria-label="Today capacity signal">
+          <div className={`hq-capacity-signal capacity-${capacityLevel.toLowerCase()}`} aria-label="Today's load">
             <div>
-              <span>Capacity</span>
+              <span>Today&apos;s load</span>
               <strong>{capacityRead.title}</strong>
               <p>{capacityRead.detail}</p>
             </div>
