@@ -1,10 +1,10 @@
 ﻿# Phase State
 
-Current Phase: phase-4-command-layer
+Current Phase: phase-5-inbox-intelligence
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
 Primary Action: Open Today, see the next best move, and capture or clear one item.
-Showable Moment: EasyLife feels faster because common actions are reachable through a calm command layer.
+Showable Moment: Email becomes a quiet source of tasks, deadlines, events, follow-ups, and drafts for approval.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
 Complexity Budget: Protected first viewport: one daily action, compact today context, quiet module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
@@ -13,11 +13,11 @@ Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired
 Phase Model Policy: judgment-heavy
 Parking State: ACTIVE
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: The command layer supports quick add, plan my day, what am I forgetting, email-to-task entry, study-plan entry, and short time-window actions without crowding Today.
-Next Phase Criteria: Move to Phase 5 Inbox Intelligence when command/capture entry points are coherent and the next work is email-derived tasks/events/follow-ups.
+Done Signal: Inbox surfaces task/deadline/event/follow-up candidates and an approval queue without auto-sending, auto-archiving, or changing backend/auth.
+Next Phase Criteria: Move to Phase 6 School Planner when inbox intelligence has safe approval flows and the next work is class/deadline planning.
 Repair Trigger: none
-Repair Return Phase: phase-4-command-layer
-Updated At: 2026-05-05 13:34:55
+Repair Return Phase: phase-5-inbox-intelligence
+Updated At: 2026-05-05 14:25:06
 
 ## Phase Order
 
@@ -60,4 +60,5 @@ repair is an interrupt lane, not a normal destination. Any phase can enter repai
 - Honor human taste notes.
 - Use stronger judgment for Shape, Simplicity, and Polish.
 - Park review-ready ships instead of continuing to generate improvements.
+
 
