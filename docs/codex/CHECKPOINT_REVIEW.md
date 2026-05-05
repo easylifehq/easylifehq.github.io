@@ -4,40 +4,40 @@
 RED
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife mission with visible connected-suite work through Phase 7 capacity and coach improvements, but it is not ready to continue unattended because a security review gate is RED and forbidden/risky auth-adjacent scope appears in the changed file list.
+The branch is moving toward the EasyLife mission with connected Today/Coach, inbox, school planner, and visual-system work. However, it is not clear to continue unattended because a security review gate is RED and an auth-related file appears in the changed-file set.
 
 ## Safety Review
-Risk found: `app-vNext/src/features/auth/routes/LoginPage.tsx` is changed, and the mission forbids unattended auth-related feature file changes. Joey security review is RED and says stop for human security review.
+Risk found: `app-vNext/src/features/auth/routes/LoginPage.tsx` changed, which conflicts with the mission’s forbidden/auth-sensitive scope. Joey security review is RED and explicitly recommends human security review.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: Phase 7 capacity signal slice and Phase 7 plan intensity modes
-- files changed: app UI files under HQ, EasyWorkout, EasyList, EasyNotes, statistics, experiments, auth login, global styles, plus codex docs/review files
-- commits added: latest HEAD `19ca79e` plus many prior checkpoint/review/phase commits since base
-- queue status: 2 unchecked tasks remain
+- Completed tasks in this checkpoint window: Phase 7 capacity signal, plan intensity modes, and fitness coach connection.
+- Files changed: app UI files across auth, EasyList, EasyNotes, EasyStatistics, EasyWorkout, UniversalCapture, HQ, shared CSS, and multiple `docs/codex` reports.
+- Commits added: latest HEAD is `b91f7f3` with many checkpoint/review/task commits since `main`.
+- Queue status: 1 unchecked task remains, `Phase 7 - Capacity And Coach review packet`.
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN; 0 high, 0 medium, 0 low, no next-task pressure
-- Simon design review: YELLOW; should influence next tasks with visual fixes first
-- Robin copy review: YELLOW; should influence next tasks with copy fixes first
-- accessibility review: YELLOW; should influence near-term repair tasks
-- performance review: GREEN; no blocker
-- Joey security review: RED; blocks unattended continuation and requires human security review
-- Franky formula review: missing; no formula-specific signal available
-- product truth: missing config, but reported ok; no PRODUCT_TRUTH.md configured
+- Visual bug report: GREEN-equivalent, 0 high / 0 medium / 0 low; does not block next tasks.
+- Simon design review: YELLOW; should influence next tasks with visual fixes first.
+- Robin copy review: YELLOW; should influence next tasks with copy cleanup.
+- Accessibility review: YELLOW; patch warnings soon.
+- Performance review: GREEN; no blocking influence.
+- Joey security review: RED; blocks unattended continuation and requires human security review.
+- Franky formula review: missing; likely not relevant unless spreadsheet/formula surfaces were changed, but remains unverified.
+- Product truth: missing config, `ok: True`; no configured product-truth blocker.
 
 ## Recommended Next Step
 stop for human review
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Human review should resolve the Joey RED security gate and inspect the auth file change before any mission-forward work continues.
+- Recommended next batch size: 1
+- Next work mode: repair-first
+- Human review should first resolve the RED security signal and inspect the auth-related diff before any mission-forward or proof-packet work continues.
 
 ## Notes For Human Reviewer
-- Build passed and working tree is clean.
-- Unchecked queue still has 2 Phase 7 tasks.
-- Security gate is the blocker, not the build.
-- Inspect `LoginPage.tsx` change against forbidden auth scope before continuing.
+- Build is passing and working tree is clean.
+- Do not continue unattended while Joey is RED.
+- Inspect `LoginPage.tsx` against forbidden auth-scope rules.
+- Remaining queued work is a proof packet, but it should wait until the security gate is cleared.
