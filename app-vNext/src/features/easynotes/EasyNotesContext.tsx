@@ -108,13 +108,13 @@ const visualQaNotes: NoteRecord[] = [
   },
   {
     id: "visual-note-assistant",
-    title: "Personal assistant revamp ideas",
-    tags: ["product", "assistant"],
+    title: "Friday errands and receipts",
+    tags: ["home", "errands"],
     folderId: "",
     pinned: false,
     bodyHtml: "",
     bodyText:
-      "Keep the home screen calm\nLead with the next useful move\nMake modules feel like rooms, not dashboards\nSeed examples so empty states do not look abandoned",
+      "Move dentist receipt to notes\nAdd grocery list before Friday\nPlan tomorrow before lunch\nText Sam about Saturday pickup",
     createdAt: new Date("2026-05-02T17:15:00"),
     updatedAt: new Date("2026-05-02T18:05:00"),
     deletedAt: null,
