@@ -80,18 +80,33 @@ export function HQPage() {
   const calendarStatusLabel = nextEvents[0] ? "Next event" : "Calendar";
   const progressStatusLabel = completedTodayCount ? "Done today" : "Open room";
   const startHere = useMemo(() => {
-    if (overdueTasks.length || dueTodayTasks.length) {
+    const firstDueTask = overdueTasks[0] || dueTodayTasks[0] || null;
+    const firstOpenWindow = openWindows[0] || null;
+
+    if (firstDueTask) {
       return {
-        label: "Review due tasks",
-        reason: `${overdueTasks.length + dueTodayTasks.length} task${overdueTasks.length + dueTodayTasks.length === 1 ? "" : "s"} need attention before the day fills up.`,
-        buttonLabel: "Open EasyList",
+        label: firstDueTask.title || "Untitled task",
+        reason: overdueTasks.length
+          ? "This is behind. Handle it, reschedule it, or intentionally release it before checking the rest."
+          : "This is due today. Decide the next step before opening the module list.",
+        buttonLabel: "Open task list",
+        to: "/app/easylist/dashboard",
+      };
+    }
+    if (quickWin) {
+      return {
+        label: quickWin.title || "Untitled task",
+        reason: `${quickWin.estimatedLength || 20} minutes. Clear this small task while the day still has room.`,
+        buttonLabel: "Open task list",
         to: "/app/easylist/dashboard",
       };
     }
     if (openWindows.length >= 3) {
       return {
-        label: "Plan open time",
-        reason: "You have open room that could use a light plan before adding more.",
+        label: firstOpenWindow
+          ? `Plan the ${formatTimeLabel(firstOpenWindow.startAt)} open window`
+          : "Plan open time",
+        reason: "Give the next open window a light plan before adding more to the day.",
         buttonLabel: "Open Calendar",
         to: "/app/easycalendar/day",
       };
@@ -102,7 +117,7 @@ export function HQPage() {
       buttonLabel: "Open Notes",
       to: "/app/easynotes",
     };
-  }, [dueTodayTasks.length, openWindows.length, overdueTasks.length]);
+  }, [dueTodayTasks, openWindows, overdueTasks, quickWin]);
 
   const dayPhase = new Date().getHours() < 12 ? "Morning" : new Date().getHours() < 17 ? "Afternoon" : "Evening";
   const attentionItems = [
