@@ -7732,7 +7732,6 @@ button.calendar-detail-card:disabled {
 }
 
 .app-shell-vnext:has(.command-center-page) .capture-fab,
-.app-shell-vnext:has(.assistant-home) .capture-fab,
 .app-shell-vnext:has(.email-triage-hero) .capture-fab {
   display: none;
 }

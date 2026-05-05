@@ -2831,3 +2831,19 @@
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 12:57:12
+
+- Task attempted: Phase 3 - Fast capture prominence slice: make one small frontend-only improvement that makes quick capture easier to reach from Today without turning the first screen into a form wall. Preserve existing UniversalCapture and task/note/calendar behavior. Guardrails: app-vNext/src UI/style/copy only; no backend, auth, Firebase, persistence, package/dependency, generated output, deploy config, old-site, root files, or broad rewrites. Acceptance: from `app-vNext`, run `npm.cmd run build`; verify capture is obvious but secondary to the next best move. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/hq/,app-vNext/src/features/experiments/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/hq, app-vNext/src/features/experiments, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/experiments/UniversalCapture.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

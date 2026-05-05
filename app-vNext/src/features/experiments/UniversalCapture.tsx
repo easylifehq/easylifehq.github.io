@@ -722,8 +722,8 @@ export function UniversalCapture() {
 
   return (
     <>
-      <button type="button" className="capture-fab" onClick={openCapture} aria-label="Quick add">
-        Add
+      <button type="button" className="capture-fab" onClick={openCapture} aria-label="Quick capture">
+        Capture
       </button>
 
       <div className={`capture-backdrop${isOpen ? " open" : ""}`} onClick={() => setIsOpen(false)} />
@@ -740,17 +740,17 @@ export function UniversalCapture() {
         <div className="capture-header">
           <div>
             <p className="eyebrow">{screenAction.hint}</p>
-            <h2>Quick add</h2>
+            <h2>Quick capture</h2>
           </div>
           <div className="capture-header-actions">
             <span className="command-hint">Ctrl K</span>
-            <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)} aria-label="Close quick add">
+            <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)} aria-label="Close quick capture">
               Close
             </button>
           </div>
         </div>
 
-        <div className="capture-mode-row" role="tablist" aria-label="Quick add type">
+        <div className="capture-mode-row" role="tablist" aria-label="Quick capture type">
           {captureModes.map(([value, label]) => (
             <button
               key={value}

@@ -3727,3 +3727,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: RED
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer visuals and better module consistency help, but HQ proof is missing and visible routes remain too marketing-led.
 - Debug checkpoint result: not-run (not-run)
+
+## 2026-05-05 12:57:12
+
+- Task: Phase 3 - Fast capture prominence slice: make one small frontend-only improvement that makes quick capture easier to reach from Today without turning the first screen into a form wall. Preserve existing UniversalCapture and task/note/calendar behavior. Guardrails: app-vNext/src UI/style/copy only; no backend, auth, Firebase, persistence, package/dependency, generated output, deploy config, old-site, root files, or broad rewrites. Acceptance: from `app-vNext`, run `npm.cmd run build`; verify capture is obvious but secondary to the next best move. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/hq/,app-vNext/src/features/experiments/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: Pack 1 - Product Spine
+- Task class: design
+- Task risk: medium
+- Changed files: 2
+- Materiality signal: impact=visible, surface-files=2, structural-files=2, source-lines=11, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: calmer visuals and better module consistency help, but HQ proof is missing and visible routes remain too marketing-led.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-124842
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-124842\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-124842\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-124842\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-124842\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-124842
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-124842\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-124842\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-124842\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-124842\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.
