@@ -546,33 +546,6 @@ export function HQPage() {
         </div>
       </section>
 
-      <PageSection eyebrow="Capture" title="Fast ways to put a thought somewhere safe">
-        <div className="hq-action-row">
-          <Link className="hq-link-card hq-link-card-primary" to="/app/easylist/add">
-            <strong>Add task</strong>
-            <p>Turn a loose obligation into one clear next action.</p>
-          </Link>
-          <Link className="hq-link-card" to="/app/easylist/email">
-            <strong>Review inbox</strong>
-            <p>Approve task, deadline, event, and follow-up suggestions from example email.</p>
-          </Link>
-          <Link className="hq-link-card" to="/app/easynotes/new">
-            <strong>Blank note</strong>
-            <p>Use this when the thought is still too messy to become a task.</p>
-          </Link>
-          <Link className="hq-link-card" to="/app/easycalendar/day">
-            <strong>Today</strong>
-            <p>Place work in time when the list is no longer enough.</p>
-          </Link>
-          {isAppVisible("easyworkout") ? (
-            <Link className="hq-link-card" to="/app/easyworkout/log?workoutMode=1">
-              <strong>Workout log</strong>
-              <p>Record training as part of the daily plan, then come back to Today.</p>
-            </Link>
-          ) : null}
-        </div>
-      </PageSection>
-
       <PageSection eyebrow="Attention" title="The things EasyLife would keep from slipping">
         <div className="assistant-attention-list">
           {attentionItems.length ? (
@@ -593,7 +566,7 @@ export function HQPage() {
         </div>
       </PageSection>
 
-      <PageSection eyebrow="Later" title="Ideas to revisit when today has room">
+      <PageSection eyebrow="Parked" title="Useful ideas without crowding today">
         <section className="hq-later-plans" aria-label="Later plans">
           <div className="hq-later-plans-copy">
             <span>Parked ideas</span>
@@ -612,7 +585,7 @@ export function HQPage() {
         </section>
       </PageSection>
 
-      <PageSection eyebrow="More" title="School plan without crowding today">
+      <PageSection eyebrow="School" title="Semester layer">
         <section className="hq-school-planner" aria-label="School planner example">
           <article className="hq-school-lead">
             <span>School week</span>
@@ -684,7 +657,7 @@ export function HQPage() {
         </section>
       </PageSection>
 
-      <PageSection eyebrow="Systems" title="Keep modules quiet until they are useful">
+      <PageSection eyebrow="Modules" title="Quiet tools under the surface">
         <div className="assistant-system-grid">
           {systems
             .filter((system) => system.visible)
