@@ -175,8 +175,16 @@ export function EasyCalendarMonthPage() {
         </div>
         <div className="calendar-month-surface">
         <div className="calendar-month-weekdays" aria-hidden="true">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((weekday) => (
-            <span key={weekday}>{weekday}</span>
+          {[
+            ["Sun", "S"],
+            ["Mon", "M"],
+            ["Tue", "T"],
+            ["Wed", "W"],
+            ["Thu", "T"],
+            ["Fri", "F"],
+            ["Sat", "S"],
+          ].map(([weekday, shortLabel]) => (
+            <span key={weekday} data-short={shortLabel}>{weekday}</span>
           ))}
         </div>
         <div className="calendar-month-grid">

@@ -3355,3 +3355,19 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 18:58:59
+
+- Task attempted: Phase 10 - Mobile core route scan: make one focused mobile repair to Calendar, Tasks, Notes, or Coach based on obvious cramped controls or first-viewport friction. Acceptance: npm.cmd run build from app-vNext. [class:bugfix risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: bugfix
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easycalendar/routes/EasyCalendarMonthPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

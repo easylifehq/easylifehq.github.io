@@ -9879,13 +9879,27 @@ button.calendar-detail-card:disabled {
     padding: 0.58rem;
   }
 
+  .calendar-month-overview-copy {
+    gap: 0.16rem;
+  }
+
+  .calendar-month-overview-copy strong {
+    font-size: 1rem;
+    line-height: 1.12;
+  }
+
+  .calendar-month-overview-copy p,
+  .calendar-type-legend {
+    display: none;
+  }
+
   .calendar-month-overview-stats {
     grid-template-columns: 1fr 1fr;
     gap: 0.4rem;
   }
 
   .calendar-month-overview-stats span {
-    min-height: 2.9rem;
+    min-height: 2.5rem;
     padding: 0.38rem 0.45rem;
   }
 
@@ -9898,6 +9912,20 @@ button.calendar-detail-card:disabled {
     min-width: 0;
     width: 100%;
     padding-inline: 0.45rem;
+  }
+
+  .calendar-month-surface {
+    margin-top: 0.55rem;
+  }
+
+  .calendar-month-weekdays span {
+    padding: 0.34rem 0.1rem;
+    font-size: 0;
+  }
+
+  .calendar-month-weekdays span::before {
+    content: attr(data-short);
+    font-size: 0.68rem;
   }
 
   .site-header-inner {
