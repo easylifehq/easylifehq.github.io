@@ -1,23 +1,23 @@
 ﻿# Phase State
 
-Current Phase: phase-12-qa-polish-and-park
+Current Phase: stage-0-ai-personal-assistant-reset
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
-Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
-Primary Action: Open Today, see the next best move, and capture or clear one item.
-Showable Moment: EasyLife opens cleanly, looks strong, works on phone, and has no obvious broken flows.
+Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
+Primary Action: Decide what belongs on the first screen, what gets hidden, and what should be removed before coding resumes.
+Showable Moment: The fleet has a precise Stage 1 implementation packet that simplifies the product instead of adding dashboard clutter.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Protected first viewport: one daily action, compact today context, quiet module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
-Before/After Judgment: Each task must make the signed-in product visibly clearer, calmer, more useful, or easier to undo than the previous inspected state.
-Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, with optional fun themes later
+Complexity Budget: Stage 0 is docs/planning only. Stage 1 may touch one owned surface per task and every UI task must remove, hide, or simplify at least one confusing element.
+Before/After Judgment: Each task must make EasyLife feel more like one assistant and less like a dashboard or app launcher.
+Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: PARKED_REVIEW_READY
-Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: Build, visual QA, accessibility, empty/loading/error states, screenshot review, and final checklist are clean enough for review.
-Next Phase Criteria: Park review-ready. Do not generate new work unless Spencer asks.
-Repair Trigger: none
-Repair Return Phase: phase-12-qa-polish-and-park
-Updated At: 2026-05-05 21:46:42
+Parking State: ACTIVE_REBUILD_PLANNING
+Evidence Required: AI_PERSONAL_ASSISTANT_REBUILD_PLAN, Stage 0 audit, target IA, reset decision, and a Stage 1 implementation packet.
+Done Signal: Stage 0 docs exist, name exact routes/files, identify what to remove or hide, and seed exactly three Stage 1 simplification tasks.
+Next Phase Criteria: Move to Stage 1 only after docs-only Stage 0 is committed cleanly.
+Repair Trigger: any task tries to add visible modules, dashboard cards, broad visual polish, or feature sprawl before Stage 0 decisions are complete.
+Repair Return Phase: stage-0-ai-personal-assistant-reset
+Updated At: 2026-05-05 23:12:32
 
 ## Phase Order
 
