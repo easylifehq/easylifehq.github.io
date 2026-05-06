@@ -5721,3 +5721,24 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: RED
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: shared polish is better, but the active pack is still blocked by brochure-first hierarchy instead of a true daily start surface.
 - Debug checkpoint result: not-run (not-run)
+
+## 2026-05-05 21:06:34
+
+- Task: User pain: the previous task was quarantined before implementation because Visible/showpiece task has docs-only or non-product scope. Add a product surface scope such as src/, public/, content/, or styles/ before implementation., so the ship needs one small visible repair instead of another broad pass. Target: docs/codex/. Change: make exactly one narrow safe slice that improves a visible UI, interaction, or copy area; prefer deleting awkward complexity over adding new systems. First screen: keep the current primary screen job dominant and move any repaired detail/helper content behind the existing clear action. Remove/simplify: one repeated label, one oversized chrome area, one vague phrase, or one confusing interaction in the current surface only. Guardrails: no backend, no auth, no payments, no Firebase rules/config, no package/dependency files, no generated output, no deployment config, no secrets, and no unrelated files. Acceptance: npm.cmd run build. Check: run the acceptance command and confirm the changed screen has one clearer visible outcome without expanding scope. [class:feature risk:low mode:single impact:visible surface:mixed scope:docs/codex accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: Pack 1 - Product Spine
+- Task class: feature
+- Task risk: low
+- Changed files: 0
+- Materiality signal: impact=visible, surface-files=0, structural-files=0, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: shared polish is better, but the active pack is still blocked by brochure-first hierarchy instead of a true daily start surface.
+- Before visual evidence:
+- None recorded before task.
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-205807
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-205807\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-205807\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-205807\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-205807\easylist-visualQa-1-mobile.png
+- Follow-up: Visible/showpiece task has docs-only or non-product scope. Add a product surface scope such as src/, public/, content/, or styles/ before implementation.
