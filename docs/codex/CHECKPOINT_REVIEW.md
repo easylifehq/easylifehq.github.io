@@ -4,29 +4,29 @@
 RED
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife mission: recent work improves the connected suite feel, More hub organization, notes, coach, and Today surfaces. However, review gates are not clear enough to continue unattended because Joey security review is RED and requests human security review.
+The branch is moving toward the EasyLife mission with visible suite-polish work across navigation, More organization, Future Plans, Notes, Coach, Settings, and shared styling. Progress is mission-aligned, but security review is blocking continuation.
 
 ## Safety Review
-Joey security review is the blocking risk signal. No forbidden files, dependency files, backend, Firebase, deploy, or generated output changes are listed, and the working tree is clean.
+Joey security review is RED with next step “stop for human security review.” No forbidden files, dependency files, backend, Firebase, deploy, or generated output changes are listed, and the working tree is clean.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: Phase 9 More hub organization completed; recent Phase 8 and Phase 7 slices also completed.
-- Files changed: navigation, settings, HQ, notes, workout, UniversalCapture, globals CSS, and docs/codex review/state files.
-- Commits added: latest HEAD `0ad6746` plus many prior Codex checkpoint/review commits since base.
-- Queue status: 3 unchecked Phase 9 tasks remain.
+- Completed tasks in this checkpoint window: Phase 9 More hub organization and Future Plans dock.
+- Files changed: navigation components, HQ, Settings, multiple feature pages, shared CSS, and Codex review/status docs.
+- Commits added: latest HEAD `f05c19f` plus prior checkpoint/review/task commits since base.
+- Queue status: 2 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks.
-- Simon design review: YELLOW; visual issues should be fixed before broad new work.
-- Robin copy review: YELLOW; copy polish should influence the next task.
-- Accessibility review: YELLOW; patch accessibility warnings soon.
-- Performance review: GREEN; no next-task constraint.
-- Joey security review: RED; stop for human security review.
-- Franky formula review: missing; no formula signal available.
-- Product truth: MISSING but marked ok; no `PRODUCT_TRUTH.md` configured.
+- Visual bug report: GREEN; 0 high, 0 medium, 0 low; should not drive next tasks.
+- Simon design review: YELLOW; continue but fix visual issues first; should influence next tasks.
+- Robin copy review: YELLOW; continue but fix copy first; should influence next tasks.
+- Accessibility review: YELLOW; patch warnings soon; should influence next tasks.
+- Performance review: GREEN; no next-task blocker.
+- Joey security review: RED; stop for human security review before more unattended work.
+- Franky formula review: missing; not applicable unless formulas/spreadsheets are in scope.
+- Product truth: MISSING but ok; no PRODUCT_TRUTH.md configured.
 
 ## Recommended Next Step
 stop for human review
@@ -34,10 +34,10 @@ stop for human review
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Continue only after human security review clears Joey’s RED gate; then take one small queued Phase 9 slice or targeted review-gate repair.
+- Security review is blocking; if a human clears Joey’s RED, resume with one small task focused on the remaining Phase 9 queue or review packet.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- RED is driven by Joey security review, not build failure.
-- Three Phase 9 tasks remain unchecked.
-- Simon, Robin, and accessibility are YELLOW and should shape the next unattended batch after security review.
+- Joey RED is the blocking signal.
+- Two Phase 9 tasks remain unchecked.
+- Product truth file is not configured.
