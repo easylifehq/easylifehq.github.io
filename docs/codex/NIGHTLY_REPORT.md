@@ -3426,3 +3426,18 @@
 - Files changed:
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 19:48:32
+
+- Task attempted: Phase 11 - Night/Focus/Soft preview clarity: improve theme selection or preview language so mood choices are understandable without feature clutter. Acceptance: npm.cmd run build from app-vNext. [class:copy risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/settings/,app-vNext/src/styles/ accept:npm.cmd run build]
+- Task class: copy
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/settings, app-vNext/src/styles
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/settings/routes/SettingsPage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

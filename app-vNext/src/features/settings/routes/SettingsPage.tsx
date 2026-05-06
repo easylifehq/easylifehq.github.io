@@ -44,51 +44,51 @@ const themeOptions: Array<{
 }> = [
   {
     value: "classic",
-    label: "Classic Notebook",
-    description: "Crisp paper, graphite text, and calm blue accents for everyday planning.",
-    tone: "Notebook",
+    label: "Soft Notebook",
+    description: "Soft paper surfaces, graphite text, and calm blue accents.",
+    tone: "Soft",
   },
   {
     value: "candy",
-    label: "Candy Mode",
-    description: "Bright, glossy, and softer without sacrificing contrast.",
-    tone: "Playful",
-  },
-  {
-    value: "gamer",
-    label: "Gamer Mode",
-    description: "Dark, saturated, and high-contrast for a moodier setup.",
-    tone: "Bold",
-  },
-  {
-    value: "elvish",
-    label: "Elvish",
-    description: "Rich forest tones, gold accents, and a polished magical feel.",
-    tone: "Enchanted",
-  },
-  {
-    value: "aurora",
-    label: "Aurora",
-    description: "A dark theme with mint, ice-blue, and soft rose accents.",
-    tone: "Northern lights",
-  },
-  {
-    value: "studio",
-    label: "Studio",
-    description: "Clean white surfaces, graphite text, and cobalt accents for a professional feel.",
-    tone: "Professional",
-  },
-  {
-    value: "sunrise",
-    label: "Sunrise",
-    description: "Warm coral, sky blue, and gentle yellow accents without losing readability.",
+    label: "Candy",
+    description: "Playful pink surfaces with bright accents and readable contrast.",
     tone: "Bright",
   },
   {
+    value: "gamer",
+    label: "Night",
+    description: "Dark surfaces with violet and cyan accents for stronger contrast.",
+    tone: "Night",
+  },
+  {
+    value: "elvish",
+    label: "Forest",
+    description: "Deep green surfaces with warm gold accents and steady contrast.",
+    tone: "Calm",
+  },
+  {
+    value: "aurora",
+    label: "Aurora Night",
+    description: "Dark surfaces with mint, ice-blue, and soft rose accents.",
+    tone: "Cool dark",
+  },
+  {
+    value: "studio",
+    label: "Focus",
+    description: "Clean white surfaces, graphite text, and cobalt accents.",
+    tone: "Focus",
+  },
+  {
+    value: "sunrise",
+    label: "Soft Morning",
+    description: "Warm light surfaces with coral, blue, and yellow accents.",
+    tone: "Warm",
+  },
+  {
     value: "midnightGarden",
-    label: "Midnight Garden",
+    label: "Night Garden",
     description: "Deep green-black surfaces with lavender and moonlit blue accents.",
-    tone: "Botanical dark",
+    tone: "Low light",
   },
 ];
 
@@ -916,7 +916,7 @@ export function SettingsPage() {
             <details className="advanced-disclosure">
               <summary>Choose another theme</summary>
               <p className="helper-copy">
-                Themes change color and mood only. Your page layout, controls, and app setup stay the same.
+                Pick the mood that feels easiest to read. Themes only change color, contrast, and surface tone.
               </p>
               <div className="settings-option-grid">
                 {themeOptions.map((option) => (
