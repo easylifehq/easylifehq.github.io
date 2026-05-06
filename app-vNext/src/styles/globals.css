@@ -6716,6 +6716,46 @@ button.calendar-detail-card:disabled {
   --hq-shadow: 0 18px 46px rgba(32, 48, 52, 0.08);
 }
 
+.app-shell-vnext:has(.app-theme-easyhq:not(.command-center-page)) {
+  --shell-accent: #24766f;
+  --shell-accent-strong: #174f4a;
+  --shell-accent-soft: #e7f5f2;
+  --shell-bg-top: #f8fbfa;
+  --shell-bg-bottom: #eef4f2;
+  --shell-grid-line: rgba(45, 79, 76, 0.055);
+  --shell-page-overlay-1: rgba(36, 118, 111, 0.08);
+  --shell-page-overlay-2: rgba(94, 122, 151, 0.07);
+  --shell-page-text: #243033;
+  --shell-heading-text: #182326;
+  --shell-muted-text: #667174;
+  --shell-card-bg: rgba(255, 255, 255, 0.96);
+  --shell-card-bg-soft: #f3f7f5;
+  --shell-card-border: rgba(35, 48, 51, 0.13);
+  --shell-chip-bg: #edf3f1;
+  --shell-chip-text: #19544f;
+  --shell-input-bg: #ffffff;
+  --shell-panel-highlight: rgba(255, 255, 255, 0.82);
+  --ui-bg-page: #f7faf9;
+  --ui-bg-section: rgba(255, 255, 255, 0.72);
+  --ui-bg-card: #f3f7f5;
+  --ui-bg-card-elevated: #ffffff;
+  --ui-bg-input: #ffffff;
+  --ui-bg-empty: #edf4f1;
+  --ui-border-subtle: rgba(35, 48, 51, 0.13);
+  --ui-border-strong: rgba(36, 118, 111, 0.26);
+  --ui-text-primary: #1e292c;
+  --ui-text-secondary: #415052;
+  --ui-text-muted: #667174;
+  --ui-button-primary-bg: #24766f;
+  --ui-button-primary-text: #ffffff;
+}
+
+.app-shell-vnext:has(.app-theme-easyhq:not(.command-center-page)) .app-suite-control,
+.app-shell-vnext:has(.app-theme-easyhq:not(.command-center-page)) .app-sidebar {
+  border-color: color-mix(in srgb, var(--ui-border-subtle) 70%, transparent);
+  background: color-mix(in srgb, var(--shell-card-bg) 84%, transparent);
+}
+
 .app-theme-easyhq:not(.command-center-page) .hq-start-card {
   gap: clamp(0.72rem, 1.4vw, 1rem);
   overflow: hidden;
