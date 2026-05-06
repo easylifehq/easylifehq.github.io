@@ -1,6 +1,6 @@
 ﻿# Accessibility Review
 
-Generated: 2026-05-05 18:00:36
+Generated: 2026-05-05 18:10:47
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
@@ -157,9 +157,9 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
               type="button"
               className={`capture-mode-button${mode === value ? " active" : ""}`}
               onClick={() => {`
-- [YELLOW] `app-vNext/src/features/hq/routes/CommandCenterPage.tsx:325` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/hq/routes/CommandCenterPage.tsx:336` - Icon-style button may need an accessible label.
   `<button className="button-secondary" type="button" onClick={scheduleNextMove} disabled={!nextMove || !openWindows[0]}>`
-- [YELLOW] `app-vNext/src/features/hq/routes/CommandCenterPage.tsx:369` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/hq/routes/CommandCenterPage.tsx:380` - Icon-style button may need an accessible label.
   `<button className="primary-button" type="button" onClick={saveCommandTask}>`
 - [YELLOW] `app-vNext/src/features/hq/routes/HQPage.tsx:474` - Icon-style button may need an accessible label.
   `<button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>`
