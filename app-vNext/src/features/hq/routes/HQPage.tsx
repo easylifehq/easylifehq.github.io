@@ -592,10 +592,10 @@ export function HQPage() {
         </div>
       </PageSection>
 
-      <PageSection eyebrow="Future Plans" title="Ideas to revisit without crowding today">
-        <section className="hq-later-plans" aria-label="Future plans">
+      <PageSection eyebrow="Later" title="Ideas to revisit when today has room">
+        <section className="hq-later-plans" aria-label="Later plans">
           <div className="hq-later-plans-copy">
-            <span>Future plans</span>
+            <span>Parked ideas</span>
             <strong>Keep useful ideas parked until today has room.</strong>
             <p>These example ideas cover school, notes, and capacity. Nothing is saved until you choose where it belongs.</p>
           </div>
