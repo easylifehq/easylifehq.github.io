@@ -235,7 +235,7 @@ export function HQPage() {
         label: firstDueTask.title || "Untitled task",
         reason: overdueTasks.length
           ? "This is behind. Handle it, reschedule it, or intentionally release it before checking the rest."
-          : "This is due today. Decide the next step before opening the module list.",
+          : "This is due today. Decide the next step before checking anything else.",
         buttonLabel: "Open task list",
         to: "/app/easylist/dashboard",
       };
