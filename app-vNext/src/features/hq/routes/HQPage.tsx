@@ -442,7 +442,7 @@ export function HQPage() {
           </div>
           <div className="assistant-next-inline" aria-labelledby="assistant-next-title">
             <div>
-              <span>Next best move</span>
+              <span>Start here</span>
               <h2 id="assistant-next-title">{startHere.label}</h2>
               <p>{startHere.reason}</p>
             </div>
