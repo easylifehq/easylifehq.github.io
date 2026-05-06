@@ -11,13 +11,13 @@ Complexity Budget: Protected first viewport: one daily action, compact today con
 Before/After Judgment: Each task must make the signed-in product visibly clearer, calmer, more useful, or easier to undo than the previous inspected state.
 Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, with optional fun themes later
 Phase Model Policy: judgment-heavy
-Parking State: ACTIVE
+Parking State: PARKED_REVIEW_READY
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
 Done Signal: Build, visual QA, accessibility, empty/loading/error states, screenshot review, and final checklist are clean enough for review.
 Next Phase Criteria: Park review-ready. Do not generate new work unless Spencer asks.
 Repair Trigger: none
 Repair Return Phase: phase-12-qa-polish-and-park
-Updated At: 2026-05-05 20:16:25
+Updated At: 2026-05-05 21:46:42
 
 ## Phase Order
 
@@ -60,6 +60,7 @@ repair is an interrupt lane, not a normal destination. Any phase can enter repai
 - Honor human taste notes.
 - Use stronger judgment for Shape, Simplicity, and Polish.
 - Park review-ready ships instead of continuing to generate improvements.
+
 
 
 
