@@ -5664,3 +5664,19 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-203953\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-203953\easylist-visualQa-1-mobile.png
 - Follow-up: Visible/showpiece task has docs-only or non-product scope. Add a product surface scope such as src/, public/, content/, or styles/ before implementation.
+
+## Batch 1 QA - 2026-05-05 20:48:28
+
+- Active work pack: Pack 1 - Product Spine
+- Batch impact mode: showpiece
+- Fresh QA evidence:
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-204632\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-204632\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-204632\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-204632\easylist-visualQa-1-mobile.png
+- Checkpoint verdict: RED
+- Simon verdict: YELLOW
+- Robin verdict: YELLOW
+- Joey verdict: RED
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: cleaner shared shell and calmer styling, but the branch still leads with repeated module brochures instead of a daily operating system.
+- Debug checkpoint result: not-run (not-run)
