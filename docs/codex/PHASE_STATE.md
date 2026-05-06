@@ -1,10 +1,10 @@
 ﻿# Phase State
 
-Current Phase: phase-9-optional-power-modules
+Current Phase: phase-10-mobile-superpower-pass
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife helps Spencer know what matters now, capture life quickly, turn scattered inputs into usable plans, and keep deeper tools available without visual overload.
 Primary Action: Open Today, see the next best move, and capture or clear one item.
-Showable Moment: Optional modules are discoverable, useful, and quiet unless pinned or relevant.
+Showable Moment: EasyLife is genuinely usable on a phone for Today, capture, calendar, tasks, and approvals.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
 Complexity Budget: Protected first viewport: one daily action, compact today context, quiet module status, no duplicate product chrome, no giant stacked controls, and mobile content starts high.
@@ -13,11 +13,11 @@ Human Taste Note: sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired
 Phase Model Policy: judgment-heavy
 Parking State: ACTIVE
 Evidence Required: Build output, protected visual QA or screenshot evidence, and a short before/after note.
-Done Signal: More organizes Money, People, Fun/Drinks, Trips, Projects, Jobs, Future Plans, and Settings without crowding Today.
-Next Phase Criteria: Move to Phase 10 Mobile Superpower Pass when optional modules have clear entry points and module toggles/pinning are understandable.
+Done Signal: Mobile first viewport, nav, capture, Today, calendar/tasks, and approval queues are readable and thumb-friendly.
+Next Phase Criteria: Move to Phase 11 Themes when mobile is comfortable and the next work is controlled mood layers.
 Repair Trigger: none
-Repair Return Phase: phase-9-optional-power-modules
-Updated At: 2026-05-05 17:45:51
+Repair Return Phase: phase-10-mobile-superpower-pass
+Updated At: 2026-05-05 18:36:02
 
 ## Phase Order
 
@@ -60,6 +60,7 @@ repair is an interrupt lane, not a normal destination. Any phase can enter repai
 - Honor human taste notes.
 - Use stronger judgment for Shape, Simplicity, and Polish.
 - Park review-ready ships instead of continuing to generate improvements.
+
 
 
 
