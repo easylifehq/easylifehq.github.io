@@ -10047,43 +10047,59 @@ button.calendar-detail-card:disabled {
   }
 
   .capture-fab {
-    right: calc(1.15rem + env(safe-area-inset-right, 0px));
-    bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
-    min-width: 60px;
-    width: 60px;
-    min-height: 60px;
-    padding: 0;
+    right: calc(0.85rem + env(safe-area-inset-right, 0px));
+    bottom: calc(4.65rem + env(safe-area-inset-bottom, 0px));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.42rem;
+    min-width: min(8.8rem, calc(100vw - 1.7rem));
+    width: auto;
+    min-height: 48px;
+    padding: 0 0.82rem 0 0.72rem;
     overflow: hidden;
     font-size: 0;
+    box-shadow: 0 10px 24px rgba(34, 29, 24, 0.16);
+  }
+
+  .capture-fab::before {
+    content: "+";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.55rem;
+    height: 1.55rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ui-button-primary-text, #fffdf9) 18%, transparent);
+    font-size: 1.1rem;
+    line-height: 1;
   }
 
   .capture-fab::after {
-    content: "+";
-    font-size: 1.45rem;
+    content: "Capture";
+    font-size: 0.86rem;
+    font-weight: 850;
     line-height: 1;
   }
 
   .app-shell-vnext:has(.assistant-home) .capture-fab {
-    left: 50%;
-    right: auto;
-    bottom: calc(4.7rem + env(safe-area-inset-bottom, 0px));
-    width: min(26rem, calc(100vw - 1.5rem - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
-    min-width: 0;
-    min-height: 54px;
-    padding: 0 1rem;
+    left: auto;
+    right: calc(0.85rem + env(safe-area-inset-right, 0px));
+    bottom: calc(4.65rem + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    min-width: min(8.8rem, calc(100vw - 1.7rem));
+    min-height: 48px;
+    padding: 0 0.82rem 0 0.72rem;
     border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 28%, var(--ui-border-subtle) 72%);
     background: color-mix(in srgb, var(--ui-bg-card-elevated, #fffdf9) 90%, var(--app-accent, var(--shell-accent)) 10%);
     color: var(--ui-text-primary, var(--shell-heading-text));
     font-size: 0;
     box-shadow: 0 12px 28px rgba(34, 29, 24, 0.16);
-    transform: translateX(-50%);
+    transform: none;
   }
 
   .app-shell-vnext:has(.assistant-home) .capture-fab::after {
-    content: "Quick capture";
-    font-size: 0.9rem;
-    font-weight: 850;
-    line-height: 1;
+    content: "Capture";
   }
 
   .capture-modal {
