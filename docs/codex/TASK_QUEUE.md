@@ -903,7 +903,7 @@ pm.cmd run build. [class:feature risk:medium mode:single impact:visible surface:
 ## EasyLife Next Variation Phase 12 - QA Polish And Park 2026-05-05
 
 - [!] Phase 12 - Build and route proof: run the source-of-truth build and inspect core protected routes for obvious breakage. Fix only blockers. [class:proof risk:low mode:single impact:stability surface:app scope:app-vNext/src/,docs/codex/ accept:npm.cmd run build]
-- [ ] Phase 12 - Empty/loading/error polish: make one small finish pass on empty, loading, or error states if an obvious rough edge remains. Acceptance: npm.cmd run build from app-vNext. [class:polish risk:low mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- [x] Phase 12 - Empty/loading/error polish: make one small finish pass on empty, loading, or error states if an obvious rough edge remains. Acceptance: npm.cmd run build from app-vNext. [class:polish risk:low mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
 - [ ] Phase 12 - Final mobile/readability check: make one small fix for mobile text fit, tap target, or overlap if found. Acceptance: npm.cmd run build from app-vNext. [class:bugfix risk:low mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
 - [ ] Phase 12 - Final park packet: write docs/codex/PHASE_12_REVIEW.md with final status, checks, known risks, and review URL/route guidance. Leave repo clean and parked. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/ accept:npm.cmd run build]
 

@@ -51,21 +51,24 @@ export function EasyListTodayPage() {
         <TaskSection
           title="Overdue"
           tasks={overdueTasks}
-          emptyLabel="Nothing overdue right now."
+          emptyTitle="Overdue is clear"
+          emptyDetail="Use this space when a task slips past its date. For now, review due today or capture the next task."
           onEdit={setSelectedTask}
           onComplete={markComplete}
         />
         <TaskSection
           title="Due today"
           tasks={dueTodayTasks}
-          emptyLabel="Nothing due today."
+          emptyTitle="No dated tasks for today"
+          emptyDetail="Add a due date when something belongs here, then EasyList can keep today's work easy to scan."
           onEdit={setSelectedTask}
           onComplete={markComplete}
         />
         <TaskSection
           title="Still on today's board"
           tasks={noDateTasks}
-          emptyLabel="No undated tasks are hanging around."
+          emptyTitle="No loose tasks on today's board"
+          emptyDetail="Capture quick tasks without a date here, or keep the board quiet until the next item appears."
           onEdit={setSelectedTask}
           onComplete={markComplete}
         />
@@ -87,13 +90,15 @@ export function EasyListTodayPage() {
 function TaskSection({
   title,
   tasks,
-  emptyLabel,
+  emptyTitle,
+  emptyDetail,
   onEdit,
   onComplete,
 }: {
   title: string;
   tasks: TaskRecord[];
-  emptyLabel: string;
+  emptyTitle: string;
+  emptyDetail: string;
   onEdit: (task: TaskRecord) => void;
   onComplete: (taskId: string) => Promise<void>;
 }) {
@@ -110,7 +115,11 @@ function TaskSection({
             />
           ))
         ) : (
-          <div className="empty-card-vnext">{emptyLabel}</div>
+          <div className="empty-card-vnext easylist-suite-empty-card">
+            <span>Today list</span>
+            <strong>{emptyTitle}</strong>
+            <p>{emptyDetail}</p>
+          </div>
         )}
       </div>
     </PageSection>

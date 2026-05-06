@@ -3474,3 +3474,18 @@
 - Files changed:
 - app-vNext/src/features/easylist/EasyListContext.tsx
 - Risks or follow-up needed: Implementation guardrails failed.
+
+## 2026-05-05 20:28:20
+
+- Task attempted: Phase 12 - Empty/loading/error polish: make one small finish pass on empty, loading, or error states if an obvious rough edge remains. Acceptance: npm.cmd run build from app-vNext. [class:polish risk:low mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: feature
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easylist/routes/EasyListTodayPage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
