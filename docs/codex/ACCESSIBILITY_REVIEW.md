@@ -1,6 +1,6 @@
 ﻿# Accessibility Review
 
-Generated: 2026-05-05 18:50:50
+Generated: 2026-05-05 19:00:28
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
@@ -54,7 +54,7 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
                     onClick={() =>`
 - [YELLOW] `app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx:735` - Icon-style button may need an accessible label.
   `<button type="submit" className="primary-button" disabled={isSavingQuickEvent}>`
-- [YELLOW] `app-vNext/src/features/easycalendar/routes/EasyCalendarMonthPage.tsx:214` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/easycalendar/routes/EasyCalendarMonthPage.tsx:222` - Icon-style button may need an accessible label.
   `<button
                       key={`${item.kind}-${item.id}`}
                       type="button"
@@ -171,7 +171,7 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
   `<button type="button" className="primary-button" onClick={handleOpenInstallShare}>`
 - [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1561` - Icon-style button may need an accessible label.
   `<button type="button" className="button-secondary" onClick={handleSendTestNotification}>`
-- [INFO] `app-vNext/src/styles/globals.css:11328` - Reduced-motion handling is present.
+- [INFO] `app-vNext/src/styles/globals.css:11356` - Reduced-motion handling is present.
   `@media (prefers-reduced-motion: reduce) {`
 
 ## Stop Or Continue
