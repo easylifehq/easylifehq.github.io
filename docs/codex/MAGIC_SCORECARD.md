@@ -5643,3 +5643,24 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: RED
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: visual restraint improved, but the active pack is still blocked by brochure-first route hierarchy.
 - Debug checkpoint result: not-run (not-run)
+
+## 2026-05-05 20:46:31
+
+- Task: Phase 12 - Final park packet: write docs/codex/PHASE_12_REVIEW.md with final status, checks, known risks, and review URL/route guidance. Leave repo clean and parked. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: Pack 1 - Product Spine
+- Task class: feature
+- Task risk: low
+- Changed files: 0
+- Materiality signal: impact=showpiece, surface-files=0, structural-files=0, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: visual restraint improved, but the active pack is still blocked by brochure-first route hierarchy.
+- Before visual evidence:
+- None recorded before task.
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-203953
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-203953\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-203953\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-203953\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-203953\easylist-visualQa-1-mobile.png
+- Follow-up: Visible/showpiece task has docs-only or non-product scope. Add a product surface scope such as src/, public/, content/, or styles/ before implementation.

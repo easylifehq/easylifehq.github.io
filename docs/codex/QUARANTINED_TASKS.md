@@ -372,3 +372,13 @@
 - Files restored before continuing:
 - app-vNext/src/features/easylist/EasyListContext.tsx
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-05 20:46:31
+
+- Batch: 1
+- Task index: 1
+- Task: Phase 12 - Final park packet: write docs/codex/PHASE_12_REVIEW.md with final status, checks, known risks, and review URL/route guidance. Leave repo clean and parked. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/ accept:npm.cmd run build]
+- Reason: Visible/showpiece task has docs-only or non-product scope. Add a product surface scope such as src/, public/, content/, or styles/ before implementation.
+- Files restored before continuing:
+- None
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
