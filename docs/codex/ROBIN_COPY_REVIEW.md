@@ -4,67 +4,79 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is moving toward calm daily-assistant language, but visible copy still occasionally slips into builder, brochure, and internal proof wording.
+EasyLife is moving toward a calmer daily workspace voice, but some visible and near-visible language still sounds like product scaffolding instead of a personal assistant helping someone handle today.
 
 ## Mission Voice Fit
-The mission asks for a connected, professional personal operating system that helps a signed-in user know what to do next today. The newer direction fits when it says "workspace", "daily plan", "task list", "capture", "calendar", "notes", and "workout log." It weakens when the product talks like a demo, proof packet, command center, or feature inventory. EasyLife should sound like a practical daily companion, not like a team explaining a product build.
+The mission calls for a connected, professional personal operating system, but the user-facing voice should not keep saying that idea out loud. The best fit is concrete daily language: today, task list, calendar block, recent note, workout log, school plan, follow-up, draft reply, and next move. Recent work appears aligned with that direction, especially around Today, More, Notes, Coach, and Future Plans. The remaining risk is brochure and builder language: "command center", "demo", "proof", "sample data", "polish", and repeated feature-shell copy make the app feel like it is explaining itself instead of helping the user act.
 
 ## Delicate Wording Risks
-- "command center" appears in app metadata and past copy samples. It is too generic SaaS and too militarized for the calm personal-assistant promise.
-- "demo" remains in dev/QA query handling and may be harmless internally, but any visible instance should become "example day", "preview", or "workspace" depending on context.
-- "proof" appears in `auth-proof-card`; the class name is probably internal, but visible proof language should be avoided because it sounds like sales validation rather than user value.
-- "sample" appears in EasyList email IDs. Internal IDs are fine, but visible "sample data" should become "example email", "example message", or "example follow-up."
-- "CommandCenterPage" and related command-center naming may be internal, but user-facing labels should not say "Command Center." Prefer "Today", "Daily plan", or "Quick actions."
-- "More" can work as a navigation label, but optional modules inside it must not read like a product catalog. They need concrete names and short outcomes.
-- "Future Plans dock" risks sounding like a builder placeholder if exposed directly. User-facing copy should say "Later plans" or "Ideas to revisit."
-- "Fun/Drinks entry" risks tonal wobble. If visible, it should feel optional and grounded, such as "Fun plans" or "Drinks list", not like a joke module.
-- "AI Lab", "mock", "sample", and "prototype" language should stay behind experiments/internal views. Working app copy should describe deterministic actions and approvals.
+- "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center." The phrase "command center" is too generic-SaaS and conflicts with the calmer daily assistant direction.
+- "CommandCenterPage" may be an internal component name, but if any related title renders as "Command Center", it should be replaced with "Today", "Workspace", or "Daily plan".
+- "demo" appears in dev/visual QA contexts. Internal route/query usage is acceptable, but visible copy should not say "demo" unless the user is clearly on a public try-it page.
+- "sample-final", "sample-meeting", "sample-container", and "sample-noise" look like internal IDs. If any nearby visible copy says "sample", it should become "example", "suggested", or a real daily noun.
+- "proof" appears in an auth CSS class. That is likely non-visible, but visible "proof" language would sound like a pitch rather than a product.
+- "Future Plans dock" is acceptable in internal docs, but visible app copy should avoid "dock" unless it is a literal UI label the user understands.
+- "More hub" is fine as implementation language, but visible UI should say "More", "More apps", or "Optional tools".
+- Phase and review packet language is appropriate for docs, not app surfaces.
+- "AI Lab", "mock", "sample data", or "fake" language should stay out of the working app surface unless the section is explicitly experimental and clearly separated from the main experience.
+- Repeated public CTAs like "Start Free" and "See Features" risk making every module feel like the same product brochure instead of a distinct daily tool.
 
 ## Beautiful Language Opportunities
-- Replace broad suite claims with daily-life nouns: "today", "next move", "task list", "note", "calendar block", "workout log", "follow-up", "draft reply."
-- Let HQ sound like a start surface: short labels such as "Today", "Next move", "Capture", "Later", and "Review" are stronger than explanatory headings.
-- Make Inbox Intelligence language trust-building by naming approval states clearly: "Review first", "Draft only", "Add to tasks", "Keep visible."
-- School planner copy can become warmer and more useful with "This week", "Study load", "Next exam", and "Make a study block."
-- Capacity and coach copy should stay humble: "lighter day", "normal plan", "push day" is better than implying prediction or optimization.
-- Notes and memory copy should avoid mystique. "Recent notes", "Needs review", and "Turn into task" are clear and credible.
+- Replace suite-claim copy with active daily prompts: "Start with today's next move" is stronger than explaining the whole system.
+- Use short, concrete module labels: "Tasks", "Calendar", "Notes", "Coach", "Inbox", "More".
+- Let each module describe one job: "Capture a task", "Block time", "Review recent notes", "Log a workout", "Draft a reply".
+- Make approval language explicit and calm: "Review before adding" or "Draft only - nothing sends yet".
+- For optional modules, use understated grouping: "Planning", "Health", "School", "Optional tools".
+- For Future Plans, favor "Later ideas" or "Planned next" if the content is not committed work.
+- On public pages, move from feature inventory to product use: show one practical preview and one concrete action before any explanation.
+- In empty states, use one sentence that answers: what is this for, what should I do, what do I get?
 
 ## Priority Rewrite
-Fix remaining customer-facing builder/process words before adding any Phase 9 surface. The most important pass is to search visible app strings for "command center", "demo", "proof", "polish", "handoff", "sample data", "AI Lab", "mock", and "prototype", then replace only visible instances with concrete daily-workspace language. Do not rename internal identifiers unless they leak into the UI.
+The single most important wording problem is remaining "command center" and builder/process language on customer-facing or first-screen surfaces. Replace it with concrete daily-workspace language before more Phase 9 work continues, especially in meta descriptions, HQ/Today labels, public module pages, and experimental surfaces that may be visible to users.
 
 ## Suggested Rewrites
-- Before: "command center"
-  After: "Today workspace"
-- Before: "sample data"
-  After: "example day"
-- Before: "proof"
-  After: "preview"
-- Before: "Calendar handoff"
-  After: "Calendar prep"
+- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
+  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and follow-ups in one daily workspace."
+
+- Before: "Command Center"
+  After: "Today"
+
+- Before: "See Features"
+  After: "See how it works"
+
+- Before: "Start Free"
+  After: "Open EasyLife"
+
+- Before: "Sample data"
+  After: "Example day"
+
 - Before: "Future Plans dock"
   After: "Later plans"
-- Before: "Fun/Drinks entry"
-  After: "Fun plans"
-- Before: "AI daily brief"
-  After: "Today brief"
-- Before: "mock responses"
-  After: "example suggestions"
+
+- Before: "AI Lab"
+  After: "Assistant preview"
+
+- Before: "Safe reply draft affordance"
+  After: "Review a draft reply"
 
 ## Voice Rules
-- Use concrete daily nouns before product nouns.
-- Keep first-screen labels short: "Today", "Next move", "Capture", "Review", "Later."
-- Do not explain the whole system above the fold.
-- Separate public product copy from working app copy.
-- Keep experiments clearly non-production without putting "mock", "demo", or "prototype" in normal app surfaces.
-- Prefer "review", "approve", and "draft" for email-related actions; never imply automatic sending.
-- Avoid generic SaaS phrases: "command center", "workflow", "solution", "proof", "handoff", "polish."
-- Write to the user doing the task, not to the builder shipping the feature.
+- Use concrete nouns before product abstractions: task list, calendar block, note, workout log, project brief, follow-up, draft reply.
+- Do not use "command center", "personal operating system", "premium", "high-tech", "proof", "handoff", "polish", or "workflow" in visible copy unless the reader and action are concrete.
+- First-screen copy should name one next action, today context, and a compact status signal.
+- Public pages may explain value; working app pages should use direct task labels.
+- Keep labels short: one to three words when possible.
+- Keep helper copy to one useful sentence, not a product pitch.
+- Separate experimental language from production language. Main app surfaces should not say "mock", "fake", or "sample data".
+- Approval copy must be explicit when nothing sends or persists: "Review first", "Draft only", "Nothing sends yet".
+- Optional modules should feel discoverable but quiet; do not let playful areas compete with Today, Tasks, Calendar, Notes, or Coach.
+- Prefer calm specificity over charm. Personality is welcome only after clarity.
 
 ## Next 5 Copy Tasks
-- [ ] Search visible app strings for "command center" and replace customer-facing uses with "Today", "Daily plan", or "workspace"; leave internal file names alone.
-- [ ] Review Phase 9 Future Plans copy and ensure the visible label is "Later plans" or similarly plain; do not expose "dock" as a user-facing noun.
-- [ ] Review optional Fun/Drinks copy and make it grounded and optional; avoid joke tone, fake claims, or anything that competes with core daily modules.
-- [ ] Audit Inbox approval language for clear consent verbs: "review", "approve", "draft", "add"; do not imply automatic email actions.
-- [ ] Check EasyNotes and HQ first-screen copy for feature-inventory language; keep only the next action, today context, and compact status above secondary detail.
+- [ ] Replace the visible meta description phrase "one command center" with "one daily workspace"; do not touch auth, routing, deploy config, or generated output.
+- [ ] Search `app-vNext/src` for visible "Command Center" text and replace only rendered user-facing labels with "Today" or "Daily workspace"; leave internal component names alone.
+- [ ] Review EasyList Email visible strings near sample candidate data and replace any user-facing "sample" language with "example"; do not rename internal IDs unless required by visible output.
+- [ ] Review public module CTAs and change one repeated generic pair into one route-specific action plus one quiet secondary action; do not add routes or new claims.
+- [ ] Review Phase 9 Fun/Drinks entry copy before implementation and keep it optional, playful, and clearly secondary; do not let it appear in the default serious Today path.
 
 ## Stop Or Continue
 continue but fix copy first
