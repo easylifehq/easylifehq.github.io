@@ -4,29 +4,29 @@
 RED
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife mission: recent work improved Phase 10 mobile density and earlier phases advanced suite cohesion, notes, More organization, and Today flow. However, the current checkpoint is blocked by Joey’s RED security review signal.
+The branch is moving toward the EasyLife mission: recent work improves mobile density, fast capture, optional module organization, notes, workout, and Today/HQ cohesion. However, it is not safe to continue unattended because Joey security review is RED.
 
 ## Safety Review
-Joey security review is RED and explicitly asks for human security review. No dirty working tree or forbidden file changes are reported, but the security gate blocks unattended continuation.
+Joey security review is RED and says stop for human security review. No dirty working tree or forbidden file changes are reported, but the security gate blocks continuation.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: Phase 10 mobile nav and first viewport repair.
-- Files changed: `app-vNext/src/features/hq/routes/HQPage.tsx`, `app-vNext/src/styles/globals.css`, plus accumulated branch changes listed in docs/app UI files.
-- Commits added: latest HEAD `ab19b19` plus many prior checkpoint/review/task commits since `main`.
-- Queue status: 3 unchecked Phase 10 tasks remain.
+- Completed tasks in this checkpoint window: Phase 10 mobile nav/first viewport and mobile fast capture; recent completed count shown is 12.
+- Files changed: frontend UI/style files under `app-vNext/src` plus Codex docs under `docs/codex`.
+- Commits added: latest HEAD is `ffc19132` (`Codex accessibility review batch 1`), with many checkpoint/review commits since `main`.
+- Queue status: 2 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN; 0 high, 0 medium, 0 low; should not block next tasks.
-- Simon design review: YELLOW; continue but fix visual issues first; should shape next UI task.
-- Robin copy review: YELLOW; continue but fix copy first; should shape next task.
-- Accessibility review: YELLOW; patch warnings soon.
-- Performance review: GREEN; no blocking influence.
-- Joey security review: RED; stop for human security review.
-- Franky formula review: missing; no formula-specific signal available.
-- Product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured.
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not drive next task.
+- Simon design review: YELLOW; continue but fix visual issues first; should influence next tasks.
+- Robin copy review: YELLOW; continue but fix copy first; should influence next tasks.
+- Accessibility review: YELLOW; patch accessibility warnings soon; should influence next tasks.
+- Performance review: GREEN; no blocker.
+- Joey security review: RED; must stop for human security review.
+- Franky formula review: missing; note gap, but no formula blocker shown.
+- Product truth: MISSING with `Product truth ok: True`; no configured `PRODUCT_TRUTH.md`.
 
 ## Recommended Next Step
 stop for human review
@@ -34,10 +34,10 @@ stop for human review
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Human review should clear or scope Joey’s security concern before any remaining Phase 10 mobile work continues.
+- Human security review should resolve Joey’s RED gate before any mission-forward queued work resumes.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Joey security gate is the blocker.
-- Three Phase 10 tasks remain queued.
-- Product truth file is not configured.
+- Two Phase 10 tasks remain unchecked.
+- Security gate is the blocker despite otherwise healthy build/visual status.
+- Review whether changed `app-vNext/src/features/auth/routes/LoginPage.tsx` is acceptable under the mission’s auth-sensitive scope rules.
