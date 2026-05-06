@@ -3465,3 +3465,12 @@
 - Files changed:
 - app-vNext/src/components/navigation/MarketingHeader.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 20:18:51
+
+- Task attempted: Phase 12 - Build and route proof: run the source-of-truth build and inspect core protected routes for obvious breakage. Fix only blockers. [class:proof risk:low mode:single impact:stability surface:app scope:app-vNext/src/,docs/codex/ accept:npm.cmd run build]
+
+- Build result: Quarantined
+- Files changed:
+- app-vNext/src/features/easylist/EasyListContext.tsx
+- Risks or follow-up needed: Implementation guardrails failed.

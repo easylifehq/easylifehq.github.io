@@ -362,3 +362,13 @@
 - Files restored before continuing:
 - docs/codex/PHASE_11_REVIEW.md
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-05 20:18:51
+
+- Batch: 1
+- Task index: 1
+- Task: Phase 12 - Build and route proof: run the source-of-truth build and inspect core protected routes for obvious breakage. Fix only blockers. [class:proof risk:low mode:single impact:stability surface:app scope:app-vNext/src/,docs/codex/ accept:npm.cmd run build]
+- Reason: Implementation guardrails failed.
+- Files restored before continuing:
+- app-vNext/src/features/easylist/EasyListContext.tsx
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.

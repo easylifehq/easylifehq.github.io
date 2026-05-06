@@ -5520,3 +5520,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: RED
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: shared shell and theme restraint are cleaner, but module surfaces still open like brochures instead of a daily operating system.
 - Debug checkpoint result: not-run (not-run)
+
+## 2026-05-05 20:18:51
+
+- Task: Phase 12 - Build and route proof: run the source-of-truth build and inspect core protected routes for obvious breakage. Fix only blockers. [class:proof risk:low mode:single impact:stability surface:app scope:app-vNext/src/,docs/codex/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: Pack 1 - Product Spine
+- Task class: unknown
+- Task risk: unknown
+- Changed files: 1
+- Materiality signal: impact=standard, surface-files=1, structural-files=1, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: shared shell and theme restraint are cleaner, but module surfaces still open like brochures instead of a daily operating system.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-200755
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-200755\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-200755\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-200755\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-200755\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-200755
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-200755\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-200755\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-200755\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-200755\easylist-visualQa-1-mobile.png
+- Follow-up: Implementation guardrails failed.
