@@ -4,74 +4,74 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is moving toward a calm daily assistant voice, but visible copy still slips into builder language, brochure framing, and AI promise language that needs tighter staging.
+EasyLife is calmer and more concrete than before, but it still leaks builder language and product-showroom phrasing where the user needs direct daily action.
 
 ## Mission Voice Fit
-The best copy is concrete and useful: "Choose today's next move", "Capture anything", "Today calendar", "Review inbox", and "Find calendar room" fit the mission because they tell the signed-in user what to do and what they get. The weaker copy appears on marketing and Settings surfaces, where terms like "Demo Path", "Show this first", "handoff", "proof", "workflow", "AI Analyze Into Rows", and distribution/setup language make the product sound like it is being presented to a reviewer or configured by a builder rather than used by a person managing a day.
+The language mostly fits the mission of a connected personal workspace: words like "workspace", "today", "capture", "task list", "calendar", "notes", and "settings" are grounded and useful. The copy is strongest when it names what the user can do next. It weakens when it falls back to "command center", "demo", "proof", "polish", "sample data", or broad suite-positioning language, because those phrases describe the product build or sales frame rather than the user's day.
 
 ## Delicate Wording Risks
-- "Demo Path", "Show this first", and "Use these moments to explain the product..." are customer-facing builder instructions. They should not appear as product copy.
-- "Draft handoff to EasyList", "EasyList handoff", and "Capture, refine, then hand off" sound internal and vague. A user needs the concrete outcome: turn notes into task drafts.
-- "Keep visible proof of what got done" feels salesy and slightly defensive. "History" or "completed today" is calmer.
-- "Start Free" may imply pricing or a product offer that is not fully staged in the copy. If pricing is not established, use "Start EasyLife" or "Open EasyLife".
-- "Closer to Apple Notes than a bloated workspace" is punchy but off-brand. It leans on another brand and insults a category instead of explaining EasyNotes.
-- "AI Analyze Into Rows" is robotic, technical, and visually loud. It should describe the user action and review outcome.
-- "AI is finding the actual tasks..." overstates intelligence and certainty. Prefer "EasyLife is sorting possible tasks..." or "Review the suggested rows before saving."
-- Settings copy like "Prep the app for friends, TestFlight, stores, support, and rollback" reads like release management, not a normal user control center.
-- "Capacitor iOS and Android projects", "Store metadata", and "Rollback plan" are internal build/distribution terms and should stay out of customer-facing Settings unless this is an owner-only admin view.
-- Repeated "AI Controls", "AI helpers", and "assistant" language is mostly safety-aware, but it should stay clearly review-first and avoid implying autonomous action.
+- "command center" remains in public metadata and app metadata. It is too generic SaaS and too militarized for a calm personal assistant product.
+- "demo" appears in dev/query contexts and may be harmless internally, but any visible use should become "example day", "preview", or "workspace".
+- "proof" appears as a class name and may not be visible, but the concept should not surface as customer-facing copy. It sounds like a pitch deck, not an app.
+- "sample" appears in EasyList email candidate IDs. If rendered anywhere, "sample data" should become "example email", "example follow-up", or "example day".
+- Product and module pages still risk explaining the system before the user feels the useful action.
+- Repeated CTA language like "Get Started", "Start Free", and "See Features" can make the product feel like a brochure when the first screen should feel operational.
+- "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center" is too inventory-heavy and too generic for the product promise.
+- "pipeline work" is not a natural daily-life noun for most users and may make the suite feel more corporate than personal.
 
 ## Beautiful Language Opportunities
-- Replace builder staging labels with user-facing section names: "Example day", "Try this path", "Daily flow", or "First things to try".
-- Give each module one plain job: Tasks captures obligations, Notes catches thoughts, Calendar protects time, Workout logs training, Settings controls the suite.
-- Rewrite AI actions around review and consent: "Suggest task rows", "Prepare a draft", "Review before saving", "Nothing changes until you approve."
-- Make Settings feel like a control center by hiding release/distribution language behind clearer owner-only language or moving it out of first-level copy.
-- Replace "workflow" with the specific noun whenever possible: task list, calendar block, note draft, project brief, email reply draft.
-- Make marketing CTAs less like generic SaaS. "Open EasyLife" or "Start your workspace" fits better than "Start Free" if no pricing context is visible.
+- Replace broad system claims with a single daily promise: plan today, capture what matters, and return to what is open.
+- Make Settings copy feel like controls for a calm workspace, not a feature catalog.
+- Give module previews more lived-in nouns: "today's list", "open note", "calendar block", "workout log", "project brief".
+- Let public pages describe outcomes in plain language before feature groups.
+- Keep first-screen labels short and concrete: "Today", "Tasks", "Calendar", "Notes", "Coach", "Inbox", "More".
+- Use "example" instead of "demo" when showing mock or seeded content.
+- Use "workspace" only when the copy names what happens inside it.
 
 ## Priority Rewrite
-Fix customer-facing builder language in the shared product marketing component and EasyNotes marketing page. The biggest issue is not one awkward phrase; it is that the page literally tells someone how to present the product with "Demo Path", "Show this first", and "Use these moments..." while also using "handoff" as if the buyer knows internal module mechanics. Nami should replace that section vocabulary with user-facing trial language and concrete outcomes.
+The most important wording problem is the remaining "command center" promise in metadata and any visible surfaces. It positions EasyLife like a generic dashboard instead of a personal assistant workspace. Replace it with a quieter sentence that names the user's daily outcome without listing every module at once.
 
 ## Suggested Rewrites
-- Before: "Demo Path"
-  After: "Example day"
+- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
+  After: "EasyLife brings your tasks, notes, calendar, workouts, and plans into one calm daily workspace."
 
-- Before: "Show this first"
-  After: "Try this flow first"
+- Before: "command center"
+  After: "daily workspace"
 
-- Before: "Use these moments to explain the product without wandering through every setting."
-  After: "Start with a few everyday actions before opening deeper settings."
+- Before: "demo"
+  After: "example day"
 
-- Before: "Draft handoff to EasyList"
-  After: "Task drafts for EasyList"
+- Before: "sample data"
+  After: "example items"
 
-- Before: "Capture, refine, then hand off"
-  After: "Capture a thought, then turn it into action"
+- Before: "proof"
+  After: "preview"
 
-- Before: "AI Analyze Into Rows"
-  After: "Suggest task rows"
+- Before: "See Features"
+  After: "See what is included"
 
-- Before: "Keep visible proof of what got done instead of letting progress disappear the second you finish it."
-  After: "Keep a clear record of completed tasks so progress stays easy to review."
+- Before: "Start Free"
+  After: "Open EasyLife"
 
-- Before: "Closer to Apple Notes than a bloated workspace."
-  After: "A simple notes space for fast capture and later review."
+- Before: "pipeline work"
+  After: "project work"
 
 ## Voice Rules
-- Use concrete product nouns: task list, note draft, calendar block, workout log, project brief, email reply draft.
-- Keep first-screen copy short: one job, one next action, one useful status.
-- Do not write instructions to the builder, reviewer, or presenter in visible app copy.
-- Avoid "handoff", "proof", "polish", "workflow", "demo", and "sample" when the user-facing action can be named.
-- AI copy must be review-first: suggest, draft, prepare, review, approve. Do not imply autonomous saving, sending, deleting, or scheduling.
-- Marketing pages can explain the product, but working app screens should use direct action labels.
-- Settings should sound like user controls, not release management or deployment planning.
+- Lead with what the user can do today.
+- Use concrete product nouns: task list, note, calendar block, workout log, project brief, inbox item, setting.
+- Avoid builder words in visible copy: demo, proof, polish, handoff, sample data, workflow, command center.
+- Keep first-screen copy short; move explanation lower or behind action.
+- Do not list every module when one daily outcome will do.
+- Public pages may explain; working app screens should direct.
+- Theme copy should describe mood and readability, not technical styling.
+- Copy should feel calm, useful, and specific, never inflated.
 
 ## Next 5 Copy Tasks
-- [ ] Replace the shared marketing "Demo Path" section labels with user-facing trial language; do not add new claims or new sections.
-- [ ] Rewrite EasyNotes "handoff" phrases into concrete task-draft language; keep the note-to-task meaning intact.
-- [ ] Change "AI Analyze Into Rows" and its helper text to review-first language; avoid implying certainty or automatic saving.
-- [ ] Review Settings distribution copy for internal build terms like TestFlight, rollback, store metadata, and Capacitor; either make them owner-only or rewrite as plain setup guidance.
-- [ ] Replace one remaining "proof", "workflow", or "Start Free" phrase in visible marketing copy with a concrete daily-use phrase; preserve routes and behavior.
+- [ ] Replace visible "command center" metadata with "daily workspace" language; do not touch routing, auth, or config behavior.
+- [ ] Search visible JSX strings for "demo", "proof", "polish", "handoff", and "sample data"; replace only customer-facing instances.
+- [ ] Review Settings theme labels and helper text; keep each description under one sentence and tied to readability or mood.
+- [ ] On one public product page, reduce CTA/feature explanation copy above the fold; keep one primary action and one concrete support line.
+- [ ] Review EasyList email candidate labels; ensure any example content says "example email" or "example follow-up", not "sample data".
 
 ## Stop Or Continue
 continue but fix copy first
