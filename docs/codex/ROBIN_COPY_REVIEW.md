@@ -4,77 +4,78 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife now sounds calmer and more useful, but several visible strings still explain the product like an internal demo instead of helping a signed-in user act today.
+EasyLife is closer to a calm daily assistant, but visible copy still slips into builder language, AI promise language, and product-brochure staging.
 
 ## Mission Voice Fit
-The strongest copy fits the mission: "Choose today's next move", "Next best move", "Today summary", "Capture anything", "Add task", "Open task list", and "Workout log" are concrete, calm, and action-oriented. The Today/HQ language is moving toward a personal assistant surface rather than a feature directory. The weak spots are remaining builder/demo words, repeated product identity, and a few broad labels like "Presentation flow", "More", "Systems", "Plan help", and "workflow" that sound more like product scaffolding than a daily workspace.
+The strongest copy now uses concrete daily nouns: task list, calendar block, note, project, workout, daily plan, workspace. That fits the mission and helps EasyLife feel useful rather than abstract. The weaker copy still says "command center", "workflow", "demo", "proof", "sample", "AI", and "example" in places where the user needs a plain action or a clear review state. For a personal assistant product, the app should sound like it is helping the user decide what to do next today, not presenting a product concept or internal prototype.
 
 ## Delicate Wording Risks
-- "command center" remains in meta copy in root/app HTML samples. It is not the right promise for EasyLife now; it sounds generic SaaS and overstates control.
-- "EasyLifeHQ" appears as the login title, auth eyebrow, and app/header brand. The repetition makes the product sound less human and more like an internal admin console.
-- "auth-proof-card" is a class name, not visible copy, but the surrounding login card still reads like a proof panel: "Open today", "List + Notes + Calendar", "Add the rest..." It is acceptable, but a little pitch-like for a login screen.
-- "Presentation flow" is visible behind a disclosure and feels like internal review language. A user does not need a presentation flow; they need setup, tour, or first steps.
-- "demoPath" is internal, but the visible block it powers still reads like a guided product walkthrough rather than a working app surface.
-- "Review inbox" paired with "example email" is honest about mock/local behavior, but "example inbox" can feel temporary or demo-made if it appears in the serious Today flow.
-- "workflow" appears in Settings copy. In customer-facing settings language, it is vague unless the action and outcome are concrete.
-- "Plan help" is understandable, but soft. It does not say what the user gets: quick actions, capture, or review.
-- "Systems" as a section label is too abstract for a personal daily assistant. It sounds like architecture, not life organization.
-- "Keep modules quiet until they are useful" is elegant but a little builder-facing. A user does not think in modules.
+- `command center` remains in public metadata. It is too generic and too SaaS-like for EasyLife's current assistant direction.
+- `Workflow` appears as a customer-facing navigation label. It is vague unless the page immediately names the actual action, such as "Plan", "Track", "Review", or "Follow up".
+- `Start Free` and `See Features` on module/product pages continue to sound like a landing-page template. They do not answer what the user does next inside EasyLife.
+- `demo`, `demoPath`, `sample`, and `example` are sometimes internal identifiers, but visible phrases like "Review example inbox", "example email", and "School planner example" weaken trust. Use "practice inbox", "inbox item", or "school plan" when the user sees it.
+- `proof` appears in user-facing marketing language. It feels like a pitch to a reviewer, not a benefit to a user.
+- `handoff` remains in EasyNotes marketing copy. It is builder/process language; use "send to Tasks", "turn into tasks", or "queue action lines".
+- Several AI lines imply capability before the product has visible deterministic boundaries. Copy such as "AI can suggest" or "AI helpers can appear" should be tied to "draft", "review", "editable", "when enabled", and "nothing changes until you approve".
+- `What am I forgetting` is an appealing command, but it risks overpromising if the app is not actually checking every source. Prefer "Check open items" or "Review loose ends" unless the screen explains the limited sources.
+- Settings copy like "Set what AI can review, suggest, draft, and never do automatically" is clearer than most AI copy, but still too broad unless each control states what data and output it affects.
+- The app still sometimes names internal surfaces like `AI Lab`, `approval queue`, and `command palette` in visible copy. These should be secondary or Labs-only labels, not the first thing a daily user reads.
 
 ## Beautiful Language Opportunities
-- Replace internal labels with daily-life nouns: "Presentation flow" can become "First steps" or "How to start".
-- Make the app header less product-heavy by choosing one identity: "EasyLife" or "Today", not repeated EasyLifeHQ framing.
-- Tighten optional-module language around outcomes: "Plan help" can become "Quick review" or "Review the day".
-- Keep the excellent Today voice and apply it to Settings, More, and optional surfaces: short verbs, concrete nouns, no platform fog.
-- Keep safety language around email suggestions. "Nothing is sent or archived until you approve it" is clear and trustworthy.
-- Soften "sample" and "example" where possible by saying "local review" or "example day" only when the mock nature must be explicit.
-- Turn "Systems" into "Apps" or "Workspace" depending on whether the section is navigation or status.
-- Use "today", "task", "note", "calendar block", "reply draft", "workout log", and "school item" as the house vocabulary.
+- Replace broad product nouns with daily nouns: "workspace", "daily plan", "task list", "calendar block", "note", "project brief", "workout log", "reply draft".
+- Let Today copy feel more human and useful: "Start here", "Next move", "Due today", "Open room", "Capture something", "Review loose ends".
+- Make AI copy humble and bounded: "Prepare a draft", "Needs your approval", "Uses visible EasyLife items", "Nothing is saved yet".
+- Use module actions instead of feature labels: "Open task list", "Plan today", "Capture note", "Review recent notes", "Log workout".
+- Turn visible "example" language into "practice" or "preview" only where the user is clearly in a mock/Labs surface.
+- Make Settings sound like user control, not configuration: "Choose what appears", "Keep suggestions review-first", "Set your start page", "Pick visible apps".
+- Give product pages more concrete route actions: "Open EasyList", "Review the plan", "See the task flow", "Try the note flow".
 
 ## Priority Rewrite
-Fix the remaining builder/demo layer in the signed-in Today/HQ and navigation copy. The next pass should replace visible phrases like "Presentation flow", "Systems", "Plan help", "example inbox", and repeated "EasyLifeHQ" identity with concrete user-facing labels that say what to do and what the user gets today.
+The single most important copy problem is visible builder/prototype language in user-facing surfaces. Nami should replace customer-visible "command center", "demo", "proof", "sample", "handoff", and vague "workflow" labels with concrete daily-life actions, one narrow surface at a time. Do not broaden into claims; the fix is subtraction and clearer nouns.
 
 ## Suggested Rewrites
-- Before: "Presentation flow"
-  After: "First steps"
-
-- Before: "Plan help"
-  After: "Quick review"
-
-- Before: "Systems"
-  After: "Apps"
-
-- Before: "Keep modules quiet until they are useful"
-  After: "Open each app when it helps today."
-
-- Before: "Review inbox"
-  After: "Review email suggestions"
-
-- Before: "Approve task, deadline, event, and follow-up suggestions from example email."
-  After: "Review local email suggestions before adding anything to your day."
-
 - Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
   After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and follow-ups in one calm workspace."
 
-- Before: "Open the manual workflow"
-  After: "Open manual steps"
+- Before: "Workflow"
+  After: "Plan" or "Review", depending on the section.
+
+- Before: "Draft handoff to EasyList"
+  After: "Turn notes into tasks"
+
+- Before: "EasyList handoff"
+  After: "Send to Tasks"
+
+- Before: "Review example inbox"
+  After: "Review practice inbox"
+
+- Before: "Approve task, deadline, event, and follow-up suggestions from example email."
+  After: "Review task, deadline, event, and follow-up drafts from a practice inbox item."
+
+- Before: "What am I forgetting"
+  After: "Review loose ends"
+
+- Before: "Start Free"
+  After: "Open EasyLife" or "Open workspace"
 
 ## Voice Rules
-- Lead with the user's next action, not the product's architecture.
-- Use concrete nouns: task list, note, calendar block, reply draft, workout log, school item, workspace.
-- Avoid builder words in visible copy: demo, proof, polish, handoff, workflow, command center, systems, presentation.
-- Keep labels short on first-screen surfaces; put explanation behind details, drawers, or secondary panels.
-- Separate mock honesty from product voice: say "example" only where the user must know nothing real will be changed.
-- Use calm confidence, not sales pressure. No "premium", "high-tech", or "personal operating system" in visible app copy.
-- For email and AI-adjacent surfaces, keep approval language explicit: review first, nothing sent, nothing archived, nothing saved until the user chooses.
-- Prefer "Today" and "workspace" over "HQ" when addressing the daily signed-in experience.
+- Use daily-action nouns before product nouns.
+- Keep first-screen labels short: "Start here", "Today", "Capture", "Due today", "Open room".
+- Avoid visible builder language: demo, proof, handoff, polish, sample data, command center.
+- Avoid broad AI promise language unless it is clearly draft-only, review-first, and reversible.
+- Use "draft", "review", "approve", and "nothing is saved yet" for uncertain or assistant-generated output.
+- Do not explain the whole suite above the fold.
+- Separate public marketing copy from working app copy.
+- Prefer "workspace" over "command center".
+- Prefer "turn into tasks" over "handoff".
+- Prefer "practice inbox" over "sample email" when mock data is visible.
 
 ## Next 5 Copy Tasks
-- [ ] Replace visible "Presentation flow" with a concrete user label such as "First steps"; do not change the disclosure behavior or add explanation.
-- [ ] Replace one visible "Systems" or "modules" label on Today/HQ with "Apps", "Workspace", or a task-specific label; keep the section meaning unchanged.
-- [ ] Rewrite "Plan help" in navigation to a clearer outcome label; preserve the existing route and menu grouping.
-- [ ] Scan app-visible strings for "workflow", "command center", "proof", "demo", "polish", and "handoff"; change only customer-facing instances and ignore internal identifiers.
-- [ ] Reduce repeated "EasyLifeHQ" identity on login/header copy to one clear product name per surface; do not touch auth behavior or routing.
+- [ ] Replace public metadata phrase "one command center" with "one calm workspace"; keep the same product meaning and do not edit deployment or generated output unless the source file is in allowed scope.
+- [ ] Replace visible EasyNotes "handoff" labels with "turn into tasks" or "send to Tasks"; do not change routes, behavior, or data fields.
+- [ ] Audit one marketing navigation/product section for the label "Workflow" and replace it with a concrete action label; do not rewrite the whole page.
+- [ ] Replace one visible "example inbox/email" phrase with "practice inbox item" or "inbox item"; preserve the review-first approval meaning.
+- [ ] Tighten one AI settings or Labs sentence so it states draft, review, source, and no automatic save; do not add new AI claims.
 
 ## Stop Or Continue
 continue but fix copy first
