@@ -878,7 +878,7 @@ pm.cmd run build. [class:feature risk:medium mode:single impact:visible surface:
 
 ## EasyLife Next Variation Phase 10 - Mobile Superpower Pass 2026-05-05
 
-- [ ] Phase 10 - Mobile nav and first viewport: repair mobile shell/Today density so the primary action appears high and tap targets are comfortable. Acceptance: npm.cmd run build from app-vNext. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- [x] Phase 10 - Mobile nav and first viewport: repair mobile shell/Today density so the primary action appears high and tap targets are comfortable. Acceptance: npm.cmd run build from app-vNext. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
 - [ ] Phase 10 - Mobile fast capture: make capture reachable and non-intrusive on phone. Preserve existing behavior. Acceptance: npm.cmd run build from app-vNext. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/experiments/,app-vNext/src/styles/ accept:npm.cmd run build]
 - [ ] Phase 10 - Mobile core route scan: make one focused mobile repair to Calendar, Tasks, Notes, or Coach based on obvious cramped controls or first-viewport friction. Acceptance: npm.cmd run build from app-vNext. [class:bugfix risk:medium mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
 - [ ] Phase 10 - Mobile Superpower review packet: run checks and write docs/codex/PHASE_10_REVIEW.md. Do not start Phase 11. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/,app-vNext/src/ accept:npm.cmd run build]

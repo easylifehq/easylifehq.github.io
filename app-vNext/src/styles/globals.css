@@ -9641,6 +9641,7 @@ button.calendar-detail-card:disabled {
   }
 
   .hq-quick-actions a {
+    min-height: 44px;
     padding: 0.48rem 0.54rem;
   }
 
@@ -9654,13 +9655,13 @@ button.calendar-detail-card:disabled {
 
   .hq-start-card .primary-button,
   .hq-start-card .button-secondary {
-    min-height: 34px;
+    min-height: 44px;
     padding: 0.48rem 0.58rem;
     font-size: 0.76rem;
     white-space: normal;
   }
 
-  .hq-start-card .primary-button:only-child {
+  .hq-start-card .primary-button {
     grid-column: 1 / -1;
   }
 
@@ -9935,8 +9936,8 @@ button.calendar-detail-card:disabled {
   }
 
   .app-suite-control .brand-badge {
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
     border-radius: calc(var(--shell-control-radius) - 2px);
     font-size: 0.62rem;
   }
@@ -10004,7 +10005,7 @@ button.calendar-detail-card:disabled {
   }
 
   .app-header-actions .menu-trigger-button {
-    min-height: 32px;
+    min-height: 44px;
     padding: 0.42rem 0.55rem;
     border-radius: calc(var(--shell-control-radius) - 2px);
     font-size: 0.74rem;
