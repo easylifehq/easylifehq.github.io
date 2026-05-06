@@ -72,11 +72,8 @@ export function ProductMarketingPage({
 
           <div className="marketing-hero-actions">
             <Link to="/login" className="button-primary">
-              Start Free
+              Open EasyLife
             </Link>
-            <a href="#features" className="button-secondary">
-              See Features
-            </a>
           </div>
 
           <div className="marketing-points">
