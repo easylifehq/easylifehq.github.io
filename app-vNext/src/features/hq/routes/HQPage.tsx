@@ -494,6 +494,7 @@ export function HQPage() {
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
             <span>Capture anything</span>
             <strong>Type a task, note, event, or deadline</strong>
+            <em>Open</em>
           </button>
           <details className="hq-context-stack">
             <summary>

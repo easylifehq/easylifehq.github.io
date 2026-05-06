@@ -1264,15 +1264,15 @@ a {
 }
 
 .app-theme-easyhq {
-  --app-accent: #4d7f6f;
-  --app-accent-soft: #eef8f3;
-  --app-accent-border: rgba(77, 127, 111, 0.2);
-  --app-accent-text: #355b4f;
-  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 82%, #4d7f6f 18%);
-  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 82%, #4d7f6f 18%);
-  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 64%, #4d7f6f 36%);
-  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 72%, #4d7f6f 28%);
-  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 62%, #355b4f 38%);
+  --app-accent: #24766f;
+  --app-accent-soft: #edf7f5;
+  --app-accent-border: rgba(36, 118, 111, 0.18);
+  --app-accent-text: #235f5b;
+  --app-panel-bg: color-mix(in srgb, var(--shell-card-bg) 90%, #24766f 10%);
+  --app-stat-bg: color-mix(in srgb, var(--shell-card-bg-soft) 92%, #24766f 8%);
+  --app-stat-border: color-mix(in srgb, var(--shell-card-border) 76%, #24766f 24%);
+  --app-chip-bg: color-mix(in srgb, var(--shell-chip-bg) 84%, #24766f 16%);
+  --app-chip-text: color-mix(in srgb, var(--shell-chip-text) 70%, #235f5b 30%);
 }
 
 .app-theme-easylist {
@@ -6709,6 +6709,152 @@ button.calendar-detail-card:disabled {
   font-size: 0.9rem;
 }
 
+.app-theme-easyhq:not(.command-center-page) {
+  --hq-surface: color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 82%, transparent);
+  --hq-surface-soft: color-mix(in srgb, var(--ui-bg-card, #f2f7f5) 58%, transparent);
+  --hq-line: color-mix(in srgb, var(--ui-border-subtle, rgba(35, 48, 51, 0.13)) 58%, transparent);
+  --hq-shadow: 0 18px 46px rgba(32, 48, 52, 0.08);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-card {
+  gap: clamp(0.72rem, 1.4vw, 1rem);
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--ui-border-subtle, rgba(35, 48, 51, 0.13)) 70%, transparent);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--app-accent, #24766f) 7%, #ffffff 93%), var(--hq-surface));
+  box-shadow: var(--hq-shadow);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-heading p {
+  color: var(--app-accent-text, var(--ui-text-muted));
+}
+
+.app-theme-easyhq:not(.command-center-page) .assistant-next-inline,
+.app-theme-easyhq:not(.command-center-page) .hq-capacity-signal,
+.app-theme-easyhq:not(.command-center-page) .hq-plan-intensity {
+  border-color: var(--hq-line);
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 72%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--shell-panel-highlight) 60%, transparent);
+}
+
+.app-theme-easyhq:not(.command-center-page) .assistant-next-inline {
+  padding: clamp(0.88rem, 1.4vw, 1.08rem);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 58px;
+  padding: 0.72rem 0.8rem;
+  border-color: color-mix(in srgb, var(--app-accent, #24766f) 22%, var(--ui-border-subtle) 78%);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), transparent),
+    color-mix(in srgb, var(--ui-bg-input, #ffffff) 92%, var(--app-accent, #24766f) 8%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--shell-panel-highlight) 78%, transparent),
+    0 10px 26px rgba(32, 48, 52, 0.06);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture:hover,
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture:focus-visible {
+  border-color: color-mix(in srgb, var(--app-accent, #24766f) 46%, var(--ui-border-subtle) 54%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), transparent),
+    color-mix(in srgb, var(--ui-bg-input, #ffffff) 86%, var(--app-accent, #24766f) 14%);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture span {
+  color: var(--app-accent-text, var(--ui-text-muted));
+  letter-spacing: 0.03em;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture strong {
+  font-size: 0.96rem;
+  font-weight: 780;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture em {
+  display: inline-grid;
+  place-items: center;
+  min-width: 3.1rem;
+  min-height: 2rem;
+  padding: 0 0.72rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent, #24766f) 24%, var(--ui-border-subtle) 76%);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 82%, transparent);
+  color: var(--app-accent-text, var(--ui-text-primary));
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 850;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-context-stack {
+  border-color: var(--hq-line);
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 58%, transparent);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-quick-actions,
+.app-theme-easyhq:not(.command-center-page) .hq-action-row,
+.app-theme-easyhq:not(.command-center-page) .assistant-attention-list,
+.app-theme-easyhq:not(.command-center-page) .assistant-system-grid {
+  gap: 0.62rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-quick-actions a,
+.app-theme-easyhq:not(.command-center-page) .hq-link-card,
+.app-theme-easyhq:not(.command-center-page) .assistant-attention-item {
+  border-color: var(--hq-line);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--shell-panel-highlight) 42%, transparent), transparent 50%),
+    color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 64%, transparent);
+  box-shadow: none;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-quick-actions a:hover,
+.app-theme-easyhq:not(.command-center-page) .hq-quick-actions a:focus-visible,
+.app-theme-easyhq:not(.command-center-page) .hq-link-card:hover,
+.app-theme-easyhq:not(.command-center-page) .hq-link-card:focus-visible,
+.app-theme-easyhq:not(.command-center-page) .assistant-attention-item:hover,
+.app-theme-easyhq:not(.command-center-page) .assistant-attention-item:focus-visible {
+  border-color: color-mix(in srgb, var(--app-accent, #24766f) 32%, var(--ui-border-subtle) 68%);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, #24766f) 8%, transparent), transparent 54%),
+    color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 78%, transparent);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-status-strip {
+  overflow: hidden;
+  border-block-color: var(--hq-line);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--app-accent, #24766f) 4%, transparent), transparent);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-status-strip article {
+  padding: 0.48rem 0.1rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) .panel-section {
+  border-top-color: var(--hq-line);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-later-plans {
+  border-color: var(--hq-line);
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 44%, transparent);
+}
+
+.app-shell-vnext.shell-theme-candy .app-theme-easyhq:not(.command-center-page) {
+  --app-accent: #24766f;
+  --app-accent-text: #235f5b;
+  --app-panel-bg: color-mix(in srgb, #ffffff 90%, #24766f 10%);
+}
+
+.app-shell-vnext.shell-theme-candy .app-theme-easyhq:not(.command-center-page) .hq-start-card,
+.app-shell-vnext.shell-theme-candy .app-theme-easyhq:not(.command-center-page) .hq-link-card,
+.app-shell-vnext.shell-theme-candy .app-theme-easyhq:not(.command-center-page) .assistant-attention-item {
+  box-shadow: var(--hq-shadow);
+}
+
 .app-theme-easyhq:not(.command-center-page) .assistant-system-grid .hq-link-card {
   gap: 0.28rem;
   padding: 0.72rem 0.78rem;
@@ -9530,18 +9676,30 @@ button.calendar-detail-card:disabled {
   }
 
   .hq-natural-capture {
-    grid-template-columns: 1fr;
-    gap: 0.12rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.12rem 0.5rem;
     min-height: 50px;
     padding: 0.52rem 0.62rem;
   }
 
   .hq-natural-capture span {
+    grid-column: 1;
     font-size: 0.62rem;
   }
 
   .hq-natural-capture strong {
+    grid-column: 1;
     font-size: 0.82rem;
+  }
+
+  .hq-natural-capture em {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    min-width: 2.65rem;
+    min-height: 1.82rem;
+    padding-inline: 0.56rem;
+    font-size: 0.68rem;
   }
 
   .hq-capacity-signal,
