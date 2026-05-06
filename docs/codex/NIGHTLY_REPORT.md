@@ -3489,3 +3489,18 @@
 - Files changed:
 - app-vNext/src/features/easylist/routes/EasyListTodayPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-05 20:39:52
+
+- Task attempted: Phase 12 - Final mobile/readability check: make one small fix for mobile text fit, tap target, or overlap if found. Acceptance: npm.cmd run build from app-vNext. [class:bugfix risk:low mode:single impact:visible surface:app scope:app-vNext/src/ accept:npm.cmd run build]
+- Task class: bugfix
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

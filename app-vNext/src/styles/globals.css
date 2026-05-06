@@ -9911,7 +9911,13 @@ button.calendar-detail-card:disabled {
   .calendar-month-overview-actions .calendar-inline-actions button {
     min-width: 0;
     width: 100%;
+    min-height: 44px;
     padding-inline: 0.45rem;
+  }
+
+  .calendar-month-overview-actions .primary-button {
+    min-height: 44px;
+    white-space: normal;
   }
 
   .calendar-month-surface {
