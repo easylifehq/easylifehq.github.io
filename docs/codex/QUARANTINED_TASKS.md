@@ -352,3 +352,13 @@
 - Files restored before continuing:
 - docs/codex/PHASE_10_REVIEW.md
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-05 19:57:52
+
+- Batch: 1
+- Task index: 1
+- Task: Phase 11 - Themes review packet: run checks and write docs/codex/PHASE_11_REVIEW.md. Do not start Phase 12. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/,app-vNext/src/ accept:npm.cmd run build]
+- Reason: Implementation guardrails failed.
+- Files restored before continuing:
+- docs/codex/PHASE_11_REVIEW.md
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
