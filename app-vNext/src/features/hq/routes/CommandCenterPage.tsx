@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
@@ -218,9 +218,11 @@ function parseCommand(value: string): CommandDraft {
 
 export function CommandCenterPage() {
   const { events, taskBlocks, tasks, addTask, scheduleTask, isLoading, error } = useEasyCalendar();
+  const location = useLocation();
   const [command, setCommand] = useState("");
   const [status, setStatus] = useState("Type a command, then approve what EasyLife thinks it is.");
   const [activeLayer, setActiveLayer] = useState("today");
+  const funDrinksEnabled = location.hash === "#fun-drinks";
   const today = startOfDay(new Date());
   const parsedCommand = command.trim() ? parseCommand(command) : null;
 
@@ -258,6 +260,15 @@ export function CommandCenterPage() {
         }
       : null,
   ].filter((item): item is { label: string; title: string; detail: string; to: string } => Boolean(item)).slice(0, 6);
+
+  useEffect(() => {
+    if (funDrinksEnabled) {
+      setActiveLayer("fun");
+      return;
+    }
+
+    setActiveLayer((currentLayer) => currentLayer === "fun" ? "today" : currentLayer);
+  }, [funDrinksEnabled]);
 
   async function saveCommandTask() {
     if (!parsedCommand?.title) return;
@@ -390,6 +401,7 @@ export function CommandCenterPage() {
           ["context", "Context"],
           ["weekly", "Weekly Reset"],
           ["email", "Email Actions"],
+          ...(funDrinksEnabled ? [["fun", "Fun + Drinks"]] : []),
         ].map(([key, label]) => (
           <button
             key={key}
@@ -510,6 +522,33 @@ export function CommandCenterPage() {
           </div>
           <div className="task-composer-actions">
             <Link className="primary-button" to="/app/easylist/email">Open Email Triage</Link>
+          </div>
+        </PageSection>
+      ) : null}
+
+      {activeLayer === "fun" ? (
+        <PageSection eyebrow="Off-hours" title="A tiny plan for drinks without taking over">
+          <div id="fun-drinks" className="command-flow-grid">
+            {[
+              ["Pick", "One place", "Choose the spot, time, and who is actually coming."],
+              ["Pace", "Two-drink note", "Add food, water, and a clear stop time before the night gets fuzzy."],
+              ["Exit", "Ride check", "Decide the ride home before the first order, then keep the plan simple."],
+              ["Tomorrow", "Light reset", "Park one small task for tomorrow so Today stays serious when you come back."],
+            ].map(([step, title, body]) => (
+              <article key={step}>
+                <span>{step}</span>
+                <strong>{title}</strong>
+                <p>{body}</p>
+              </article>
+            ))}
+          </div>
+          <div className="task-composer-actions">
+            <Link className="primary-button" to="/app/easycalendar/day">
+              Find open time
+            </Link>
+            <Link className="button-secondary" to="/app/easylist/add">
+              Add a reminder
+            </Link>
           </div>
         </PageSection>
       ) : null}
