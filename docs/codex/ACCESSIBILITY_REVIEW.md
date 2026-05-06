@@ -1,6 +1,6 @@
 ﻿# Accessibility Review
 
-Generated: 2026-05-05 20:29:56
+Generated: 2026-05-05 20:41:24
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
@@ -171,7 +171,7 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
   `<button type="button" className="primary-button" onClick={handleOpenInstallShare}>`
 - [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1561` - Icon-style button may need an accessible label.
   `<button type="button" className="button-secondary" onClick={handleSendTestNotification}>`
-- [INFO] `app-vNext/src/styles/globals.css:11356` - Reduced-motion handling is present.
+- [INFO] `app-vNext/src/styles/globals.css:11362` - Reduced-motion handling is present.
   `@media (prefers-reduced-motion: reduce) {`
 
 ## Stop Or Continue
