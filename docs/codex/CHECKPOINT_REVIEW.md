@@ -4,40 +4,40 @@
 RED
 
 ## Progress Against Mission
-The branch is broadly moving toward the EasyLife mission through repeated small UI, mobile, theme, copy, and polish passes across the connected suite. However, it is not ready to continue unattended because Joey security review is RED and requests human review.
+The branch has moved substantially toward the EasyLife mission with many small UI, mobile, copy, theme, and suite-polish batches. However, it is not ready to continue unattended because the security review gate is RED and requests human review.
 
 ## Safety Review
-Joey security review is RED with next step `stop for human security review`. Changed files include sensitive-adjacent auth UI `app-vNext/src/features/auth/routes/LoginPage.tsx`, though no explicit forbidden backend/auth logic change is confirmed in the provided summary.
+Joey security review is RED with next step `stop for human security review`. No dirty working tree or forbidden file changes are reported in the current checkpoint, but the security gate is blocking.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: recent Phase 12 empty/loading/error polish and final mobile/readability fix passed; final park packet was quarantined
-- files changed: multiple app UI/style files and docs changed since base
-- commits added: latest HEAD `8276c5b8` plus many checkpoint/review/task commits since base
-- queue status: 2 unchecked tasks remain
+- Completed tasks in this checkpoint window: 12 recent tasks shown, including Phase 10 mobile polish, Phase 11 theme/copy work, Phase 12 empty/mobile polish, and recovery UI repairs.
+- Files changed: multiple `app-vNext/src` UI/style files and `docs/codex` review/status files.
+- Commits added: latest HEAD `cc620d85` plus a long sequence of checkpoint, review, QA, and phase commits since `main`.
+- Queue status: 1 unchecked task remains, but it is malformed/docs-only for visible product work and should not proceed unattended as written.
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN signal; 0 high, 0 medium, 0 low, should not drive next tasks
-- Simon design review: YELLOW, continue but fix visual issues first; should influence next tasks
-- Robin copy review: YELLOW, continue but fix copy first; should influence next tasks
-- accessibility review: YELLOW, patch warnings soon; should influence next tasks
-- performance review: GREEN, no next-task blocker
-- Joey security review: RED, stop for human security review; blocks unattended continuation
-- Franky formula review: missing; should be completed if formulas/spreadsheets are relevant
-- Product truth: MISSING but `ok: True`; no product-truth RED blocker
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low. Should not drive next tasks.
+- Simon design review: YELLOW; fix visual issues first if work resumes.
+- Robin copy review: YELLOW; copy cleanup should influence next tasks.
+- Accessibility review: YELLOW; patch warnings soon.
+- Performance review: GREEN; no immediate action.
+- Joey security review: RED; blocks unattended continuation and requires human security review.
+- Franky formula review: missing; no formula-specific action unless spreadsheet/formula surfaces are involved.
+- Product truth: missing config but `ok: True`; no PRODUCT_TRUTH.md configured.
 
 ## Recommended Next Step
 stop for human review
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Resolve or formally clear the Joey RED security gate before any mission-forward unattended work continues.
+- Recommended next batch size: 1
+- Next work mode: repair-first
+- The next batch should only happen after human review clears the Joey security RED and the malformed docs-only visible task is replaced with a valid product-surface scope.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- RED is driven by security review, not build or visual bugs.
-- Two unchecked recovery tasks remain in the queue.
-- Final park packet was quarantined due to docs-only/showpiece scope mismatch.
+- Security gate is the blocker.
+- One unchecked task remains but targets `docs/codex` for visible UI work, which already caused quarantine.
+- Simon, Robin, and accessibility all remain YELLOW and should shape any next repair batch.
