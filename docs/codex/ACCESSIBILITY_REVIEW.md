@@ -1,6 +1,6 @@
 ﻿# Accessibility Review
 
-Generated: 2026-05-05 18:29:20
+Generated: 2026-05-05 18:41:29
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
@@ -161,7 +161,7 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
   `<button className="button-secondary" type="button" onClick={scheduleNextMove} disabled={!nextMove || !openWindows[0]}>`
 - [YELLOW] `app-vNext/src/features/hq/routes/CommandCenterPage.tsx:380` - Icon-style button may need an accessible label.
   `<button className="primary-button" type="button" onClick={saveCommandTask}>`
-- [YELLOW] `app-vNext/src/features/hq/routes/HQPage.tsx:474` - Icon-style button may need an accessible label.
+- [YELLOW] `app-vNext/src/features/hq/routes/HQPage.tsx:494` - Icon-style button may need an accessible label.
   `<button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>`
 - [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1329` - Icon-style button may need an accessible label.
   `<button type="button" className="primary-button" onClick={handleExportAll}>`
@@ -171,7 +171,7 @@ Ada checked deterministic accessibility risks: missing image alt text, unlabeled
   `<button type="button" className="primary-button" onClick={handleOpenInstallShare}>`
 - [YELLOW] `app-vNext/src/features/settings/routes/SettingsPage.tsx:1561` - Icon-style button may need an accessible label.
   `<button type="button" className="button-secondary" onClick={handleSendTestNotification}>`
-- [INFO] `app-vNext/src/styles/globals.css:11311` - Reduced-motion handling is present.
+- [INFO] `app-vNext/src/styles/globals.css:11312` - Reduced-motion handling is present.
   `@media (prefers-reduced-motion: reduce) {`
 
 ## Stop Or Continue
