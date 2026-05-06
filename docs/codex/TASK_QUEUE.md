@@ -890,7 +890,7 @@ pm.cmd run build. [class:feature risk:medium mode:single impact:visible surface:
 
 ## EasyLife Next Variation Phase 11 - Themes 2026-05-05
 
-- [ ] Phase 11 - Theme token guardrails: refine theme tokens so themes change atmosphere, not layout or product hierarchy. Acceptance: npm.cmd run build from app-vNext. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/styles/,app-vNext/src/features/settings/ accept:npm.cmd run build]
+- [x] Phase 11 - Theme token guardrails: refine theme tokens so themes change atmosphere, not layout or product hierarchy. Acceptance: npm.cmd run build from app-vNext. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/styles/,app-vNext/src/features/settings/ accept:npm.cmd run build]
 - [ ] Phase 11 - Controlled Candy theme: make Candy feel fun but less overwhelming, preserving contrast and readability. Acceptance: npm.cmd run build from app-vNext. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/styles/ accept:npm.cmd run build]
 - [ ] Phase 11 - Night/Focus/Soft preview clarity: improve theme selection or preview language so mood choices are understandable without feature clutter. Acceptance: npm.cmd run build from app-vNext. [class:copy risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/settings/,app-vNext/src/styles/ accept:npm.cmd run build]
 - [ ] Phase 11 - Themes review packet: run checks and write docs/codex/PHASE_11_REVIEW.md. Do not start Phase 12. [class:proof risk:low mode:single impact:planning surface:docs scope:docs/codex/,app-vNext/src/ accept:npm.cmd run build]

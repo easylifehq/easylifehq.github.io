@@ -916,7 +916,7 @@ export function SettingsPage() {
             <details className="advanced-disclosure">
               <summary>Choose another theme</summary>
               <p className="helper-copy">
-                Theme changes apply across EasyLife without changing your data or app setup.
+                Themes change color and mood only. Your page layout, controls, and app setup stay the same.
               </p>
               <div className="settings-option-grid">
                 {themeOptions.map((option) => (
