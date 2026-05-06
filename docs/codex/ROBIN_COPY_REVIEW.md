@@ -4,76 +4,71 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is moving toward a calmer daily-assistant voice, but several visible strings still sound like an internal prototype or a grand product promise instead of a concrete workspace.
+EasyLife is closer to a calm daily workspace, but a few visible phrases still sound like internal product scaffolding instead of a trustworthy personal assistant.
 
 ## Mission Voice Fit
-The strongest copy now uses practical daily nouns: task, note, calendar, workout log, due work, open room, follow-up, and today. That fits the mission well. The weaker copy appears in the command and HQ surfaces, where phrases like "cockpit," "EasyLife reads your day," "Presentation flow," and "Smart Review Queue" make the app sound more theatrical or builder-facing than trustworthy. The first screen is closer to the right job, but it still sometimes explains the system instead of telling the user what to do next.
+The best copy now points toward useful daily nouns: workspace, daily plan, task list, calendar block, notes, workout log, and settings. That fits the mission. The weak spots are leftover product-build phrases, especially "command center", "demo", "proof", "sample", and broad module language that can make the app feel like a showcase instead of something the user opens to decide what to do next.
 
 ## Delicate Wording Risks
-- "EasyLife reads your day, chooses a next move..." overclaims agency and intelligence. If this is deterministic local UI, say what it calculates or shows.
-- "One calm cockpit. Layers underneath." is too abstract and too cute for the product. It does not clearly say who this is for, what to do, or what the user gets.
-- "Daily Cockpit" repeats the same metaphor and makes a personal assistant app feel like a control-room concept.
-- "Smart Review Queue" implies intelligence that may not be visible or calibrated. "Review queue" is enough.
-- "Presentation flow" sounds like builder or demo language, not buyer or user language.
-- "The things EasyLife would keep from slipping" is awkward conditional copy. It suggests a promise without saying what is actually being shown.
-- "No task is shouting" is memorable but too cute for a professional daily workspace.
-- "Bigger goals and sections" is vague. It names structure, not outcome.
-- "Start with the next move" in navigation is close, but still slightly slogan-like. "Today and next action" would be clearer.
-- "Open the manual workflow" and "manual workflow usable" in Settings sound internal. Use "manual controls" or "manual path" instead.
-- "Rich forest tones, gold accents, and a polished magical feel" uses "polished" as a vague value word and feels less concrete than the other theme descriptions.
-- "Sample commands" and sample IDs are mostly internal, but any visible or screen-reader-facing label should become "Example commands."
+- "command center" in public metadata overstates the product and sounds generic SaaS instead of calm personal workspace.
+- "demo" is acceptable in internal query params, but should not appear in visible customer-facing copy unless the page is explicitly a demo page.
+- "proof" appears in class naming; harmless if not visible, but avoid moving that language into UI copy.
+- "sample data" and "sample" should not appear as visible labels. Prefer "example day", "example task", or "starter list" if the user sees it.
+- "Fun and drinks" may feel slightly casual beside the serious daily assistant direction. It should stay optional and quiet, not part of the main spine.
+- "Future Plans" is clear enough, but it can become vague if the surrounding copy does not name concrete outputs like ideas, projects, or later tasks.
+- Approval/reply language must stay explicit: no copy should imply EasyLife sends, archives, or changes email without user approval.
 
 ## Beautiful Language Opportunities
-- Replace cockpit/control-room language with day-planning language: "Today plan," "Review queue," "Next move," "Open time," "Follow-ups."
-- Make HQ copy more direct: one sentence should name the next action and the reason, not explain the assistant concept.
-- Use "shows," "groups," "suggests," or "stages" instead of "reads" and "chooses" when the app is using local deterministic data.
-- Keep the best current tone: "open room," "due work," "capture a loose thought," "review inbox," and "place work in time."
-- Settings can feel more premium by being plainer: "Manual controls stay available" is stronger than "workflow."
-- Optional modules need warmer but concrete labels: "Projects" can say "Longer plans" or "Project briefs" instead of "Bigger goals and sections."
+- Replace broad system language with direct daily-life copy: "Start with today", "Review your next task", "Open recent notes", "Plan a calendar block".
+- Use short labels in primary navigation: Today, Calendar, Tasks, Notes, Coach, Inbox, More.
+- Make optional modules feel like quiet extensions: "Later", "Projects", "School", "Ideas", "Fun".
+- In Inbox surfaces, keep trust high with phrases like "Review before adding", "Draft only", and "Needs approval".
+- In Notes, use warm but concrete memory language: "Recent notes", "Needs review", "Turn into a task".
+- In HQ, avoid explaining the suite. Name the next move and the visible context.
 
 ## Priority Rewrite
-The single most important wording problem is the command/HQ promise language that implies an intelligent assistant is reading and choosing for the user. Nami should replace "cockpit," "reads your day," "chooses a next move," "Smart Review Queue," and "Presentation flow" with concrete labels that describe local output: today plan, next move, review queue, example commands, and daily path.
+Fix remaining visible "command center", "demo", "proof", "polish", "handoff", and "sample data" language wherever it reaches users. The app should sound like it is helping someone run today, not presenting a build artifact or internal review packet.
 
 ## Suggested Rewrites
-- Before: "One calm cockpit. Layers underneath."
-  After: "Today first. Details when you need them."
+- Before: "command center"
+  After: "daily workspace"
 
-- Before: "EasyLife reads your day, chooses a next move, and keeps deeper systems tucked one tap away."
-  After: "EasyLife shows the next move, today context, and the places to check next."
+- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
+  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and follow-ups in one daily workspace."
 
-- Before: "Daily Cockpit"
-  After: "Today snapshot"
+- Before: "sample data"
+  After: "example day"
 
-- Before: "Smart Review Queue"
-  After: "Review queue"
+- Before: "demo"
+  After: "example"
 
-- Before: "Presentation flow"
-  After: "Daily path"
+- Before: "proof"
+  After: "preview"
 
-- Before: "The things EasyLife would keep from slipping"
-  After: "Things to check before they slip"
+- Before: "Calendar handoff"
+  After: "Calendar prep"
 
-- Before: "No task is shouting"
-  After: "No urgent task is waiting"
+- Before: "Future Plans"
+  After: "Later plans"
 
-- Before: "Open the manual workflow"
-  After: "Use manual controls"
+- Before: "Fun and drinks"
+  After: "Fun ideas"
 
 ## Voice Rules
-- Prefer concrete daily nouns: task, note, calendar block, follow-up, workout log, project brief, inbox review.
-- Do not use control-room metaphors like cockpit, command center, or layers unless the surface is explicitly an internal lab.
-- Avoid AI-style certainty. Use "shows," "groups," "suggests," "stages," or "reviews" instead of "reads," "knows," or "chooses."
-- Keep first-screen labels short: Today, Next move, Due work, Open room, Capture, Review queue.
-- Remove builder-facing words from visible UI: demo, proof, sample, presentation flow, workflow, polish, handoff.
-- Let playful copy stay secondary. The primary daily path should sound calm, useful, and adult.
-- Do not add claims. Rewrite by making existing action and outcome clearer.
+- Use concrete daily nouns before abstract product nouns.
+- Say what the user can do now, not what the system is.
+- Keep first-screen copy short: one next move, today context, compact status.
+- Do not use builder words in customer-facing UI: handoff, proof, polish, workflow, sample data, command center.
+- Use "draft", "review", and "approve" whenever copy touches email-derived actions.
+- Keep optional modules quieter than Today, Tasks, Calendar, Notes, Coach, and Inbox.
+- Do not make claims about AI, automation, prediction, or sending unless the behavior is real and visible.
 
 ## Next 5 Copy Tasks
-- [ ] Replace command-page cockpit language with direct today-planning labels; do not add new claims or new sections.
-- [ ] Change "EasyLife reads your day, chooses a next move..." to deterministic language that says what the UI shows or stages.
-- [ ] Rename "Smart Review Queue," "Daily Cockpit," and "Presentation flow" to plain labels; preserve behavior and layout.
-- [ ] Replace visible or assistive "sample" labels with "example" where the user encounters them; ignore internal IDs and dev-only params.
-- [ ] Tighten vague optional-module descriptions like "Bigger goals and sections"; use concrete user outcomes and keep each description under one short sentence.
+- [ ] Replace public metadata "command center" with "daily workspace"; do not touch auth, routing, config, package files, or generated output.
+- [ ] Search visible JSX strings for "demo", "proof", "sample data", "handoff", and "polish"; replace only user-facing instances, leaving internal identifiers alone.
+- [ ] Review the Inbox approval queue copy and confirm every email-derived action says "review", "draft", or "approve" before any outcome.
+- [ ] Review the More hub labels and keep optional entries quiet, concrete, and secondary to Today, Calendar, Tasks, Notes, Coach, and Inbox.
+- [ ] Review HQ first-screen copy and remove any explanatory line that describes the product instead of naming today's next move.
 
 ## Stop Or Continue
 continue but fix copy first
