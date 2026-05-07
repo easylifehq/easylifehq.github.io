@@ -5951,3 +5951,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite pages look more consistent, but the assistant-first surface is still not visible.
 - Debug checkpoint result: WARN (passed)
+
+## 2026-05-07 00:37:33
+
+- Task: User pain: the assistant reset needs one small visible shell slice after planning so EasyLife stops reading like a suite of separate apps. Skill: frontend-ui-engineering. Target: app-vNext/src/components/navigation/appProducts.ts, app-vNext/src/components/navigation/AppHeader.tsx, docs/codex/NIGHTLY_REPORT.md. Change: simplify the default navigation labels toward Today, Inbox/Capture, Plan, Notes, and More without deleting routes. First screen: Today/assistant command surface stays the mental start point before optional modules. Remove/simplify: one app-suite label, daily-group item, or navigation affordance that makes optional modules feel primary. Guardrails: forbidden scope: frontend-only shell slice; no backend, auth, payments, dependencies, package files, release config, generated output, credentials, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the shell change, build result, and any route to inspect. Stop if: the change requires route deletion, product data migration, or a new dashboard surface. Check: default nav has a clearer one-assistant shape and optional modules are quieter. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/components/navigation/,docs/codex/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: unknown
+- Task class: design
+- Task risk: medium
+- Changed files: 2
+- Materiality signal: impact=visible, surface-files=2, structural-files=2, source-lines=74, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite pages look more consistent, but the assistant-first surface is still not visible.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003253
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003253\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003253\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003253\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003253\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003253
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003253\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003253\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003253\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003253\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.

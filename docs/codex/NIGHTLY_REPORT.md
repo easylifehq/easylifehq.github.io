@@ -3618,3 +3618,19 @@
 - Files changed:
 - None
 - Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.
+
+## 2026-05-07 00:37:33
+
+- Task attempted: User pain: the assistant reset needs one small visible shell slice after planning so EasyLife stops reading like a suite of separate apps. Skill: frontend-ui-engineering. Target: app-vNext/src/components/navigation/appProducts.ts, app-vNext/src/components/navigation/AppHeader.tsx, docs/codex/NIGHTLY_REPORT.md. Change: simplify the default navigation labels toward Today, Inbox/Capture, Plan, Notes, and More without deleting routes. First screen: Today/assistant command surface stays the mental start point before optional modules. Remove/simplify: one app-suite label, daily-group item, or navigation affordance that makes optional modules feel primary. Guardrails: forbidden scope: frontend-only shell slice; no backend, auth, payments, dependencies, package files, release config, generated output, credentials, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the shell change, build result, and any route to inspect. Stop if: the change requires route deletion, product data migration, or a new dashboard surface. Check: default nav has a clearer one-assistant shape and optional modules are quieter. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/components/navigation/,docs/codex/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/components/navigation, docs/codex
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/components/navigation/AppHeader.tsx
+- app-vNext/src/components/navigation/appProducts.ts
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

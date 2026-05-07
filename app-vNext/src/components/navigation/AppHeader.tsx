@@ -10,27 +10,27 @@ export function AppHeader() {
   const visibleItems = appProductItems.filter((item) => !item.appId || isAppVisible(item.appId));
   const currentApp = useMemo(() => {
     const pathname = location.pathname;
-    if (pathname.startsWith("/app/easylist")) return "EasyList";
-    if (pathname.startsWith("/app/easycalendar")) return "EasyCalendar";
-    if (pathname.startsWith("/app/easynotes")) return "EasyNotes";
-    if (pathname.startsWith("/app/easypipeline")) return "EasyPipeline";
-    if (pathname.startsWith("/app/easycontacts")) return "EasyContacts";
-    if (pathname.startsWith("/app/easyprojects")) return "EasyProjects";
-    if (pathname.startsWith("/app/easyworkout")) return "EasyWorkout";
-    if (pathname.startsWith("/app/easystatistics")) return "EasyStatistics";
+    if (pathname.startsWith("/app/easylist")) return "Capture";
+    if (pathname.startsWith("/app/easycalendar")) return "Plan";
+    if (pathname.startsWith("/app/easynotes")) return "Notes";
+    if (pathname.startsWith("/app/easypipeline")) return "Follow-ups";
+    if (pathname.startsWith("/app/easycontacts")) return "People";
+    if (pathname.startsWith("/app/easyprojects")) return "Projects";
+    if (pathname.startsWith("/app/easyworkout")) return "Workout log";
+    if (pathname.startsWith("/app/easystatistics")) return "Progress";
     if (pathname.startsWith("/app/settings")) return "Settings";
-    return "EasyHQ";
+    return "Today";
   }, [location.pathname]);
 
   return (
     <header className="app-header">
       <div className="app-header-main">
-        <div className="app-suite-control" role="group" aria-label={`EasyLife suite switcher, current app ${currentApp}`}>
+        <div className="app-suite-control" role="group" aria-label={`EasyLife navigation, current area ${currentApp}`}>
           <div className="app-header-brand">
-            <Link to="/app/hq" className="site-brand" aria-label="Go to EasyHQ">
+            <Link to="/app/hq" className="site-brand" aria-label="Go to Today">
               <span className="brand-badge">EL</span>
               <div>
-                <strong className="site-brand-title">EasyLifeHQ</strong>
+                <strong className="site-brand-title">EasyLife</strong>
               </div>
             </Link>
           </div>
