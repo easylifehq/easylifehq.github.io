@@ -412,3 +412,13 @@
 - Files restored before continuing:
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-06 21:59:48
+
+- Batch: 1
+- Task index: 1
+- Task: User pain: EasyLife still reads like separate apps instead of one assistant. Target: docs/codex/AI_ASSISTANT_TARGET_IA.md. Change: define one-assistant navigation: Today, Inbox, Plan, Notes, More; include what each surface owns, what stays hidden, and what disappears from the first viewport. Remove/simplify: reject separate-app navigation as the primary mental model. Guardrails: docs-only; no product UI edits, no auth, no backend, no payments, no package or dependency changes, no release config, no generated output, no credentials, no unrelated ships. Acceptance: IA doc gives Stage 1 implementation slices with exact files/routes. Check: git diff shows docs/codex changes only. [class:planning risk:low mode:single impact:docs scope:docs/codex/ accept:docs-only]
+- Reason: Visible/showpiece task has docs-only or non-product scope. Add a product surface scope such as src/, public/, content/, or styles/ before implementation.
+- Files restored before continuing:
+- None
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.

@@ -5877,3 +5877,24 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: RED
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: visual consistency and copy improved, but the active pack is still blocked by module-first brochure hierarchy instead of a daily start surface.
 - Debug checkpoint result: not-run (not-run)
+
+## 2026-05-06 21:59:48
+
+- Task: User pain: EasyLife still reads like separate apps instead of one assistant. Target: docs/codex/AI_ASSISTANT_TARGET_IA.md. Change: define one-assistant navigation: Today, Inbox, Plan, Notes, More; include what each surface owns, what stays hidden, and what disappears from the first viewport. Remove/simplify: reject separate-app navigation as the primary mental model. Guardrails: docs-only; no product UI edits, no auth, no backend, no payments, no package or dependency changes, no release config, no generated output, no credentials, no unrelated ships. Acceptance: IA doc gives Stage 1 implementation slices with exact files/routes. Check: git diff shows docs/codex changes only. [class:planning risk:low mode:single impact:docs scope:docs/codex/ accept:docs-only]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: unknown
+- Task class: feature
+- Task risk: low
+- Changed files: 0
+- Materiality signal: impact=visible, surface-files=0, structural-files=0, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: Pack 1 - Product Spine; REASON: visual consistency and copy improved, but the active pack is still blocked by module-first brochure hierarchy instead of a daily start surface.
+- Before visual evidence:
+- None recorded before task.
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-213825
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-213825\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-213825\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-213825\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-213825\easylist-visualQa-1-mobile.png
+- Follow-up: Visible/showpiece task has docs-only or non-product scope. Add a product surface scope such as src/, public/, content/, or styles/ before implementation.
