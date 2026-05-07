@@ -1,9 +1,9 @@
 # Joey Security Review
 
-Generated: 2026-05-07 03:02:24
+Generated: 2026-05-07 16:04:39
 Project: EasyLife
 Branch: codex/product-EasyLife-20260504-231503
-HEAD: bbbc1ffa
+HEAD: fb25446f
 Base branch: main
 
 ## Verdict
@@ -21,16 +21,20 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - app-vNext/src/components/navigation/ProductsMenu.tsx
 - app-vNext/src/components/navigation/appProducts.ts
 - app-vNext/src/features/auth/routes/LoginPage.tsx
+- app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx
 - app-vNext/src/features/easycalendar/routes/EasyCalendarMonthPage.tsx
 - app-vNext/src/features/easylist/routes/EasyListEmailPage.tsx
+- app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
 - app-vNext/src/features/easylist/routes/EasyListTodayPage.tsx
 - app-vNext/src/features/easynotes/EasyNotesContext.tsx
 - app-vNext/src/features/easynotes/routes/EasyNotesEditorPage.tsx
 - app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx
+- app-vNext/src/features/easynotes/routes/EasyNotesNewPage.tsx
 - app-vNext/src/features/easystatistics/routes/EasyStatisticsPage.tsx
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutDashboardPage.tsx
 - app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx
 - app-vNext/src/features/experiments/UniversalCapture.tsx
+- app-vNext/src/features/hq/assistantCommandHints.ts
 - app-vNext/src/features/hq/routes/CommandCenterPage.tsx
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/features/marketing/components/ProductMarketingPage.tsx
@@ -43,10 +47,12 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - docs/codex/AI_PERSONAL_ASSISTANT_REBUILD_PLAN.md
 - docs/codex/AUTO_REPAIR.md
 - docs/codex/CHECKPOINT_REVIEW.md
+- docs/codex/EASYLIFE_6_HOUR_AI_ASSISTANT_MISSION.md
 - docs/codex/JOEY_SECURITY_REVIEW.md
 - docs/codex/MAGIC_SCORECARD.md
 - docs/codex/NEXT_5_TASKS.md
 - docs/codex/NIGHTLY_REPORT.md
+- docs/codex/PERFORMANCE_REVIEW.md
 - docs/codex/PHASE_10_REVIEW.md
 - docs/codex/PHASE_11_REVIEW.md
 - docs/codex/PHASE_12_REVIEW.md
@@ -69,6 +75,9 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - docs/codex/TASK_QUEUE.md
 - docs/codex/VISUAL_BUGS.md
 - docs/codex/WORK_PACK_STATUS.md
+- docs/codex/archive/QUALITY_QUARANTINE_HISTORY_2026-05-07.md
+- docs/codex/archive/QUARANTINED_TASKS_HISTORY_2026-05-07-1150.md
+- docs/codex/archive/QUARANTINED_TASKS_HISTORY_2026-05-07.md
 
 ## Sensitive Added Lines
 - None
