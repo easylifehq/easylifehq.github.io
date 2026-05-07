@@ -4,74 +4,74 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is moving toward a calm personal assistant voice, but visible copy still carries too much builder language, suite inventory language, and soft AI framing before the user's next action is concrete.
+EasyLife is closer to a calm personal assistant, but scattered "command center", "demo", "sample", and internal-process language still weakens the promise.
 
 ## Mission Voice Fit
-The strongest copy direction is concrete and useful: Today, Capture, Plan, Notes, More, daily plan, task list, calendar block, recent notes, and workspace all fit the mission. The weaker copy still frames EasyLife as a "command center," "AI brain," "suite," or "demo" surface, which makes the product feel explained instead of helpful. For this mission, the signed-in app should sound like a quiet assistant that helps the user decide what to do next today, not a product tour.
+The strongest language now supports a connected daily workspace: Today, Capture, Plan, Notes, More, next move, inbox, and workspace are good concrete nouns. The mission fit is not fully clean because parts of the product still sound like a build artifact or generic SaaS shell instead of a user's daily assistant. The protected app should answer "what should I do next today?" before it explains the system.
 
 ## Delicate Wording Risks
-- "command center" appears in root/app metadata and makes EasyLife sound like a generic SaaS dashboard instead of a personal daily assistant.
-- "AI brain" in task language is too big a promise unless real AI behavior, sources, assumptions, and limits are visible.
-- "assistant command surface" can work internally, but it is too technical and abstract as customer-facing copy.
-- "presentation/demo language" and "sample data" weaken trust when visible to a buyer or user; use "example day" only when the example is clearly static.
-- "proof," "polish," "handoff," and "workflow" remain risky terms when visible because they sound like builder notes, not user outcomes.
-- "Open workspace" is serviceable, but repeated across product pages it becomes generic and less helpful than a specific action.
-- "Products and demo" style copy should stay out of customer-facing navigation; it stages the page as a tour, not a usable product.
-- "More" is clear as a nav label, but optional modules need concrete grouping so More does not become a junk drawer.
+- "command center" appears in root and app meta descriptions. It sounds generic and tactical, not personal or calm.
+- "AI brain" in task language is not necessarily visible, but it is the wrong guide phrase for future UI. It overpromises intelligence and can push the product toward fake certainty.
+- "demo", "sample data", and "proof" hits should be treated carefully. Some are internal identifiers, but any visible use would make the product feel unfinished.
+- "AI-native" is a builder phrase. If visible, it should become a concrete user outcome like "capture a thought" or "plan the next block".
+- "assistant cockpit" and "command surface" are acceptable as internal planning terms only. They should not appear as customer-facing product copy.
+- "More" risks feeling like a junk drawer if paired with broad labels or feature inventory language.
+- "connected suite" is mission-useful internally, but visible copy should say what connects: tasks, notes, calendar blocks, workout plans, and settings.
+- The product should avoid implying real AI, backend sync, email automation, or predictive advice where the current implementation is local, static, or deterministic.
 
 ## Beautiful Language Opportunities
-- Replace broad product claims with direct daily outcomes: "See today's next move," "Capture a thought," "Review the next calendar block."
-- Make Today copy shorter and more decisive: one read, one next move, one capture option.
-- Give Capture a warmer assistant role: "Inbox for loose tasks, notes, and follow-ups."
-- Recast Notes as memory without implying real AI recall: "Recent notes to keep close" or "Things you may need again."
-- Make Plan sound like a day timeline, not a calendar product: "Next block," "Open room," "Schedule pressure."
-- Make Settings sound like controls, not explanations: "Suite controls," "Theme," "Notifications," "Visible apps."
-- Use optional module labels that are quiet and concrete: "Workout log," "Projects," "School planner," "Contacts."
+- Replace "command center" with "daily workspace", "daily plan", or "Today workspace" depending on surface.
+- Make Capture feel warmer and more specific: "Drop in tasks, notes, emails, and reminders before you sort them."
+- Make Today sharper: one next move, one reason, one action.
+- Use "inbox" only when the action is intake or review. Use "task list" when the user is working through tasks.
+- Use "plan" for calendar/day structure, not for broad product strategy.
+- Use "memory" carefully for Notes: it is evocative, but visible copy should still name note capture, recent notes, and follow-ups.
+- Public pages can be softer, but working app labels should be short and operational.
 
 ## Priority Rewrite
-The single most important wording problem is the remaining "command center" and AI-brain framing. Nami should replace visible uses with concrete daily-assistant language that names the user's action and outcome: Today shows the next move, Capture holds loose input, Plan shows calendar pressure, Notes keeps useful memory, and More holds optional tools. Do not add bigger AI claims to compensate.
+Fix the remaining "command center" framing in visible metadata and any customer-facing shell copy. It is the clearest mismatch with the personal assistant direction: it sounds corporate, generic, and feature-heavy. Replace it with a daily workspace phrase that names the user's real objects: tasks, notes, calendar planning, workouts, and projects.
 
 ## Suggested Rewrites
 - Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
-  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and follow-ups in one daily workspace."
+  After: "EasyLife keeps tasks, notes, calendar plans, workouts, and projects in one daily workspace."
 
-- Before: "Today still needs to feel like the app's AI brain."
-  After: "Today should show the next useful move before any module inventory."
+- Before: "Command Center"
+  After: "Today"
 
-- Before: "assistant command surface"
-  After: "Today start surface"
+- Before: "AI brain"
+  After: "Today read"
 
-- Before: "Open workspace"
-  After: "Open Today"
+- Before: "AI-native"
+  After: "Ready for quick capture"
 
-- Before: "sample data"
-  After: "example day"
+- Before: "Sample data"
+  After: "Example day"
 
-- Before: "Calendar handoff"
-  After: "Calendar prep"
+- Before: "Proof"
+  After: "What is ready"
 
-- Before: "proof"
-  After: "route evidence" for internal docs, or remove from visible UI.
+- Before: "More"
+  After: "More tools"
 
-- Before: "polish"
-  After: "clearer spacing" in internal task docs, or remove from visible UI.
+- Before: "Capture supports Today"
+  After: "Capture gives Today a clean inbox."
 
 ## Voice Rules
-- Lead with the user's next action, not the product category.
-- Use concrete nouns: task list, calendar block, note, workout log, daily plan, settings, inbox.
+- Lead with the user's next action, not the product architecture.
+- Use concrete nouns: task, note, calendar block, workout, project, inbox, daily plan, settings.
 - Keep primary labels short: Today, Capture, Plan, Notes, More.
-- Keep AI language humble and local unless real model behavior is visible and explained.
-- Separate public marketing copy from app copy; the app should use task labels, not sales language.
-- Avoid builder words in visible UI: proof, polish, handoff, workflow, demo, sample data, command center.
-- Do not explain every module on the first screen.
-- Make every visible sentence pass: who is this for, what should they do, and what do they get?
+- Keep AI language humble and local unless real AI behavior exists.
+- Do not use "demo", "sample data", "proof", "handoff", "polish", "workflow", or "command center" in visible buyer or app copy.
+- Separate marketing copy from app copy. Marketing can explain; the app should direct.
+- Do not describe EasyLife as a pile of apps. Describe the daily loop: capture, plan, remember, act.
+- Keep helper copy specific enough to answer who it is for, what to do, and what the user gets.
 
 ## Next 5 Copy Tasks
-- [ ] Replace visible "command center" metadata or UI copy with "daily workspace" or a more specific route outcome; do not touch internal docs unless they are customer-facing.
-- [ ] Sweep HQ/Today visible copy for "AI brain," "command surface," and vague assistant claims; replace with one next-action sentence using existing local data only.
-- [ ] Review EasyList/Capture labels and make one phrase read as an inbox for loose tasks and follow-ups; do not change task behavior or data shape.
-- [ ] Review product-page CTAs and replace one repeated generic "Open workspace" with a route-specific action such as "Open Today" where accurate.
-- [ ] Review optional-module copy under More and replace one abstract group label with concrete module nouns; keep optional tools secondary.
+- [ ] Replace visible "command center" in root/app meta descriptions with "daily workspace"; do not change claims or add features.
+- [ ] Search visible JSX strings for "demo", "sample data", "proof", "handoff", and "polish"; replace only customer-facing instances, leaving internal identifiers alone.
+- [ ] Tighten Today first-screen helper copy to one next action, one reason, and one clear button label; do not add explanatory paragraphs.
+- [ ] Review Capture and Inbox labels so they read as one assistant intake lane; avoid adding new behavior or AI promises.
+- [ ] Review More menu labels and group descriptions; make optional modules discoverable without making them sound primary.
 
 ## Stop Or Continue
 continue but fix copy first
