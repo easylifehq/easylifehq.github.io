@@ -4,29 +4,29 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the assistant-reset mission: recent work tightened navigation and HQ/marketing surfaces, and the remaining queue is focused on making EasyLife feel like one connected assistant instead of separate apps. It is not ready to park because 18 tasks remain and review gates still show visual, copy, and accessibility polish debt.
+The branch is still moving toward the EasyLife assistant reset: recent work tightened navigation, Today/HQ, theme polish, mobile/readability, and planning docs. Progress is uneven because the queue still contains 18 unchecked tasks and recent recovery loops/quarantines show the fleet still needs tighter task gating.
 
 ## Safety Review
-No forbidden or high-risk file changes found. Working tree is clean, and changed files stay in frontend/docs scope.
+No forbidden or risky sensitive files found in the provided changed-file list. Changes stay in `app-vNext/src/` UI surfaces and `docs/codex/`. Working tree is clean.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: Joey security review batch 1, Robin copy review batch 1, Simon design review batch 1, visual inspect batch 1, and related checkpoint/repair work.
-- Files changed: frontend navigation, HQ, EasyList, EasyNotes, EasyCalendar, Settings, global styles, marketing page, and docs/codex review/planning files.
-- Commits added: latest HEAD is `d4d9dd5b` with multiple checkpoint/review/repair commits since base.
+- Completed tasks in this checkpoint window: 12 shown, including mobile/readability polish, theme polish, empty/error state polish, Stage 0 assistant audit, HQ reset decision, and small visible recovery repairs.
+- Files changed: navigation, HQ/Today, EasyList, EasyCalendar, EasyNotes, Settings, marketing, global styles, and `docs/codex/` review/planning docs.
+- Commits added: yes; latest HEAD is `6756b2bc` (`Codex quarantine failed task batch 1 task 1`).
 - Queue status: 18 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: YELLOW; 10 medium issues should influence next tasks.
-- Simon design review: YELLOW; continue but fix visual issues first.
-- Robin copy review: YELLOW; continue but fix copy first.
-- Accessibility review: YELLOW; patch accessibility warnings soon.
-- Performance review: GREEN; no next-task blocker.
-- Joey security review: GREEN; no next-task blocker.
-- Franky formula review: missing; likely not relevant unless spreadsheet/formula surfaces appear.
-- Product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured.
+- Visual bug report: YELLOW influence; 10 medium visual issues, fix visual polish before broad new work.
+- Simon design review: YELLOW influence; continue but fix visual issues first.
+- Robin copy review: YELLOW influence; continue but fix copy first.
+- Accessibility review: YELLOW influence; patch warnings soon.
+- Performance review: GREEN no blocking influence.
+- Joey security review: GREEN no blocking influence.
+- Franky formula review: missing; no formula-specific blocker identified, but gate is incomplete.
+- Product truth: MISSING but `ok: True`; no configured `PRODUCT_TRUTH.md`.
 
 ## Recommended Next Step
 patch first
@@ -34,11 +34,10 @@ patch first
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Use one narrow repair to clear a named medium visual/copy/accessibility concern before continuing the assistant-reset implementation queue.
+- The next task should address one concrete visual/copy/accessibility concern because review gates are YELLOW and recent quarantines show broad packets are causing loop risk.
 
 ## Notes For Human Reviewer
-- Build passed and repo is clean.
-- Not ship-ready because queue is not empty.
-- No high visual bugs reported.
-- Product truth is missing, not failing.
-- Next task should avoid broad UI expansion and remove or simplify one confusing visible element.
+- Build passed and tree is clean.
+- Not ship-ready because unchecked queue remains and visual/copy/accessibility gates are YELLOW.
+- Product truth is not configured, but not RED.
+- Keep next task tightly scoped to one UI surface with `npm.cmd run build` proof.
