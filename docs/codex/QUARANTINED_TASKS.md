@@ -442,3 +442,13 @@
 - Files restored before continuing:
 - None
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-07 01:45:50
+
+- Batch: 1
+- Task index: 1
+- Task: User pain: Today still risks feeling like a module showroom instead of an assistant command surface. Skill: frontend-ui-engineering. Target: app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md. Change: simplify the default HQ first path after the status strip so Today shows one short read, one recommended next move, capture, and compact context only. First screen: Today/assistant command surface stays dominant before optional modules or deeper daily detail. Remove/simplify: hide or remove one visible block from Attention, Parked, School, Modules, install, presentation/demo copy, or extra stats grids. Guardrails: forbidden scope: frontend-only HQ slice; no backend, auth, payments, dependencies, package files, release config, generated output, credentials, new dashboard, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the hidden/removed HQ element, build result, and route to inspect. Stop if: the change needs backend behavior, data migration, route deletion, or files outside declared scope. Check: /app/hq reads as Today first, not feature inventory. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/hq/routes/,docs/codex/ accept:npm.cmd run build]
+- Reason: Large Phase 3 task requires a concrete slice plan before implementation.
+- Files restored before continuing:
+- None
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
