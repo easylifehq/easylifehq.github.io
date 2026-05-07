@@ -3603,3 +3603,18 @@
 - Files changed:
 - None
 - Risks or follow-up needed: Visible/showpiece task has docs-only or non-product scope. Add a product surface scope such as src/, public/, content/, or styles/ before implementation.
+
+## 2026-05-07 00:32:52
+
+- Task attempted: User pain: EasyLife has old Stage 0 and recovery tasks mixed together, so the next fleet run needs one clean assistant-reset packet before UI work restarts. Skill: planning-and-task-breakdown. Target: docs/codex/NEXT_5_TASKS.md, docs/codex/TASK_QUEUE.md, docs/codex/AI_ASSISTANT_FLEET_GATES.md. Change: replace the next actionable packet with exactly three V2 Stage 1 tasks: assistant shell simplification, Today first viewport simplification, and More optional-module hiding. Remove/simplify: stale recovery wording, docs-only visible tasks, and any broad beauty-pass instruction. Guardrails: forbidden scope: docs-only planning; no product UI edits, backend, auth, payments, dependencies, package files, release config, generated output, credentials, or unrelated files. Acceptance: docs-only. Proof: NEXT_5_TASKS.md contains exactly three V2 tasks with Skill, Acceptance, Proof, and Stop if fields. Stop if: Stage 0 audit, IA, or reset-decision docs are missing enough detail to name exact files. Check: Select-String confirms no unchecked docs-only visible implementation task remains ahead of the Stage 1 packet. [class:planning risk:low mode:single impact:standard surface:mixed scope:docs/codex/ accept:docs-only]
+- Task class: planning
+- Task risk: low
+- Task mode: single
+- Task impact: standard
+- Allowed scope: docs/codex
+- Acceptance checks: docs-only
+- Implementation scale: large
+- Build result: Quarantined
+- Files changed:
+- None
+- Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.

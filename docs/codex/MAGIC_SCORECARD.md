@@ -5914,3 +5914,24 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: visual consistency improved, but the active assistant direction is still not visible enough in the product surface.
 - Debug checkpoint result: FAIL (failed)
+
+## 2026-05-07 00:32:52
+
+- Task: User pain: EasyLife has old Stage 0 and recovery tasks mixed together, so the next fleet run needs one clean assistant-reset packet before UI work restarts. Skill: planning-and-task-breakdown. Target: docs/codex/NEXT_5_TASKS.md, docs/codex/TASK_QUEUE.md, docs/codex/AI_ASSISTANT_FLEET_GATES.md. Change: replace the next actionable packet with exactly three V2 Stage 1 tasks: assistant shell simplification, Today first viewport simplification, and More optional-module hiding. Remove/simplify: stale recovery wording, docs-only visible tasks, and any broad beauty-pass instruction. Guardrails: forbidden scope: docs-only planning; no product UI edits, backend, auth, payments, dependencies, package files, release config, generated output, credentials, or unrelated files. Acceptance: docs-only. Proof: NEXT_5_TASKS.md contains exactly three V2 tasks with Skill, Acceptance, Proof, and Stop if fields. Stop if: Stage 0 audit, IA, or reset-decision docs are missing enough detail to name exact files. Check: Select-String confirms no unchecked docs-only visible implementation task remains ahead of the Stage 1 packet. [class:planning risk:low mode:single impact:standard surface:mixed scope:docs/codex/ accept:docs-only]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: unknown
+- Task class: planning
+- Task risk: low
+- Changed files: 0
+- Materiality signal: impact=standard, surface-files=0, structural-files=0, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: visual consistency improved, but the active assistant direction is still not visible enough in the product surface.
+- Before visual evidence:
+- None recorded before task.
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260506-215950
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260506-215950\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260506-215950\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260506-215950\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260506-215950\easylist-visualQa-1-mobile.png
+- Follow-up: Large Phase 3 task requires a concrete slice plan before implementation.
