@@ -4,55 +4,57 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is starting to sound like a personal assistant suite, but visually it still behaves like a collection of polished module pages with small chrome and hierarchy debts nibbling at the calm.
+EasyLife is getting calmer and more coherent, but the current branch still feels more like a polished product catalog than a signed-in personal assistant that knows what I should do next.
 
 ## Mission Fit
-The current direction mostly matches the mission: Today, Capture, Plan, and Notes are being pulled toward one assistant loop instead of separate utilities. That is the right move. The miss is discipline: the active pack says Stage 0 salvage audit, but the branch is already changing app surfaces, so the work feels useful but slightly ahead of its own operating contract. The product needs one clearer daily start surface and quieter module navigation before more assistant language is added.
+The direction matches the EasyLife mission in tone: shared navigation, calmer language, consistent cards, and a clearer Today/Capture/Plan/Notes model are all moving toward one connected personal operating system. The miss is hierarchy. The reviewed screens still spend too much first-screen energy explaining modules instead of proving the daily assistant flow. Stage 0 is supposed to salvage and clarify the assistant direction; right now it clarifies the brochure better than the working cockpit.
 
 ## Taste Check
-The better parts are the move toward "capture -> plan -> remember" language, the calmer Notes-as-memory framing, and the attempt to make Calendar feel like a day plan rather than a dense calendar product. That is current, useful, and closer to a personal operating system.
+The best parts: the soft paper surface, graphite text, teal accent, and restrained panels feel more mature than generic SaaS blue-on-white. The cards have a pleasant tactile quality, and the copy is less corporate than before.
 
-What still feels off: the shell is not yet elegant enough to carry the concept. Small tap targets in Settings navigation make the suite feel less premium, and repeated route chrome risks turning the app into a tour of labels instead of a tool. The assistant idea is promising; the visual system is still wearing a conference badge.
+The weak parts: the page system is too templated. EasyList, EasyCalendar, EasyNotes, and EasyWorkout all use nearly the same hero-card-plus-feature-card composition, so the suite feels consistent but not yet alive. Mobile type is oversized and scroll-hungry. Desktop has a weird amount of ceremonial white space before the hero. The whole thing has taste, but it is still wearing a very expensive training-wheel layout.
 
 ## Visual Problems To Fix
-- Settings navigation has multiple undersized tap targets on desktop and mobile, including Today, Capture, Plan, and Notes links. A personal operating system cannot have fussy primary navigation.
-- The site brand target is also reported too small, which weakens the header as a reliable suite anchor.
-- Module routes still risk feeling like destination pages with their own identities rather than one connected assistant surface.
-- The first-screen hierarchy is improved in language, but the product still needs stricter progressive disclosure: one daily next action first, then compact module status, then deeper controls.
-- The branch has many touched surfaces for a Stage 0 active pack, which creates a visible design governance problem: the product is being shaped before the audit stage is cleanly closed.
-- Calendar and Notes improvements appear narrow and sane, but the screenshots/report evidence still does not prove the whole shell has achieved one calm visual rhythm across desktop and mobile.
-- Settings is becoming the obvious weak link because navigation quality issues appear there first. That is not the room where the walls should wobble.
+- Desktop product pages have a large dead band between the header and the hero card, delaying the actual page content for no useful reason.
+- The root page repeats "Products" in both the main nav and the right-side action cluster, making the header feel undecided.
+- Product pages repeat identity in the header and hero eyebrow: "Daily Workspace EasyLifeHQ" followed by "EASYLIFEHQ" or the module name. This is not catastrophic, but it is duplicated page identity and should be quieter.
+- The customer-facing product pages still bury the real app promise inside framed panels and feature blocks instead of showing a more immediate working surface.
+- Settings desktop navigation is visually cramped: the brand mark and nav row feel squeezed, and the visual report confirms small tap targets.
+- Settings mobile nav is large but still reports small tap targets on Today, Capture, Plan, and Notes; that is an interaction polish failure on the suite shell.
+- Mobile product pages are too vertically inflated: huge body copy, tall buttons, and pill rows consume the first screen before the user sees enough proof.
+- The preview panels on product pages are useful, but they all share the same pale card treatment, so module personality is flattened.
+- Feature sections arrive too loudly and too soon. They read like marketing inventory when the mission wants progressive disclosure and daily utility.
 
 ## Strongest Opportunities
-- Make the protected app shell feel like one object: consistent nav height, target size, active state, spacing, and page header rhythm across Today, Capture, Plan, Notes, Workout, and Settings.
-- Reduce route chrome before adding content. Let Today be the assistant start, and let module pages support it with concise, task-specific surfaces.
-- Treat Settings as a suite control center, not an afterthought. Cleaner navigation there will make the whole product feel more credible.
-- Push the assistant loop visually, not only verbally: Capture, Plan, and Remember should share repeated layout patterns, not just related copy.
-- Use mobile as the taste test. If the primary nav feels tiny or cramped on mobile, the product is not calm yet.
+- Make the signed-in HQ or command cockpit the visual proof source: one next action, one command input, compact Today/Inbox/Plan/Memory state, then quieter module links.
+- Reduce route chrome across product and app surfaces so the actual working screen has priority over wrappers, labels, and explanatory bands.
+- Tighten the app header into a reliable shell with 44px minimum targets and fewer competing labels.
+- Give each module one distinct functional preview pattern instead of recycling the same card list: timeline for Plan, intake stack for Capture, memory snippets for Notes, compact session logger for Workout.
+- On mobile, cut hero copy by 25-35 percent and let the preview surface appear earlier.
 
 ## Priority Fix
-Fix the shared app navigation target sizing and shell rhythm first, especially on Settings. Make every primary nav item meet comfortable touch dimensions without making the header louder, preserve the current route structure, and keep the active state quiet but unmistakable. This is the single highest-leverage repair because it improves trust, mobile comfort, suite cohesion, and visual polish without inventing new product scope.
+Fix the suite shell and first-screen hierarchy before adding any new sections. The next batch should make navigation quieter, targets larger, and the first signed-in surface more obviously assistant-led: one daily action, one command/capture affordance, compact module status, and no repeated product identity. Nami should treat this as a chrome reduction task, not a new feature task.
 
 ## Magic Improvement Score
-SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: assistant language is clearer, but shell polish and pack discipline are still not strong enough.
+SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite tone and assistant language improved, but shell hierarchy and first-screen assistant proof are still not strong enough.
 
 ## Designer Handoff
-Next implementer: do a restraint pass on the shared shell, not a new feature pass. Keep the assistant loop language that now connects Today, Capture, Plan, and Notes. Keep the calmer Notes and Calendar direction. Change the navigation ergonomics, header spacing, and route chrome so the app feels like one composed product rather than a sequence of repaired screens. The user should feel, within five seconds, "I know what to do next today, and everything else is nearby but not shouting."
+Keep the restrained paper-and-teal visual system, the blunt life-management copy, and the connected Today/Capture/Plan/Notes model. Change the hierarchy: strip duplicated labels, reduce header noise, enforce proper tap targets, and move feature inventory lower. The user should feel like they opened a calm daily assistant, not a well-dressed directory of apps. On mobile, make the first screen useful faster: fewer words, earlier preview, quieter chips.
 
 ## What Not To Do Next
-- Do not add another assistant panel, dashboard card, or feature inventory.
-- Do not add more product explanation to compensate for weak hierarchy.
-- Do not broaden the Calendar or HQ work again; the previous quarantine pattern already warned you.
-- Do not touch backend, auth, AI integrations, persistence, package files, or deployment.
-- Do not ignore mobile tap comfort because the desktop looks acceptable.
-- Do not make the header taller and louder just to satisfy tap targets; solve it with proportion, padding, and rhythm.
+- Do not add more marketing sections to prove the product.
+- Do not add new modules, new routes, or bigger dashboards.
+- Do not make the command center more theatrical with fake AI claims.
+- Do not ignore the settings nav tap-target findings because they look "minor."
+- Do not keep cloning the same hero and feature-card layout across every module.
+- Do not change backend, auth, persistence, packages, deployment, or anything outside the visual/frontend scope.
 
 ## Next 5 Design Tasks
-- [ ] Increase shared app nav hit areas to comfortable desktop and mobile sizes while keeping the header visually quiet; do not change routes, auth, data, or copy scope.
-- [ ] Review Settings first viewport and reduce any duplicated header or route-label chrome; keep Settings as a control center, not a brochure.
-- [ ] Align active nav styling across Today, Capture, Plan, Notes, Workout, and Settings with one restrained pattern; no new colors or decorative treatments.
-- [ ] Inspect Today, Capture, Plan, and Notes mobile screenshots for cramped controls or stacked chrome; fix only one visible spacing issue per route.
-- [ ] Update the design/report docs to reconcile the active Stage 0 label with the app-surface work already completed; keep it factual and short.
+- [ ] Fix the app header tap targets to meet at least 44px height on desktop and mobile, without changing routing or adding new nav items.
+- [ ] Remove duplicated "Products" header treatment on the root marketing page, keeping one clear path to product exploration and one primary app CTA.
+- [ ] Tighten desktop top spacing above product hero cards by one small CSS/layout pass, with no new sections and no typography scale increase.
+- [ ] Reduce mobile hero copy and chip crowding on one product page, making the preview panel visible earlier without removing the primary CTA.
+- [ ] Give one module preview a more specific functional layout, such as a real day timeline for Calendar or intake stack for EasyList, while preserving the shared visual system.
 
 ## Stop Or Continue
 continue but fix visual issues first
