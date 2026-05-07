@@ -12,113 +12,27 @@ import {
 import { isCompletedToday, sortActiveTasks } from "@/features/easylist/lib/taskUtils";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { useLastAppRoute } from "@/lib/mobile/appRouteMemory";
-import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
-
-const demoPath = [
-  {
-    label: "EasyList",
-    title: "Capture one task",
-    description: "Add one task, set its urgency, and make the list useful quickly.",
-    to: "/app/easylist/add",
-  },
-  {
-    label: "EasyNotes",
-    title: "Write one messy note",
-    description: "Open a blank note and turn useful lines into tasks or a project later.",
-    to: "/app/easynotes/new",
-  },
-  {
-    label: "EasyCalendar",
-    title: "Put work into time",
-    description: "Open day view and place flexible task blocks beside fixed events.",
-    to: "/app/easycalendar/day",
-  },
-  {
-    label: "Settings",
-    title: "Show control",
-    description: "Open Settings for themes, visible apps, calendar wake time, and labs.",
-    to: "/app/settings",
-  },
-];
 
 const quickActions = [
   {
-    label: "Add task",
-    detail: "Start a clear next action.",
+    label: "Capture",
+    detail: "Drop the loose thread.",
     to: "/app/easylist/add",
   },
   {
-    label: "Plan my day",
-    detail: "Open today in calendar.",
+    label: "Plan",
+    detail: "Put work into time.",
     to: "/app/easycalendar/day",
   },
   {
-    label: "Check what is still open",
-    detail: "Review the loose ends.",
-    to: "/app/command",
+    label: "Inbox",
+    detail: "Review open loops.",
+    to: "/app/easylist/dashboard",
   },
   {
-    label: "Capture note",
-    detail: "Park a thought quickly.",
+    label: "Notes",
+    detail: "Save the messy bit.",
     to: "/app/easynotes/new",
-  },
-];
-
-const schoolPlanner = {
-  courses: [
-    { code: "BIO 210", name: "Microbiology", cadence: "Lab Tue / lecture Thu", focus: "Prep culture notes" },
-    { code: "MATH 132", name: "Calculus II", cadence: "Problem set week", focus: "Integration review" },
-    { code: "ENG 241", name: "Modern Fiction", cadence: "Seminar Friday", focus: "Draft discussion notes" },
-  ],
-  assignments: [
-    { course: "BIO 210", title: "Lab worksheet", due: "Tonight", estimate: "35 min" },
-    { course: "MATH 132", title: "Section 7 problem set", due: "Thu", estimate: "50 min" },
-    { course: "ENG 241", title: "Reading response", due: "Fri", estimate: "25 min" },
-  ],
-  exams: [
-    { course: "MATH 132", title: "Quiz 4", date: "Wed", prep: "Formula sheet pass" },
-    { course: "BIO 210", title: "Unit exam", date: "Next Tue", prep: "Two study blocks" },
-  ],
-  load: [
-    {
-      day: "Tonight",
-      weight: "Heavy",
-      item: "BIO 210 lab worksheet",
-      focus: "Finish the worksheet before opening later-week reading.",
-    },
-    {
-      day: "Wed",
-      weight: "Exam",
-      item: "MATH 132 Quiz 4",
-      focus: "Review formulas, then attempt two mixed practice problems.",
-    },
-    {
-      day: "Thu-Fri",
-      weight: "Steady",
-      item: "Problem set and reading response",
-      focus: "Split the work into one math block and one writing pass.",
-    },
-  ],
-};
-
-const laterPlans = [
-  {
-    label: "School week",
-    title: "Review study load before it spills into today.",
-    detail: "Keep assignments and exam prep visible, then add only the next task or calendar block.",
-    to: "/app/easylist/add",
-  },
-  {
-    label: "Notes to action",
-    title: "Revisit recent notes for one follow-up.",
-    detail: "Look for a note that needs a task, reply, or calendar hold before it goes stale.",
-    to: "/app/easynotes",
-  },
-  {
-    label: "Lighter day",
-    title: "Protect capacity when the calendar gets full.",
-    detail: "Use a light plan and keep workouts as a short log when the day is already loaded.",
-    to: "/app/easycalendar/day",
   },
 ];
 
@@ -159,11 +73,9 @@ function isSameDate(left: Date | null, right: Date) {
 }
 
 export function HQPage() {
-  const { events, taskBlocks, tasks, isLoading, error } = useEasyCalendar();
-  const { isAppVisible, isExperimentalFeatureEnabled } = useSettings();
-  const mobileRuntime = useMobileRuntime();
+  const { events, taskBlocks, tasks, error } = useEasyCalendar();
+  const { isAppVisible } = useSettings();
   const lastAppRoute = useLastAppRoute();
-  const showPlanningPreview = isExperimentalFeatureEnabled("dailyReview");
   const [planIntensity, setPlanIntensity] = useState<PlanIntensityMode>("Normal");
   const today = startOfDay(new Date());
 
@@ -171,7 +83,6 @@ export function HQPage() {
     .filter((event) => event.startAt && startOfDay(event.startAt).getTime() === today.getTime())
     .sort((left, right) => (left.startAt?.getTime() || 0) - (right.startAt?.getTime() || 0));
   const nextEvents = todayEvents.slice(0, 3);
-  const activeTaskCount = tasks.filter((task) => !task.completed).length;
   const dueTodayTasks = sortActiveTasks(tasks.filter((task) => !task.completed && isSameDate(task.dueDate, today)));
   const overdueTasks = sortActiveTasks(tasks.filter((task) => !task.completed && task.dueDate && startOfDay(task.dueDate).getTime() < today.getTime()));
   const openWindows = getOpenTimeWindowsForDay(today, events, taskBlocks);
@@ -207,7 +118,7 @@ export function HQPage() {
     Full: {
       title: "Full capacity",
       detail: isAppVisible("easyworkout")
-        ? "Recover the urgent work first. Make the workout a light log if it still fits."
+        ? "Recover urgent work first. Keep everything else optional."
         : "Recover urgent work first and avoid adding extra commitments.",
     },
   }[capacityLevel];
@@ -361,63 +272,12 @@ export function HQPage() {
       : null,
   ].filter((item): item is { label: string; title: string; detail: string; to: string } => Boolean(item)).slice(0, 3);
   const assistantRead = overdueTasks.length
-    ? "There is one small recovery thread. Clear that first, then the day gets easier."
+    ? "One recovery thread is leading the stack. Clear it, reschedule it, or release it."
     : dueTodayTasks.length > 3
       ? "Today has enough moving parts. Pick one list, one time block, and keep the rest quiet."
       : nextEvents.length
-        ? "The calendar has shape. Use the open windows for the work that would otherwise leak."
-        : "The day is open. Capture the loose ends now so they do not become noise later.";
-  const systems = [
-    {
-      label: "List",
-      title: `${activeTaskCount} open`,
-      detail: mostUrgent ? mostUrgentLabel : "Nothing urgent is waiting.",
-      to: "/app/easylist/dashboard",
-      visible: isAppVisible("easylist"),
-    },
-    {
-      label: "Email",
-      title: "Review email suggestions",
-      detail: "Approve task, deadline, event, and follow-up suggestions before anything changes.",
-      to: "/app/easylist/email",
-      visible: isAppVisible("easylist"),
-    },
-    {
-      label: "Calendar",
-      title: nextEvents[0] ? nextEvents[0].title || "Next event" : "Open day",
-      detail: nextOpenWindow
-        ? `${formatDuration(nextOpenWindow.minutes)} open around ${formatTimeLabel(nextOpenWindow.startAt)}`
-        : `${todayEvents.length} event${todayEvents.length === 1 ? "" : "s"} today`,
-      to: "/app/easycalendar/day",
-      visible: isAppVisible("easycalendar"),
-    },
-    {
-      label: "Notes",
-      title: "Capture",
-      detail: "Park the messy thought before it becomes another task.",
-      to: "/app/easynotes/new",
-      visible: isAppVisible("easynotes"),
-    },
-    {
-      label: "Projects",
-      title: "Longer arc",
-      detail: "Keep plans connected to tasks without crowding today.",
-      to: "/app/easyprojects",
-      visible: isAppVisible("easyprojects"),
-    },
-    {
-      label: "Workout",
-      title: capacityLevel === "Full" ? "Light log if it fits" : "Training can stay connected",
-      detail:
-        capacityLevel === "Full"
-          ? "Open the logger later without adding more pressure to Today."
-          : "Use the workout log to keep training progress tied to the daily plan.",
-      to: "/app/easyworkout/dashboard",
-      visible: isAppVisible("easyworkout"),
-    },
-  ];
-  const schoolNextAssignment = schoolPlanner.assignments[0];
-  const schoolNextExam = schoolPlanner.exams[0];
+        ? "The calendar has shape. Use open windows for work that would otherwise leak."
+        : "The day is open. Capture the loose ends before they become noise.";
 
   function openNaturalCapture() {
     window.dispatchEvent(new Event("easylife:open-capture"));
@@ -431,8 +291,8 @@ export function HQPage() {
         <article className="hq-start-card">
           <div className="hq-start-heading">
             <div>
-              <p>{dayPhase} brief</p>
-              <h1 id="hq-title">Choose today&apos;s next move.</h1>
+              <p>{dayPhase} command</p>
+              <h1 id="hq-title">Today, reduced.</h1>
             </div>
           </div>
           <strong>{assistantRead}</strong>
@@ -448,7 +308,7 @@ export function HQPage() {
             </div>
             <div className="task-composer-actions">
               <Link to={startHere.to} className="primary-button">
-                {startHere.buttonLabel}
+                {startHere.buttonLabel.replace("Open ", "")}
               </Link>
               {lastAppRoute ? (
                 <Link to={lastAppRoute.path} className="button-secondary">
@@ -498,7 +358,7 @@ export function HQPage() {
           </button>
           <details className="hq-context-stack">
             <summary>
-              <span>Context</span>
+              <span>Signals</span>
               <strong>{contextLead}</strong>
             </summary>
             <div>
@@ -546,7 +406,7 @@ export function HQPage() {
         </div>
       </section>
 
-      <PageSection eyebrow="Attention" title="The things EasyLife would keep from slipping">
+      <PageSection eyebrow="Review" title="Only what needs a decision">
         <div className="assistant-attention-list">
           {attentionItems.length ? (
             attentionItems.map((item) => (
@@ -565,196 +425,6 @@ export function HQPage() {
           )}
         </div>
       </PageSection>
-
-      <PageSection eyebrow="Parked" title="Useful ideas without crowding today">
-        <section className="hq-later-plans" aria-label="Later plans">
-          <div className="hq-later-plans-copy">
-            <span>Parked ideas</span>
-            <strong>Keep useful ideas parked until today has room.</strong>
-            <p>These example ideas cover school, notes, and capacity. Nothing is saved until you choose where it belongs.</p>
-          </div>
-          <div className="hq-later-plans-list">
-            {laterPlans.map((plan) => (
-              <Link to={plan.to} className="hq-later-plan" key={plan.label}>
-                <span>{plan.label}</span>
-                <strong>{plan.title}</strong>
-                <p>{plan.detail}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-      </PageSection>
-
-      <PageSection eyebrow="School" title="Semester layer">
-        <section className="hq-school-planner" aria-label="School planner example">
-          <article className="hq-school-lead">
-            <span>School week</span>
-            <strong>{schoolPlanner.courses.length} courses / {schoolPlanner.assignments.length} assignments / {schoolPlanner.exams.length} exams</strong>
-            <p>
-              Start with {schoolNextAssignment.course}: {schoolNextAssignment.title.toLowerCase()} due {schoolNextAssignment.due.toLowerCase()}.
-            </p>
-            <small>No school item is saved until you review and add it in EasyList or EasyCalendar.</small>
-          </article>
-          <div className="hq-study-load" aria-label="Heavy week view">
-            <div className="hq-study-load-header">
-              <span>Heavy week</span>
-              <strong>Upcoming load and focus</strong>
-            </div>
-            <div className="hq-study-load-track">
-              {schoolPlanner.load.map((loadItem) => (
-                <article key={`${loadItem.day}-${loadItem.item}`} className="hq-study-load-item">
-                  <span>{loadItem.day} / {loadItem.weight}</span>
-                  <strong>{loadItem.item}</strong>
-                  <p>{loadItem.focus}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-          <div className="hq-school-columns">
-            <div>
-              <span>Courses</span>
-              {schoolPlanner.courses.map((course) => (
-                <article key={course.code} className="hq-school-item">
-                  <strong>{course.code} / {course.name}</strong>
-                  <p>{course.cadence}</p>
-                  <small>{course.focus}</small>
-                </article>
-              ))}
-            </div>
-            <div>
-              <span>Assignments</span>
-              {schoolPlanner.assignments.map((assignment) => (
-                <article key={`${assignment.course}-${assignment.title}`} className="hq-school-item">
-                  <strong>{assignment.title}</strong>
-                  <p>{assignment.course} / Due {assignment.due}</p>
-                  <small>{assignment.estimate}</small>
-                  <div className="hq-school-actions" aria-label={`Review ${assignment.title} options`}>
-                    <Link to="/app/easylist/add">Review as task</Link>
-                    <Link to="/app/easycalendar/day">Find calendar room</Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-            <div>
-              <span>Exams</span>
-              {schoolPlanner.exams.map((exam) => (
-                <article key={`${exam.course}-${exam.title}`} className="hq-school-item">
-                  <strong>{exam.title}</strong>
-                  <p>{exam.course} / {exam.date}</p>
-                  <small>{exam.prep}</small>
-                  <div className="hq-school-actions" aria-label={`Review ${exam.title} options`}>
-                    <Link to="/app/easylist/add">Plan study task</Link>
-                    <Link to="/app/easycalendar/day">Review calendar block</Link>
-                  </div>
-                </article>
-              ))}
-              <article className="hq-school-item hq-school-note">
-                <strong>Suggested focus</strong>
-                <p>{schoolNextExam.course} needs a short review before the next open calendar block fills.</p>
-              </article>
-            </div>
-          </div>
-        </section>
-      </PageSection>
-
-      <PageSection eyebrow="Modules" title="Quiet tools under the surface">
-        <div className="assistant-system-grid">
-          {systems
-            .filter((system) => system.visible)
-            .map((system) => (
-              <Link className="hq-link-card" to={system.to} key={system.label}>
-                <span>{system.label}</span>
-                <strong>{system.title}</strong>
-                <p>{system.detail}</p>
-              </Link>
-          ))}
-        </div>
-      </PageSection>
-
-      {!mobileRuntime.isStandalone ? (
-        <Link className="hq-install-card" to="/app/settings?section=install">
-          <span className="settings-state-pill">Mobile</span>
-          <strong>Install EasyLife on your phone</strong>
-          <p>Add it to your home screen from Settings so it opens like an app.</p>
-        </Link>
-      ) : null}
-
-      {isExperimentalFeatureEnabled("dailyReview") ? (
-        <details className="advanced-disclosure">
-          <summary>Deeper daily read</summary>
-          <div className="daily-review-grid">
-            <article className="stat-card-vnext">
-              <span>Due now</span>
-              <strong>{dueTodayTasks.length}</strong>
-            </article>
-            <article className="stat-card-vnext">
-              <span>Behind</span>
-              <strong>{overdueTasks.length}</strong>
-            </article>
-            <article className="stat-card-vnext">
-              <span>Finished</span>
-              <strong>{completedTodayCount}</strong>
-            </article>
-            <article className="stat-card-vnext">
-              <span>Open room</span>
-              <strong>{formatDuration(openMinutes)}</strong>
-            </article>
-            <article className="stat-card-vnext">
-              <span>Events today</span>
-              <strong>{todayEvents.length}</strong>
-            </article>
-          </div>
-          <div className="dashboard-grid daily-review-followup">
-            <article className="mini-panel-vnext">
-              <span>Read</span>
-              <strong>
-                {overdueTasks.length
-                  ? "A few things need recovery, but this is fixable."
-                  : dueTodayTasks.length > 4
-                    ? "Today is loaded. Keep the plan simple."
-                    : "The day looks calm enough to steer intentionally."}
-              </strong>
-            </article>
-            <article className="mini-panel-vnext">
-              <span>Most urgent</span>
-              <strong>{mostUrgent ? mostUrgentLabel : "Nothing is shouting right now."}</strong>
-            </article>
-            <article className="mini-panel-vnext">
-              <span>Quick win</span>
-              <strong>{quickWin ? quickWin.title : "No tiny task is waiting."}</strong>
-            </article>
-            {isExperimentalFeatureEnabled("startHere") ? (
-              <article className="mini-panel-vnext start-here-card">
-                <span>Next action</span>
-                <strong>{startHere.label}</strong>
-                <p>{startHere.reason}</p>
-                <Link to={startHere.to} className="primary-button compact-button">
-                  Go there
-                </Link>
-              </article>
-            ) : null}
-          </div>
-        </details>
-      ) : null}
-
-      {showPlanningPreview ? (
-        <details className="advanced-disclosure">
-          <summary>Presentation flow</summary>
-          {isLoading ? <p className="helper-copy">Loading today&apos;s events...</p> : null}
-          <div className="hq-demo-path">
-            {demoPath.map((step, index) => (
-              <Link key={step.title} to={step.to} className="hq-demo-step">
-                <span>{index + 1}</span>
-                <div>
-                  <small>{step.label}</small>
-                  <strong>{step.title}</strong>
-                  <p>{step.description}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </details>
-      ) : null}
     </main>
   );
 }

@@ -11749,6 +11749,216 @@ button.calendar-detail-card:disabled {
   }
 }
 
+.app-primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.18rem;
+  min-width: 0;
+  padding: 0.16rem;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(35, 48, 51, 0.13)) 70%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card, #f3f7f5) 62%, transparent);
+}
+
+.app-primary-nav a {
+  display: inline-grid;
+  place-items: center;
+  min-height: 34px;
+  padding: 0.4rem 0.62rem;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.78rem;
+  font-weight: 850;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.app-primary-nav a:hover,
+.app-primary-nav a:focus-visible,
+.app-primary-nav a[aria-current="page"] {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 28%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 74%, transparent);
+  color: var(--ui-text-primary, var(--shell-heading-text));
+}
+
+.app-shell-vnext:has(.app-theme-easyhq:not(.command-center-page)) {
+  --shell-accent: #1ea58f;
+  --shell-accent-strong: #00d8b8;
+  --shell-accent-soft: #e5fbf6;
+  --shell-bg-top: #f4f8f8;
+  --shell-bg-bottom: #e9f0ef;
+  --shell-grid-line: rgba(7, 28, 33, 0.055);
+  --shell-page-overlay-1: rgba(0, 216, 184, 0.07);
+  --shell-page-overlay-2: rgba(78, 117, 255, 0.06);
+  --shell-page-text: #1d2a2d;
+  --shell-heading-text: #0c1518;
+  --shell-muted-text: #657477;
+  --shell-card-bg: rgba(255, 255, 255, 0.9);
+  --shell-card-bg-soft: #edf4f3;
+  --shell-card-border: rgba(12, 21, 24, 0.13);
+  --shell-chip-bg: #e7f4f1;
+  --shell-chip-text: #086d60;
+  --ui-bg-page: #f5f8f8;
+  --ui-bg-section: rgba(255, 255, 255, 0.66);
+  --ui-bg-card: #edf4f3;
+  --ui-bg-card-elevated: #ffffff;
+  --ui-bg-input: #ffffff;
+  --ui-bg-empty: #e6efed;
+  --ui-border-subtle: rgba(12, 21, 24, 0.13);
+  --ui-border-strong: rgba(30, 165, 143, 0.32);
+  --ui-text-primary: #101b1e;
+  --ui-text-secondary: #344548;
+  --ui-text-muted: #657477;
+  --ui-button-primary-bg: #0d6f63;
+  --ui-button-primary-text: #ffffff;
+}
+
+.app-shell-vnext:has(.app-theme-easyhq:not(.command-center-page)) .app-header {
+  border-color: rgba(12, 21, 24, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(247, 251, 250, 0.7)),
+    rgba(255, 255, 255, 0.74);
+  box-shadow: 0 16px 44px rgba(8, 20, 24, 0.09);
+}
+
+.app-shell-vnext:has(.app-theme-easyhq:not(.command-center-page)) .app-suite-control {
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.app-shell-vnext:has(.app-theme-easyhq:not(.command-center-page)) .brand-badge {
+  background:
+    linear-gradient(135deg, #08171a, #124f4a 58%, #00d8b8);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 10px 24px rgba(8, 20, 24, 0.18);
+}
+
+.app-theme-easyhq:not(.command-center-page) {
+  --hq-surface: rgba(255, 255, 255, 0.76);
+  --hq-surface-soft: rgba(244, 249, 248, 0.72);
+  --hq-line: rgba(10, 28, 32, 0.12);
+  --hq-shadow: 0 22px 58px rgba(8, 20, 24, 0.1);
+  max-width: 1120px;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-card {
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.42fr);
+  grid-template-areas:
+    "heading summary"
+    "read summary"
+    "next next"
+    "capture capture"
+    "load pace"
+    "quick context";
+  border-color: rgba(10, 28, 32, 0.14);
+  background:
+    linear-gradient(135deg, rgba(9, 24, 28, 0.06), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(247, 252, 251, 0.72));
+  box-shadow: var(--hq-shadow);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(0, 216, 184, 0.16), transparent 28%),
+    linear-gradient(180deg, rgba(78, 117, 255, 0.07), transparent 36%);
+  pointer-events: none;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-card > * {
+  position: relative;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-heading p,
+.app-theme-easyhq:not(.command-center-page) .hq-today-summary span,
+.app-theme-easyhq:not(.command-center-page) .assistant-next-inline span,
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture span,
+.app-theme-easyhq:not(.command-center-page) .hq-context-stack summary span,
+.app-theme-easyhq:not(.command-center-page) .hq-context-stack a span,
+.app-theme-easyhq:not(.command-center-page) .hq-quick-actions span,
+.app-theme-easyhq:not(.command-center-page) .hq-status-strip span,
+.app-theme-easyhq:not(.command-center-page) .assistant-attention-item span {
+  letter-spacing: 0;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-heading h1 {
+  font-size: clamp(2.05rem, 4.6vw, 4.25rem);
+  line-height: 0.96;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-card > strong {
+  max-width: 38ch;
+  font-size: clamp(1.02rem, 1.45vw, 1.18rem);
+  font-weight: 760;
+  line-height: 1.38;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-today-summary,
+.app-theme-easyhq:not(.command-center-page) .assistant-next-inline,
+.app-theme-easyhq:not(.command-center-page) .hq-capacity-signal,
+.app-theme-easyhq:not(.command-center-page) .hq-plan-intensity,
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture,
+.app-theme-easyhq:not(.command-center-page) .hq-context-stack,
+.app-theme-easyhq:not(.command-center-page) .hq-status-strip article {
+  border-color: var(--hq-line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.28)),
+    rgba(255, 255, 255, 0.46);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.app-theme-easyhq:not(.command-center-page) .assistant-next-inline {
+  border-color: rgba(30, 165, 143, 0.28);
+  background:
+    linear-gradient(135deg, rgba(0, 216, 184, 0.13), transparent 48%),
+    rgba(255, 255, 255, 0.62);
+}
+
+.app-theme-easyhq:not(.command-center-page) .assistant-next-inline h2 {
+  font-size: clamp(1.25rem, 2.2vw, 1.72rem);
+}
+
+.app-theme-easyhq:not(.command-center-page) .primary-button {
+  background:
+    linear-gradient(135deg, #083b37, #0d6f63 58%, #17c6aa);
+  box-shadow: 0 10px 26px rgba(13, 111, 99, 0.24);
+}
+
+.app-theme-easyhq:not(.command-center-page) .button-secondary,
+.app-theme-easyhq:not(.command-center-page) .hq-quick-actions a {
+  background: rgba(255, 255, 255, 0.54);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-quick-actions a {
+  min-height: 4.5rem;
+  align-content: center;
+  border-color: rgba(10, 28, 32, 0.1);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-quick-actions strong {
+  font-size: 0.94rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-status-strip {
+  gap: 0.5rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) > .panel-section {
+  padding-top: 1rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) > .panel-section .panel-header h2 {
+  font-size: 0.98rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) .assistant-attention-list {
+  border-color: rgba(10, 28, 32, 0.1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .task-card-vnext.completed,
   .app-shell-vnext.shell-theme-gamer .task-card-vnext.completed,

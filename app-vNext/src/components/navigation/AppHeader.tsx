@@ -8,6 +8,7 @@ export function AppHeader() {
   const location = useLocation();
   const { isAppVisible } = useSettings();
   const visibleItems = appProductItems.filter((item) => !item.appId || isAppVisible(item.appId));
+  const primaryItems = visibleItems.filter((item) => ["Today", "Capture", "Plan", "Notes"].includes(item.label));
   const currentApp = useMemo(() => {
     const pathname = location.pathname;
     if (pathname.startsWith("/app/easylist")) return "Capture";
@@ -36,6 +37,17 @@ export function AppHeader() {
           </div>
 
           <div className="app-header-actions">
+            <nav className="app-primary-nav" aria-label="Primary EasyLife areas">
+              {primaryItems.map((item) => {
+                const isCurrent = location.pathname === item.href || location.pathname.startsWith(item.href.split("/").slice(0, 3).join("/"));
+
+                return (
+                  <Link key={item.href} to={item.href} aria-current={isCurrent ? "page" : undefined}>
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
             <ProductsMenu items={visibleItems} label="More" />
           </div>
         </div>
