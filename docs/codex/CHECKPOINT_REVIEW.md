@@ -1,43 +1,43 @@
 # Checkpoint Review
 
 ## Verdict
-RED
+YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife assistant-reset mission with recent navigation simplification and planning work, but it is not ready to continue unattended because an auth-adjacent file is changed in the branch and multiple review gates remain yellow or missing.
+The branch is still moving toward the EasyLife mission: recent work tightened the assistant reset direction, simplified navigation, and kept the product focused on a calmer one-assistant model. It is not parked yet because 9 unchecked tasks remain and review gates still carry YELLOW follow-up signals.
 
 ## Safety Review
-Risk found: `app-vNext/src/features/auth/routes/LoginPage.tsx` is changed since base. Mission rules forbid unattended auth-related feature file changes unless explicitly approved, so this needs human verification even if the edit was only UI/copy.
+No unsafe files or forbidden-scope changes found in the provided checkpoint data. Working tree is clean, no package/dependency/auth/Firebase/backend/deploy changes are listed.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: assistant shell/navigation simplification passed build; Today/HQ simplification was quarantined before implementation
-- files changed: navigation, HQ, marketing, settings, core feature routes, global styles, and docs; risky auth-adjacent change present in `LoginPage.tsx`
-- commits added: latest HEAD `89115e19` plus many checkpoint/review/task commits since base
-- queue status: 9 unchecked tasks remain
+- Completed tasks in this checkpoint window: assistant shell simplification passed; HQ first-path simplification was attempted but quarantined for needing a concrete slice plan.
+- Files changed: `app-vNext/src/components/navigation/AppHeader.tsx`, `app-vNext/src/components/navigation/appProducts.ts`, plus existing branch changes listed across app and docs.
+- Commits added: latest HEAD is `7785bb3c` (`Codex Robin copy review batch 1`).
+- Queue status: 9 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN; 0 high, 0 medium, 0 low; should not block next tasks
-- Simon design review: YELLOW; says continue but fix visual issues first; should influence next tasks
-- Robin copy review: YELLOW; says continue but fix copy first; should influence next tasks
-- accessibility review: YELLOW; patch warnings soon; should influence next tasks
-- performance review: GREEN; continue
-- Joey security review: GREEN; continue
-- Franky formula review: missing; confirm whether applicable before parking
-- product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured
+- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks.
+- Simon design review: YELLOW; should influence next tasks with visual issues fixed first.
+- Robin copy review: YELLOW; should influence next tasks with copy cleanup before broad UI work.
+- Accessibility review: YELLOW; should influence next tasks with accessibility warnings patched soon.
+- Performance review: GREEN; no next-task constraint.
+- Joey security review: GREEN; no next-task constraint.
+- Franky formula review: missing; no formula blocker indicated, but status should be restored if formulas/spreadsheets enter scope.
+- Product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured, not blocking.
 
 ## Recommended Next Step
-stop for human review
+continue
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Human review should first clear the auth-adjacent `LoginPage.tsx` change and yellow review gates before more mission-forward UI work proceeds.
+- Recommended next batch size: 1
+- Next work mode: repair-first
+- Keep the next batch to one narrow task because Simon, Robin, and accessibility are YELLOW, and the queue includes medium-risk assistant reset work that needs tight slice control.
 
 ## Notes For Human Reviewer
 - Build passed and working tree is clean.
-- Main blocker is safety scope, not build health.
-- Review `LoginPage.tsx` diff for auth/session behavior.
-- Quarantine pattern shows some tasks are still too broad or misclassified.
+- Do not treat missing Product Truth as RED; output says no config.
+- Next task should avoid broad HQ work until it has a concrete one-slice plan.
+- Current queue still contains stale recovery-style tasks that may need cleanup.
