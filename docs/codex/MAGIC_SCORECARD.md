@@ -6540,3 +6540,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite language is clearer, but the assistant-first surface and shell polish are still not fully proven.
 - Debug checkpoint result: WARN (passed)
+
+## 2026-05-07 15:51:20
+
+- Task: User pain: the assistant needs a local command grammar so the UI can feel AI-native before real integrations exist. Skill: api-and-interface-design. Target: app-vNext/src/features/hq/assistantCommandHints.ts, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md. Change: add a tiny frontend-only command hint model with 5-7 example intents for capture, plan, summarize, remember, and clean up, then render one compact hint row on Today. First screen: command hints support the main assistant input/read and do not become a feature inventory. Remove/simplify: one existing generic helper phrase near the command/capture area. Guardrails: local/static UI model only; no real AI/API calls, backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, or persistence changes. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the new local command file, removed phrase, build result, and route inspected. Stop if: the change needs a model provider, network call, settings schema, or backend. Check: a user can see what the assistant can do without reading a marketing explanation. [class:feature risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/hq/assistantCommandHints.ts,app-vNext/src/features/hq/routes/HQPage.tsx,docs/codex/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: unknown
+- Task class: feature
+- Task risk: low
+- Changed files: 2
+- Materiality signal: impact=visible, surface-files=2, structural-files=2, source-lines=42, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite language is clearer, but the assistant-first surface and shell polish are still not fully proven.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-154635
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-154635\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-154635\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-154635\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-154635\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-154635
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-154635\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-154635\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-154635\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-154635\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.

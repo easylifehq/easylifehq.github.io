@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { PageSection } from "@/components/ui/PageSection";
+import { assistantCommandHintRow } from "@/features/hq/assistantCommandHints";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
   formatDuration,
@@ -251,6 +252,8 @@ export function HQPage() {
           <div className="hq-today-summary" aria-label="Today summary">
             <span>Today</span>
             <p>{todaySummary.join(" / ")}</p>
+            <span>Try</span>
+            <p>{assistantCommandHintRow}</p>
           </div>
           <div className="assistant-next-inline" aria-labelledby="assistant-next-title">
             <div>
@@ -284,7 +287,7 @@ export function HQPage() {
           </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
             <span>Capture anything</span>
-            <strong>Type a task, note, event, or deadline</strong>
+            <strong>Open quick capture</strong>
             <em>Open</em>
           </button>
           <details className="hq-context-stack">

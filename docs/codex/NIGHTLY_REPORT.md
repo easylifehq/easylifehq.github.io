@@ -3816,3 +3816,19 @@
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-07 15:51:20
+
+- Task attempted: User pain: the assistant needs a local command grammar so the UI can feel AI-native before real integrations exist. Skill: api-and-interface-design. Target: app-vNext/src/features/hq/assistantCommandHints.ts, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md. Change: add a tiny frontend-only command hint model with 5-7 example intents for capture, plan, summarize, remember, and clean up, then render one compact hint row on Today. First screen: command hints support the main assistant input/read and do not become a feature inventory. Remove/simplify: one existing generic helper phrase near the command/capture area. Guardrails: local/static UI model only; no real AI/API calls, backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, or persistence changes. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the new local command file, removed phrase, build result, and route inspected. Stop if: the change needs a model provider, network call, settings schema, or backend. Check: a user can see what the assistant can do without reading a marketing explanation. [class:feature risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/hq/assistantCommandHints.ts,app-vNext/src/features/hq/routes/HQPage.tsx,docs/codex/ accept:npm.cmd run build]
+- Task class: feature
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/hq/assistantCommandHints.ts, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/hq/assistantCommandHints.ts
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
