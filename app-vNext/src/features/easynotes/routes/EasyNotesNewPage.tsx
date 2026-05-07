@@ -17,5 +17,5 @@ export function EasyNotesNewPage() {
     });
   }, [addNote, navigate]);
 
-  return <LoadingState label="Opening a blank note..." />;
+  return <LoadingState label="Saving a place for this thought..." />;
 }

@@ -404,12 +404,11 @@ export function EasyNotesLibraryPage() {
 
           {!isLoading && filteredNotes.length === 0 ? (
             <div className="empty-card-vnext notes-empty-card notes-suite-empty-card">
-              <span className="notes-empty-suite-label">EasyNotes workspace</span>
-              <strong>{hasFilters ? "No notes match this view" : "No notes yet"}</strong>
+              <strong>{hasFilters ? "No saved memory matches this view" : "No saved memory yet"}</strong>
               <p className="helper-copy">
                 {hasFilters
-                  ? "Try a different search or folder, or clear filters to return to your full EasyNotes workspace."
-                  : "Capture a thought, meeting note, or rough draft here. Your latest notes will be ready to review when you return."}
+                  ? "Try a different search or folder, or clear filters to return to the thoughts you saved for later."
+                  : "Save a thought, meeting note, or rough draft here. It will be ready when Today needs more context."}
               </p>
             </div>
           ) : null}

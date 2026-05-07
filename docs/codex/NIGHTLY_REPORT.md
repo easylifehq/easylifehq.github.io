@@ -3878,3 +3878,20 @@
 - Files changed:
 - app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-07 16:03:44
+
+- Task attempted: User pain: Notes should become assistant memory, not another notebook. Skill: frontend-ui-engineering. Target: app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx, app-vNext/src/features/easynotes/routes/EasyNotesNewPage.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: make one visible copy/layout simplification so creating or reviewing notes feels like saving memory for the assistant. First screen: Notes stays a quiet memory surface tied to Today. Remove/simplify: one vague notebook phrase, repeated card label, or oversized note chrome. Guardrails: frontend-only; preserve editor behavior, notes data shapes/routes, backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, and unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the Notes route, removed/simplified element, changed files, and build result. Stop if: the change needs editor model changes, new persistence, or AI summarization. Check: Notes reads like memory the assistant can use later. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx,app-vNext/src/features/easynotes/routes/EasyNotesNewPage.tsx,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx, app-vNext/src/features/easynotes/routes/EasyNotesNewPage.tsx, app-vNext/src/styles, docs/codex
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx
+- app-vNext/src/features/easynotes/routes/EasyNotesNewPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
