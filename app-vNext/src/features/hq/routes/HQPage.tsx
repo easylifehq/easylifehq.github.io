@@ -13,29 +13,6 @@ import { isCompletedToday, sortActiveTasks } from "@/features/easylist/lib/taskU
 import { useSettings } from "@/features/settings/SettingsContext";
 import { useLastAppRoute } from "@/lib/mobile/appRouteMemory";
 
-const quickActions = [
-  {
-    label: "Capture",
-    detail: "Drop the loose thread.",
-    to: "/app/easylist/add",
-  },
-  {
-    label: "Plan",
-    detail: "Put work into time.",
-    to: "/app/easycalendar/day",
-  },
-  {
-    label: "Inbox",
-    detail: "Review open loops.",
-    to: "/app/easylist/dashboard",
-  },
-  {
-    label: "Notes",
-    detail: "Save the messy bit.",
-    to: "/app/easynotes/new",
-  },
-];
-
 type TodayContextItem = {
   label: string;
   title: string;
@@ -371,14 +348,6 @@ export function HQPage() {
               ))}
             </div>
           </details>
-          <nav className="hq-quick-actions" aria-label="Quick actions">
-            {quickActions.map((action) => (
-              <Link to={action.to} key={action.label}>
-                <strong>{action.label}</strong>
-                <span>{action.detail}</span>
-              </Link>
-            ))}
-          </nav>
         </article>
 
         <div className="hq-status-strip" aria-label="Module status context">
