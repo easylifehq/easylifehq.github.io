@@ -4,29 +4,29 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife assistant/suite mission: recent work tightened navigation, HQ/Today, EasyList/Capture, theme polish, mobile fit, and planning docs. It is not parked yet because 29 unchecked tasks remain and review gates still report medium visual/copy/accessibility concerns.
+The branch is still moving toward the EasyLife mission: recent work keeps pushing Today, Capture, navigation, themes, and review docs toward a calmer connected assistant/suite model. Progress is not parked-ready because 29 unchecked tasks remain and review gates still report medium visual/copy/accessibility follow-up.
 
 ## Safety Review
-No forbidden or high-risk behavior found from the provided checkpoint data. Working tree is clean, build passed, and changed files are limited to frontend app surfaces and `docs/codex/`.
+No forbidden or risky behavior found from the provided state. Working tree is clean, build passed, and changed files are limited to app frontend/docs; no package, auth, Firebase, backend, deploy, or secret files are listed.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: 12 shown, including Phase 10 mobile scan, Phase 11 theme/copy work, Phase 12 polish/readability, EasyList/Capture repair, and assistant reset planning docs.
-- Files changed: frontend navigation, HQ, EasyList, EasyNotes, Calendar, Settings, marketing/product surfaces, global styles, and `docs/codex/` reports/plans.
-- Commits added: yes; HEAD is `4758e815`.
+- Completed tasks in this checkpoint window: 12 recent completed tasks shown, including mobile/readability polish, theme cleanup, empty/error polish, EasyList/Capture repair, and assistant reset planning docs.
+- Files changed: frontend navigation, HQ/Today, EasyList, EasyNotes, EasyCalendar, Settings, global styles, and codex review/planning docs.
+- Commits added: branch includes many commits since `main`; current HEAD is `cc530ebf`.
 - Queue status: 29 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- Visual bug report: YELLOW influence next tasks; 9 medium visual issues should drive repair-first work.
-- Simon design review: YELLOW influence next tasks; continue but fix visual issues first.
-- Robin copy review: YELLOW influence next tasks; continue but fix copy first.
-- Accessibility review: YELLOW influence next tasks; patch warnings soon.
-- Performance review: GREEN no blocking influence.
-- Joey security review: GREEN no blocking influence.
-- Franky formula review: missing; no formula blocker known, but status should be restored if formula surfaces matter.
-- Product truth: missing config, `ok: True`; no RED gate.
+- Visual bug report: YELLOW influence; 9 medium visual issues should shape next work.
+- Simon design review: YELLOW influence; continue but fix visual issues first.
+- Robin copy review: YELLOW influence; continue but fix copy first.
+- Accessibility review: YELLOW influence; patch accessibility warnings soon.
+- Performance review: GREEN no blocker.
+- Joey security review: GREEN no blocker.
+- Franky formula review: missing; no formula gate signal available.
+- Product truth: MISSING but `product truth ok` is true; no PRODUCT_TRUTH.md configured.
 
 ## Recommended Next Step
 patch first
@@ -34,10 +34,10 @@ patch first
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Use one narrow repair because the branch is clean and building, but medium visual issues plus Simon/Robin/accessibility YELLOW gates should be cleared before broader mission-forward work.
+- One sentence explaining why: The build is passing and the tree is clean, but medium visual issues plus Simon/Robin/accessibility YELLOW gates mean the next task should be one narrow repair before mission-forward feature work.
 
 ## Notes For Human Reviewer
-- Build passed and working tree is clean.
-- Not ready to park: queue is not empty.
-- Main risk is quality churn from repeated quarantined HQ/Today repair attempts.
-- Next task should be tightly scoped to one named visual/copy/accessibility issue.
+- Product truth is not configured, but not marked failing.
+- Queue is not empty, so this is not ready to park.
+- Watch repeated quarantine loops around `HQPage.tsx`.
+- Keep next task tightly scoped and build-verified.
