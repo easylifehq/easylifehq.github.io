@@ -4,29 +4,29 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife assistant/suite mission: recent work tightened navigation, Capture/EasyList, Today/HQ, and local assistant command hints. It is not ready to park because review gates still report medium visual issues, copy polish, accessibility warnings, and 27 unchecked tasks.
+The branch is still moving toward the EasyLife assistant reset mission: recent work tightened HQ/Today, Capture/EasyList language, navigation, and local assistant command hints. Progress is meaningful, but the branch is not parked because 26 unchecked tasks remain and review gates still report visual, copy, and accessibility follow-up.
 
 ## Safety Review
-No unsafe behavior found. Working tree is clean, build passed, and changed files stay in frontend/docs scope. No package, auth, Firebase, backend, deploy, secret, or generated-output changes are listed.
+No unsafe behavior found in the reported checkpoint state. Working tree is clean, build passed, and recent changes stayed in frontend/docs scope. Watch `app-vNext/src/features/hq/routes/HQPage.tsx`, `app-vNext/src/styles/globals.css`, and navigation files because repeated repair attempts have concentrated there.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: repaired HQ guardrail loop, added local assistant command hints, and completed EasyList/Capture repair
-- files changed: frontend navigation, HQ, EasyList, Calendar, Notes, Settings, styles, and docs/codex reports/plans
-- commits added: latest HEAD `2b8872cc` plus many prior checkpoint/review/task commits since `main`
-- queue status: 27 unchecked tasks remain
+- completed tasks in this checkpoint window: HQ visual repair, local assistant command hints, Capture/Today language bridge
+- files changed: HQ page, EasyList inbox page, assistant command hints, global styles, navigation/docs across the branch
+- commits added: latest HEAD is `8c01ba87`; many checkpoint/review/task commits exist since `main`
+- queue status: 26 unchecked tasks remain
 
 ## Follow-Up Gate Status
-- visual bug report: YELLOW influence next tasks; 9 medium visual issues remain
-- Simon design review: YELLOW influence next tasks; continue but fix visual issues first
-- Robin copy review: YELLOW influence next tasks; continue but fix copy first
-- accessibility review: YELLOW influence next tasks; patch warnings soon
-- performance review: GREEN no blocker
-- Joey security review: GREEN no blocker
-- Franky formula review: missing; no formula signal available
-- next-task influence: repair-first work should address the yellow visual/copy/accessibility gates before broader mission slices
+- visual bug report: YELLOW; 9 medium visual issues should shape next tasks
+- Simon design review: YELLOW; continue but fix visual issues first
+- Robin copy review: YELLOW; continue but fix copy first
+- accessibility review: YELLOW; patch accessibility warnings soon
+- performance review: GREEN; no next-task blocker
+- Joey security review: GREEN; no next-task blocker
+- Franky formula review: missing; likely not relevant unless spreadsheet/formula work appears
+- Product truth: missing but not failing; no `PRODUCT_TRUTH.md` configured
 
 ## Recommended Next Step
 patch first
@@ -34,10 +34,10 @@ patch first
 ## Next Batch Guidance
 - recommended next batch size: 1
 - next work mode: repair-first
-- one sentence explaining why: The build and tree are healthy, but medium visual issues and YELLOW design/copy/accessibility reviews need one narrow repair slice before continuing broader assistant-reset work.
+- Use one narrow task to address a named medium visual/copy/accessibility issue before continuing mission-forward assistant reset work.
 
 ## Notes For Human Reviewer
-- Product truth is missing, but marked ok and not RED.
-- Branch is clean and build-passing.
+- Build and working tree are clean.
 - Not ready to park because queue is non-empty and review gates are YELLOW.
-- Keep scope small; avoid restarting broad HQ redesign loops.
+- No high visual issues reported.
+- Product truth is missing, not RED.
