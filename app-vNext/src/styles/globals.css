@@ -639,15 +639,6 @@ a {
   flex: 1 1 0;
 }
 
-.menu-link-card .menu-link-status {
-  flex: 0 0 auto;
-  color: var(--ui-text-muted, var(--shell-muted-text));
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
 .sidebar-nav {
   display: grid;
   align-content: start;

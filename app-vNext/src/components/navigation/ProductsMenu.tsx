@@ -151,7 +151,6 @@ export function ProductsMenu({
                 >
                   <span className="menu-link-title">
                     <strong>{item.label}</strong>
-                    {isCurrent ? <span className="menu-link-status">Current</span> : null}
                   </span>
                   {shouldShowDescriptions ? <span className="menu-link-description">{item.description}</span> : null}
                 </Link>
