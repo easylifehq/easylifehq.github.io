@@ -1,9 +1,9 @@
 # Joey Security Review
 
-Generated: 2026-05-06 21:46:25
+Generated: 2026-05-07 03:02:24
 Project: EasyLife
 Branch: codex/product-EasyLife-20260504-231503
-HEAD: 891034b9
+HEAD: bbbc1ffa
 Base branch: main
 
 ## Verdict
@@ -38,9 +38,12 @@ Joey checked the doors, windows, config files, dependency locks, secrets, auth/p
 - app-vNext/src/styles/globals.css
 - docs/codex/ACCESSIBILITY_REVIEW.md
 - docs/codex/AI_ASSISTANT_FLEET_GATES.md
+- docs/codex/AI_ASSISTANT_HQ_RESET_DECISION.md
 - docs/codex/AI_ASSISTANT_STAGE_0_AUDIT.md
 - docs/codex/AI_PERSONAL_ASSISTANT_REBUILD_PLAN.md
+- docs/codex/AUTO_REPAIR.md
 - docs/codex/CHECKPOINT_REVIEW.md
+- docs/codex/JOEY_SECURITY_REVIEW.md
 - docs/codex/MAGIC_SCORECARD.md
 - docs/codex/NEXT_5_TASKS.md
 - docs/codex/NIGHTLY_REPORT.md
