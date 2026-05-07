@@ -6856,3 +6856,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite tone and assistant language improved, but shell hierarchy and first-screen assistant proof are still not strong enough.
 - Debug checkpoint result: WARN (passed)
+
+## 2026-05-07 17:14:19
+
+- Task: User pain: EasyLife needs a small local AI simulation pattern so future real AI can plug in without changing the UI every time. Skill: api-and-interface-design. Target: app-vNext/src/features/hq/assistantCommandHints.ts, app-vNext/src/features/hq/assistantPreview.ts, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md. Change: add a local/static assistant preview helper that returns one suggested next action from hard-coded Today/Capture/Plan/Memory examples and render it compactly. First screen: preview supports the recommended next move and does not pretend to call real AI. Remove/simplify: one over-explained helper line near the recommendation area. Guardrails: local/static frontend only; no real AI/API calls, environment variables, backend, auth, Firebase rules/config, persistence, dependencies, package files, generated output, deployment config, secrets, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the preview helper, removed helper line, build result, and route inspected. Stop if: real provider access, secrets, or data model changes are needed. Check: the UI has a believable AI-ready pattern without fake network behavior. [class:feature risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/hq/assistantCommandHints.ts,app-vNext/src/features/hq/assistantPreview.ts,app-vNext/src/features/hq/routes/HQPage.tsx,docs/codex/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: unknown
+- Task class: feature
+- Task risk: low
+- Changed files: 2
+- Materiality signal: impact=visible, surface-files=2, structural-files=2, source-lines=69, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite tone and assistant language improved, but shell hierarchy and first-screen assistant proof are still not strong enough.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.

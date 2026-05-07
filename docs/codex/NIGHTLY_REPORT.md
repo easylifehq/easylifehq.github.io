@@ -3942,3 +3942,19 @@
 - app-vNext/src/features/hq/routes/CommandCenterPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-07 17:14:19
+
+- Task attempted: User pain: EasyLife needs a small local AI simulation pattern so future real AI can plug in without changing the UI every time. Skill: api-and-interface-design. Target: app-vNext/src/features/hq/assistantCommandHints.ts, app-vNext/src/features/hq/assistantPreview.ts, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md. Change: add a local/static assistant preview helper that returns one suggested next action from hard-coded Today/Capture/Plan/Memory examples and render it compactly. First screen: preview supports the recommended next move and does not pretend to call real AI. Remove/simplify: one over-explained helper line near the recommendation area. Guardrails: local/static frontend only; no real AI/API calls, environment variables, backend, auth, Firebase rules/config, persistence, dependencies, package files, generated output, deployment config, secrets, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the preview helper, removed helper line, build result, and route inspected. Stop if: real provider access, secrets, or data model changes are needed. Check: the UI has a believable AI-ready pattern without fake network behavior. [class:feature risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/hq/assistantCommandHints.ts,app-vNext/src/features/hq/assistantPreview.ts,app-vNext/src/features/hq/routes/HQPage.tsx,docs/codex/ accept:npm.cmd run build]
+- Task class: feature
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/hq/assistantCommandHints.ts, app-vNext/src/features/hq/assistantPreview.ts, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/hq/assistantPreview.ts
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
