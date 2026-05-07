@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
@@ -11,7 +11,6 @@ import {
 } from "@/features/easycalendar/lib/calendarUtils";
 import {
   getPriorityMeta,
-  isCompletedToday,
   isDueToday,
   isOverdue,
   sortActiveTasks,
@@ -33,14 +32,7 @@ type CommandDraft = {
   actionLabel: string;
 };
 
-const commandExamples = [
-  "email Thomas about the final tomorrow 8 min",
-  "schedule study block at 7pm for 45 min",
-  "note finance lab idea",
-  "follow up with Adiesha Friday",
-  "plan my day 20 min",
-  "log workout legs 75 min",
-];
+const commandExample = "add a task, save a note, or plan the next block";
 
 const intentMeta: Record<CommandIntent, { label: string; routeLabel: string }> = {
   task: { label: "Task", routeLabel: "EasyList" },
@@ -166,7 +158,7 @@ function parseCommand(value: string): CommandDraft {
       estimatedLength: estimatedLength || 20,
       category: "Review",
       route: "/app/command",
-      helper: "Review command. Use the review queue and weekly reset layers below.",
+      helper: "Review command. Keep the next decision in this cockpit before opening deeper tools.",
       confidence: "High",
       actionLabel: "Save planning task",
     };
@@ -217,11 +209,10 @@ function parseCommand(value: string): CommandDraft {
 }
 
 export function CommandCenterPage() {
-  const { events, taskBlocks, tasks, addTask, scheduleTask, isLoading, error } = useEasyCalendar();
+  const { events, taskBlocks, tasks, addTask, scheduleTask, error } = useEasyCalendar();
   const location = useLocation();
   const [command, setCommand] = useState("");
-  const [status, setStatus] = useState("Type a command, then approve what EasyLife thinks it is.");
-  const [activeLayer, setActiveLayer] = useState("today");
+  const [status, setStatus] = useState("Type one thing, then choose where it belongs.");
   const funDrinksEnabled = location.hash === "#fun-drinks";
   const today = startOfDay(new Date());
   const parsedCommand = command.trim() ? parseCommand(command) : null;
@@ -229,7 +220,6 @@ export function CommandCenterPage() {
   const activeTasks = useMemo(() => sortActiveTasks(tasks.filter((task) => !task.completed)), [tasks]);
   const overdueTasks = activeTasks.filter(isOverdue);
   const dueTodayTasks = activeTasks.filter(isDueToday);
-  const completedToday = tasks.filter(isCompletedToday);
   const todayEvents = events
     .filter((event) => event.startAt && startOfDay(event.startAt).getTime() === today.getTime())
     .sort((left, right) => (left.startAt?.getTime() || 0) - (right.startAt?.getTime() || 0));
@@ -237,7 +227,6 @@ export function CommandCenterPage() {
   const openMinutes = openWindows.reduce((sum, window) => sum + window.minutes, 0);
   const nextMove = overdueTasks[0] || dueTodayTasks[0] || activeTasks[0] || null;
   const nextEvent = todayEvents[0] || null;
-  const quickWins = activeTasks.filter((task) => (task.estimatedLength || 999) <= 20).slice(0, 4);
   const reviewItems = [
     ...overdueTasks.slice(0, 3).map((task) => ({
       label: "Recover",
@@ -260,15 +249,42 @@ export function CommandCenterPage() {
         }
       : null,
   ].filter((item): item is { label: string; title: string; detail: string; to: string } => Boolean(item)).slice(0, 6);
-
-  useEffect(() => {
-    if (funDrinksEnabled) {
-      setActiveLayer("fun");
-      return;
-    }
-
-    setActiveLayer((currentLayer) => currentLayer === "fun" ? "today" : currentLayer);
-  }, [funDrinksEnabled]);
+  const cockpitStatuses = [
+    {
+      label: "Today",
+      value: nextMove ? nextMove.title : "No task selected",
+      detail: overdueTasks.length
+        ? `${overdueTasks.length} overdue`
+        : dueTodayTasks.length
+          ? `${dueTodayTasks.length} due today`
+          : "Clear for capture",
+      to: nextMove ? "/app/easylist/dashboard" : "/app/easylist/add",
+    },
+    {
+      label: "Inbox",
+      value: `${activeTasks.length} open`,
+      detail: "Capture first, sort later",
+      to: "/app/easylist/dashboard",
+    },
+    {
+      label: "Plan",
+      value: nextEvent ? nextEvent.title || "Next event" : formatDuration(openMinutes),
+      detail: nextEvent
+        ? nextEvent.allDay
+          ? "All day"
+          : `${formatTimeLabel(nextEvent.startAt)} start`
+        : openWindows[0]
+          ? `Open at ${formatTimeLabel(openWindows[0].startAt)}`
+          : "No open room",
+      to: "/app/easycalendar/day",
+    },
+    {
+      label: "Memory",
+      value: "Notes ready",
+      detail: "Save context you will need later",
+      to: "/app/easynotes",
+    },
+  ];
 
   async function saveCommandTask() {
     if (!parsedCommand?.title) return;
@@ -314,13 +330,13 @@ export function CommandCenterPage() {
       <section className="command-hero" aria-labelledby="command-title">
         <div>
           <p className="eyebrow">Today</p>
-          <h1 id="command-title">One calm cockpit. Layers underneath.</h1>
+          <h1 id="command-title">Command the day.</h1>
           <p>
-            EasyLife reads your day, chooses a next move, and keeps deeper systems tucked one tap away.
+            Start with one loose thought. EasyLife can hold it as a task, note, plan item, or review point.
           </p>
         </div>
         <div className="command-hero-readout">
-          <span>Next best move</span>
+          <span>Current state</span>
           <strong>{nextMove ? nextMove.title : "Capture the next loose end"}</strong>
           <p>
             {overdueTasks.length
@@ -340,15 +356,8 @@ export function CommandCenterPage() {
         </div>
       </section>
 
-      <PageSection eyebrow="Command Palette" title="Type anything">
+      <PageSection eyebrow="Command" title="One input">
         <div className="command-palette-panel">
-          <div className="command-example-row" aria-label="Sample commands">
-            {commandExamples.map((example) => (
-              <button key={example} type="button" className="command-example-chip" onClick={() => setCommand(example)}>
-                {example}
-              </button>
-            ))}
-          </div>
           <label className="field-stack">
             <span>Command</span>
             <textarea
@@ -361,7 +370,7 @@ export function CommandCenterPage() {
                 }
               }}
               rows={3}
-              placeholder="Examples: email Thomas about final tomorrow, plan my day 20 min, note idea for finance lab, schedule study block at 7pm"
+              placeholder={`Try: ${commandExample}`}
             />
           </label>
           {parsedCommand ? (
@@ -393,140 +402,28 @@ export function CommandCenterPage() {
         </div>
       </PageSection>
 
-      <section className="command-layer-tabs" aria-label="Today review layers">
-        {[
-          ["today", "Today"],
-          ["review", "Review Queue"],
-          ["plan", "Daily Flow"],
-          ["context", "Context"],
-          ["weekly", "Weekly Reset"],
-          ["email", "Email Actions"],
-          ...(funDrinksEnabled ? [["fun", "Fun + Drinks"]] : []),
-        ].map(([key, label]) => (
-          <button
-            key={key}
-            className={activeLayer === key ? "toggle-button active" : "toggle-button"}
-            type="button"
-            onClick={() => setActiveLayer(key)}
-          >
-            {label}
-          </button>
+      <section className="command-status-row" aria-label="Today, Inbox, Plan, and Memory status">
+        {cockpitStatuses.map((item) => (
+          <Link to={item.to} key={item.label}>
+            <span>{item.label}</span>
+            <strong>{item.value}</strong>
+            <p>{item.detail}</p>
+          </Link>
         ))}
       </section>
 
-      {activeLayer === "today" ? (
-        <PageSection eyebrow="Daily Cockpit" title="The minimum useful picture">
-          <div className="command-metric-grid">
-            <article>
-              <span>Due now</span>
-              <strong>{overdueTasks.length + dueTodayTasks.length}</strong>
-              <p>{overdueTasks.length} overdue / {dueTodayTasks.length} due today</p>
-            </article>
-            <article>
-              <span>Calendar</span>
-              <strong>{todayEvents.length}</strong>
-              <p>{nextEvent ? `Next: ${nextEvent.title}` : "No fixed event next"}</p>
-            </article>
-            <article>
-              <span>Open room</span>
-              <strong>{formatDuration(openMinutes)}</strong>
-              <p>{openWindows[0] ? `First gap at ${formatTimeLabel(openWindows[0].startAt)}` : "No open windows"}</p>
-            </article>
-            <article>
-              <span>Done today</span>
-              <strong>{completedToday.length}</strong>
-              <p>{isLoading ? "Loading..." : "Momentum without clutter"}</p>
-            </article>
-          </div>
-        </PageSection>
+      {reviewItems.length ? (
+        <section className="command-review-strip" aria-label="Needs review">
+          <span>Review</span>
+          <strong>{reviewItems[0].title}</strong>
+          <p>{reviewItems[0].detail}</p>
+          <Link className="button-secondary compact-button" to={reviewItems[0].to}>
+            Open
+          </Link>
+        </section>
       ) : null}
 
-      {activeLayer === "review" ? (
-        <PageSection eyebrow="Smart Review Queue" title="Do, defer, draft, archive, plan">
-          <div className="assistant-attention-list">
-            {reviewItems.length ? reviewItems.map((item) => (
-              <Link className="assistant-attention-item" to={item.to} key={`${item.label}-${item.title}`}>
-                <span>{item.label}</span>
-                <strong>{item.title}</strong>
-                <p>{item.detail}</p>
-              </Link>
-            )) : (
-              <article className="assistant-attention-item">
-                <span>Clear</span>
-                <strong>No review items are shouting.</strong>
-                <p>Open email or capture a thought if something is still in your head.</p>
-              </article>
-            )}
-          </div>
-        </PageSection>
-      ) : null}
-
-      {activeLayer === "plan" ? (
-        <PageSection eyebrow="Daily Planning Flow" title="Three minutes to steer the day">
-          <div className="command-flow-grid">
-            {[
-              ["1", "Review today", `${overdueTasks.length + dueTodayTasks.length} due items and ${todayEvents.length} events.`],
-              ["2", "Choose top 3", nextMove ? `Start with ${nextMove.title}.` : "Capture the one thing that matters."],
-              ["3", "Block time", openWindows[0] ? `Use the ${formatDuration(openWindows[0].minutes)} window at ${formatTimeLabel(openWindows[0].startAt)}.` : "Calendar is full. Keep the list tiny."],
-              ["4", "Clear inbox", "Scan email for asks, drafts, meetings, and archive-only noise."],
-              ["5", "Start", "Open the smallest next action and leave the rest parked."],
-            ].map(([step, title, body]) => (
-              <article key={step}>
-                <span>{step}</span>
-                <strong>{title}</strong>
-                <p>{body}</p>
-              </article>
-            ))}
-          </div>
-        </PageSection>
-      ) : null}
-
-      {activeLayer === "context" ? (
-        <PageSection eyebrow="Context Cards" title="Related systems without dashboard clutter">
-          <div className="command-context-grid">
-            <Link to="/app/easylist/dashboard"><span>Task</span><strong>{nextMove?.title || "No task selected"}</strong><p>Priority, due date, estimated time, and linked time blocks.</p></Link>
-            <Link to="/app/easylist/email"><span>Email</span><strong>Inbox signals</strong><p>Replies, school mail, meetings, drafts, and archive-safe noise.</p></Link>
-            <Link to="/app/easynotes"><span>Notes</span><strong>Recent thinking</strong><p>Capture before deciding whether it becomes a task or project.</p></Link>
-            <Link to="/app/easyprojects"><span>Projects</span><strong>Longer arcs</strong><p>Keep the big plan underneath today’s next action.</p></Link>
-          </div>
-        </PageSection>
-      ) : null}
-
-      {activeLayer === "weekly" ? (
-        <PageSection eyebrow="Weekly Reset" title="A clean sweep for the next seven days">
-          <div className="command-flow-grid">
-            {[
-              ["Overdue", `${overdueTasks.length}`, "Recover or intentionally drop."],
-              ["Waiting", "Email", "Create follow-up tasks from Gmail."],
-              ["Deadlines", `${activeTasks.filter((task) => task.dueDate).length}`, "Make sure every deadline has a next action."],
-              ["Projects", "Review", "Pick one project that deserves a push."],
-              ["People", "Follow up", "Check contacts and pipeline reminders."],
-              ["Health", "Plan", "Put workouts into the week before it fills."],
-            ].map(([label, value, body]) => (
-              <article key={label}>
-                <span>{label}</span>
-                <strong>{value}</strong>
-                <p>{body}</p>
-              </article>
-            ))}
-          </div>
-        </PageSection>
-      ) : null}
-
-      {activeLayer === "email" ? (
-        <PageSection eyebrow="Email Actions Layer" title="Powerful, but approval-first">
-          <div className="email-integration-grid">
-            <article><span>Read</span><strong>Sync Gmail</strong><p>Pull recent inbox, unread, school, or meeting threads.</p></article>
-            <article><span>Extract</span><strong>Find tasks</strong><p>Turn likely asks into review cards before saving anything.</p></article>
-            <article><span>Draft</span><strong>Create Gmail drafts</strong><p>Draft replies after approval. Sending remains manual.</p></article>
-          </div>
-          <div className="task-composer-actions">
-            <Link className="primary-button" to="/app/easylist/email">Open Email Triage</Link>
-          </div>
-        </PageSection>
-      ) : null}
-
-      {activeLayer === "fun" ? (
+      {funDrinksEnabled ? (
         <PageSection eyebrow="Off-hours" title="A tiny plan for drinks without taking over">
           <div id="fun-drinks" className="command-flow-grid">
             {[
