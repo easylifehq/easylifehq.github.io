@@ -337,7 +337,7 @@ export function EasyCalendarDayPage() {
       <PageSection
         eyebrow="Calendar"
         title={formatLongDate(selectedDate)}
-        description="Swipe through days or jump with the week strip."
+        description="Choose a day, then add a block or preview Plan My Day."
       >
         {error ? <p className="error-copy">{error}</p> : null}
         <div className="calendar-day-topbar">
