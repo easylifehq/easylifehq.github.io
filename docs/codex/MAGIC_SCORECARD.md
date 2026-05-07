@@ -6300,3 +6300,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: shell consistency improved, but the assistant-first surface is still not visually proven.
 - Debug checkpoint result: WARN (passed)
+
+## 2026-05-07 11:31:52
+
+- Task: User pain: Today still needs to feel like the app's AI brain instead of a cleaned-up home page. Skill: frontend-ui-engineering. Target: app-vNext/src/features/hq/routes/HQPage.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: reshape the first viewport around one assistant read, one command/capture prompt, and one recommended next move using existing/local data only. First screen: Today command surface dominates before lists, modules, or stats. Remove/simplify: one soft headline, decorative treatment, or secondary block that makes Today feel like a brochure/dashboard. Guardrails: frontend-only; no real AI/API calls, backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the Today simplification, changed files, build result, and /app/hq route inspected. Stop if: real model access, new stored data, or backend behavior is needed. Check: Today answers "what should I do next?" in the first viewport. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/hq/routes/HQPage.tsx,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: unknown
+- Task class: unknown
+- Task risk: unknown
+- Changed files: 3
+- Materiality signal: impact=standard, surface-files=2, structural-files=2, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: shell consistency improved, but the assistant-first surface is still not visually proven.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easylist-visualQa-1-mobile.png
+- Follow-up: Review reported an unresolved P1/P2 finding.

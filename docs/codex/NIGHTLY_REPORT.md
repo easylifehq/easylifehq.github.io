@@ -3747,3 +3747,14 @@
 - Files changed:
 - app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-07 11:31:52
+
+- Task attempted: User pain: Today still needs to feel like the app's AI brain instead of a cleaned-up home page. Skill: frontend-ui-engineering. Target: app-vNext/src/features/hq/routes/HQPage.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: reshape the first viewport around one assistant read, one command/capture prompt, and one recommended next move using existing/local data only. First screen: Today command surface dominates before lists, modules, or stats. Remove/simplify: one soft headline, decorative treatment, or secondary block that makes Today feel like a brochure/dashboard. Guardrails: frontend-only; no real AI/API calls, backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the Today simplification, changed files, build result, and /app/hq route inspected. Stop if: real model access, new stored data, or backend behavior is needed. Check: Today answers "what should I do next?" in the first viewport. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/hq/routes/HQPage.tsx,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+
+- Build result: Quarantined
+- Files changed:
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- app-vNext/src/styles/globals.css
+- docs/codex/RUNTIME_VERIFICATION.md
+- Risks or follow-up needed: Review reported an unresolved P1/P2 finding.
