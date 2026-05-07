@@ -3832,3 +3832,19 @@
 - app-vNext/src/features/hq/assistantCommandHints.ts
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-07 15:56:26
+
+- Task attempted: User pain: Capture, Plan, and Notes still feel like separate destinations instead of one assistant loop. Skill: frontend-ui-engineering. Target: app-vNext/src/features/hq/routes/HQPage.tsx, app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx, docs/codex/NIGHTLY_REPORT.md. Change: add one shared "capture -> plan -> remember" language bridge between Today and EasyList using copy/layout only. First screen: Today still owns the next action while Capture becomes the intake lane. Remove/simplify: one app-suite or task-app phrase that separates EasyList from the assistant model. Guardrails: copy/UI only; no data shape changes, persistence changes, backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names old wording, new wording, build result, and Today/Capture routes inspected. Stop if: the bridge needs new stored relationships or backend sync. Check: Capture reads like the assistant's inbox, not a separate task product. [class:copy risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/hq/routes/HQPage.tsx,app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx,docs/codex/ accept:npm.cmd run build]
+- Task class: copy
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/hq/routes/HQPage.tsx, app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx, docs/codex
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

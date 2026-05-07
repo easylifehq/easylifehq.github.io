@@ -100,7 +100,7 @@ export function HQPage() {
         reason: overdueTasks.length
           ? "This is behind. Handle it, reschedule it, or intentionally release it before checking the rest."
           : "This is due today. Decide the next step before checking anything else.",
-        buttonLabel: "Open task list",
+        buttonLabel: "Review Capture",
         to: "/app/easylist/dashboard",
       };
     }
@@ -108,7 +108,7 @@ export function HQPage() {
       return {
         label: quickWin.title || "Untitled task",
         reason: `${quickWin.estimatedLength || 20} minutes. Clear this small task while the day still has room.`,
-        buttonLabel: "Open task list",
+        buttonLabel: "Review Capture",
         to: "/app/easylist/dashboard",
       };
     }
@@ -244,7 +244,7 @@ export function HQPage() {
         <article className="hq-start-card">
           <div className="hq-start-heading">
             <div>
-              <p>{dayPhase} command</p>
+              <p>Capture -&gt; plan -&gt; remember</p>
               <h1 id="hq-title">Today, reduced.</h1>
             </div>
           </div>
@@ -271,7 +271,7 @@ export function HQPage() {
                 </Link>
               ) : null}
               <Link to="/app/easylist/add" className="button-secondary">
-                Add task
+                Capture
               </Link>
             </div>
           </div>
@@ -286,7 +286,7 @@ export function HQPage() {
             </small>
           </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
-            <span>Capture anything</span>
+            <span>Capture gives Today a clean inbox</span>
             <strong>Open quick capture</strong>
             <em>Open</em>
           </button>

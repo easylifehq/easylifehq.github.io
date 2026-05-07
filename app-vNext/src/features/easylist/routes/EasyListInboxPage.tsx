@@ -13,19 +13,19 @@ export function EasyListInboxPage() {
   );
 
   if (isLoading) {
-    return <LoadingState label="Loading EasyList..." />;
+    return <LoadingState label="Opening Capture..." />;
   }
 
   return (
     <>
       <PageSection
         eyebrow="Capture"
-        title="Inbox capture"
-        description="Add a task here; type today in the row when it belongs on Today, otherwise keep it in this inbox for review."
+        title="Capture inbox"
+        description="Capture -> plan -> remember starts here: drop tasks, notes, emails, or reminders into the assistant's inbox so Today can plan the next move and Notes can keep what matters."
       >
         <div className="easylist-list-picker">
           <label className="field-stack">
-            <span>Add to list</span>
+            <span>Inbox lane</span>
             <input
               list="easylist-list-options"
               value={listName}

@@ -6581,3 +6581,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite tone is clearer, but shell polish and assistant-first evidence are still not strong enough.
 - Debug checkpoint result: WARN (passed)
+
+## 2026-05-07 15:56:26
+
+- Task: User pain: Capture, Plan, and Notes still feel like separate destinations instead of one assistant loop. Skill: frontend-ui-engineering. Target: app-vNext/src/features/hq/routes/HQPage.tsx, app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx, docs/codex/NIGHTLY_REPORT.md. Change: add one shared "capture -> plan -> remember" language bridge between Today and EasyList using copy/layout only. First screen: Today still owns the next action while Capture becomes the intake lane. Remove/simplify: one app-suite or task-app phrase that separates EasyList from the assistant model. Guardrails: copy/UI only; no data shape changes, persistence changes, backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names old wording, new wording, build result, and Today/Capture routes inspected. Stop if: the bridge needs new stored relationships or backend sync. Check: Capture reads like the assistant's inbox, not a separate task product. [class:copy risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/hq/routes/HQPage.tsx,app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx,docs/codex/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: unknown
+- Task class: copy
+- Task risk: low
+- Changed files: 2
+- Materiality signal: impact=visible, surface-files=2, structural-files=2, source-lines=18, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite tone is clearer, but shell polish and assistant-first evidence are still not strong enough.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.
