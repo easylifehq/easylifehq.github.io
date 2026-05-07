@@ -1,9 +1,9 @@
 # Visual Bug Report
 
-Generated: 2026-05-07 15:57:09
+Generated: 2026-05-07 16:04:02
 Project: EasyLife
 Status: No Blocking Visual Bugs
-Artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155652
+Artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-160345
 
 ## Summary
 
@@ -30,55 +30,55 @@ Contract: C:\Dev\easylifehq.github.io\docs\codex\INFORMATION_STAGING.md
    - Selector: `a.site-brand`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 19x48px EL EasyLife
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155652\settings-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-160345\settings-visualQa-1-desktop.png
 
 2. [MEDIUM] small-tap-target on /settings?visualQa=1 (desktop)
    - Selector: `a:nth-of-type(1)`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 71x34px Today
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155652\settings-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-160345\settings-visualQa-1-desktop.png
 
 3. [MEDIUM] small-tap-target on /settings?visualQa=1 (desktop)
    - Selector: `a:nth-of-type(2)`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 70x34px Capture
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155652\settings-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-160345\settings-visualQa-1-desktop.png
 
 4. [MEDIUM] small-tap-target on /settings?visualQa=1 (desktop)
    - Selector: `a:nth-of-type(3)`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 49x34px Plan
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155652\settings-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-160345\settings-visualQa-1-desktop.png
 
 5. [MEDIUM] small-tap-target on /settings?visualQa=1 (desktop)
    - Selector: `a:nth-of-type(4)`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 58x34px Notes
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155652\settings-visualQa-1-desktop.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-160345\settings-visualQa-1-desktop.png
 
 6. [MEDIUM] small-tap-target on /settings?visualQa=1 (mobile)
    - Selector: `a:nth-of-type(1)`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 51x32px Today
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155652\settings-visualQa-1-mobile.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-160345\settings-visualQa-1-mobile.png
 
 7. [MEDIUM] small-tap-target on /settings?visualQa=1 (mobile)
    - Selector: `a:nth-of-type(2)`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 61x32px Capture
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155652\settings-visualQa-1-mobile.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-160345\settings-visualQa-1-mobile.png
 
 8. [MEDIUM] small-tap-target on /settings?visualQa=1 (mobile)
    - Selector: `a:nth-of-type(3)`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 41x32px Plan
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155652\settings-visualQa-1-mobile.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-160345\settings-visualQa-1-mobile.png
 
 9. [MEDIUM] small-tap-target on /settings?visualQa=1 (mobile)
    - Selector: `a:nth-of-type(4)`
    - Issue: Interactive target may be hard to tap.
    - Evidence: 50x32px Notes
-   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155652\settings-visualQa-1-mobile.png
+   - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-160345\settings-visualQa-1-mobile.png
 
 ## Suggested Task Queue Wording
 
