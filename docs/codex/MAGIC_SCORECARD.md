@@ -5992,3 +5992,24 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: navigation and visual consistency improved, but the assistant-first daily surface is still not visually proven.
 - Debug checkpoint result: WARN (passed)
+
+## 2026-05-07 01:36:56
+
+- Task: User pain: Today still risks feeling like a module showroom instead of an assistant command surface. Skill: frontend-ui-engineering. Target: app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md. Change: simplify the default HQ first path after the status strip so Today shows one short read, one recommended next move, capture, and compact context only. First screen: Today/assistant command surface stays dominant before optional modules or deeper daily detail. Remove/simplify: hide or remove one visible block from Attention, Parked, School, Modules, install, presentation/demo copy, or extra stats grids. Guardrails: forbidden scope: frontend-only HQ slice; no backend, auth, payments, dependencies, package files, release config, generated output, credentials, new dashboard, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the hidden/removed HQ element, build result, and route to inspect. Stop if: the change needs backend behavior, data migration, route deletion, or files outside declared scope. Check: /app/hq reads as Today first, not feature inventory. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/hq/routes/,docs/codex/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: unknown
+- Task class: design
+- Task risk: medium
+- Changed files: 0
+- Materiality signal: impact=visible, surface-files=0, structural-files=0, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: navigation and visual consistency improved, but the assistant-first daily surface is still not visually proven.
+- Before visual evidence:
+- None recorded before task.
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003734
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003734\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003734\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003734\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-003734\easylist-visualQa-1-mobile.png
+- Follow-up: Large Phase 3 task requires a concrete slice plan before implementation.
