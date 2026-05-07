@@ -1,44 +1,43 @@
 # Checkpoint Review
 
 ## Verdict
-RED
+YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the assistant-reset mission with recent Today, Capture, command hint, and navigation simplification work, but it is not ready to continue unattended because a forbidden/risky auth-adjacent file is in the branch diff and review gates still report medium visual/copy/accessibility concerns.
+The branch is still moving toward the EasyLife assistant/reset mission: recent completed work tightened Today, Capture, local command hints, and Plan language. It is not parked because 25 unchecked tasks remain and review gates still report medium visual/copy/accessibility follow-up.
 
 ## Safety Review
-Risk found: `app-vNext/src/features/auth/routes/LoginPage.tsx` changed since base, which conflicts with the mission’s forbidden auth-related scope. No backend, Firebase, dependency, deployment, or secret files are listed.
+No forbidden or high-risk files found in the provided change list. Working tree is clean, build passed, and recent touched files stay in app frontend/docs scope.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: HQ guardrail repair, local assistant command hints, Today/Capture copy bridge; latest Plan/Calendar task was quarantined before implementation
-- files changed: multiple app UI/docs files since base, including navigation, HQ, EasyList, EasyCalendar, EasyNotes, Settings, globals CSS, and docs
-- commits added: latest HEAD `c4737bb2` plus many prior checkpoint/review/task commits since `main`
-- queue status: 26 unchecked tasks remain
+- completed tasks in this checkpoint window: EasyList/Capture repair, Today HQ repair, local command hints, Capture/Today language bridge, and Calendar day route repair
+- files changed: frontend route/style/navigation files plus docs/codex review/report files
+- commits added: latest HEAD is `c170a2fd` with multiple commits since `main`
+- queue status: 25 unchecked tasks remain
 
 ## Follow-Up Gate Status
-- visual bug report: YELLOW influence; 9 medium issues should shape repair work
-- Simon design review: YELLOW influence; continue but fix visual issues first
-- Robin copy review: YELLOW influence; continue but fix copy first
-- accessibility review: YELLOW influence; patch warnings soon
-- performance review: GREEN no blocker
-- Joey security review: GREEN no blocker
-- Franky formula review: missing; should not drive next app UI tasks unless formulas/spreadsheets enter scope
-- Product truth: missing config, no configured blocker
+- visual bug report: YELLOW influence next tasks; 9 medium visual issues remain
+- Simon design review: YELLOW influence next tasks; fix visual issues first
+- Robin copy review: YELLOW influence next tasks; fix copy first
+- accessibility review: YELLOW influence next tasks; patch warnings soon
+- performance review: GREEN no blocking influence
+- Joey security review: GREEN no blocking influence
+- Franky formula review: missing; no formula signal available
+- next-task influence: prioritize small repair-first visual/copy/accessibility slices before broader mission work
 
 ## Recommended Next Step
-stop for human review
+continue
 
 ## Next Batch Guidance
 - recommended next batch size: 1
 - next work mode: repair-first
-- Use one tightly scoped human-approved repair because the branch has a forbidden auth-route diff plus medium visual/copy/accessibility review debt.
+- Keep the next batch to one narrow repair because the queue is non-empty, the build is healthy, but Simon/Robin/accessibility and 9 medium visual issues should shape the next task.
 
 ## Notes For Human Reviewer
-- Build passed and working tree is clean.
-- `LoginPage.tsx` needs human review against forbidden auth scope.
-- Medium visual issues remain; no high visual issues reported.
-- Product truth is not configured, so it did not block this checkpoint.
-- Latest Plan/Calendar task was quarantined due to large-slice guardrails before implementation.
+- Product truth is missing but marked ok.
+- No RED blockers from build, security, or performance.
+- Branch is not ready to park because queue remains active.
+- Watch repeated quarantine pattern around broad HQ/Calendar tasks; keep slices small.
