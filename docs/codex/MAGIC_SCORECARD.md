@@ -6262,3 +6262,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: shell consistency improved, but the assistant-first surface is still not visually proven.
 - Debug checkpoint result: not-run (not-run)
+
+## 2026-05-07 11:27:07
+
+- Task: User pain: the current EasyList/Capture repair is blocking the assistant reset, so the run needs to clear that review issue before adding new assistant surfaces. Skill: debugging-and-error-recovery. Target: app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: make exactly one narrow visible repair in the EasyList inbox/capture surface so it reads as assistant Inbox/Capture without adding task behavior. First screen: Capture supports Today and does not become a separate dashboard. Remove/simplify: one repeated header, vague helper phrase, oversized chrome layer, or review-blocking proof gap. Guardrails: frontend-only; preserve task data shapes, task persistence, existing routes, auth, Firebase rules/config, backend, payments, dependencies, package files, generated output, deployment config, secrets, and unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md and MAGIC_SCORECARD.md name the repaired review issue, changed files, build result, and EasyList route inspected. Stop if: the repair needs persistence/model changes, external integrations, or files outside declared scope. Check: Capture has one clearer Inbox outcome without expanding scope. [class:bugfix risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: unknown
+- Task class: bugfix
+- Task risk: low
+- Changed files: 1
+- Materiality signal: impact=visible, surface-files=1, structural-files=1, source-lines=4, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: shell consistency improved, but the assistant-first surface is still not visually proven.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-104644\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.

@@ -3732,3 +3732,18 @@
 - app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
 - docs/codex/RUNTIME_VERIFICATION.md
 - Risks or follow-up needed: Review reported an unresolved P1/P2 finding.
+
+## 2026-05-07 11:27:07
+
+- Task attempted: User pain: the current EasyList/Capture repair is blocking the assistant reset, so the run needs to clear that review issue before adding new assistant surfaces. Skill: debugging-and-error-recovery. Target: app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: make exactly one narrow visible repair in the EasyList inbox/capture surface so it reads as assistant Inbox/Capture without adding task behavior. First screen: Capture supports Today and does not become a separate dashboard. Remove/simplify: one repeated header, vague helper phrase, oversized chrome layer, or review-blocking proof gap. Guardrails: frontend-only; preserve task data shapes, task persistence, existing routes, auth, Firebase rules/config, backend, payments, dependencies, package files, generated output, deployment config, secrets, and unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md and MAGIC_SCORECARD.md name the repaired review issue, changed files, build result, and EasyList route inspected. Stop if: the repair needs persistence/model changes, external integrations, or files outside declared scope. Check: Capture has one clearer Inbox outcome without expanding scope. [class:bugfix risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Task class: bugfix
+- Task risk: low
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx, app-vNext/src/styles, docs/codex
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

@@ -20,8 +20,8 @@ export function EasyListInboxPage() {
     <>
       <PageSection
         eyebrow="Capture"
-        title="Add task"
-        description="Write one or more clear task rows. Details stay optional until the task needs them."
+        title="Inbox capture"
+        description="Add a task here; type today in the row when it belongs on Today, otherwise keep it in this inbox for review."
       >
         <div className="easylist-list-picker">
           <label className="field-stack">
