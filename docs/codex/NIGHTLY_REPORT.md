@@ -3705,3 +3705,20 @@
 - app-vNext/src/styles/globals.css
 - docs/codex/RUNTIME_VERIFICATION.md
 - Risks or follow-up needed: Review reported an unresolved P1/P2 finding.
+
+## 2026-05-07 10:44:19
+
+- Task attempted: User pain: the assistant shell should expose Today, Capture, Plan, and Notes clearly without making More feel like a second dashboard. Skill: frontend-ui-engineering. Target: app-vNext/src/components/navigation/AppHeader.tsx, app-vNext/src/components/navigation/ProductsMenu.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: make the header/More interaction more compact and technical while preserving all existing routes. First screen: primary nav reinforces Today as the start. Remove/simplify: one redundant menu label, group description, or cramped nav treatment. Guardrails: frontend-only; no route deletion, backend, auth, payments, dependencies, package files, generated output, deployment config, secrets, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the shell change, build result, and desktop/mobile routes inspected. Stop if: this requires routing rewrites or settings schema changes. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/components/navigation/,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/components/navigation, app-vNext/src/styles, docs/codex
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/components/navigation/AppHeader.tsx
+- app-vNext/src/components/navigation/ProductsMenu.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

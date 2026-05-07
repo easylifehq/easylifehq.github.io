@@ -6183,3 +6183,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite consistency is better, but the assistant-first daily surface is still not visually proven.
 - Debug checkpoint result: FAIL (failed)
+
+## 2026-05-07 10:44:19
+
+- Task: User pain: the assistant shell should expose Today, Capture, Plan, and Notes clearly without making More feel like a second dashboard. Skill: frontend-ui-engineering. Target: app-vNext/src/components/navigation/AppHeader.tsx, app-vNext/src/components/navigation/ProductsMenu.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: make the header/More interaction more compact and technical while preserving all existing routes. First screen: primary nav reinforces Today as the start. Remove/simplify: one redundant menu label, group description, or cramped nav treatment. Guardrails: frontend-only; no route deletion, backend, auth, payments, dependencies, package files, generated output, deployment config, secrets, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the shell change, build result, and desktop/mobile routes inspected. Stop if: this requires routing rewrites or settings schema changes. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/components/navigation/,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: unknown
+- Task class: design
+- Task risk: medium
+- Changed files: 3
+- Materiality signal: impact=visible, surface-files=3, structural-files=3, source-lines=73, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite consistency is better, but the assistant-first daily surface is still not visually proven.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.

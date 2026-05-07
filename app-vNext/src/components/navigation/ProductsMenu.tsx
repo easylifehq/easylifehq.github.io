@@ -13,6 +13,7 @@ export type ProductsMenuItem = {
 type ProductsMenuProps = {
   items: ProductsMenuItem[];
   label?: string;
+  panelLabel?: string;
   className?: string;
   panelClassName?: string;
   showDescriptions?: boolean;
@@ -21,6 +22,7 @@ type ProductsMenuProps = {
 export function ProductsMenu({
   items,
   label = "Products",
+  panelLabel,
   className = "",
   panelClassName = "",
   showDescriptions = false,
@@ -28,7 +30,7 @@ export function ProductsMenu({
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const hasGroups = items.some((item) => item.group);
-  const shouldShowDescriptions = showDescriptions || hasGroups;
+  const shouldShowDescriptions = showDescriptions;
   const groupedItems = items.reduce<Array<{ label: string; description?: string; items: ProductsMenuItem[] }>>(
     (groups, item) => {
       const label = item.group ?? "";
@@ -113,7 +115,7 @@ export function ProductsMenu({
 
       <div className={`menu-panel${isOpen ? " open" : ""}${panelClassName ? ` ${panelClassName}` : ""}`}>
         <div className="menu-panel-header">
-          <strong>{label}</strong>
+          <strong>{panelLabel ?? label}</strong>
           <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)}>
             Close
           </button>
@@ -123,7 +125,7 @@ export function ProductsMenu({
             {group.label ? (
               <div className="menu-link-group-header">
                 <strong>{group.label}</strong>
-                {group.description ? <span>{group.description}</span> : null}
+                {shouldShowDescriptions && group.description ? <span>{group.description}</span> : null}
               </div>
             ) : null}
             {group.items.map((item) => {
