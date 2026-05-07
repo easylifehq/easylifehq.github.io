@@ -4,41 +4,41 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife mission: recent work tightens Today, Capture, Plan, Notes, and More into a more unified assistant model. Progress is real, but the remaining queue and review gates show polish and proof work still need to drive the next batch.
+The branch is still moving toward the EasyLife assistant/reset mission with small frontend and docs slices that reduce separate-app feel across Today, Capture, Plan, Notes, More, and Command Center. It is not parked: 22 unchecked tasks remain and review gates still point to visual, copy, and accessibility follow-up.
 
 ## Safety Review
-No forbidden or high-risk files found in the provided changed-file set. Working tree is clean, build passed, and recent changes stayed in frontend/docs scope.
+No forbidden or high-risk behavior found from the provided state. Working tree is clean, build passed, and changed files stay in app frontend/docs scope.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: Today guardrail repair, local assistant command hints, Today/Capture copy bridge, Plan day-route simplification, Notes memory simplification, More menu simplification.
-- Files changed: `HQPage.tsx`, `assistantCommandHints.ts`, `EasyListInboxPage.tsx`, `EasyCalendarDayPage.tsx`, `EasyNotesLibraryPage.tsx`, `EasyNotesNewPage.tsx`, `ProductsMenu.tsx`, `globals.css`, plus related docs.
-- Commits added: latest HEAD is `d70a01ac`; multiple checkpoint/review/task commits exist since base.
-- Queue status: 23 unchecked tasks remain.
+- completed tasks in this checkpoint window: local command hints, Today/Capture language bridge, Plan day-route simplification, Notes memory copy/layout simplification, More menu reduction, Command Center cockpit tightening
+- files changed: frontend navigation, HQ, EasyList, EasyCalendar, EasyNotes, settings/styles, and codex review/planning docs
+- commits added: latest HEAD `02ff3aaa` plus many checkpoint/review/task commits since `main`
+- queue status: 22 unchecked tasks remain
 
 ## Follow-Up Gate Status
-- Visual bug report: YELLOW influence; 9 medium visual issues should shape the next task.
-- Simon design review: YELLOW influence; continue but fix visual issues first.
-- Robin copy review: YELLOW influence; continue but fix copy first.
-- Accessibility review: YELLOW influence; patch accessibility warnings soon.
-- Performance review: GREEN; no blocker.
-- Joey security review: GREEN; no blocker.
-- Franky formula review: missing; no current formula blocker, but gate is incomplete.
-- Product truth: missing config, not blocking because product truth ok is `True`.
+- visual bug report: YELLOW influence next tasks; 9 medium issues remain
+- Simon design review: YELLOW influence next tasks; continue but fix visual issues first
+- Robin copy review: YELLOW influence next tasks; continue but fix copy first
+- accessibility review: YELLOW influence next tasks; patch warnings soon
+- performance review: GREEN no blocking influence
+- Joey security review: GREEN no blocking influence
+- Franky formula review: missing no formula signal available
+- Product truth: missing `PRODUCT_TRUTH.md`, but product truth ok is true; no RED gate
 
 ## Recommended Next Step
 patch first
 
 ## Next Batch Guidance
-- Recommended next batch size: 1
-- Next work mode: repair-first
-- Keep the next batch to one narrow repair because review gates are yellow, visual medium issues remain, and the queue still contains several broad tasks that have previously triggered quarantine.
+- recommended next batch size: 1
+- next work mode: repair-first
+- one sentence explaining why: The branch is clean and building, but medium visual/copy/accessibility gates should be reduced with one narrow repair before more mission-forward expansion.
 
 ## Notes For Human Reviewer
-- Working tree is clean.
-- Build passed.
+- Build passed and tree is clean.
+- No high visual issues reported.
 - Product truth file is not configured.
-- Medium visual debt remains.
-- Queue still has 23 unchecked tasks, so this is not parked/ready.
+- Queue still contains several overlapping assistant-reset and recovery tasks.
+- Watch for repeated quarantines caused by broad task wording or missing slice plans.
