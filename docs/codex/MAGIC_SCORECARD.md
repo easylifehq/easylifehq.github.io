@@ -5898,3 +5898,19 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-213825\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260505-213825\easylist-visualQa-1-mobile.png
 - Follow-up: Visible/showpiece task has docs-only or non-product scope. Add a product surface scope such as src/, public/, content/, or styles/ before implementation.
+
+## Batch 1 QA - 2026-05-06 22:02:08
+
+- Active work pack: unknown
+- Batch impact mode: visible
+- Fresh QA evidence:
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260506-215950\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260506-215950\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260506-215950\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260506-215950\easylist-visualQa-1-mobile.png
+- Checkpoint verdict: YELLOW
+- Simon verdict: YELLOW
+- Robin verdict: YELLOW
+- Joey verdict: GREEN
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: visual consistency improved, but the active assistant direction is still not visible enough in the product surface.
+- Debug checkpoint result: FAIL (failed)
