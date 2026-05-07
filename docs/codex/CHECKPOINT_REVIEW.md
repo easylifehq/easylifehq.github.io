@@ -4,40 +4,40 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife mission: recent work tightened the assistant reset direction, simplified navigation, and kept the product focused on a calmer one-assistant model. It is not parked yet because 9 unchecked tasks remain and review gates still carry YELLOW follow-up signals.
+The branch is still moving toward the EasyLife assistant-reset mission. Recent work tightened navigation and HQ direction, but 18 unchecked tasks remain and review gates still call for visual, copy, and accessibility polish before broad continuation.
 
 ## Safety Review
-No unsafe files or forbidden-scope changes found in the provided checkpoint data. Working tree is clean, no package/dependency/auth/Firebase/backend/deploy changes are listed.
+No forbidden or high-risk behavior found from the provided status. Working tree is clean, build passed, and changed files are limited to app UI/source and `docs/codex` review/planning files.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: assistant shell simplification passed; HQ first-path simplification was attempted but quarantined for needing a concrete slice plan.
-- Files changed: `app-vNext/src/components/navigation/AppHeader.tsx`, `app-vNext/src/components/navigation/appProducts.ts`, plus existing branch changes listed across app and docs.
-- Commits added: latest HEAD is `7785bb3c` (`Codex Robin copy review batch 1`).
-- Queue status: 9 unchecked tasks remain.
+- completed tasks in this checkpoint window: assistant shell simplification landed; latest repair cleared a visible/proof loop in `HQPage.tsx`
+- files changed: multiple app UI files under `app-vNext/src/` plus `docs/codex` reports/planning docs since base
+- commits added: latest HEAD `c6e158d6 Codex checkpoint batch 1 task 1`
+- queue status: 18 unchecked tasks remain
 
 ## Follow-Up Gate Status
-- Visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks.
-- Simon design review: YELLOW; should influence next tasks with visual issues fixed first.
-- Robin copy review: YELLOW; should influence next tasks with copy cleanup before broad UI work.
-- Accessibility review: YELLOW; should influence next tasks with accessibility warnings patched soon.
-- Performance review: GREEN; no next-task constraint.
-- Joey security review: GREEN; no next-task constraint.
-- Franky formula review: missing; no formula blocker indicated, but status should be restored if formulas/spreadsheets enter scope.
-- Product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured, not blocking.
+- visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks
+- Simon design review: YELLOW, continue but fix visual issues first; should shape the next task
+- Robin copy review: YELLOW, continue but fix copy first; should shape the next task
+- accessibility review: YELLOW, continue but patch warnings soon; should influence near-term tasks
+- performance review: GREEN; no immediate influence
+- Joey security review: GREEN; no immediate influence
+- Franky formula review: missing; no formula-specific blocker identified, but gate is incomplete
+- product truth: MISSING with `Product truth ok: True`; no configured product-truth blocker
 
 ## Recommended Next Step
 continue
 
 ## Next Batch Guidance
-- Recommended next batch size: 1
-- Next work mode: repair-first
-- Keep the next batch to one narrow task because Simon, Robin, and accessibility are YELLOW, and the queue includes medium-risk assistant reset work that needs tight slice control.
+- recommended next batch size: 1
+- next work mode: repair-first
+- Keep the next batch to one narrow assistant-reset repair because Simon, Robin, and accessibility are all YELLOW and the queue already contains focused UI/copy/accessibility-safe slices.
 
 ## Notes For Human Reviewer
-- Build passed and working tree is clean.
-- Do not treat missing Product Truth as RED; output says no config.
-- Next task should avoid broad HQ work until it has a concrete one-slice plan.
-- Current queue still contains stale recovery-style tasks that may need cleanup.
+- Branch is clean and build-passing.
+- Not ready to park because 18 unchecked tasks remain.
+- Prefer the next task that fixes visible/copy polish on the assistant shell or Today first viewport.
+- Avoid broad planning loops; keep BatchSize 1.
