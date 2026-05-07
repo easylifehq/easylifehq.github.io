@@ -1,43 +1,43 @@
 # Checkpoint Review
 
 ## Verdict
-RED
+YELLOW
 
 ## Progress Against Mission
-The branch is moving toward the EasyLife assistant-reset mission with recent navigation, HQ, and EasyList simplification work, but it is not ready to continue unattended because review debt remains and an auth-related file appears in the changed-files set.
+The branch is still moving toward the EasyLife assistant-reset mission: recent work simplified the shell/navigation and repaired the EasyList/Capture surface so it reads more like an assistant inbox. Progress is real, but not ready to park because 29 unchecked tasks remain and review gates still point to visual, copy, and accessibility follow-up.
 
 ## Safety Review
-Risk found: `app-vNext/src/features/auth/routes/LoginPage.tsx` is changed since base, and the mission forbids unattended auth-related feature file changes. No backend, Firebase, dependency, deploy, secret, or generated-output changes are listed.
+No forbidden or high-risk behavior found. Working tree is clean, build passed, and recent changes stayed in frontend/docs scope. Watch `app-vNext/src/features/auth/routes/LoginPage.tsx` in the total branch diff because auth-adjacent files are sensitive, but no current blocking signal is reported.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: recent shell/header compacting passed; EasyList/Capture simplification was quarantined for unresolved P1/P2 review finding
-- files changed: working tree clean; branch diff includes app UI files, docs, styles, and `LoginPage.tsx`
-- commits added: latest HEAD `ea36ef6f` plus multiple Codex review/repair commits since base
-- queue status: 17 unchecked tasks remain
+- Completed tasks in this checkpoint window: assistant shell/navigation simplification; EasyList/Capture blocker repair; one prior header/More compactness pass.
+- Files changed: `AppHeader.tsx`, `ProductsMenu.tsx`, `globals.css`, `EasyListInboxPage.tsx`, plus accumulated branch app/docs changes.
+- Commits added: latest HEAD is `422d73f9` with many checkpoint/review commits since `main`.
+- Queue status: 29 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- visual bug report: YELLOW influence next tasks; 9 medium visual issues should be patched before mission-forward work
-- Simon design review: YELLOW influence next tasks; continue but fix visual issues first
-- Robin copy review: YELLOW influence next tasks; continue but fix copy first
-- accessibility review: YELLOW influence next tasks; patch accessibility warnings soon
-- performance review: GREEN no blocking influence
-- Joey security review: GREEN no blocking influence
-- Franky formula review: missing; should be restored or explicitly marked not applicable before final park
-- product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured
+- Visual bug report: YELLOW influence next tasks; 9 medium visual issues remain.
+- Simon design review: YELLOW influence next tasks; continue but fix visual issues first.
+- Robin copy review: YELLOW influence next tasks; continue but fix copy first.
+- Accessibility review: YELLOW influence next tasks; patch warnings soon.
+- Performance review: GREEN no blocking influence.
+- Joey security review: GREEN no blocking influence.
+- Franky formula review: missing; not blocking unless spreadsheet/formula work resumes.
+- Product truth: MISSING but `ok: True`; no configured `PRODUCT_TRUTH.md`.
 
 ## Recommended Next Step
-stop for human review
+patch first
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Human review should decide whether the auth-route diff is acceptable before any unattended repair continues.
+- Recommended next batch size: 1
+- Next work mode: repair-first
+- Use one narrow repair because review gates already identify medium visual/copy/accessibility debt, and the queue has enough mission-forward work waiting after those gates are cleared.
 
 ## Notes For Human Reviewer
-- Build is green and working tree is clean.
-- RED is due to forbidden/risky auth-related file presence, not build failure.
-- There are still 9 medium visual issues plus Simon/Robin/accessibility YELLOW gates.
-- The queue is not empty; next safe work should be one bounded repair only after review.
+- Branch is clean and build-passing.
+- Do not park yet; queue is not empty.
+- Prioritize the named EasyLife assistant reset surfaces: Today, Capture, Plan, Notes, More.
+- Keep avoiding backend, auth, Firebase, deployment, dependency, and package files.
