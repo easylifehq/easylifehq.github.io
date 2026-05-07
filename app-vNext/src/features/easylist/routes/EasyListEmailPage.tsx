@@ -132,7 +132,7 @@ function inferKind(text: string): EmailSuggestionKind {
   const lower = text.toLowerCase();
 
   if (/\b(meeting|calendar|tomorrow|available|join|appointment|call)\b/.test(lower)) return "event";
-  if (/\b(invoice|statement|payment|billing|fee|charge|due back|late|deadline|due)\b/.test(lower)) return "deadline";
+  if (/\b(invoice|statement|pay(?:ment)?|bill(?:ing)?|fee|charge|due back|late|deadline|due)\b/.test(lower)) return "deadline";
   if (/\b(reply|respond|let me know|confirm|question|can you|would you|follow up|follow-up)\b/.test(lower)) return "follow-up";
   return "task";
 }
@@ -178,7 +178,7 @@ function inferCategory(kind: EmailSuggestionKind, text: string) {
 
   if (/\b(professor|assignment|exam|final|canvas|class|homework)\b/.test(lower)) return "School";
   if (/\b(rent|apartment|lease|landlord|maintenance)\b/.test(lower)) return "Home";
-  if (/\b(payment|invoice|statement|card|charge|fee)\b/.test(lower)) return "Finance";
+  if (/\b(pay(?:ment)?|invoice|statement|card|charge|fee)\b/.test(lower)) return "Finance";
   if (/\b(interview|resume|job|application)\b/.test(lower)) return "Work";
   if (kind === "event") return "Calendar";
   return "Admin";
