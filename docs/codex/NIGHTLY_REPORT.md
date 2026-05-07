@@ -3895,3 +3895,18 @@
 - app-vNext/src/features/easynotes/routes/EasyNotesNewPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-07 16:05:10
+
+- Task attempted: User pain: More should feel like optional powers under the assistant, not a junk drawer of apps. Skill: frontend-ui-engineering. Target: app-vNext/src/components/navigation/ProductsMenu.tsx, app-vNext/src/components/navigation/appProducts.ts, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: make one grouping/copy/style reduction so workout, projects, pipeline/jobs, contacts, statistics, school, and fun/drinks stay secondary. First screen: Today, Capture, Plan, Notes, and More remain the core model. Remove/simplify: one optional module label, group description, or menu treatment that makes optional modules feel primary. Guardrails: frontend-only; no route deletion, settings schema changes, backend, auth, payments, dependencies, package files, generated output, deployment config, secrets, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the optional-module change, build result, and desktop/mobile menu inspected. Stop if: the change requires deleting routes or changing stored settings. Check: More is discoverable but not competing with Today. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/components/navigation/ProductsMenu.tsx,app-vNext/src/components/navigation/appProducts.ts,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/components/navigation/ProductsMenu.tsx, app-vNext/src/components/navigation/appProducts.ts, app-vNext/src/styles, docs/codex
+- Acceptance checks: npm.cmd run build
+- Implementation scale: large
+- Build result: Quarantined
+- Files changed:
+- None
+- Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.
