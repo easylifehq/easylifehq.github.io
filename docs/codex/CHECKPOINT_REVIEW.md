@@ -4,40 +4,41 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife assistant reset: recent work tightened navigation, Today/HQ, theme polish, mobile/readability, and planning docs. Progress is uneven because the queue still contains 18 unchecked tasks and recent recovery loops/quarantines show the fleet still needs tighter task gating.
+The branch is still moving toward the EasyLife mission: recent work continues simplifying the assistant shell, Today/HQ surface, navigation, themes, mobile fit, and review docs toward a calmer connected suite. It is not parked yet because 17 tasks remain unchecked and review gates still report medium visual/copy/accessibility concerns.
 
 ## Safety Review
-No forbidden or risky sensitive files found in the provided changed-file list. Changes stay in `app-vNext/src/` UI surfaces and `docs/codex/`. Working tree is clean.
+No forbidden or high-risk behavior found from the provided state. Working tree is clean, build passed, and changed files stay in frontend/docs scope. Watch `app-vNext/src/features/auth/routes/LoginPage.tsx` in review because auth-adjacent UI files are sensitive even if logic was not reported as changed.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: 12 shown, including mobile/readability polish, theme polish, empty/error state polish, Stage 0 assistant audit, HQ reset decision, and small visible recovery repairs.
-- Files changed: navigation, HQ/Today, EasyList, EasyCalendar, EasyNotes, Settings, marketing, global styles, and `docs/codex/` review/planning docs.
-- Commits added: yes; latest HEAD is `6756b2bc` (`Codex quarantine failed task batch 1 task 1`).
-- Queue status: 18 unchecked tasks remain.
+- completed tasks in this checkpoint window: 12 shown recently, including mobile polish, theme refinement, assistant reset planning, shell simplification, and small HQ/marketing/navigation repairs
+- files changed: frontend navigation, HQ, EasyList, EasyCalendar, EasyNotes, EasyWorkout, Settings, marketing, global styles, and codex review/planning docs
+- commits added: latest HEAD `6c32481d` plus many checkpoint/review/repair commits since `main`
+- queue status: 17 unchecked tasks remain
 
 ## Follow-Up Gate Status
-- Visual bug report: YELLOW influence; 10 medium visual issues, fix visual polish before broad new work.
-- Simon design review: YELLOW influence; continue but fix visual issues first.
-- Robin copy review: YELLOW influence; continue but fix copy first.
-- Accessibility review: YELLOW influence; patch warnings soon.
-- Performance review: GREEN no blocking influence.
-- Joey security review: GREEN no blocking influence.
-- Franky formula review: missing; no formula-specific blocker identified, but gate is incomplete.
-- Product truth: MISSING but `ok: True`; no configured `PRODUCT_TRUTH.md`.
+- visual bug report: YELLOW influence next tasks; 10 medium visual issues, no high issues
+- Simon design review: YELLOW influence next tasks; continue but fix visual issues first
+- Robin copy review: YELLOW influence next tasks; continue but fix copy first
+- accessibility review: YELLOW influence next tasks; patch warnings soon
+- performance review: GREEN no blocking influence
+- Joey security review: GREEN no blocking influence
+- Franky formula review: missing; should be noted but does not block this frontend/docs branch unless formula surfaces are touched
+- Product truth: MISSING, but `Product truth ok: True`; no `PRODUCT_TRUTH.md` configured
 
 ## Recommended Next Step
 patch first
 
 ## Next Batch Guidance
-- Recommended next batch size: 1
-- Next work mode: repair-first
-- The next task should address one concrete visual/copy/accessibility concern because review gates are YELLOW and recent quarantines show broad packets are causing loop risk.
+- recommended next batch size: 1
+- next work mode: repair-first
+- Keep the next batch to one narrow UI/copy/accessibility repair because the build is healthy, but Simon/Robin/accessibility gates still name non-blocking cleanup before mission-forward work continues.
 
 ## Notes For Human Reviewer
-- Build passed and tree is clean.
-- Not ship-ready because unchecked queue remains and visual/copy/accessibility gates are YELLOW.
-- Product truth is not configured, but not RED.
-- Keep next task tightly scoped to one UI surface with `npm.cmd run build` proof.
+- Build passed and working tree is clean.
+- Not ready to park: queue is not empty.
+- No high visual issues reported.
+- Medium visual issues and copy/accessibility warnings should shape the next task.
+- Product truth is missing by configuration, not failing.
