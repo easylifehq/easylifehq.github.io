@@ -147,3 +147,12 @@
 - Repair Trigger: LOOPING_QUALITY: repair active pack before fresh work
 - Repair Return Phase: shape
 - Task: - [ ] Repair lane for LOOPING_QUALITY in Pack 1 - Product Spine: inspect the latest MAGIC_SCORECARD, QUALITY_QUARANTINE, Simon, Robin, Joey, Visual, and nightly report notes, then make exactly one smallest blocker-clearing repair that addresses 'repair active pack before fresh work'; preserve the prior product phase, prefer reducing churn over adding features, keep No More Features Lock true. First screen: keep the current primary screen job dominant and move repaired helper/detail content behind the existing clear action. Avoid backend, secrets, package/dependency files, deployment config, generated output, broad rewrites, and unrelated files. [class:bugfix risk:low mode:single impact:visible surface:mixed scope:src/,app-vNext/src/,css/,js/,wine.html,index.html]
+
+## 2026-05-07 02:52:32
+
+- State: LOOPING_QUALITY
+- Budget: OK: commits 1, quarantines 4, quality 0
+- Recommendation: repair active pack before fresh work
+- Repair Trigger: LOOPING_QUALITY: repair active pack before fresh work
+- Repair Return Phase: proof
+- Task: - [ ] Repair lane for LOOPING_QUALITY in unknown: inspect the latest MAGIC_SCORECARD, QUALITY_QUARANTINE, Simon, Robin, Joey, Visual, and nightly report notes, then make exactly one smallest blocker-clearing repair that addresses 'repair active pack before fresh work'; preserve the prior product phase, prefer reducing churn over adding features, keep No More Features Lock true. Skill: debugging-and-error-recovery. Target: src/, app-vNext/src/, css/, js/, wine.html, index.html, docs/codex/. Change: clear the smallest visible or proof blocker named by the reports. First screen: keep the current primary screen job dominant and move repaired helper/detail content behind the existing clear action. Remove/simplify: one blocker, repeated label, vague phrase, cramped control, or misleading visible detail. Guardrails: avoid backend, secrets, package/dependency files, deployment config, generated output, broad rewrites, and unrelated files. Acceptance: run the documented ship build/static check. Proof: NIGHTLY_REPORT.md and MAGIC_SCORECARD.md record the repaired blocker and any remaining follow-up. Stop if: the reports disagree, the fix requires sensitive scope, or the same quality loop repeats. Check: latest review output no longer names the same blocker. [class:bugfix risk:low mode:single impact:visible surface:mixed scope:src/,app-vNext/src/,css/,js/,wine.html,index.html,docs/codex/]
