@@ -1,6 +1,6 @@
 ﻿# Performance Review
 
-Generated: 2026-05-01 17:37:54
+Generated: 2026-05-07 16:04:38
 Project: EasyLife
 Repo: C:\Dev\easylifehq.github.io
 
@@ -11,7 +11,7 @@ GREEN
 Percy checked deterministic performance risks: oversized build artifacts, missing build artifacts when a build script exists, large inline base64 assets, transition-all CSS, blur/filter usage, very short polling intervals, broad will-change usage, and eager autoplay video.
 
 ## Summary
-- Source files scanned: 246
+- Source files scanned: 251
 - Build artifacts scanned: 0
 - JavaScript bundle budget: 350KB
 - CSS bundle budget: 180KB
@@ -32,13 +32,13 @@ Percy checked deterministic performance risks: oversized build artifacts, missin
   `-webkit-backdrop-filter: blur(22px) saturate(1.08);`
 - [INFO] `app-vNext/src/styles/globals.css:330` - Blur filter found; keep usage limited on large/fixed surfaces.
   `backdrop-filter: blur(22px) saturate(1.08);`
-- [INFO] `app-vNext/src/styles/globals.css:1361` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `app-vNext/src/styles/globals.css:1420` - Blur filter found; keep usage limited on large/fixed surfaces.
   `-webkit-backdrop-filter: blur(18px) saturate(1.08);`
-- [INFO] `app-vNext/src/styles/globals.css:1362` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `app-vNext/src/styles/globals.css:1421` - Blur filter found; keep usage limited on large/fixed surfaces.
   `backdrop-filter: blur(18px) saturate(1.08);`
-- [INFO] `app-vNext/src/styles/globals.css:5021` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `app-vNext/src/styles/globals.css:5576` - Blur filter found; keep usage limited on large/fixed surfaces.
   `backdrop-filter: blur(12px);`
-- [INFO] `assets/index-HceE6n6y.css:1` - Blur filter found; keep usage limited on large/fixed surfaces.
+- [INFO] `assets/index-DDK9-5ck.css:1` - Blur filter found; keep usage limited on large/fixed surfaces.
   `:root{color-scheme:light;font-family:var(--shell-body-font, "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif);line-height:1.5;font-weight:400;color:#1f2528;background:#f3f...`
 - [INFO] `old-site/css/global-nav.css:13` - Blur filter found; keep usage limited on large/fixed surfaces.
   `backdrop-filter: blur(18px);`
