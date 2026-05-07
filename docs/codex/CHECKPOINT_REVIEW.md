@@ -1,44 +1,43 @@
 # Checkpoint Review
 
 ## Verdict
-YELLOW
+RED
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife mission: recent work continues simplifying the assistant shell, Today/HQ surface, navigation, themes, mobile fit, and review docs toward a calmer connected suite. It is not parked yet because 17 tasks remain unchecked and review gates still report medium visual/copy/accessibility concerns.
+The branch is moving toward the EasyLife assistant-reset mission with recent navigation, HQ, and EasyList simplification work, but it is not ready to continue unattended because review debt remains and an auth-related file appears in the changed-files set.
 
 ## Safety Review
-No forbidden or high-risk behavior found from the provided state. Working tree is clean, build passed, and changed files stay in frontend/docs scope. Watch `app-vNext/src/features/auth/routes/LoginPage.tsx` in review because auth-adjacent UI files are sensitive even if logic was not reported as changed.
+Risk found: `app-vNext/src/features/auth/routes/LoginPage.tsx` is changed since base, and the mission forbids unattended auth-related feature file changes. No backend, Firebase, dependency, deploy, secret, or generated-output changes are listed.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: 12 shown recently, including mobile polish, theme refinement, assistant reset planning, shell simplification, and small HQ/marketing/navigation repairs
-- files changed: frontend navigation, HQ, EasyList, EasyCalendar, EasyNotes, EasyWorkout, Settings, marketing, global styles, and codex review/planning docs
-- commits added: latest HEAD `6c32481d` plus many checkpoint/review/repair commits since `main`
+- completed tasks in this checkpoint window: recent shell/header compacting passed; EasyList/Capture simplification was quarantined for unresolved P1/P2 review finding
+- files changed: working tree clean; branch diff includes app UI files, docs, styles, and `LoginPage.tsx`
+- commits added: latest HEAD `ea36ef6f` plus multiple Codex review/repair commits since base
 - queue status: 17 unchecked tasks remain
 
 ## Follow-Up Gate Status
-- visual bug report: YELLOW influence next tasks; 10 medium visual issues, no high issues
+- visual bug report: YELLOW influence next tasks; 9 medium visual issues should be patched before mission-forward work
 - Simon design review: YELLOW influence next tasks; continue but fix visual issues first
 - Robin copy review: YELLOW influence next tasks; continue but fix copy first
-- accessibility review: YELLOW influence next tasks; patch warnings soon
+- accessibility review: YELLOW influence next tasks; patch accessibility warnings soon
 - performance review: GREEN no blocking influence
 - Joey security review: GREEN no blocking influence
-- Franky formula review: missing; should be noted but does not block this frontend/docs branch unless formula surfaces are touched
-- Product truth: MISSING, but `Product truth ok: True`; no `PRODUCT_TRUTH.md` configured
+- Franky formula review: missing; should be restored or explicitly marked not applicable before final park
+- product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured
 
 ## Recommended Next Step
-patch first
+stop for human review
 
 ## Next Batch Guidance
 - recommended next batch size: 1
 - next work mode: repair-first
-- Keep the next batch to one narrow UI/copy/accessibility repair because the build is healthy, but Simon/Robin/accessibility gates still name non-blocking cleanup before mission-forward work continues.
+- Human review should decide whether the auth-route diff is acceptable before any unattended repair continues.
 
 ## Notes For Human Reviewer
-- Build passed and working tree is clean.
-- Not ready to park: queue is not empty.
-- No high visual issues reported.
-- Medium visual issues and copy/accessibility warnings should shape the next task.
-- Product truth is missing by configuration, not failing.
+- Build is green and working tree is clean.
+- RED is due to forbidden/risky auth-related file presence, not build failure.
+- There are still 9 medium visual issues plus Simon/Robin/accessibility YELLOW gates.
+- The queue is not empty; next safe work should be one bounded repair only after review.
