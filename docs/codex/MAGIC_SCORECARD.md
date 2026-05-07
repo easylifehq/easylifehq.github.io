@@ -6221,3 +6221,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite consistency is better, but the assistant-first daily surface is still not visually proven.
 - Debug checkpoint result: WARN (passed)
+
+## 2026-05-07 10:46:43
+
+- Task: User pain: EasyList/Capture still needs to feel like the assistant inbox, not a separate task app. Skill: frontend-ui-engineering. Target: app-vNext/src/features/easylist/, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: make one visible copy/layout reduction in the capture or task review path so it reads as Inbox/Capture inside EasyLife. First screen: Capture supports Today instead of becoming another dashboard. Remove/simplify: one repeated header, vague helper phrase, or extra chrome layer. Guardrails: frontend-only; preserve task data shapes and existing routes; no backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the exact EasyList route and removed/simplified element. Stop if: the change needs persistence/model changes or external integrations. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/easylist/,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: unknown
+- Task class: unknown
+- Task risk: unknown
+- Changed files: 2
+- Materiality signal: impact=standard, surface-files=1, structural-files=1, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite consistency is better, but the assistant-first daily surface is still not visually proven.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-mobile.png
+- Follow-up: Review reported an unresolved P1/P2 finding.

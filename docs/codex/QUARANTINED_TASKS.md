@@ -464,3 +464,14 @@
 - app-vNext/src/styles/globals.css
 - docs/codex/RUNTIME_VERIFICATION.md
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-07 10:46:43
+
+- Batch: 2
+- Task index: 1
+- Task: User pain: EasyList/Capture still needs to feel like the assistant inbox, not a separate task app. Skill: frontend-ui-engineering. Target: app-vNext/src/features/easylist/, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: make one visible copy/layout reduction in the capture or task review path so it reads as Inbox/Capture inside EasyLife. First screen: Capture supports Today instead of becoming another dashboard. Remove/simplify: one repeated header, vague helper phrase, or extra chrome layer. Guardrails: frontend-only; preserve task data shapes and existing routes; no backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the exact EasyList route and removed/simplified element. Stop if: the change needs persistence/model changes or external integrations. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/easylist/,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Reason: Review reported an unresolved P1/P2 finding.
+- Files restored before continuing:
+- app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
+- docs/codex/RUNTIME_VERIFICATION.md
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
