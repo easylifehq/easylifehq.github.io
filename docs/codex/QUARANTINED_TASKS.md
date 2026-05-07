@@ -452,3 +452,15 @@
 - Files restored before continuing:
 - None
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-07 03:07:11
+
+- Batch: 1
+- Task index: 1
+- Task: User pain: the Today command card is cleaner now, but it can still feel too soft instead of precise and technical. Skill: frontend-ui-engineering. Target: app-vNext/src/features/hq/routes/HQPage.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: tighten the Today first viewport microcopy and visual rhythm so the primary read, next move, capture row, and status strip feel like one command surface. First screen: Today remains dominant before optional modules. Remove/simplify: one vague phrase or oversized visual treatment in the first viewport. Guardrails: frontend-only; no backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, new dashboard, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the exact phrase/style removed, changed files, build result, and /app/hq inspection route. Stop if: the task requires new data, backend behavior, or files outside the declared scope. [class:design risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/hq/routes/,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Reason: Review reported an unresolved P1/P2 finding.
+- Files restored before continuing:
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- app-vNext/src/styles/globals.css
+- docs/codex/RUNTIME_VERIFICATION.md
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.

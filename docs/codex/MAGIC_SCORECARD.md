@@ -6145,3 +6145,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite consistency is better, but the assistant-first daily surface is still not visually proven.
 - Debug checkpoint result: WARN (passed)
+
+## 2026-05-07 03:07:11
+
+- Task: User pain: the Today command card is cleaner now, but it can still feel too soft instead of precise and technical. Skill: frontend-ui-engineering. Target: app-vNext/src/features/hq/routes/HQPage.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: tighten the Today first viewport microcopy and visual rhythm so the primary read, next move, capture row, and status strip feel like one command surface. First screen: Today remains dominant before optional modules. Remove/simplify: one vague phrase or oversized visual treatment in the first viewport. Guardrails: frontend-only; no backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, new dashboard, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the exact phrase/style removed, changed files, build result, and /app/hq inspection route. Stop if: the task requires new data, backend behavior, or files outside the declared scope. [class:design risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/hq/routes/,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: unknown
+- Task class: unknown
+- Task risk: unknown
+- Changed files: 3
+- Materiality signal: impact=standard, surface-files=2, structural-files=2, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite consistency is better, but the assistant-first daily surface is still not visually proven.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-025951\easylist-visualQa-1-mobile.png
+- Follow-up: Review reported an unresolved P1/P2 finding.
