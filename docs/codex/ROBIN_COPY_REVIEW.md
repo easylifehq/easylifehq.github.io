@@ -4,74 +4,77 @@
 YELLOW
 
 ## One-Sentence Read
-EasyLife is calmer and more concrete than before, but visible copy still slips into builder language, AI promise language, and module-brochure staging.
+EasyLife is moving toward a calmer assistant voice, but visible copy still slips into builder language, module-showroom framing, and vague product-doorway labels.
 
 ## Mission Voice Fit
-The strongest language fits the mission: "Choose today's next move," "Start here," "Capture anything," "Today summary," "Open room," and "Drafts only until you approve" all support a calm personal workspace. The weaker language appears when EasyLife explains itself like an internal product review or prototype: "Demo Path," "Show this first," "Presentation flow," "workflow," "proof," "handoff," and broad AI helper copy. The product position should be practical daily assistance, not a pitch deck or build log.
+The best current language is concrete and useful: "Today", "Capture note", "Open task list", "Plan my day", "Due today", "Next event", and "Open room" all fit the mission of a daily personal workspace. The weaker language appears where the product explains itself instead of helping the user act: marketing pages still say "Features", "How It Works", "Demo Path", and "Show this first", while some app copy still uses "workflow", "handoff", "proof", "sample", and "command center". That keeps EasyLife sounding partly like a product build or sales deck instead of one trusted daily assistant.
 
 ## Delicate Wording Risks
-- "Demo Path" and "Show this first" sound like instructions to the builder or presenter, not useful copy for a buyer or signed-in user.
-- "Presentation flow" is internal staging language. A user does not know what to do with it.
-- "Draft handoff to EasyList" and "EasyList handoff" still feel process-heavy and vague. Use concrete nouns like "task draft" or "action lines."
-- "Workflow" appears in marketing navigation and product copy. It is not always wrong, but as a standalone section label it reads generic and less personal than "Plan," "Steps," "Review," or "Daily path."
-- "AI workspace lab," "Try a safe AI command," and "AI can review, suggest, draft" risk overpromising if these are mock, experimental, or gated surfaces. Keep AI copy visibly review-first and scoped.
-- "Project Planner AI" is too product-feature-like without explaining what the user gets or controls.
-- "Home-screen PWA link," "TestFlight later," "Store metadata," "Rollback plan," and "Capacitor iOS and Android projects" are owner/build/distribution language. They should stay out of ordinary customer-facing Settings unless this is explicitly an admin/developer panel.
-- "proof" in visible marketing copy still sounds like internal validation language, not a customer benefit.
-- "sample" IDs appear mostly internal, but "example email" is visible and should be staged carefully so it does not make the Inbox surface feel fake.
+- "Demo Path", "Show this first", and "Use these moments to explain the product without wandering through every setting" sound like instructions to the builder or presenter, not buyer-facing product copy.
+- "Draft handoff to EasyList", "EasyList handoff", and "Capture, refine, then hand off" are still too internal and process-heavy for customer-facing notes copy.
+- "Open EasyLife" is clear enough as a navigation label, but as a primary CTA it is vague. It does not say what the user does next or what they get.
+- "Features" and "How It Works" are generic brochure labels. They are not wrong, but they reinforce separate-module marketing instead of a single assistant path.
+- "command center" appears in public/meta copy and conflicts with the newer, calmer assistant direction. It sounds generic SaaS and slightly militarized.
+- "proof" appears in visible marketing copy such as "visible proof of what got done"; this is less risky than "proof" as internal evidence language, but still feels a little defensive and product-review-ish.
+- "sample" appears mostly in IDs and mock constants, which is acceptable when not visible. Keep watching for visible "sample data" because it can break trust.
+- Settings language such as "Planned global capture button" and "manual workflow" reads like product planning or implementation status if visible to users.
+- "Project Planner AI" risks overpromising if no real AI behavior, confidence boundary, or deterministic explanation is visible nearby.
+- "Show control" in the HQ demo path feels awkward and unclear. It does not tell the user what action to take or why it matters.
 
 ## Beautiful Language Opportunities
-- The Today/HQ surface can become more elegant by using fewer explanatory sentences and more crisp daily nouns: "Next move," "Today," "Open room," "Due work," "Capture."
-- Marketing sections can shift from "Features" and "How It Works" toward simpler buyer paths like "What it helps with" and "How the day starts."
-- AI copy can feel more trustworthy if every sentence names review, draft state, and user approval near the action.
-- Settings copy can become clearer by separating user controls from product-owner distribution/admin language.
-- The school planner copy is concrete and useful; keep that plain style for other optional modules.
-- Replace "workspace" where repeated with more specific nouns when possible: "task list," "note library," "calendar day," "workout log," "project brief."
+- Replace "Open EasyLife" with a more action-shaped CTA on at least one public surface, such as "Start today" or "Open today's plan".
+- Reframe "Demo Path" as a user-facing "Daily path" or "Start here" if that section must stay visible.
+- Replace "handoff" with concrete transfer language: "turn note lines into tasks", "send action lines to Tasks", or "make a task from this note".
+- Replace "Features" with a calmer section label like "What it helps with" or remove the eyebrow entirely where the heading already does the work.
+- Bring public pages closer to the app voice by using "Today", "Capture", "Plan", "Notes", and "More" as the vocabulary spine.
+- Tighten Settings copy so it reads as choices the user controls now, not features planned by the builder.
+- Use "example day" only where mock content is intentionally illustrative; otherwise, avoid exposing that data is sample/mock.
+- Make "Plan My Day" copy more humble when automated suggestions are involved: preview, apply, undo, and keep the user in control.
 
 ## Priority Rewrite
-Fix the customer-facing builder language in marketing and HQ deeper sections first, especially "Demo Path," "Show this first," and "Presentation flow." These phrases break the product illusion because they describe how to present EasyLife instead of what the user should do. Nami should make one copy-only pass that renames these sections into user-facing, action-based labels without adding claims or expanding the page.
+The most important wording problem is the visible marketing section that says "Demo Path", "Show this first", and "Use these moments to explain the product without wandering through every setting." That copy is not addressed to the customer and exposes the builder/presenter mindset. Nami should turn this into a small copy-only task in `ProductMarketingPage.tsx`: rename the section and supporting sentence so it describes a real user path through the product, without adding claims, new sections, or broader marketing rewrites.
 
 ## Suggested Rewrites
 - Before: "Demo Path"
-  After: "A Simple First Day"
-
-- Before: "Show this first"
-  After: "Start with these moments"
-
-- Before: "Use these moments to explain the product without wandering through every setting."
-  After: "Begin with the few places that make the day easier to understand."
-
-- Before: "Presentation flow"
   After: "Daily path"
 
+- Before: "Show this first"
+  After: "Start with one useful move"
+
+- Before: "Use these moments to explain the product without wandering through every setting."
+  After: "Follow the shortest path from capture to a clear next action."
+
 - Before: "Draft handoff to EasyList"
-  After: "Task draft for EasyList"
+  After: "Turn note lines into tasks"
 
-- Before: "Try a safe AI command"
-  After: "Try a review-first helper"
+- Before: "EasyList handoff"
+  After: "Tasks from notes"
 
-- Before: "Set what AI can review, suggest, draft, and never do automatically."
-  After: "Choose which helper suggestions stay available, and require review before anything changes."
+- Before: "Open EasyLife"
+  After: "Open today's plan"
 
-- Before: "Keep visible proof of what got done"
-  After: "Keep completed work visible"
+- Before: "Features"
+  After: "What it helps with"
+
+- Before: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and pipeline work in one command center."
+  After: "EasyLife keeps tasks, notes, calendar planning, workouts, projects, and follow-ups in one daily workspace."
 
 ## Voice Rules
-- Lead with what the user can do today, not what the product demonstrates.
-- Use concrete daily nouns: task list, calendar block, note, project brief, workout log, draft reply.
-- Avoid builder words in visible UI: demo, proof, handoff, polish, presentation, workflow, sample data.
-- Keep AI language modest: draft, suggest, review, approval, manual send, reversible.
-- Do not imply automation unless the action is real, visible, and user-approved.
-- Use "workspace" sparingly; prefer the specific place or object when the sentence allows it.
-- First-screen copy should be short enough to scan in one breath.
-- Optional modules should sound available, not equal to the main daily path.
+- Use concrete daily nouns: task list, note, calendar block, workout log, project brief, daily plan, inbox, capture, More.
+- Keep first-screen copy short and action-shaped: what to do next, why it matters, and where it opens.
+- Avoid builder and review words in visible UI: demo, proof, handoff, polish, sample data, workflow, command center.
+- Do not imply AI, prediction, or automation unless the UI clearly shows user approval, assumptions, preview, and undo.
+- Public pages may explain the product, but app surfaces should use direct task labels instead of sales language.
+- Prefer "turn this note into tasks" over abstract transfer language like "handoff".
+- Treat optional modules as quiet support, not equal product promises.
+- Do not add claims. Make existing claims plainer, smaller, and more useful.
 
 ## Next 5 Copy Tasks
-- [ ] Rename "Demo Path," "Show this first," and its helper sentence in `ProductMarketingPage.tsx`; keep the section customer-facing and do not add new claims.
-- [ ] Replace visible "handoff" language in EasyNotes marketing with "task draft" or "action lines"; keep meaning and preview structure unchanged.
-- [ ] Audit visible "proof" copy in marketing routes and replace it with concrete completion or review language; ignore class names and internal identifiers.
-- [ ] Tighten Settings AI descriptions so every AI-related control mentions draft, review, or approval near the action; do not imply automatic saves, sends, deletes, or scheduling.
-- [ ] Separate owner/distribution language in Settings from ordinary user controls; keep technical terms only where the section is clearly for app distribution or admin review.
+- [ ] Rename the visible "Demo Path" section in `ProductMarketingPage.tsx`; guardrail: copy-only, keep the section and links, do not add claims.
+- [ ] Replace one visible "handoff" phrase in EasyNotes marketing with concrete note-to-task language; guardrail: one page only, preserve meaning and route behavior.
+- [ ] Replace the public/meta "command center" description with "daily workspace" language; guardrail: no root deployed file edits unless explicitly allowed by the task scope.
+- [ ] Audit Settings for visible builder-state phrases like "Planned global capture button" and "manual workflow"; guardrail: labels must describe current user control, not future implementation.
+- [ ] Replace one repeated "Open EasyLife" CTA on a marketing page with a more specific daily action label; guardrail: preserve the existing link target.
 
 ## Stop Or Continue
 continue but fix copy first
