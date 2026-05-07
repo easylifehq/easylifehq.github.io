@@ -72,7 +72,7 @@ export function ProductMarketingPage({
 
           <div className="marketing-hero-actions">
             <Link to="/login" className="button-primary">
-              Open EasyLife
+              Open workspace
             </Link>
           </div>
 
