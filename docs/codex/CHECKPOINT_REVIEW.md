@@ -4,40 +4,41 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife assistant-reset mission. Recent work tightened navigation and HQ direction, but 18 unchecked tasks remain and review gates still call for visual, copy, and accessibility polish before broad continuation.
+The branch is moving toward the assistant-reset mission: recent work tightened navigation and HQ/marketing surfaces, and the remaining queue is focused on making EasyLife feel like one connected assistant instead of separate apps. It is not ready to park because 18 tasks remain and review gates still show visual, copy, and accessibility polish debt.
 
 ## Safety Review
-No forbidden or high-risk behavior found from the provided status. Working tree is clean, build passed, and changed files are limited to app UI/source and `docs/codex` review/planning files.
+No forbidden or high-risk file changes found. Working tree is clean, and changed files stay in frontend/docs scope.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- completed tasks in this checkpoint window: assistant shell simplification landed; latest repair cleared a visible/proof loop in `HQPage.tsx`
-- files changed: multiple app UI files under `app-vNext/src/` plus `docs/codex` reports/planning docs since base
-- commits added: latest HEAD `c6e158d6 Codex checkpoint batch 1 task 1`
-- queue status: 18 unchecked tasks remain
+- Completed tasks in this checkpoint window: Joey security review batch 1, Robin copy review batch 1, Simon design review batch 1, visual inspect batch 1, and related checkpoint/repair work.
+- Files changed: frontend navigation, HQ, EasyList, EasyNotes, EasyCalendar, Settings, global styles, marketing page, and docs/codex review/planning files.
+- Commits added: latest HEAD is `d4d9dd5b` with multiple checkpoint/review/repair commits since base.
+- Queue status: 18 unchecked tasks remain.
 
 ## Follow-Up Gate Status
-- visual bug report: GREEN signal; 0 high, 0 medium, 0 low; should not block next tasks
-- Simon design review: YELLOW, continue but fix visual issues first; should shape the next task
-- Robin copy review: YELLOW, continue but fix copy first; should shape the next task
-- accessibility review: YELLOW, continue but patch warnings soon; should influence near-term tasks
-- performance review: GREEN; no immediate influence
-- Joey security review: GREEN; no immediate influence
-- Franky formula review: missing; no formula-specific blocker identified, but gate is incomplete
-- product truth: MISSING with `Product truth ok: True`; no configured product-truth blocker
+- Visual bug report: YELLOW; 10 medium issues should influence next tasks.
+- Simon design review: YELLOW; continue but fix visual issues first.
+- Robin copy review: YELLOW; continue but fix copy first.
+- Accessibility review: YELLOW; patch accessibility warnings soon.
+- Performance review: GREEN; no next-task blocker.
+- Joey security review: GREEN; no next-task blocker.
+- Franky formula review: missing; likely not relevant unless spreadsheet/formula surfaces appear.
+- Product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured.
 
 ## Recommended Next Step
-continue
+patch first
 
 ## Next Batch Guidance
-- recommended next batch size: 1
-- next work mode: repair-first
-- Keep the next batch to one narrow assistant-reset repair because Simon, Robin, and accessibility are all YELLOW and the queue already contains focused UI/copy/accessibility-safe slices.
+- Recommended next batch size: 1
+- Next work mode: repair-first
+- Use one narrow repair to clear a named medium visual/copy/accessibility concern before continuing the assistant-reset implementation queue.
 
 ## Notes For Human Reviewer
-- Branch is clean and build-passing.
-- Not ready to park because 18 unchecked tasks remain.
-- Prefer the next task that fixes visible/copy polish on the assistant shell or Today first viewport.
-- Avoid broad planning loops; keep BatchSize 1.
+- Build passed and repo is clean.
+- Not ship-ready because queue is not empty.
+- No high visual bugs reported.
+- Product truth is missing, not failing.
+- Next task should avoid broad UI expansion and remove or simplify one confusing visible element.
