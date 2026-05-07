@@ -3848,3 +3848,18 @@
 - app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-07 15:56:52
+
+- Task attempted: User pain: Plan/Calendar should operate like an assistant day timeline, not a dense calendar module. Skill: frontend-ui-engineering. Target: app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: make one small visible reduction in the day plan route so next block, open room, or schedule triage language feels sharper and more assistant-led. First screen: Plan supports Today and keeps the day's next action clear. Remove/simplify: one repeated label, cramped control, or explanatory phrase. Guardrails: frontend-only; preserve calendar data shapes, recurrence behavior, routes, backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, and unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the route, simplification, changed files, and build result. Stop if: the change requires calendar model or persistence changes. Check: Plan tells the user what is next without adding a new dashboard. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Task class: design
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx, app-vNext/src/styles, docs/codex
+- Acceptance checks: npm.cmd run build
+- Implementation scale: large
+- Build result: Quarantined
+- Files changed:
+- None
+- Risks or follow-up needed: Large Phase 3 task requires a concrete slice plan before implementation.

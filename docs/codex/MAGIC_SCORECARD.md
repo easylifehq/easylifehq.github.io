@@ -6619,3 +6619,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite tone is clearer, but shell polish and assistant-first evidence are still not strong enough.
 - Debug checkpoint result: WARN (passed)
+
+## 2026-05-07 15:56:52
+
+- Task: User pain: Plan/Calendar should operate like an assistant day timeline, not a dense calendar module. Skill: frontend-ui-engineering. Target: app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md. Change: make one small visible reduction in the day plan route so next block, open room, or schedule triage language feels sharper and more assistant-led. First screen: Plan supports Today and keeps the day's next action clear. Remove/simplify: one repeated label, cramped control, or explanatory phrase. Guardrails: frontend-only; preserve calendar data shapes, recurrence behavior, routes, backend, auth, payments, Firebase rules/config, dependencies, package files, generated output, deployment config, secrets, and unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the route, simplification, changed files, and build result. Stop if: the change requires calendar model or persistence changes. Check: Plan tells the user what is next without adding a new dashboard. [class:design risk:medium mode:single impact:visible surface:app scope:app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx,app-vNext/src/styles/,docs/codex/ accept:npm.cmd run build]
+- Result: Quarantined
+- Magic signal: learned-from-failure
+- Active work pack: unknown
+- Task class: design
+- Task risk: medium
+- Changed files: 0
+- Materiality signal: impact=visible, surface-files=0, structural-files=0, source-lines=0, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite tone is clearer, but shell polish and assistant-first evidence are still not strong enough.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-155121\easylist-visualQa-1-mobile.png
+- Follow-up: Large Phase 3 task requires a concrete slice plan before implementation.
