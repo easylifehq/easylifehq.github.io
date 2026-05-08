@@ -4,29 +4,29 @@
 YELLOW
 
 ## Progress Against Mission
-The branch is still moving toward the EasyLife assistant/suite mission: recent work tightened navigation, HQ, Notes, Plan, More, mobile fit, and assistant copy. However, the checkpoint is not ready to park because 19 unchecked tasks remain and review gates still report medium visual, copy, and accessibility follow-up.
+The branch is moving toward the EasyLife mission: recent work continues consolidating Today, Capture, Plan, Notes, More, and assistant HQ into a calmer connected assistant model. Progress is meaningful, but the queue still has 19 unchecked tasks and review gates are calling for visual, copy, and accessibility polish before more mission-forward work.
 
 ## Safety Review
-No forbidden or high-risk files found in the provided changed-file list. Working tree is clean. Risk is mainly scope drift from repeated recovery tasks and broad assistant-reset work, not sensitive-system exposure.
+No unsafe behavior found. Working tree is clean, build passed, and no forbidden backend/auth/Firebase/payment/dependency/deploy scope is reported.
 
 ## Build Result
 External build passed.
 
 ## Batch Summary
-- Completed tasks in this checkpoint window: recent small visible repairs across Calendar day, Notes memory, More menu, Command Center, HQ assistant preview/mobile/copy, plus several proof/recovery attempts.
-- Files changed: app frontend files under `app-vNext/src/` and review/planning docs under `docs/codex/`.
-- Commits added: latest HEAD is `377665cb`; many commits exist since `main`.
-- Queue status: 19 unchecked tasks remain.
+- Completed tasks in this checkpoint window: 12 shown, including mobile/readability polish, empty/loading/error polish, theme refinements, Notes memory simplification, More optional-module cleanup, HQ assistant reset/audit docs, and assistant preview/HQ tightening.
+- Files changed: app-vNext navigation, HQ, EasyList, EasyCalendar, EasyNotes, Settings, global styles, and docs/codex review/planning reports.
+- Commits added: multiple checkpoint, review, QA, repair, and assistant-reset commits; current HEAD is `ea230701`.
+- Queue status: 19 unchecked tasks remain; queue is not empty.
 
 ## Follow-Up Gate Status
-- Visual bug report: YELLOW; 0 high, 6 medium issues, should drive the next repair.
-- Simon design review: YELLOW; continue but fix visual issues first.
-- Robin copy review: YELLOW; continue but fix copy first.
-- Accessibility review: YELLOW; continue but patch warnings soon.
-- Performance review: GREEN; does not block next work.
-- Joey security review: GREEN; does not block next work.
-- Franky formula review: missing; likely not relevant unless spreadsheet/formula surfaces are touched.
-- Product truth: missing configuration, but marked ok; does not force RED.
+- Visual bug report: YELLOW influence; 7 medium issues should shape next repair.
+- Simon design review: YELLOW influence; continue but fix visual issues first.
+- Robin copy review: YELLOW influence; continue but fix copy first.
+- Accessibility review: YELLOW influence; patch warnings soon.
+- Performance review: GREEN; no blocking influence.
+- Joey security review: GREEN; no blocking influence.
+- Franky formula review: missing; no formula-specific signal available.
+- Product truth: MISSING but ok; no `PRODUCT_TRUTH.md` configured.
 
 ## Recommended Next Step
 patch first
@@ -34,10 +34,10 @@ patch first
 ## Next Batch Guidance
 - Recommended next batch size: 1
 - Next work mode: repair-first
-- Use one narrow patch because medium visual issues plus Simon/Robin/accessibility YELLOW gates should be cleared before mission-forward queue work continues.
+- Use one small repair because the build and tree are healthy, but medium visual issues plus Simon/Robin/accessibility YELLOW findings should be addressed before more assistant-reset expansion.
 
 ## Notes For Human Reviewer
-- Build passed and tree is clean.
-- Do not park yet: queue is not empty.
-- Next task should target one concrete visual/copy/accessibility issue.
-- Keep forbidden scope and package/dependency files untouched.
+- Not ready for GREEN because unchecked tasks remain.
+- Medium visual issues are the main active quality concern.
+- Product truth is missing, not failing.
+- Branch appears safe to continue with narrow repair work.
