@@ -7115,3 +7115,19 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-184003\easylist-visualQa-1-desktop.png
 - Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-184003\easylist-visualQa-1-mobile.png
 - Follow-up: Implementation guardrails failed.
+
+## Batch 1 QA - 2026-05-07 19:30:59
+
+- Active work pack: unknown
+- Batch impact mode: visible
+- Fresh QA evidence:
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-192923\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-192923\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-192923\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-192923\easylist-visualQa-1-mobile.png
+- Checkpoint verdict: YELLOW
+- Simon verdict: YELLOW
+- Robin verdict: YELLOW
+- Joey verdict: GREEN
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite voice and consistency improved, but first-screen restraint and app-shell polish are still not ready.
+- Debug checkpoint result: FAIL (failed)
