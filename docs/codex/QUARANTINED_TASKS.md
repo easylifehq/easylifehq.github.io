@@ -66,3 +66,16 @@
 - app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx
 - docs/codex/RUNTIME_VERIFICATION.md
 - Next step: Nami should avoid repeating this exact task until a human reviews the failure.
+
+## 2026-05-07 18:40:03
+
+- Batch: 2
+- Task index: 1
+- Task: User pain: after several small slices, EasyLife needs proof that Today, Capture, Plan, Notes, and More are converging into one assistant. Skill: code-review-and-quality. Target: docs/codex/NIGHTLY_REPORT.md, docs/codex/CHECKPOINT_REVIEW.md, docs/codex/SIMON_DESIGN_REVIEW.md, docs/codex/ROBIN_COPY_REVIEW.md, app-vNext/src/. Change: run the build and review the five core assistant routes for obvious breakage, stale suite language, mobile fit, and clutter regressions; make only one tiny blocker repair if required. First screen: do not add UI unless a blocker is found. Remove/simplify: stale report language that says EasyLife is finished without evidence. Guardrails: proof-first; no backend, auth, payments, real AI/API calls, dependencies, package files, generated output, deployment config, secrets, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: reports say whether EasyLife is human-review-ready or name one next blocker. Stop if: review finds a broad redesign need instead of a bounded repair. Check: proof packet names routes inspected and the next best follow-up. [class:proof risk:low mode:single impact:stability surface:app scope:docs/codex/,app-vNext/src/ accept:npm.cmd run build]
+- Reason: Implementation guardrails failed.
+- Files restored before continuing:
+- app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
+- docs/codex/CHECKPOINT_REVIEW.md
+- docs/codex/ROBIN_COPY_REVIEW.md
+- docs/codex/SIMON_DESIGN_REVIEW.md
+- Next step: Nami should avoid repeating this exact task until a human reviews the failure.
