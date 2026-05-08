@@ -244,7 +244,7 @@ export function HQPage() {
         <article className="hq-start-card">
           <div className="hq-start-heading">
             <div>
-              <p>Capture -&gt; plan -&gt; remember</p>
+              <p>Capture, plan, and save what matters</p>
               <h1 id="hq-title">Today, reduced.</h1>
             </div>
           </div>
