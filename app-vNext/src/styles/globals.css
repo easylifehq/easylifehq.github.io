@@ -12027,3 +12027,58 @@ button.calendar-detail-card:disabled {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 430px) {
+  .app-header-main {
+    padding: 0.28rem 0.36rem;
+  }
+
+  .app-suite-control {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+
+  .app-suite-control .site-brand {
+    min-height: 34px;
+    justify-self: start;
+  }
+
+  .app-header-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.24rem;
+    width: 100%;
+  }
+
+  .app-primary-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .app-primary-nav a {
+    min-width: 0;
+    min-height: 44px;
+    padding: 0.32rem 0.2rem;
+    font-size: 0.7rem;
+    line-height: 1.05;
+    white-space: normal;
+  }
+
+  .app-header-actions .menu-trigger-button {
+    min-height: 44px;
+    padding-inline: 0.5rem;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-today-summary {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.18rem 0.42rem;
+    padding: 0.58rem;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-today-summary p {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}

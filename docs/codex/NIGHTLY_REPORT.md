@@ -3958,3 +3958,19 @@
 - app-vNext/src/features/hq/assistantPreview.ts
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-07 18:04:36
+
+- Task attempted: User pain: mobile users should see the assistant command surface without cramped nav or overlapping text. Skill: frontend-ui-engineering. Target: app-vNext/src/styles/globals.css, app-vNext/src/components/navigation/AppHeader.tsx, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md. Change: make one focused 390px mobile repair for text fit, tap target spacing, nav wrapping, or first viewport overlap. First screen: Today remains usable without horizontal scroll or overlapping controls. Remove/simplify: one cramped control, overlong label, or stacked helper line. Guardrails: frontend-only; no backend, auth, payments, dependencies, package files, generated output, deployment config, secrets, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the mobile viewport issue checked, changed files, build result, and result. Stop if: the fix requires a component rewrite outside declared files. Check: first viewport is scannable on a narrow phone. [class:bugfix risk:medium mode:single impact:visible surface:app scope:app-vNext/src/styles/,app-vNext/src/components/navigation/AppHeader.tsx,app-vNext/src/features/hq/routes/HQPage.tsx,docs/codex/ accept:npm.cmd run build]
+- Task class: bugfix
+- Task risk: medium
+- Task mode: single
+- Task impact: visible
+- Allowed scope: app-vNext/src/styles, app-vNext/src/components/navigation/AppHeader.tsx, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex
+- Acceptance checks: npm.cmd run build
+- Implementation scale: small
+- Build result: Passed
+- Files changed:
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- app-vNext/src/styles/globals.css
+- Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.

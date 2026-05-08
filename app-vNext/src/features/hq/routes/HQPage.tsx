@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { PageSection } from "@/components/ui/PageSection";
 import { assistantCommandHintRow } from "@/features/hq/assistantCommandHints";
-import { getLocalAssistantPreview } from "@/features/hq/assistantPreview";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
   formatDuration,
@@ -130,10 +129,6 @@ export function HQPage() {
       to: "/app/easynotes",
     };
   }, [dueTodayTasks, openWindows, overdueTasks, quickWin]);
-  const assistantPreview = getLocalAssistantPreview({
-    recommendedLabel: startHere.label,
-    recommendedRoute: startHere.to,
-  });
 
   const dayPhase = new Date().getHours() < 12 ? "Morning" : new Date().getHours() < 17 ? "Afternoon" : "Evening";
   const nextOpenWindow = openWindows[0];
@@ -265,9 +260,6 @@ export function HQPage() {
               <span>Start here</span>
               <h2 id="assistant-next-title">{startHere.label}</h2>
               <p>{startHere.reason}</p>
-              <p>
-                <strong>{assistantPreview.label} preview:</strong> {assistantPreview.action}. {assistantPreview.reason}
-              </p>
             </div>
             <div className="task-composer-actions">
               <Link to={startHere.to} className="primary-button">

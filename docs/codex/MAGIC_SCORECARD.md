@@ -6894,3 +6894,28 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite tone and assistant language improved, but shell hierarchy and first-screen assistant proof are still not strong enough.
 - Debug checkpoint result: not-run (not-run)
+
+## 2026-05-07 18:04:36
+
+- Task: User pain: mobile users should see the assistant command surface without cramped nav or overlapping text. Skill: frontend-ui-engineering. Target: app-vNext/src/styles/globals.css, app-vNext/src/components/navigation/AppHeader.tsx, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md. Change: make one focused 390px mobile repair for text fit, tap target spacing, nav wrapping, or first viewport overlap. First screen: Today remains usable without horizontal scroll or overlapping controls. Remove/simplify: one cramped control, overlong label, or stacked helper line. Guardrails: frontend-only; no backend, auth, payments, dependencies, package files, generated output, deployment config, secrets, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names the mobile viewport issue checked, changed files, build result, and result. Stop if: the fix requires a component rewrite outside declared files. Check: first viewport is scannable on a narrow phone. [class:bugfix risk:medium mode:single impact:visible surface:app scope:app-vNext/src/styles/,app-vNext/src/components/navigation/AppHeader.tsx,app-vNext/src/features/hq/routes/HQPage.tsx,docs/codex/ accept:npm.cmd run build]
+- Result: Passed
+- Magic signal: moved-forward
+- Active work pack: unknown
+- Task class: bugfix
+- Task risk: medium
+- Changed files: 2
+- Materiality signal: impact=visible, surface-files=2, structural-files=2, source-lines=63, css-only=False
+- Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite tone and assistant language improved, but shell hierarchy and first-screen assistant proof are still not strong enough.
+- Before visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easylist-visualQa-1-mobile.png
+- After visual evidence:
+- Visual report artifacts: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easycalendar-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easycalendar-visualQa-1-mobile.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easylist-visualQa-1-desktop.png
+- Screenshot: C:\Dev\easylifehq.github.io\.codex-logs\visual-inspect-20260507-170952\easylist-visualQa-1-mobile.png
+- Follow-up: Low. External build, task acceptance checks, and checkpoint loop review completed.
