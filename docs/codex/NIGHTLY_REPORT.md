@@ -3974,3 +3974,13 @@
 - app-vNext/src/features/hq/routes/HQPage.tsx
 - app-vNext/src/styles/globals.css
 - Risks or follow-up needed: Low. External build, task acceptance checks, and checkpoint loop review completed.
+
+## 2026-05-07 18:06:49
+
+- Task attempted: User pain: old suite/demo language will make the assistant reset feel fake even if the layout improves. Skill: frontend-ui-engineering. Target: app-vNext/src/features/hq/, app-vNext/src/components/navigation/, app-vNext/src/features/easylist/, app-vNext/src/features/easycalendar/, app-vNext/src/features/easynotes/, docs/codex/NIGHTLY_REPORT.md. Change: remove or replace exactly one visible suite, demo, presentation, app-grid, or feature-inventory phrase from a core assistant route. First screen: wording supports one assistant, not separate apps. Remove/simplify: exactly one stale phrase or repeated label. Guardrails: copy/UI only; no backend, auth, payments, dependencies, package files, generated output, deployment config, secrets, route deletion, or unrelated modules. Acceptance: npm.cmd run build from app-vNext. Proof: NIGHTLY_REPORT.md names old phrase, replacement, route, and build result. Stop if: no visible stale phrase is found in declared files. Check: the changed route sounds like an assistant product. [class:copy risk:low mode:single impact:visible surface:app scope:app-vNext/src/features/hq/,app-vNext/src/components/navigation/,app-vNext/src/features/easylist/,app-vNext/src/features/easycalendar/,app-vNext/src/features/easynotes/,docs/codex/ accept:npm.cmd run build]
+
+- Build result: Quarantined
+- Files changed:
+- app-vNext/src/features/easylist/routes/EasyListDashboardPage.tsx
+- docs/codex/RUNTIME_VERIFICATION.md
+- Risks or follow-up needed: Review reported an unresolved P1/P2 finding.
