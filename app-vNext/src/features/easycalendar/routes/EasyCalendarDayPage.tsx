@@ -54,6 +54,8 @@ type AppliedPlanUndo = {
   replacedBlocks: CalendarTaskBlockRecord[];
 };
 
+type DayModeId = "light" | "normal" | "push" | "recovery";
+
 export function EasyCalendarDayPage() {
   const {
     categories,
@@ -114,6 +116,40 @@ export function EasyCalendarDayPage() {
     [events, taskBlocks, selectedDate, wakeHour, dayEndHour]
   );
   const activeTasks = useMemo(() => tasks.filter((task) => !task.completed && !task.deletedAt), [tasks]);
+  const openMinutes = openWindows.reduce((sum, window) => sum + window.minutes, 0);
+  const recoveryTaskCount = activeTasks.filter(
+    (task) => task.dueDate && startOfDay(task.dueDate).getTime() < selectedDate.getTime()
+  ).length;
+  const activeDayMode: DayModeId =
+    isOverloaded || recoveryTaskCount
+      ? "recovery"
+      : scheduledMinutes <= 3 * 60 && openMinutes >= 4 * 60
+        ? "light"
+        : scheduledMinutes >= 7 * 60 || openMinutes < 90
+          ? "push"
+          : "normal";
+  const dayModeOptions: Array<{ id: DayModeId; label: string; detail: string }> = [
+    {
+      id: "light",
+      label: "Light day",
+      detail: "Keep one meaningful move and leave room to breathe.",
+    },
+    {
+      id: "normal",
+      label: "Normal day",
+      detail: "Choose one main block, one admin block, and one reset.",
+    },
+    {
+      id: "push",
+      label: "Push day",
+      detail: "Protect the must-do work and stop adding extras.",
+    },
+    {
+      id: "recovery",
+      label: "Recovery day",
+      detail: "Rescue overdue work before planning anything ambitious.",
+    },
+  ];
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
     [selectedBlockId, taskBlocks]
@@ -335,9 +371,9 @@ export function EasyCalendarDayPage() {
   return (
     <>
       <PageSection
-        eyebrow="Calendar"
+        eyebrow="Plan"
         title={formatLongDate(selectedDate)}
-        description="Choose a day, then add a block or preview Plan My Day."
+        description="Use today's shape to decide what you can realistically do before adding more."
       >
         {error ? <p className="error-copy">{error}</p> : null}
         <div className="calendar-day-topbar">
@@ -369,12 +405,21 @@ export function EasyCalendarDayPage() {
             </button>
           ))}
         </div>
-        <div className="quiet-metrics-row calendar-day-summary-row" aria-label="Calendar snapshot">
+        <div className="quiet-metrics-row calendar-day-summary-row" aria-label="Plan snapshot">
           <span><strong>{formatDuration(scheduledMinutes)}</strong> planned</span>
           <span><strong>{fixedEventCount}</strong> event{fixedEventCount === 1 ? "" : "s"}</span>
           <span><strong>{taskBlockCount}</strong> task block{taskBlockCount === 1 ? "" : "s"}</span>
         </div>
-        <div className="calendar-type-legend" aria-label="Calendar item types">
+        <div className="settings-status-grid" aria-label="Static day mode read">
+          {dayModeOptions.map((mode) => (
+            <article className="settings-status-card" key={mode.id}>
+              <span>{mode.id === activeDayMode ? "Today" : "Mode"}</span>
+              <strong>{mode.label}</strong>
+              <p>{mode.detail}</p>
+            </article>
+          ))}
+        </div>
+        <div className="calendar-type-legend" aria-label="Plan item types">
           <span className="fixed">Event</span>
           <span className="deadline">Deadline</span>
           <span className="flexible">Task block</span>
@@ -382,9 +427,9 @@ export function EasyCalendarDayPage() {
       </PageSection>
 
       <PageSection
-        eyebrow="Day"
+        eyebrow="Today"
         title="Day timeline"
-        description="Scan scheduled events, task blocks, and open windows in order."
+        description="Scan fixed events, planned blocks, and open windows in order."
       >
         {isLoading ? <p className="helper-copy">Loading this schedule...</p> : null}
 
@@ -470,7 +515,7 @@ export function EasyCalendarDayPage() {
             <strong>This day looks overloaded.</strong>
             <p>
               You have {formatDuration(scheduledMinutes)} on the calendar already, so
-              the planner should suggest carefully instead of packing in more.
+              Plan should suggest carefully instead of packing in more.
             </p>
           </div>
         ) : null}

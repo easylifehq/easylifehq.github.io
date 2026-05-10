@@ -72,7 +72,7 @@ export function HQPage() {
           ? `Plan the ${formatTimeLabel(firstOpenWindow.startAt)} open window`
           : "Plan open time",
         reason: "Give the next open window a light plan before adding more to the day.",
-        buttonLabel: "Open Calendar",
+        buttonLabel: "Plan Today",
         to: "/app/easycalendar/day",
       };
     }
@@ -106,7 +106,7 @@ export function HQPage() {
       : null,
     nextEvents[0]
       ? {
-          label: todayEvents.length >= 3 ? "Calendar pressure" : "Calendar",
+          label: todayEvents.length >= 3 ? "Plan pressure" : "Plan",
           title: nextEvents[0].title || "Untitled event",
           detail: nextEvents[0].allDay
             ? "All day"
@@ -161,7 +161,7 @@ export function HQPage() {
       : null,
     nextEvents[0]
       ? {
-          label: "Next on calendar",
+          label: "Next in Plan",
           title: nextEvents[0].title || "Untitled event",
           detail: nextEvents[0].allDay
             ? "All day"
@@ -183,7 +183,7 @@ export function HQPage() {
     : dueTodayTasks.length > 3
       ? "Today has enough moving parts. Pick one list, one time block, and keep the rest quiet."
       : nextEvents.length
-        ? "The calendar has shape. Use open windows for work that would otherwise leak."
+        ? "Plan has shape. Use open windows for work that would otherwise leak."
         : "The day is open. Capture the loose ends before they become noise.";
 
   function openNaturalCapture() {

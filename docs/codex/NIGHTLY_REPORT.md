@@ -4080,3 +4080,16 @@
 - Routes inspected: /app/easylist/add and /app/hq.
 - Product simplification: the Inbox page now shows a read-only assistant queue for Approve, Plan, Remember, and Follow up based on existing items in the selected lane; it does not create, archive, send, sync, or persist anything differently.
 - Risks or follow-up needed: Low. Stage 4 should connect Plan/day builder language to this intake model without changing backend behavior.
+
+## 2026-05-10 13:50:58
+
+- Task attempted: Stage 4 - Planning Engine UI slice. User pain: Plan needs to answer what can realistically fit today instead of feeling like a separate calendar app. Skill/workflow: frontend-ui-engineering with incremental-implementation. Target: app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md, docs/codex/MAGIC_SCORECARD.md. Change: added a static day-mode affordance for Light day, Normal day, Push day, and Recovery day using existing schedule/open-window/task data only, and connected Today copy back to Plan. Remove/simplify: changed the top route framing from Calendar/Calendar snapshot/Calendar item types to Plan/Plan snapshot/Plan item types and replaced Today references like Calendar pressure/Open Calendar with Plan pressure/Plan Today. Guardrails: no scheduling algorithm, backend, auth, payments, Firebase rules/config, dependencies, package files, deploy config, generated output, secrets, or persistence changes. Acceptance: npm.cmd run build from app-vNext. Proof: this report and MAGIC_SCORECARD.md. Stop condition: stop if the affordance needs new scheduling writes or a real planning algorithm. [class:feature risk:low mode:single impact:visible surface:plan scope:app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx,app-vNext/src/features/hq/routes/HQPage.tsx,docs/codex/NIGHTLY_REPORT.md,docs/codex/MAGIC_SCORECARD.md accept:npm.cmd run build from app-vNext]
+- Build result: Passed (`npm.cmd run build` from `app-vNext`)
+- Files changed:
+- app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- docs/codex/NIGHTLY_REPORT.md
+- docs/codex/MAGIC_SCORECARD.md
+- Routes inspected: /app/easycalendar/day and /app/hq.
+- Product simplification: the Plan page now frames the day as a realistic mode read instead of a standalone calendar screen; no schedule suggestions are applied unless the existing Plan My Day preview/apply flow is explicitly used.
+- Risks or follow-up needed: Low. Stage 5 should connect Notes/memory into this assistant loop without changing persistence behavior.

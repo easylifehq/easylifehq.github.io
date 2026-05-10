@@ -7233,3 +7233,25 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 5; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 3 - Assistant Inbox; REASON: Inbox now behaves like assistant intake instead of a separate task app, but the composer itself still carries older task-entry mechanics for a later deeper pass.
 - Follow-up: Stage 4 Planning Engine.
+
+## Stage 4 Plan Check - 2026-05-10 13:50:58
+
+- Task: Stage 4 - Planning Engine UI slice.
+- Result: Passed
+- Magic signal: realistic-day-mode
+- Active work pack: AI Personal Assistant Stage 4 - Planning Engine
+- Task class: feature
+- Task risk: low
+- Changed files: 4
+- Materiality signal: impact=visible, surface-files=2, docs-files=2, source-lines=focused, css-only=False
+- Plan model: Light day, Normal day, Push day, Recovery day.
+- Added affordance: read-only day-mode cards mark today's current planning shape from existing scheduled time, open windows, and overdue task context.
+- Removed/simplified element: changed Calendar/Calendar snapshot/Calendar item types and Today copy like Calendar pressure/Open Calendar into Plan/Plan snapshot/Plan item types/Plan pressure/Plan Today.
+- Acceptance evidence: `npm.cmd run build` from `app-vNext` passed.
+- Routes inspected: /app/easycalendar/day and /app/hq.
+- Checkpoint verdict: GREEN
+- Simon verdict: YELLOW
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Simon improvement score: SCORE: 6; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 4 - Planning Engine; REASON: Plan now answers what kind of day this is before asking the user to schedule more, but it remains a static UI slice until a later planning algorithm pass.
+- Follow-up: Stage 5 Notes And Memory.
