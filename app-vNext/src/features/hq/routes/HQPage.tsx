@@ -54,7 +54,7 @@ export function HQPage() {
         reason: overdueTasks.length
           ? "This is behind. Handle it, reschedule it, or intentionally release it before checking the rest."
           : "This is due today. Decide the next step before checking anything else.",
-        buttonLabel: "Review Capture",
+        buttonLabel: "Approve Inbox",
         to: "/app/easylist/dashboard",
       };
     }
@@ -62,7 +62,7 @@ export function HQPage() {
       return {
         label: quickWin.title || "Untitled task",
         reason: `${quickWin.estimatedLength || 20} minutes. Clear this small task while the day still has room.`,
-        buttonLabel: "Review Capture",
+        buttonLabel: "Approve Inbox",
         to: "/app/easylist/dashboard",
       };
     }
@@ -77,7 +77,7 @@ export function HQPage() {
       };
     }
     return {
-      label: "Capture the next note",
+      label: "Remember the next note",
       reason: "Everything looks calm, so a quick note can keep loose thoughts out of the way.",
       buttonLabel: "Open Notes",
       to: "/app/easynotes",
@@ -100,7 +100,7 @@ export function HQPage() {
           title: overdueTasks.length
             ? `${overdueTasks.length} overdue`
             : `${dueTodayTasks.length} due today`,
-          detail: mostUrgentLabel || "Open the list and choose the next step.",
+          detail: mostUrgentLabel || "Open Inbox and choose the next step.",
           to: "/app/easylist/dashboard",
         }
       : null,
@@ -118,7 +118,7 @@ export function HQPage() {
       ? {
           label: "Follow-up hint",
           title: followUpTasks[0].title || "Untitled follow-up",
-          detail: followUpTasks[0].dueDate ? "Already dated in the list." : "No date yet. Decide whether it belongs today.",
+          detail: followUpTasks[0].dueDate ? "Already dated in Inbox." : "No date yet. Decide whether it belongs today.",
           to: "/app/easylist/email",
         }
       : null,
@@ -137,7 +137,7 @@ export function HQPage() {
         {
           label: "Open room",
           title: "No pressure is standing out",
-          detail: "Capture a loose thought or keep the day open.",
+          detail: "Add a loose thought to Inbox or keep the day open.",
           to: "/app/easylist/add",
         },
       ]).slice(0, 3);
@@ -225,7 +225,7 @@ export function HQPage() {
                 </Link>
               ) : null}
               <Link to="/app/easylist/add" className="button-secondary">
-                Capture
+                Add to Inbox
               </Link>
             </div>
           </div>
@@ -266,7 +266,7 @@ export function HQPage() {
             <article className="assistant-attention-item">
               <span>Clear</span>
               <strong>No loose end is demanding the first move.</strong>
-              <p>Use capture or calendar to give the open day a little structure.</p>
+              <p>Use Inbox or Plan to give the open day a little structure.</p>
             </article>
           )}
         </div>

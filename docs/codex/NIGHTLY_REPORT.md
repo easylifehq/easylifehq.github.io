@@ -4067,3 +4067,16 @@
 - docs/codex/MAGIC_SCORECARD.md
 - Visual/product simplification: the Today first viewport no longer renders the three-card module status strip or standalone capacity/load block; deeper calendar/task/follow-up context now stays behind the quiet Signals disclosure.
 - Risks or follow-up needed: Low. Functionality remains linked through next move, capture, Signals, and the Review section below the fold.
+
+## 2026-05-10 13:48:51
+
+- Task attempted: Stage 3 - Assistant Inbox/Capture. User pain: Inbox/Capture still sounded like a separate task app instead of the assistant's intake and approval queue. Skill/workflow: frontend-ui-engineering with incremental-implementation. Target: app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md, docs/codex/MAGIC_SCORECARD.md. Change: reframed capture around inbox, approve, plan, remember, and follow up; added a local/static assistant queue read using existing task data only. Remove/simplify: replaced "Capture inbox", "Opening Capture", "Review Capture", "Open the list", and standalone Capture button language with Inbox/Approve/Plan/Remember/Follow up language. Guardrails: no real Gmail, API, AI, backend, auth, payments, Firebase rules/config, dependencies, package files, deploy config, generated output, secrets, or persistence behavior changes. Acceptance: npm.cmd run build from app-vNext. Proof: this report and MAGIC_SCORECARD.md. Stop condition: stop if the queue affordance needs new writes, sync, archive, send, or external service behavior. [class:feature risk:low mode:single impact:visible surface:inbox scope:app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx,app-vNext/src/features/hq/routes/HQPage.tsx,docs/codex/NIGHTLY_REPORT.md,docs/codex/MAGIC_SCORECARD.md accept:npm.cmd run build from app-vNext]
+- Build result: Passed (`npm.cmd run build` from `app-vNext`)
+- Files changed:
+- app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- docs/codex/NIGHTLY_REPORT.md
+- docs/codex/MAGIC_SCORECARD.md
+- Routes inspected: /app/easylist/add and /app/hq.
+- Product simplification: the Inbox page now shows a read-only assistant queue for Approve, Plan, Remember, and Follow up based on existing items in the selected lane; it does not create, archive, send, sync, or persist anything differently.
+- Risks or follow-up needed: Low. Stage 4 should connect Plan/day builder language to this intake model without changing backend behavior.

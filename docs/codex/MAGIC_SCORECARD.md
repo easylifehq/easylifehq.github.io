@@ -7211,3 +7211,25 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 5; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 2 - Today Minimal Surface; REASON: Today now behaves more like an assistant command surface than a feature dashboard, but the visual system still needs later Stage 9 polish before it feels premium.
 - Follow-up: Stage 3 Assistant Inbox.
+
+## Stage 3 Inbox Check - 2026-05-10 13:48:51
+
+- Task: Stage 3 - Assistant Inbox/Capture.
+- Result: Passed
+- Magic signal: intake-approval-queue
+- Active work pack: AI Personal Assistant Stage 3 - Assistant Inbox
+- Task class: feature
+- Task risk: low
+- Changed files: 4
+- Materiality signal: impact=visible, surface-files=2, docs-files=2, source-lines=focused, css-only=False
+- Inbox model: capture, approve, plan, remember, follow up.
+- Added affordance: read-only assistant queue cards count existing selected-lane items needing approval, planning, memory context, or follow-up attention.
+- Removed/simplified wording: replaced Capture inbox / Opening Capture / Review Capture / Open the list / standalone Capture button language with assistant Inbox wording.
+- Acceptance evidence: `npm.cmd run build` from `app-vNext` passed.
+- Routes inspected: /app/easylist/add and /app/hq.
+- Checkpoint verdict: GREEN
+- Simon verdict: YELLOW
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Simon improvement score: SCORE: 5; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 3 - Assistant Inbox; REASON: Inbox now behaves like assistant intake instead of a separate task app, but the composer itself still carries older task-entry mechanics for a later deeper pass.
+- Follow-up: Stage 4 Planning Engine.
