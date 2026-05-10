@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-10 - Assistant Copy Cleanup
+
+- Task: Clean remaining EasyLife suite/module language in owned login, Inbox, Plan, Notes, and shared app header files.
+- Result: Passed implementation and build; copy review remains NOT_READY_FOR_VISUAL_PASS because the public/login shell still exposes product-inventory navigation outside this task's owned files.
+- Magic signal: moved-forward-with-known-blocker
+- Changed files: 8
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chrome rendered `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` on local Vite port `4186`.
+- Simon improvement score: SCORE: 4; DIRECTION: improved; REASON: signed-in core copy now supports the assistant model, but public/login copy still starts from product inventory.
+- Follow-up: Run a public/auth shell copy cleanup before broad visual polish.
+
 ## 2026-04-25 18:08:26
 
 - Task: Pack 1 - Product Spine protected Settings empty-state rhythm repair: refine one existing Settings empty or low-content panel so it feels like the suite control center with a clear next action, using copy/UI only. Do not change logic, routing, auth, Firebase, backend, persistence, data models, dependencies, package files, generated output, deployment config, secrets, docs report files, root config files, or unrelated pages. [class:design risk:low mode:single scope:app-vNext/src/features/settings/,app-vNext/src/styles/ accept:npm.cmd test]

@@ -61,7 +61,7 @@ export function EasyListInboxPage() {
       <PageSection
         eyebrow="Inbox"
         title="Capture, approve, plan, remember"
-        description="Drop loose work, reminders, notes, and follow-ups into the assistant inbox. Approve what matters, plan what needs time, remember context, and route follow-ups without changing how anything is saved."
+        description="Catch loose work, reminders, notes, and follow-ups in one intake. Approve what matters, send time-sensitive items to Plan, and keep context available for Today."
       >
         <div className="settings-status-grid" aria-label="Assistant inbox queue">
           {assistantQueue.map((item) => (
@@ -74,7 +74,7 @@ export function EasyListInboxPage() {
         </div>
         <div className="easylist-list-picker">
           <label className="field-stack">
-            <span>Inbox lane</span>
+            <span>Intake view</span>
             <input
               list="easylist-list-options"
               value={listName}

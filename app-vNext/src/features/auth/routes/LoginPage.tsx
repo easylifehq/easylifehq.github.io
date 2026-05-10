@@ -81,7 +81,7 @@ export function LoginPage() {
           <div className="auth-proof-card">
             <span>Open today</span>
             <strong>Today + Inbox + Plan</strong>
-            <p>Keep deeper context close without turning the first screen into a tool shelf.</p>
+            <p>Keep deeper context close without crowding the first screen.</p>
           </div>
         </div>
 

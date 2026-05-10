@@ -108,12 +108,12 @@ export function EasyNotesLibraryPage() {
         detail: "Saved context Today can use later.",
       },
       {
-        label: "Turn into task",
+        label: "Task cue",
         count: notes.filter((note) => TASK_CUE_PATTERN.test(`${note.title} ${note.bodyText} ${note.tags.join(" ")}`)).length,
         detail: "Looks like action hiding in text.",
       },
       {
-        label: "Turn into plan",
+        label: "Plan cue",
         count: notes.filter((note) => PLAN_CUE_PATTERN.test(`${note.title} ${note.bodyText} ${note.tags.join(" ")}`)).length,
         detail: "Mentions time, deadlines, or blocks.",
       },
@@ -123,7 +123,7 @@ export function EasyNotesLibraryPage() {
         detail: "Already kept close for reference.",
       },
       {
-        label: "Review stale note",
+        label: "Review old context",
         count: staleNotes.length,
         detail: "Untouched for two weeks or more.",
       },
@@ -139,7 +139,7 @@ export function EasyNotesLibraryPage() {
   }
 
   async function handleCreateFolder() {
-    const folderName = window.prompt("Folder name");
+    const folderName = window.prompt("Context group name");
     if (!folderName?.trim()) return;
 
     const folderId = await addFolder(folderName);
@@ -151,7 +151,7 @@ export function EasyNotesLibraryPage() {
   async function handleRenameFolder() {
     if (!selectedFolderId) return;
     const currentFolder = folders.find((folder) => folder.id === selectedFolderId);
-    const folderName = window.prompt("Folder name", currentFolder?.name || "");
+    const folderName = window.prompt("Context group name", currentFolder?.name || "");
     if (!folderName?.trim()) return;
 
     await renameFolder(selectedFolderId, folderName);
@@ -161,7 +161,7 @@ export function EasyNotesLibraryPage() {
     if (!selectedFolderId) return;
     const currentFolder = folders.find((folder) => folder.id === selectedFolderId);
     const confirmed = window.confirm(
-      `Delete ${currentFolder?.name || "this folder"}? Notes inside it will move to No folder.`
+      `Delete ${currentFolder?.name || "this group"}? Notes inside it will move to No group.`
     );
     if (!confirmed) return;
 
@@ -202,15 +202,15 @@ export function EasyNotesLibraryPage() {
     const count = await cleanUpEmptyNotes();
     setCleanupMessage(
       count
-        ? `${count} empty untitled note${count === 1 ? "" : "s"} moved to Recently deleted.`
-        : "No empty untitled notes to clean up."
+        ? `${count} empty memory item${count === 1 ? "" : "s"} moved to Recently deleted.`
+        : "No empty memory items to clean up."
     );
   }
 
   return (
     <PageSection
       title="Memory"
-      description="Save context for the assistant, then decide what should become a task, plan, pinned reference, or stale-note review."
+      description="Save context for later, then decide what should become a task, a plan, a pinned reference, or a review."
     >
         <div className="notes-command-strip" aria-label="Memory actions">
           <div className="notes-capture-group">
@@ -266,7 +266,7 @@ export function EasyNotesLibraryPage() {
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search titles, tags, and notes"
+              placeholder="Search saved context"
             />
           </label>
 
@@ -356,10 +356,10 @@ export function EasyNotesLibraryPage() {
           open={toolsOpen}
           onToggle={(event) => setToolsOpen(event.currentTarget.open)}
         >
-          <summary>Organize memory</summary>
+          <summary>Organize context</summary>
           <div className="notes-control-center">
           <label className="field-stack">
-            <span>Folder</span>
+            <span>Context group</span>
             <select
               value={selectedFolderId}
               onChange={(event) => {
@@ -382,7 +382,7 @@ export function EasyNotesLibraryPage() {
                 {selectedNoteIds.length} selected
               </strong>
               <select value={bulkFolderId} onChange={(event) => setBulkFolderId(event.target.value)}>
-                <option value="">No folder</option>
+                <option value="">No group</option>
                 {folders.map((folder) => (
                   <option key={folder.id} value={folder.id}>
                     {folder.name}
@@ -404,10 +404,10 @@ export function EasyNotesLibraryPage() {
               {selectedFolderId ? (
                 <>
                   <button type="button" className="ghost-button compact-button" onClick={() => void handleRenameFolder()}>
-                    Rename folder
+                    Rename group
                   </button>
                   <button type="button" className="ghost-button compact-button" onClick={() => void handleDeleteFolder()}>
-                    Delete folder
+                    Delete group
                   </button>
                 </>
               ) : null}
@@ -424,10 +424,10 @@ export function EasyNotesLibraryPage() {
           </div>
           <div className="task-composer-actions">
             <button type="button" className="button-secondary compact-button" onClick={() => void handleCreateFolder()}>
-              New folder
+              New group
             </button>
             <button type="button" className="button-secondary compact-button" onClick={() => void handleCleanup()}>
-              Clean up empty notes
+              Clean up empty memory
             </button>
             <Link to="/app/easynotes/trash" className="button-secondary compact-button">
               Recently deleted
@@ -444,7 +444,7 @@ export function EasyNotesLibraryPage() {
             {hasFilters ? (
               <div className="note-card-meta">
                 <span>Showing</span>
-                Matches your current search or folder
+                Matches your current search or context group
               </div>
             ) : null}
           </div>
@@ -459,7 +459,7 @@ export function EasyNotesLibraryPage() {
               <strong>{hasFilters ? "No saved memory matches this view" : "No saved memory yet"}</strong>
               <p className="helper-copy">
                 {hasFilters
-                  ? "Try a different search or folder, or clear filters to return to the thoughts you saved for later."
+                  ? "Try a different search or context group, or clear filters to return to the thoughts you saved for later."
                   : "Save a thought, meeting note, or rough draft here. It will be ready when Today needs more context."}
               </p>
             </div>
@@ -477,7 +477,7 @@ export function EasyNotesLibraryPage() {
                   checked={selectedNoteIds.includes(note.id)}
                   onChange={() => toggleSelectedNote(note.id)}
                 />
-                <span>Select note</span>
+                <span>Select memory</span>
               </label>
               ) : null}
               <Link to={`/app/easynotes/${note.id}`} className="note-card-link">

@@ -4,31 +4,32 @@
 NOT_READY_FOR_VISUAL_PASS
 
 ## One-Sentence Read
-The core app is finally speaking more like a personal assistant, but the entrance and some route chrome still sound like a bundle of tools.
+The signed-in core now mostly speaks like one assistant, but the public/login shell still introduces EasyLife like a product inventory.
 
 ## What Improved
-- The primary words now point in the right direction: Today, Inbox, Plan, Notes, More.
-- Inbox copy uses useful assistant verbs: approve, plan, remember, follow up.
-- Plan copy is more practical because it talks about the shape of the day.
-- Notes copy now has a memory/action angle instead of only library management.
+- Login proof copy no longer frames the product as a tool shelf.
+- App header assistive copy now says assistant navigation and keeps the visible model at Today, Inbox, Plan, Notes, More.
+- Inbox now reads as one intake surface with approve, Plan, and Today language.
+- Plan now uses fixed items, focus blocks, due items, Today timeline, and quick add plan item instead of calendar-app labels.
+- Notes now reads as Memory with context groups, task cues, plan cues, pinned context, and old-context review.
 
 ## Copy That Still Hurts The Product
-- Public/auth copy still lists many feature areas and makes EasyLife sound like a suite.
-- Any visible list/calendar/notes subnavigation should be softened where it competes with Inbox, Plan, and Memory.
-- Loading/review states do not yet explain the assistant product clearly enough when route inspection stalls.
-- The app should avoid claiming AI behavior until the interaction is real; use assistant as product framing, not as a promise of live model action.
+- The `/login` route still renders surrounding public navigation with "Explore products," "Products," and product names such as EasyHQ, EasyList, and EasyNotes. Those strings live outside the owned files for this slice.
+- Marketing route metadata and public product navigation still carry the old suite structure.
+- Some deeper non-owned surfaces still use EasyList/EasyNotes language, especially archive/deleted/editor and optional More modules.
 
 ## Does The App Read As One Assistant?
-Almost in the signed-in core, not yet from the first public/auth impression. A reviewer should not have to mentally translate old suite language into the new assistant model.
+Yes inside the signed-in review path for Today, Inbox, Plan, Notes, and Settings/More. Not yet from the public/login entrance.
 
-## Priority Rewrite
-Rewrite the login/public first impression to say EasyLife helps choose the next move from tasks, plans, notes, and context. Avoid long inventory lists and old app-suite framing.
+## Route Inspection
+- Method: local Vite preview on `http://127.0.0.1:4186`, rendered DOM captured with headless Chrome `--dump-dom`.
+- Checked: `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, `/app/settings?demo=1`.
+- Build: `npm.cmd run build` passed from `app-vNext`.
 
 ## Next Copy Tasks
-- [ ] Replace auth/public feature inventory copy with one assistant promise.
-- [ ] Remove one remaining visible task/list/calendar/notes app phrase from each core route where it competes with Inbox, Plan, or Memory.
-- [ ] Make loading/demo review states sound intentional if they appear during local review.
-- [ ] Keep AI language modest until a real assistant behavior exists.
+- [ ] Clean `MarketingHeader`, `marketingNavigation`, and the public landing/product routes so login no longer starts with feature inventory.
+- [ ] Clean non-owned deeper route chrome for EasyList/EasyNotes archive, deleted, editor, and optional More paths.
+- [ ] Keep AI language modest until real assistant behavior exists.
 
 ## Stop Or Continue
-continue proof repair first
+continue with public/login shell copy cleanup before broad visual polish

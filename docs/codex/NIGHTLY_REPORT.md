@@ -1,5 +1,34 @@
 # Codex Nightly Report
 
+## 2026-05-10 - Suite language cleanup
+
+- Task attempted: Clean remaining EasyLife suite/module language in the owned login, Inbox, Plan, Notes, and shared app header surfaces so the product reads as one AI personal assistant.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4186` and inspected rendered DOM with headless Chrome `--dump-dom` for `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1`.
+- Files changed:
+  - `app-vNext/src/components/navigation/AppHeader.tsx`
+  - `app-vNext/src/features/auth/routes/LoginPage.tsx`
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx`
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Exact simplification:
+  - Login proof card no longer says "tool shelf."
+  - Inbox no longer says "Inbox lane" or describes routing as a standalone task intake.
+  - Plan no longer exposes "Event," "Deadline," "Task block," "Day timeline," "Schedule task," or "calendar item" as primary visible copy in the day view.
+  - Notes now uses "Memory," "context group," "Task cue," "Plan cue," and "Review old context" instead of notes-app/library-management framing.
+  - App header assistive labels now say assistant navigation and More instead of EasyLife areas and More context.
+- Routes inspected:
+  - Login: route loads, but surrounding public marketing navigation still exposes product inventory outside this task's owned file list.
+  - Today/HQ: no blocked suite terms found in rendered text.
+  - Inbox/Capture: no blocked suite terms found in rendered text.
+  - Plan: owned day surface copy is assistant-aligned; "Today timeline" replaces "Day timeline."
+  - Notes: memory/context copy is assistant-aligned.
+  - Settings/More: route loads and header More language is clean.
+- Follow-up needed: Public/auth shell and marketing navigation still need their own copy cleanup before a full visual pass can honestly start from the login entrance.
+
 
 ## 2026-04-24 05:51:57
 

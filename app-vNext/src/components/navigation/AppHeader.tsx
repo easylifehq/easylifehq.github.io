@@ -14,7 +14,7 @@ export function AppHeader() {
     const pathname = location.pathname;
     if (pathname.startsWith("/app/easylist")) return "Inbox";
     if (pathname.startsWith("/app/easycalendar")) return "Plan";
-    if (pathname.startsWith("/app/easynotes")) return "Notes";
+    if (pathname.startsWith("/app/easynotes")) return "Memory";
     if (pathname.startsWith("/app/easypipeline")) return "Follow-ups";
     if (pathname.startsWith("/app/easycontacts")) return "People";
     if (pathname.startsWith("/app/easyprojects")) return "Projects";
@@ -27,7 +27,7 @@ export function AppHeader() {
   return (
     <header className="app-header">
       <div className="app-header-main">
-        <div className="app-suite-control" role="group" aria-label={`EasyLife navigation, current area ${currentApp}`}>
+        <div className="app-suite-control" role="group" aria-label={`EasyLife assistant navigation, current area ${currentApp}`}>
           <div className="app-header-brand">
             <Link to="/app/hq" className="site-brand" aria-label="Go to Today">
               <span className="brand-badge">EL</span>
@@ -38,7 +38,7 @@ export function AppHeader() {
           </div>
 
           <div className="app-header-actions">
-            <nav className="app-primary-nav app-primary-nav--today-start" aria-label="Primary EasyLife areas, starting with Today">
+            <nav className="app-primary-nav app-primary-nav--today-start" aria-label="Primary assistant areas, starting with Today">
               {primaryItems.map((item) => {
                 const isCurrent = location.pathname === item.href || location.pathname.startsWith(item.href.split("/").slice(0, 3).join("/"));
 
@@ -49,7 +49,7 @@ export function AppHeader() {
                 );
               })}
             </nav>
-            <ProductsMenu items={moreItems} label="More" panelLabel="More context" />
+            <ProductsMenu items={moreItems} label="More" panelLabel="More" />
           </div>
         </div>
       </div>

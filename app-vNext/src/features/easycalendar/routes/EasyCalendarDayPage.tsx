@@ -379,7 +379,7 @@ export function EasyCalendarDayPage() {
         <div className="calendar-day-topbar">
           <div className="calendar-inline-actions">
             <Link to="/app/easycalendar/month" className="button-secondary compact-button">
-              Month
+              Month view
             </Link>
             <button type="button" className="ghost-button compact-button" onClick={() => moveDay(-1)}>
               Prev day
@@ -389,7 +389,7 @@ export function EasyCalendarDayPage() {
             </button>
           </div>
           <button type="button" className="primary-button compact-button" onClick={() => openQuickEvent(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), wakeHour, 0, 0, 0))}>
-            Add
+            Add time
           </button>
         </div>
         <div className="calendar-week-strip" aria-label="Week">
@@ -407,8 +407,8 @@ export function EasyCalendarDayPage() {
         </div>
         <div className="quiet-metrics-row calendar-day-summary-row" aria-label="Plan snapshot">
           <span><strong>{formatDuration(scheduledMinutes)}</strong> planned</span>
-          <span><strong>{fixedEventCount}</strong> event{fixedEventCount === 1 ? "" : "s"}</span>
-          <span><strong>{taskBlockCount}</strong> task block{taskBlockCount === 1 ? "" : "s"}</span>
+          <span><strong>{fixedEventCount}</strong> fixed item{fixedEventCount === 1 ? "" : "s"}</span>
+          <span><strong>{taskBlockCount}</strong> focus block{taskBlockCount === 1 ? "" : "s"}</span>
         </div>
         <div className="settings-status-grid" aria-label="Static day mode read">
           {dayModeOptions.map((mode) => (
@@ -420,18 +420,18 @@ export function EasyCalendarDayPage() {
           ))}
         </div>
         <div className="calendar-type-legend" aria-label="Plan item types">
-          <span className="fixed">Event</span>
-          <span className="deadline">Deadline</span>
-          <span className="flexible">Task block</span>
+          <span className="fixed">Fixed</span>
+          <span className="deadline">Due</span>
+          <span className="flexible">Focus block</span>
         </div>
       </PageSection>
 
       <PageSection
         eyebrow="Today"
-        title="Day timeline"
+        title="Today timeline"
         description="Scan fixed events, planned blocks, and open windows in order."
       >
-        {isLoading ? <p className="helper-copy">Loading this schedule...</p> : null}
+        {isLoading ? <p className="helper-copy">Loading today...</p> : null}
 
         <div className="calendar-day-actions calendar-command-bar">
           <div className="calendar-status-card">
@@ -514,7 +514,7 @@ export function EasyCalendarDayPage() {
           <div className="calendar-warning-card">
             <strong>This day looks overloaded.</strong>
             <p>
-              You have {formatDuration(scheduledMinutes)} on the calendar already, so
+              You have {formatDuration(scheduledMinutes)} on the day already, so
               Plan should suggest carefully instead of packing in more.
             </p>
           </div>
@@ -601,7 +601,7 @@ export function EasyCalendarDayPage() {
         </div>
 
         <details className="advanced-disclosure calendar-deadline-stack">
-          <summary>Deadlines</summary>
+          <summary>Due items</summary>
           {items.filter((item) => item.kind === "deadline").length ? (
             items
               .filter((item) => item.kind === "deadline")
@@ -629,7 +629,7 @@ export function EasyCalendarDayPage() {
               );
               })
           ) : (
-            <p className="helper-copy">No task deadlines on this day.</p>
+            <p className="helper-copy">No due items on this day.</p>
           )}
         </details>
       </PageSection>
@@ -652,7 +652,7 @@ export function EasyCalendarDayPage() {
             className="drawer-panel-vnext calendar-quick-create-panel"
             role="dialog"
             aria-modal="true"
-            aria-label="Quick add calendar item"
+            aria-label="Quick add plan item"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="drawer-header-vnext">
@@ -660,10 +660,10 @@ export function EasyCalendarDayPage() {
                 <p className="eyebrow">Quick add</p>
                 <h2>
                   {quickEvent.mode === "task-block"
-                    ? "Schedule task"
+                    ? "Place task"
                     : quickEvent.mode === "deadline"
-                      ? "New deadline"
-                      : "New event"}
+                      ? "New due item"
+                      : "New fixed time"}
                 </h2>
               </div>
               <button type="button" className="ghost-button compact-button" onClick={() => setQuickEvent(null)}>
@@ -674,9 +674,9 @@ export function EasyCalendarDayPage() {
             <form className="task-composer" onSubmit={(event) => void handleQuickEventSubmit(event)}>
               <div className="calendar-quick-create-tabs" aria-label="Quick add type">
                 {[
-                  ["event", "Event"],
-                  ["deadline", "Deadline"],
-                  ["task-block", "Task"],
+                  ["event", "Fixed time"],
+                  ["deadline", "Due"],
+                  ["task-block", "Focus block"],
                 ].map(([mode, label]) => (
                   <button
                     key={mode}
@@ -695,7 +695,7 @@ export function EasyCalendarDayPage() {
 
               {quickEvent.mode === "task-block" ? (
                 <label className="field-stack">
-                  <span>Task</span>
+                  <span>Choose task</span>
                   <select
                     autoFocus
                     value={quickEvent.selectedTaskId}
@@ -713,12 +713,12 @@ export function EasyCalendarDayPage() {
                 </label>
               ) : (
                 <label className="field-stack">
-                  <span>{quickEvent.mode === "deadline" ? "Deadline" : "Title"}</span>
+                  <span>{quickEvent.mode === "deadline" ? "Due item" : "Title"}</span>
                   <input
                     autoFocus
                     value={quickEvent.title}
                     onChange={(event) => setQuickEvent((current) => current ? { ...current, title: event.target.value } : current)}
-                    placeholder={quickEvent.mode === "deadline" ? "Homework due, exam, application..." : "Class, practice, appointment..."}
+                    placeholder={quickEvent.mode === "deadline" ? "Due item..." : "Appointment, practice, focus time..."}
                   />
                 </label>
               )}
@@ -752,7 +752,7 @@ export function EasyCalendarDayPage() {
                 ) : null}
                 {quickEvent.mode !== "task-block" ? (
                   <label className="field-stack">
-                    <span>Kind</span>
+                    <span>Context</span>
                     <select
                       value={quickEvent.eventType}
                       onChange={(event) =>
@@ -781,10 +781,10 @@ export function EasyCalendarDayPage() {
                   {isSavingQuickEvent
                     ? "Adding..."
                     : quickEvent.mode === "task-block"
-                      ? "Schedule task"
+                      ? "Place task"
                       : quickEvent.mode === "deadline"
-                        ? "Add deadline"
-                        : "Add event"}
+                        ? "Add due item"
+                        : "Add fixed time"}
                 </button>
               </div>
             </form>
