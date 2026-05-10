@@ -4055,3 +4055,15 @@
 - docs/codex/MAGIC_SCORECARD.md
 - Routes inspected: /app/hq, /app/easylist/add, /app/easycalendar/day, /app/easynotes, /app/settings, /app/easyworkout/log, /app/easypipeline/dashboard, /app/easycontacts, /app/easyprojects, /app/easystatistics.
 - Risks or follow-up needed: Low. Routes remain intact; optional modules stay reachable through More/Settings. Stage 2 should simplify the Today first viewport before any broad visual polish.
+
+## 2026-05-10 13:46:12
+
+- Task attempted: Stage 2 - Today Minimal Surface. User pain: Today still risked reading like a dashboard instead of answering what needs attention now. Skill/workflow: frontend-ui-engineering with incremental-implementation. Target: app-vNext/src/features/hq/routes/HQPage.tsx, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md, docs/codex/MAGIC_SCORECARD.md. Change: tightened the first viewport around one assistant read, one next best move, one capture/command button, one small today strip, and one quiet Signals disclosure. First screen rule: answer "what needs my attention now?" before deeper context. Remove/simplify: removed the extra first-path status/capacity grid and its separate load block from Today. Guardrails: no backend, auth, payments, Firebase rules/config, dependencies, package files, deploy config, generated output, secrets, or route deletion. Acceptance: npm.cmd run build from app-vNext. Proof: this report and MAGIC_SCORECARD.md. Stop condition: stop if the simplification requires deleting routes or adding a new dashboard. [class:feature risk:low mode:single impact:visible surface:today scope:app-vNext/src/features/hq/routes/HQPage.tsx,app-vNext/src/styles/globals.css,docs/codex/NIGHTLY_REPORT.md,docs/codex/MAGIC_SCORECARD.md accept:npm.cmd run build from app-vNext]
+- Build result: Passed (`npm.cmd run build` from `app-vNext`)
+- Files changed:
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- app-vNext/src/styles/globals.css
+- docs/codex/NIGHTLY_REPORT.md
+- docs/codex/MAGIC_SCORECARD.md
+- Visual/product simplification: the Today first viewport no longer renders the three-card module status strip or standalone capacity/load block; deeper calendar/task/follow-up context now stays behind the quiet Signals disclosure.
+- Risks or follow-up needed: Low. Functionality remains linked through next move, capture, Signals, and the Review section below the fold.

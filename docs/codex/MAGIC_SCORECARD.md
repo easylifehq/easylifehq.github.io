@@ -7191,3 +7191,23 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 4; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 1 - One Assistant Shell; REASON: navigation and Settings now point toward one assistant path, but Today still needs its Stage 2 minimal first-viewport simplification before the product feels sharp.
 - Follow-up: Stage 2 Today Minimal Surface.
+
+## Stage 2 Today Check - 2026-05-10 13:46:12
+
+- Task: Stage 2 - Today Minimal Surface.
+- Result: Passed
+- Magic signal: attention-first-today
+- Active work pack: AI Personal Assistant Stage 2 - Today Minimal Surface
+- Task class: feature
+- Task risk: low
+- Changed files: 4
+- Materiality signal: impact=visible, surface-files=2, docs-files=2, source-lines=focused, css-only=False
+- First viewport now prioritizes: assistant read, next best move, capture/command entry, today summary strip, and quiet Signals disclosure.
+- Removed/simplified distraction: removed the extra first-path status/capacity grid and standalone load block from Today.
+- Acceptance evidence: `npm.cmd run build` from `app-vNext` passed.
+- Checkpoint verdict: GREEN
+- Simon verdict: YELLOW
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Simon improvement score: SCORE: 5; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 2 - Today Minimal Surface; REASON: Today now behaves more like an assistant command surface than a feature dashboard, but the visual system still needs later Stage 9 polish before it feels premium.
+- Follow-up: Stage 3 Assistant Inbox.
