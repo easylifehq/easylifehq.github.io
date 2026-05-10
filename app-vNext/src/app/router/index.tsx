@@ -191,6 +191,7 @@ const SettingsPage = lazyNamed(
 
 function StartupRedirect() {
   const { settings, isLoading } = useSettings();
+  const location = useLocation();
 
   if (isLoading) {
     return <LoadingState label="Opening your workspace..." />;
@@ -201,10 +202,16 @@ function StartupRedirect() {
       ? getLastAppRoute()?.path || "/app/hq"
       : settings.startupRoute;
 
-  return <Navigate to={target} replace />;
+  return (
+    <Navigate
+      to={{ pathname: target, search: location.search, hash: location.hash }}
+      replace
+    />
+  );
 }
 
 function PublicHomeRoute() {
+  const location = useLocation();
   const { user, isLoading: isAuthLoading } = useAuth();
   const { settings, isLoading: isSettingsLoading } = useSettings();
 
@@ -218,7 +225,12 @@ function PublicHomeRoute() {
         ? getLastAppRoute()?.path || "/app/hq"
         : settings.startupRoute;
 
-    return <Navigate to={target} replace />;
+    return (
+      <Navigate
+        to={{ pathname: target, search: location.search, hash: location.hash }}
+        replace
+      />
+    );
   }
 
   return <MarketingLandingPage />;
@@ -230,6 +242,17 @@ function SettingsPathRedirect() {
   return (
     <Navigate
       to={{ pathname: "/app/settings", search: location.search, hash: location.hash }}
+      replace
+    />
+  );
+}
+
+function PreserveSearchRedirect({ to }: { to: string }) {
+  const location = useLocation();
+
+  return (
+    <Navigate
+      to={{ pathname: to, search: location.search, hash: location.hash }}
       replace
     />
   );
@@ -260,19 +283,19 @@ export function AppRouter() {
             <Route path="hq" element={<HQPage />} />
             <Route path="command" element={<CommandCenterPage />} />
             <Route path="easylist" element={<EasyListLayout />}>
-              <Route index element={<Navigate to="/app/easylist/dashboard" replace />} />
+              <Route index element={<PreserveSearchRedirect to="/app/easylist/dashboard" />} />
               <Route path="dashboard" element={<EasyListDashboardPage />} />
               <Route path="add" element={<EasyListInboxPage />} />
               <Route path="email" element={<EasyListEmailPage />} />
-              <Route path="inbox" element={<Navigate to="/app/easylist/add" replace />} />
-              <Route path="today" element={<Navigate to="/app/easylist/dashboard" replace />} />
-              <Route path="upcoming" element={<Navigate to="/app/easylist/dashboard" replace />} />
+              <Route path="inbox" element={<PreserveSearchRedirect to="/app/easylist/add" />} />
+              <Route path="today" element={<PreserveSearchRedirect to="/app/easylist/dashboard" />} />
+              <Route path="upcoming" element={<PreserveSearchRedirect to="/app/easylist/dashboard" />} />
               <Route path="archive" element={<EasyListArchivePage />} />
               <Route path="deleted" element={<EasyListDeletedPage />} />
             </Route>
             <Route path="easycalendar" element={<EasyCalendarLayout />}>
-              <Route index element={<Navigate to="/app/easycalendar/month" replace />} />
-              <Route path="week" element={<Navigate to="/app/easycalendar/month" replace />} />
+              <Route index element={<PreserveSearchRedirect to="/app/easycalendar/month" />} />
+              <Route path="week" element={<PreserveSearchRedirect to="/app/easycalendar/month" />} />
               <Route path="day" element={<EasyCalendarDayPage />} />
               <Route path="month" element={<EasyCalendarMonthPage />} />
             </Route>
@@ -283,7 +306,7 @@ export function AppRouter() {
               <Route path=":noteId" element={<EasyNotesEditorPage />} />
             </Route>
             <Route path="easypipeline" element={<EasyPipelineLayout />}>
-              <Route index element={<Navigate to="/app/easypipeline/dashboard" replace />} />
+              <Route index element={<PreserveSearchRedirect to="/app/easypipeline/dashboard" />} />
               <Route path="dashboard" element={<EasyPipelineDashboardPage />} />
               <Route path="stats" element={<EasyPipelineStatsPage />} />
               <Route path="email" element={<EasyPipelineEmailPage />} />
@@ -297,7 +320,7 @@ export function AppRouter() {
               <Route path=":projectId/timeline" element={<EasyProjectsTimelinePage />} />
             </Route>
             <Route path="easyworkout" element={<EasyWorkoutLayout />}>
-              <Route index element={<Navigate to="/app/easyworkout/dashboard" replace />} />
+              <Route index element={<PreserveSearchRedirect to="/app/easyworkout/dashboard" />} />
               <Route path="dashboard" element={<EasyWorkoutDashboardPage />} />
               <Route path="routines" element={<EasyWorkoutRoutinesPage />} />
               <Route path="log" element={<EasyWorkoutLogPage />} />

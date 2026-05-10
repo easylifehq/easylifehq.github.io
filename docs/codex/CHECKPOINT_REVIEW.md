@@ -1,10 +1,10 @@
 # Checkpoint Review
 
 ## Verdict
-NOT_READY_FOR_VISUAL_PASS
+READY_FOR_VISUAL_PASS
 
 ## Reviewed At
-2026-05-10 13:57:13 -06:00
+2026-05-10 14:33:16 -06:00
 
 ## Scope
 EasyLife assistant rebuild proof packet after Stages 1-5:
@@ -26,9 +26,17 @@ Passed: `npm.cmd run build` from `app-vNext`.
 - More/Settings: `/app/settings`
 
 ## Inspection Method
-Build verification passed. Local preview inspection was attempted through the dev server and in-app browser. The protected routes redirected to login without demo mode. With demo/visual preview parameters, the shell navigation appeared, but several routes stayed at the loading workspace state or did not expose stable route content for inspection.
+Build verification passed. Local preview inspection used the intended dev-only review mode: append `?demo=1` or `?visualQa=1` to protected app routes. Production auth remains unchanged because preview auth is still guarded by `import.meta.env.DEV`.
 
-This means the product code is build-clean, but the human-review path is not clean enough to trust as the final proof surface.
+The five review routes were inspected at `http://localhost:4181` with `?demo=1`. Each route rendered its expected assistant marker without login redirect or stuck loading:
+
+- `/app/hq?demo=1`: `What needs attention now?`
+- `/app/easylist/add?demo=1`: `Assistant inbox queue`
+- `/app/easycalendar/day?demo=1`: `Static day mode read`
+- `/app/easynotes?demo=1`: `Assistant memory bridge`
+- `/app/settings?demo=1`: `Current assistant status`
+
+Redirect proof also passed: `/app?demo=1` landed on `/app/hq?demo=1`, and `/settings?demo=1` landed on `/app/settings?demo=1`.
 
 ## What Now Works
 - The main shell now has the right mental model: Today, Inbox, Plan, Notes, and More.
@@ -39,21 +47,19 @@ This means the product code is build-clean, but the human-review path is not cle
 - Notes now has a memory bridge instead of feeling only like a standalone note library.
 
 ## What Still Feels Bad
-- The review/preview path is unstable. A reviewer can hit login, loading, or partial shell states instead of immediately seeing the five assistant routes.
-- Login/public shell copy still carries older suite language such as tasks, notes, time, follow-ups, workouts, and progress in one workspace.
 - Some internal route language still leaks old module framing, including list/calendar/notes identity in subnavigation or page chrome.
 - The visual system has not had its Stage 9 pass yet. It is functionally pointed in the right direction, but not yet sleek enough to be judged as finished.
 
 ## Does It Read As One Assistant?
-Partially. The signed-in product model is now one assistant path in structure and language, but the public/auth edge and route-preview reliability still weaken the first impression.
+Yes enough to begin visual polish. The signed-in route model now opens cleanly as Today, Inbox, Plan, Notes, and More in local review mode, and the auth entry no longer leads with old app-suite inventory.
 
 ## Should Visual Polish Begin?
-No. Do one short proof/preview repair pass first, then begin visual polish.
+Yes. Start Stage 9 with one bounded surface at a time. Fold remaining module-language cleanup into the first copy/shell polish slices instead of treating it as a proof blocker.
 
 ## Top Three Next Blockers
-1. Make local human review reliable for `/app/hq`, `/app/easylist/add`, `/app/easycalendar/day`, `/app/easynotes`, and `/app/settings` so each route renders beyond login/loading in a reviewable state.
-2. Replace public/auth-shell suite copy with the same one-assistant language used by the signed-in shell.
-3. Remove remaining visible subnavigation/module wording that makes Inbox, Plan, and Memory feel like separate apps.
+1. Simplify remaining visible subnavigation/module wording that makes Inbox, Plan, and Memory feel like separate apps.
+2. Begin Stage 9 visual polish with the signed-in shell chrome: density, active states, and a colder/slicker assistant mood.
+3. Keep the local route proof command in the nightly report so future reviewers use `?demo=1` instead of real auth.
 
 ## Recommendation
-Continue with a bounded proof repair before Stage 9 visual polish. Do not add new assistant features until the review path is reliable.
+Move from proof repair into Stage 9 visual polish. Do not add new assistant features until the shell and first-route polish pass.

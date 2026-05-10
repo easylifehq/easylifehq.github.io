@@ -4125,3 +4125,28 @@
 - Visual polish decision: NOT_READY_FOR_VISUAL_PASS.
 - Top three next blockers: make the five review routes render reliably in local review, rewrite public/auth first impression into one-assistant language, and remove remaining visible module/subnav wording from Inbox, Plan, and Memory.
 - Risks or follow-up needed: Medium. No build risk found, but proof/review blockers should be repaired before Stage 9 visual polish begins.
+
+## 2026-05-10 14:33:16
+
+- Task attempted: Reviewability proof repair before visual polish. User pain: the Stage 1-5 proof packet could not trust local review because protected routes could hit login/loading and auth copy still sounded like a tool suite. Skill/workflow: debugging-and-error-recovery with browser proof. Target: app-vNext/src/features/auth/AuthContext.tsx, app-vNext/src/app/router/index.tsx, app-vNext/src/features/auth/routes/LoginPage.tsx, docs/codex/NIGHTLY_REPORT.md, docs/codex/CHECKPOINT_REVIEW.md, docs/codex/MAGIC_SCORECARD.md, docs/codex/PHASE_STATE.md. Change: clarified the dev-only review auth path, preserved `?demo=1` / `?visualQa=1` through app redirects, and replaced the login feature-inventory phrase with Today/Inbox/Plan assistant language. Guardrails: no production auth weakening, backend, Firebase rules/config, dependencies, package files, deploy config, generated output, secrets, broad visual redesign, RestaurantDemo, or deployment changes. Acceptance: npm.cmd run build from app-vNext. Proof: browser inspection of the five assistant routes with `?demo=1`. Stop condition: stop if reliable review requires production auth changes or backend changes. [class:bugfix risk:low mode:single impact:visible surface:auth-review scope:app-vNext/src/features/auth/AuthContext.tsx,app-vNext/src/app/router/index.tsx,app-vNext/src/features/auth/routes/LoginPage.tsx,docs/codex/ accept:npm.cmd run build from app-vNext]
+- Build result: Passed (`npm.cmd run build` from `app-vNext`; Vite built successfully in 1.27s)
+- Files changed:
+- app-vNext/src/features/auth/AuthContext.tsx
+- app-vNext/src/app/router/index.tsx
+- app-vNext/src/features/auth/routes/LoginPage.tsx
+- docs/codex/NIGHTLY_REPORT.md
+- docs/codex/CHECKPOINT_REVIEW.md
+- docs/codex/MAGIC_SCORECARD.md
+- docs/codex/PHASE_STATE.md
+- Intended review path: in local dev only, append `?demo=1` or `?visualQa=1` to protected routes. The preview user is still guarded by `import.meta.env.DEV`; production auth remains unchanged.
+- Routes inspected at local preview:
+- `/app/hq?demo=1` rendered `What needs attention now?`
+- `/app/easylist/add?demo=1` rendered `Assistant inbox queue`
+- `/app/easycalendar/day?demo=1` rendered `Static day mode read`
+- `/app/easynotes?demo=1` rendered `Assistant memory bridge`
+- `/app/settings?demo=1` rendered `Current assistant status`
+- Redirect proof: `/app?demo=1` preserved review mode and landed on `/app/hq?demo=1`; `/settings?demo=1` preserved review mode and landed on `/app/settings?demo=1`.
+- Removed/simplified phrase: replaced `Tasks, notes, time, follow-ups, workouts, and progress in one calm workspace` plus `List + Notes + Calendar` with Today/Inbox/Plan assistant copy.
+- Proof blockers remaining: no route/auth review blocker remains. Remaining visible module/subnav language should be handled inside Stage 9 shell/copy polish.
+- Visual polish decision: READY_FOR_VISUAL_PASS.
+- Risks or follow-up needed: Low. Start Stage 9 with shell chrome and remaining module-language cleanup; do not add new assistant features.

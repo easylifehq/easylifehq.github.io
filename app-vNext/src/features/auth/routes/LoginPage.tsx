@@ -75,13 +75,13 @@ export function LoginPage() {
             <p className="eyebrow">EasyLifeHQ</p>
             <h1>{title}</h1>
             <p className="auth-copy">
-              Tasks, notes, time, follow-ups, workouts, and progress in one calm workspace.
+              Start with Today, catch loose thoughts in Inbox, and let Plan and Notes keep the next move clear.
             </p>
           </div>
           <div className="auth-proof-card">
             <span>Open today</span>
-            <strong>List + Notes + Calendar</strong>
-            <p>Add the rest when the day needs more structure.</p>
+            <strong>Today + Inbox + Plan</strong>
+            <p>Keep deeper context close without turning the first screen into a tool shelf.</p>
           </div>
         </div>
 

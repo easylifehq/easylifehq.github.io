@@ -21,15 +21,18 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+function isDevReviewMode() {
+  if (!import.meta.env.DEV) return false;
+  const params = new URLSearchParams(window.location.search);
+  return params.get("visualQa") === "1" || params.get("demo") === "1";
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const isLocalPreview =
-      import.meta.env.DEV && (params.get("visualQa") === "1" || params.get("demo") === "1");
-    if (isLocalPreview) {
+    if (isDevReviewMode()) {
       setUser({ uid: "local-preview", email: "preview@easylife.local" } as User);
       setIsLoading(false);
       return;

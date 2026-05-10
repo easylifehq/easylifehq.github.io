@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: proof
+Current Phase: polish
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Prove the Stage 1-5 assistant rebuild is reviewable before visual polish begins.
+Primary Action: Begin Stage 9 visual polish with one bounded assistant surface at a time.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Proof work may fix review blockers only; no new assistant modules or broad visual redesign.
-Before/After Judgment: The proof path must show whether the user can review EasyLife as one assistant without login/loading or old suite-language confusion.
+Complexity Budget: Stage 9 tasks may polish one owned surface at a time and must remove or simplify one clutter source.
+Before/After Judgment: Each polish task must make EasyLife feel more slick, technical, calm, and assistant-like without adding feature sprawl.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: NOT_READY_FOR_VISUAL_PASS
+Parking State: READY_FOR_VISUAL_PASS
 Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
-Done Signal: Stage 1-5 implementation tasks passed build, but proof says NOT_READY_FOR_VISUAL_PASS because route review and auth/public framing still need bounded repair.
-Next Phase Criteria: Move to Stage 9 visual polish only after the five review routes render reliably and the public/auth first impression uses one-assistant language.
-Repair Trigger: local route review is not reliable enough for human review.
-Repair Return Phase: proof
-Updated At: 2026-05-10 13:57:13 -06:00
+Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
+Next Phase Criteria: Run Stage 9 visual polish in small slices: shell chrome first, Today first viewport second, then Inbox/Plan/Memory route chrome.
+Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
+Repair Return Phase: polish
+Updated At: 2026-05-10 14:33:16 -06:00
 
 ## Phase Order
 

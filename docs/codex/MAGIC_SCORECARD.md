@@ -7298,3 +7298,26 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 6; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 1-5 Proof; REASON: the product spine is now correctly aimed at one assistant, but reviewability and old entrance/module language must be fixed before visual polish.
 - Follow-up: bounded proof repair, then Stage 9 visual polish.
+
+## Reviewability Repair - 2026-05-10 14:33:16
+
+- Task: Reviewability proof repair before visual polish.
+- Result: Passed
+- Magic signal: review-path-unblocked
+- Active work pack: AI Personal Assistant Proof Repair
+- Task class: bugfix
+- Task risk: low
+- Changed files: 7
+- Materiality signal: impact=visible, surface-files=3, docs-files=4, source-lines=focused, css-only=False
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Review mode: local dev `?demo=1` or `?visualQa=1`, still guarded by `import.meta.env.DEV`.
+- Routes reviewed: /app/hq?demo=1, /app/easylist/add?demo=1, /app/easycalendar/day?demo=1, /app/easynotes?demo=1, /app/settings?demo=1.
+- Route markers found: What needs attention now?, Assistant inbox queue, Static day mode read, Assistant memory bridge, Current assistant status.
+- Redirect proof: /app?demo=1 and /settings?demo=1 preserve demo mode.
+- Removed/simplified wording: login no longer leads with old suite inventory or `List + Notes + Calendar`; it now frames Today, Inbox, and Plan as the entry.
+- Checkpoint verdict: READY_FOR_VISUAL_PASS
+- Simon verdict: READY_FOR_VISUAL_PASS
+- Robin verdict: YELLOW
+- Joey verdict: GREEN
+- Simon improvement score: SCORE: 7; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Proof Repair; REASON: the review path is reliable and the auth entry now matches the assistant model, so Stage 9 visual polish can start with remaining route chrome/copy cleanup.
+- Follow-up: Stage 9 visual polish, shell chrome first.
