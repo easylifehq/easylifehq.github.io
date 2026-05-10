@@ -1,29 +1,29 @@
 # Phase State
 
-Current Phase: shape
+Current Phase: proof
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Execute the assistant roadmap in small Stage 1-5 slices: shell, Today, Inbox, Plan, Notes, then proof.
+Primary Action: Prove the Stage 1-5 assistant rebuild is reviewable before visual polish begins.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 1-5 tasks may touch one owned surface per task and every UI task must remove, hide, or simplify at least one confusing element.
-Before/After Judgment: Each task must make EasyLife feel more like one assistant and less like a dashboard or app launcher.
+Complexity Budget: Proof work may fix review blockers only; no new assistant modules or broad visual redesign.
+Before/After Judgment: The proof path must show whether the user can review EasyLife as one assistant without login/loading or old suite-language confusion.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: ACTIVE_ROADMAP_EXECUTION_READY
-Evidence Required: EASYLIFE_ASSISTANT_ROADMAP_EXECUTION, NEXT_5_TASKS, clean TASK_QUEUE, build proof after each implementation task.
-Done Signal: Stage 1-5 implementation tasks pass build, record proof, and the proof packet says READY_FOR_VISUAL_PASS or names bounded blockers.
-Next Phase Criteria: After Stage 1-5 proof, move to Stage 9 visual polish only if the proof packet says READY_FOR_VISUAL_PASS.
-Repair Trigger: none
+Parking State: NOT_READY_FOR_VISUAL_PASS
+Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
+Done Signal: Stage 1-5 implementation tasks passed build, but proof says NOT_READY_FOR_VISUAL_PASS because route review and auth/public framing still need bounded repair.
+Next Phase Criteria: Move to Stage 9 visual polish only after the five review routes render reliably and the public/auth first impression uses one-assistant language.
+Repair Trigger: local route review is not reliable enough for human review.
 Repair Return Phase: proof
-Updated At: 2026-05-10 13:20:00
+Updated At: 2026-05-10 13:57:13 -06:00
 
 ## Phase Order
 
 Website loop: brief -> foundation -> shape -> simplicity -> polish -> proof -> parked
 
-Website stage contract source: docs/codex/WEBSITE_STAGE_RULES.md when present. Use leet-website-stages.ps1 -Project EasyLife -WriteReference from the fleet control room to write or refresh it.
+Website stage contract source: docs/codex/WEBSITE_STAGE_RULES.md when present. Use fleet-website-stages.ps1 -Project EasyLife -WriteReference from the fleet control room to write or refresh it.
 
 Analytical software loop: problem-brief -> data-contract -> formula-spec -> fixture-tests -> engine-build -> calibration -> dashboard -> scenario-tools -> analysis-proof -> parked
 

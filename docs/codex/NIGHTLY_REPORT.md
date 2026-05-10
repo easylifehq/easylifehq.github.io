@@ -4106,3 +4106,22 @@
 - Routes inspected: /app/easynotes and /app/hq.
 - Product simplification: Notes now presents a read-only assistant memory bridge that identifies existing notes with action, plan, pinned, and stale-review cues; it does not turn anything into tasks/plans or persist anything differently.
 - Risks or follow-up needed: Low. Stage 1-5 roadmap is now implemented as static/front-end slices; next work should be proof/review before visual polish.
+
+## 2026-05-10 13:57:13
+
+- Task attempted: Assistant rebuild proof packet. User pain: after Stages 1-5, EasyLife needs an honest proof call before the team starts making it prettier. Skill/workflow: code-review-and-quality with proof/review packet. Target: docs/codex/NIGHTLY_REPORT.md, docs/codex/CHECKPOINT_REVIEW.md, docs/codex/SIMON_DESIGN_REVIEW.md, docs/codex/ROBIN_COPY_REVIEW.md, docs/codex/MAGIC_SCORECARD.md, docs/codex/PHASE_STATE.md. Change: ran build, inspected the five assistant routes through local preview where possible, and recorded whether the rebuild is ready for human review and visual polish. Guardrails: docs only; no product UI, backend, auth, payments, Firebase rules/config, dependencies, package files, deploy config, generated output, secrets, RestaurantDemo, or deployment changes. Acceptance: npm.cmd run build from app-vNext. Proof: CHECKPOINT_REVIEW.md, SIMON_DESIGN_REVIEW.md, ROBIN_COPY_REVIEW.md, MAGIC_SCORECARD.md, and PHASE_STATE.md. Stop condition: stop if the review finds proof blockers rather than doing UI changes in this task. [class:proof risk:low mode:single impact:stability surface:docs scope:docs/codex/NIGHTLY_REPORT.md,docs/codex/CHECKPOINT_REVIEW.md,docs/codex/SIMON_DESIGN_REVIEW.md,docs/codex/ROBIN_COPY_REVIEW.md,docs/codex/MAGIC_SCORECARD.md,docs/codex/PHASE_STATE.md accept:npm.cmd run build from app-vNext]
+- Build result: Passed (`npm.cmd run build` from `app-vNext`; Vite built successfully in 1.29s)
+- Files changed:
+- docs/codex/NIGHTLY_REPORT.md
+- docs/codex/CHECKPOINT_REVIEW.md
+- docs/codex/SIMON_DESIGN_REVIEW.md
+- docs/codex/ROBIN_COPY_REVIEW.md
+- docs/codex/MAGIC_SCORECARD.md
+- docs/codex/PHASE_STATE.md
+- Routes inspected: /app/hq, /app/easylist/add, /app/easycalendar/day, /app/easynotes, /app/settings.
+- What now works: the signed-in product model is now Today, Inbox, Plan, Notes, and More; Today has a clearer attention-first shape; Inbox, Plan, and Memory have assistant-oriented affordances.
+- What still feels bad: local review is not reliable enough because protected routes can redirect to login and demo/visual preview can stall at loading or partial shell states; public/auth copy still carries old suite framing; some module/subnav wording still leaks the old app-suite identity.
+- One-assistant read: partial yes. The core structure reads as one assistant, but the entrance and route proof path do not yet support that read cleanly.
+- Visual polish decision: NOT_READY_FOR_VISUAL_PASS.
+- Top three next blockers: make the five review routes render reliably in local review, rewrite public/auth first impression into one-assistant language, and remove remaining visible module/subnav wording from Inbox, Plan, and Memory.
+- Risks or follow-up needed: Medium. No build risk found, but proof/review blockers should be repaired before Stage 9 visual polish begins.

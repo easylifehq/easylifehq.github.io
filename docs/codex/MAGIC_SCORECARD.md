@@ -7277,3 +7277,24 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 6; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 5 - Notes And Memory; REASON: Notes now feeds the assistant loop as memory/action context, but the real conversion actions remain intentionally static until a later behavior pass.
 - Follow-up: Stage 1-5 proof/review packet before Stage 9 visual polish.
+
+## Stage 1-5 Proof Packet - 2026-05-10 13:57:13
+
+- Task: Assistant rebuild proof packet.
+- Result: Passed as proof, but product verdict is NOT_READY_FOR_VISUAL_PASS.
+- Magic signal: proof-before-polish
+- Active work pack: AI Personal Assistant Stage 1-5 Proof
+- Task class: proof
+- Task risk: low
+- Changed files: 6 docs files
+- Materiality signal: impact=stability, surface-files=0, docs-files=6, source-lines=none, css-only=False
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Routes reviewed: /app/hq, /app/easylist/add, /app/easycalendar/day, /app/easynotes, /app/settings.
+- What works: assistant shell, Today minimal surface, Inbox intake model, Plan day-mode model, and Notes memory bridge now align around one assistant path.
+- What blocks review: local preview/demo route inspection is not reliable enough, public/auth copy still lists the old suite shape, and remaining module/subnav language still weakens the one-assistant read.
+- Checkpoint verdict: NOT_READY_FOR_VISUAL_PASS
+- Simon verdict: NOT_READY_FOR_VISUAL_PASS
+- Robin verdict: NOT_READY_FOR_VISUAL_PASS
+- Joey verdict: GREEN
+- Simon improvement score: SCORE: 6; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 1-5 Proof; REASON: the product spine is now correctly aimed at one assistant, but reviewability and old entrance/module language must be fixed before visual polish.
+- Follow-up: bounded proof repair, then Stage 9 visual polish.
