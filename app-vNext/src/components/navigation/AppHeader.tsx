@@ -10,6 +10,7 @@ export function AppHeader() {
   const visibleItems = appProductItems.filter((item) => !item.appId || isAppVisible(item.appId));
   const primaryItems = visibleItems.filter((item) => ["Today", "Inbox", "Plan", "Notes"].includes(item.label));
   const moreItems = visibleItems.filter((item) => !primaryItems.includes(item));
+  const shellMoreItems = moreItems.map(({ group: _group, groupDescription: _groupDescription, ...item }) => item);
   const currentApp = useMemo(() => {
     const pathname = location.pathname;
     if (pathname.startsWith("/app/easylist")) return "Inbox";
@@ -18,7 +19,7 @@ export function AppHeader() {
     if (pathname.startsWith("/app/easypipeline")) return "Follow-ups";
     if (pathname.startsWith("/app/easycontacts")) return "People";
     if (pathname.startsWith("/app/easyprojects")) return "Projects";
-    if (pathname.startsWith("/app/easyworkout")) return "Workout log";
+    if (pathname.startsWith("/app/easyworkout")) return "Workout";
     if (pathname.startsWith("/app/easystatistics")) return "Progress";
     if (pathname.startsWith("/app/settings")) return "Settings";
     return "Today";
@@ -48,8 +49,8 @@ export function AppHeader() {
                   </Link>
                 );
               })}
+              <ProductsMenu items={shellMoreItems} label="More" panelLabel="More" panelClassName="app-more-panel" />
             </nav>
-            <ProductsMenu items={moreItems} label="More" panelLabel="More" />
           </div>
         </div>
       </div>

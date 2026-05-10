@@ -47,8 +47,8 @@ export const appProductItems: AppProductItem[] = [
   },
   {
     href: "/app/command",
-    label: "Review queue",
-    description: "Check assistant follow-ups",
+    label: "Review",
+    description: "Check follow-ups",
     group: "More",
     groupDescription: "Open when you need extra context.",
   },

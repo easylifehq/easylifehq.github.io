@@ -1,5 +1,28 @@
 # Codex Nightly Report
 
+## 2026-05-10 - Stage 9 shell polish
+
+- Task attempted: Implement EasyLife Stage 9 signed-in shell polish so the header/nav feels more like a slick assistant workspace and less like a soft app suite.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4190` and inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` with headless Chrome desktop/mobile screenshots plus rendered DOM checks.
+- Files changed:
+  - `app-vNext/src/components/navigation/AppHeader.tsx`
+  - `app-vNext/src/components/navigation/appProducts.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Removed/simplified shell clutter:
+  - Moved `More` into the same primary assistant nav group as Today, Inbox, Plan, and Notes.
+  - Removed the duplicate `More` group header from the signed-in menu by stripping menu grouping only in `AppHeader`.
+  - Shortened `Review queue` to `Review` in the optional More list.
+  - Flattened the old pill-container nav border and made active state clarity live on the selected route itself.
+- Route inspection result:
+  - Today, Inbox, Plan, Notes, and Settings/More all retained the primary model: Today, Inbox, Plan, Notes, More.
+  - Mobile header no longer clips the More entry at 390px.
+  - Optional modules remain reachable under More.
+- Follow-up needed: Continue Stage 9 with Today first viewport polish; public/login inventory is still a separate Robin blocker outside this signed-in shell slice.
+
 ## 2026-05-10 - Suite language cleanup
 
 - Task attempted: Clean remaining EasyLife suite/module language in the owned login, Inbox, Plan, Notes, and shared app header surfaces so the product reads as one AI personal assistant.

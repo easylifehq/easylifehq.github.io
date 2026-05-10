@@ -266,21 +266,25 @@ a {
 
 .app-suite-control {
   display: inline-grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: 0.42rem;
-  width: min(100%, 25rem);
+  gap: 0.62rem;
+  width: min(100%, 34rem);
   min-width: 0;
-  max-width: min(100%, 25rem);
-  padding: 0.22rem;
-  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  max-width: min(100%, 34rem);
+  padding: 0.26rem;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 56%, transparent);
   border-radius: calc(var(--shell-control-radius) + 4px);
-  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 82%, transparent);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--shell-panel-highlight) 72%, transparent);
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 10%, transparent), transparent 44%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 72%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--shell-panel-highlight) 78%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--app-accent, var(--shell-accent)) 6%, transparent);
 }
 
 .app-suite-control .site-brand {
-  padding: 0.18rem 0.34rem;
+  padding: 0.18rem 0.3rem;
 }
 
 .site-brand-title {
@@ -320,17 +324,17 @@ a {
 
 .app-header {
   width: min(1200px, calc(100% - 2.5rem));
-  margin: 0.9rem auto 0;
-  border-radius: var(--shell-panel-radius);
-  border-color: color-mix(in srgb, var(--shell-header-border) 72%, white 28%);
+  margin: 0.72rem auto 0;
+  border-radius: calc(var(--shell-panel-radius) - 4px);
+  border-color: color-mix(in srgb, var(--shell-header-border) 58%, white 42%);
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--shell-panel-highlight) 74%, transparent), transparent 52%),
-    color-mix(in srgb, var(--shell-header-bg) 90%, white 10%);
-  -webkit-backdrop-filter: blur(22px) saturate(1.08);
-  backdrop-filter: blur(22px) saturate(1.08);
+    linear-gradient(135deg, color-mix(in srgb, var(--shell-panel-highlight) 64%, transparent), transparent 48%),
+    color-mix(in srgb, var(--shell-header-bg) 82%, white 18%);
+  -webkit-backdrop-filter: blur(24px) saturate(1.12);
+  backdrop-filter: blur(24px) saturate(1.12);
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--shell-panel-highlight) 88%, white 12%),
-    0 10px 28px rgba(24, 35, 38, 0.08);
+    inset 0 1px 0 color-mix(in srgb, var(--shell-panel-highlight) 82%, white 18%),
+    0 12px 34px rgba(7, 18, 22, 0.07);
   overflow: visible;
 }
 
@@ -381,7 +385,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0.68rem 1rem;
+  padding: 0.48rem 0.62rem;
   min-width: 0;
   max-width: 100%;
   touch-action: manipulation;
@@ -394,24 +398,25 @@ a {
 }
 
 .app-header-actions .products-menu {
-  width: 5.6rem;
+  width: auto;
+  min-width: 0;
 }
 
 .app-header-actions .menu-trigger-button {
   width: 100%;
-  min-height: 36px;
-  padding: 0.55rem 0.72rem;
-  background: var(--ui-bg-tab-active, var(--shell-accent-soft));
+  min-height: 34px;
+  padding: 0.42rem 0.58rem;
+  background: color-mix(in srgb, var(--ui-bg-tab-active, var(--shell-accent-soft)) 68%, transparent);
   color: var(--ui-text-primary, var(--shell-page-text));
-  border-color: color-mix(in srgb, var(--shell-accent) 32%, var(--shell-card-border));
+  border-color: color-mix(in srgb, var(--shell-accent) 22%, var(--shell-card-border));
   font-weight: 800;
 }
 
 .app-header-actions .menu-panel {
   left: auto;
   right: 0;
-  width: min(260px, calc(100vw - 2rem));
-  min-width: min(232px, calc(100vw - 2rem));
+  width: min(220px, calc(100vw - 2rem));
+  min-width: min(212px, calc(100vw - 2rem));
 }
 
 .button-primary,
@@ -10248,10 +10253,9 @@ button.calendar-detail-card:disabled {
   }
 
   .app-header-actions {
-    width: auto;
+    display: block;
+    width: 100%;
     min-width: 0;
-    justify-content: end;
-    gap: 0.4rem;
   }
 
   .site-header-actions {
@@ -10265,9 +10269,10 @@ button.calendar-detail-card:disabled {
   }
 
   .app-suite-control {
+    grid-template-columns: 1fr;
     width: 100%;
     max-width: 100%;
-    gap: 0.24rem;
+    gap: 0.16rem;
     padding: 0.16rem;
     border-radius: calc(var(--shell-control-radius) + 1px);
   }
@@ -10337,6 +10342,22 @@ button.calendar-detail-card:disabled {
     min-width: 0;
   }
 
+  .app-primary-nav {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    width: 100%;
+    gap: 0.1rem;
+  }
+
+  .app-primary-nav a,
+  .app-primary-nav .menu-trigger-button {
+    min-width: 0;
+    min-height: 40px;
+    padding: 0.3rem 0.18rem;
+    font-size: 0.72rem;
+    background: color-mix(in srgb, var(--ui-bg-card, #f3f7f5) 46%, transparent);
+  }
+
   .app-header-actions .menu-trigger-button,
   .app-header-actions > .button-secondary {
     width: auto;
@@ -10345,10 +10366,11 @@ button.calendar-detail-card:disabled {
   }
 
   .app-header-actions .menu-trigger-button {
+    width: 100%;
     min-height: 44px;
-    padding: 0.42rem 0.55rem;
+    padding: 0.3rem 0.18rem;
     border-radius: calc(var(--shell-control-radius) - 2px);
-    font-size: 0.74rem;
+    font-size: 0.72rem;
   }
 
   .app-header-actions > .button-secondary {
@@ -11668,20 +11690,21 @@ button.calendar-detail-card:disabled {
 .app-primary-nav {
   display: flex;
   align-items: center;
-  gap: 0.18rem;
+  gap: 0.12rem;
   min-width: 0;
-  padding: 0.16rem;
-  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, rgba(35, 48, 51, 0.13)) 70%, transparent);
+  padding: 0;
+  border: 0;
   border-radius: 8px;
-  background: color-mix(in srgb, var(--ui-bg-card, #f3f7f5) 62%, transparent);
+  background: transparent;
 }
 
 .app-primary-nav a {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 34px;
-  padding: 0.4rem 0.62rem;
+  min-height: 32px;
+  padding: 0.38rem 0.58rem;
   border: 1px solid transparent;
   border-radius: 7px;
   color: var(--ui-text-secondary, var(--shell-page-text));
@@ -11692,12 +11715,40 @@ button.calendar-detail-card:disabled {
   white-space: nowrap;
 }
 
+.app-primary-nav .products-menu {
+  display: inline-flex;
+  min-width: 3.45rem;
+  margin-left: 0.08rem;
+}
+
+.app-primary-nav .menu-trigger-button {
+  min-width: 3.35rem;
+  min-height: 32px;
+  padding: 0.38rem 0.58rem;
+  border-color: transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.78rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
 .app-primary-nav a:hover,
 .app-primary-nav a:focus-visible,
-.app-primary-nav a[aria-current="page"] {
-  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 28%, transparent);
-  background: color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 74%, transparent);
+.app-primary-nav a[aria-current="page"],
+.app-primary-nav .menu-trigger-button:hover,
+.app-primary-nav .menu-trigger-button:focus-visible,
+.app-primary-nav .menu-trigger-button[aria-expanded="true"] {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 20%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 66%, transparent);
   color: var(--ui-text-primary, var(--shell-heading-text));
+}
+
+.app-primary-nav a[aria-current="page"] {
+  box-shadow:
+    inset 0 -2px 0 color-mix(in srgb, var(--app-accent, var(--shell-accent)) 72%, transparent),
+    0 6px 16px color-mix(in srgb, var(--app-accent, var(--shell-accent)) 10%, transparent);
 }
 
 .app-primary-nav--today-start a:first-child {
@@ -12007,29 +12058,31 @@ button.calendar-detail-card:disabled {
 
   .app-header-actions {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: 1fr;
     gap: 0.24rem;
     width: 100%;
   }
 
   .app-primary-nav {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     width: 100%;
   }
 
-  .app-primary-nav a {
+  .app-primary-nav a,
+  .app-primary-nav .menu-trigger-button {
     min-width: 0;
-    min-height: 44px;
-    padding: 0.32rem 0.2rem;
+    min-height: 40px;
+    padding: 0.3rem 0.18rem;
     font-size: 0.7rem;
     line-height: 1.05;
-    white-space: normal;
+    white-space: nowrap;
   }
 
   .app-header-actions .menu-trigger-button {
-    min-height: 44px;
-    padding-inline: 0.5rem;
+    width: 100%;
+    min-height: 40px;
+    padding: 0.3rem 0.18rem;
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-today-summary {

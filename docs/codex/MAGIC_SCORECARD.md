@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-10 - Stage 9 Shell Polish
+
+- Task: Signed-in shell polish for Today, Inbox, Plan, Notes, and More.
+- Result: Passed implementation, build, and local route inspection.
+- Magic signal: moved-forward
+- Changed files: 6
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chrome inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` on local Vite port `4190`; desktop and 390px mobile screenshots saved under `.codex-logs/stage9-shell-20260510`.
+- Simon improvement score: SCORE: 5; DIRECTION: improved; REASON: shell chrome is tighter and More now belongs to the assistant rail, but Today still needs first-viewport visual polish before human review.
+- Follow-up: Continue with Today first viewport polish.
+
 ## 2026-05-10 - Assistant Copy Cleanup
 
 - Task: Clean remaining EasyLife suite/module language in owned login, Inbox, Plan, Notes, and shared app header files.
