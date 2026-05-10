@@ -1,9 +1,9 @@
 # Phase State
 
-Current Phase: polish
+Current Phase: stage-9-visual-polish
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Begin Stage 9 visual polish with one bounded assistant surface at a time.
+Primary Action: Execute Stage 9 visual polish with one bounded assistant surface at a time.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
@@ -11,13 +11,13 @@ Complexity Budget: Stage 9 tasks may polish one owned surface at a time and must
 Before/After Judgment: Each polish task must make EasyLife feel more slick, technical, calm, and assistant-like without adding feature sprawl.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_VISUAL_PASS
+Parking State: STAGE_9_PLAN_READY
 Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Run Stage 9 visual polish in small slices: shell chrome first, Today first viewport second, then Inbox/Plan/Memory route chrome.
+Next Phase Criteria: Complete the five Stage 9 tasks in NEXT_5_TASKS.md, then create a visual proof packet that says READY_FOR_HUMAN_VISUAL_REVIEW or names blockers.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: polish
-Updated At: 2026-05-10 14:33:16 -06:00
+Updated At: 2026-05-10 - Stage 9 visual polish plan created.
 
 ## Phase Order
 
