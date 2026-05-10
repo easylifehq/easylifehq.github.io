@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: proof
+Current Phase: shape
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Decide what belongs on the first screen, what gets hidden, and what should be removed before coding resumes.
-Showable Moment: The fleet has a precise Stage 1 implementation packet that simplifies the product instead of adding dashboard clutter.
+Primary Action: Execute the assistant roadmap in small Stage 1-5 slices: shell, Today, Inbox, Plan, Notes, then proof.
+Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 0 is docs/planning only. Stage 1 may touch one owned surface per task and every UI task must remove, hide, or simplify at least one confusing element.
+Complexity Budget: Stage 1-5 tasks may touch one owned surface per task and every UI task must remove, hide, or simplify at least one confusing element.
 Before/After Judgment: Each task must make EasyLife feel more like one assistant and less like a dashboard or app launcher.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: ACTIVE_REBUILD_PLANNING
-Evidence Required: AI_PERSONAL_ASSISTANT_REBUILD_PLAN, Stage 0 audit, target IA, reset decision, and a Stage 1 implementation packet.
-Done Signal: Stage 0 docs exist, name exact routes/files, identify what to remove or hide, and seed exactly three Stage 1 simplification tasks.
-Next Phase Criteria: Move to Stage 1 only after docs-only Stage 0 is committed cleanly.
+Parking State: ACTIVE_ROADMAP_EXECUTION_READY
+Evidence Required: EASYLIFE_ASSISTANT_ROADMAP_EXECUTION, NEXT_5_TASKS, clean TASK_QUEUE, build proof after each implementation task.
+Done Signal: Stage 1-5 implementation tasks pass build, record proof, and the proof packet says READY_FOR_VISUAL_PASS or names bounded blockers.
+Next Phase Criteria: After Stage 1-5 proof, move to Stage 9 visual polish only if the proof packet says READY_FOR_VISUAL_PASS.
 Repair Trigger: none
 Repair Return Phase: proof
-Updated At: 2026-05-07 11:47:02
+Updated At: 2026-05-10 13:20:00
 
 ## Phase Order
 
@@ -53,6 +53,7 @@ repair is an interrupt lane, not a normal destination. Any phase can enter repai
 
 - One primary action above the fold.
 - No more features after Foundation unless a human moves the phase backward.
+- Visual polish is deferred until Stage 9; pre-Stage-9 visual changes are allowed only when they support shell clarity or Today clarity.
 - Track whether each task makes the product clearer, simpler, more useful, or more beautiful.
 - Keep one sentence product promise visible to the planner.
 - Respect complexity budgets for sections, CTAs, choices, and visible copy.
