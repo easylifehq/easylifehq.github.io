@@ -8,11 +8,11 @@ export function AppHeader() {
   const location = useLocation();
   const { isAppVisible } = useSettings();
   const visibleItems = appProductItems.filter((item) => !item.appId || isAppVisible(item.appId));
-  const primaryItems = visibleItems.filter((item) => ["Today", "Capture", "Plan", "Notes"].includes(item.label));
+  const primaryItems = visibleItems.filter((item) => ["Today", "Inbox", "Plan", "Notes"].includes(item.label));
   const moreItems = visibleItems.filter((item) => !primaryItems.includes(item));
   const currentApp = useMemo(() => {
     const pathname = location.pathname;
-    if (pathname.startsWith("/app/easylist")) return "Capture";
+    if (pathname.startsWith("/app/easylist")) return "Inbox";
     if (pathname.startsWith("/app/easycalendar")) return "Plan";
     if (pathname.startsWith("/app/easynotes")) return "Notes";
     if (pathname.startsWith("/app/easypipeline")) return "Follow-ups";
@@ -49,7 +49,7 @@ export function AppHeader() {
                 );
               })}
             </nav>
-            <ProductsMenu items={moreItems} label="More" panelLabel="More tools" />
+            <ProductsMenu items={moreItems} label="More" panelLabel="More context" />
           </div>
         </div>
       </div>

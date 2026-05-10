@@ -7169,3 +7169,25 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 3; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 0 - Salvage Audit; REASON: suite voice and consistency improved, but first-screen restraint and app-shell polish are still not ready.
 - Debug checkpoint result: FAIL (failed)
+
+## Stage 1 Shell Check - 2026-05-10 13:42:24
+
+- Task: Stage 1 - One Assistant Shell.
+- Result: Passed
+- Magic signal: assistant-shell-coherence
+- Active work pack: AI Personal Assistant Stage 1 - One Assistant Shell
+- Task class: feature
+- Task risk: low
+- Changed files: 5
+- Materiality signal: impact=visible, surface-files=3, docs-files=2, source-lines=focused, css-only=False
+- Primary shell: Today, Inbox, Plan, Notes, More.
+- Removed/simplified label: the default shell no longer uses Capture as the primary task surface, More tools as the overflow panel, or Workspace apps/Suite language in Settings.
+- Optional modules demoted: Workout, Projects, Follow-ups, People, Progress, and other optional context remain reachable under More/Settings.
+- Routes inspected: /app/hq, /app/easylist/add, /app/easycalendar/day, /app/easynotes, /app/settings, /app/easyworkout/log, /app/easypipeline/dashboard, /app/easycontacts, /app/easyprojects, /app/easystatistics.
+- Acceptance evidence: `npm.cmd run build` from `app-vNext` passed.
+- Checkpoint verdict: GREEN
+- Simon verdict: YELLOW
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Simon improvement score: SCORE: 4; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Stage 1 - One Assistant Shell; REASON: navigation and Settings now point toward one assistant path, but Today still needs its Stage 2 minimal first-viewport simplification before the product feels sharp.
+- Follow-up: Stage 2 Today Minimal Surface.

@@ -4042,3 +4042,16 @@
 - app-vNext/src/features/marketing/routes/EasyNotesMarketingPage.tsx
 - docs/codex/MAGIC_SCORECARD.md
 - Risks or follow-up needed: Implementation guardrails failed.
+
+## 2026-05-10 13:42:24
+
+- Task attempted: Stage 1 - One Assistant Shell. User pain: EasyLife reads like a suite of separate mini-apps instead of one AI personal assistant. Skill/workflow: frontend-ui-engineering with incremental-implementation. Target: app-vNext/src/components/navigation/appProducts.ts, app-vNext/src/components/navigation/AppHeader.tsx, app-vNext/src/features/settings/routes/SettingsPage.tsx, docs/codex/NIGHTLY_REPORT.md, docs/codex/MAGIC_SCORECARD.md. Change: set the primary shell to Today, Inbox, Plan, Notes, and More while demoting optional modules into More/Settings. First screen rule: keep Today as the daily assistant command surface and do not add a dashboard. Remove/simplify: replaced separate-app labels such as Capture, Apps, Workspace apps, EasyList, EasyCalendar, EasyNotes, EasyWorkout, More tools, and cross-app with Inbox, More, core surfaces, Plan, Notes, Workout, More context, and cross-surface. Guardrails: no backend, auth, payments, Firebase rules/config, dependencies, package files, deploy config, generated output, secrets, or route deletion. Acceptance: npm.cmd run build from app-vNext. Proof: this report and MAGIC_SCORECARD.md. Stop condition: stop if the shell change requires route deletion or files outside the declared Stage 1 scope. [class:feature risk:low mode:single impact:visible surface:navigation-settings scope:app-vNext/src/components/navigation/appProducts.ts,app-vNext/src/components/navigation/AppHeader.tsx,app-vNext/src/features/settings/routes/SettingsPage.tsx,docs/codex/NIGHTLY_REPORT.md,docs/codex/MAGIC_SCORECARD.md accept:npm.cmd run build from app-vNext]
+- Build result: Passed (`npm.cmd run build` from `app-vNext`)
+- Files changed:
+- app-vNext/src/components/navigation/appProducts.ts
+- app-vNext/src/components/navigation/AppHeader.tsx
+- app-vNext/src/features/settings/routes/SettingsPage.tsx
+- docs/codex/NIGHTLY_REPORT.md
+- docs/codex/MAGIC_SCORECARD.md
+- Routes inspected: /app/hq, /app/easylist/add, /app/easycalendar/day, /app/easynotes, /app/settings, /app/easyworkout/log, /app/easypipeline/dashboard, /app/easycontacts, /app/easyprojects, /app/easystatistics.
+- Risks or follow-up needed: Low. Routes remain intact; optional modules stay reachable through More/Settings. Stage 2 should simplify the Today first viewport before any broad visual polish.

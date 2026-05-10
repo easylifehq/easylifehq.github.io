@@ -100,49 +100,49 @@ const appVisibilityOptions: Array<{
 }> = [
   {
     id: "easylist",
-    label: "EasyList",
-    description: "Quick task capture and the main list.",
+    label: "Inbox",
+    description: "Capture, task review, and loose follow-ups.",
     home: "Daily",
   },
   {
     id: "easynotes",
-    label: "EasyNotes",
-    description: "Fast notes and rough thoughts.",
+    label: "Notes",
+    description: "Memory, rough thoughts, and writing context.",
     home: "Daily",
   },
   {
     id: "easycalendar",
-    label: "EasyCalendar",
-    description: "Today, fixed events, and time blocks.",
+    label: "Plan",
+    description: "Today, fixed events, and realistic day blocks.",
     home: "Daily",
   },
   {
     id: "easyworkout",
-    label: "EasyWorkout",
-    description: "Fast workout logging, with stats as a bonus.",
-    home: "Daily",
+    label: "Workout",
+    description: "Training context when it matters for the day.",
+    home: "Optional",
   },
   {
     id: "easystatistics",
-    label: "EasyStatistics",
-    description: "Progress, trends, and deeper cross-app stats.",
+    label: "Progress",
+    description: "Trends and deeper cross-assistant stats.",
     home: "Optional",
   },
   {
     id: "easypipeline",
-    label: "EasyPipeline",
+    label: "Follow-ups",
     description: "Applications, follow-ups, and job-search momentum.",
     home: "Optional",
   },
   {
     id: "easycontacts",
-    label: "EasyContacts",
+    label: "People",
     description: "People, relationship reminders, and networking context.",
     home: "Optional",
   },
   {
     id: "easyprojects",
-    label: "EasyProjects",
+    label: "Projects",
     description: "Sections, milestones, and synced tasks.",
     home: "Optional",
   },
@@ -155,13 +155,13 @@ const appVisibilityGroups: Array<{
 }> = [
   {
     id: "Daily",
-    title: "Daily spine",
-    description: "Keep these close to Today, tasks, notes, calendar, and workout logging.",
+    title: "Assistant path",
+    description: "Keep Today, Inbox, Plan, and Notes close to the first screen.",
   },
   {
     id: "Optional",
-    title: "Optional support",
-    description: "Show these when projects, follow-ups, contacts, or stats matter this week.",
+    title: "More context",
+    description: "Show workout, projects, follow-ups, people, or progress only when they matter this week.",
   },
 ];
 
@@ -180,17 +180,17 @@ const experimentalFeatureOptions: Array<{
     description: "Adds a compact read on today's load, wins, open time, and follow-ups.",
     category: "HQ",
     status: "Active",
-    showsUp: "EasyHQ",
-    recommendation: "Keep if you like HQ showing a planning pulse.",
+    showsUp: "Today",
+    recommendation: "Keep if you like Today showing a planning pulse.",
   },
   {
     id: "startHere",
-    label: "Start Here",
-    description: "Suggests the best app to open first based on tasks, follow-ups, calendar room, and workouts.",
+    label: "Next Step",
+    description: "Suggests the next surface to open based on tasks, follow-ups, calendar room, and workouts.",
     category: "HQ",
     status: "Active",
-    showsUp: "EasyHQ",
-    recommendation: "Keep if you want HQ to suggest where to begin.",
+    showsUp: "Today",
+    recommendation: "Keep if you want Today to suggest where to begin.",
   },
   {
     id: "inboxCapture",
@@ -207,7 +207,7 @@ const experimentalFeatureOptions: Array<{
     description: "Legacy switch for task parsing work that is now mostly part of the standard Add Tasks flow.",
     category: "Planning",
     status: "Partial",
-    showsUp: "EasyList Add Tasks",
+    showsUp: "Inbox capture",
     recommendation: "Can be retired soon unless we wire a specific smart-entry behavior to it.",
   },
   {
@@ -216,7 +216,7 @@ const experimentalFeatureOptions: Array<{
     description: "Adds a recovery-oriented cleanup panel for overdue tasks instead of only flagging them.",
     category: "Planning",
     status: "Active",
-    showsUp: "EasyList dashboard",
+    showsUp: "Inbox review",
     recommendation: "Keep if you want the overdue cleanup panel.",
   },
   {
@@ -225,7 +225,7 @@ const experimentalFeatureOptions: Array<{
     description: "Drafts project sections, due dates, and linked task suggestions from a rough goal.",
     category: "Projects",
     status: "Active",
-    showsUp: "EasyProjects",
+    showsUp: "More / Projects",
     recommendation: "Requires Assistant and draft creation to be on.",
   },
   {
@@ -234,7 +234,7 @@ const experimentalFeatureOptions: Array<{
     description: "Uses a calmer writing surface with less chrome when editing a note.",
     category: "Notes",
     status: "Active",
-    showsUp: "EasyNotes editor",
+    showsUp: "Notes editor",
     recommendation: "Keep if you prefer the calmer note editor shell.",
   },
   {
@@ -243,17 +243,17 @@ const experimentalFeatureOptions: Array<{
     description: "Extracts likely tasks from notes for review before anything is created.",
     category: "Notes",
     status: "Active",
-    showsUp: "EasyNotes editor",
+    showsUp: "Notes editor",
     recommendation: "Keep if you want note-to-task/project review tools.",
   },
   {
     id: "mobileAppSheet",
-    label: "Mobile App Switcher Sheet",
-    description: "Uses a more intentional mobile Apps menu with backdrop and sheet behavior.",
+    label: "Mobile More Sheet",
+    description: "Uses a more intentional mobile More menu with backdrop and sheet behavior.",
     category: "Capture",
     status: "Active",
     showsUp: "Mobile header",
-    recommendation: "Keep for a better phone app switcher.",
+    recommendation: "Keep for a better phone More menu.",
   },
   {
     id: "gymMode",
@@ -261,7 +261,7 @@ const experimentalFeatureOptions: Array<{
     description: "Adds faster workout entry points, larger in-gym controls, and training stat previews.",
     category: "Workout",
     status: "Active",
-    showsUp: "EasyWorkout",
+    showsUp: "More / Workout",
     recommendation: "Promote to a normal workout feature after this pass.",
   },
 ];
@@ -297,23 +297,23 @@ const settingsSections: Array<{
   },
   {
     id: "apps",
-    label: "Apps",
-    eyebrow: "Suite",
-    description: "Choose which apps show up in your workspace.",
+    label: "More",
+    eyebrow: "Assistant Path",
+    description: "Choose what stays in the core path and what waits under More.",
     group: "basics",
   },
   {
     id: "calendar",
-    label: "Calendar",
-    eyebrow: "EasyCalendar",
+    label: "Plan",
+    eyebrow: "Planning",
     description: "Wake-up time, default view, and planning defaults.",
     group: "basics",
   },
   {
     id: "page-settings",
-    label: "Suite Controls",
-    eyebrow: "App Defaults",
-    description: "Tune the defaults that shape how each EasyLife app opens and hands work across the suite.",
+    label: "Surface Defaults",
+    eyebrow: "Assistant Defaults",
+    description: "Tune how Inbox, Plan, Notes, and optional context open from the assistant.",
     group: "advanced",
   },
   {
@@ -376,29 +376,29 @@ const pageSettingsSections: Array<{
 }> = [
   {
     id: "calendar",
-    label: "Calendar",
-    title: "EasyCalendar",
+    label: "Plan",
+    title: "Plan",
     description: "Wake-up time, day layout, categories, recurring classes, and calendar defaults belong here.",
     status: "Started",
   },
   {
     id: "list",
-    label: "List",
-    title: "EasyList",
+    label: "Inbox",
+    title: "Inbox",
     description: "Urgency scale, quick-add defaults, archive behavior, and task display controls will live here.",
     status: "Next",
   },
   {
     id: "notes",
     label: "Notes",
-    title: "EasyNotes",
+    title: "Notes",
     description: "Open-note behavior, untitled note cleanup, folders, and note-to-task defaults will live here.",
     status: "Next",
   },
   {
     id: "workout",
     label: "Workout",
-    title: "EasyWorkout",
+    title: "Workout",
     description: "Workout mode defaults, exercise box counts, and logging preferences will live here.",
     status: "Next",
   },
@@ -411,14 +411,14 @@ const defaultViewOptions: Array<{ value: CalendarDefaultView; label: string }> =
 ];
 
 const startupRouteOptions: Array<{ value: StartupRoute; label: string; description: string }> = [
-  { value: "/app/hq", label: "EasyHQ", description: "Start with today's workspace." },
+  { value: "/app/hq", label: "Today", description: "Start with the assistant's daily read." },
   { value: "last-used", label: "Last used screen", description: "Resume where you left off." },
-  { value: "/app/easylist/dashboard", label: "EasyList", description: "Open straight to your task list." },
-  { value: "/app/easylist/add", label: "Add tasks", description: "Start in fast capture mode." },
-  { value: "/app/easycalendar/day", label: "Today calendar", description: "Start with today hour by hour." },
-  { value: "/app/easynotes", label: "EasyNotes", description: "Open your notes library." },
+  { value: "/app/easylist/dashboard", label: "Inbox review", description: "Open straight to captured items." },
+  { value: "/app/easylist/add", label: "Capture", description: "Start in fast inbox mode." },
+  { value: "/app/easycalendar/day", label: "Plan", description: "Start with today hour by hour." },
+  { value: "/app/easynotes", label: "Notes", description: "Open assistant memory." },
   { value: "/app/easynotes/new", label: "Blank note", description: "Start writing immediately." },
-  { value: "/app/easyworkout/dashboard", label: "EasyWorkout", description: "Open the workout dashboard." },
+  { value: "/app/easyworkout/dashboard", label: "Workout", description: "Open optional training context." },
 ];
 
 const notesResumeOptions: Array<{ value: NotesResumeBehavior; label: string }> = [
@@ -814,7 +814,7 @@ export function SettingsPage() {
           <h1>Settings</h1>
           <p>Adjust the settings that shape today.</p>
         </div>
-        <div className="settings-status-grid" aria-label="Current suite status">
+        <div className="settings-status-grid" aria-label="Current assistant status">
           <article className="settings-status-card">
             <span>Signed in</span>
             <strong>{auth.currentUser?.email || user?.email || "EasyLife account"}</strong>
@@ -965,7 +965,7 @@ export function SettingsPage() {
 
         {activeSection === "calendar" ? (
         <PageSection
-          eyebrow="Calendar"
+          eyebrow="Planning"
           title="Day setup"
         >
           <div id="calendar" className="settings-anchor" />
@@ -973,7 +973,7 @@ export function SettingsPage() {
             <label className="settings-toggle-row active">
               <div>
                 <span className="settings-card-topline">
-                  <span>EasyCalendar</span>
+                  <span>Plan</span>
                   <span className="settings-state-pill">Day view</span>
                 </span>
                 <strong>Wake-up time</strong>
@@ -1050,8 +1050,8 @@ export function SettingsPage() {
 
         {activeSection === "page-settings" ? (
         <PageSection
-          eyebrow="Suite controls"
-          title="App defaults"
+          eyebrow="Assistant defaults"
+          title="Surface defaults"
         >
           <div id="page-settings" className="settings-anchor" />
           <div className="settings-page-section-list">
@@ -1067,9 +1067,9 @@ export function SettingsPage() {
             ))}
           </div>
 
-          <aside className="settings-command-note" aria-label="Suite defaults guidance">
+          <aside className="settings-command-note" aria-label="Assistant defaults guidance">
             <div>
-              <span className="settings-card-topline">How your apps open</span>
+              <span className="settings-card-topline">How surfaces open</span>
               <strong>Set how EasyLife opens, captures, and routes your work.</strong>
               <p>
                 These controls tune how each app starts its work while keeping the underlying tools and saved data
@@ -1086,7 +1086,7 @@ export function SettingsPage() {
           <div className="settings-app-preference-grid">
             <section className="settings-app-preference-card">
               <div className="panel-header">
-                <p className="eyebrow">EasyList</p>
+                <p className="eyebrow">Inbox</p>
                 <h3>Task defaults</h3>
                 <p>Control how new quick-add rows behave before you type anything.</p>
               </div>
@@ -1124,7 +1124,7 @@ export function SettingsPage() {
 
             <section className="settings-app-preference-card">
               <div className="panel-header">
-                <p className="eyebrow">EasyNotes</p>
+                <p className="eyebrow">Notes</p>
                 <h3>Writing defaults</h3>
                 <p>Choose what happens when you come back to notes and process messy text.</p>
               </div>
@@ -1152,7 +1152,7 @@ export function SettingsPage() {
                   }
                 >
                   <option value="review">Review first</option>
-                  <option value="send-to-list">Send to EasyList</option>
+                  <option value="send-to-list">Send to Inbox</option>
                 </select>
               </label>
               <label className="settings-inline-check">
@@ -1167,7 +1167,7 @@ export function SettingsPage() {
 
             <section className="settings-app-preference-card">
               <div className="panel-header">
-                <p className="eyebrow">EasyWorkout</p>
+                <p className="eyebrow">Workout</p>
                 <h3>Workout mode defaults</h3>
                 <p>Set how much structure is ready when you hit Start Workout.</p>
               </div>
@@ -1206,8 +1206,8 @@ export function SettingsPage() {
             <section className="settings-app-preference-card">
               <div className="panel-header">
                 <p className="eyebrow">Routing</p>
-                <h3>Cross-app planning</h3>
-                <p>Decide how task follow-ups should move between Projects and Pipeline.</p>
+                <h3>Cross-surface planning</h3>
+                <p>Decide how task follow-ups should move between optional Projects and Follow-ups.</p>
               </div>
               <label className="field-stack">
                 <span>Project routing</span>
@@ -1250,9 +1250,9 @@ export function SettingsPage() {
 
         {activeSection === "apps" ? (
         <PageSection
-          eyebrow="Suite"
-          title="Workspace apps"
-          description="Choose what appears in More without making optional modules compete with your daily tools."
+          eyebrow="Assistant Path"
+          title="More and core surfaces"
+          description="Choose what stays in Today, Inbox, Plan, and Notes, and what waits under More."
         >
           <div id="apps" className="settings-anchor" />
           {isLoading ? <p className="helper-copy">Loading your preferences...</p> : null}
@@ -1359,7 +1359,7 @@ export function SettingsPage() {
                 <span className="settings-state-pill">{projectLinkedTaskCount} tasks</span>
               </span>
               <strong>{dataCollections.projectTaskLinks.length} project task link{dataCollections.projectTaskLinks.length === 1 ? "" : "s"}</strong>
-              <p>Project sections are connected back to EasyList tasks so larger work stays inspectable.</p>
+              <p>Project sections are connected back to Inbox tasks so larger work stays inspectable.</p>
             </article>
             <article className="settings-review-card">
               <span className="settings-card-topline">
@@ -1367,7 +1367,7 @@ export function SettingsPage() {
                 <span className="settings-state-pill">{softDeletedNoteCount ? "Recoverable" : "Empty"}</span>
               </span>
               <strong>{softDeletedNoteCount} note{softDeletedNoteCount === 1 ? "" : "s"} in trash</strong>
-              <p>Deleted notes remain reviewable from EasyNotes trash before permanent removal.</p>
+              <p>Deleted notes remain reviewable from Notes trash before permanent removal.</p>
             </article>
           </div>
         </PageSection>
@@ -1582,7 +1582,7 @@ export function SettingsPage() {
             <label className={`settings-toggle-row${settings.notifications.taskDeadlines ? " active" : ""}`}>
               <div>
                 <span className="settings-card-topline">
-                  <span>EasyList</span>
+                  <span>Inbox</span>
                   <span className="settings-state-pill">Tasks</span>
                 </span>
                 <strong>Task deadline reminders</strong>
@@ -1597,7 +1597,7 @@ export function SettingsPage() {
             <label className={`settings-toggle-row${settings.notifications.calendarBlocks ? " active" : ""}`}>
               <div>
                 <span className="settings-card-topline">
-                  <span>EasyCalendar</span>
+                  <span>Plan</span>
                   <span className="settings-state-pill">Blocks</span>
                 </span>
                 <strong>Calendar work-block reminders</strong>
@@ -1718,8 +1718,8 @@ export function SettingsPage() {
                   <span>Routing</span>
                   <span className="settings-state-pill">Suggestions</span>
                 </span>
-                <strong>Allow cross-app suggestions</strong>
-                <p>Lets AI suggest moving a thought into Tasks, Calendar, Projects, Pipeline, or Notes.</p>
+                <strong>Allow cross-surface suggestions</strong>
+                <p>Lets AI suggest moving a thought into Inbox, Plan, Projects, Follow-ups, or Notes.</p>
               </div>
               <input
                 type="checkbox"
@@ -1805,13 +1805,13 @@ export function SettingsPage() {
         <div className="settings-labs-summary">
           <article>
             <span>Recommended first</span>
-            <strong>Daily Review, Start Here, Mobile App Sheet</strong>
-            <p>Active labs have visible app surfaces today. Coming soon switches are parked until we build them.</p>
+            <strong>Daily Review, Next Step, Mobile More Sheet</strong>
+            <p>Active labs have visible assistant surfaces today. Coming soon switches are parked until we build them.</p>
           </article>
           <article>
             <span>Easy to undo</span>
             <strong>Every lab has its own switch</strong>
-            <p>Turn a feature off here and its UI disappears from the suite.</p>
+            <p>Turn a feature off here and its UI disappears from the assistant.</p>
           </article>
         </div>
 
