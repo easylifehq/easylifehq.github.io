@@ -4,6 +4,8 @@ import { PageSection } from "@/components/ui/PageSection";
 import { useEasyNotes } from "@/features/easynotes/EasyNotesContext";
 
 const lastOpenNoteStorageKey = "easynotes:lastOpenNoteId";
+const TASK_CUE_PATTERN = /\b(task|todo|to do|need to|should|follow up|reply|call|text|send|finish|submit)\b/i;
+const PLAN_CUE_PATTERN = /\b(plan|schedule|calendar|today|tomorrow|this week|deadline|due|block|morning|afternoon)\b/i;
 
 function formatDate(value: Date | null) {
   if (!value) return "Just now";
@@ -63,6 +65,16 @@ export function EasyNotesLibraryPage() {
     [folders]
   );
   const pinnedNotes = useMemo(() => notes.filter((note) => note.pinned), [notes]);
+  const staleNotes = useMemo(
+    () =>
+      notes.filter((note) => {
+        const touchedAt = note.updatedAt || note.createdAt;
+        if (!touchedAt) return false;
+
+        return Date.now() - touchedAt.getTime() >= 14 * 86400000;
+      }),
+    [notes]
+  );
   const recentNotes = useMemo(
     () =>
       [...notes]
@@ -87,6 +99,36 @@ export function EasyNotesLibraryPage() {
   const lastOpenNote = useMemo(
     () => notes.find((note) => note.id === lastOpenNoteId) || notes[0] || null,
     [notes, lastOpenNoteId]
+  );
+  const memoryBridge = useMemo(
+    () => [
+      {
+        label: "Remember",
+        count: notes.length,
+        detail: "Saved context Today can use later.",
+      },
+      {
+        label: "Turn into task",
+        count: notes.filter((note) => TASK_CUE_PATTERN.test(`${note.title} ${note.bodyText} ${note.tags.join(" ")}`)).length,
+        detail: "Looks like action hiding in text.",
+      },
+      {
+        label: "Turn into plan",
+        count: notes.filter((note) => PLAN_CUE_PATTERN.test(`${note.title} ${note.bodyText} ${note.tags.join(" ")}`)).length,
+        detail: "Mentions time, deadlines, or blocks.",
+      },
+      {
+        label: "Pin context",
+        count: pinnedNotes.length,
+        detail: "Already kept close for reference.",
+      },
+      {
+        label: "Review stale note",
+        count: staleNotes.length,
+        detail: "Untouched for two weeks or more.",
+      },
+    ],
+    [notes, pinnedNotes.length, staleNotes.length]
   );
 
   async function handleCreateNote() {
@@ -167,17 +209,17 @@ export function EasyNotesLibraryPage() {
 
   return (
     <PageSection
-      title="Capture note"
-      description="Write the thought now. Recent notes are next for review."
+      title="Memory"
+      description="Save context for the assistant, then decide what should become a task, plan, pinned reference, or stale-note review."
     >
-        <div className="notes-command-strip" aria-label="Notes actions">
+        <div className="notes-command-strip" aria-label="Memory actions">
           <div className="notes-capture-group">
             <button type="button" className="notes-command-button notes-command-button-primary" onClick={() => void handleCreateNote()}>
               <span aria-hidden="true">+</span>
-              Capture note
+              Remember something
             </button>
             <span className="notes-library-status">
-              {notes.length ? "Review recent below" : "Capture first, sort later"}
+              {notes.length ? "Review memory below" : "Remember first, sort later"}
             </span>
           </div>
           <div className="notes-secondary-actions">
@@ -188,7 +230,7 @@ export function EasyNotesLibraryPage() {
                 setSearchOpen((current) => !current);
                 window.setTimeout(() => searchInputRef.current?.focus(), 0);
               }}
-              aria-label="Search notes"
+              aria-label="Search memory"
             >
               Search
             </button>
@@ -204,10 +246,20 @@ export function EasyNotesLibraryPage() {
           </div>
         </div>
 
+        <div className="settings-status-grid" aria-label="Assistant memory bridge">
+          {memoryBridge.map((item) => (
+            <article className="settings-status-card" key={item.label}>
+              <span>{item.label}</span>
+              <strong>{item.count}</strong>
+              <p>{item.detail}</p>
+            </article>
+          ))}
+        </div>
+
         {searchOpen ? (
         <div className="notes-library-toolbar notes-search-toolbar">
           <label className="field-stack notes-search-field">
-            <span>Search notes</span>
+            <span>Search memory</span>
             <input
               id="notes-search"
               ref={searchInputRef}
@@ -234,10 +286,10 @@ export function EasyNotesLibraryPage() {
             <section className="group-block notes-review-block">
               <div className="group-heading">
                 <div>
-                  <h3>Review recent</h3>
+                  <h3>Review memory</h3>
                   <p className="note-card-meta">
                     <span>Last touched</span>
-                    Keep active notes moving
+                    Keep active context moving
                   </p>
                 </div>
                 <span>{recentNotes.length}</span>
@@ -304,7 +356,7 @@ export function EasyNotesLibraryPage() {
           open={toolsOpen}
           onToggle={(event) => setToolsOpen(event.currentTarget.open)}
         >
-          <summary>Organize notes</summary>
+          <summary>Organize memory</summary>
           <div className="notes-control-center">
           <label className="field-stack">
             <span>Folder</span>
@@ -315,7 +367,7 @@ export function EasyNotesLibraryPage() {
                 setSelectedNoteIds([]);
               }}
             >
-              <option value="">All notes</option>
+              <option value="">All memory</option>
               {folders.map((folder) => (
                 <option key={folder.id} value={folder.id}>
                   {folder.name}
@@ -386,9 +438,9 @@ export function EasyNotesLibraryPage() {
         {error ? <p className="error-copy">{error}</p> : null}
         {cleanupMessage ? <p className="helper-copy">{cleanupMessage}</p> : null}
 
-        <div className="group-heading notes-library-results-heading" aria-label="Notes library results">
+        <div className="group-heading notes-library-results-heading" aria-label="Memory results">
           <div>
-            <h3>{hasFilters ? "Filtered notes" : "All notes"}</h3>
+            <h3>{hasFilters ? "Filtered memory" : "All memory"}</h3>
             {hasFilters ? (
               <div className="note-card-meta">
                 <span>Showing</span>
@@ -400,7 +452,7 @@ export function EasyNotesLibraryPage() {
         </div>
 
         <div className="notes-library-grid">
-          {isLoading ? <p className="helper-copy">Loading your notes...</p> : null}
+          {isLoading ? <p className="helper-copy">Loading memory...</p> : null}
 
           {!isLoading && filteredNotes.length === 0 ? (
             <div className="empty-card-vnext notes-empty-card notes-suite-empty-card">

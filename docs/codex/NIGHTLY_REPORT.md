@@ -4093,3 +4093,16 @@
 - Routes inspected: /app/easycalendar/day and /app/hq.
 - Product simplification: the Plan page now frames the day as a realistic mode read instead of a standalone calendar screen; no schedule suggestions are applied unless the existing Plan My Day preview/apply flow is explicitly used.
 - Risks or follow-up needed: Low. Stage 5 should connect Notes/memory into this assistant loop without changing persistence behavior.
+
+## 2026-05-10 13:53:24
+
+- Task attempted: Stage 5 - Notes And Memory bridge. User pain: Notes should feed the assistant as memory and action context instead of feeling like a separate notes app. Skill/workflow: frontend-ui-engineering with incremental-implementation. Target: app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx, app-vNext/src/features/hq/routes/HQPage.tsx, docs/codex/NIGHTLY_REPORT.md, docs/codex/MAGIC_SCORECARD.md. Note: requested route `EasyNotesPage.tsx` does not exist; `/app/easynotes` is implemented by `EasyNotesLibraryPage.tsx`. Change: added a static memory bridge for Remember, Turn into task, Turn into plan, Pin context, and Review stale note using existing notes only, and connected Today copy to Open Memory. Remove/simplify: changed visible framing from Capture note / Notes actions / Search notes / Organize notes / All notes / Open Notes to Memory / Memory actions / Search memory / Organize memory / All memory / Open Memory. Guardrails: no real AI, search backend, persistence changes, sync, backend, auth, payments, Firebase rules/config, dependencies, package files, deploy config, generated output, or secrets. Acceptance: npm.cmd run build from app-vNext. Proof: this report and MAGIC_SCORECARD.md. Stop condition: stop if the bridge needs new writes, generated output, or search/sync behavior. [class:feature risk:low mode:single impact:visible surface:notes-memory scope:app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx,app-vNext/src/features/hq/routes/HQPage.tsx,docs/codex/NIGHTLY_REPORT.md,docs/codex/MAGIC_SCORECARD.md accept:npm.cmd run build from app-vNext]
+- Build result: Passed (`npm.cmd run build` from `app-vNext`)
+- Files changed:
+- app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx
+- app-vNext/src/features/hq/routes/HQPage.tsx
+- docs/codex/NIGHTLY_REPORT.md
+- docs/codex/MAGIC_SCORECARD.md
+- Routes inspected: /app/easynotes and /app/hq.
+- Product simplification: Notes now presents a read-only assistant memory bridge that identifies existing notes with action, plan, pinned, and stale-review cues; it does not turn anything into tasks/plans or persist anything differently.
+- Risks or follow-up needed: Low. Stage 1-5 roadmap is now implemented as static/front-end slices; next work should be proof/review before visual polish.

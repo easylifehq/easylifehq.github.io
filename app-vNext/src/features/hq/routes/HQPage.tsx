@@ -78,8 +78,8 @@ export function HQPage() {
     }
     return {
       label: "Remember the next note",
-      reason: "Everything looks calm, so a quick note can keep loose thoughts out of the way.",
-      buttonLabel: "Open Notes",
+      reason: "Everything looks calm, so save the context before it turns into noise.",
+      buttonLabel: "Open Memory",
       to: "/app/easynotes",
     };
   }, [dueTodayTasks, openWindows, overdueTasks, quickWin]);
@@ -231,7 +231,7 @@ export function HQPage() {
           </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
             <span>Capture or command</span>
-            <strong>Tell EasyLife what changed, what to remember, or what to plan.</strong>
+            <strong>Tell EasyLife what changed, what to remember, what to approve, or what to plan.</strong>
             <em>Open</em>
           </button>
           <details className="hq-context-stack">
