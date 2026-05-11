@@ -1,5 +1,35 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 9 final visual proof packet
+
+- Task attempted: Rerun the Stage 9 visual proof packet after the Inbox and Plan polish tasks and decide whether Stage 10 Assistant Brain Foundation can begin.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4196` and inspected `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` with headless Chromium. Today was also inspected at 390px mobile. No page errors were reported.
+- Files changed:
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- What feels slick:
+  - Login starts with one assistant promise and no product inventory.
+  - Today has the strongest command surface: assistant read, next move, compact status strip, command row, and quiet context.
+  - Inbox now reads as an intake approval queue with next review, approve, Plan, remember, and follow-up language.
+  - Plan now opens with day capacity, open time, fixed commitments, focus blocks, and one next planning action.
+  - Notes reads as Memory, and Settings/More behaves like support/control rather than a product list.
+- What still feels bad:
+  - The theme is coherent and reviewable, but still has some panel/card weight that can be revisited after Stage 10 proves useful behavior.
+  - Some deeper optional/direct routes may still carry legacy Easy* module language.
+  - Notes still has a floating Capture affordance; it is acceptable for review, but can be reconsidered during later polish.
+- Assistant read:
+  - EasyLife now reads as one assistant path across Login, Today, Inbox, Plan, Notes, and More/Settings.
+- Verdict:
+  - `READY_FOR_HUMAN_VISUAL_REVIEW`
+- Stage 10 gate:
+  - Stage 10 Assistant Brain Foundation is approved to begin with the prepared approval-first tasks in `docs/codex/NEXT_5_TASKS.md`.
+
 ## 2026-05-11 - Stage 9 Plan day surface polish
 
 - Task attempted: Polish `/app/easycalendar/day?demo=1` so Plan feels like the assistant's realistic day-planning read instead of a standalone calendar module.

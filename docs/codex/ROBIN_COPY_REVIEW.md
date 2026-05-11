@@ -1,10 +1,10 @@
 # Robin Copy Review
 
 ## Verdict
-COPY_READY_WITH_DEEP_ROUTE_CAVEATS
+COPY_READY_FOR_HUMAN_VISUAL_REVIEW
 
 ## One-Sentence Read
-The public/login entrance now introduces EasyLife as one assistant path instead of a product inventory.
+The main EasyLife review path now introduces and sustains one assistant model from login through Today, Inbox, Plan, Notes, and More.
 
 ## What Improved
 - Public/login header navigation now says Assistant instead of Products.
@@ -36,7 +36,7 @@ Yes from the public/login entrance and inside the signed-in review path for Toda
 - [ ] Keep AI language modest until real assistant behavior exists.
 
 ## Stop Or Continue
-continue Stage 9 visual polish with Inbox and Plan; copy is no longer the main review blocker
+continue to Stage 10 Assistant Brain Foundation with modest approval-first language
 
 ## Stage 9 Proof Update - 2026-05-11
 
@@ -49,3 +49,18 @@ Inbox now leads with `Review the intake queue`, `Next review`, `Approve`, `Plan`
 Copy verdict for this route: `INBOX_COPY_READY_FOR_VISUAL_PROOF`.
 
 Remaining copy caveat: the shared task composer still contains underlying task-row labels because the behavior remains real task capture, but the visible Inbox frame now reads as assistant intake instead of a standalone list app.
+
+## Stage 9 Final Copy Proof - 2026-05-11
+
+Copy verdict: `COPY_READY_FOR_HUMAN_VISUAL_REVIEW`.
+
+The six-route proof rendered the main path with assistant language:
+
+- Login: `Open your assistant`
+- Today: `What needs attention now?`
+- Inbox: `Review the intake queue`
+- Plan: `Plan a realistic day`
+- Notes: `Memory`
+- Settings/More: `Settings`
+
+The remaining copy caveats are non-blocking: deeper optional/direct routes can still carry legacy labels, and Stage 10 copy must avoid implying real AI automation, real memory, email sending, sync, or hidden writes.

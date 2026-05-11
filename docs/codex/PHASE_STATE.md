@@ -1,33 +1,33 @@
 # Phase State
 
-Current Phase: stage-9-visual-polish
+Current Phase: stage-10-assistant-brain-foundation
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Finish remaining Stage 9 visual blockers, starting with Inbox intake polish and Plan day polish.
+Primary Action: Begin approval-first assistant brain foundation with local, reviewable suggestions and no hidden writes.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 9 tasks may polish one owned surface at a time and must remove or simplify one clutter source.
-Before/After Judgment: Each polish task must make EasyLife feel more slick, technical, calm, and assistant-like without adding feature sprawl.
+Complexity Budget: Stage 10 tasks must add one approval-first assistant behavior at a time and must not add autonomous actions.
+Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: NOT_READY_FOR_HUMAN_VISUAL_REVIEW
+Parking State: READY_FOR_HUMAN_VISUAL_REVIEW
 Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 10 task packet is prepared in NEXT_5_TASKS.md, but implementation remains gated. Complete or explicitly park the remaining Inbox and Plan Stage 9 visual blockers, then rerun the visual proof packet. Only a proof packet that says READY_FOR_HUMAN_VISUAL_REVIEW should begin Stage 10 Assistant Brain Foundation.
+Next Phase Criteria: Stage 9 visual proof now says READY_FOR_HUMAN_VISUAL_REVIEW. Stage 10 Assistant Brain Foundation may begin using the prepared approval-first tasks in NEXT_5_TASKS.md.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
-Repair Return Phase: polish
-Updated At: 2026-05-11 - Stage 10 assistant brain task packet prepared, still gated by Stage 9 visual proof.
+Repair Return Phase: stage-10-assistant-brain-foundation
+Updated At: 2026-05-11 - Stage 9 visual proof passed; Stage 10 assistant brain foundation approved.
 
 ## Assistant Brain Gate
 
-The real assistant brain comes after visual polish, not before it. Stage 10 is approved only when the visual proof packet confirms the shell is credible enough for human review or the remaining visual issues are small and explicitly parked.
+The real assistant brain comes after visual polish, not before it. Stage 10 is now approved because the visual proof packet confirmed the shell is credible enough for human review.
 
 Stage 10 source: docs/codex/EASYLIFE_STAGE_10_ASSISTANT_BRAIN_PLAN.md
 
 First Stage 10 behavior: approval-first intake classification. The assistant may suggest task, note, plan, reminder, follow-up, or unsure intent, but it must not create hidden writes, sync external systems, send email, alter calendars, or imply real memory until those contracts exist.
 
-Prepared Stage 10 queue: docs/codex/NEXT_5_TASKS.md now contains exactly five approval-first implementation tasks. They are ready for a future phase switch but are not authorization to implement Stage 10 while Parking State remains NOT_READY_FOR_HUMAN_VISUAL_REVIEW.
+Prepared Stage 10 queue: docs/codex/NEXT_5_TASKS.md now contains exactly five approval-first implementation tasks. They are authorized to start while preserving the no-hidden-write guardrails.
 
 ## Phase Order
 

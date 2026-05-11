@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 9 Final Visual Proof Packet
+
+- Task: Rerun Stage 9 visual proof after Inbox and Plan polish.
+- Result: Passed build and route inspection; Stage 10 Assistant Brain Foundation is approved to begin.
+- Magic signal: ready-for-human-review
+- Changed files: docs only
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` on local Vite port `4196`; Today was also inspected at 390px mobile.
+- Screenshot evidence: `.codex-logs/stage9-proof-20260511-login.png`, `.codex-logs/stage9-proof-20260511-today.png`, `.codex-logs/stage9-proof-20260511-inbox.png`, `.codex-logs/stage9-proof-20260511-plan.png`, `.codex-logs/stage9-proof-20260511-notes.png`, `.codex-logs/stage9-proof-20260511-settings.png`, and `.codex-logs/stage9-proof-20260511-today-mobile.png`.
+- Simon verdict: `READY_FOR_HUMAN_VISUAL_REVIEW`.
+- Robin verdict: `COPY_READY_FOR_HUMAN_VISUAL_REVIEW`.
+- Stage 10 gate: opened for approval-first local assistant brain tasks only.
+
 ## 2026-05-11 - Stage 9 Plan Day Surface Polish
 
 - Task: Plan day surface polish.

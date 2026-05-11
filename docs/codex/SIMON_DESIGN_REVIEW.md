@@ -1,10 +1,10 @@
 # Simon Design Review
 
 ## Verdict
-NOT_READY_FOR_HUMAN_VISUAL_REVIEW
+READY_FOR_HUMAN_VISUAL_REVIEW
 
 ## One-Sentence Read
-EasyLife is visually credible in its entrance, shell, and Today surface, but Inbox and Plan still need polish before the assistant brain should begin.
+EasyLife is visually credible enough for human review: the entrance, shell, Today, Inbox, Plan, Notes, and More now read as one calm assistant path.
 
 ## What Improved
 - Plan now leads with a realistic day-planning read: capacity, planned time, open time, fixed commitments, focus blocks, and one next planning action.
@@ -26,29 +26,36 @@ EasyLife is visually credible in its entrance, shell, and Today surface, but Inb
 - Mobile shell inspection at 390px keeps Today, Inbox, Plan, Notes, and More visible without clipping.
 
 ## What Still Feels Bad
-- The final Stage 9 proof packet still needs to re-check the whole review path after the Inbox and Plan fixes.
-- Memory may still benefit from later route-specific polish, but it is no longer the top blocker before the next proof run.
+- Memory may still benefit from later route-specific polish, especially around review density and the floating Capture affordance.
 - There is still some card/panel language in deeper surfaces for a personal assistant that should feel fast, composed, and direct.
+- Some deeper optional/direct routes may still carry legacy module language.
 
 ## Design Readiness
-Rerun the Stage 9 visual proof packet. Public/login, signed-in shell, Today, Inbox, and Plan have now had focused polish, but the app still needs the full review verdict before Stage 10.
+EasyLife is `READY_FOR_HUMAN_VISUAL_REVIEW`. Stage 10 Assistant Brain Foundation may begin, but only with approval-first local behavior and no hidden writes.
 
 ## Stage 9 Proof Result
 
 - Build passed with `npm.cmd run build` from `app-vNext`.
-- Login, Today, Inbox, Plan, Notes, and Settings/More all rendered in local review mode.
+- Login, Today, Inbox, Plan, Notes, and Settings/More all rendered in local review mode on `http://127.0.0.1:4196`.
 - Today passed desktop and 390px mobile inspection.
-- The previous bounded blockers, Inbox intake polish and Plan day polish, have now been addressed and need a fresh proof verdict.
+- The previous bounded blockers, Inbox intake polish and Plan day polish, have now been addressed.
 
 ## Priority Design Blocker
-Full Stage 9 proof. The next judgment point is whether the complete review path is credible enough for human visual review.
+The next blocker is usefulness, not visual credibility: Stage 10 needs a real approval-first assistant brain foundation that does not overpromise.
 
 ## Next Design Tasks
 - [x] Stage 9 Task 2: polish Today first viewport and flatten one card/panel clutter source.
 - [x] Stage 9 Task 3: polish Inbox into a compact assistant intake queue.
 - [x] Stage 9 Task 4: polish Plan day surface without adding scheduling behavior.
 - [x] Separate Robin task: clean public/login product inventory language.
-- [ ] Stage 9 proof packet: inspect login, Today, Inbox, Plan, Notes, and Settings/More.
+- [x] Stage 9 proof packet: inspect login, Today, Inbox, Plan, Notes, and Settings/More.
 
 ## Stop Or Continue
-continue Stage 9 visual polish
+continue to Stage 10 Assistant Brain Foundation
+
+## Stage 9 Final Proof Update - 2026-05-11
+
+- Route proof passed for `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1`.
+- Desktop screenshots were captured for all six routes; Today was also captured at 390px mobile.
+- No browser page errors were reported.
+- Final verdict: `READY_FOR_HUMAN_VISUAL_REVIEW`.
