@@ -14,16 +14,16 @@ type IntentRule = {
 
 const intentRules: IntentRule[] = [
   {
-    intent: "follow-up",
-    confidence: "high",
-    pattern: /\b(reply|respond|follow up|follow-up|call|text|message|email)\b/i,
-    summary: "Looks like something to follow up on.",
-  },
-  {
     intent: "reminder",
     confidence: "high",
     pattern: /\b(remind me|reminder|don't forget|dont forget|remember to)\b/i,
     summary: "Looks like a reminder to review before saving.",
+  },
+  {
+    intent: "follow-up",
+    confidence: "high",
+    pattern: /\b(reply|respond|follow up|follow-up|call|text|message|email)\b/i,
+    summary: "Looks like something to follow up on.",
   },
   {
     intent: "plan",

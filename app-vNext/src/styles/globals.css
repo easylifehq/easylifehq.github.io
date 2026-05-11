@@ -4631,6 +4631,139 @@ textarea::placeholder {
   padding-top: 0.1rem;
 }
 
+.assistant-intent-preview {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.36fr) minmax(0, 1fr);
+  gap: 0.72rem;
+  align-items: stretch;
+}
+
+.assistant-intent-input,
+.assistant-suggestion-card {
+  min-width: 0;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 74%, transparent);
+}
+
+.assistant-intent-input {
+  display: grid;
+  align-content: start;
+  gap: 0.55rem;
+  padding: 0.72rem;
+}
+
+.assistant-intent-input p,
+.assistant-suggestion-warning {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
+.assistant-suggestion-card {
+  display: grid;
+  gap: 0.68rem;
+  padding: 0.78rem;
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 28%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 9%, transparent), transparent 48%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 78%, transparent);
+}
+
+.assistant-suggestion-topline,
+.assistant-suggestion-main,
+.assistant-suggestion-actions,
+.assistant-suggestion-fields {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.assistant-suggestion-topline,
+.assistant-suggestion-fields {
+  flex-wrap: wrap;
+}
+
+.assistant-suggestion-topline span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.55rem;
+  padding: 0.18rem 0.48rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 78%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, var(--shell-chip-bg)) 72%, transparent);
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.72rem;
+  font-weight: 840;
+  text-transform: capitalize;
+}
+
+.assistant-suggestion-main {
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.assistant-suggestion-main p {
+  margin: 0 0 0.16rem;
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.assistant-suggestion-main h3 {
+  margin: 0;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: clamp(1rem, 1.6vw, 1.24rem);
+  line-height: 1.14;
+}
+
+.assistant-suggestion-main strong {
+  display: block;
+  margin-top: 0.24rem;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.86rem;
+  font-weight: 620;
+  line-height: 1.4;
+}
+
+.assistant-suggestion-actions {
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.assistant-suggestion-actions button {
+  min-height: 34px;
+  padding: 0.34rem 0.58rem;
+  font-size: 0.78rem;
+}
+
+.assistant-suggestion-fields span {
+  display: grid;
+  min-width: min(100%, 160px);
+  gap: 0.16rem;
+  padding: 0.55rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 70%, transparent);
+}
+
+.assistant-suggestion-fields small,
+.assistant-suggestion-fields em {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 760;
+}
+
+.assistant-suggestion-fields strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
 .easylist-inbox-surface .task-rows-shell {
   gap: 0.65rem;
   padding: 0.72rem;
@@ -4673,7 +4806,8 @@ textarea::placeholder {
 
 @media (max-width: 820px) {
   .easylist-inbox-command,
-  .easylist-inbox-controls {
+  .easylist-inbox-controls,
+  .assistant-intent-preview {
     grid-template-columns: 1fr;
   }
 

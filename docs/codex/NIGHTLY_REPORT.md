@@ -1,5 +1,24 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 10 visible Inbox assistant suggestion card
+
+- Task attempted: Wire the local assistant intent contract into Inbox/Capture as a visible approval-first suggestion before anything changes.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4201` and inspected `/app/easylist/add?demo=1` with headless Chromium. The route rendered the assistant intake preview, suggestion card, intent/confidence/approval state, preview-only approve/edit/dismiss actions, and no-write warning. Screenshot saved at `.codex-logs/stage10-task2-inbox.png`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/features/assistant/intentClassifier.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product change:
+  - Inbox now has a local assistant intake preview field that runs `classifyAssistantIntent`.
+  - The compact suggestion card shows detected intent, confidence label, approval state, editable-looking fields, and preview-only Approve/Edit/Dismiss affordances.
+  - Explicit reminder phrasing now wins over follow-up keywords, so `Remember to call the dentist tomorrow morning` classifies as `reminder` instead of `follow-up`.
+- No-write guarantee:
+  - The card does not save, create, archive, send, sync, remember, mutate existing task data, call a model, alter auth/backend/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Stage 10 Task 3 can make the preview affordances switch local approval states without touching saved data.
+
 ## 2026-05-11 - Stage 10 approval-first assistant intent contract
 
 - Task attempted: Create the first local assistant-brain contract for classifying messy capture text into a visible suggestion before anything changes.

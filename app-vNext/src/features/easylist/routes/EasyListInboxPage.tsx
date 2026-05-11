@@ -1,4 +1,6 @@
 import { LoadingState } from "@/components/feedback/LoadingState";
+import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
+import { approvalStateLabels } from "@/features/assistant/intentTypes";
 import { TaskComposer } from "@/features/easylist/components/TaskComposer";
 import { useEasyList } from "@/features/easylist/EasyListContext";
 import { useMemo, useState } from "react";
@@ -8,6 +10,7 @@ const FOLLOW_UP_PATTERN = /\b(email|reply|respond|follow up|follow-up|call|text|
 export function EasyListInboxPage() {
   const { tasks, isLoading, error, addTask } = useEasyList();
   const [listName, setListName] = useState("Main");
+  const [assistantCaptureText, setAssistantCaptureText] = useState("Reply to Maya about Friday plans");
   const listNames = useMemo(
     () => Array.from(new Set(["Main", ...tasks.map((task) => task.listName || "Main")])).sort(),
     [tasks]
@@ -26,6 +29,10 @@ export function EasyListInboxPage() {
   const unresolvedCount = activeLaneItems.length;
   const nextReviewItem =
     activeLaneItems.find((task) => !task.dueDate && !task.estimatedLength) || activeLaneItems[0] || null;
+  const assistantSuggestion = useMemo(
+    () => classifyAssistantIntent(assistantCaptureText),
+    [assistantCaptureText]
+  );
   const assistantQueue = useMemo(
     () => [
       {
@@ -109,6 +116,61 @@ export function EasyListInboxPage() {
           </label>
           <p>Keep scope quiet. Today only needs the next thing worth approving.</p>
         </div>
+
+        <section className="assistant-intent-preview" aria-labelledby="assistant-intent-preview-title">
+          <div className="assistant-intent-input">
+            <label className="field-stack">
+              <span>Assistant intake preview</span>
+              <input
+                type="text"
+                value={assistantCaptureText}
+                onChange={(event) => setAssistantCaptureText(event.target.value)}
+                placeholder="Paste one messy thought to classify locally"
+              />
+            </label>
+            <p>Local preview only. Nothing is saved, sent, synced, or remembered from this card.</p>
+          </div>
+
+          <article className={`assistant-suggestion-card assistant-suggestion-card-${assistantSuggestion.intent}`}>
+            <div className="assistant-suggestion-topline">
+              <span>{assistantSuggestion.intent}</span>
+              <span>{assistantSuggestion.confidenceLabel}</span>
+              <span>{approvalStateLabels[assistantSuggestion.approvalState]}</span>
+            </div>
+            <div className="assistant-suggestion-main">
+              <div>
+                <p id="assistant-intent-preview-title">Suggested next shape</p>
+                <h3>{assistantSuggestion.title}</h3>
+                <strong>{assistantSuggestion.summary}</strong>
+              </div>
+              <div className="assistant-suggestion-actions" aria-label="Preview-only approval actions">
+                <button type="button" className="primary-button" title="Preview only. This does not save anything.">
+                  Approve
+                </button>
+                <button type="button" className="button-secondary" title="Preview only. This does not edit saved data.">
+                  Edit
+                </button>
+                <button type="button" className="ghost-button" title="Preview only. This does not dismiss saved data.">
+                  Dismiss
+                </button>
+              </div>
+            </div>
+            <div className="assistant-suggestion-fields" aria-label="Editable-looking suggestion fields">
+              {assistantSuggestion.fields.map((field) => (
+                <span key={field.label}>
+                  <small>{field.label}</small>
+                  <strong>{field.value}</strong>
+                  <em>{field.editable ? "editable after approval" : "locked"}</em>
+                </span>
+              ))}
+            </div>
+            {assistantSuggestion.warnings.map((warning) => (
+              <p key={warning} className="assistant-suggestion-warning">
+                {warning}
+              </p>
+            ))}
+          </article>
+        </section>
 
         <TaskComposer onSubmit={addTask} listName={selectedListName} showBrainDump={false} />
       </section>

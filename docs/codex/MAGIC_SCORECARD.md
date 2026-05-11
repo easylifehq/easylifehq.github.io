@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 10 Visible Inbox Suggestion Card
+
+- Task: Visible Inbox assistant suggestion card.
+- Result: Passed local UI implementation, build, and route inspection.
+- Magic signal: approval-first-behavior-visible
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4201`; screenshot saved at `.codex-logs/stage10-task2-inbox.png`.
+- Contract evidence: Inbox calls `classifyAssistantIntent` from a local preview field and renders intent, confidence, approval state, editable-looking fields, and preview-only Approve/Edit/Dismiss actions.
+- No-write guarantee: no model calls, hidden writes, persistence changes, task mutation, email sending, calendar sync, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 10 Task 3 should make approval state transitions local and explicit without changing saved data behavior.
+
 ## 2026-05-11 - Stage 10 Approval-First Intent Contract
 
 - Task: Approval-first assistant intent contract.
