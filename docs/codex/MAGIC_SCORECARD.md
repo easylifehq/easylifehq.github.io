@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 11 Local Draft Comparison Row
+
+- Task: Local draft comparison row.
+- Result: Passed local UI implementation, build, and route inspection.
+- Magic signal: draft-choice-visible-without-writes
+- Changed files: 7
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4206`, selected `Memory draft`, clicked `Preview draft`, and verified exactly one `.assistant-local-draft-preview`. Screenshot saved at `.codex-logs/stage11-task2-inbox-comparison.png`.
+- Comparison evidence: Inbox now shows six unsaved draft shapes: Task, Memory, Plan, Reminder, Follow-up, and Review.
+- Simplification evidence: removed the repeated approval-state chip from the suggestion card topline to keep the card compact.
+- Copy verdict: `COPY_STAYS_HONEST_FOR_LOCAL_DRAFT_COMPARISON`.
+- No-write guarantee: no persistence, saved alternate drafts, task/note/calendar mutation, archive/send/sync/schedule/remember behavior, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 11 Task 3 should connect Today to safe unsaved draft review while keeping the same no-write boundary.
+
 ## 2026-05-11 - Stage 11 Unsaved Inbox Local Draft Preview
 
 - Task: Unsaved Inbox local draft preview.

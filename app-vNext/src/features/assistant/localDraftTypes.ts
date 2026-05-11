@@ -28,6 +28,14 @@ export type AssistantLocalDraft = {
   warnings: string[];
 };
 
+export type AssistantLocalDraftComparisonOption = {
+  draftType: AssistantLocalDraftType;
+  label: string;
+  title: string;
+  summary: string;
+  recommended: boolean;
+};
+
 export const localDraftTypeLabels: Record<AssistantLocalDraftType, string> = {
   task: "Task draft",
   note: "Memory draft",

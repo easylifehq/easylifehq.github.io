@@ -3,6 +3,20 @@
 ## Verdict
 COPY_READY_FOR_STAGE_11
 
+## Stage 11 Task 2 Copy Review - 2026-05-11
+
+Verdict: `COPY_STAYS_HONEST_FOR_LOCAL_DRAFT_COMPARISON`.
+
+The new Inbox comparison row stays honest because it says `Compare unsaved shapes`, uses draft labels rather than save labels, and keeps the no-write warning visible in the single approved preview. Selecting Task, Memory, Plan, Reminder, Follow-up, or Review changes only the local preview shape.
+
+What improved:
+- `Approve preview` had already been softened to `Preview draft`, and this task keeps that safer verb.
+- The repeated approval-state chip was removed from the suggestion topline, so the card now avoids saying the same preview state in three places.
+- The draft preview still says the selected draft is not saved and that no task, note, plan, reminder, follow-up, email, sync, schedule, or memory has been created.
+
+Copy risk:
+- `Memory draft` is acceptable only because the nearby warning says it is not saved or remembered. Keep that pairing until real persistence is deliberately designed.
+
 ## Stage 10 Copy Proof - 2026-05-11
 
 The Stage 10 assistant copy is honest enough to continue. It consistently frames the assistant as suggesting, classifying, reviewing, and asking for approval before anything changes.

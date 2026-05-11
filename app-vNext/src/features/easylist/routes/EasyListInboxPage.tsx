@@ -1,7 +1,14 @@
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
-import { buildLocalDraftFromSuggestion } from "@/features/assistant/localDraftBuilder";
-import { localDraftStatusLabels, localDraftTypeLabels } from "@/features/assistant/localDraftTypes";
+import {
+  buildLocalDraftComparisonOptions,
+  buildLocalDraftFromSuggestion,
+} from "@/features/assistant/localDraftBuilder";
+import {
+  localDraftStatusLabels,
+  localDraftTypeLabels,
+  type AssistantLocalDraftType,
+} from "@/features/assistant/localDraftTypes";
 import {
   approvalStatePreviewLabels,
   type AssistantApprovalState,
@@ -24,6 +31,7 @@ export function EasyListInboxPage() {
   const [listName, setListName] = useState("Main");
   const [assistantCaptureText, setAssistantCaptureText] = useState("Reply to Maya about Friday plans");
   const [previewApprovalState, setPreviewApprovalState] = useState<AssistantApprovalState>("suggested");
+  const [selectedDraftType, setSelectedDraftType] = useState<AssistantLocalDraftType>("follow-up");
   const listNames = useMemo(
     () => Array.from(new Set(["Main", ...tasks.map((task) => task.listName || "Main")])).sort(),
     [tasks]
@@ -50,9 +58,20 @@ export function EasyListInboxPage() {
     assistantSuggestion.approvalState === "needs-review" ? "needs-review" : previewApprovalState;
   const visibleApprovalState =
     previewApprovalState === "suggested" ? assistantSuggestion.approvalState : previewApprovalState;
+  const draftComparisonOptions = useMemo(
+    () => buildLocalDraftComparisonOptions(assistantSuggestion),
+    [assistantSuggestion]
+  );
+  const activeDraftType =
+    draftComparisonOptions.some((option) => option.draftType === selectedDraftType)
+      ? selectedDraftType
+      : assistantSuggestion.intent;
   const approvedLocalDraft = useMemo(
-    () => (visibleApprovalState === "approved" ? buildLocalDraftFromSuggestion(assistantSuggestion) : null),
-    [assistantSuggestion, visibleApprovalState]
+    () =>
+      visibleApprovalState === "approved"
+        ? buildLocalDraftFromSuggestion(assistantSuggestion, activeDraftType)
+        : null,
+    [activeDraftType, assistantSuggestion, visibleApprovalState]
   );
   const assistantQueue = useMemo(
     () => [
@@ -148,6 +167,7 @@ export function EasyListInboxPage() {
                 onChange={(event) => {
                   setAssistantCaptureText(event.target.value);
                   setPreviewApprovalState("suggested");
+                  setSelectedDraftType(classifyAssistantIntent(event.target.value).intent);
                 }}
                 placeholder="Paste one messy thought to classify locally"
               />
@@ -159,7 +179,6 @@ export function EasyListInboxPage() {
             <div className="assistant-suggestion-topline">
               <span>{assistantSuggestion.intent}</span>
               <span>{assistantSuggestion.confidenceLabel}</span>
-              <span>{approvalStatePreviewLabels[visibleApprovalState]}</span>
             </div>
             <div className="assistant-suggestion-main">
               <div>
@@ -225,6 +244,22 @@ export function EasyListInboxPage() {
               </p>
             ))}
           </article>
+
+          <div className="assistant-draft-comparison-row" aria-label="Compare local draft shapes">
+            <span>Compare unsaved shapes</span>
+            {draftComparisonOptions.map((option) => (
+              <button
+                key={option.draftType}
+                type="button"
+                className={activeDraftType === option.draftType ? "active" : ""}
+                onClick={() => setSelectedDraftType(option.draftType)}
+                title="Local preview only. This does not create another draft."
+              >
+                <strong>{option.label}</strong>
+                <small>{option.recommended ? "Suggested" : option.summary}</small>
+              </button>
+            ))}
+          </div>
 
           {approvedLocalDraft ? (
             <article className="assistant-local-draft-preview" aria-label="Unsaved local draft preview">

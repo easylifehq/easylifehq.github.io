@@ -1,5 +1,27 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 11 local draft comparison row
+
+- Task attempted: Let the user compare what captured input could become as a task, memory note, plan item, reminder, follow-up, or unsure draft before choosing.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4206` and inspected `/app/easylist/add?demo=1` with headless Chromium. Verified the comparison row rendered six local draft shapes, selected `Memory draft`, clicked `Preview draft`, and confirmed exactly one unsaved draft preview rendered. Screenshot saved at `.codex-logs/stage11-task2-inbox-comparison.png`.
+- Files changed:
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product change:
+  - Inbox now has one compact `Compare unsaved shapes` row for Task draft, Memory draft, Plan draft, Reminder draft, Follow-up draft, and Review draft.
+  - The selected comparison shape controls the single unsaved draft preview after `Preview draft`; no alternate saved drafts are created.
+- Crowding simplification:
+  - Removed the repeated approval-state chip from the suggestion card topline because the approval picker and state note already carry that copy.
+- No-write guarantee:
+  - This task added local comparison UI and deterministic draft-shape labels only. It does not persist, save, create, archive, send, sync, schedule, remember, mutate existing data, call models, change backend/auth/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Stage 11 Task 3 can let Today point to safe unsaved draft review without adding persistence.
+
 ## 2026-05-11 - Stage 11 unsaved Inbox local draft preview
 
 - Task attempted: When an assistant suggestion is approved locally, show a safe unsaved draft preview before any real save behavior exists.

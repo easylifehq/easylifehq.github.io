@@ -4640,6 +4640,7 @@ textarea::placeholder {
 
 .assistant-intent-input,
 .assistant-suggestion-card,
+.assistant-draft-comparison-row,
 .assistant-local-draft-preview {
   min-width: 0;
   border-radius: 8px;
@@ -4681,6 +4682,54 @@ textarea::placeholder {
   background:
     linear-gradient(135deg, color-mix(in srgb, #1f8f6a 10%, transparent), transparent 52%),
     color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 78%, transparent);
+}
+
+.assistant-draft-comparison-row {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.42rem;
+  padding: 0.5rem;
+}
+
+.assistant-draft-comparison-row > span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.2rem;
+  padding: 0 0.18rem;
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.72rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.assistant-draft-comparison-row button {
+  display: grid;
+  min-width: min(100%, 120px);
+  gap: 0.08rem;
+  padding: 0.38rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  text-align: left;
+}
+
+.assistant-draft-comparison-row button.active {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 38%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 12%, var(--ui-bg-card, var(--shell-card-bg)));
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
+.assistant-draft-comparison-row strong {
+  font-size: 0.78rem;
+}
+
+.assistant-draft-comparison-row small {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.68rem;
+  font-weight: 720;
 }
 
 .assistant-suggestion-topline,
@@ -4896,6 +4945,10 @@ textarea::placeholder {
   }
 
   .assistant-local-draft-preview {
+    grid-column: auto;
+  }
+
+  .assistant-draft-comparison-row {
     grid-column: auto;
   }
 
