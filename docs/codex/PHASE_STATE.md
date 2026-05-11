@@ -43,7 +43,7 @@ Stage 11 proof result: READY_FOR_STAGE_12.
 
 ## Explicit Save-Draft Handoff Gate
 
-Stage 12 source: docs/codex/NEXT_5_TASKS.md
+Stage 12 source: docs/codex/EASYLIFE_STAGE_12_EXPLICIT_SAVE_DRAFT_HANDOFF_PLAN.md
 
 Prepared Stage 12 queue: docs/codex/NEXT_5_TASKS.md contains exactly five explicit handoff tasks.
 
