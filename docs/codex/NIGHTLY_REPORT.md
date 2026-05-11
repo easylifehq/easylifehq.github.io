@@ -1,5 +1,33 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 12 Explicit Save-Draft Handoff proof packet
+
+- Task attempted: Prove whether explicit user-approved handoff previews are ready before adding any real saved assistant action.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4214` and inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` with headless Chromium. No browser page errors were reported.
+- Screenshot evidence:
+  - `.codex-logs/stage12-proof-today.png`
+  - `.codex-logs/stage12-proof-inbox.png`
+  - `.codex-logs/stage12-proof-plan.png`
+  - `.codex-logs/stage12-proof-notes.png`
+  - `.codex-logs/stage12-proof-settings.png`
+  - `.codex-logs/stage12-proof-inbox-handoffs.png`
+  - `.codex-logs/stage12-proof-plan-handoff.png`
+  - `.codex-logs/stage12-proof-notes-handoff.png`
+- Explicit handoff visibility:
+  - Inbox shows explicit task-row, follow-up, and reminder handoff previews after user choice.
+  - Plan shows an explicit unscheduled day draft handoff after user choice.
+  - Notes shows an explicit unsaved note draft handoff after user choice.
+- Auto-save boundary:
+  - Preserved. The inspected handoffs had no submit button inside the handoff preview panels and kept no-save/no-send/no-schedule/no-real-memory copy visible.
+- Copy honesty:
+  - Preserved. Follow-up says it does not send email, text, calls, or messages. Reminder says it does not schedule a notification. Plan says it is not scheduled and not saved. Notes says it is not saved and not real memory. Today still says nothing is saved from Today.
+- Still fake, weak, or confusing:
+  - Handoffs are review-only and do not yet produce saved objects.
+  - Inbox is the densest route because it carries suggestion, comparison, handoff previews, and the existing task composer.
+  - Stage 13 should start with task save only; note, plan, reminder, and follow-up saves should stay parked until the task path proves the final-confirmation pattern.
+- Verdict: `READY_FOR_STAGE_13`.
+
 ## 2026-05-11 - Stage 12 follow-up and reminder handoff preview
 
 - Task attempted: Let the user explicitly review follow-up and reminder drafts as local handoff previews without sending, scheduling, syncing, or saving anything.

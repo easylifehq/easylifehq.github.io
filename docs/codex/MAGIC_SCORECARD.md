@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 12 Explicit Save-Draft Handoff Proof
+
+- Task: Stage 12 Explicit Save-Draft Handoff proof packet.
+- Result: Passed build, five-route inspection, and explicit handoff review.
+- Magic signal: ready-for-stage-13
+- Changed files: docs only
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` on local Vite port `4214`.
+- Handoff evidence: task, note, plan, follow-up, and reminder handoff previews remained explicit, local, editable, and user-triggered.
+- Boundary evidence: no submit button inside handoff panels; no auto-save copy; no-send/no-notification/no-schedule/no-real-memory copy remained visible.
+- Verdict: `READY_FOR_STAGE_13`.
+- Stage 13 constraint: begin with the narrowest user-approved task save path only, then prove it before note, plan, reminder, or follow-up saves.
+
 ## 2026-05-11 - Stage 12 Follow-Up And Reminder Handoff Preview
 
 - Task: Follow-up and reminder handoff preview.

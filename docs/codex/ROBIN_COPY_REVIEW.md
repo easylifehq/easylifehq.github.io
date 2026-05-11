@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+COPY_READY_FOR_STAGE_13
+
+## Stage 12 Copy Proof - 2026-05-11
+
+Verdict: `COPY_READY_FOR_STAGE_13`.
+
+Stage 12 copy stays honest enough to allow the first real saved assistant action in Stage 13. The handoffs consistently say what has not happened: no automatic save, no email/text/call/message, no notification, no schedule, and no real memory.
+
+What works:
+- `Preview ... handoff` makes the user choice explicit.
+- Follow-up and reminder copy name the dangerous external actions directly.
+- Plan and Notes keep no-schedule and no-real-memory warnings close to the preview fields.
+- Today still says nothing is saved from Today.
+
+Copy risk:
+- Stage 13 must not generalize from "save task" to "assistant can save everything." Keep the first real save copy narrow: one user-approved task save, one receipt, no background intelligence.
+
+---
+
+## Verdict
 FOLLOWUP_REMINDER_HANDOFF_COPY_STAYS_HONEST
 
 ## Stage 12 Task 4 Copy Review - 2026-05-11
