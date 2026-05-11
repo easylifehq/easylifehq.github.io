@@ -33,7 +33,9 @@ Completed Stage 10 queue: approval-first intent contract, visible Inbox suggesti
 
 Stage 10 proof result: READY_FOR_STAGE_11.
 
-Stage 11 source: docs/codex/NEXT_5_TASKS.md
+Stage 11 source: docs/codex/EASYLIFE_STAGE_11_SAFE_LOCAL_MEMORY_PLAN.md
+
+Prepared Stage 11 queue: docs/codex/NEXT_5_TASKS.md contains exactly five safe local memory tasks.
 
 Stage 11 may create visible unsaved draft previews from approved local suggestions. The assistant may show what a suggestion would become, but it must not write to tasks, notes, calendar, memory, email, sync, backend, Firebase config, dependencies, generated output, deploy config, or secrets.
 
