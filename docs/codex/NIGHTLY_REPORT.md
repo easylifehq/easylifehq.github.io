@@ -1,5 +1,26 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 9 Inbox intake surface polish
+
+- Task attempted: Polish `/app/easylist/add?demo=1` so Inbox feels like a compact assistant intake and approval queue instead of a list-management page.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4194` and inspected `/app/easylist/add?demo=1` with headless Chromium at 1280px desktop and 390px mobile. No page errors were reported.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Removed/simplified visual clutter:
+  - Replaced the borrowed settings-card queue with a compact next-review command block and four small approve/Plan/remember/follow-up counters.
+  - Replaced the heavy list picker framing with a quiet Queue scope row.
+  - Hid the old EasyList subnav on this Inbox intake route so the first read starts at Inbox instead of Lists/Email.
+  - Flattened the composer chrome by hiding the table header row and presenting the visible composer heading as Intake rows.
+- Route inspection result:
+  - Desktop shows unresolved input, one next review action, approve/Plan/remember/follow-up language, a quiet queue scope, and the intake rows without the old subnav.
+  - Mobile stacks the queue counters and intake fields without overlapping text or horizontal overflow.
+- Follow-up needed: Continue Stage 9 with Plan day polish, then rerun the visual proof packet before Stage 10 assistant-brain work.
+
 ## 2026-05-11 - Stage 9 visual proof packet
 
 - Task attempted: Decide whether EasyLife is ready for human visual review before starting Stage 10 Assistant Brain Foundation.

@@ -1,5 +1,4 @@
 import { LoadingState } from "@/components/feedback/LoadingState";
-import { PageSection } from "@/components/ui/PageSection";
 import { TaskComposer } from "@/features/easylist/components/TaskComposer";
 import { useEasyList } from "@/features/easylist/EasyListContext";
 import { useMemo, useState } from "react";
@@ -24,6 +23,9 @@ export function EasyListInboxPage() {
       ),
     [selectedListName, tasks]
   );
+  const unresolvedCount = activeLaneItems.length;
+  const nextReviewItem =
+    activeLaneItems.find((task) => !task.dueDate && !task.estimatedLength) || activeLaneItems[0] || null;
   const assistantQueue = useMemo(
     () => [
       {
@@ -58,23 +60,41 @@ export function EasyListInboxPage() {
 
   return (
     <>
-      <PageSection
-        eyebrow="Inbox"
-        title="Capture, approve, plan, remember"
-        description="Catch loose work, reminders, notes, and follow-ups in one intake. Approve what matters, send time-sensitive items to Plan, and keep context available for Today."
-      >
-        <div className="settings-status-grid" aria-label="Assistant inbox queue">
+      <section className="panel-section easylist-inbox-surface" aria-labelledby="easylist-inbox-title">
+        <header className="panel-header easylist-inbox-header">
+          <p className="eyebrow">Inbox</p>
+          <h2 id="easylist-inbox-title">Review the intake queue</h2>
+          <p className="page-section-description">
+            Capture loose input, approve what matters, send time-sensitive work to Plan, and keep context available for Today.
+          </p>
+        </header>
+
+        <div className="easylist-inbox-command" aria-label="Next inbox review action">
+          <div>
+            <span>Next review</span>
+            <strong>{nextReviewItem?.title || "No unresolved input is waiting."}</strong>
+            <p>
+              {nextReviewItem
+                ? "Approve it, add time context, remember the detail, or release it before adding more."
+                : "Use the command row below when a new thought needs somewhere safe to land."}
+            </p>
+          </div>
+          <small>{unresolvedCount} unresolved</small>
+        </div>
+
+        <div className="easylist-inbox-strip" aria-label="Assistant inbox queue">
           {assistantQueue.map((item) => (
-            <article className="settings-status-card" key={item.label}>
+            <article key={item.label}>
               <span>{item.label}</span>
               <strong>{item.count}</strong>
               <p>{item.detail}</p>
             </article>
           ))}
         </div>
-        <div className="easylist-list-picker">
+
+        <div className="easylist-inbox-controls">
           <label className="field-stack">
-            <span>Intake view</span>
+            <span>Queue scope</span>
             <input
               list="easylist-list-options"
               value={listName}
@@ -87,9 +107,11 @@ export function EasyListInboxPage() {
               ))}
             </datalist>
           </label>
+          <p>Keep scope quiet. Today only needs the next thing worth approving.</p>
         </div>
+
         <TaskComposer onSubmit={addTask} listName={selectedListName} showBrainDump={false} />
-      </PageSection>
+      </section>
 
       {error ? <p className="error-copy">{error}</p> : null}
     </>

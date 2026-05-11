@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 9 Inbox Intake Surface Polish
+
+- Task: Inbox intake surface polish.
+- Result: Passed implementation, build, and desktop/mobile local route inspection.
+- Magic signal: moved-forward
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4194` at 1280px desktop and 390px mobile; screenshots saved under `.codex-logs/stage9-inbox-20260511-desktop.png` and `.codex-logs/stage9-inbox-20260511-mobile.png`.
+- Copy improvement score: SCORE: 5; DIRECTION: improved; REASON: Inbox now prioritizes unresolved input, one next review action, and approve/Plan/remember/follow-up language while hiding the old Lists/Email subnav on this route.
+- Follow-up: Continue Stage 9 with Plan day polish, then rerun the visual proof packet before Stage 10 Assistant Brain Foundation.
+
 ## 2026-05-11 - Stage 10 Assistant Brain Task Packet
 
 - Task: Prepare Stage 10 assistant brain task packet.

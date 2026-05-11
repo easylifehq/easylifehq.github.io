@@ -41,3 +41,11 @@ continue Stage 9 visual polish with Inbox and Plan; copy is no longer the main r
 ## Stage 9 Proof Update - 2026-05-11
 
 Copy is not the main blocker to human visual review anymore. The public/login entrance, signed-in shell, Today, Notes, and Settings/More read as one assistant path. Remaining copy caveats are in deeper optional/direct routes and can be handled after the visual proof blockers unless they appear in the main review path.
+
+## Stage 9 Inbox Intake Update - 2026-05-11
+
+Inbox now leads with `Review the intake queue`, `Next review`, `Approve`, `Plan`, `Remember`, and `Follow up` language. The route no longer starts with the visible Lists/Email subnav, and the local scope control is framed as `Queue scope` instead of a list picker.
+
+Copy verdict for this route: `INBOX_COPY_READY_FOR_VISUAL_PROOF`.
+
+Remaining copy caveat: the shared task composer still contains underlying task-row labels because the behavior remains real task capture, but the visible Inbox frame now reads as assistant intake instead of a standalone list app.
