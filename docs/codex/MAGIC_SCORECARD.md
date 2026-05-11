@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 10 Today Local Intent Language
+
+- Task: Today assistant read uses local intent language.
+- Result: Passed local UI implementation, build, and route inspection.
+- Magic signal: assistant-brain-visible-on-today
+- Changed files: 4
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/hq?demo=1` on local Vite port `4203`; screenshot saved at `.codex-logs/stage10-task4-today.png`.
+- Contract evidence: Today command row now renders capture/classify/review/approve language plus local intent, confidence, and approval-state labels from the assistant contract.
+- Simplification evidence: replaced stale `Capture or command` wording with `Capture, classify, review, approve`.
+- No-write guarantee: no model calls, hidden writes, persistence changes, task/note/calendar mutation, email sending, calendar sync, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Create the Stage 10 proof packet and decide whether Stage 11 safe local memory planning can begin.
+
 ## 2026-05-11 - Stage 10 Local Approval State Preview
 
 - Task: Local approval state preview.

@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 10 Today local intent language
+
+- Task attempted: Make Today reflect the assistant brain foundation by showing how captured input becomes a reviewed suggestion before anything changes.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4203` and inspected `/app/hq?demo=1` with headless Chromium. The first viewport still showed assistant read, next move, command/capture entry, Today strip, and quiet context. The command row rendered `Capture, classify, review, approve`, local suggestion intent/confidence/approval language, and `Nothing changes here.` Screenshot saved at `.codex-logs/stage10-task4-today.png`.
+- Files changed:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product change:
+  - Today now uses the local intent classifier language in the existing command/capture surface instead of adding a new dashboard block.
+  - Removed the stale/passive `Capture or command` label and replaced it with the approval-first path: capture, classify, review, approve.
+  - The command row previews the local intent, confidence label, and approval state from the contract while linking the real action to the existing capture modal.
+- No-write guarantee:
+  - Today only renders local/static suggestion language. It does not create, persist, update, classify through a model, save tasks, write notes, schedule calendar items, send email, sync memory, alter auth/backend/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Create the Stage 10 proof packet to decide whether Stage 11 safe local memory planning can begin.
+
 ## 2026-05-11 - Stage 10 local approval state preview
 
 - Task attempted: Make the visible Inbox assistant suggestion reviewable with local-only approval state switching.

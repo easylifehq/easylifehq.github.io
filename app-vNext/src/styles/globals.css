@@ -6960,6 +6960,15 @@ button.calendar-detail-card:disabled {
   cursor: pointer;
 }
 
+.hq-natural-capture small {
+  grid-column: 2;
+  min-width: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.74rem;
+  font-weight: 650;
+  line-height: 1.28;
+}
+
 .hq-natural-capture:hover,
 .hq-natural-capture:focus-visible {
   border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 46%, var(--ui-border-subtle) 54%);
@@ -12443,6 +12452,12 @@ button.calendar-detail-card:disabled {
   font-weight: 760;
 }
 
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture small {
+  grid-column: 2;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.76rem;
+}
+
 .app-theme-easyhq:not(.command-center-page) .hq-natural-capture em {
   justify-self: end;
   color: var(--ui-text-muted, var(--shell-muted-text));
@@ -12568,13 +12583,14 @@ button.calendar-detail-card:disabled {
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-natural-capture span,
-  .app-theme-easyhq:not(.command-center-page) .hq-natural-capture strong {
+  .app-theme-easyhq:not(.command-center-page) .hq-natural-capture strong,
+  .app-theme-easyhq:not(.command-center-page) .hq-natural-capture small {
     grid-column: 1;
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-natural-capture em {
     grid-column: 2;
-    grid-row: 1 / span 2;
+    grid-row: 1 / span 3;
     align-self: center;
   }
 

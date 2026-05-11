@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { PageSection } from "@/components/ui/PageSection";
+import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
+import { approvalStatePreviewLabels } from "@/features/assistant/intentTypes";
 import { assistantCommandHintRow } from "@/features/hq/assistantCommandHints";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
@@ -44,6 +46,10 @@ export function HQPage() {
     { label: "Plan", value: `${todayEvents.length}` },
     { label: "Open", value: formatDuration(openMinutes) },
   ];
+  const todayIntentSuggestion = useMemo(
+    () => classifyAssistantIntent(assistantCommandHintRow),
+    []
+  );
   const startHere = useMemo(() => {
     const firstDueTask = overdueTasks[0] || dueTodayTasks[0] || null;
     const firstOpenWindow = openWindows[0] || null;
@@ -227,8 +233,12 @@ export function HQPage() {
             </div>
           </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
-            <span>Capture or command</span>
+            <span>Capture, classify, review, approve</span>
             <strong>{assistantCommandHintRow}</strong>
+            <small>
+              Local suggestion: {todayIntentSuggestion.intent} / {todayIntentSuggestion.confidenceLabel} /{" "}
+              {approvalStatePreviewLabels[todayIntentSuggestion.approvalState]}. Nothing changes here.
+            </small>
             <em>Open</em>
           </button>
           <details className="hq-context-stack">
