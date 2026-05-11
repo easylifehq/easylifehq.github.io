@@ -22,7 +22,7 @@ export function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const title = useMemo(
-    () => (mode === "login" ? "Log in to EasyLifeHQ" : "Create your EasyLifeHQ account"),
+    () => (mode === "login" ? "Open your assistant" : "Create your assistant workspace"),
     [mode]
   );
 
@@ -75,13 +75,13 @@ export function LoginPage() {
             <p className="eyebrow">EasyLifeHQ</p>
             <h1>{title}</h1>
             <p className="auth-copy">
-              Start with Today, catch loose thoughts in Inbox, and let Plan and Notes keep the next move clear.
+              Start with Today, catch loose thoughts in Inbox, shape the day in Plan, and keep context close in Notes.
             </p>
           </div>
           <div className="auth-proof-card">
-            <span>Open today</span>
-            <strong>Today + Inbox + Plan</strong>
-            <p>Keep deeper context close without crowding the first screen.</p>
+            <span>Assistant path</span>
+            <strong>Today &gt; Inbox &gt; Plan</strong>
+            <p>One calm loop for attention, capture, and the next move.</p>
           </div>
         </div>
 

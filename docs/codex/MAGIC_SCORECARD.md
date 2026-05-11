@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 9 Public/Login Entrance Polish
+
+- Task: Public/login assistant entrance polish.
+- Result: Passed implementation, build, and local route/menu inspection.
+- Magic signal: moved-forward
+- Changed files: 7
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: In-app browser inspected `/login`, `/`, and the opened public Assistant menu on local Vite port `4191`.
+- Copy improvement score: SCORE: 5; DIRECTION: improved; REASON: the main entrance now leads with one assistant promise and no longer exposes Explore products, Products, EasyHQ, EasyList, or EasyNotes in the public/login path.
+- Follow-up: Continue with Today first viewport polish, then the Stage 9 visual proof packet.
+
 ## 2026-05-10 - Stage 9 Shell Polish
 
 - Task: Signed-in shell polish for Today, Inbox, Plan, Notes, and More.

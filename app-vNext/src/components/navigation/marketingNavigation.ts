@@ -3,48 +3,48 @@ import type { ProductsMenuItem } from "@/components/navigation/ProductsMenu";
 export const marketingProductItems: ProductsMenuItem[] = [
   {
     href: "/easyhq",
-    label: "EasyHQ",
-    description: "Open the daily workspace.",
+    label: "Today",
+    description: "Open the assistant home.",
   },
   {
     href: "/easylist",
-    label: "EasyList",
-    description: "Clear the small stuff and protect your time.",
+    label: "Inbox",
+    description: "Capture loose tasks and follow-ups.",
   },
   {
     href: "/easynotes",
-    label: "EasyNotes",
-    description: "Write first, organize later.",
+    label: "Notes",
+    description: "Keep context close.",
   },
   {
     href: "/easycalendar",
-    label: "EasyCalendar",
-    description: "Plan time around real life.",
+    label: "Plan",
+    description: "Shape the day around real life.",
   },
   {
     href: "/easypipeline",
-    label: "EasyPipeline",
-    description: "Track applications and follow-ups clearly.",
+    label: "Follow-ups",
+    description: "Track longer loops clearly.",
   },
   {
     href: "/easyprojects",
-    label: "EasyProjects",
-    description: "Plan bigger goals with linked tasks.",
+    label: "Projects",
+    description: "Break larger goals into next moves.",
   },
   {
     href: "/easycontacts",
-    label: "EasyContacts",
-    description: "Remember people and follow-ups.",
+    label: "People",
+    description: "Remember context and follow-ups.",
   },
   {
     href: "/easyworkout",
-    label: "EasyWorkout",
-    description: "Log training in Gym Mode.",
+    label: "Workout",
+    description: "Keep training out of your head.",
   },
   {
     href: "/easystatistics",
-    label: "EasyStatistics",
-    description: "Review progress without page clutter.",
+    label: "Progress",
+    description: "Review patterns without page clutter.",
   },
 ];
 
@@ -102,7 +102,7 @@ export function getMarketingSectionLinks(pathname: string): SectionLink[] {
   }
 
   return [
-    { href: "/#products", label: "Products" },
+    { href: "/#assistant-map", label: "Assistant" },
     { href: "/#how-it-works", label: "How It Works" },
     { href: "/#why-easy", label: "Why Easy" },
   ];

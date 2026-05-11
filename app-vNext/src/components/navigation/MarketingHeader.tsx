@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ProductsMenu, type ProductsMenuItem } from "@/components/navigation/ProductsMenu";
+import { ProductsMenu } from "@/components/navigation/ProductsMenu";
 import { useLocation } from "react-router-dom";
 import {
   getMarketingSectionLinks,
@@ -24,7 +24,7 @@ export function MarketingHeader() {
             <strong className="site-brand-title">EasyLifeHQ</strong>
           </div>
         </Link>
-        <span className="site-mobile-cue">Explore products</span>
+        <span className="site-mobile-cue">Assistant preview</span>
 
         <nav className="site-nav-links" aria-label="Marketing">
           {marketingLinks.map((link) => (
@@ -35,7 +35,7 @@ export function MarketingHeader() {
         </nav>
 
         <div className="site-header-actions">
-          <ProductsMenu items={marketingProductItems} />
+          <ProductsMenu items={marketingProductItems} label="Assistant" panelLabel="Assistant map" />
           <Link to="/login" className="button-primary">
             Get Started
           </Link>

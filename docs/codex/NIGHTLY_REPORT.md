@@ -1,5 +1,30 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 9 public/login assistant entrance polish
+
+- Task attempted: Polish the public/login entrance so EasyLife introduces one AI personal assistant instead of a product inventory.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4191` and inspected `/login`, `/`, and the opened public Assistant menu with the in-app browser DOM snapshot and screenshots.
+- Files changed:
+  - `app-vNext/src/components/navigation/MarketingHeader.tsx`
+  - `app-vNext/src/components/navigation/marketingNavigation.ts`
+  - `app-vNext/src/features/marketing/routes/MarketingLandingPage.tsx`
+  - `app-vNext/src/features/auth/routes/LoginPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Removed/demoted inventory language:
+  - `Explore products` became `Assistant preview`.
+  - Public `Products` navigation became `Assistant`.
+  - The landing page `Explore Products` CTA became `See Assistant Flow`.
+  - The old `Products` / `The EasyLifeHQ suite` section became `Assistant Map` with Today, Inbox, Plan, Notes, and supporting areas.
+  - Public menu labels no longer expose EasyHQ, EasyList, EasyNotes, EasyCalendar, EasyPipeline, EasyProjects, EasyContacts, EasyWorkout, or EasyStatistics.
+- Route inspection result:
+  - `/login` leads with `Open your assistant` and an assistant path proof card.
+  - `/` leads with `One calm assistant for the things you actually have to handle.`
+  - The opened Assistant menu exposes Today, Inbox, Plan, Notes, and optional support areas without product-suite naming.
+- Follow-up needed: Continue Stage 9 with Today first viewport polish, then create the visual proof packet before Stage 10 assistant-brain work.
+
 ## 2026-05-10 - Stage 9 shell polish
 
 - Task attempted: Implement EasyLife Stage 9 signed-in shell polish so the header/nav feels more like a slick assistant workspace and less like a soft app suite.

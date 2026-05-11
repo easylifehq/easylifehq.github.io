@@ -1,12 +1,17 @@
 # Robin Copy Review
 
 ## Verdict
-NOT_READY_FOR_VISUAL_PASS
+PUBLIC_LOGIN_READY_FOR_VISUAL_PASS
 
 ## One-Sentence Read
-The signed-in core now mostly speaks like one assistant, but the public/login shell still introduces EasyLife like a product inventory.
+The public/login entrance now introduces EasyLife as one assistant path instead of a product inventory.
 
 ## What Improved
+- Public/login header navigation now says Assistant instead of Products.
+- The mobile cue now says Assistant preview instead of Explore products.
+- The landing hero leads with one assistant promise: one calm assistant for the things you actually have to handle.
+- The old suite/product grid is now an Assistant Map anchored around Today, Inbox, Plan, and Notes.
+- The public Assistant menu no longer exposes EasyHQ, EasyList, EasyNotes, or other Easy* product names as visible labels.
 - Login proof copy no longer frames the product as a tool shelf.
 - App header assistive copy now says assistant navigation and keeps the visible model at Today, Inbox, Plan, Notes, More.
 - Inbox now reads as one intake surface with approve, Plan, and Today language.
@@ -14,22 +19,21 @@ The signed-in core now mostly speaks like one assistant, but the public/login sh
 - Notes now reads as Memory with context groups, task cues, plan cues, pinned context, and old-context review.
 
 ## Copy That Still Hurts The Product
-- The `/login` route still renders surrounding public navigation with "Explore products," "Products," and product names such as EasyHQ, EasyList, and EasyNotes. Those strings live outside the owned files for this slice.
-- Marketing route metadata and public product navigation still carry the old suite structure.
 - Some deeper non-owned surfaces still use EasyList/EasyNotes language, especially archive/deleted/editor and optional More modules.
+- Individual legacy public product routes still exist and may carry old labels when opened directly; this slice kept those routes intact and cleaned the main public/login entrance only.
 
 ## Does The App Read As One Assistant?
-Yes inside the signed-in review path for Today, Inbox, Plan, Notes, and Settings/More. Not yet from the public/login entrance.
+Yes from the public/login entrance and inside the signed-in review path for Today, Inbox, Plan, Notes, and Settings/More. Remaining copy risk is in deeper optional/direct legacy routes, not the main entrance.
 
 ## Route Inspection
-- Method: local Vite preview on `http://127.0.0.1:4186`, rendered DOM captured with headless Chrome `--dump-dom`.
-- Checked: `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, `/app/settings?demo=1`.
+- Method: local Vite preview on `http://127.0.0.1:4191`, rendered DOM and screenshots captured with the in-app browser.
+- Checked: `/login`, `/`, and opened public Assistant menu.
 - Build: `npm.cmd run build` passed from `app-vNext`.
 
 ## Next Copy Tasks
-- [ ] Clean `MarketingHeader`, `marketingNavigation`, and the public landing/product routes so login no longer starts with feature inventory.
+- [x] Clean `MarketingHeader`, `marketingNavigation`, and the public landing route so login no longer starts with feature inventory.
 - [ ] Clean non-owned deeper route chrome for EasyList/EasyNotes archive, deleted, editor, and optional More paths.
 - [ ] Keep AI language modest until real assistant behavior exists.
 
 ## Stop Or Continue
-continue with public/login shell copy cleanup before broad visual polish
+continue with Stage 9 Today first viewport polish before the visual proof packet

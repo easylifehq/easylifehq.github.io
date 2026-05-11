@@ -1,75 +1,75 @@
 import { Link } from "react-router-dom";
 
-const productCards = [
+const assistantAreas = [
   {
-    id: "easyhq",
+    id: "today",
     href: "/easyhq",
-    eyebrow: "EasyHQ",
-    title: "The daily workspace.",
+    eyebrow: "Today",
+    title: "Start with what needs attention.",
     description:
       "Open to the page that matters, see the shape of your day, and jump into the next useful action.",
   },
   {
-    id: "easylist",
+    id: "inbox",
     href: "/easylist",
-    eyebrow: "EasyList",
-    title: "Tasks, deadlines, and quick lists.",
+    eyebrow: "Inbox",
+    title: "Capture without organizing first.",
     description:
-      "Capture anything from burritos to exam prep, then add urgency, notes, deadlines, or calendar time only when needed.",
+      "Drop the messy thought, task, deadline, or reminder first, then decide what it should become.",
   },
   {
-    id: "easycalendar",
+    id: "plan",
     href: "/easycalendar",
-    eyebrow: "EasyCalendar",
-    title: "The Google-style time layer.",
+    eyebrow: "Plan",
+    title: "Turn the day into a realistic shape.",
     description:
-      "Separate fixed events, deadlines, and flexible work blocks so your day stays readable.",
+      "Separate fixed events, due items, and flexible focus blocks so your day stays readable.",
   },
   {
-    id: "easynotes",
+    id: "notes",
     href: "/easynotes",
-    eyebrow: "EasyNotes",
-    title: "Fast notes that can turn into action.",
+    eyebrow: "Notes",
+    title: "Keep memory close to action.",
     description:
-      "Write quickly, keep folders clean, and turn useful lines into task drafts when you are ready.",
+      "Write quickly, keep context clean, and mark useful lines for task or plan review when you are ready.",
   },
   {
-    id: "easypipeline",
+    id: "follow-ups",
     href: "/easypipeline",
-    eyebrow: "EasyPipeline",
-    title: "The momentum tracker.",
+    eyebrow: "Follow-ups",
+    title: "Keep longer loops from disappearing.",
     description:
       "Keep applications, follow-ups, and career movement organized without muddying the rest of your system.",
   },
   {
-    id: "easyprojects",
+    id: "projects",
     href: "/easyprojects",
-    eyebrow: "EasyProjects",
-    title: "The project planning layer.",
+    eyebrow: "Projects",
+    title: "Break bigger goals into next moves.",
     description:
       "Turn rough goals into sections, linked tasks, target dates, and practical next steps.",
   },
   {
-    id: "easycontacts",
+    id: "people",
     href: "/easycontacts",
-    eyebrow: "EasyContacts",
-    title: "The relationship memory.",
+    eyebrow: "People",
+    title: "Remember context around people.",
     description:
       "Keep people, context, and follow-up reminders close to the work they support.",
   },
   {
-    id: "easyworkout",
+    id: "workout",
     href: "/easyworkout",
-    eyebrow: "EasyWorkout",
-    title: "The training logger.",
+    eyebrow: "Workout",
+    title: "Keep training out of your head.",
     description:
       "Start Gym Mode, log exercises without fighting the keyboard, and keep routines close.",
   },
   {
-    id: "easystatistics",
+    id: "progress",
     href: "/easystatistics",
-    eyebrow: "EasyStatistics",
-    title: "The progress room.",
+    eyebrow: "Progress",
+    title: "Review patterns without clutter.",
     description:
       "Keep the numbers fun without crowding the pages where you are trying to work.",
   },
@@ -100,59 +100,59 @@ export function MarketingLandingPage() {
       <section className="marketing-hero">
         <div className="marketing-hero-copy">
           <p className="eyebrow">EasyLifeHQ</p>
-          <h1>A clean workspace for the things you actually have to handle.</h1>
+          <h1>One calm assistant for the things you actually have to handle.</h1>
           <p>
-            Capture the messy stuff fast, separate tasks from deadlines and fixed
-            events, then open the app from your phone like it belongs there.
+            Start with Today, catch loose thoughts in Inbox, shape the day in Plan,
+            and keep useful context in Notes without turning life into a dashboard.
           </p>
 
           <div className="marketing-hero-actions">
             <Link to="/login" className="button-primary">
               Open EasyLifeHQ
             </Link>
-            <a href="#products" className="button-secondary">
-              Explore Products
+            <a href="#assistant-map" className="button-secondary">
+              See Assistant Flow
             </a>
           </div>
 
           <div className="marketing-points">
-            <span className="info-pill">Home-screen ready</span>
-            <span className="info-pill">Task vs deadline</span>
-            <span className="info-pill">Local reminders</span>
-            <span className="info-pill">Review-first AI</span>
+            <span className="info-pill">Today first</span>
+            <span className="info-pill">Inbox capture</span>
+            <span className="info-pill">Plan the day</span>
+            <span className="info-pill">Notes as context</span>
           </div>
         </div>
 
         <div className="marketing-hero-card">
-          <span className="info-pill">4.x mobile core</span>
-          <p className="marketing-hero-card-title">Built around daily use, not a settings maze.</p>
+          <span className="info-pill">Assistant preview</span>
+          <p className="marketing-hero-card-title">Built around daily use, not a feature maze.</p>
           <p>
-            Pick your startup page, add EasyLife to your iPhone home screen, keep
-            reminders local, and export your data when you want a safety check.
+            The first screen stays centered on attention, next moves, capture, and
+            the few pieces of context that help you decide what to do.
           </p>
           <div className="marketing-card-metrics">
-            <span>Launch</span>
+            <span>Today</span>
             <span>Capture</span>
-            <span>Review</span>
+            <span>Plan</span>
           </div>
         </div>
       </section>
 
-      <section id="products" className="marketing-section">
+      <section id="assistant-map" className="marketing-section">
         <div className="panel-header">
-          <p className="eyebrow">Products</p>
-          <h2>The EasyLifeHQ suite</h2>
-          <p>Each app has a clear job, so the system stays simple as the suite grows.</p>
+          <p className="eyebrow">Assistant Map</p>
+          <h2>One path, with deeper context when you need it</h2>
+          <p>Today stays first. The other areas support the assistant instead of competing with it.</p>
         </div>
 
         <div className="marketing-card-grid">
-          {productCards.map((card) => (
+          {assistantAreas.map((card) => (
             <article key={card.id} id={card.id} className="marketing-card">
               <p className="eyebrow">{card.eyebrow}</p>
               <h3>{card.title}</h3>
               <p>{card.description}</p>
               <Link to={card.href} className="text-button marketing-inline-link">
-                Learn about {card.eyebrow}
+                Preview {card.eyebrow}
               </Link>
             </article>
           ))}
@@ -172,11 +172,11 @@ export function MarketingLandingPage() {
           </article>
           <article className="marketing-card">
             <h3>2. Separate the shape</h3>
-            <p>Tasks, deadlines, classes, events, notes, and workouts each get the right amount of structure.</p>
+            <p>Tasks, deadlines, fixed events, notes, and routines each get the right amount of structure.</p>
           </article>
           <article className="marketing-card">
             <h3>3. Keep control</h3>
-            <p>Reminders, exports, startup pages, visible apps, themes, and AI controls stay in Settings.</p>
+            <p>Settings keep control visible without implying hidden automation or surprise changes.</p>
           </article>
         </div>
       </section>
@@ -213,12 +213,12 @@ export function MarketingLandingPage() {
             <strong>Add it to your home screen, pick your startup page, and get back in quickly.</strong>
           </div>
           <div className="mini-panel-vnext">
-            <span>Connected ecosystem</span>
-            <strong>One login, shared context, and clean switching between the apps that need attention.</strong>
+            <span>One assistant path</span>
+            <strong>Today, Inbox, Plan, and Notes stay connected without turning into a catalog.</strong>
           </div>
           <div className="mini-panel-vnext">
             <span>Safe by design</span>
-            <strong>Exports, scoped data, security rules, and review-first AI keep the user in charge.</strong>
+            <strong>Review-first suggestions keep the user in charge before deeper assistant behavior arrives.</strong>
           </div>
         </div>
       </section>
