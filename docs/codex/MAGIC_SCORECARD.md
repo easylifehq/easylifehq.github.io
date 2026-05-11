@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 10 Assistant Brain Task Packet
+
+- Task: Prepare Stage 10 assistant brain task packet.
+- Result: Passed docs-only planning.
+- Magic signal: prepared-but-gated
+- Changed files: docs only
+- Build evidence: not required for docs-only packet.
+- Packet evidence: `NEXT_5_TASKS.md` now contains exactly five Task Contract V2-compatible Stage 10 tasks.
+- Gate: Stage 10 implementation remains blocked until Stage 9 visual proof says `READY_FOR_HUMAN_VISUAL_REVIEW` or the remaining Inbox/Plan blockers are explicitly parked.
+- First behavior: approval-first intake classification.
+- Guardrail: no hidden writes, real AI promises, email sending, calendar sync, backend changes, Firebase rules/config, dependencies, package files, deploy config, generated output, or secrets.
+
 ## 2026-05-11 - Stage 9 Visual Proof Packet
 
 - Task: Stage 9 visual proof packet before assistant brain.
