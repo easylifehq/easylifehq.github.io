@@ -1,5 +1,29 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 10 Assistant Brain Foundation proof packet
+
+- Task attempted: Prove whether the first assistant brain foundation is ready for human review before adding real persistence or model-backed intelligence.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4204` and inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` with headless Chromium. No browser page errors were reported. Screenshots saved at `.codex-logs/stage10-proof-today.png`, `.codex-logs/stage10-proof-inbox.png`, `.codex-logs/stage10-proof-plan.png`, `.codex-logs/stage10-proof-notes.png`, and `.codex-logs/stage10-proof-settings.png`.
+- Files changed:
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Approval-first behavior:
+  - Visible on Today and Inbox. Today names the path as capture, classify, review, approve. Inbox shows a local suggestion card with intent, confidence, approval state, preview controls, and no-write language.
+- No-write/no-hidden-action promise:
+  - Clear enough to continue. The UI says nothing changes from the local preview, and the implementation remains deterministic/local with no model calls, persistence, email, sync, calendar writes, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Still fake, weak, or confusing:
+  - Approval state is still only display state; it needs an unsaved local draft preview to feel useful.
+  - Inbox still contains real task-row controls below the assistant frame.
+  - Notes/Memory has not yet joined the approval-first draft loop.
+- Stage 11 gate:
+  - `READY_FOR_STAGE_11`. NEXT_5_TASKS.md now contains exactly five Stage 11 Safe Local Memory tasks.
+
 ## 2026-05-11 - Stage 10 Today local intent language
 
 - Task attempted: Make Today reflect the assistant brain foundation by showing how captured input becomes a reviewed suggestion before anything changes.

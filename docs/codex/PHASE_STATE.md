@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: stage-10-assistant-brain-foundation
+Current Phase: stage-11-safe-local-memory
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Begin approval-first assistant brain foundation with local, reviewable suggestions and no hidden writes.
+Primary Action: Turn approved assistant suggestions into visible unsaved local draft previews before any real save behavior exists.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 10 tasks must add one approval-first assistant behavior at a time and must not add autonomous actions.
+Complexity Budget: Stage 11 tasks must add one safe local draft behavior at a time and must not add autonomous actions, hidden writes, real memory, or persistence.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_HUMAN_VISUAL_REVIEW
+Parking State: READY_FOR_STAGE_11
 Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 9 visual proof now says READY_FOR_HUMAN_VISUAL_REVIEW. Stage 10 Assistant Brain Foundation may begin using the prepared approval-first tasks in NEXT_5_TASKS.md.
+Next Phase Criteria: Stage 10 proof now says READY_FOR_STAGE_11. Stage 11 Safe Local Memory may begin using the prepared local draft tasks in NEXT_5_TASKS.md.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
-Repair Return Phase: stage-10-assistant-brain-foundation
-Updated At: 2026-05-11 - Stage 9 visual proof passed; Stage 10 assistant brain foundation approved.
+Repair Return Phase: stage-11-safe-local-memory
+Updated At: 2026-05-11 - Stage 10 assistant brain proof passed; Stage 11 safe local memory approved.
 
 ## Assistant Brain Gate
 
@@ -27,7 +27,15 @@ Stage 10 source: docs/codex/EASYLIFE_STAGE_10_ASSISTANT_BRAIN_PLAN.md
 
 First Stage 10 behavior: approval-first intake classification. The assistant may suggest task, note, plan, reminder, follow-up, or unsure intent, but it must not create hidden writes, sync external systems, send email, alter calendars, or imply real memory until those contracts exist.
 
-Prepared Stage 10 queue: docs/codex/NEXT_5_TASKS.md now contains exactly five approval-first implementation tasks. They are authorized to start while preserving the no-hidden-write guardrails.
+Completed Stage 10 queue: approval-first intent contract, visible Inbox suggestion card, local approval preview states, Today local intent language, and this proof packet.
+
+## Safe Local Memory Gate
+
+Stage 10 proof result: READY_FOR_STAGE_11.
+
+Stage 11 source: docs/codex/NEXT_5_TASKS.md
+
+Stage 11 may create visible unsaved draft previews from approved local suggestions. The assistant may show what a suggestion would become, but it must not write to tasks, notes, calendar, memory, email, sync, backend, Firebase config, dependencies, generated output, deploy config, or secrets.
 
 ## Phase Order
 

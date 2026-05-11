@@ -1,6 +1,36 @@
 # Robin Copy Review
 
 ## Verdict
+COPY_READY_FOR_STAGE_11
+
+## Stage 10 Copy Proof - 2026-05-11
+
+The Stage 10 assistant copy is honest enough to continue. It consistently frames the assistant as suggesting, classifying, reviewing, and asking for approval before anything changes.
+
+## What Works
+
+- Today says `Capture, classify, review, approve` and pairs the local suggestion with `Nothing changes here.`
+- Inbox says the preview is local and that nothing is saved, sent, synced, or remembered from the card.
+- Approval controls now say `Approve preview`, `Edit preview`, and `Dismiss preview`, which avoids implying a real write.
+- The preview state labels say `Preview:` for suggested, editing, approved locally, dismissed locally, and needs review.
+
+## Copy That Still Needs Care
+
+- `Approved locally` is acceptable for this proof, but Stage 11 should make clear whether approved means a draft, not a saved object.
+- The shared task composer still contains task-row language under the assistant frame.
+- Stage 11 must avoid saying memory, sync, plan, or follow-up as if those actions actually happen.
+
+## Copy Recommendation
+
+Continue to Stage 11, but keep every new draft label visibly unsaved until an explicit save behavior is intentionally designed and reviewed.
+
+## Final Verdict
+
+COPY_READY_FOR_STAGE_11
+
+---
+
+## Verdict
 COPY_READY_FOR_HUMAN_VISUAL_REVIEW
 
 ## One-Sentence Read

@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 10 Assistant Brain Foundation Proof
+
+- Task: Stage 10 Assistant Brain Foundation proof packet.
+- Result: Passed build and five-route inspection; Stage 11 Safe Local Memory is approved to begin.
+- Magic signal: ready-for-stage-11
+- Changed files: docs only
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` on local Vite port `4204`.
+- Screenshot evidence: `.codex-logs/stage10-proof-today.png`, `.codex-logs/stage10-proof-inbox.png`, `.codex-logs/stage10-proof-plan.png`, `.codex-logs/stage10-proof-notes.png`, and `.codex-logs/stage10-proof-settings.png`.
+- Approval-first evidence: Today renders capture/classify/review/approve local intent language; Inbox renders suggestion, confidence, approval-state preview, and no-write language.
+- No-write guarantee: no model calls, hidden writes, persistence changes, task/note/calendar mutation, email sending, calendar sync, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Verdict: `READY_FOR_STAGE_11`.
+
 ## 2026-05-11 - Stage 10 Today Local Intent Language
 
 - Task: Today assistant read uses local intent language.
