@@ -1,16 +1,27 @@
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
-import { approvalStateLabels } from "@/features/assistant/intentTypes";
+import {
+  approvalStatePreviewLabels,
+  type AssistantApprovalState,
+} from "@/features/assistant/intentTypes";
 import { TaskComposer } from "@/features/easylist/components/TaskComposer";
 import { useEasyList } from "@/features/easylist/EasyListContext";
 import { useMemo, useState } from "react";
 
 const FOLLOW_UP_PATTERN = /\b(email|reply|respond|follow up|follow-up|call|text|message)\b/i;
+const APPROVAL_STATE_OPTIONS: AssistantApprovalState[] = [
+  "suggested",
+  "editing",
+  "approved",
+  "dismissed",
+  "needs-review",
+];
 
 export function EasyListInboxPage() {
   const { tasks, isLoading, error, addTask } = useEasyList();
   const [listName, setListName] = useState("Main");
   const [assistantCaptureText, setAssistantCaptureText] = useState("Reply to Maya about Friday plans");
+  const [previewApprovalState, setPreviewApprovalState] = useState<AssistantApprovalState>("suggested");
   const listNames = useMemo(
     () => Array.from(new Set(["Main", ...tasks.map((task) => task.listName || "Main")])).sort(),
     [tasks]
@@ -33,6 +44,10 @@ export function EasyListInboxPage() {
     () => classifyAssistantIntent(assistantCaptureText),
     [assistantCaptureText]
   );
+  const activeApprovalState =
+    assistantSuggestion.approvalState === "needs-review" ? "needs-review" : previewApprovalState;
+  const visibleApprovalState =
+    previewApprovalState === "suggested" ? assistantSuggestion.approvalState : previewApprovalState;
   const assistantQueue = useMemo(
     () => [
       {
@@ -124,7 +139,10 @@ export function EasyListInboxPage() {
               <input
                 type="text"
                 value={assistantCaptureText}
-                onChange={(event) => setAssistantCaptureText(event.target.value)}
+                onChange={(event) => {
+                  setAssistantCaptureText(event.target.value);
+                  setPreviewApprovalState("suggested");
+                }}
                 placeholder="Paste one messy thought to classify locally"
               />
             </label>
@@ -135,7 +153,7 @@ export function EasyListInboxPage() {
             <div className="assistant-suggestion-topline">
               <span>{assistantSuggestion.intent}</span>
               <span>{assistantSuggestion.confidenceLabel}</span>
-              <span>{approvalStateLabels[assistantSuggestion.approvalState]}</span>
+              <span>{approvalStatePreviewLabels[visibleApprovalState]}</span>
             </div>
             <div className="assistant-suggestion-main">
               <div>
@@ -144,23 +162,54 @@ export function EasyListInboxPage() {
                 <strong>{assistantSuggestion.summary}</strong>
               </div>
               <div className="assistant-suggestion-actions" aria-label="Preview-only approval actions">
-                <button type="button" className="primary-button" title="Preview only. This does not save anything.">
-                  Approve
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={() => setPreviewApprovalState("approved")}
+                  title="Preview only. This does not save anything."
+                >
+                  Approve preview
                 </button>
-                <button type="button" className="button-secondary" title="Preview only. This does not edit saved data.">
-                  Edit
+                <button
+                  type="button"
+                  className="button-secondary"
+                  onClick={() => setPreviewApprovalState("editing")}
+                  title="Preview only. This does not edit saved data."
+                >
+                  Edit preview
                 </button>
-                <button type="button" className="ghost-button" title="Preview only. This does not dismiss saved data.">
-                  Dismiss
+                <button
+                  type="button"
+                  className="ghost-button"
+                  onClick={() => setPreviewApprovalState("dismissed")}
+                  title="Preview only. This does not dismiss saved data."
+                >
+                  Dismiss preview
                 </button>
               </div>
             </div>
+            <div className="assistant-approval-state-picker" aria-label="Local preview approval state">
+              {APPROVAL_STATE_OPTIONS.map((state) => (
+                <button
+                  key={state}
+                  type="button"
+                  className={visibleApprovalState === state ? "active" : ""}
+                  onClick={() => setPreviewApprovalState(state)}
+                >
+                  {approvalStatePreviewLabels[state]}
+                </button>
+              ))}
+            </div>
+            <p className={`assistant-approval-state-note assistant-approval-state-note-${activeApprovalState}`}>
+              {approvalStatePreviewLabels[visibleApprovalState]} only. This changes the card display, not your tasks,
+              notes, calendar, email, sync, or memory.
+            </p>
             <div className="assistant-suggestion-fields" aria-label="Editable-looking suggestion fields">
               {assistantSuggestion.fields.map((field) => (
                 <span key={field.label}>
                   <small>{field.label}</small>
                   <strong>{field.value}</strong>
-                  <em>{field.editable ? "editable after approval" : "locked"}</em>
+                  <em>{field.editable ? "preview editable" : "contract field"}</em>
                 </span>
               ))}
             </div>

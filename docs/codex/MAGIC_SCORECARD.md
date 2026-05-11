@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 10 Local Approval State Preview
+
+- Task: Local approval state preview.
+- Result: Passed local UI implementation, build, and route inspection.
+- Magic signal: approval-loop-reviewable
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4202`; screenshot saved at `.codex-logs/stage10-task3-inbox.png`.
+- Interaction evidence: clicked through suggested, editing, approved locally, dismissed locally, and needs-review preview states; shortcut buttons for approve/edit/dismiss also updated local display only.
+- Simplification evidence: changed confusing `editable after approval` wording to `preview editable`, and approval buttons now say `Approve preview`, `Edit preview`, and `Dismiss preview`.
+- No-write guarantee: no model calls, hidden writes, persistence changes, task/note/calendar mutation, email sending, calendar sync, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 10 Task 4 should connect this approval-first language back to Today while staying local/static.
+
 ## 2026-05-11 - Stage 10 Visible Inbox Suggestion Card
 
 - Task: Visible Inbox assistant suggestion card.

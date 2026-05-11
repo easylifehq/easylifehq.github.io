@@ -50,3 +50,11 @@ export const approvalStateLabels: Record<AssistantApprovalState, string> = {
   dismissed: "Dismissed",
   "needs-review": "Needs review",
 };
+
+export const approvalStatePreviewLabels: Record<AssistantApprovalState, string> = {
+  suggested: "Preview: suggested",
+  editing: "Preview: editing",
+  approved: "Preview: approved locally",
+  dismissed: "Preview: dismissed locally",
+  "needs-review": "Preview: needs review",
+};

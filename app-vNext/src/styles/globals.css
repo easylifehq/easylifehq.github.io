@@ -4674,13 +4674,15 @@ textarea::placeholder {
 .assistant-suggestion-topline,
 .assistant-suggestion-main,
 .assistant-suggestion-actions,
-.assistant-suggestion-fields {
+.assistant-suggestion-fields,
+.assistant-approval-state-picker {
   display: flex;
   gap: 0.45rem;
 }
 
 .assistant-suggestion-topline,
-.assistant-suggestion-fields {
+.assistant-suggestion-fields,
+.assistant-approval-state-picker {
   flex-wrap: wrap;
 }
 
@@ -4738,6 +4740,55 @@ textarea::placeholder {
   min-height: 34px;
   padding: 0.34rem 0.58rem;
   font-size: 0.78rem;
+}
+
+.assistant-approval-state-picker {
+  padding: 0.4rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 62%, transparent);
+}
+
+.assistant-approval-state-picker button {
+  min-height: 30px;
+  padding: 0.24rem 0.48rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.72rem;
+  font-weight: 780;
+}
+
+.assistant-approval-state-picker button.active {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 42%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 13%, var(--ui-bg-card, var(--shell-card-bg)));
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
+.assistant-approval-state-note {
+  margin: 0;
+  padding: 0.48rem 0.58rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 70%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 68%, transparent);
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
+.assistant-approval-state-note-approved {
+  border-color: color-mix(in srgb, #1f8f6a 34%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, #1f8f6a 10%, var(--ui-bg-card, var(--shell-input-bg)));
+}
+
+.assistant-approval-state-note-editing,
+.assistant-approval-state-note-needs-review {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 34%, var(--ui-border-subtle, var(--shell-card-border)));
+}
+
+.assistant-approval-state-note-dismissed {
+  opacity: 0.78;
 }
 
 .assistant-suggestion-fields span {

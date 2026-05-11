@@ -1,5 +1,24 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 10 local approval state preview
+
+- Task attempted: Make the visible Inbox assistant suggestion reviewable with local-only approval state switching.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4202` and inspected `/app/easylist/add?demo=1` with headless Chromium. Clicked through `Preview: suggested`, `Preview: editing`, `Preview: approved locally`, `Preview: dismissed locally`, and `Preview: needs review`; also verified `Approve preview`, `Edit preview`, and `Dismiss preview` buttons update the card display only. Screenshot saved at `.codex-logs/stage10-task3-inbox.png`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/features/assistant/intentTypes.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product change:
+  - The suggestion card now has an explicit local preview state picker for suggested, editing, approved, dismissed, and needs-review states.
+  - The existing approval buttons now read `Approve preview`, `Edit preview`, and `Dismiss preview` to avoid implying a real save.
+  - Simplified the confusing `editable after approval` field label to `preview editable`.
+- No-write guarantee:
+  - State changes affect only the rendered preview card. They do not create, update, dismiss, or persist tasks, notes, calendar data, email, sync, memory, model output, auth/backend/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up needed: Stage 10 Task 4 can echo approval-first intake language back into Today without adding persistence.
+
 ## 2026-05-11 - Stage 10 visible Inbox assistant suggestion card
 
 - Task attempted: Wire the local assistant intent contract into Inbox/Capture as a visible approval-first suggestion before anything changes.
