@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 12 Explicit Task-Row Handoff Preview
+
+- Task: Explicit task-row handoff preview.
+- Result: Passed local UI implementation, build, and route inspection.
+- Magic signal: task-handoff-visible-without-save
+- Changed files: 7
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4210`, selected `Task draft`, clicked `Preview draft`, then clicked `Preview task row handoff`. Screenshot saved at `.codex-logs/stage12-task1-inbox-task-handoff.png`.
+- Handoff evidence: rendered one editable unsaved task-row preview with no submit button inside the handoff panel; existing `TaskComposer` save behavior remained separate and unchanged.
+- No-auto-save guarantee: no `addTask` call, no persistence, task mutation, archive/send/sync/schedule/remember behavior, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 12 Task 2 should add the note/memory handoff preview with the same explicit no-write boundary.
+
 ## 2026-05-11 - Stage 12 Explicit Save-Draft Handoff Task Packet
 
 - Task: Create Stage 12 Explicit Save-Draft Handoff task packet.

@@ -45,6 +45,19 @@ export type AssistantMemoryDraftActionOption = {
   summary: string;
 };
 
+export type AssistantTaskRowHandoffPreview = {
+  id: string;
+  sourceDraftId: string;
+  title: string;
+  itemKind: "task" | "deadline";
+  category: string;
+  dueDate: string;
+  estimatedLength: string;
+  priorityTier: number;
+  notes: string;
+  warnings: string[];
+};
+
 export const localDraftTypeLabels: Record<AssistantLocalDraftType, string> = {
   task: "Task draft",
   note: "Memory draft",

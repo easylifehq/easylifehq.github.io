@@ -12,7 +12,7 @@ type TaskComposerProps = {
   showBrainDump?: boolean;
 };
 
-type TaskRowDraft = {
+export type TaskRowDraft = {
   id: string;
   itemKind: TaskItemKind;
   title: string;

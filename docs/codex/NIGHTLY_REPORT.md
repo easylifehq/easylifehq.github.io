@@ -1,5 +1,29 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 12 explicit task-row handoff preview
+
+- Task attempted: Let the user explicitly send an approved local task draft into an editable task-row preview without automatically saving it.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4210` and inspected `/app/easylist/add?demo=1` with headless Chromium. Selected `Task draft`, clicked `Preview draft`, then clicked `Preview task row handoff`; the route rendered an editable unsaved task-row preview with no submit button inside the handoff panel. Screenshot saved at `.codex-logs/stage12-task1-inbox-task-handoff.png`.
+- Files changed:
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/features/easylist/components/TaskComposer.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Explicit handoff behavior:
+  - Task handoff is available only when the approved local draft is a `Task draft`.
+  - The user must explicitly click `Preview task row handoff`.
+  - The handoff renders editable local fields for task title, kind, due date, minutes, and notes.
+  - The real `TaskComposer` save behavior remains unchanged and separate below the assistant preview.
+- Copy/product simplification:
+  - The handoff is labeled `Editable unsaved task row` and says it has not been saved.
+- No-auto-save guarantee:
+  - This task does not call `addTask`, submit the composer, persist, save, archive, send, sync, schedule, remember, mutate existing data automatically, call models, change backend/auth/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Stage 12 Task 2 can add a note/memory handoff preview while preserving the same explicit/no-write boundary.
+
 ## 2026-05-11 - Stage 11 Safe Local Memory proof packet
 
 - Task attempted: Prove whether safe local draft previews are ready before explicit save-draft handoff behavior begins.

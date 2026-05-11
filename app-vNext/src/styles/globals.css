@@ -4898,6 +4898,36 @@ textarea::placeholder {
   margin: 0;
 }
 
+.assistant-handoff-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.assistant-handoff-actions span {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.78rem;
+  font-weight: 720;
+}
+
+.assistant-task-handoff-preview {
+  grid-column: 2;
+  display: grid;
+  gap: 0.58rem;
+  padding: 0.72rem;
+  border-radius: 8px;
+  border: 1px dashed color-mix(in srgb, var(--app-accent, var(--shell-accent)) 42%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent), transparent 50%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 76%, transparent);
+}
+
+.assistant-task-handoff-row {
+  margin: 0;
+  box-shadow: none;
+}
+
 .assistant-suggestion-actions {
   flex: 0 0 auto;
   flex-wrap: wrap;
@@ -5051,6 +5081,10 @@ textarea::placeholder {
   }
 
   .assistant-draft-comparison-row {
+    grid-column: auto;
+  }
+
+  .assistant-task-handoff-preview {
     grid-column: auto;
   }
 

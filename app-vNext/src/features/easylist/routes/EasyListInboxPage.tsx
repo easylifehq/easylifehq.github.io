@@ -3,12 +3,15 @@ import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
 import {
   buildLocalDraftComparisonOptions,
   buildLocalDraftFromSuggestion,
+  buildTaskRowHandoffPreview,
 } from "@/features/assistant/localDraftBuilder";
 import {
   localDraftStatusLabels,
   localDraftTypeLabels,
+  type AssistantTaskRowHandoffPreview,
   type AssistantLocalDraftType,
 } from "@/features/assistant/localDraftTypes";
+import type { TaskRowDraft } from "@/features/easylist/components/TaskComposer";
 import {
   approvalStatePreviewLabels,
   type AssistantApprovalState,
@@ -32,6 +35,8 @@ export function EasyListInboxPage() {
   const [assistantCaptureText, setAssistantCaptureText] = useState("Reply to Maya about Friday plans");
   const [previewApprovalState, setPreviewApprovalState] = useState<AssistantApprovalState>("suggested");
   const [selectedDraftType, setSelectedDraftType] = useState<AssistantLocalDraftType>("follow-up");
+  const [showTaskHandoff, setShowTaskHandoff] = useState(false);
+  const [taskHandoffPreview, setTaskHandoffPreview] = useState<AssistantTaskRowHandoffPreview | null>(null);
   const listNames = useMemo(
     () => Array.from(new Set(["Main", ...tasks.map((task) => task.listName || "Main")])).sort(),
     [tasks]
@@ -73,6 +78,7 @@ export function EasyListInboxPage() {
         : null,
     [activeDraftType, assistantSuggestion, visibleApprovalState]
   );
+  const canPreviewTaskHandoff = approvedLocalDraft?.draftType === "task";
   const assistantQueue = useMemo(
     () => [
       {
@@ -168,6 +174,8 @@ export function EasyListInboxPage() {
                   setAssistantCaptureText(event.target.value);
                   setPreviewApprovalState("suggested");
                   setSelectedDraftType(classifyAssistantIntent(event.target.value).intent);
+                  setShowTaskHandoff(false);
+                  setTaskHandoffPreview(null);
                 }}
                 placeholder="Paste one messy thought to classify locally"
               />
@@ -190,7 +198,11 @@ export function EasyListInboxPage() {
                 <button
                   type="button"
                   className="primary-button"
-                  onClick={() => setPreviewApprovalState("approved")}
+                  onClick={() => {
+                    setPreviewApprovalState("approved");
+                    setShowTaskHandoff(false);
+                    setTaskHandoffPreview(null);
+                  }}
                   title="Preview only. This does not save anything."
                 >
                   Preview draft
@@ -198,7 +210,11 @@ export function EasyListInboxPage() {
                 <button
                   type="button"
                   className="button-secondary"
-                  onClick={() => setPreviewApprovalState("editing")}
+                  onClick={() => {
+                    setPreviewApprovalState("editing");
+                    setShowTaskHandoff(false);
+                    setTaskHandoffPreview(null);
+                  }}
                   title="Preview only. This does not edit saved data."
                 >
                   Edit preview
@@ -206,7 +222,11 @@ export function EasyListInboxPage() {
                 <button
                   type="button"
                   className="ghost-button"
-                  onClick={() => setPreviewApprovalState("dismissed")}
+                  onClick={() => {
+                    setPreviewApprovalState("dismissed");
+                    setShowTaskHandoff(false);
+                    setTaskHandoffPreview(null);
+                  }}
                   title="Preview only. This does not dismiss saved data."
                 >
                   Dismiss preview
@@ -252,7 +272,11 @@ export function EasyListInboxPage() {
                 key={option.draftType}
                 type="button"
                 className={activeDraftType === option.draftType ? "active" : ""}
-                onClick={() => setSelectedDraftType(option.draftType)}
+                onClick={() => {
+                  setSelectedDraftType(option.draftType);
+                  setShowTaskHandoff(false);
+                  setTaskHandoffPreview(null);
+                }}
                 title="Local preview only. This does not create another draft."
               >
                 <strong>{option.label}</strong>
@@ -281,6 +305,97 @@ export function EasyListInboxPage() {
                 ))}
               </div>
               {approvedLocalDraft.warnings.map((warning) => (
+                <p key={warning} className="assistant-local-draft-warning">
+                  {warning}
+                </p>
+              ))}
+              {canPreviewTaskHandoff ? (
+                <div className="assistant-handoff-actions">
+                  <button
+                    type="button"
+                    className="button-secondary"
+                    onClick={() => {
+                      const preview = buildTaskRowHandoffPreview(approvedLocalDraft);
+                      setTaskHandoffPreview(preview);
+                      setShowTaskHandoff(Boolean(preview));
+                    }}
+                  >
+                    Preview task row handoff
+                  </button>
+                  <span>This only prepares an editable local row. It does not save.</span>
+                </div>
+              ) : null}
+            </article>
+          ) : null}
+
+          {showTaskHandoff && taskHandoffPreview ? (
+            <article className="assistant-task-handoff-preview" aria-label="Editable unsaved task-row preview">
+              <div className="assistant-local-draft-header">
+                <span>Explicit handoff preview</span>
+                <strong>Editable unsaved task row</strong>
+              </div>
+              <div className="task-row-grid task-row-card assistant-task-handoff-row">
+                <label className="field-stack task-row-field">
+                  <span>Task</span>
+                  <input
+                    type="text"
+                    value={taskHandoffPreview.title}
+                    onChange={(event) =>
+                      setTaskHandoffPreview((current) => current ? { ...current, title: event.target.value } : current)
+                    }
+                  />
+                </label>
+                <label className="field-stack task-row-field">
+                  <span>Kind</span>
+                  <select
+                    value={taskHandoffPreview.itemKind}
+                    onChange={(event) =>
+                      setTaskHandoffPreview((current) =>
+                        current ? { ...current, itemKind: event.target.value as TaskRowDraft["itemKind"] } : current
+                      )
+                    }
+                  >
+                    <option value="task">Task</option>
+                    <option value="deadline">Deadline</option>
+                  </select>
+                </label>
+                <label className="field-stack task-row-field">
+                  <span>Due</span>
+                  <input
+                    type="date"
+                    value={taskHandoffPreview.dueDate}
+                    onChange={(event) =>
+                      setTaskHandoffPreview((current) => current ? { ...current, dueDate: event.target.value } : current)
+                    }
+                  />
+                </label>
+                <label className="field-stack task-row-field">
+                  <span>Minutes</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="5"
+                    value={taskHandoffPreview.estimatedLength}
+                    onChange={(event) =>
+                      setTaskHandoffPreview((current) =>
+                        current ? { ...current, estimatedLength: event.target.value } : current
+                      )
+                    }
+                    placeholder="30"
+                  />
+                </label>
+                <label className="field-stack task-row-field">
+                  <span>Notes</span>
+                  <input
+                    type="text"
+                    value={taskHandoffPreview.notes}
+                    onChange={(event) =>
+                      setTaskHandoffPreview((current) => current ? { ...current, notes: event.target.value } : current)
+                    }
+                  />
+                </label>
+              </div>
+              {taskHandoffPreview.warnings.map((warning) => (
                 <p key={warning} className="assistant-local-draft-warning">
                   {warning}
                 </p>

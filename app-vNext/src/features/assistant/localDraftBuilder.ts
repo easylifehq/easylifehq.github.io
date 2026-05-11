@@ -6,6 +6,7 @@ import {
   type AssistantLocalDraftComparisonOption,
   type AssistantLocalDraftType,
   type AssistantMemoryDraftActionOption,
+  type AssistantTaskRowHandoffPreview,
 } from "./localDraftTypes";
 
 function normalizeDraftText(text: string) {
@@ -134,3 +135,35 @@ export const memoryDraftActionOptions: AssistantMemoryDraftActionOption[] = [
     summary: "Hide this local preview.",
   },
 ];
+
+function buildTaskHandoffNotes(draft: AssistantLocalDraft) {
+  const source = normalizeDraftText(draft.sourceText);
+
+  if (!source || source === draft.title) {
+    return "Review this local handoff before using the existing save action.";
+  }
+
+  return `Source capture: ${source}`;
+}
+
+export function buildTaskRowHandoffPreview(draft: AssistantLocalDraft): AssistantTaskRowHandoffPreview | null {
+  if (draft.draftType !== "task") {
+    return null;
+  }
+
+  return {
+    id: `task-handoff-${draft.id}`,
+    sourceDraftId: draft.id,
+    title: draft.title,
+    itemKind: "task",
+    category: "",
+    dueDate: "",
+    estimatedLength: "",
+    priorityTier: 5,
+    notes: buildTaskHandoffNotes(draft),
+    warnings: [
+      "Editable local task-row preview only. This has not been saved.",
+      "Use the existing task save action below only when you are ready to create a real task.",
+    ],
+  };
+}
