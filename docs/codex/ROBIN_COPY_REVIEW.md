@@ -1,6 +1,32 @@
 # Robin Copy Review
 
 ## Verdict
+COPY_READY_FOR_STAGE_12
+
+## Stage 11 Copy Proof - 2026-05-11
+
+Verdict: `COPY_READY_FOR_EXPLICIT_HANDOFF`.
+
+The Stage 11 copy keeps the no-write promise clear enough to proceed. Today says nothing is saved from Today. Inbox says drafts are unsaved and no task, note, plan, reminder, follow-up, email, sync, schedule, or memory has been created. Notes says the memory-like draft is not saved, pinned, remembered, planned, or turned into a task.
+
+What works:
+- `Unsaved local preview` appears at the draft moment.
+- `Preview draft` is safer than approval language that sounds like a write.
+- `Compare unsaved shapes` makes the choice feel local and reversible.
+- Notes uses `Memory-like assistant draft`, which avoids claiming real memory.
+
+Copy risks to carry into Stage 12:
+- `Remember something` is still a real note-creation action, so Stage 12 must keep it visually and verbally separate from local draft preview actions.
+- `Turn into task` and `Turn into plan` are acceptable as labels only while paired with preview/no-write language; actual handoff copy must say what will happen before it happens.
+- Reminder and follow-up handoff must not imply notifications, email sending, calendar sync, or background automation.
+
+## Stage 11 Final Copy Verdict
+
+COPY_READY_FOR_STAGE_12
+
+---
+
+## Verdict
 COPY_READY_FOR_STAGE_11
 
 ## Stage 11 Task 4 Copy Review - 2026-05-11

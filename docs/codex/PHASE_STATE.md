@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: stage-11-safe-local-memory
+Current Phase: stage-12-explicit-save-draft-handoff
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Turn approved assistant suggestions into visible unsaved local draft previews before any real save behavior exists.
+Primary Action: Show explicit user-approved handoff previews from unsaved local drafts into existing flows before any real save behavior exists.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 11 tasks must add one safe local draft behavior at a time and must not add autonomous actions, hidden writes, real memory, or persistence.
+Complexity Budget: Stage 12 tasks must add one explicit handoff preview at a time and must not add autonomous actions, hidden writes, real memory, external sync, or persistence.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_STAGE_11
+Parking State: READY_FOR_STAGE_12
 Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 10 proof now says READY_FOR_STAGE_11. Stage 11 Safe Local Memory may begin using the prepared local draft tasks in NEXT_5_TASKS.md.
+Next Phase Criteria: Stage 11 proof now says READY_FOR_STAGE_12. Stage 12 Explicit Save-Draft Handoff may begin using the prepared handoff tasks in NEXT_5_TASKS.md.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
-Repair Return Phase: stage-11-safe-local-memory
-Updated At: 2026-05-11 - Stage 10 assistant brain proof passed; Stage 11 safe local memory approved.
+Repair Return Phase: stage-12-explicit-save-draft-handoff
+Updated At: 2026-05-11 - Stage 11 safe local memory proof passed; Stage 12 explicit save-draft handoff approved.
 
 ## Assistant Brain Gate
 
@@ -38,6 +38,16 @@ Stage 11 source: docs/codex/EASYLIFE_STAGE_11_SAFE_LOCAL_MEMORY_PLAN.md
 Prepared Stage 11 queue: docs/codex/NEXT_5_TASKS.md contains exactly five safe local memory tasks.
 
 Stage 11 may create visible unsaved draft previews from approved local suggestions. The assistant may show what a suggestion would become, but it must not write to tasks, notes, calendar, memory, email, sync, backend, Firebase config, dependencies, generated output, deploy config, or secrets.
+
+Stage 11 proof result: READY_FOR_STAGE_12.
+
+## Explicit Save-Draft Handoff Gate
+
+Stage 12 source: docs/codex/NEXT_5_TASKS.md
+
+Prepared Stage 12 queue: docs/codex/NEXT_5_TASKS.md contains exactly five explicit handoff tasks.
+
+Stage 12 may show how an unsaved local draft would be handed to an existing task, note, plan, reminder, or follow-up flow after explicit user approval. It must not automatically save, create, archive, send, sync, schedule, remember, mutate stored data, call models, change backend/auth/Firebase config, add dependencies, touch package files, deploy, or generate tracked app output.
 
 ## Phase Order
 

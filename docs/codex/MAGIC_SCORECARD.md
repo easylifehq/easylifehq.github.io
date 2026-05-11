@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 11 Safe Local Memory Proof
+
+- Task: Stage 11 Safe Local Memory proof packet.
+- Result: Passed build and five-route inspection; Stage 12 Explicit Save-Draft Handoff is approved to begin.
+- Magic signal: ready-for-stage-12
+- Changed files: docs only
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` on local Vite port `4209`.
+- Screenshot evidence: `.codex-logs/stage11-proof-today.png`, `.codex-logs/stage11-proof-inbox.png`, `.codex-logs/stage11-proof-plan.png`, `.codex-logs/stage11-proof-notes.png`, and `.codex-logs/stage11-proof-settings.png`.
+- Unsaved draft evidence: Today points to unsaved Inbox draft review; Inbox renders one suggestion, six comparison options, and one unsaved draft preview; Notes renders local memory draft actions and no-real-memory copy.
+- No-write guarantee: no persistence, save-draft handoff, task/note/calendar mutation, archive/send/sync/schedule/remember behavior, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Verdict: `READY_FOR_STAGE_12`.
+
 ## 2026-05-11 - Stage 11 Notes Local Memory Draft Affordance
 
 - Task: Notes local memory draft affordance.

@@ -1,6 +1,35 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_STAGE_12
+
+## Stage 11 Design Proof - 2026-05-11
+
+Verdict: `SAFE_LOCAL_DRAFTS_VISUALLY_READY_FOR_HANDOFF`.
+
+The Stage 11 surfaces stay reviewable. Today remains focused on one read, one next move, one command row, and the small today strip. Inbox carries the heaviest behavior, but it is still structured as one suggestion, one comparison row, and one unsaved draft preview. Notes adds a quiet memory-draft affordance without turning Memory into a second dashboard.
+
+What works:
+- Today points to safe draft review without adding a new panel.
+- Inbox makes draft shape choice visible while keeping one preview as the main object.
+- Notes/Memory shows local actions in a contained panel below the memory bridge.
+- Plan and Settings remain stable support routes.
+
+What still feels weak:
+- Inbox density remains the main design risk because real task capture lives below the assistant preview.
+- The Notes affordance is honest but still a little panel-heavy; Stage 12 should avoid adding another large block there.
+- The handoff moment does not exist yet, so users can review previews but cannot clearly choose what to do next.
+
+Design recommendation:
+Begin Stage 12 with the narrowest explicit handoff preview, likely task-row handoff first. Keep all handoff UI compact and avoid adding a second command center.
+
+## Stage 11 Final Verdict
+
+READY_FOR_STAGE_12
+
+---
+
+## Verdict
 READY_FOR_STAGE_11
 
 ## Stage 11 Task 3 Design Review - 2026-05-11

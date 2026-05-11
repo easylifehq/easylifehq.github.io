@@ -1,5 +1,30 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 11 Safe Local Memory proof packet
+
+- Task attempted: Prove whether safe local draft previews are ready before explicit save-draft handoff behavior begins.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4209` and inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` with headless Chromium. No browser page errors were reported. Screenshots saved at `.codex-logs/stage11-proof-today.png`, `.codex-logs/stage11-proof-inbox.png`, `.codex-logs/stage11-proof-plan.png`, `.codex-logs/stage11-proof-notes.png`, and `.codex-logs/stage11-proof-settings.png`.
+- Files changed:
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Unsaved local draft behavior:
+  - Visible on Today, Inbox, and Notes/Memory. Today points to an unsaved Inbox draft review; Inbox shows one suggestion, six comparison options, and one unsaved draft preview; Notes shows local memory-like draft actions and dismiss state.
+- No-write/no-hidden-action promise:
+  - Clear enough to continue. The proof surfaces say drafts are unsaved and that nothing has been saved, sent, synced, scheduled, remembered, or created from the preview.
+- Still fake, weak, or confusing:
+  - The draft preview has no explicit handoff yet.
+  - Inbox still sits above real task capture, so handoff copy must be precise.
+  - Notes has both real note creation and local draft preview on the same route.
+  - Plan has no draft handoff yet.
+- Stage 12 gate:
+  - `READY_FOR_STAGE_12`. NEXT_5_TASKS.md now contains exactly five Stage 12 Explicit Save-Draft Handoff tasks.
+
 ## 2026-05-11 - Stage 11 Notes local memory draft affordance
 
 - Task attempted: Show what a memory-like assistant suggestion could become as an unsaved local draft without creating real memory.
