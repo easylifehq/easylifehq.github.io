@@ -150,6 +150,16 @@ export function EasyCalendarDayPage() {
       detail: "Rescue overdue work before planning anything ambitious.",
     },
   ];
+  const activeDayModeOption = dayModeOptions.find((mode) => mode.id === activeDayMode) || dayModeOptions[1];
+  const fixedCommitmentLabel = `${fixedEventCount} fixed commitment${fixedEventCount === 1 ? "" : "s"}`;
+  const focusBlockLabel = `${taskBlockCount} focus block${taskBlockCount === 1 ? "" : "s"}`;
+  const nextPlanningAction = recoveryTaskCount
+    ? "Start by rescuing overdue work before adding anything new."
+    : isOverloaded
+      ? "Protect the fixed commitments and move one flexible block out."
+      : openWindows.length
+        ? "Preview a plan, then approve only the blocks that fit the open windows."
+        : "Review fixed commitments before adding more to this day.";
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
     [selectedBlockId, taskBlocks]
@@ -372,8 +382,8 @@ export function EasyCalendarDayPage() {
     <>
       <PageSection
         eyebrow="Plan"
-        title={formatLongDate(selectedDate)}
-        description="Use today's shape to decide what you can realistically do before adding more."
+        title="Plan a realistic day"
+        description={`${formatLongDate(selectedDate)}. Use today's capacity before adding more.`}
       >
         {error ? <p className="error-copy">{error}</p> : null}
         <div className="calendar-day-topbar">
@@ -392,6 +402,7 @@ export function EasyCalendarDayPage() {
             Add time
           </button>
         </div>
+
         <div className="calendar-week-strip" aria-label="Week">
           {weekDays.map((day) => (
             <button
@@ -405,21 +416,32 @@ export function EasyCalendarDayPage() {
             </button>
           ))}
         </div>
-        <div className="quiet-metrics-row calendar-day-summary-row" aria-label="Plan snapshot">
-          <span><strong>{formatDuration(scheduledMinutes)}</strong> planned</span>
-          <span><strong>{fixedEventCount}</strong> fixed item{fixedEventCount === 1 ? "" : "s"}</span>
-          <span><strong>{taskBlockCount}</strong> focus block{taskBlockCount === 1 ? "" : "s"}</span>
+
+        <div className="calendar-plan-read" aria-label="Assistant day planning read">
+          <div className="calendar-plan-read-main">
+            <span>Day capacity</span>
+            <strong>{activeDayModeOption.label}</strong>
+            <p>{activeDayModeOption.detail}</p>
+          </div>
+          <div className="calendar-plan-read-metrics" aria-label="Day planning metrics">
+            <span><strong>{formatDuration(scheduledMinutes)}</strong> planned</span>
+            <span><strong>{formatDuration(openMinutes)}</strong> open</span>
+            <span><strong>{fixedEventCount}</strong> fixed</span>
+            <span><strong>{taskBlockCount}</strong> focus</span>
+          </div>
+          <div className="calendar-plan-read-action">
+            <span>Next planning action</span>
+            <p>{nextPlanningAction}</p>
+          </div>
         </div>
-        <div className="settings-status-grid" aria-label="Static day mode read">
-          {dayModeOptions.map((mode) => (
-            <article className="settings-status-card" key={mode.id}>
-              <span>{mode.id === activeDayMode ? "Today" : "Mode"}</span>
-              <strong>{mode.label}</strong>
-              <p>{mode.detail}</p>
-            </article>
-          ))}
+
+        <div className="calendar-plan-context-strip" aria-label="Plan context">
+          <span>{fixedCommitmentLabel}</span>
+          <span>{focusBlockLabel}</span>
+          <span>{openWindows.length} open window{openWindows.length === 1 ? "" : "s"}</span>
         </div>
-        <div className="calendar-type-legend" aria-label="Plan item types">
+
+        <div className="calendar-type-legend calendar-type-legend-quiet" aria-label="Plan item types">
           <span className="fixed">Fixed</span>
           <span className="deadline">Due</span>
           <span className="flexible">Focus block</span>
@@ -428,8 +450,8 @@ export function EasyCalendarDayPage() {
 
       <PageSection
         eyebrow="Today"
-        title="Today timeline"
-        description="Scan fixed events, planned blocks, and open windows in order."
+        title="Timeline"
+        description="Scan fixed commitments, planned blocks, and open windows in order."
       >
         {isLoading ? <p className="helper-copy">Loading today...</p> : null}
 
@@ -449,7 +471,7 @@ export function EasyCalendarDayPage() {
             onClick={handlePlanMyDayPreview}
             disabled={isPlanning || isUndoingPlan}
           >
-            Plan My Day
+            Preview plan
           </button>
         </div>
 

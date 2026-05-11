@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 9 Plan Day Surface Polish
+
+- Task: Plan day surface polish.
+- Result: Passed implementation, build, and desktop/mobile local route inspection.
+- Magic signal: moved-forward
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easycalendar/day?demo=1` on local Vite port `4195` at 1280px desktop and 390px mobile; screenshots saved under `.codex-logs/stage9-plan-20260511-desktop.png` and `.codex-logs/stage9-plan-20260511-mobile.png`.
+- Simon improvement score: SCORE: 5; DIRECTION: improved; REASON: Plan now leads with day capacity, open windows, fixed commitments, focus blocks, and one next planning action while removing the four-card mode grid and duplicate floating Capture button.
+- Follow-up: Rerun the Stage 9 visual proof packet before Stage 10 Assistant Brain Foundation.
+
 ## 2026-05-11 - Stage 9 Inbox Intake Surface Polish
 
 - Task: Inbox intake surface polish.

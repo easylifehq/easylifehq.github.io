@@ -3131,6 +3131,104 @@ textarea::placeholder {
   font-size: 0.98rem;
 }
 
+.calendar-plan-read {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.95fr);
+  gap: 0.65rem;
+  padding: 0.78rem;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 9%, transparent), transparent 62%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 82%, transparent);
+}
+
+.app-shell-vnext:has(.calendar-plan-read) .capture-fab {
+  display: none;
+}
+
+.calendar-plan-read-main,
+.calendar-plan-read-action {
+  display: grid;
+  align-content: start;
+  gap: 0.32rem;
+  min-width: 0;
+}
+
+.calendar-plan-read-main {
+  padding: 0.18rem 0.1rem;
+}
+
+.calendar-plan-read-main span,
+.calendar-plan-read-action span,
+.calendar-plan-context-strip span {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.calendar-plan-read-main strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+  line-height: 1.05;
+}
+
+.calendar-plan-read-main p,
+.calendar-plan-read-action p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  line-height: 1.45;
+}
+
+.calendar-plan-read-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.46rem;
+}
+
+.calendar-plan-read-metrics span,
+.calendar-plan-read-action {
+  padding: 0.68rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 70%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 72%, transparent);
+}
+
+.calendar-plan-read-metrics strong {
+  display: block;
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 1rem;
+}
+
+.calendar-plan-read-action {
+  grid-column: 1 / -1;
+}
+
+.calendar-plan-context-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.25rem;
+}
+
+.calendar-plan-context-strip span,
+.calendar-type-legend-quiet span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.85rem;
+  padding: 0.26rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 76%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 64%, transparent);
+}
+
+.calendar-type-legend-quiet {
+  margin-top: 0.1rem;
+  opacity: 0.86;
+}
+
 .advanced-disclosure {
   padding: 0.9rem;
   border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
@@ -9956,6 +10054,10 @@ button.calendar-detail-card:disabled {
   }
 
   .calendar-day-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-plan-read {
     grid-template-columns: 1fr;
   }
 

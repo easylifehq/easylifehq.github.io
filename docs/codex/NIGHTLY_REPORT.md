@@ -1,5 +1,26 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 9 Plan day surface polish
+
+- Task attempted: Polish `/app/easycalendar/day?demo=1` so Plan feels like the assistant's realistic day-planning read instead of a standalone calendar module.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4195` and inspected `/app/easycalendar/day?demo=1` with headless Chromium at 1280px desktop and 390px mobile. No page errors were reported.
+- Files changed:
+  - `app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Removed/simplified visual clutter:
+  - Replaced the four-card day-mode grid with one assistant planning read for day capacity, planned time, open time, fixed commitments, focus blocks, and the next planning action.
+  - Softened the item legend into a quiet pill row instead of a competing status block.
+  - Renamed `Plan My Day` to `Preview plan` so the action reads approval-first.
+  - Hid the duplicate floating Capture button on Plan so Add time and Preview plan own the planning controls.
+- Route inspection result:
+  - Desktop shows capacity, open windows, fixed commitments, and one next planning action before the timeline.
+  - Mobile stacks the planning read cleanly without the floating capture control covering Plan actions.
+- Follow-up needed: Rerun the Stage 9 visual proof packet and decide whether EasyLife is ready for human visual review before Stage 10.
+
 ## 2026-05-11 - Stage 9 Inbox intake surface polish
 
 - Task attempted: Polish `/app/easylist/add?demo=1` so Inbox feels like a compact assistant intake and approval queue instead of a list-management page.
