@@ -12546,6 +12546,7 @@ button.calendar-detail-card:disabled {
   grid-column: 2;
   color: var(--ui-text-secondary, var(--shell-page-text));
   font-size: 0.76rem;
+  max-width: 50rem;
 }
 
 .app-theme-easyhq:not(.command-center-page) .hq-natural-capture em {

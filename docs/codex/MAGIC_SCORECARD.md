@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 11 Today Safe Draft Review Hint
+
+- Task: Today safe draft review hint.
+- Result: Passed local/static implementation, build, and route inspection.
+- Magic signal: today-points-to-safe-draft-review
+- Changed files: 6
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/hq?demo=1` on local Vite port `4207` and verified assistant read, next move, command/capture row, today strip, and safe unsaved draft hint. Screenshot saved at `.codex-logs/stage11-task3-today-draft-hint.png`.
+- Design evidence: Today remained focused; no new panel, dashboard, persisted draft state, or cross-route storage was added.
+- Simplification evidence: replaced the dense `Local suggestion: intent / confidence / approval state` sentence with one safe draft review hint.
+- No-write guarantee: no persistence, saved draft state, task/note/calendar mutation, archive/send/sync/schedule/remember behavior, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 11 Task 4 should add the Notes/Memory local draft affordance while preserving the same no-write boundary.
+
 ## 2026-05-11 - Stage 11 Local Draft Comparison Row
 
 - Task: Local draft comparison row.

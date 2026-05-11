@@ -3,6 +3,20 @@
 ## Verdict
 READY_FOR_STAGE_11
 
+## Stage 11 Task 3 Design Review - 2026-05-11
+
+Verdict: `TODAY_REMAINS_FOCUSED_WITH_SAFE_DRAFT_HINT`.
+
+Today still holds the first viewport around one assistant read, one next move, one command/capture row, and one Due / Plan / Open strip. The new hint is small enough to support the command row instead of becoming another panel.
+
+What improved:
+- The old dense classifier sentence was shortened into one safer action: review an unsaved draft in Inbox.
+- The secondary action now says `Review Draft`, which connects Today to the Stage 11 Inbox behavior without implying a save.
+- No cross-route draft state or persisted preview was added.
+
+Design risk:
+- The command row still carries a long static example string, but this task did not make it worse. If Today gets crowded again, the next visual repair should shorten that example list rather than adding another surface.
+
 ## Stage 10 Design Proof - 2026-05-11
 
 The assistant brain foundation is visually reviewable enough to continue. Today keeps the first viewport disciplined while adding a small local intent read into the command row, and Inbox makes the approval loop visible without turning into a new dashboard.

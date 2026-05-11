@@ -90,3 +90,13 @@ export function buildLocalDraftComparisonOptions(
     recommended: draftType === suggestion.intent,
   }));
 }
+
+export function buildLocalDraftReviewHint(suggestion: AssistantIntentSuggestion) {
+  const draftTypeLabel = localDraftTypeLabels[suggestion.intent].toLowerCase();
+
+  return {
+    label: "Safe next action",
+    title: `Review an unsaved ${draftTypeLabel} in Inbox`,
+    detail: "Nothing is saved from Today.",
+  };
+}

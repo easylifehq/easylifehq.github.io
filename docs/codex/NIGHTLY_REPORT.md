@@ -1,5 +1,26 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 11 Today safe draft review hint
+
+- Task attempted: Make Today explain that the safest next action is reviewing an unsaved local draft in Inbox without implying anything has been saved.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4207` and inspected `/app/hq?demo=1` with headless Chromium. The first viewport still rendered the assistant read, next move, command/capture row, and Due / Plan / Open strip. Screenshot saved at `.codex-logs/stage11-task3-today-draft-hint.png`.
+- Files changed:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product change:
+  - Today now derives a static local draft review hint from the same local assistant contract and says the safe next action is reviewing an unsaved draft in Inbox.
+  - The secondary first-viewport action now says `Review Draft`, pointing users toward Inbox without creating cross-route state.
+- Density simplification:
+  - Replaced the older `Local suggestion: intent / confidence / approval state` sentence with `Safe next action: Review an unsaved ... draft in Inbox. Nothing is saved from Today.`
+- No-write guarantee:
+  - This task added static/local Today copy and a deterministic helper only. It does not persist draft state, save, create, archive, send, sync, schedule, remember, mutate data, call models, change backend/auth/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Stage 11 Task 4 can bring the same safe local draft affordance to Notes/Memory.
+
 ## 2026-05-11 - Stage 11 local draft comparison row
 
 - Task attempted: Let the user compare what captured input could become as a task, memory note, plan item, reminder, follow-up, or unsure draft before choosing.
