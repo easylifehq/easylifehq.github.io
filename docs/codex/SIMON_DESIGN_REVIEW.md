@@ -1,10 +1,10 @@
 # Simon Design Review
 
 ## Verdict
-TODAY_PASS_IMPROVED
+NOT_READY_FOR_HUMAN_VISUAL_REVIEW
 
 ## One-Sentence Read
-The public entrance, signed-in shell, and Today first viewport now read much more like one assistant, but Inbox and Plan still need surface-level polish before a full visual proof packet.
+EasyLife is visually credible in its entrance, shell, and Today surface, but Inbox and Plan still need polish before the assistant brain should begin.
 
 ## What Improved
 - Today now has a more disciplined first viewport: assistant read, next move, compact Due / Plan / Open strip, inline command input, and quiet context.
@@ -27,7 +27,14 @@ The public entrance, signed-in shell, and Today first viewport now read much mor
 - There is still some card/panel language in deeper surfaces for a personal assistant that should feel fast, composed, and direct.
 
 ## Design Readiness
-Continue Stage 9 one surface at a time. Public/login, signed-in shell, and Today are improved enough to move to Inbox intake polish, but the app is not yet `READY_FOR_HUMAN_VISUAL_REVIEW`.
+Continue Stage 9 one surface at a time. Public/login, signed-in shell, and Today are improved enough to keep, but the app is not yet `READY_FOR_HUMAN_VISUAL_REVIEW`.
+
+## Stage 9 Proof Result
+
+- Build passed with `npm.cmd run build` from `app-vNext`.
+- Login, Today, Inbox, Plan, Notes, and Settings/More all rendered in local review mode.
+- Today passed desktop and 390px mobile inspection.
+- The remaining visual blockers are bounded: Inbox intake polish and Plan day polish.
 
 ## Priority Design Blocker
 Inbox intake polish. The assistant home now supports the model; the next judgment point is whether capture/approval feels sleek, compact, and operational.

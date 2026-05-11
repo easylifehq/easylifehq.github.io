@@ -1,7 +1,7 @@
 # Robin Copy Review
 
 ## Verdict
-PUBLIC_LOGIN_READY_FOR_VISUAL_PASS
+COPY_READY_WITH_DEEP_ROUTE_CAVEATS
 
 ## One-Sentence Read
 The public/login entrance now introduces EasyLife as one assistant path instead of a product inventory.
@@ -36,4 +36,8 @@ Yes from the public/login entrance and inside the signed-in review path for Toda
 - [ ] Keep AI language modest until real assistant behavior exists.
 
 ## Stop Or Continue
-continue with Stage 9 Today first viewport polish before the visual proof packet
+continue Stage 9 visual polish with Inbox and Plan; copy is no longer the main review blocker
+
+## Stage 9 Proof Update - 2026-05-11
+
+Copy is not the main blocker to human visual review anymore. The public/login entrance, signed-in shell, Today, Notes, and Settings/More read as one assistant path. Remaining copy caveats are in deeper optional/direct routes and can be handled after the visual proof blockers unless they appear in the main review path.

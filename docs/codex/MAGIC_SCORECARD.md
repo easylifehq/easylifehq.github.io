@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 9 Visual Proof Packet
+
+- Task: Stage 9 visual proof packet before assistant brain.
+- Result: Build and route inspection passed; human visual review is not approved yet.
+- Magic signal: hold-before-brain
+- Changed files: docs only
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: In-app browser inspected `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` on local Vite port `4193`; Today was also inspected at 390px mobile.
+- Visual verdict: `NOT_READY_FOR_HUMAN_VISUAL_REVIEW`.
+- Reason: public/login, shell, Today, Notes, and Settings are credible enough to keep, but Inbox still feels like list management and Plan still feels like a calendar module.
+- Follow-up: Finish Inbox intake polish and Plan day polish, then rerun the Stage 9 proof packet before Stage 10 Assistant Brain Foundation.
+
 ## 2026-05-11 - Stage 9 Today First Viewport Polish
 
 - Task: Today first viewport polish.

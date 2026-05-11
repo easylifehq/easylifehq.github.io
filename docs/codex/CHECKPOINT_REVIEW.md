@@ -1,7 +1,65 @@
 # Checkpoint Review
 
 ## Verdict
-READY_FOR_VISUAL_PASS
+NOT_READY_FOR_HUMAN_VISUAL_REVIEW
+
+## Stage 9 Visual Proof Packet
+
+Reviewed At: 2026-05-11
+
+Stage 9 proof says EasyLife is on the right course but should not start Stage 10 Assistant Brain Foundation yet. The public/login entrance, signed-in shell, and Today command surface are visually credible enough to keep, but Inbox and Plan still need their bounded polish tasks before a human visual review will be fair.
+
+## Stage 9 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 9 Routes Inspected
+
+Local preview: `http://127.0.0.1:4193`
+
+- Login: `/login` rendered `Open your assistant` and the Assistant public navigation.
+- Today/HQ: `/app/hq?demo=1` rendered `What needs attention now?` and `Capture or command`.
+- Today mobile: `/app/hq?demo=1` at 390px rendered the Due / Plan / Open strip and no duplicate floating Capture button.
+- Inbox/Capture: `/app/easylist/add?demo=1` rendered the assistant inbox route, but still feels like list-management chrome.
+- Plan: `/app/easycalendar/day?demo=1` rendered the day route, but still has calendar-module weight.
+- Notes: `/app/easynotes?demo=1` rendered Memory with assistant-aligned copy.
+- More/Settings: `/app/settings?demo=1` rendered Settings with assistant status.
+
+## What Feels Slick
+
+- The public entrance now sells one assistant promise instead of a product catalog.
+- The signed-in shell has a clean Today, Inbox, Plan, Notes, More model.
+- Today is now the strongest surface: one assistant read, one next move, one command/capture row, a compact due/plan/open strip, and quiet context.
+- Notes reads more like Memory than a standalone notes app.
+- Settings/More is acceptable as a support/control surface.
+
+## What Still Feels Bad
+
+- Inbox is still too close to list management. The assistant words are there, but the intake surface needs a tighter approval-queue hierarchy.
+- Plan is aligned conceptually, but the day surface still feels like a calendar module rather than a slick planning read.
+- Deeper optional/direct routes still carry some legacy module labels.
+
+## Does It Read As One Assistant?
+
+Mostly yes. The first impression, shell, Today, Notes, and Settings now support the one-assistant model. The remaining risk is not product direction; it is two unfinished visual polish surfaces.
+
+## Should Stage 10 Assistant Brain Begin?
+
+No. Stage 10 should wait until Inbox and Plan are polished or explicitly parked. Building the assistant brain now would put new intelligence into two surfaces that still need visual trust work.
+
+## Top Three Next Blockers
+
+1. Polish Inbox into a compact assistant intake/approval queue.
+2. Polish Plan into a calmer planning read around day capacity and next planning action.
+3. Create the final Stage 9 proof packet again after those two tasks and decide whether to transition to Stage 10.
+
+## Final Verdict
+
+NOT_READY_FOR_HUMAN_VISUAL_REVIEW
+
+---
+
+## Historical Stage 1-5 Proof
 
 ## Reviewed At
 2026-05-10 14:33:16 -06:00

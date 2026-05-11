@@ -1,5 +1,32 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 9 visual proof packet
+
+- Task attempted: Decide whether EasyLife is ready for human visual review before starting Stage 10 Assistant Brain Foundation.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4193` and inspected `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` with the in-app browser. Today was also inspected at 390px mobile.
+- Files changed:
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- What now works:
+  - Public/login entrance reads as one assistant path.
+  - Signed-in shell presents Today, Inbox, Plan, Notes, and More cleanly.
+  - Today is the strongest visual surface and answers what needs attention now.
+  - Notes/Memory and Settings/More are acceptable for the current proof path.
+- What still feels bad:
+  - Inbox still feels too much like list management instead of a compact approval queue.
+  - Plan still has calendar-module weight instead of a calm planning read.
+- Assistant read:
+  - EasyLife mostly reads as one assistant now, but the visual polish phase is not complete.
+- Verdict:
+  - `NOT_READY_FOR_HUMAN_VISUAL_REVIEW`
+- Follow-up needed: Complete Inbox intake polish and Plan day polish, then rerun this proof packet before Stage 10.
+
 ## 2026-05-11 - Stage 9 Today first viewport polish
 
 - Task attempted: Polish the Today first viewport into a slicker assistant command surface that answers what needs attention now.
