@@ -1,5 +1,29 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 12 follow-up and reminder handoff preview
+
+- Task attempted: Let the user explicitly review follow-up and reminder drafts as local handoff previews without sending, scheduling, syncing, or saving anything.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4213` and inspected `/app/easylist/add?demo=1` with headless Chromium. Clicked `Preview draft`, then inspected both `Preview follow-up handoff` and `Preview reminder handoff`; both rendered editable local review previews with no submit button inside the handoff panel and no browser errors. Screenshot saved at `.codex-logs/stage12-task4-followup-reminder-handoff.png`.
+- Files changed:
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Explicit handoff behavior:
+  - Follow-up handoff is available only for follow-up drafts and says it does not send email, text, calls, or messages.
+  - Reminder handoff is available only for reminder drafts and says it does not schedule a notification.
+  - Both handoffs require the user to explicitly click the preview action.
+  - Both handoffs render editable local fields for review title, method/state, timing, and local notes.
+- Copy/product simplification:
+  - The handoff language uses `review` and `preview` instead of implying real external follow-up or reminder execution.
+- No-send/no-schedule/no-save guarantee:
+  - This task does not persist, save, create, archive, send, sync, schedule, remember, mutate existing notes/tasks/calendar data, call models, change backend/auth/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Stage 12 Task 5 should prove the full explicit handoff set before Stage 13 planning.
+
 ## 2026-05-11 - Stage 12 explicit plan draft handoff preview
 
 - Task attempted: Let the user explicitly hand off an approved plan draft into an editable Plan/day preview without scheduling anything.

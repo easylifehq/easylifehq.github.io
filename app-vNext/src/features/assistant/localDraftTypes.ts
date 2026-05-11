@@ -80,6 +80,17 @@ export type AssistantPlanHandoffPreview = {
   warnings: string[];
 };
 
+export type AssistantReviewHandoffPreview = {
+  id: string;
+  sourceDraftId: string;
+  handoffType: "follow-up" | "reminder";
+  title: string;
+  reviewMethod: string;
+  timingHint: string;
+  notes: string;
+  warnings: string[];
+};
+
 export const localDraftTypeLabels: Record<AssistantLocalDraftType, string> = {
   task: "Task draft",
   note: "Memory draft",

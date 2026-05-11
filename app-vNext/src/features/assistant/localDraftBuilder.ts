@@ -8,6 +8,7 @@ import {
   type AssistantMemoryDraftActionOption,
   type AssistantNoteHandoffPreview,
   type AssistantPlanHandoffPreview,
+  type AssistantReviewHandoffPreview,
   type AssistantTaskRowHandoffPreview,
 } from "./localDraftTypes";
 
@@ -210,5 +211,35 @@ export function buildPlanHandoffPreview(
       "Editable local plan preview only. This is not scheduled and not saved.",
       "Use the existing Plan controls only when you are ready to place real blocks on the day.",
     ],
+  };
+}
+
+export function buildReviewHandoffPreview(draft: AssistantLocalDraft): AssistantReviewHandoffPreview | null {
+  if (draft.draftType !== "follow-up" && draft.draftType !== "reminder") {
+    return null;
+  }
+
+  const source = normalizeDraftText(draft.sourceText) || draft.title;
+  const isFollowUp = draft.draftType === "follow-up";
+
+  return {
+    id: `review-handoff-${draft.id}`,
+    sourceDraftId: draft.id,
+    handoffType: draft.draftType,
+    title: draft.title,
+    reviewMethod: isFollowUp ? "Manual reply review" : "Manual reminder review",
+    timingHint: isFollowUp ? "Before next check-in" : "No notification scheduled",
+    notes: isFollowUp
+      ? `Draft the follow-up language before choosing any real email, text, call, or message action. Source capture: ${source}`
+      : `Review what should be remembered before choosing any real reminder or calendar action. Source capture: ${source}`,
+    warnings: isFollowUp
+      ? [
+          "Editable local follow-up preview only. This does not send email, text, calls, or messages.",
+          "This follow-up is not saved automatically. Choose any real next action yourself.",
+        ]
+      : [
+          "Editable local reminder preview only. This does not schedule a notification.",
+          "This reminder is not saved automatically. Choose any real next action yourself.",
+        ],
   };
 }

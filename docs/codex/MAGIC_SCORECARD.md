@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 12 Follow-Up And Reminder Handoff Preview
+
+- Task: Follow-up and reminder handoff preview.
+- Result: Passed local UI/domain implementation, build, and route inspection.
+- Magic signal: followup-reminder-handoff-visible-without-external-action
+- Changed files: 7
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4213`, clicked `Preview follow-up handoff`, then selected `Reminder draft` and clicked `Preview reminder handoff`. Screenshot saved at `.codex-logs/stage12-task4-followup-reminder-handoff.png`.
+- Handoff evidence: both previews rendered four editable local controls and no submit button inside the handoff panel.
+- Copy verdict: `FOLLOWUP_REMINDER_HANDOFF_COPY_STAYS_HONEST`.
+- Boundary evidence: follow-up says it does not send email, text, calls, or messages; reminder says it does not schedule a notification; both say they are not saved automatically.
+- No-send/no-schedule/no-save guarantee: no persistence, task/note/calendar mutation, archive/send/sync/schedule/remember behavior, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 12 Task 5 should prove the full handoff set and decide whether Stage 13 can begin.
+
 ## 2026-05-11 - Stage 12 Explicit Plan Draft Handoff Preview
 
 - Task: Explicit plan draft handoff preview.

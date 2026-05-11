@@ -1,6 +1,25 @@
 # Robin Copy Review
 
 ## Verdict
+FOLLOWUP_REMINDER_HANDOFF_COPY_STAYS_HONEST
+
+## Stage 12 Task 4 Copy Review - 2026-05-11
+
+Verdict: `FOLLOWUP_REMINDER_HANDOFF_COPY_STAYS_HONEST`.
+
+The follow-up and reminder handoff copy stays honest because each preview names the action it refuses to take. Follow-up says it does not send email, text, calls, or messages. Reminder says it does not schedule a notification. Both say the preview is not saved automatically and that the user must choose any real next action.
+
+What improved:
+- The handoff action is explicit: `Preview follow-up handoff` or `Preview reminder handoff`.
+- Follow-up uses `Manual reply review`, which keeps the work inside review instead of pretending a message can be sent.
+- Reminder uses `Manual reminder review` and `No notification scheduled`, which avoids implying background scheduling.
+
+Copy risk:
+- Follow-up and reminder are naturally external-action words, so every future Stage 13 save/handoff task must keep no-send and no-notification copy close to the controls until real integrations are deliberately approved.
+
+---
+
+## Verdict
 NO_REAL_MEMORY_WORDING_STAYS_HONEST_FOR_NOTE_HANDOFF
 
 ## Stage 12 Task 2 Copy Review - 2026-05-11

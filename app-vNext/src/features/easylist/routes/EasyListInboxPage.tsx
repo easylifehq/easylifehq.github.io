@@ -3,11 +3,13 @@ import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
 import {
   buildLocalDraftComparisonOptions,
   buildLocalDraftFromSuggestion,
+  buildReviewHandoffPreview,
   buildTaskRowHandoffPreview,
 } from "@/features/assistant/localDraftBuilder";
 import {
   localDraftStatusLabels,
   localDraftTypeLabels,
+  type AssistantReviewHandoffPreview,
   type AssistantTaskRowHandoffPreview,
   type AssistantLocalDraftType,
 } from "@/features/assistant/localDraftTypes";
@@ -37,6 +39,8 @@ export function EasyListInboxPage() {
   const [selectedDraftType, setSelectedDraftType] = useState<AssistantLocalDraftType>("follow-up");
   const [showTaskHandoff, setShowTaskHandoff] = useState(false);
   const [taskHandoffPreview, setTaskHandoffPreview] = useState<AssistantTaskRowHandoffPreview | null>(null);
+  const [showReviewHandoff, setShowReviewHandoff] = useState(false);
+  const [reviewHandoffPreview, setReviewHandoffPreview] = useState<AssistantReviewHandoffPreview | null>(null);
   const listNames = useMemo(
     () => Array.from(new Set(["Main", ...tasks.map((task) => task.listName || "Main")])).sort(),
     [tasks]
@@ -79,6 +83,8 @@ export function EasyListInboxPage() {
     [activeDraftType, assistantSuggestion, visibleApprovalState]
   );
   const canPreviewTaskHandoff = approvedLocalDraft?.draftType === "task";
+  const canPreviewReviewHandoff =
+    approvedLocalDraft?.draftType === "follow-up" || approvedLocalDraft?.draftType === "reminder";
   const assistantQueue = useMemo(
     () => [
       {
@@ -176,6 +182,8 @@ export function EasyListInboxPage() {
                   setSelectedDraftType(classifyAssistantIntent(event.target.value).intent);
                   setShowTaskHandoff(false);
                   setTaskHandoffPreview(null);
+                  setShowReviewHandoff(false);
+                  setReviewHandoffPreview(null);
                 }}
                 placeholder="Paste one messy thought to classify locally"
               />
@@ -202,6 +210,8 @@ export function EasyListInboxPage() {
                     setPreviewApprovalState("approved");
                     setShowTaskHandoff(false);
                     setTaskHandoffPreview(null);
+                    setShowReviewHandoff(false);
+                    setReviewHandoffPreview(null);
                   }}
                   title="Preview only. This does not save anything."
                 >
@@ -214,6 +224,8 @@ export function EasyListInboxPage() {
                     setPreviewApprovalState("editing");
                     setShowTaskHandoff(false);
                     setTaskHandoffPreview(null);
+                    setShowReviewHandoff(false);
+                    setReviewHandoffPreview(null);
                   }}
                   title="Preview only. This does not edit saved data."
                 >
@@ -226,6 +238,8 @@ export function EasyListInboxPage() {
                     setPreviewApprovalState("dismissed");
                     setShowTaskHandoff(false);
                     setTaskHandoffPreview(null);
+                    setShowReviewHandoff(false);
+                    setReviewHandoffPreview(null);
                   }}
                   title="Preview only. This does not dismiss saved data."
                 >
@@ -276,6 +290,8 @@ export function EasyListInboxPage() {
                   setSelectedDraftType(option.draftType);
                   setShowTaskHandoff(false);
                   setTaskHandoffPreview(null);
+                  setShowReviewHandoff(false);
+                  setReviewHandoffPreview(null);
                 }}
                 title="Local preview only. This does not create another draft."
               >
@@ -323,6 +339,26 @@ export function EasyListInboxPage() {
                     Preview task row handoff
                   </button>
                   <span>This only prepares an editable local row. It does not save.</span>
+                </div>
+              ) : null}
+              {canPreviewReviewHandoff ? (
+                <div className="assistant-handoff-actions">
+                  <button
+                    type="button"
+                    className="button-secondary"
+                    onClick={() => {
+                      const preview = buildReviewHandoffPreview(approvedLocalDraft);
+                      setReviewHandoffPreview(preview);
+                      setShowReviewHandoff(Boolean(preview));
+                    }}
+                  >
+                    Preview {approvedLocalDraft.draftType === "follow-up" ? "follow-up" : "reminder"} handoff
+                  </button>
+                  <span>
+                    {approvedLocalDraft.draftType === "follow-up"
+                      ? "This does not send email, text, calls, or messages."
+                      : "This does not schedule a notification."}
+                  </span>
                 </div>
               ) : null}
             </article>
@@ -396,6 +432,68 @@ export function EasyListInboxPage() {
                 </label>
               </div>
               {taskHandoffPreview.warnings.map((warning) => (
+                <p key={warning} className="assistant-local-draft-warning">
+                  {warning}
+                </p>
+              ))}
+            </article>
+          ) : null}
+
+          {showReviewHandoff && reviewHandoffPreview ? (
+            <article className="assistant-review-handoff-preview" aria-label="Editable unsaved follow-up or reminder preview">
+              <div className="assistant-local-draft-header">
+                <span>Explicit handoff preview</span>
+                <strong>
+                  Editable unsaved {reviewHandoffPreview.handoffType === "follow-up" ? "follow-up" : "reminder"} review
+                </strong>
+              </div>
+              <div className="assistant-review-handoff-grid">
+                <label className="field-stack">
+                  <span>Review title</span>
+                  <input
+                    type="text"
+                    value={reviewHandoffPreview.title}
+                    onChange={(event) =>
+                      setReviewHandoffPreview((current) => current ? { ...current, title: event.target.value } : current)
+                    }
+                  />
+                </label>
+                <label className="field-stack">
+                  <span>{reviewHandoffPreview.handoffType === "follow-up" ? "Reply method" : "Reminder state"}</span>
+                  <input
+                    type="text"
+                    value={reviewHandoffPreview.reviewMethod}
+                    onChange={(event) =>
+                      setReviewHandoffPreview((current) =>
+                        current ? { ...current, reviewMethod: event.target.value } : current
+                      )
+                    }
+                  />
+                </label>
+                <label className="field-stack">
+                  <span>{reviewHandoffPreview.handoffType === "follow-up" ? "Review by" : "Timing note"}</span>
+                  <input
+                    type="text"
+                    value={reviewHandoffPreview.timingHint}
+                    onChange={(event) =>
+                      setReviewHandoffPreview((current) =>
+                        current ? { ...current, timingHint: event.target.value } : current
+                      )
+                    }
+                  />
+                </label>
+                <label className="field-stack assistant-review-handoff-notes">
+                  <span>Local review notes</span>
+                  <textarea
+                    rows={3}
+                    value={reviewHandoffPreview.notes}
+                    onChange={(event) =>
+                      setReviewHandoffPreview((current) => current ? { ...current, notes: event.target.value } : current)
+                    }
+                  />
+                </label>
+              </div>
+              {reviewHandoffPreview.warnings.map((warning) => (
                 <p key={warning} className="assistant-local-draft-warning">
                   {warning}
                 </p>

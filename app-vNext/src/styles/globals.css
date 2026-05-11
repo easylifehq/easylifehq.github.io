@@ -5026,6 +5026,34 @@ textarea::placeholder {
     color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 76%, transparent);
 }
 
+.assistant-review-handoff-preview {
+  grid-column: 2;
+  display: grid;
+  gap: 0.58rem;
+  padding: 0.72rem;
+  border-radius: 8px;
+  border: 1px dashed color-mix(in srgb, var(--app-accent, var(--shell-accent)) 42%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent), transparent 50%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 76%, transparent);
+}
+
+.assistant-review-handoff-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(160px, 0.7fr) minmax(150px, 0.7fr);
+  gap: 0.55rem;
+  align-items: end;
+}
+
+.assistant-review-handoff-notes {
+  grid-column: 1 / -1;
+}
+
+.assistant-review-handoff-notes textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
 .assistant-task-handoff-row {
   margin: 0;
   box-shadow: none;
@@ -5194,6 +5222,14 @@ textarea::placeholder {
 
   .assistant-task-handoff-preview {
     grid-column: auto;
+  }
+
+  .assistant-review-handoff-preview {
+    grid-column: auto;
+  }
+
+  .assistant-review-handoff-grid {
+    grid-template-columns: 1fr;
   }
 
   .easylist-inbox-command {
