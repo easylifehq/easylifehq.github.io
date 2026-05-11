@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 12 Explicit Plan Draft Handoff Preview
+
+- Task: Explicit plan draft handoff preview.
+- Result: Passed local UI/domain implementation, build, and route inspection.
+- Magic signal: plan-handoff-visible-without-scheduling
+- Changed files: 7
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easycalendar/day?demo=1` on local Vite port `4212`, clicked `Preview plan handoff`, and verified no page errors. Screenshot saved at `.codex-logs/stage12-task3-plan-handoff.png`.
+- Handoff evidence: rendered one editable unscheduled day draft with six editable local controls and no submit button inside the handoff panel.
+- Design verdict: `PLAN_REMAINS_FOCUSED_AND_HONEST_FOR_HANDOFF`.
+- Simplification evidence: softened `Apply plan` and `Plan applied` language to `Add suggestions` and `Suggested blocks added`.
+- No-schedule/no-save guarantee: no persistence, calendar/task/note mutation, archive/send/sync/schedule/remember behavior, scheduling algorithms, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 12 Task 4 should add reminder/follow-up handoff preview with the same explicit no-write boundary.
+
 ## 2026-05-11 - Stage 12 Explicit Note Draft Handoff Preview
 
 - Task: Explicit note draft handoff preview.

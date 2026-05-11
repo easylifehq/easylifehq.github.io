@@ -1,5 +1,29 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 12 explicit plan draft handoff preview
+
+- Task attempted: Let the user explicitly hand off an approved plan draft into an editable Plan/day preview without scheduling anything.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4212` and inspected `/app/easycalendar/day?demo=1` with headless Chromium. Clicked `Preview plan handoff`; the route rendered an editable unscheduled day draft with no submit button inside the handoff panel and no browser errors. Screenshot saved at `.codex-logs/stage12-task3-plan-handoff.png`.
+- Files changed:
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Explicit handoff behavior:
+  - Plan handoff is available only as a local plan draft preview.
+  - The user must explicitly click `Preview plan handoff`.
+  - The handoff renders editable local fields for plan title, day mode, date, start, end, and review notes.
+  - The existing Plan preview/add-suggestions flow remains separate from the assistant handoff preview.
+- Copy/product simplification:
+  - Softened old scheduling-adjacent language by changing `Apply plan` to `Add suggestions` and `Plan applied` to `Suggested blocks added`.
+- No-schedule/no-save guarantee:
+  - This task does not persist, save, create, archive, send, sync, schedule, remember, mutate existing notes/tasks/calendar data, call models, add scheduling algorithms, change backend/auth/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Stage 12 Task 4 can add a reminder/follow-up handoff preview while preserving the same explicit no-write boundary.
+
 ## 2026-05-11 - Stage 12 explicit note draft handoff preview
 
 - Task attempted: Let the user explicitly hand off an approved memory/note draft into an editable note draft preview without creating real memory or saving a note.

@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+PLAN_REMAINS_FOCUSED_AND_HONEST_FOR_HANDOFF
+
+## Stage 12 Task 3 Design Review - 2026-05-11
+
+Verdict: `PLAN_REMAINS_FOCUSED_AND_HONEST_FOR_HANDOFF`.
+
+The Plan route remains focused because the assistant handoff sits inside the existing first planning read instead of becoming a second calendar surface. It adds one explicit `Preview plan handoff` action, then reveals one editable unscheduled day draft.
+
+What works:
+- The preview is visibly local and says it is not scheduled and not saved.
+- The editable fields are compact: title, day mode, date, start, end, and review notes.
+- The existing real Plan controls stay separate below the assistant preview.
+- The older `Apply plan`/`Plan applied` language was softened to `Add suggestions`/`Suggested blocks added`, which makes the route feel less like the assistant silently scheduled something.
+
+Design risk:
+- Plan now has both an assistant handoff preview and a real suggestion flow. The separation is acceptable for this slice, but future tasks should avoid adding another Plan panel before the Stage 12 proof.
+
+---
+
+## Verdict
 READY_FOR_STAGE_12
 
 ## Stage 11 Design Proof - 2026-05-11

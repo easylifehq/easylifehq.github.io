@@ -3351,6 +3351,76 @@ textarea::placeholder {
   opacity: 0.86;
 }
 
+.calendar-plan-handoff-card,
+.calendar-plan-handoff-preview {
+  margin-top: 0.72rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 74%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 72%, transparent);
+}
+
+.calendar-plan-handoff-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.72rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.68rem 0.72rem;
+}
+
+.calendar-plan-handoff-card div {
+  display: grid;
+  gap: 0.14rem;
+  min-width: min(100%, 280px);
+}
+
+.calendar-plan-handoff-card span {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.calendar-plan-handoff-card strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 0.94rem;
+}
+
+.calendar-plan-handoff-card p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.calendar-plan-handoff-preview {
+  display: grid;
+  gap: 0.58rem;
+  padding: 0.72rem;
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 42%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent), transparent 50%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 76%, transparent);
+}
+
+.calendar-plan-handoff-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(150px, 0.75fr) repeat(3, minmax(120px, 0.55fr));
+  gap: 0.55rem;
+  align-items: end;
+}
+
+.calendar-plan-handoff-notes {
+  grid-column: 1 / -1;
+}
+
+.calendar-plan-handoff-notes textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
 .advanced-disclosure {
   padding: 0.9rem;
   border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
@@ -10526,6 +10596,10 @@ button.calendar-detail-card:disabled {
   .calendar-plan-preview-card li {
     grid-template-columns: 1fr;
     gap: 0.12rem;
+  }
+
+  .calendar-plan-handoff-grid {
+    grid-template-columns: 1fr;
   }
 
   .calendar-plan-actions,

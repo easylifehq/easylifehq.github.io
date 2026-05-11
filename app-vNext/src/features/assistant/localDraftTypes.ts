@@ -68,6 +68,18 @@ export type AssistantNoteHandoffPreview = {
   warnings: string[];
 };
 
+export type AssistantPlanHandoffPreview = {
+  id: string;
+  sourceDraftId: string;
+  title: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  dayMode: "light" | "normal" | "push" | "recovery";
+  notes: string;
+  warnings: string[];
+};
+
 export const localDraftTypeLabels: Record<AssistantLocalDraftType, string> = {
   task: "Task draft",
   note: "Memory draft",

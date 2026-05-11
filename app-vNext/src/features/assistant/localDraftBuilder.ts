@@ -7,6 +7,7 @@ import {
   type AssistantLocalDraftType,
   type AssistantMemoryDraftActionOption,
   type AssistantNoteHandoffPreview,
+  type AssistantPlanHandoffPreview,
   type AssistantTaskRowHandoffPreview,
 } from "./localDraftTypes";
 
@@ -184,6 +185,30 @@ export function buildNoteHandoffPreview(draft: AssistantLocalDraft): AssistantNo
     warnings: [
       "Editable local note preview only. This is not saved and is not real memory.",
       "Use the existing note creation flow only when you are ready to create a real note.",
+    ],
+  };
+}
+
+export function buildPlanHandoffPreview(
+  draft: AssistantLocalDraft,
+  defaults: Pick<AssistantPlanHandoffPreview, "date" | "startTime" | "endTime" | "dayMode">
+): AssistantPlanHandoffPreview | null {
+  if (draft.draftType !== "plan") {
+    return null;
+  }
+
+  return {
+    id: `plan-handoff-${draft.id}`,
+    sourceDraftId: draft.id,
+    title: draft.title,
+    date: defaults.date,
+    startTime: defaults.startTime,
+    endTime: defaults.endTime,
+    dayMode: defaults.dayMode,
+    notes: `Review this local day preview before using any real planning action. Source capture: ${normalizeDraftText(draft.sourceText) || draft.title}`,
+    warnings: [
+      "Editable local plan preview only. This is not scheduled and not saved.",
+      "Use the existing Plan controls only when you are ready to place real blocks on the day.",
     ],
   };
 }

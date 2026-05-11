@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
+import { buildLocalDraftFromSuggestion, buildPlanHandoffPreview } from "@/features/assistant/localDraftBuilder";
+import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
+import type { AssistantPlanHandoffPreview } from "@/features/assistant/localDraftTypes";
 import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
 import { CalendarTaskBlockDrawer } from "@/features/easycalendar/components/CalendarTaskBlockDrawer";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
@@ -81,6 +84,8 @@ export function EasyCalendarDayPage() {
   const [appliedPlanUndo, setAppliedPlanUndo] = useState<AppliedPlanUndo | null>(null);
   const [isPlanning, setIsPlanning] = useState(false);
   const [isUndoingPlan, setIsUndoingPlan] = useState(false);
+  const [showPlanHandoff, setShowPlanHandoff] = useState(false);
+  const [planHandoffPreview, setPlanHandoffPreview] = useState<AssistantPlanHandoffPreview | null>(null);
   const selectedDate = useMemo(() => {
     const dateParam = searchParams.get("date");
     if (!dateParam) return startOfDay(new Date());
@@ -93,6 +98,8 @@ export function EasyCalendarDayPage() {
     setPlanPreview(null);
     setAppliedPlanUndo(null);
     setPlanMessage("");
+    setShowPlanHandoff(false);
+    setPlanHandoffPreview(null);
   }, [selectedDate]);
 
   const weekStart = useMemo(() => startOfWeek(selectedDate), [selectedDate]);
@@ -159,7 +166,15 @@ export function EasyCalendarDayPage() {
       ? "Protect the fixed commitments and move one flexible block out."
       : openWindows.length
         ? "Preview a plan, then approve only the blocks that fit the open windows."
-        : "Review fixed commitments before adding more to this day.";
+      : "Review fixed commitments before adding more to this day.";
+  const assistantPlanSuggestion = useMemo(
+    () => classifyAssistantIntent("Block 45 minutes today for the highest-friction item after fixed commitments."),
+    []
+  );
+  const assistantPlanDraft = useMemo(
+    () => buildLocalDraftFromSuggestion(assistantPlanSuggestion, "plan"),
+    [assistantPlanSuggestion]
+  );
   const selectedBlock = useMemo(
     () => taskBlocks.find((taskBlock) => taskBlock.id === selectedBlockId) || null,
     [selectedBlockId, taskBlocks]
@@ -441,6 +456,117 @@ export function EasyCalendarDayPage() {
           <span>{openWindows.length} open window{openWindows.length === 1 ? "" : "s"}</span>
         </div>
 
+        <div className="calendar-plan-handoff-card" aria-label="Assistant plan handoff preview">
+          <div>
+            <span>Assistant plan draft</span>
+            <strong>{assistantPlanDraft.title}</strong>
+            <p>Preview the shape locally before anything is placed on the day.</p>
+          </div>
+          <button
+            type="button"
+            className="button-secondary compact-button"
+            onClick={() => {
+              const preview = buildPlanHandoffPreview(assistantPlanDraft, {
+                date: toDateInputValue(selectedDate),
+                startTime: toTimeInputValue(
+                  openWindows[0]?.startAt ||
+                    new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), wakeHour, 0, 0, 0)
+                ),
+                endTime: toTimeInputValue(
+                  openWindows[0]?.endAt ||
+                    new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), Math.min(wakeHour + 1, 23), 0, 0, 0)
+                ),
+                dayMode: activeDayMode,
+              });
+              setPlanHandoffPreview(preview);
+              setShowPlanHandoff(Boolean(preview));
+            }}
+          >
+            Preview plan handoff
+          </button>
+        </div>
+
+        {showPlanHandoff && planHandoffPreview ? (
+          <div className="calendar-plan-handoff-preview" aria-label="Editable unscheduled plan draft preview">
+            <div className="assistant-local-draft-header">
+              <span>Explicit handoff preview</span>
+              <strong>Editable unscheduled day draft</strong>
+            </div>
+            <div className="calendar-plan-handoff-grid">
+              <label className="field-stack">
+                <span>Plan title</span>
+                <input
+                  type="text"
+                  value={planHandoffPreview.title}
+                  onChange={(event) =>
+                    setPlanHandoffPreview((current) => current ? { ...current, title: event.target.value } : current)
+                  }
+                />
+              </label>
+              <label className="field-stack">
+                <span>Day mode</span>
+                <select
+                  value={planHandoffPreview.dayMode}
+                  onChange={(event) =>
+                    setPlanHandoffPreview((current) =>
+                      current ? { ...current, dayMode: event.target.value as DayModeId } : current
+                    )
+                  }
+                >
+                  {dayModeOptions.map((mode) => (
+                    <option key={mode.id} value={mode.id}>{mode.label}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="field-stack">
+                <span>Date</span>
+                <input
+                  type="date"
+                  value={planHandoffPreview.date}
+                  onChange={(event) =>
+                    setPlanHandoffPreview((current) => current ? { ...current, date: event.target.value } : current)
+                  }
+                />
+              </label>
+              <label className="field-stack">
+                <span>Start</span>
+                <input
+                  type="time"
+                  value={planHandoffPreview.startTime}
+                  onChange={(event) =>
+                    setPlanHandoffPreview((current) => current ? { ...current, startTime: event.target.value } : current)
+                  }
+                />
+              </label>
+              <label className="field-stack">
+                <span>End</span>
+                <input
+                  type="time"
+                  value={planHandoffPreview.endTime}
+                  onChange={(event) =>
+                    setPlanHandoffPreview((current) => current ? { ...current, endTime: event.target.value } : current)
+                  }
+                />
+              </label>
+              <label className="field-stack calendar-plan-handoff-notes">
+                <span>Review notes</span>
+                <textarea
+                  rows={3}
+                  value={planHandoffPreview.notes}
+                  onChange={(event) =>
+                    setPlanHandoffPreview((current) => current ? { ...current, notes: event.target.value } : current)
+                  }
+                />
+              </label>
+            </div>
+            {planHandoffPreview.warnings.map((warning) => (
+              <p key={warning} className="assistant-local-draft-warning">
+                {warning}
+              </p>
+            ))}
+          </div>
+        ) : null}
+
         <div className="calendar-type-legend calendar-type-legend-quiet" aria-label="Plan item types">
           <span className="fixed">Fixed</span>
           <span className="deadline">Due</span>
@@ -486,7 +612,7 @@ export function EasyCalendarDayPage() {
                   ? `Applying will replace ${planPreview.replacedBlocks.length} current suggestion${
                       planPreview.replacedBlocks.length === 1 ? "" : "s"
                     }.`
-                  : "Review the suggested shape before anything is added."}
+                  : "Review the suggested shape before adding anything to the day."}
               </p>
             </div>
             <ol>
@@ -507,7 +633,7 @@ export function EasyCalendarDayPage() {
                 onClick={() => void handleApplyPlanPreview()}
                 disabled={isPlanning}
               >
-                {isPlanning ? "Applying..." : "Apply plan"}
+                {isPlanning ? "Adding..." : "Add suggestions"}
               </button>
             </div>
           </div>
@@ -518,7 +644,7 @@ export function EasyCalendarDayPage() {
         {appliedPlanUndo ? (
           <div className="calendar-plan-undo-card">
             <div>
-              <strong>Plan applied. Undo is still available.</strong>
+              <strong>Suggested blocks added. Undo is still available.</strong>
               <p>Undo removes the new suggested blocks and restores replaced suggestions.</p>
             </div>
             <button
