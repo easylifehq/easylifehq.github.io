@@ -1,5 +1,28 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 11 unsaved Inbox local draft preview
+
+- Task attempted: When an assistant suggestion is approved locally, show a safe unsaved draft preview before any real save behavior exists.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4205` and inspected `/app/easylist/add?demo=1` with headless Chromium. Clicked `Preview draft`; the route rendered `.assistant-local-draft-preview` with `Unsaved local preview`, `Follow-up draft`, and explicit no-write warnings. Screenshot saved at `.codex-logs/stage11-task1-inbox-draft.png`.
+- Files changed:
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.test.ts`
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Draft shape:
+  - Local draft types cover task, note, plan, reminder, follow-up, and unsure.
+  - A draft includes id, source suggestion id, source text, draft type, title, body, unsaved status, confidence, approval state, editable-looking fields, and warnings.
+- Product change:
+  - `Approve preview` was softened to `Preview draft` so the action no longer implies data has already been written.
+  - When the preview state is approved locally, Inbox renders one unsaved draft preview below the assistant suggestion card.
+- No-write guarantee:
+  - This task added deterministic local draft shaping and UI display only. It does not persist, save, create, archive, send, sync, schedule, remember, mutate existing tasks/notes/calendar data, call a model, change backend/auth/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Stage 11 Task 2 can add a compact comparison row so the user can see suggestion versus unsaved draft before any explicit handoff exists.
+
 ## 2026-05-11 - Stage 10 Assistant Brain Foundation proof packet
 
 - Task attempted: Prove whether the first assistant brain foundation is ready for human review before adding real persistence or model-backed intelligence.

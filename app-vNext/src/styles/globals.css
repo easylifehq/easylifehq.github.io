@@ -4639,7 +4639,8 @@ textarea::placeholder {
 }
 
 .assistant-intent-input,
-.assistant-suggestion-card {
+.assistant-suggestion-card,
+.assistant-local-draft-preview {
   min-width: 0;
   border-radius: 8px;
   border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
@@ -4671,22 +4672,38 @@ textarea::placeholder {
     color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 78%, transparent);
 }
 
+.assistant-local-draft-preview {
+  grid-column: 2;
+  display: grid;
+  gap: 0.58rem;
+  padding: 0.72rem;
+  border-color: color-mix(in srgb, #1f8f6a 36%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #1f8f6a 10%, transparent), transparent 52%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 78%, transparent);
+}
+
 .assistant-suggestion-topline,
 .assistant-suggestion-main,
 .assistant-suggestion-actions,
 .assistant-suggestion-fields,
-.assistant-approval-state-picker {
+.assistant-approval-state-picker,
+.assistant-local-draft-header,
+.assistant-local-draft-fields {
   display: flex;
   gap: 0.45rem;
 }
 
 .assistant-suggestion-topline,
 .assistant-suggestion-fields,
-.assistant-approval-state-picker {
+.assistant-approval-state-picker,
+.assistant-local-draft-fields {
   flex-wrap: wrap;
 }
 
-.assistant-suggestion-topline span {
+.assistant-suggestion-topline span,
+.assistant-local-draft-header span,
+.assistant-local-draft-header strong {
   display: inline-flex;
   align-items: center;
   min-height: 1.55rem;
@@ -4700,12 +4717,18 @@ textarea::placeholder {
   text-transform: capitalize;
 }
 
+.assistant-local-draft-header {
+  align-items: center;
+  justify-content: space-between;
+}
+
 .assistant-suggestion-main {
   align-items: flex-start;
   justify-content: space-between;
 }
 
-.assistant-suggestion-main p {
+.assistant-suggestion-main p,
+.assistant-local-draft-body small {
   margin: 0 0 0.16rem;
   color: var(--ui-text-muted, var(--shell-muted));
   font-size: 0.72rem;
@@ -4714,20 +4737,27 @@ textarea::placeholder {
   text-transform: uppercase;
 }
 
-.assistant-suggestion-main h3 {
+.assistant-suggestion-main h3,
+.assistant-local-draft-body h3 {
   margin: 0;
   color: var(--ui-text-primary, var(--shell-page-text));
   font-size: clamp(1rem, 1.6vw, 1.24rem);
   line-height: 1.14;
 }
 
-.assistant-suggestion-main strong {
+.assistant-suggestion-main strong,
+.assistant-local-draft-body p,
+.assistant-local-draft-warning {
   display: block;
   margin-top: 0.24rem;
   color: var(--ui-text-secondary, var(--shell-muted));
   font-size: 0.86rem;
   font-weight: 620;
   line-height: 1.4;
+}
+
+.assistant-local-draft-warning {
+  margin: 0;
 }
 
 .assistant-suggestion-actions {
@@ -4791,7 +4821,8 @@ textarea::placeholder {
   opacity: 0.78;
 }
 
-.assistant-suggestion-fields span {
+.assistant-suggestion-fields span,
+.assistant-local-draft-fields span {
   display: grid;
   min-width: min(100%, 160px);
   gap: 0.16rem;
@@ -4802,14 +4833,16 @@ textarea::placeholder {
 }
 
 .assistant-suggestion-fields small,
-.assistant-suggestion-fields em {
+.assistant-suggestion-fields em,
+.assistant-local-draft-fields small {
   color: var(--ui-text-muted, var(--shell-muted));
   font-size: 0.7rem;
   font-style: normal;
   font-weight: 760;
 }
 
-.assistant-suggestion-fields strong {
+.assistant-suggestion-fields strong,
+.assistant-local-draft-fields strong {
   color: var(--ui-text-primary, var(--shell-page-text));
   font-size: 0.9rem;
   line-height: 1.2;
@@ -4860,6 +4893,10 @@ textarea::placeholder {
   .easylist-inbox-controls,
   .assistant-intent-preview {
     grid-template-columns: 1fr;
+  }
+
+  .assistant-local-draft-preview {
+    grid-column: auto;
   }
 
   .easylist-inbox-command {

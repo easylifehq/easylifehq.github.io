@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 11 Unsaved Inbox Local Draft Preview
+
+- Task: Unsaved Inbox local draft preview.
+- Result: Passed local domain implementation, build, and route inspection.
+- Magic signal: safe-local-memory-started
+- Changed files: 7
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4205`, clicked `Preview draft`, and verified `.assistant-local-draft-preview` rendered. Screenshot saved at `.codex-logs/stage11-task1-inbox-draft.png`.
+- Draft contract evidence: added local draft object types and deterministic builder for task, note, plan, reminder, follow-up, and unsure suggestions.
+- Copy simplification evidence: changed `Approve preview` to `Preview draft` so local approval does not imply saved data.
+- No-write guarantee: no persistence, task/note/calendar mutation, archive/send/sync/schedule/remember behavior, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 11 Task 2 should add a compact local draft comparison row while preserving the unsaved/no-write guarantee.
+
 ## 2026-05-11 - Stage 11 Safe Local Memory Task Packet
 
 - Task: Create Stage 11 Safe Local Memory task packet.

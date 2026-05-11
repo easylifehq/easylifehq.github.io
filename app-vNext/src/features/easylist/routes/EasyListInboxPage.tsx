@@ -1,5 +1,7 @@
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
+import { buildLocalDraftFromSuggestion } from "@/features/assistant/localDraftBuilder";
+import { localDraftStatusLabels, localDraftTypeLabels } from "@/features/assistant/localDraftTypes";
 import {
   approvalStatePreviewLabels,
   type AssistantApprovalState,
@@ -48,6 +50,10 @@ export function EasyListInboxPage() {
     assistantSuggestion.approvalState === "needs-review" ? "needs-review" : previewApprovalState;
   const visibleApprovalState =
     previewApprovalState === "suggested" ? assistantSuggestion.approvalState : previewApprovalState;
+  const approvedLocalDraft = useMemo(
+    () => (visibleApprovalState === "approved" ? buildLocalDraftFromSuggestion(assistantSuggestion) : null),
+    [assistantSuggestion, visibleApprovalState]
+  );
   const assistantQueue = useMemo(
     () => [
       {
@@ -168,7 +174,7 @@ export function EasyListInboxPage() {
                   onClick={() => setPreviewApprovalState("approved")}
                   title="Preview only. This does not save anything."
                 >
-                  Approve preview
+                  Preview draft
                 </button>
                 <button
                   type="button"
@@ -201,8 +207,8 @@ export function EasyListInboxPage() {
               ))}
             </div>
             <p className={`assistant-approval-state-note assistant-approval-state-note-${activeApprovalState}`}>
-              {approvalStatePreviewLabels[visibleApprovalState]} only. This changes the card display, not your tasks,
-              notes, calendar, email, sync, or memory.
+              {approvalStatePreviewLabels[visibleApprovalState]} only. Approval creates an unsaved draft preview here,
+              not a task, note, calendar item, email, sync, or memory.
             </p>
             <div className="assistant-suggestion-fields" aria-label="Editable-looking suggestion fields">
               {assistantSuggestion.fields.map((field) => (
@@ -219,6 +225,33 @@ export function EasyListInboxPage() {
               </p>
             ))}
           </article>
+
+          {approvedLocalDraft ? (
+            <article className="assistant-local-draft-preview" aria-label="Unsaved local draft preview">
+              <div className="assistant-local-draft-header">
+                <span>{localDraftStatusLabels[approvedLocalDraft.status]}</span>
+                <strong>{localDraftTypeLabels[approvedLocalDraft.draftType]}</strong>
+              </div>
+              <div className="assistant-local-draft-body">
+                <small>Draft title</small>
+                <h3>{approvedLocalDraft.title}</h3>
+                <p>{approvedLocalDraft.body}</p>
+              </div>
+              <div className="assistant-local-draft-fields" aria-label="Local draft fields">
+                {approvedLocalDraft.fields.map((field) => (
+                  <span key={field.draftKey}>
+                    <small>{field.label}</small>
+                    <strong>{field.value}</strong>
+                  </span>
+                ))}
+              </div>
+              {approvedLocalDraft.warnings.map((warning) => (
+                <p key={warning} className="assistant-local-draft-warning">
+                  {warning}
+                </p>
+              ))}
+            </article>
+          ) : null}
         </section>
 
         <TaskComposer onSubmit={addTask} listName={selectedListName} showBrainDump={false} />
