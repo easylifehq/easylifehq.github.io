@@ -2470,6 +2470,39 @@ textarea::placeholder {
   background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 58%, transparent);
 }
 
+.notes-handoff-actions {
+  margin-top: 0.55rem;
+}
+
+.notes-note-handoff-preview {
+  grid-column: 2;
+  display: grid;
+  gap: 0.58rem;
+  padding: 0.66rem;
+  border-radius: 8px;
+  border: 1px dashed color-mix(in srgb, var(--app-accent, var(--shell-accent)) 42%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent), transparent 50%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 72%, transparent);
+}
+
+.notes-note-handoff-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, 0.5fr);
+  gap: 0.55rem;
+  align-items: end;
+}
+
+.notes-note-handoff-body,
+.notes-note-handoff-pin {
+  grid-column: 1 / -1;
+}
+
+.notes-note-handoff-body textarea {
+  min-height: 6.5rem;
+  resize: vertical;
+}
+
 .notes-library-results-heading {
   margin-top: 1.15rem;
   padding-top: 0.75rem;
@@ -5066,8 +5099,13 @@ textarea::placeholder {
   }
 
   .notes-memory-draft-preview,
-  .notes-memory-draft-dismissed {
+  .notes-memory-draft-dismissed,
+  .notes-note-handoff-preview {
     grid-column: auto;
+  }
+
+  .notes-note-handoff-grid {
+    grid-template-columns: 1fr;
   }
 
   .easylist-inbox-command,

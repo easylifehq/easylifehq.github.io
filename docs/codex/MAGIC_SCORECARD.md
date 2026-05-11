@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 12 Explicit Note Draft Handoff Preview
+
+- Task: Explicit note draft handoff preview.
+- Result: Passed local UI/domain implementation, build, and route inspection.
+- Magic signal: note-handoff-visible-without-memory-write
+- Changed files: 7
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easynotes?demo=1` on local Vite port `4211`, clicked `Preview note handoff`, and verified no page errors. Screenshot saved at `.codex-logs/stage12-task2-notes-note-handoff.png`.
+- File note: requested `EasyNotesPage.tsx` does not exist; `/app/easynotes` is implemented by `EasyNotesLibraryPage.tsx`.
+- Handoff evidence: rendered one editable unsaved note preview with four editable local controls and no submit button inside the handoff panel; existing `Remember something` note creation remained separate.
+- Copy verdict: `NO_REAL_MEMORY_WORDING_STAYS_HONEST_FOR_NOTE_HANDOFF`.
+- No-real-memory/no-save guarantee: no persistence, note/task/calendar mutation, archive/send/sync/schedule/remember behavior, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 12 Task 3 should add the plan/day handoff preview with the same explicit no-write boundary.
+
 ## 2026-05-11 - Stage 12 Explicit Task-Row Handoff Preview
 
 - Task: Explicit task-row handoff preview.

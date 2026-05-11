@@ -3,10 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
 import {
+  buildNoteHandoffPreview,
   buildLocalDraftFromSuggestion,
   memoryDraftActionOptions,
 } from "@/features/assistant/localDraftBuilder";
-import { localDraftStatusLabels, localDraftTypeLabels, type AssistantMemoryDraftAction } from "@/features/assistant/localDraftTypes";
+import {
+  localDraftStatusLabels,
+  localDraftTypeLabels,
+  type AssistantMemoryDraftAction,
+  type AssistantNoteHandoffPreview,
+} from "@/features/assistant/localDraftTypes";
 import { useEasyNotes } from "@/features/easynotes/EasyNotesContext";
 
 const lastOpenNoteStorageKey = "easynotes:lastOpenNoteId";
@@ -64,6 +70,8 @@ export function EasyNotesLibraryPage() {
   const [toolsOpen, setToolsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [memoryDraftAction, setMemoryDraftAction] = useState<AssistantMemoryDraftAction>("remember");
+  const [showNoteHandoff, setShowNoteHandoff] = useState(false);
+  const [noteHandoffPreview, setNoteHandoffPreview] = useState<AssistantNoteHandoffPreview | null>(null);
   const [lastOpenNoteId] = useState(() => window.localStorage.getItem(lastOpenNoteStorageKey) || "");
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -118,6 +126,7 @@ export function EasyNotesLibraryPage() {
   const selectedMemoryDraft = selectedMemoryDraftOption?.draftType
     ? buildLocalDraftFromSuggestion(memoryDraftSuggestion, selectedMemoryDraftOption.draftType)
     : null;
+  const canPreviewNoteHandoff = selectedMemoryDraft?.draftType === "note";
   const memoryBridge = useMemo(
     () => [
       {
@@ -289,7 +298,11 @@ export function EasyNotesLibraryPage() {
                 key={option.action}
                 type="button"
                 className={memoryDraftAction === option.action ? "active" : ""}
-                onClick={() => setMemoryDraftAction(option.action)}
+                onClick={() => {
+                  setMemoryDraftAction(option.action);
+                  setShowNoteHandoff(false);
+                  setNoteHandoffPreview(null);
+                }}
                 title="Local preview only. This does not write memory."
               >
                 <strong>{option.label}</strong>
@@ -309,12 +322,87 @@ export function EasyNotesLibraryPage() {
                   {warning}
                 </p>
               ))}
+              {canPreviewNoteHandoff ? (
+                <div className="assistant-handoff-actions notes-handoff-actions">
+                  <button
+                    type="button"
+                    className="button-secondary"
+                    onClick={() => {
+                      const preview = buildNoteHandoffPreview(selectedMemoryDraft);
+                      setNoteHandoffPreview(preview);
+                      setShowNoteHandoff(Boolean(preview));
+                    }}
+                  >
+                    Preview note handoff
+                  </button>
+                  <span>This only prepares an editable local note. It does not save or remember.</span>
+                </div>
+              ) : null}
             </article>
           ) : (
             <p className="notes-memory-draft-dismissed">
               Dismissed locally. No memory draft was saved, pinned, created, scheduled, synced, or remembered.
             </p>
           )}
+          {showNoteHandoff && noteHandoffPreview ? (
+            <article className="notes-note-handoff-preview" aria-label="Editable unsaved note draft preview">
+              <div className="assistant-local-draft-header">
+                <span>Explicit handoff preview</span>
+                <strong>Editable unsaved note draft</strong>
+              </div>
+              <div className="notes-note-handoff-grid">
+                <label className="field-stack">
+                  <span>Note title</span>
+                  <input
+                    type="text"
+                    value={noteHandoffPreview.title}
+                    onChange={(event) =>
+                      setNoteHandoffPreview((current) => current ? { ...current, title: event.target.value } : current)
+                    }
+                  />
+                </label>
+                <label className="field-stack">
+                  <span>Context group</span>
+                  <input
+                    type="text"
+                    value={noteHandoffPreview.contextGroup}
+                    onChange={(event) =>
+                      setNoteHandoffPreview((current) =>
+                        current ? { ...current, contextGroup: event.target.value } : current
+                      )
+                    }
+                  />
+                </label>
+                <label className="inline-check notes-note-handoff-pin">
+                  <input
+                    type="checkbox"
+                    checked={noteHandoffPreview.pinPreview}
+                    onChange={(event) =>
+                      setNoteHandoffPreview((current) =>
+                        current ? { ...current, pinPreview: event.target.checked } : current
+                      )
+                    }
+                  />
+                  <span>Preview as pinned context only</span>
+                </label>
+                <label className="field-stack notes-note-handoff-body">
+                  <span>Note body</span>
+                  <textarea
+                    rows={4}
+                    value={noteHandoffPreview.body}
+                    onChange={(event) =>
+                      setNoteHandoffPreview((current) => current ? { ...current, body: event.target.value } : current)
+                    }
+                  />
+                </label>
+              </div>
+              {noteHandoffPreview.warnings.map((warning) => (
+                <p key={warning} className="assistant-local-draft-warning">
+                  {warning}
+                </p>
+              ))}
+            </article>
+          ) : null}
         </section>
 
         {searchOpen ? (
@@ -517,11 +605,11 @@ export function EasyNotesLibraryPage() {
 
           {!isLoading && filteredNotes.length === 0 ? (
             <div className="empty-card-vnext notes-empty-card notes-suite-empty-card">
-              <strong>{hasFilters ? "No saved memory matches this view" : "No saved memory yet"}</strong>
+              <strong>{hasFilters ? "No memory matches this view" : "No memory yet"}</strong>
               <p className="helper-copy">
                 {hasFilters
-                  ? "Try a different search or context group, or clear filters to return to the thoughts you saved for later."
-                  : "Save a thought, meeting note, or rough draft here. It will be ready when Today needs more context."}
+                  ? "Try a different search or context group, or clear filters to return to the thoughts kept for later."
+                  : "Keep a thought, meeting note, or rough draft here. It will be ready when Today needs more context."}
               </p>
             </div>
           ) : null}

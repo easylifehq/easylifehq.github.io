@@ -6,6 +6,7 @@ import {
   type AssistantLocalDraftComparisonOption,
   type AssistantLocalDraftType,
   type AssistantMemoryDraftActionOption,
+  type AssistantNoteHandoffPreview,
   type AssistantTaskRowHandoffPreview,
 } from "./localDraftTypes";
 
@@ -164,6 +165,25 @@ export function buildTaskRowHandoffPreview(draft: AssistantLocalDraft): Assistan
     warnings: [
       "Editable local task-row preview only. This has not been saved.",
       "Use the existing task save action below only when you are ready to create a real task.",
+    ],
+  };
+}
+
+export function buildNoteHandoffPreview(draft: AssistantLocalDraft): AssistantNoteHandoffPreview | null {
+  if (draft.draftType !== "note") {
+    return null;
+  }
+
+  return {
+    id: `note-handoff-${draft.id}`,
+    sourceDraftId: draft.id,
+    title: draft.title,
+    body: draft.body,
+    contextGroup: "Inbox review",
+    pinPreview: false,
+    warnings: [
+      "Editable local note preview only. This is not saved and is not real memory.",
+      "Use the existing note creation flow only when you are ready to create a real note.",
     ],
   };
 }

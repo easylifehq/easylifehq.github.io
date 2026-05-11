@@ -1,5 +1,31 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 12 explicit note draft handoff preview
+
+- Task attempted: Let the user explicitly hand off an approved memory/note draft into an editable note draft preview without creating real memory or saving a note.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4211` and inspected `/app/easynotes?demo=1` with headless Chromium. Clicked `Preview note handoff`; the route rendered an editable unsaved note preview with no submit button inside the handoff panel and no browser errors. Screenshot saved at `.codex-logs/stage12-task2-notes-note-handoff.png`.
+- Files changed:
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- File note:
+  - Requested `EasyNotesPage.tsx` does not exist in this repo. `/app/easynotes` is implemented by `EasyNotesLibraryPage.tsx`, so this task used that route file.
+- Explicit handoff behavior:
+  - Note handoff is available only when the approved local draft is a note/memory draft.
+  - The user must explicitly click `Preview note handoff`.
+  - The handoff renders editable local fields for note title, context group, pinned-context preview, and note body.
+  - The existing `Remember something` note creation action remains separate from the assistant handoff preview.
+- Copy/product simplification:
+  - Softened empty-state language from saved-memory framing to `No memory matches this view` and `No memory yet`.
+- No-real-memory/no-save guarantee:
+  - This task does not persist, save, create, archive, send, sync, schedule, remember, mutate existing notes/tasks/calendar data, call models, change backend/auth/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Stage 12 Task 3 can add an explicit plan/day handoff preview while preserving the same no-write boundary.
+
 ## 2026-05-11 - Stage 12 explicit task-row handoff preview
 
 - Task attempted: Let the user explicitly send an approved local task draft into an editable task-row preview without automatically saving it.

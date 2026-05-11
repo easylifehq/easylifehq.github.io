@@ -1,6 +1,25 @@
 # Robin Copy Review
 
 ## Verdict
+NO_REAL_MEMORY_WORDING_STAYS_HONEST_FOR_NOTE_HANDOFF
+
+## Stage 12 Task 2 Copy Review - 2026-05-11
+
+Verdict: `NO_REAL_MEMORY_WORDING_STAYS_HONEST_FOR_NOTE_HANDOFF`.
+
+The note handoff copy stays honest because the preview says `Editable unsaved note draft`, warns that it is not saved and is not real memory, and points users back to the existing note creation flow only when they are ready to create a real note.
+
+What improved:
+- The handoff requires the explicit `Preview note handoff` choice before any editable note preview appears.
+- The preview fields are labeled as local editing surfaces, not as saved memory.
+- Empty-state copy now says `No memory matches this view` and `No memory yet`, which avoids implying a stored assistant memory system.
+
+Copy risk:
+- `Remember something` is still a real note creation action on the same route, so it must stay visually and verbally separate from local assistant draft handoffs.
+
+---
+
+## Verdict
 COPY_READY_FOR_STAGE_12
 
 ## Stage 11 Copy Proof - 2026-05-11
