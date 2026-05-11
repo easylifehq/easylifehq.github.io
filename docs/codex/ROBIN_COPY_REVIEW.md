@@ -3,6 +3,20 @@
 ## Verdict
 COPY_READY_FOR_STAGE_11
 
+## Stage 11 Task 4 Copy Review - 2026-05-11
+
+Verdict: `NO_REAL_MEMORY_WORDING_CLEAR`.
+
+Notes/Memory now says the assistant draft is an unsaved local preview and explicitly says it is not saved, pinned, remembered, planned, or turned into a task. The dismiss state also says no memory draft was saved, pinned, created, scheduled, synced, or remembered.
+
+What improved:
+- `Save context for later` became `Keep context close`, which makes the route feel less like standalone notebook management.
+- `Saved context Today can use later` became `Context candidates Today can review later`, which keeps the bridge tied to Today without implying assistant memory has happened.
+- The new affordance uses draft/action language instead of real automation language.
+
+Copy risk:
+- The main `Remember something` button still creates a real note through existing Notes behavior, so it should remain visually separate from the local assistant draft affordance.
+
 ## Stage 11 Task 2 Copy Review - 2026-05-11
 
 Verdict: `COPY_STAYS_HONEST_FOR_LOCAL_DRAFT_COMPARISON`.

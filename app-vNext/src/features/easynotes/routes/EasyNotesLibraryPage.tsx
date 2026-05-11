@@ -1,6 +1,12 @@
 import { useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
+import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
+import {
+  buildLocalDraftFromSuggestion,
+  memoryDraftActionOptions,
+} from "@/features/assistant/localDraftBuilder";
+import { localDraftStatusLabels, localDraftTypeLabels, type AssistantMemoryDraftAction } from "@/features/assistant/localDraftTypes";
 import { useEasyNotes } from "@/features/easynotes/EasyNotesContext";
 
 const lastOpenNoteStorageKey = "easynotes:lastOpenNoteId";
@@ -57,6 +63,7 @@ export function EasyNotesLibraryPage() {
   const [cleanupMessage, setCleanupMessage] = useState("");
   const [toolsOpen, setToolsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [memoryDraftAction, setMemoryDraftAction] = useState<AssistantMemoryDraftAction>("remember");
   const [lastOpenNoteId] = useState(() => window.localStorage.getItem(lastOpenNoteStorageKey) || "");
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -100,12 +107,23 @@ export function EasyNotesLibraryPage() {
     () => notes.find((note) => note.id === lastOpenNoteId) || notes[0] || null,
     [notes, lastOpenNoteId]
   );
+  const memoryDraftSource =
+    lastOpenNote?.bodyText.trim() || lastOpenNote?.title.trim() || "Remember the launch notes and pin the next decision.";
+  const memoryDraftSuggestion = useMemo(
+    () => classifyAssistantIntent(`Remember this context: ${memoryDraftSource}`),
+    [memoryDraftSource]
+  );
+  const selectedMemoryDraftOption =
+    memoryDraftActionOptions.find((option) => option.action === memoryDraftAction) || memoryDraftActionOptions[0];
+  const selectedMemoryDraft = selectedMemoryDraftOption?.draftType
+    ? buildLocalDraftFromSuggestion(memoryDraftSuggestion, selectedMemoryDraftOption.draftType)
+    : null;
   const memoryBridge = useMemo(
     () => [
       {
         label: "Remember",
         count: notes.length,
-        detail: "Saved context Today can use later.",
+        detail: "Context candidates Today can review later.",
       },
       {
         label: "Task cue",
@@ -210,7 +228,7 @@ export function EasyNotesLibraryPage() {
   return (
     <PageSection
       title="Memory"
-      description="Save context for later, then decide what should become a task, a plan, a pinned reference, or a review."
+      description="Keep context close, then decide what should become a task, a plan, a pinned reference, or a review."
     >
         <div className="notes-command-strip" aria-label="Memory actions">
           <div className="notes-capture-group">
@@ -255,6 +273,49 @@ export function EasyNotesLibraryPage() {
             </article>
           ))}
         </div>
+
+        <section className="notes-memory-draft-affordance" aria-labelledby="notes-memory-draft-title">
+          <div className="notes-memory-draft-copy">
+            <span>{localDraftStatusLabels["unsaved-preview"]}</span>
+            <h3 id="notes-memory-draft-title">Memory-like assistant draft</h3>
+            <p>
+              Preview what this context could become. This is not saved, pinned, remembered, planned, or turned into a
+              task.
+            </p>
+          </div>
+          <div className="notes-memory-draft-actions" aria-label="Local memory draft actions">
+            {memoryDraftActionOptions.map((option) => (
+              <button
+                key={option.action}
+                type="button"
+                className={memoryDraftAction === option.action ? "active" : ""}
+                onClick={() => setMemoryDraftAction(option.action)}
+                title="Local preview only. This does not write memory."
+              >
+                <strong>{option.label}</strong>
+                <small>{option.summary}</small>
+              </button>
+            ))}
+          </div>
+          {selectedMemoryDraft ? (
+            <article className="notes-memory-draft-preview" aria-label="Unsaved memory draft preview">
+              <div>
+                <span>{localDraftTypeLabels[selectedMemoryDraft.draftType]}</span>
+                <strong>{selectedMemoryDraft.title}</strong>
+                <p>{selectedMemoryDraft.body}</p>
+              </div>
+              {selectedMemoryDraft.warnings.map((warning) => (
+                <p key={warning} className="assistant-local-draft-warning">
+                  {warning}
+                </p>
+              ))}
+            </article>
+          ) : (
+            <p className="notes-memory-draft-dismissed">
+              Dismissed locally. No memory draft was saved, pinned, created, scheduled, synced, or remembered.
+            </p>
+          )}
+        </section>
 
         {searchOpen ? (
         <div className="notes-library-toolbar notes-search-toolbar">

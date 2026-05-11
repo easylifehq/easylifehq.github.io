@@ -36,6 +36,15 @@ export type AssistantLocalDraftComparisonOption = {
   recommended: boolean;
 };
 
+export type AssistantMemoryDraftAction = "remember" | "pin-context" | "task" | "plan" | "dismiss";
+
+export type AssistantMemoryDraftActionOption = {
+  action: AssistantMemoryDraftAction;
+  label: string;
+  draftType: AssistantLocalDraftType | null;
+  summary: string;
+};
+
 export const localDraftTypeLabels: Record<AssistantLocalDraftType, string> = {
   task: "Task draft",
   note: "Memory draft",

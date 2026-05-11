@@ -2381,6 +2381,95 @@ textarea::placeholder {
   color: var(--ui-text-primary, var(--shell-page-text));
 }
 
+.notes-memory-draft-affordance {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.28fr) minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: stretch;
+  margin: 0.75rem 0 0.95rem;
+  padding: 0.72rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 28%, var(--ui-border-subtle, var(--shell-card-border)));
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent-soft, var(--shell-chip-bg)) 34%, transparent), transparent 52%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 90%, transparent);
+}
+
+.notes-memory-draft-copy,
+.notes-memory-draft-preview {
+  min-width: 0;
+}
+
+.notes-memory-draft-copy span,
+.notes-memory-draft-preview span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.7rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.notes-memory-draft-copy h3,
+.notes-memory-draft-preview strong {
+  display: block;
+  margin: 0.12rem 0 0;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.98rem;
+  line-height: 1.2;
+}
+
+.notes-memory-draft-copy p,
+.notes-memory-draft-preview p,
+.notes-memory-draft-dismissed {
+  margin: 0.34rem 0 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
+.notes-memory-draft-actions {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.42rem;
+}
+
+.notes-memory-draft-actions button {
+  display: grid;
+  align-content: start;
+  gap: 0.12rem;
+  min-height: 4.1rem;
+  padding: 0.48rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 72%, transparent);
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  text-align: left;
+}
+
+.notes-memory-draft-actions button.active {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 42%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 12%, var(--ui-bg-card, var(--shell-card-bg)));
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
+.notes-memory-draft-actions strong {
+  font-size: 0.78rem;
+}
+
+.notes-memory-draft-actions small {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.68rem;
+  line-height: 1.22;
+}
+
+.notes-memory-draft-preview,
+.notes-memory-draft-dismissed {
+  grid-column: 2;
+  padding: 0.58rem;
+  border-radius: 8px;
+  border: 1px dashed color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 78%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 58%, transparent);
+}
+
 .notes-library-results-heading {
   margin-top: 1.15rem;
   padding-top: 0.75rem;
@@ -4938,6 +5027,19 @@ textarea::placeholder {
 }
 
 @media (max-width: 820px) {
+  .notes-memory-draft-affordance {
+    grid-template-columns: 1fr;
+  }
+
+  .notes-memory-draft-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .notes-memory-draft-preview,
+  .notes-memory-draft-dismissed {
+    grid-column: auto;
+  }
+
   .easylist-inbox-command,
   .easylist-inbox-controls,
   .assistant-intent-preview {

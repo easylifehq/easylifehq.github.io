@@ -5,6 +5,7 @@ import {
   type AssistantLocalDraft,
   type AssistantLocalDraftComparisonOption,
   type AssistantLocalDraftType,
+  type AssistantMemoryDraftActionOption,
 } from "./localDraftTypes";
 
 function normalizeDraftText(text: string) {
@@ -100,3 +101,36 @@ export function buildLocalDraftReviewHint(suggestion: AssistantIntentSuggestion)
     detail: "Nothing is saved from Today.",
   };
 }
+
+export const memoryDraftActionOptions: AssistantMemoryDraftActionOption[] = [
+  {
+    action: "remember",
+    label: "Remember",
+    draftType: "note",
+    summary: "Hold as an unsaved memory draft.",
+  },
+  {
+    action: "pin-context",
+    label: "Pin context",
+    draftType: "note",
+    summary: "Preview as context to keep close.",
+  },
+  {
+    action: "task",
+    label: "Turn into task",
+    draftType: "task",
+    summary: "Preview as an action draft.",
+  },
+  {
+    action: "plan",
+    label: "Turn into plan",
+    draftType: "plan",
+    summary: "Preview as a plan draft.",
+  },
+  {
+    action: "dismiss",
+    label: "Dismiss",
+    draftType: null,
+    summary: "Hide this local preview.",
+  },
+];

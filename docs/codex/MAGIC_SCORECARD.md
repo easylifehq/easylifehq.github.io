@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 11 Notes Local Memory Draft Affordance
+
+- Task: Notes local memory draft affordance.
+- Result: Passed local UI/domain implementation, build, and route inspection.
+- Magic signal: memory-draft-visible-without-memory-write
+- Changed files: 7
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easynotes?demo=1` on local Vite port `4208`, clicked `Pin context`, `Turn into task`, and `Dismiss`, and verified no page errors. Screenshot saved at `.codex-logs/stage11-task4-notes-memory-draft.png`.
+- File note: requested `EasyNotesPage.tsx` does not exist; `/app/easynotes` is implemented by `EasyNotesLibraryPage.tsx`.
+- Affordance evidence: Notes now shows local-only actions for Remember, Pin context, Turn into task, Turn into plan, and Dismiss.
+- Copy verdict: `NO_REAL_MEMORY_WORDING_CLEAR`.
+- No-write guarantee: no persistence, note/task/calendar mutation, archive/send/sync/schedule/remember behavior, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 11 proof should decide readiness for Stage 12 explicit handoff planning.
+
 ## 2026-05-11 - Stage 11 Today Safe Draft Review Hint
 
 - Task: Today safe draft review hint.

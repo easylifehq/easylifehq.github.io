@@ -1,5 +1,29 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 11 Notes local memory draft affordance
+
+- Task attempted: Show what a memory-like assistant suggestion could become as an unsaved local draft without creating real memory.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4208` and inspected `/app/easynotes?demo=1` with headless Chromium. Clicked `Pin context`, `Turn into task`, and `Dismiss`; the route rendered the local affordance, one unsaved preview, and dismiss/no-write copy with no page errors. Screenshot saved at `.codex-logs/stage11-task4-notes-memory-draft.png`.
+- Files changed:
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- File note:
+  - Requested `EasyNotesPage.tsx` does not exist in this repo. `/app/easynotes` is implemented by `EasyNotesLibraryPage.tsx`, so this task used that route file.
+- Product change:
+  - Notes/Memory now includes a quiet `Memory-like assistant draft` affordance with local-only actions for Remember, Pin context, Turn into task, Turn into plan, and Dismiss.
+  - The selected action changes only the local preview shape.
+- Copy simplification:
+  - Softened `Save context for later` to `Keep context close` and changed `Saved context Today can use later` to `Context candidates Today can review later`.
+- No-write guarantee:
+  - This task added local/static UI and deterministic draft-shape helpers only. It does not persist, save, create, archive, send, sync, schedule, remember, mutate notes/tasks/calendar data, call models, change backend/auth/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Stage 11 proof can now decide whether safe local memory is ready for Stage 12 explicit handoff planning.
+
 ## 2026-05-11 - Stage 11 Today safe draft review hint
 
 - Task attempted: Make Today explain that the safest next action is reviewing an unsaved local draft in Inbox without implying anything has been saved.
