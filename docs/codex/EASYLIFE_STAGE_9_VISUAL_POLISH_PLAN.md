@@ -6,6 +6,19 @@ Make EasyLife feel like a slick, technical, calm, powerful AI personal assistant
 
 Stage 9 is polish, not new product scope. Each task must improve one owned surface, remove or simplify one clutter source, pass build, and leave a proof artifact. No task may add backend behavior, auth changes, Firebase rules/config, payments, dependencies, package files, deploy config, generated output, secrets, or new persisted intelligence.
 
+## Product Order Decision
+
+Finish the reviewable assistant shell before building the real assistant brain.
+
+The current product has the right assistant shape, but the human review risk is visual trust: the app must feel calm, slick, technical, and coherent before intelligence is wired into it. Stage 9 therefore stays focused on visible assistant quality. The assistant brain begins only after a visual proof packet says `READY_FOR_HUMAN_VISUAL_REVIEW` or names small visual blockers that can be fixed without changing the core surfaces.
+
+After Stage 9, the next product phase is Stage 10: Assistant Brain Foundation. Stage 10 starts with a narrow approval-first assistant loop:
+
+- parse messy capture text into suggested task, note, plan, reminder, or follow-up intent;
+- show suggested actions before anything changes;
+- keep the user in control with approve/edit/dismiss;
+- write no hidden automation, no email sending, no calendar sync, and no real memory behavior until those contracts are explicitly designed.
+
 ## Evidence Base
 
 - `CHECKPOINT_REVIEW.md`: Stages 1-5 are functionally ready for visual polish. Today, Inbox, Plan, Notes, and More render with `?demo=1`.
@@ -73,3 +86,7 @@ Stage 9 is ready for human visual review when:
 - Robin can say the entrance and signed-in core no longer read as product inventory.
 - Simon can say the first screens feel slick, technical, calm, and powerful enough to judge visually.
 - `NEXT_5_TASKS.md` has been completed or replaced by a proof packet that says `READY_FOR_HUMAN_VISUAL_REVIEW`.
+
+## Handoff To Stage 10
+
+Do not begin Stage 10 until the Stage 9 proof packet has been created. If the proof packet is ready, create Stage 10 tasks around the smallest useful assistant-brain behavior: intake classification with human approval. Do not start with broad "AI assistant" work, background automation, or integrations.
