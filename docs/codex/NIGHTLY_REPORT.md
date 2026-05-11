@@ -1,5 +1,31 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 10 approval-first assistant intent contract
+
+- Task attempted: Create the first local assistant-brain contract for classifying messy capture text into a visible suggestion before anything changes.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/intentTypes.ts`
+  - `app-vNext/src/features/assistant/intentClassifier.ts`
+  - `app-vNext/src/features/assistant/intentClassifier.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Contract added:
+  - Allowed intents: task, note, plan, reminder, follow-up, unsure.
+  - Confidence language: high, medium, low mapped to reviewable labels.
+  - Approval states: suggested, editing, approved, dismissed, needs-review.
+  - Suggestion shape: source text, intent, title, summary, confidence label, approval state, editable fields, and warnings.
+- Deterministic classifier examples:
+  - `Reply to Maya about Friday plans` -> follow-up.
+  - `Remember to call the dentist tomorrow morning` -> reminder.
+  - `Block 30 minutes tomorrow for the proposal` -> plan.
+  - `This launch idea should stay near the roadmap notes` -> note.
+  - `buy groceries this weekend` -> task.
+  - `blue folder` -> unsure.
+- No-write guarantee:
+  - This task added local TypeScript contract/classification only. It does not call a model, save data, send email, sync calendars, alter auth/backend/Firebase config, add dependencies, touch package files, deploy, or generate output.
+- Follow-up needed: Stage 10 Task 2 can now wire a visible Inbox suggestion card to this local contract without changing saved data behavior.
+
 ## 2026-05-11 - Stage 9 final visual proof packet
 
 - Task attempted: Rerun the Stage 9 visual proof packet after the Inbox and Plan polish tasks and decide whether Stage 10 Assistant Brain Foundation can begin.

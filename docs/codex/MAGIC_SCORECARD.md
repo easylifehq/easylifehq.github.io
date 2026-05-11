@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 10 Approval-First Intent Contract
+
+- Task: Approval-first assistant intent contract.
+- Result: Passed local contract/classifier implementation and build.
+- Magic signal: assistant-brain-foundation-started
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Contract evidence: added allowed intents `task`, `note`, `plan`, `reminder`, `follow-up`, `unsure`; confidence language; approval states; suggestion shape; deterministic local classifier examples.
+- No-write guarantee: no model calls, hidden writes, persistence changes, email sending, calendar sync, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+- Follow-up: Stage 10 Task 2 should wire a visible Inbox suggestion card using this contract without changing saved data behavior.
+
 ## 2026-05-11 - Stage 9 Final Visual Proof Packet
 
 - Task: Rerun Stage 9 visual proof after Inbox and Plan polish.
