@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-11 - Stage 9 Today First Viewport Polish
+
+- Task: Today first viewport polish.
+- Result: Passed implementation, build, and desktop/mobile local route inspection.
+- Magic signal: moved-forward
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: In-app browser inspected `/app/hq?demo=1` on local Vite port `4192` at 1280px desktop and 390px mobile.
+- Simon improvement score: SCORE: 5; DIRECTION: improved; REASON: Today now prioritizes one assistant read, one next move, one compact Due / Plan / Open strip, and one inline command/capture surface while hiding the duplicate floating capture control.
+- Follow-up: Continue with Inbox intake surface polish before the final Stage 9 visual proof packet.
+
 ## 2026-05-11 - Stage 9 Public/Login Entrance Polish
 
 - Task: Public/login assistant entrance polish.

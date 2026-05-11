@@ -40,9 +40,9 @@ export function HQPage() {
   const mostUrgentLabel = overdueTasks[0]?.title || dueTodayTasks[0]?.title || "";
   const quickWin = sortActiveTasks(tasks.filter((task) => !task.completed && (task.estimatedLength || 999) <= 20))[0] || null;
   const todaySummary = [
-    `${overdueTasks.length + dueTodayTasks.length} due`,
-    `${todayEvents.length} event${todayEvents.length === 1 ? "" : "s"}`,
-    `${formatDuration(openMinutes)} open`,
+    { label: "Due", value: `${overdueTasks.length + dueTodayTasks.length}` },
+    { label: "Plan", value: `${todayEvents.length}` },
+    { label: "Open", value: formatDuration(openMinutes) },
   ];
   const startHere = useMemo(() => {
     const firstDueTask = overdueTasks[0] || dueTodayTasks[0] || null;
@@ -204,10 +204,12 @@ export function HQPage() {
           </div>
           <strong>{assistantRead}</strong>
           <div className="hq-today-summary" aria-label="Today summary">
-            <span>Today</span>
-            <p>{todaySummary.join(" / ")}</p>
-            <span>Try</span>
-            <p>{assistantCommandHintRow}</p>
+            {todaySummary.map((item) => (
+              <span key={item.label}>
+                <b>{item.value}</b>
+                {item.label}
+              </span>
+            ))}
           </div>
           <div className="assistant-next-inline" aria-labelledby="assistant-next-title">
             <div>
@@ -219,11 +221,6 @@ export function HQPage() {
               <Link to={startHere.to} className="primary-button">
                 {startHere.buttonLabel.replace("Open ", "")}
               </Link>
-              {lastAppRoute ? (
-                <Link to={lastAppRoute.path} className="button-secondary">
-                  Resume {lastAppRoute.label}
-                </Link>
-              ) : null}
               <Link to="/app/easylist/add" className="button-secondary">
                 Add to Inbox
               </Link>
@@ -231,15 +228,22 @@ export function HQPage() {
           </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
             <span>Capture or command</span>
-            <strong>Tell EasyLife what changed, what to remember, what to approve, or what to plan.</strong>
+            <strong>{assistantCommandHintRow}</strong>
             <em>Open</em>
           </button>
           <details className="hq-context-stack">
             <summary>
-              <span>Signals</span>
+              <span>Context</span>
               <strong>{contextLead}</strong>
             </summary>
             <div>
+              {lastAppRoute ? (
+                <Link to={lastAppRoute.path}>
+                  <span>Resume</span>
+                  <strong>{lastAppRoute.label}</strong>
+                  <p>Return to the last assistant surface you opened.</p>
+                </Link>
+              ) : null}
               {contextItems.map((item) => (
                 <Link to={item.to} key={`${item.label}-${item.title}`}>
                   <span>{item.label}</span>

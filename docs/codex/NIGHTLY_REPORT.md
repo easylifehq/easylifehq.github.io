@@ -1,5 +1,27 @@
 # Codex Nightly Report
 
+## 2026-05-11 - Stage 9 Today first viewport polish
+
+- Task attempted: Polish the Today first viewport into a slicker assistant command surface that answers what needs attention now.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4192` and inspected `/app/hq?demo=1` at 1280px desktop and 390px mobile with the in-app browser.
+- Files changed:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Removed/simplified visual clutter:
+  - Replaced the mixed `Today / Try` summary text row with a compact three-part Due / Plan / Open strip.
+  - Moved the command hint into the command/capture row so the first screen has one clear command surface.
+  - Demoted `Signals` to quieter `Context`.
+  - Moved `Resume` out of the primary next-move action row and into the context drawer.
+  - Hid the duplicate floating Capture button on Today so the inline command surface owns capture.
+- Route inspection result:
+  - Desktop shows one assistant read, one next move, one command/capture input, one compact today strip, and quiet context.
+  - Mobile shows Today, Inbox, Plan, Notes, More in the shell; the Today strip and command/capture row render without the duplicate floating capture control.
+- Follow-up needed: Continue Stage 9 with Inbox intake surface polish, then Plan polish and the visual proof packet.
+
 ## 2026-05-11 - Stage 9 public/login assistant entrance polish
 
 - Task attempted: Polish the public/login entrance so EasyLife introduces one AI personal assistant instead of a product inventory.
