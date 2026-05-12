@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - EasyLife Local Review Access README
+
+- Task: Create EasyLife local review access instructions.
+- Result: Passed docs-only README creation and build acceptance.
+- Magic signal: review-access-made-obvious
+- Changed files: docs only
+- README path: `docs/codex/EASYLIFE_LOCAL_REVIEW_README.md`.
+- Coverage evidence: README includes the exact `npm.cmd run dev -- --host 127.0.0.1 --port 4231` command, five review URLs, the dev-only demo review caveat, server stop instructions, and links to the review packet plus notes template.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: README does not add app code, create Stage 16 tasks, deploy, or change backend/auth/Firebase config, dependencies, package files, generated output, or secrets.
+
 ## 2026-05-12 - EasyLife Human Review Notes Template
 
 - Task: Create EasyLife human review notes template.

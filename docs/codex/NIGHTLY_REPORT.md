@@ -1,5 +1,17 @@
 # Codex Nightly Report
 
+## 2026-05-12 - EasyLife local review access README
+
+- Task attempted: Make it obvious how to start the local review server and which URLs to open.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_LOCAL_REVIEW_README.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- README path: `docs/codex/EASYLIFE_LOCAL_REVIEW_README.md`.
+- README coverage: exact dev server command, Today/Inbox/Plan/Notes/Settings review URLs, the dev-only `?demo=1` caveat, how to stop the server, and links to the human review packet plus notes template.
+- Boundary preserved: This docs-only task does not add app code, deploy, start Stage 16, or change backend/auth/Firebase config, dependencies, package files, generated output, or secrets.
+
 ## 2026-05-12 - EasyLife human review notes template
 
 - Task attempted: Create a structured place to capture human review feedback before Stage 16.
