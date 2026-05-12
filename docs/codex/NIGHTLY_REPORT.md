@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-12 - EasyLife Stage 16 decision gate
+
+- Task attempted: Define how Stage 16 should be chosen after human review, without starting it.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_16_DECISION_GATE.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Decision gate path: `docs/codex/EASYLIFE_STAGE_16_DECISION_GATE.md`.
+- Gate coverage: visual trust polish, task save real-user QA, note/context real-user QA, assistant brain expansion, and plan/reminder/follow-up preview hardening.
+- Required evidence: human review notes or an explicit bounded mission before Stage 16 tasks are created.
+- Boundary preserved: `NEXT_5_TASKS.md` remains human-review-ready with no active Stage 16 implementation tasks. External actions, notifications, calendar sync, model calls, real memory, hidden writes, and new saved object types remain parked.
+
 ## 2026-05-12 - EasyLife local review access README
 
 - Task attempted: Make it obvious how to start the local review server and which URLs to open.

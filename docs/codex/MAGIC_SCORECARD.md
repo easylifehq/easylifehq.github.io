@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - EasyLife Stage 16 Decision Gate
+
+- Task: Create EasyLife Stage 16 decision gate.
+- Result: Passed docs-only decision gate creation and build acceptance.
+- Magic signal: stage-16-gated-by-review
+- Changed files: docs only
+- Decision gate path: `docs/codex/EASYLIFE_STAGE_16_DECISION_GATE.md`.
+- Coverage evidence: gate defines possible Stage 16 directions, evidence required for each, parked boundaries, decision rules, and Task Contract V2 creation rules.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Queue evidence: `NEXT_5_TASKS.md` remains human-review-ready and does not contain active Stage 16 implementation tasks.
+- Boundary evidence: external actions, notifications, calendar sync, model calls, real memory, hidden writes, and new saved object types remain parked.
+
 ## 2026-05-12 - EasyLife Local Review Access README
 
 - Task: Create EasyLife local review access instructions.

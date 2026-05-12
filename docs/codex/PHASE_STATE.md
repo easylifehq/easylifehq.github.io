@@ -79,6 +79,10 @@ Stage 15 proof result: READY_FOR_HUMAN_REVIEW.
 
 EasyLife should be reviewed by a human before Stage 16 begins. The review should focus on whether the assistant loop feels useful, trustworthy, and worth using daily. Stage 16 must be created from review notes or from an explicit bounded mission, and it must continue to park saved plans, reminders, follow-ups, email, notifications, calendar sync, model calls, and real memory unless separately approved.
 
+Stage 16 decision source: docs/codex/EASYLIFE_STAGE_16_DECISION_GATE.md
+
+Stage 16 is not started. The decision gate defines possible directions only: visual trust polish, task save real-user QA, note/context real-user QA, assistant brain expansion, or plan/reminder/follow-up preview hardening.
+
 ## Phase Order
 
 Website loop: brief -> foundation -> shape -> simplicity -> polish -> proof -> parked

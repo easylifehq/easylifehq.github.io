@@ -4,6 +4,10 @@ Stage 15 proof returned `READY_FOR_HUMAN_REVIEW`. The simplified saved task/note
 
 Do not start Stage 16 automatically. Use human review notes or an explicit bounded mission before creating the next five implementation tasks.
 
+Stage 16 decision gate: `docs/codex/EASYLIFE_STAGE_16_DECISION_GATE.md`.
+
+Status: no active implementation tasks. The queue remains parked for human review.
+
 ## Completed Stage 15 Tasks
 
 - [x] User pain: The task save path is trustworthy, but Inbox is still dense enough that users may skim past the actual save boundary. Result: committed `fc4fe1e9 Simplify EasyLife Inbox task save receipt`.
