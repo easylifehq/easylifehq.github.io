@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 16 Task 4 visiting somewhere prompt
+
+- Task attempted: Add a simple assistant-style prompt for "who do I know near this place?" without maps or geocoding.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected: `http://127.0.0.1:4231/app/easycontacts?demo=1`.
+- Files changed:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product evidence: added a `Visiting somewhere?` assistant prompt with a local place input, fictional Portland/Denver/Pacific Northwest example chips, saved-label-only result copy, and static contact matches.
+- Boundary evidence: the prompt says it uses saved freeform labels only and does not use live location, maps, geocoding, exact addresses, or device location.
+- Boundary preserved: no map API, geocoding, device location, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, exact addresses, or real personal data were added.
+
 ## 2026-05-12 - Stage 16 Task 3 People by Place grouped view
 
 - Task attempted: Let the user review who they know by city or region without using a map yet.

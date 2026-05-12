@@ -69,6 +69,7 @@ export function EasyContactsPage() {
   const { contacts, isLoading, error, addContact, saveContact, archiveCurrentContact } = useEasyContacts();
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
+  const [placeReviewQuery, setPlaceReviewQuery] = useState("Portland, OR");
   const [selectedContact, setSelectedContact] = useState<EasyContactRecord | null>(null);
   const [draft, setDraft] = useState<ContactDraft>(emptyDraft);
   const contactParam = searchParams.get("contact");
@@ -126,6 +127,19 @@ export function EasyContactsPage() {
         return left.place.localeCompare(right.place);
       });
   }, [filteredContacts]);
+  const placeReviewMatches = useMemo(() => {
+    const query = placeReviewQuery.trim().toLowerCase();
+    if (!query) return [];
+
+    return filteredContacts
+      .filter((contact) =>
+        [contact.currentCity, contact.region, contact.lastKnownPlace, contact.visitNote]
+          .join(" ")
+          .toLowerCase()
+          .includes(query)
+      )
+      .slice(0, 3);
+  }, [filteredContacts, placeReviewQuery]);
   const activeThisMonth = useMemo(() => {
     const monthStart = new Date();
     monthStart.setDate(1);
@@ -272,6 +286,45 @@ export function EasyContactsPage() {
               )) : <div className="empty-card-vnext">Add a few people you want to stay in touch with.</div>}
             </div>
           </article>
+        </div>
+      </PageSection>
+
+      <PageSection
+        eyebrow="Assistant prompt"
+        title="Visiting somewhere?"
+        description="Ask who you know near a place using saved freeform labels only. No live location, map, or geocoding."
+      >
+        <div className="contacts-place-prompt" aria-label="Who do I know near this place">
+          <div className="contacts-place-prompt-main">
+            <label className="field-stack">
+              <span>Place to review</span>
+              <input
+                value={placeReviewQuery}
+                onChange={(event) => setPlaceReviewQuery(event.target.value)}
+                placeholder="Try Portland, Denver, or Pacific Northwest"
+              />
+            </label>
+            <div className="contacts-place-prompt-chips" aria-label="Example place prompts">
+              {["Portland, OR", "Denver, CO", "Pacific Northwest"].map((place) => (
+                <button key={place} type="button" className="ghost-button" onClick={() => setPlaceReviewQuery(place)}>
+                  {place}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="contacts-place-prompt-result">
+            <p className="eyebrow">Saved labels only</p>
+            <strong>{placeReviewMatches.length ? `${placeReviewMatches.length} possible ${placeReviewMatches.length === 1 ? "person" : "people"} near ${placeReviewQuery}` : "No saved place label match yet"}</strong>
+            <span>This checks current city, region, last known place, and visit notes. It does not use exact addresses or device location.</span>
+            <div className="contacts-place-prompt-list">
+              {placeReviewMatches.map((contact) => (
+                <button key={contact.id} type="button" className="contacts-place-person" onClick={() => setSelectedContact(contact)}>
+                  <strong>{contact.fullName || "Unnamed contact"}</strong>
+                  <span>{getPlaceSummary(contact)}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </PageSection>
 

@@ -2,6 +2,22 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 16 Task 4 Visiting Somewhere Prompt
+
+- Task: Add visiting-somewhere assistant prompt.
+- Result: Passed build, local route inspection, and copy boundary review.
+- Magic signal: saved-label-place-review-prompt
+- Changed files:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Route evidence: `/app/easycontacts?demo=1` showed `Visiting somewhere?`, a place review input, Portland/Denver/Pacific Northwest example chips, `Saved labels only`, and a Portland match from fictional contact data.
+- Boundary evidence: copy says it uses saved freeform labels only and does not use live location, maps, geocoding, exact addresses, or device location.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Scope evidence: no map API, geocoding, device location, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, exact addresses, or real personal data were added.
+
 ## 2026-05-12 - Stage 16 Task 3 People By Place
 
 - Task: Add People by Place grouped view.

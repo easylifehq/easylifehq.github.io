@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+VISITING_PROMPT_COPY_IS_HONEST
+
+## Stage 16 Task 4 Copy Review - 2026-05-12
+
+Verdict: `VISITING_PROMPT_COPY_IS_HONEST`.
+
+The visiting-place prompt now gives the user the exact mental model they asked for: "who do I know near this place?" It stays honest by saying the match is based on saved freeform place labels only.
+
+What works:
+- The prompt uses fictional examples: Portland, Denver, and Pacific Northwest.
+- The result area says `Saved labels only`.
+- The helper copy says there is no live location, map, geocoding, exact address, or device-location lookup.
+- The prompt feels like an assistant review surface rather than a CRM filter.
+
+Copy risk:
+- The matching is intentionally simple and local. Future stages should keep calling it saved-label review unless real search/geocoding is explicitly approved.
+
+---
+
+## Verdict
 PLACE_MEMORY_COPY_IS_PRIVACY_LIGHT
 
 ## Stage 16 Task 2 Copy Review - 2026-05-12
