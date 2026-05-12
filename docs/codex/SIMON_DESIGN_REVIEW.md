@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_HUMAN_REVIEW
+
+## Stage 15 Design Proof - 2026-05-12
+
+Verdict: `READY_FOR_HUMAN_REVIEW`.
+
+The saved task/note loop is visually tolerable enough to show. It is still safety-forward, but it no longer reads like a wall of policy. Today stays focused on the assistant read, next move, command input, and small status strip. Inbox and Notes keep the real save actions inside contained review panels with receipts.
+
+What works:
+- Today's helper is short enough to feel like guidance, not a warning block.
+- Inbox keeps task save local and scannable after the receipt simplification.
+- Notes keeps note/context save calm enough to review without pretending real memory exists.
+- Plan and Settings still render as supporting assistant surfaces, not new save destinations.
+
+Design risk:
+- The product can be human-reviewed now, but broad visual polish is not done forever. The next design move should come from actual review notes, not automatic expansion.
+
+---
+
+## Verdict
 TODAY_SAVE_LANES_ARE_TIGHTER
 
 ## Stage 15 Task 3 Design Review - 2026-05-12

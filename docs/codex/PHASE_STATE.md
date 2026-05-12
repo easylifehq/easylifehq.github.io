@@ -1,9 +1,9 @@
 # Phase State
 
-Current Phase: stage-15-trustworthy-saved-assistant-loop
+Current Phase: human-review-ready
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Harden and simplify the saved task/note assistant loop before any new saved object type is considered.
+Primary Action: Put the simplified saved task/note assistant loop in front of a human before expanding saved assistant actions.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
@@ -11,13 +11,13 @@ Complexity Budget: Stage 15 tasks must simplify and prove the existing task and 
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_STAGE_15
+Parking State: READY_FOR_HUMAN_REVIEW
 Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 14 proof now says READY_FOR_STAGE_15. Stage 15 Trustworthy Saved Assistant Loop may begin using the prepared tasks in NEXT_5_TASKS.md.
+Next Phase Criteria: Stage 15 proof now says READY_FOR_HUMAN_REVIEW. Do not start Stage 16 automatically; collect human review notes or accept an explicit bounded Stage 16 mission first.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-12 - Stage 14 user-approved task and note save proof passed; Stage 15 hardening approved.
+Updated At: 2026-05-12 - Stage 15 trustworthy saved assistant loop proof passed; EasyLife is ready for human review.
 
 ## Assistant Brain Gate
 
@@ -72,6 +72,12 @@ Stage 14 proof result: READY_FOR_STAGE_15.
 Prepared Stage 15 queue: docs/codex/NEXT_5_TASKS.md contains exactly five trustworthy saved assistant loop tasks.
 
 Stage 15 may harden, simplify, and prove the existing task and note/context save paths. It must not add saved plans, saved reminders, saved follow-ups, external communication, notifications, calendar sync, model-backed action, real memory, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, or secrets.
+
+Stage 15 proof result: READY_FOR_HUMAN_REVIEW.
+
+## Human Review Gate
+
+EasyLife should be reviewed by a human before Stage 16 begins. The review should focus on whether the assistant loop feels useful, trustworthy, and worth using daily. Stage 16 must be created from review notes or from an explicit bounded mission, and it must continue to park saved plans, reminders, follow-ups, email, notifications, calendar sync, model calls, and real memory unless separately approved.
 
 ## Phase Order
 

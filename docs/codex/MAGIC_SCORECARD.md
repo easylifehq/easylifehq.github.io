@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 15 Proof Packet
+
+- Task: Stage 15 proof packet.
+- Result: Passed build, five-route proof, task-save proof, note/context-save proof, and human-review readiness decision.
+- Magic signal: ready-for-human-review
+- Changed files: docs only
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Local dev review mode inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` on port `4231`.
+- Proof artifacts: `.codex-logs/stage15-proof-today.png`, `.codex-logs/stage15-proof-inbox.png`, `.codex-logs/stage15-proof-plan.png`, `.codex-logs/stage15-proof-notes.png`, `.codex-logs/stage15-proof-settings.png`, `.codex-logs/stage15-proof-task-save.png`, and `.codex-logs/stage15-proof-note-save.png`.
+- Task-save evidence: final confirmation remains required; demo review mode reported no signed-in task save happened; receipt preserved no note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory boundary.
+- Note/context-save evidence: final confirmation remains required; demo review mode reported no signed-in note save happened; receipt preserved no task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real memory boundary.
+- Parked evidence: saved plans, reminders, follow-ups, email, notifications, calendar sync, model calls, and real memory remain parked.
+- Verdict: `READY_FOR_HUMAN_REVIEW`.
+
 ## 2026-05-12 - Stage 15 Assistant Save-Boundary Checklist
 
 - Task: Create EasyLife assistant save-boundary checklist.

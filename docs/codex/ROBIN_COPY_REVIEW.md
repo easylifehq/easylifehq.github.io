@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+READY_FOR_HUMAN_REVIEW
+
+## Stage 15 Copy Proof - 2026-05-12
+
+Verdict: `READY_FOR_HUMAN_REVIEW`.
+
+The saved assistant loop copy is honest enough for human review. It explains the two real save lanes in plain language, avoids claiming real AI action, and keeps plans, reminders, and follow-ups preview-only.
+
+What works:
+- Task save copy says one task can be saved only after final confirmation in Inbox.
+- Note/context save copy says one note/context item can be saved only after final confirmation in Notes.
+- Receipts still say what was not created.
+- The reusable save-boundary checklist now gives future tasks a compact regression guard.
+
+Copy risk:
+- The broader product still uses Memory as a user-facing area name. That is acceptable for review as long as save actions keep saying note/context and receipts continue to say no real memory was created.
+
+---
+
+## Verdict
 NOTE_CONTEXT_RECEIPT_IS_CALMER_AND_HONEST
 
 ## Stage 15 Task 2 Copy Review - 2026-05-12

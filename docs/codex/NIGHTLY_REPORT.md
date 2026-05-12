@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 15 proof packet
+
+- Task attempted: Prove whether the simplified saved task/note assistant loop is ready for human review or Stage 16.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started local dev review mode on `http://127.0.0.1:4231` and inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1`.
+- Save-flow inspection:
+  - Task save flow: selected `Task draft`, clicked `Preview draft`, clicked `Preview task-only save row`, and clicked `Confirm and save task`. Demo review mode showed no signed-in task save happened, while the receipt preserved the no-note/no-plan/no-reminder/no-follow-up/no-email/no-calendar/no-notification/no-sync/no-memory boundary.
+  - Note/context save flow: clicked `Preview note save path`, clicked `Confirm and save note`, and verified demo review mode showed no signed-in note save happened. The receipt preserved the no-task/no-plan/no-reminder/no-follow-up/no-email/no-notification/no-calendar/no-sync/no-model-call/no-real-memory boundary.
+- Proof artifacts:
+  - `.codex-logs/stage15-proof-today.png`
+  - `.codex-logs/stage15-proof-inbox.png`
+  - `.codex-logs/stage15-proof-plan.png`
+  - `.codex-logs/stage15-proof-notes.png`
+  - `.codex-logs/stage15-proof-settings.png`
+  - `.codex-logs/stage15-proof-task-save.png`
+  - `.codex-logs/stage15-proof-note-save.png`
+- Result: the simplified saved task/note loop is explicit, understandable, contained, and visually tolerable for human review.
+- Parked work: saved plans, reminders, follow-ups, email, notifications, calendar sync, model calls, and real memory remain parked.
+- Final verdict: `READY_FOR_HUMAN_REVIEW`.
+
 ## 2026-05-12 - Stage 15 assistant save-boundary checklist
 
 - Task attempted: Create a reusable checklist so future assistant-save work does not accidentally add fake AI, hidden writes, or external actions.
