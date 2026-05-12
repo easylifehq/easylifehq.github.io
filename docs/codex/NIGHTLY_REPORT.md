@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 17 Task 3 remove Future Map filler
+
+- Task attempted: Stop teasing a map before a real map exists and keep People + Places focused on saved place labels.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected: `http://127.0.0.1:4231/app/easycontacts?demo=1` in local demo mode.
+- Files changed:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product simplification: removed the `Future map preview` section, removed its bubble-card scaffold, removed the `bubbleContacts` derived list, and deleted the unused map-preview CSS.
+- Current value preserved: the first surface keeps `Visiting somewhere?` as a saved-label review prompt, and `People by place` remains the grouped place-memory view.
+- Boundary copy: the prompt now says it uses saved city, region, last known place, and visit notes, with no map, geocoding, exact address, or device location.
+- Boundary preserved: no map API, geocoding, device location, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, exact addresses, real personal data, or persistence behavior changes were added.
+
 ## 2026-05-12 - Stage 17 Task 2 Contacts People + Places consolidation
 
 - Task attempted: Make People + Places useful and personal without making Contacts feel like a bloated CRM dashboard.

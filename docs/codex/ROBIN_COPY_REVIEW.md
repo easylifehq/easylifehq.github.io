@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+NO_MAP_PROMISE_COPY_IS_HONEST
+
+## Stage 17 Task 3 Copy Review - 2026-05-12
+
+Verdict: `NO_MAP_PROMISE_COPY_IS_HONEST`.
+
+People + Places no longer teases a fake map. The route now names the real current behavior: use saved place labels to review who might be near a city or region.
+
+What works:
+- `Future map preview` is removed from the visible route.
+- `Visiting somewhere?` remains as the useful current prompt.
+- `People by place` remains as the grouped saved-label view.
+- The prompt says there is no map, geocoding, exact address, or device-location behavior.
+
+Copy risk:
+- Future map work should not return until there is an explicit privacy/API decision. Until then, the safest phrase is saved place labels.
+
+---
+
+## Verdict
 STAGE_16_COPY_READY_FOR_HUMAN_REVIEW
 
 ## Stage 16 People + Places Copy Proof - 2026-05-12

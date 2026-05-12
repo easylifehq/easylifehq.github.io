@@ -2,6 +2,23 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 17 Task 3 Remove Future Map Filler
+
+- Task: Remove Future Map filler from People + Places.
+- Result: Passed build and local route inspection.
+- Magic signal: people-places-no-fake-map
+- Changed files:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product evidence: removed the `Future map preview` section, `bubbleContacts`, and unused bubble-map CSS.
+- Copy evidence: `Visiting somewhere?` and `People by place` now carry the real current value, with saved-label boundary copy instead of future-map language.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: `/app/easycontacts?demo=1` rendered locally without the future-map preview section.
+- Boundary evidence: no map API, geocoding, device location, exact addresses, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, real personal data, or persistence behavior changes were added.
+
 ## 2026-05-12 - Stage 17 Task 2 Contacts People + Places
 
 - Task: Consolidate Contacts People + Places.

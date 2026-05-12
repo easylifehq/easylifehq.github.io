@@ -52,11 +52,12 @@ function getPlaceSummary(contact: EasyContactRecord) {
 function PlaceMemoryBlock({ contact, compact = false }: { contact: EasyContactRecord; compact?: boolean }) {
   const currentPlace = [contact.currentCity, contact.region].filter(Boolean).join(" · ");
   const lastKnownIsDifferent = contact.lastKnownPlace && contact.lastKnownPlace !== contact.currentCity;
+  const currentPlaceSafe = currentPlace ? [contact.currentCity, contact.region].filter(Boolean).join(" - ") : "";
 
   return (
     <span className={`contact-place-memory${compact ? " contact-place-memory-compact" : ""}`} aria-label="Place memory">
       {!compact ? <span className="contact-place-memory-label">Place memory</span> : null}
-      <strong>{currentPlace || contact.lastKnownPlace || "No city or region saved"}</strong>
+      <strong>{currentPlaceSafe || contact.lastKnownPlace || "No city or region saved"}</strong>
       {contact.movedRecently && contact.lastKnownPlace ? <small>Moved recently from {contact.lastKnownPlace}</small> : null}
       {!contact.movedRecently && lastKnownIsDifferent ? <small>Last known near {contact.lastKnownPlace}</small> : null}
       {contact.visitNote ? <small>Visit note: {contact.visitNote}</small> : null}
@@ -95,7 +96,6 @@ export function EasyContactsPage() {
         .includes(term)
     );
   }, [contacts, search]);
-  const bubbleContacts = useMemo(() => filteredContacts.slice(0, 18), [filteredContacts]);
   const dueContacts = useMemo(
     () => filteredContacts.filter((contact) => isFollowUpNeeded(contact.nextFollowUpAt)).slice(0, 6),
     [filteredContacts]
@@ -210,10 +210,10 @@ export function EasyContactsPage() {
           <article className="contacts-memory-panel contacts-memory-panel-wide">
             <div className="contacts-memory-panel-top">
               <div>
-                <p className="eyebrow">Near a place</p>
+                <p className="eyebrow">Visiting somewhere?</p>
                 <h3>{placeReviewMatches.length ? `${placeReviewMatches.length} possible match${placeReviewMatches.length === 1 ? "" : "es"}` : "Saved labels only"}</h3>
               </div>
-              <span className="chip-pill">No map</span>
+              <span className="chip-pill">Labels only</span>
             </div>
             <label className="field-stack">
               <span>Place to review</span>
@@ -230,13 +230,14 @@ export function EasyContactsPage() {
                 </button>
               ))}
             </div>
+            <p className="helper-copy">Uses saved city, region, last known place, and visit notes. No map, geocoding, exact address, or device location.</p>
             <div className="contacts-overview-list">
               {placeReviewMatches.length ? placeReviewMatches.map((contact) => (
                 <button key={contact.id} type="button" className="contacts-place-person" onClick={() => setSelectedContact(contact)}>
                   <strong>{contact.fullName || "Unnamed contact"}</strong>
                   <span>{getPlaceSummary(contact)}</span>
                 </button>
-              )) : <p className="helper-copy">This checks saved city, region, last known place, and visit notes. It does not use location or geocoding.</p>}
+              )) : <p className="helper-copy">No saved place label match yet.</p>}
             </div>
           </article>
         </div>
@@ -284,7 +285,7 @@ export function EasyContactsPage() {
       <PageSection
         eyebrow="Places"
         title="People by place"
-        description="Review who you know near a city or region before a visit. Map view stays future-only."
+        description="Review who you know near a city or region before a visit using saved place labels."
       >
         <div className="contacts-place-groups" aria-label="People grouped by place">
           {peopleByPlace.length ? peopleByPlace.map((group) => (
@@ -307,31 +308,6 @@ export function EasyContactsPage() {
               </div>
             </article>
           )) : <div className="empty-card-vnext">No place memory to group yet.</div>}
-        </div>
-      </PageSection>
-
-      <PageSection
-        eyebrow="Browse"
-        title="Future map preview"
-        description="A light place-label preview for now. This is not a live map, geocoded view, or exact-address tool."
-      >
-        <div className="contacts-bubble-map" role="list" aria-label="Future people place map preview">
-          {bubbleContacts.length ? (
-            bubbleContacts.map((contact, index) => (
-              <button
-                key={contact.id}
-                type="button"
-                role="listitem"
-                className={`contact-bubble contact-bubble-${(index % 5) + 1}`}
-                onClick={() => setSelectedContact(contact)}
-              >
-                <strong>{contact.fullName || "Unnamed"}</strong>
-                <span>{getPlaceSummary(contact)}</span>
-              </button>
-            ))
-          ) : (
-            <div className="empty-card-vnext">No contacts to map yet.</div>
-          )}
         </div>
       </PageSection>
 

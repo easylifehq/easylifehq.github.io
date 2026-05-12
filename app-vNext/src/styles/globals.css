@@ -8590,58 +8590,6 @@ button.calendar-detail-card:disabled {
   color: var(--ui-text-muted, var(--shell-muted-text));
 }
 
-.contacts-bubble-map {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  align-items: center;
-  justify-content: center;
-  min-height: 190px;
-  padding: 1.2rem;
-  border-radius: 22px;
-  background:
-    radial-gradient(circle at top, color-mix(in srgb, var(--app-accent) 14%, transparent), transparent 48%),
-    var(--ui-bg-empty, color-mix(in srgb, var(--app-panel-bg) 92%, transparent));
-  border: 1px solid var(--ui-border-subtle, var(--app-panel-border, rgba(99, 76, 58, 0.12)));
-}
-
-.contact-bubble {
-  width: 124px;
-  height: 124px;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  gap: 0.25rem;
-  padding: 0.9rem;
-  text-align: center;
-  border-radius: 999px;
-  border: 1px solid var(--app-accent-border, rgba(99, 76, 58, 0.12));
-  background: color-mix(in srgb, var(--ui-bg-card) 78%, var(--app-accent) 22%);
-  box-shadow: var(--shell-card-shadow);
-}
-
-.contact-bubble strong {
-  font-size: 0.95rem;
-  line-height: 1.1;
-}
-
-.contact-bubble span {
-  color: var(--ui-text-muted, var(--shell-muted-text));
-  font-size: 0.78rem;
-}
-
-.contact-bubble-1,
-.contact-bubble-4 {
-  width: 138px;
-  height: 138px;
-}
-
-.contact-bubble-2,
-.contact-bubble-5 {
-  width: 112px;
-  height: 112px;
-}
-
 .contacts-place-groups {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -12749,20 +12697,6 @@ button.calendar-detail-card:disabled {
 
   .notes-body-field textarea {
     min-height: calc(var(--easy-viewport-height, 100dvh) - 15rem);
-  }
-
-  .contacts-bubble-map {
-    padding: 0.9rem;
-    gap: 0.65rem;
-  }
-
-  .contact-bubble,
-  .contact-bubble-1,
-  .contact-bubble-2,
-  .contact-bubble-4,
-  .contact-bubble-5 {
-    width: 104px;
-    height: 104px;
   }
 
   .contact-card-meta-row {
