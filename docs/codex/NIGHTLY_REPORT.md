@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 15 tighten Today and Inbox save-lane copy
+
+- Task attempted: Make the two safe save lanes clear with fewer words so Today feels like an assistant surface, not a policy notice.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4228` and inspected `/app/hq?demo=1` and `/app/easylist/add?demo=1` with headless Chromium. Screenshots saved at `.codex-logs/stage15-task3-today-save-lanes.png` and `.codex-logs/stage15-task3-inbox-save-lanes.png`.
+- Files changed:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Today simplification:
+  - The command helper now says: `Save tasks in Inbox, notes in Notes; plans, reminders, and follow-ups stay previews.`
+  - Today still shows assistant read, next move, command/capture row, and the Due/Plan/Open strip.
+  - Today does not show saved task or saved note receipt data.
+- Inbox simplification:
+  - The route header still names the save lanes: tasks confirm in Inbox, note/context confirms in Notes, and plans/reminders/follow-ups stay preview-only.
+  - The intake helper no longer repeats both lanes; it now says nothing saves, sends, syncs, schedules, or remembers until final confirmation.
+- Guardrails preserved: No cross-route state, persistence, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 15 simplify Notes note/context receipt
 
 - Task attempted: Make the Notes note/context confirmation and receipt calmer without implying real memory.

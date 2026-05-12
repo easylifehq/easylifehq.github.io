@@ -295,8 +295,7 @@ export function EasyListInboxPage() {
               />
             </label>
             <p>
-              Local preview only. Task saves require final confirmation here; note/context saves require final
-              confirmation in Notes. Nothing is sent, synced, scheduled, or remembered from this card.
+              Local preview only. Nothing saves, sends, syncs, schedules, or remembers until final confirmation.
             </p>
           </div>
 

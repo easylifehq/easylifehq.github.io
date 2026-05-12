@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+TODAY_SAVE_LANES_ARE_TIGHTER
+
+## Stage 15 Task 3 Design Review - 2026-05-12
+
+Verdict: `TODAY_SAVE_LANES_ARE_TIGHTER`.
+
+Today now explains the two safe save lanes in fewer words and feels less like a policy notice. The Inbox route still carries the full lane rule once, while the intake helper now uses a shorter no-action-until-confirmation sentence.
+
+What works:
+- Today says `Save tasks in Inbox, notes in Notes; plans, reminders, and follow-ups stay previews.`
+- Today still keeps assistant read, next move, command/capture, and the Due/Plan/Open strip in the first viewport.
+- Inbox still says tasks confirm there, note/context confirms in Notes, and plans/reminders/follow-ups stay preview-only.
+- No saved task or note data appears on Today.
+
+Design risk:
+- The shortened Today copy is still doing safety work in one compact line. Stage 15 proof should verify that it reads as guidance, not policy clutter.
+
+---
+
+## Verdict
 INBOX_TASK_RECEIPT_IS_EASIER_TO_SCAN
 
 ## Stage 15 Task 1 Design Review - 2026-05-12

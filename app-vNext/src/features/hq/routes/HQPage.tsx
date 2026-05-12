@@ -240,8 +240,8 @@ export function HQPage() {
             <span>Capture, classify, confirm safely</span>
             <strong>{assistantCommandHintRow}</strong>
             <small>
-              {localDraftHint.label}: {localDraftHint.title}. Inbox can save one task; Notes can save one
-              note/context item. Plans, reminders, and follow-ups stay preview-only.
+              {localDraftHint.label}: {localDraftHint.title}. Save tasks in Inbox, notes in Notes; plans,
+              reminders, and follow-ups stay previews.
             </small>
             <em>Open Inbox</em>
           </button>

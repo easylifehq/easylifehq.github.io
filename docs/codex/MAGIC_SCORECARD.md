@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 15 Tighten Today And Inbox Save-Lane Copy
+
+- Task: Tighten Today and Inbox save-lane copy.
+- Result: Passed static wording implementation, build, and route inspection.
+- Magic signal: save-lanes-clearer-with-fewer-words
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/hq?demo=1` and `/app/easylist/add?demo=1` on local Vite port `4228`. Screenshots saved at `.codex-logs/stage15-task3-today-save-lanes.png` and `.codex-logs/stage15-task3-inbox-save-lanes.png`.
+- Today evidence: command helper now says `Save tasks in Inbox, notes in Notes; plans, reminders, and follow-ups stay previews.` No saved task or note data appears on Today.
+- Inbox evidence: route header still names tasks in Inbox, note/context in Notes, and plans/reminders/follow-ups preview-only; intake helper no longer repeats both save lanes.
+- No behavior change: no cross-route state, persistence, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 15 Simplify Notes Note/Context Receipt
 
 - Task: Simplify Notes note/context receipt.
