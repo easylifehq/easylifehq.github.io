@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: human-review-ready
+Current Phase: stage-16-people-places-memory
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Put the simplified saved task/note assistant loop in front of a human before expanding saved assistant actions.
+Primary Action: Add privacy-light People + Places memory to EasyContacts so the assistant can remember where people live or are moving.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 15 tasks must simplify and prove the existing task and note/context save paths only; they must not add autonomous actions, hidden writes, real memory, external sync, email, notifications, calendar sync, reminders, follow-ups, model calls, new saved object types, or broad persistence.
+Complexity Budget: Stage 16 tasks must stay inside EasyContacts People + Places memory and must not add exact addresses, maps, geocoding, autonomous actions, hidden writes, real memory, external sync, email, notifications, calendar sync, reminders, follow-ups, model calls, new saved object types outside people/place labels, or broad persistence.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_HUMAN_REVIEW
+Parking State: READY_FOR_STAGE_16
 Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 15 proof now says READY_FOR_HUMAN_REVIEW. Do not start Stage 16 automatically; collect human review notes or accept an explicit bounded Stage 16 mission first.
+Next Phase Criteria: Stage 16 People + Places Memory is now approved by explicit user mission. Use the prepared tasks in NEXT_5_TASKS.md.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-12 - Stage 15 trustworthy saved assistant loop proof passed; EasyLife is ready for human review.
+Updated At: 2026-05-12 - Stage 16 converted to People + Places Memory; broader decision gate moved to Stage 17.
 
 ## Assistant Brain Gate
 
@@ -81,7 +81,17 @@ EasyLife should be reviewed by a human before Stage 16 begins. The review should
 
 Stage 16 decision source: docs/codex/EASYLIFE_STAGE_16_DECISION_GATE.md
 
-Stage 16 is not started. The decision gate defines possible directions only: visual trust polish, task save real-user QA, note/context real-user QA, assistant brain expansion, or plan/reminder/follow-up preview hardening.
+Stage 16 is now started as People + Places Memory by explicit user mission.
+
+## People + Places Memory Gate
+
+Stage 16 source: docs/codex/EASYLIFE_PEOPLE_PLACES_MEMORY_PLAN.md
+
+Prepared Stage 16 queue: docs/codex/NEXT_5_TASKS.md contains exactly five People + Places Memory tasks.
+
+Stage 16 may add privacy-light people/place labels to EasyContacts: current city, region, last known place, moved recently, and visit note. It must not require exact street addresses, add map APIs, geocoding, device location, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, real personal data, model calls, or external actions.
+
+Stage 17 decision source: docs/codex/EASYLIFE_STAGE_17_DECISION_GATE.md
 
 ## Phase Order
 

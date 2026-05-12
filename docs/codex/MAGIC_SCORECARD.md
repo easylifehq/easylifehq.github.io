@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Convert Stage 16 To People + Places Memory
+
+- Task: Convert Stage 16 to People + Places Memory.
+- Result: Passed docs-only Stage 16 conversion and build acceptance.
+- Magic signal: stage-16-people-places-approved
+- Changed files: docs only
+- Stage 16 source: `docs/codex/EASYLIFE_STAGE_16_DECISION_GATE.md`.
+- Stage 17 source: `docs/codex/EASYLIFE_STAGE_17_DECISION_GATE.md`.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five Task Contract V2-compatible Stage 16 People + Places tasks.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: exact street addresses, map APIs, geocoding, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, and real personal data remain out of scope.
+
 ## 2026-05-12 - EasyLife People + Places Memory Plan
 
 - Task: Create EasyLife People + Places memory plan.

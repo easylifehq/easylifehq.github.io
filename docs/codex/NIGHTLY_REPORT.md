@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Convert Stage 16 to People + Places Memory
+
+- Task attempted: Make People + Places Memory the approved Stage 16 direction and push the broader decision gate to Stage 17.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_PEOPLE_PLACES_MEMORY_PLAN.md`
+  - `docs/codex/EASYLIFE_STAGE_16_DECISION_GATE.md`
+  - `docs/codex/EASYLIFE_STAGE_17_DECISION_GATE.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Stage 16 mission: People + Places Memory for EasyContacts.
+- Stage 17 gate: broader decision gate moved to `docs/codex/EASYLIFE_STAGE_17_DECISION_GATE.md`.
+- Queue: `docs/codex/NEXT_5_TASKS.md` now contains exactly five Task Contract V2-compatible Stage 16 tasks.
+- Boundary preserved: no app UI was edited. Exact street addresses, map APIs, geocoding, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, and real personal data remain out of scope.
+
 ## 2026-05-12 - EasyLife People + Places memory plan
 
 - Task attempted: Plan a future EasyContacts upgrade so EasyLife can remember where people live or are moving, and help the user review who they know near a place.

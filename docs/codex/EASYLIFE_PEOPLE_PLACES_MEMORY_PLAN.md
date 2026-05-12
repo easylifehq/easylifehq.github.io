@@ -1,6 +1,6 @@
 # EasyLife People + Places Memory Plan
 
-This is a future EasyContacts upgrade candidate. It is not approved implementation work yet.
+This is the approved Stage 16 direction for EasyContacts. Implementation must still follow the bounded task packet in `docs/codex/NEXT_5_TASKS.md`.
 
 ## Mission
 
@@ -70,16 +70,16 @@ The first version can use freeform place labels and grouped lists without maps o
 
 ## Stage 16 Fit
 
-This can become a Stage 16 candidate if human review says the assistant loop is trustworthy and the next useful behavior should be personal context expansion.
+This is now Stage 16 because the user explicitly chose People + Places as the next useful behavior.
 
-Prefer this direction when review notes say:
+Continue this direction while review notes say:
 
 - EasyLife should remember people better.
 - EasyContacts feels too generic or hidden under More.
 - The user wants a practical reason to return to the app before adding external AI.
 - A privacy-light place memory system feels more valuable than visual polish.
 
-Do not choose this direction if review says:
+Pause or redirect this direction if review says:
 
 - Today/Inbox/Notes still feel untrustworthy.
 - The saved task/note loop is confusing.
@@ -103,4 +103,4 @@ If approved later, begin with one narrow local UI slice:
 - Keep map view as future.
 - Keep exact addresses out of scope.
 
-Do not create these tasks until Stage 16 is explicitly chosen.
+Stage 16 has been chosen. Use the five-task packet in `docs/codex/NEXT_5_TASKS.md` before implementation.
