@@ -1,6 +1,25 @@
 # Simon Design Review
 
 ## Verdict
+TASK_SAVE_RECEIPT_KEEPS_INBOX_AS_APPROVAL_QUEUE
+
+## Stage 13 Task 2 Design Review - 2026-05-12
+
+Verdict: `TASK_SAVE_RECEIPT_KEEPS_INBOX_AS_APPROVAL_QUEUE`.
+
+The saved task receipt makes the final-confirmed save result visible without turning Inbox into a completion dashboard. It stays inside the existing assistant handoff area and reports the concrete saved object instead of adding another route-level status surface.
+
+What works:
+- The receipt shows the task title and list immediately after `Confirm and save task`.
+- The boundary copy is still close to the receipt: no email, notification, calendar item, note, memory, or follow-up was created.
+- Demo review mode remains honest by saying no signed-in task save happened.
+
+Design risk:
+- Inbox is still the densest assistant surface. The next Stage 13 task should tighten task-only boundary language or reduce receipt copy before adding any new saved-action surface.
+
+---
+
+## Verdict
 READY_FOR_STAGE_13
 
 ## Stage 12 Design Proof - 2026-05-11

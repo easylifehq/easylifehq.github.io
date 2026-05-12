@@ -5090,28 +5090,90 @@ textarea::placeholder {
 }
 
 .assistant-task-save-confirmation p,
-.assistant-task-save-message {
+.assistant-task-save-receipt,
+.assistant-task-save-receipt p {
   margin: 0;
   color: var(--ui-text-secondary, var(--shell-muted));
   font-size: 0.84rem;
   line-height: 1.4;
 }
 
-.assistant-task-save-message {
-  padding: 0.56rem 0.65rem;
+.assistant-task-save-receipt {
+  display: grid;
+  gap: 0.62rem;
+  padding: 0.66rem;
   border-radius: 8px;
   border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
   background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 72%, transparent);
 }
 
-.assistant-task-save-message-saved {
+.assistant-task-save-receipt-saved {
   border-color: color-mix(in srgb, #1f8f6a 34%, var(--ui-border-subtle, var(--shell-card-border)));
   background: color-mix(in srgb, #1f8f6a 10%, var(--ui-bg-card, var(--shell-input-bg)));
 }
 
-.assistant-task-save-message-blocked {
+.assistant-task-save-receipt-blocked {
   border-color: color-mix(in srgb, #b86b2b 34%, var(--ui-border-subtle, var(--shell-card-border)));
   background: color-mix(in srgb, #b86b2b 9%, var(--ui-bg-card, var(--shell-input-bg)));
+}
+
+.assistant-task-save-receipt-header {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.assistant-task-save-receipt-header span,
+.assistant-task-save-receipt-grid dt {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.assistant-task-save-receipt-header strong {
+  min-width: 0;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.98rem;
+  line-height: 1.16;
+}
+
+.assistant-task-save-receipt-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0;
+}
+
+.assistant-task-save-receipt-grid div {
+  display: grid;
+  gap: 0.12rem;
+  padding: 0.46rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 68%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 70%, transparent);
+}
+
+.assistant-task-save-receipt-grid dd {
+  margin: 0;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.82rem;
+  font-weight: 760;
+}
+
+.assistant-task-save-receipt-notes,
+.assistant-task-save-receipt-boundary {
+  padding: 0.48rem 0.55rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 68%, transparent);
+}
+
+.assistant-task-save-receipt-boundary {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-weight: 760;
 }
 
 .assistant-suggestion-actions {
@@ -5290,6 +5352,15 @@ textarea::placeholder {
   .assistant-task-save-confirmation {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .assistant-task-save-receipt-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .assistant-task-save-receipt-grid {
+    grid-template-columns: 1fr;
   }
 
   .easylist-inbox-command {

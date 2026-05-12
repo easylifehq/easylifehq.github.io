@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 13 saved task receipt
+
+- Task attempted: After a final-confirmed assistant task save, show a clear receipt so the user knows exactly what happened.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4216` and inspected `/app/easylist/add?demo=1` with headless Chromium. Selected `Task draft`, clicked `Preview draft`, clicked `Preview task row handoff`, clicked `Confirm and save task`, and verified the receipt. Screenshot saved at `.codex-logs/stage13-task2-saved-task-receipt.png`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Receipt behavior:
+  - The post-confirmation receipt shows the saved task title, list, kind, due date, and minutes.
+  - In demo review mode, the receipt still says no signed-in task save happened.
+  - The receipt explicitly says no email, notification, calendar item, note, memory, or follow-up was created.
+- No-extra-write guarantee: This task only changes the visible receipt around the existing task save path. It does not add another write path, save notes, save plans, create reminders, create follow-ups, send email, schedule calendar items, change backend/auth/Firebase config, add dependencies, touch package files, deploy, or generate app output.
+- Follow-up needed: Stage 13 Task 3 should tighten the task-only save boundary and decide whether the saved receipt is enough before any non-task save path is considered.
+
 ## 2026-05-12 - Stage 13 final-confirmed task save handoff
 
 - Task attempted: Let the user save an approved assistant task handoff only after a final explicit confirmation.

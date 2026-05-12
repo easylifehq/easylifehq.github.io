@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 13 Saved Task Receipt
+
+- Task: Saved task receipt.
+- Result: Passed local UI implementation, build, and route inspection.
+- Magic signal: saved-task-receipt-visible
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4216`, selected `Task draft`, clicked `Preview draft`, clicked `Preview task row handoff`, clicked `Confirm and save task`, and verified `.assistant-task-save-receipt`. Screenshot saved at `.codex-logs/stage13-task2-saved-task-receipt.png`.
+- Receipt evidence: receipt shows `Reply to Maya about Friday plans`, list `Main`, kind, due date, and minutes.
+- Demo guard: `?demo=1` still reports that no signed-in task save happened.
+- Boundary evidence: receipt says no email, notification, calendar item, note, memory, or follow-up was created.
+- No-extra-write guarantee: no additional save path, note save, plan save, reminder, follow-up, external action, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was added.
+- Follow-up: Stage 13 Task 3 should tighten task-only save boundary copy before expanding beyond task saves.
+
 ## 2026-05-12 - Stage 13 Final-Confirmed Task Save Handoff
 
 - Task: Final-confirmed task save handoff.

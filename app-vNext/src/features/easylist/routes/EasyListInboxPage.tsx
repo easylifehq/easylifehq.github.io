@@ -563,9 +563,46 @@ export function EasyListInboxPage() {
                 </button>
               </div>
               {taskSaveConfirmation ? (
-                <p className={`assistant-task-save-message assistant-task-save-message-${taskSaveConfirmation.status}`}>
-                  {taskSaveConfirmation.message}
-                </p>
+                <article
+                  className={`assistant-task-save-receipt assistant-task-save-receipt-${taskSaveConfirmation.status}`}
+                  aria-label="Task save receipt"
+                >
+                  <div className="assistant-task-save-receipt-header">
+                    <span>
+                      {taskSaveConfirmation.status === "saved"
+                        ? "Task saved"
+                        : taskSaveConfirmation.status === "saving"
+                          ? "Saving task"
+                          : "Task save receipt preview"}
+                    </span>
+                    <strong>{taskSaveConfirmation.title || "Untitled task"}</strong>
+                  </div>
+                  <dl className="assistant-task-save-receipt-grid">
+                    <div>
+                      <dt>List</dt>
+                      <dd>{taskSaveConfirmation.listName}</dd>
+                    </div>
+                    <div>
+                      <dt>Kind</dt>
+                      <dd>{taskSaveConfirmation.itemKind}</dd>
+                    </div>
+                    <div>
+                      <dt>Due</dt>
+                      <dd>{taskSaveConfirmation.dueDate || "None"}</dd>
+                    </div>
+                    <div>
+                      <dt>Minutes</dt>
+                      <dd>{taskSaveConfirmation.estimatedLength || "Unset"}</dd>
+                    </div>
+                  </dl>
+                  {taskSaveConfirmation.notes ? (
+                    <p className="assistant-task-save-receipt-notes">{taskSaveConfirmation.notes}</p>
+                  ) : null}
+                  <p className="assistant-task-save-receipt-message">{taskSaveConfirmation.message}</p>
+                  <p className="assistant-task-save-receipt-boundary">
+                    No email, notification, calendar item, note, memory, or follow-up was created.
+                  </p>
+                </article>
               ) : null}
             </article>
           ) : null}
