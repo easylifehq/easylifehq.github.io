@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+INBOX_TASK_RECEIPT_IS_EASIER_TO_SCAN
+
+## Stage 15 Task 1 Design Review - 2026-05-12
+
+Verdict: `INBOX_TASK_RECEIPT_IS_EASIER_TO_SCAN`.
+
+Inbox keeps the same final-confirmed task save behavior, but the confirmation now reads faster. The full excluded-action list moved out of the confirmation and the receipt gained a compact `Only saved: Task` field, which makes the result easier to scan after the click.
+
+What works:
+- The confirmation still requires `Confirm and save task`.
+- The receipt still shows title, list, kind, due date, minutes, and the task-only boundary.
+- The new `Only saved: Task` field makes the receipt more scannable.
+- Inbox remains an intake/approval queue; no completion dashboard was added.
+
+Design risk:
+- The receipt still carries necessary safety copy. Stage 15 should keep simplifying around the edges, not remove the core no-note/no-plan/no-reminder/no-follow-up/no-external-action boundary.
+
+---
+
+## Verdict
 READY_FOR_STAGE_15
 
 ## Stage 14 Design Proof - 2026-05-12

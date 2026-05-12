@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 15 Simplify Inbox Task-Save Receipt
+
+- Task: Simplify Inbox task-save receipt.
+- Result: Passed copy/UI implementation, build, and route inspection.
+- Magic signal: task-receipt-easier-to-scan
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4225`, selected `Task draft`, clicked `Preview draft`, clicked `Preview task-only save row`, clicked `Confirm and save task`, and verified `.assistant-task-save-receipt`. Screenshot saved at `.codex-logs/stage15-task1-inbox-task-save-receipt.png`.
+- Simplification evidence: confirmation now says `Everything else stays preview-only`; receipt includes `Only saved: Task`.
+- Boundary evidence: receipt still says no note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory was created.
+- No behavior change: existing task save behavior is unchanged; no note save, plan save, reminder save, follow-up save, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 14 Proof Packet
 
 - Task: Stage 14 proof packet.

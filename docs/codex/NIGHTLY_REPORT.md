@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 15 simplify Inbox task-save receipt
+
+- Task attempted: Make the Inbox task-save confirmation and receipt easier to scan without weakening the task-only boundary.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4225` and inspected `/app/easylist/add?demo=1` with headless Chromium. Selected `Task draft`, clicked `Preview draft`, clicked `Preview task-only save row`, clicked `Confirm and save task`, and verified the receipt. Screenshot saved at `.codex-logs/stage15-task1-inbox-task-save-receipt.png`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Simplification:
+  - The final confirmation now says `Everything else stays preview-only` instead of repeating the full excluded-action list.
+  - The receipt now includes a compact `Only saved: Task` field.
+  - The full boundary remains on the receipt: no note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory was created.
+- Guardrails preserved: Existing task save behavior is unchanged. No note save, plan save, reminder save, follow-up save, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 14 proof packet
 
 - Task attempted: Prove whether user-approved task and note save paths are trustworthy before expanding beyond tasks/notes.

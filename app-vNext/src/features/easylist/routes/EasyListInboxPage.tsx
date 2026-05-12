@@ -568,8 +568,7 @@ export function EasyListInboxPage() {
                   <strong>Save one task to {selectedListName}</strong>
                   <p className="assistant-task-save-boundary">
                     Task save only: `{taskHandoffPreview.title || "Untitled task"}` can be saved as one{" "}
-                    {taskHandoffPreview.itemKind}. Note/context saves require Notes final confirmation; plans,
-                    reminders, follow-ups, email, calendar, notifications, sync, and memory stay preview-only.
+                    {taskHandoffPreview.itemKind}. Everything else stays preview-only.
                   </p>
                 </div>
                 <button
@@ -613,13 +612,17 @@ export function EasyListInboxPage() {
                       <dt>Minutes</dt>
                       <dd>{taskSaveConfirmation.estimatedLength || "Unset"}</dd>
                     </div>
+                    <div className="assistant-task-save-receipt-scope">
+                      <dt>Only saved</dt>
+                      <dd>Task</dd>
+                    </div>
                   </dl>
                   {taskSaveConfirmation.notes ? (
                     <p className="assistant-task-save-receipt-notes">{taskSaveConfirmation.notes}</p>
                   ) : null}
                   <p className="assistant-task-save-receipt-message">{taskSaveConfirmation.message}</p>
                   <p className="assistant-task-save-receipt-boundary">
-                    Task save only: no email, notification, calendar item, note, memory, reminder, plan, or follow-up was created.
+                    No note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory was created.
                   </p>
                 </article>
               ) : null}
