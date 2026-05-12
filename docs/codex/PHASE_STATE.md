@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: stage-16-people-places-memory-proof
+Current Phase: stage-17-anti-annoyance-planning
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Add privacy-light People + Places memory to EasyContacts so the assistant can remember where people live or are moving.
+Primary Action: Remove the five visible annoyances most likely to make a human reviewer distrust the assistant before adding more features.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 16 tasks must stay inside EasyContacts People + Places memory and must not add exact addresses, maps, geocoding, autonomous actions, hidden writes, real memory, external sync, email, notifications, calendar sync, reminders, follow-ups, model calls, new saved object types outside people/place labels, or broad persistence.
+Complexity Budget: Stage 17 tasks must remove, shorten, collapse, hide, or demote existing clutter. They must not add new feature surfaces beyond consolidation, copy repair, and visual trust cleanup.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_HUMAN_REVIEW
-Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
+Parking State: ACTIVE_STAGE_17_REPAIR_PLAN
+Evidence Required: build proof, six-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 16 People + Places Memory proof says READY_FOR_HUMAN_REVIEW. Use the Stage 17 decision gate only after human review notes or a new explicit bounded mission.
+Next Phase Criteria: Complete the five Stage 17 anti-annoyance tasks, then run a blunt proof packet that ends READY_FOR_HUMAN_REVIEW, NEEDS_ONE_MORE_ANTI_ANNOYANCE_PASS, or NOT_READY_FOR_HUMAN_REVIEW.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-12 - Stage 16 People + Places Memory proof packet completed with READY_FOR_HUMAN_REVIEW.
+Updated At: 2026-05-12 - Stage 17 Anti-Annoyance task packet created from blunt product scan.
 
 ## Assistant Brain Gate
 
@@ -93,7 +93,17 @@ Stage 16 may add privacy-light people/place labels to EasyContacts: current city
 
 Stage 17 decision source: docs/codex/EASYLIFE_STAGE_17_DECISION_GATE.md
 
-Stage 16 proof result: READY_FOR_HUMAN_REVIEW. Do not create active Stage 17 implementation tasks until human review notes or a new explicit bounded mission chooses one direction from the Stage 17 decision gate.
+Stage 16 proof result: READY_FOR_HUMAN_REVIEW.
+
+## Stage 17 Anti-Annoyance Gate
+
+Stage 17 source: docs/codex/EASYLIFE_STAGE_17_ANTI_ANNOYANCE_PLAN.md
+
+Prepared Stage 17 queue: docs/codex/NEXT_5_TASKS.md contains exactly five anti-annoyance tasks.
+
+Stage 17 is active by explicit user mission after a blunt product scan found likely human-review frustrations. Stage 17 may tighten Today command copy, consolidate Contacts / People + Places, remove Future map filler, repair Notes/Memory language, and clean up Settings assistant chrome. It must not add new feature surfaces beyond consolidation, copy repair, and visual trust cleanup. It must not add backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, model calls, real memory, maps, geocoding, exact addresses, device location, or real personal data.
+
+Stage 17 proof must inspect Today, Inbox, Plan, Notes, Contacts, and Settings and name remaining annoyances honestly.
 
 ## Phase Order
 

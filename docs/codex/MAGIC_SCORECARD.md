@@ -2,6 +2,22 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 17 Anti-Annoyance Task Packet
+
+- Task: Create Stage 17 Anti-Annoyance task packet.
+- Result: Passed docs-only Stage 17 packet creation and build acceptance.
+- Magic signal: anti-annoyance-queue-ready
+- Changed files:
+  - `docs/codex/EASYLIFE_STAGE_17_ANTI_ANNOYANCE_PLAN.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five Stage 17 Task Contract V2-compatible tasks.
+- Product evidence: tasks directly map to the blunt scan findings for Today, Contacts, Future map filler, Notes/Memory language, and Settings.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs-only packet; no app UI, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, persistence changes, external actions, model calls, real memory, maps, geocoding, exact addresses, device location, or real personal data changed.
+
 ## 2026-05-12 - Stage 16 People + Places Proof
 
 - Task: Create Stage 16 People + Places proof packet.

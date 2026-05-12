@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 17 Anti-Annoyance task packet
+
+- Task attempted: Turn the blunt product scan into a focused Stage 17 repair plan before adding more features.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_17_ANTI_ANNOYANCE_PLAN.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Stage 17 mission: remove the five annoyances most likely to frustrate a human reviewer before adding more features.
+- Active queue: exactly five Task Contract V2-compatible tasks covering Today command copy, Contacts consolidation, Future map filler removal, Notes/Memory language repair, and Settings assistant cleanup.
+- Queue validation: `NEXT_5_TASKS.md` contains exactly five unchecked active Stage 17 tasks.
+- Boundary preserved: no app UI was edited. No backend/auth/Firebase rules/config, dependencies, package files, deploy config, generated output, secrets, persistence changes, external actions, model calls, real memory, maps, geocoding, exact addresses, device location, or real personal data were added.
+
 ## 2026-05-12 - Stage 16 People + Places proof packet
 
 - Task attempted: Prove whether People + Places Memory is ready for human review before any map/geocoding work.
