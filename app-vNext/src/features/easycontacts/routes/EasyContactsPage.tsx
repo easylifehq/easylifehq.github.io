@@ -49,6 +49,22 @@ function getPlaceSummary(contact: EasyContactRecord) {
   return place;
 }
 
+function PlaceMemoryBlock({ contact, compact = false }: { contact: EasyContactRecord; compact?: boolean }) {
+  const currentPlace = [contact.currentCity, contact.region].filter(Boolean).join(" · ");
+  const lastKnownIsDifferent = contact.lastKnownPlace && contact.lastKnownPlace !== contact.currentCity;
+
+  return (
+    <span className={`contact-place-memory${compact ? " contact-place-memory-compact" : ""}`} aria-label="Place memory">
+      <span className="contact-place-memory-label">Place memory</span>
+      <strong>{currentPlace || contact.lastKnownPlace || "No city or region saved"}</strong>
+      {contact.movedRecently && contact.lastKnownPlace ? <small>Moved recently from {contact.lastKnownPlace}</small> : null}
+      {!contact.movedRecently && lastKnownIsDifferent ? <small>Last known near {contact.lastKnownPlace}</small> : null}
+      {contact.visitNote ? <small>Visit note: {contact.visitNote}</small> : null}
+      {!compact ? <small>No exact address needed.</small> : null}
+    </span>
+  );
+}
+
 export function EasyContactsPage() {
   const { contacts, isLoading, error, addContact, saveContact, archiveCurrentContact } = useEasyContacts();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -194,12 +210,12 @@ export function EasyContactsPage() {
 
         <div className="contacts-focus-strip" aria-label="Contact focus">
           <span>{dueContacts.length ? `${dueContacts.length} follow-up${dueContacts.length === 1 ? "" : "s"} need attention` : "No follow-ups due right now"}</span>
-          <span>{warmContacts.length ? `${warmContacts.length} warm relationships in play` : "No warm relationships yet"}</span>
+          <span>{warmContacts.length ? `${warmContacts.length} people to keep close` : "No warm people yet"}</span>
           <span>{recentContacts.length ? `${recentContacts.length} recently touched contacts` : "No recent contact activity yet"}</span>
         </div>
       </PageSection>
 
-      <PageSection eyebrow="Today" title="Relationship hub" description="Lead with who needs attention, keep warm people close, and let the full directory live below.">
+      <PageSection eyebrow="Today" title="People to check on" description="Lead with who needs attention, remember where people are, and keep the larger list below.">
         <div className="contacts-focus-grid">
           <article className="contacts-focus-panel">
             <div className="contacts-focus-panel-top">
@@ -214,10 +230,10 @@ export function EasyContactsPage() {
                 <button key={contact.id} type="button" className="contact-row-card" onClick={() => setSelectedContact(contact)}>
                   <strong>{contact.fullName || "Unnamed contact"}</strong>
                   <span>{contact.company || contact.relationship || "Contact"}</span>
-                  <small>{getPlaceSummary(contact)}</small>
+                  <PlaceMemoryBlock contact={contact} compact />
                   <small>{formatRelativeDate(contact.nextFollowUpAt)}</small>
                 </button>
-              )) : <div className="empty-card-vnext">Nothing overdue. Your network is caught up.</div>}
+              )) : <div className="empty-card-vnext">Nothing overdue. Your people list is caught up.</div>}
             </div>
           </article>
 
@@ -234,8 +250,8 @@ export function EasyContactsPage() {
                 <button key={contact.id} type="button" className="contact-row-card" onClick={() => setSelectedContact(contact)}>
                   <strong>{contact.fullName || "Unnamed contact"}</strong>
                   <span>{contact.company || contact.relationship || "Contact"}</span>
-                  <small>{getPlaceSummary(contact)}</small>
-                  <small>{contact.visitNote || contact.role || contact.status}</small>
+                  <PlaceMemoryBlock contact={contact} compact />
+                  <small>{contact.role || contact.status}</small>
                 </button>
               )) : <div className="empty-card-vnext">Add a few people you want to stay in touch with.</div>}
             </div>
@@ -248,7 +264,7 @@ export function EasyContactsPage() {
         title="People memory map"
         description="A quick visual pass over your people and place labels. This is not a live map or geocoded view."
       >
-        <div className="contacts-bubble-map" role="list" aria-label="Contact map">
+        <div className="contacts-bubble-map" role="list" aria-label="People place memory map">
           {bubbleContacts.length ? (
             bubbleContacts.map((contact, index) => (
               <button
@@ -268,7 +284,7 @@ export function EasyContactsPage() {
         </div>
       </PageSection>
 
-      <PageSection eyebrow="Directory" title="Your network" description="Search, scan, and open any person when you want the full details.">
+      <PageSection eyebrow="People" title="People you know" description="Search, scan, and open anyone when you want the fuller memory card.">
         <div className="toolbar-row">
           <input className="search-input" aria-label="Search contacts" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search contacts" />
         </div>
@@ -285,11 +301,10 @@ export function EasyContactsPage() {
               <p>{contact.company || "No company"}{contact.role ? ` | ${contact.role}` : ""}</p>
               <p>{contact.relationship || "No relationship label yet"}</p>
               <div className="contact-card-meta-row">
-                <small>{getPlaceSummary(contact)}</small>
                 <small>{formatRelativeDate(contact.nextFollowUpAt)}</small>
                 <small>{contact.lastContactedAt ? `Last touch ${contact.lastContactedAt}` : "No contact logged yet"}</small>
               </div>
-              {contact.visitNote ? <p>{contact.visitNote}</p> : null}
+              <PlaceMemoryBlock contact={contact} />
             </button>
           )) : <div className="empty-card-vnext">No contacts match this filter yet.</div>}
         </div>

@@ -2,6 +2,22 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 16 Task 2 Place Memory Block
+
+- Task: Add calm place memory blocks to EasyContacts list/detail surfaces.
+- Result: Passed build, local route inspection, and copy boundary review.
+- Magic signal: contact-place-memory-block-visible
+- Changed files:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Route evidence: `/app/easycontacts?demo=1` showed place memory blocks with Portland/Denver city-region labels, moved-recently/last-known-place copy, visit notes, and a "No exact address needed" boundary in the fuller people cards.
+- Copy evidence: CRM-like "Your network" and "Relationship hub" wording was softened to "People you know" and "People to check on."
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no exact address language, map API, geocoding, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets were added.
+
 ## 2026-05-12 - Stage 16 Task 1 Contact Place Memory Fields
 
 - Task: Add EasyContacts contact place memory fields.

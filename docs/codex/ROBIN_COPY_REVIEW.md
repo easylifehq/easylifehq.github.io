@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+PLACE_MEMORY_COPY_IS_PRIVACY_LIGHT
+
+## Stage 16 Task 2 Copy Review - 2026-05-12
+
+Verdict: `PLACE_MEMORY_COPY_IS_PRIVACY_LIGHT`.
+
+The new EasyContacts place memory copy reads like people/place context rather than a CRM record. It shows city/region, moved-recently context, last-known-place context, and visit notes without asking for exact street addresses.
+
+What improved:
+- "Relationship hub" became "People to check on."
+- "Your network" became "People you know."
+- The fuller contact cards say "No exact address needed."
+- The browse section still says the place view is not a live map or geocoded view.
+
+Copy risk:
+- The page still has contact-management fields like company, relationship, and follow-up. That is acceptable for now because the Stage 16 change clearly frames place memory as lightweight context instead of a CRM.
+
+---
+
+## Verdict
 READY_FOR_HUMAN_REVIEW
 
 ## Stage 15 Copy Proof - 2026-05-12

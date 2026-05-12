@@ -8596,6 +8596,48 @@ button.calendar-detail-card:disabled {
   color: var(--ui-text-muted, var(--shell-muted-text));
 }
 
+.contact-place-memory {
+  display: grid;
+  gap: 0.22rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent) 18%, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card, #fffdf9) 86%, var(--app-accent) 14%);
+  color: var(--ui-text-primary, inherit);
+}
+
+.contact-place-memory-label {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.contact-place-memory strong {
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.contact-place-memory small {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  line-height: 1.35;
+}
+
+.contact-place-memory-compact {
+  gap: 0.1rem;
+  padding: 0.5rem 0.55rem;
+  background: color-mix(in srgb, var(--ui-bg-card, #fffdf9) 78%, var(--app-accent) 22%);
+}
+
+.contact-place-memory-compact .contact-place-memory-label {
+  font-size: 0.68rem;
+}
+
+.contact-place-memory-compact strong {
+  font-size: 0.84rem;
+}
+
 .contact-row-card:hover,
 .contact-row-card:focus-visible {
   transform: translateY(-1px);

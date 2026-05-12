@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 16 Task 2 place memory block
+
+- Task attempted: Make each contact show a calm place memory block so the user can remember where people live or moved.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected: `http://127.0.0.1:4231/app/easycontacts?demo=1`.
+- Files changed:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product evidence: follow-up and warm-contact rows now show compact place memory blocks; the people list shows fuller blocks with city/region, moved-recently or last-known-place text, visit notes, and "No exact address needed."
+- Copy simplification: softened CRM-like network language from "Your network" and "Relationship hub" toward "People you know" and "People to check on."
+- Boundary preserved: no exact street address language, map API, geocoding, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets were added.
+
 ## 2026-05-12 - Stage 16 Task 1 contact place memory fields
 
 - Task attempted: Let EasyContacts represent where someone lives or recently moved in a privacy-light way.
