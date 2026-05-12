@@ -2,6 +2,23 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 17 Task 2 Contacts People + Places
+
+- Task: Consolidate Contacts People + Places.
+- Result: Passed build and local route inspection.
+- Magic signal: contacts-people-places-less-crm
+- Changed files:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product evidence: top Contacts path now centers on `Needs attention`, `Where people are`, and `Near a place` instead of stats, company counts, duplicated focus strips, and repeated warm-contact cards.
+- Copy evidence: `Company or context` became `Context`; `Add contact` became `Add person`; compact place rows no longer repeat the `Place memory` label.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: `/app/easycontacts?demo=1` rendered locally with only existing React Router future-flag warnings.
+- Boundary evidence: no exact addresses, map API, geocoding, device location, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, real personal data, or persistence behavior changes were added.
+
 ## 2026-05-12 - Stage 17 Task 1 Today Command Surface
 
 - Task: Simplify Today command surface anti-annoyance.

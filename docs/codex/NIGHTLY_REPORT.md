@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 17 Task 2 Contacts People + Places consolidation
+
+- Task attempted: Make People + Places useful and personal without making Contacts feel like a bloated CRM dashboard.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected: `http://127.0.0.1:4231/app/easycontacts?demo=1` in local demo mode.
+- Files changed:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product simplification: replaced the top stat grid and duplicate focus strips with one `People memory` overview centered on who needs attention, where people are, and who is near a place.
+- Clutter removed/demoted: removed visible `Total contacts`, `Follow-ups due`, `Active this month`, `Companies`, `People to check on`, `Active relationships`, and the separate `Visiting somewhere?` section from the first path.
+- Copy repair: changed `Company or context` to `Context`, changed `Add contact` to `Add person`, and removed compact repeated `Place memory` labels from quick review rows.
+- Boundary preserved: place fields and existing contact behavior remain intact. No exact addresses, map API, geocoding, device location, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, real personal data, or persistence behavior changes were added.
+
 ## 2026-05-12 - Stage 17 Task 1 Today command surface anti-annoyance
 
 - Task attempted: Make Today feel like a slick assistant command surface instead of a proof packet.

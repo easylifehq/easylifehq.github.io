@@ -1,6 +1,27 @@
 # Simon Design Review
 
 ## Verdict
+CONTACTS_PEOPLE_PLACES_IS_LESS_CRM_LIKE
+
+## Stage 17 Task 2 Design Review - 2026-05-12
+
+Verdict: `CONTACTS_PEOPLE_PLACES_IS_LESS_CRM_LIKE`.
+
+Contacts now opens on one People memory surface instead of a dashboard stack. The first screen has three clear jobs: people needing attention, where people are, and who might be near a place. The company/stat/reporting language is pushed out of the first impression.
+
+What works:
+- The old stats grid is gone from the top path.
+- The duplicate focus strips and separate `People to check on` section are gone.
+- The place review prompt is part of the first People memory surface instead of a standalone block.
+- `Company or context` is softened to `Context`, and `Add contact` is now `Add person`.
+- Desktop inspection showed the first screen reading as people/place memory rather than CRM reporting.
+
+Design risk:
+- The future map preview still exists below People by place. Stage 17 Task 3 should remove, collapse, or reframe it so the page stops carrying future-feature filler.
+
+---
+
+## Verdict
 TODAY_COMMAND_SURFACE_IS_LESS_PROOFY
 
 ## Stage 17 Task 1 Design Review - 2026-05-12

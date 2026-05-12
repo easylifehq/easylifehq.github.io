@@ -50,12 +50,12 @@ function getPlaceSummary(contact: EasyContactRecord) {
 }
 
 function PlaceMemoryBlock({ contact, compact = false }: { contact: EasyContactRecord; compact?: boolean }) {
-  const currentPlace = [contact.currentCity, contact.region].filter(Boolean).join(" / ");
+  const currentPlace = [contact.currentCity, contact.region].filter(Boolean).join(" · ");
   const lastKnownIsDifferent = contact.lastKnownPlace && contact.lastKnownPlace !== contact.currentCity;
 
   return (
     <span className={`contact-place-memory${compact ? " contact-place-memory-compact" : ""}`} aria-label="Place memory">
-      <span className="contact-place-memory-label">Place memory</span>
+      {!compact ? <span className="contact-place-memory-label">Place memory</span> : null}
       <strong>{currentPlace || contact.lastKnownPlace || "No city or region saved"}</strong>
       {contact.movedRecently && contact.lastKnownPlace ? <small>Moved recently from {contact.lastKnownPlace}</small> : null}
       {!contact.movedRecently && lastKnownIsDifferent ? <small>Last known near {contact.lastKnownPlace}</small> : null}
@@ -100,16 +100,13 @@ export function EasyContactsPage() {
     () => filteredContacts.filter((contact) => isFollowUpNeeded(contact.nextFollowUpAt)).slice(0, 6),
     [filteredContacts]
   );
-  const warmContacts = useMemo(
-    () => filteredContacts.filter((contact) => contact.status === "warm" || contact.status === "active").slice(0, 6),
-    [filteredContacts]
+  const placeMemoryCount = useMemo(
+    () => contacts.filter((contact) => contact.currentCity || contact.region || contact.lastKnownPlace).length,
+    [contacts]
   );
-  const recentContacts = useMemo(
-    () =>
-      [...filteredContacts]
-        .sort((left, right) => (right.updatedAt?.getTime() || 0) - (left.updatedAt?.getTime() || 0))
-        .slice(0, 8),
-    [filteredContacts]
+  const movedRecentlyCount = useMemo(
+    () => contacts.filter((contact) => contact.movedRecently).length,
+    [contacts]
   );
   const peopleByPlace = useMemo(() => {
     const groups = new Map<string, EasyContactRecord[]>();
@@ -140,17 +137,6 @@ export function EasyContactsPage() {
       )
       .slice(0, 3);
   }, [filteredContacts, placeReviewQuery]);
-  const activeThisMonth = useMemo(() => {
-    const monthStart = new Date();
-    monthStart.setDate(1);
-    monthStart.setHours(0, 0, 0, 0);
-    return contacts.filter((contact) => {
-      if (!contact.lastContactedAt) return false;
-      const contactDate = new Date(contact.lastContactedAt);
-      return !Number.isNaN(contactDate.getTime()) && contactDate >= monthStart;
-    }).length;
-  }, [contacts]);
-
   useEffect(() => {
     if (!contactParam) return;
     const matchingContact = contacts.find((contact) => contact.id === contactParam);
@@ -183,20 +169,76 @@ export function EasyContactsPage() {
 
   return (
     <>
-      <PageSection eyebrow="People memory" title="Contacts" description="Keep people close, remember where they are, and know who to check in with when a place comes up.">
+      <PageSection eyebrow="People + places" title="People memory" description="See who needs attention, where people are, and who might be near a place.">
         {error ? <p className="error-copy">{error}</p> : null}
 
-        <div className="stats-grid">
-          <article className="stat-card-vnext"><span>Total contacts</span><strong>{contacts.length}</strong></article>
-          <article className="stat-card-vnext"><span>Follow-ups due</span><strong>{contacts.filter((contact) => isFollowUpNeeded(contact.nextFollowUpAt)).length}</strong></article>
-          <article className="stat-card-vnext"><span>Active this month</span><strong>{activeThisMonth}</strong></article>
-          <article className="stat-card-vnext"><span>Companies</span><strong>{new Set(contacts.map((contact) => contact.company).filter(Boolean)).size}</strong></article>
-        </div>
+        <div className="contacts-memory-overview" aria-label="People and place overview">
+          <article className="contacts-memory-panel">
+            <div className="contacts-memory-panel-top">
+              <div>
+                <p className="eyebrow">Needs attention</p>
+                <h3>{dueContacts.length ? `${dueContacts.length} due now` : "Clear for now"}</h3>
+              </div>
+              <span className="chip-pill">{contacts.length}</span>
+            </div>
+            <div className="contacts-overview-list">
+              {dueContacts.length ? dueContacts.slice(0, 3).map((contact) => (
+                <button key={contact.id} type="button" className="contacts-place-person" onClick={() => setSelectedContact(contact)}>
+                  <strong>{contact.fullName || "Unnamed contact"}</strong>
+                  <span>{formatRelativeDate(contact.nextFollowUpAt)}</span>
+                </button>
+              )) : <p className="helper-copy">No one is overdue. Keep the list quiet.</p>}
+            </div>
+          </article>
 
-        <div className="contacts-focus-strip" aria-label="People and place memory">
-          <span>{contacts.filter((contact) => contact.currentCity || contact.region).length} with place memory</span>
-          <span>{contacts.filter((contact) => contact.movedRecently).length} moved recently</span>
-          <span>No exact addresses required</span>
+          <article className="contacts-memory-panel">
+            <div className="contacts-memory-panel-top">
+              <div>
+                <p className="eyebrow">Where people are</p>
+                <h3>{placeMemoryCount} place labels</h3>
+              </div>
+              <span className="chip-pill">{movedRecentlyCount} moved</span>
+            </div>
+            <p className="helper-copy">Current city, region, last known place, and visit notes. No exact addresses.</p>
+            <div className="contacts-place-mini-list">
+              {peopleByPlace.slice(0, 3).map((group) => (
+                <span key={group.place}>{group.place}: {group.contacts.length}</span>
+              ))}
+            </div>
+          </article>
+
+          <article className="contacts-memory-panel contacts-memory-panel-wide">
+            <div className="contacts-memory-panel-top">
+              <div>
+                <p className="eyebrow">Near a place</p>
+                <h3>{placeReviewMatches.length ? `${placeReviewMatches.length} possible match${placeReviewMatches.length === 1 ? "" : "es"}` : "Saved labels only"}</h3>
+              </div>
+              <span className="chip-pill">No map</span>
+            </div>
+            <label className="field-stack">
+              <span>Place to review</span>
+              <input
+                value={placeReviewQuery}
+                onChange={(event) => setPlaceReviewQuery(event.target.value)}
+                placeholder="Try Portland, Denver, or Pacific Northwest"
+              />
+            </label>
+            <div className="contacts-place-prompt-chips" aria-label="Example place prompts">
+              {["Portland, OR", "Denver, CO", "Pacific Northwest"].map((place) => (
+                <button key={place} type="button" className="ghost-button" onClick={() => setPlaceReviewQuery(place)}>
+                  {place}
+                </button>
+              ))}
+            </div>
+            <div className="contacts-overview-list">
+              {placeReviewMatches.length ? placeReviewMatches.map((contact) => (
+                <button key={contact.id} type="button" className="contacts-place-person" onClick={() => setSelectedContact(contact)}>
+                  <strong>{contact.fullName || "Unnamed contact"}</strong>
+                  <span>{getPlaceSummary(contact)}</span>
+                </button>
+              )) : <p className="helper-copy">This checks saved city, region, last known place, and visit notes. It does not use location or geocoding.</p>}
+            </div>
+          </article>
         </div>
 
         <form className="contacts-command-strip" onSubmit={handleQuickAdd}>
@@ -210,11 +252,11 @@ export function EasyContactsPage() {
             />
           </label>
           <label className="field-stack">
-            <span>Company or context</span>
+            <span>Context</span>
             <input
               value={draft.company}
               onChange={(event) => setDraft((current) => ({ ...current, company: event.target.value }))}
-              placeholder="Google, gym, soccer, class"
+              placeholder="Friend, gym, class, work"
             />
           </label>
           <label className="field-stack">
@@ -234,98 +276,9 @@ export function EasyContactsPage() {
             />
           </label>
           <button type="submit" className="primary-button">
-            Add contact
+            Add person
           </button>
         </form>
-
-        <div className="contacts-focus-strip" aria-label="Contact focus">
-          <span>{dueContacts.length ? `${dueContacts.length} follow-up${dueContacts.length === 1 ? "" : "s"} need attention` : "No follow-ups due right now"}</span>
-          <span>{warmContacts.length ? `${warmContacts.length} people to keep close` : "No warm people yet"}</span>
-          <span>{recentContacts.length ? `${recentContacts.length} recently touched contacts` : "No recent contact activity yet"}</span>
-        </div>
-      </PageSection>
-
-      <PageSection eyebrow="Today" title="People to check on" description="Lead with who needs attention, remember where people are, and keep the larger list below.">
-        <div className="contacts-focus-grid">
-          <article className="contacts-focus-panel">
-            <div className="contacts-focus-panel-top">
-              <div>
-                <p className="eyebrow">Follow up</p>
-                <h3>Due now</h3>
-              </div>
-              <span className="chip-pill">{dueContacts.length}</span>
-            </div>
-            <div className="contacts-focus-list">
-              {dueContacts.length ? dueContacts.map((contact) => (
-                <button key={contact.id} type="button" className="contact-row-card" onClick={() => setSelectedContact(contact)}>
-                  <strong>{contact.fullName || "Unnamed contact"}</strong>
-                  <span>{contact.company || contact.relationship || "Contact"}</span>
-                  <PlaceMemoryBlock contact={contact} compact />
-                  <small>{formatRelativeDate(contact.nextFollowUpAt)}</small>
-                </button>
-              )) : <div className="empty-card-vnext">Nothing overdue. Your people list is caught up.</div>}
-            </div>
-          </article>
-
-          <article className="contacts-focus-panel">
-            <div className="contacts-focus-panel-top">
-              <div>
-                <p className="eyebrow">Keep warm</p>
-                <h3>Active relationships</h3>
-              </div>
-              <span className="chip-pill">{warmContacts.length}</span>
-            </div>
-            <div className="contacts-focus-list">
-              {warmContacts.length ? warmContacts.map((contact) => (
-                <button key={contact.id} type="button" className="contact-row-card" onClick={() => setSelectedContact(contact)}>
-                  <strong>{contact.fullName || "Unnamed contact"}</strong>
-                  <span>{contact.company || contact.relationship || "Contact"}</span>
-                  <PlaceMemoryBlock contact={contact} compact />
-                  <small>{contact.role || contact.status}</small>
-                </button>
-              )) : <div className="empty-card-vnext">Add a few people you want to stay in touch with.</div>}
-            </div>
-          </article>
-        </div>
-      </PageSection>
-
-      <PageSection
-        eyebrow="Assistant prompt"
-        title="Visiting somewhere?"
-        description="Ask who you know near a place using saved freeform labels only. No live location, map, or geocoding."
-      >
-        <div className="contacts-place-prompt" aria-label="Who do I know near this place">
-          <div className="contacts-place-prompt-main">
-            <label className="field-stack">
-              <span>Place to review</span>
-              <input
-                value={placeReviewQuery}
-                onChange={(event) => setPlaceReviewQuery(event.target.value)}
-                placeholder="Try Portland, Denver, or Pacific Northwest"
-              />
-            </label>
-            <div className="contacts-place-prompt-chips" aria-label="Example place prompts">
-              {["Portland, OR", "Denver, CO", "Pacific Northwest"].map((place) => (
-                <button key={place} type="button" className="ghost-button" onClick={() => setPlaceReviewQuery(place)}>
-                  {place}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="contacts-place-prompt-result">
-            <p className="eyebrow">Saved labels only</p>
-            <strong>{placeReviewMatches.length ? `${placeReviewMatches.length} possible ${placeReviewMatches.length === 1 ? "person" : "people"} near ${placeReviewQuery}` : "No saved place label match yet"}</strong>
-            <span>This checks current city, region, last known place, and visit notes. It does not use exact addresses or device location.</span>
-            <div className="contacts-place-prompt-list">
-              {placeReviewMatches.map((contact) => (
-                <button key={contact.id} type="button" className="contacts-place-person" onClick={() => setSelectedContact(contact)}>
-                  <strong>{contact.fullName || "Unnamed contact"}</strong>
-                  <span>{getPlaceSummary(contact)}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
       </PageSection>
 
       <PageSection
