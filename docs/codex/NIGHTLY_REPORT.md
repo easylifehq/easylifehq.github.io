@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 17 Task 1 Today command surface anti-annoyance
+
+- Task attempted: Make Today feel like a slick assistant command surface instead of a proof packet.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Routes inspected:
+  - `http://127.0.0.1:4231/app/hq?demo=1` on desktop.
+  - `http://127.0.0.1:4231/app/hq?demo=1` at a 390px mobile viewport.
+- Files changed:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/hq/assistantCommandHints.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product simplification: removed the long slash-separated command example chain, changed the secondary first-viewport action from `Task-only confirm` to `Capture`, and compressed save-boundary copy into one calm line: `Inbox previews first. Tasks and notes still need confirmation.`
+- Visual repair: tightened Today command-card height and mobile wrapping so the first viewport reads as assistant read, next move, command, and context strip without clipped copy.
+- Boundary preserved: no persistence, routing, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, external actions, model calls, calendar sync, notifications, maps, or real memory behavior changed.
+
 ## 2026-05-12 - Stage 17 Anti-Annoyance task packet
 
 - Task attempted: Turn the blunt product scan into a focused Stage 17 repair plan before adding more features.

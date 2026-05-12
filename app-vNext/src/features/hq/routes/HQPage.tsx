@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { PageSection } from "@/components/ui/PageSection";
-import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
-import { buildLocalDraftReviewHint } from "@/features/assistant/localDraftBuilder";
 import { assistantCommandHintRow } from "@/features/hq/assistantCommandHints";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
@@ -46,14 +44,6 @@ export function HQPage() {
     { label: "Plan", value: `${todayEvents.length}` },
     { label: "Open", value: formatDuration(openMinutes) },
   ];
-  const todayIntentSuggestion = useMemo(
-    () => classifyAssistantIntent(assistantCommandHintRow),
-    []
-  );
-  const localDraftHint = useMemo(
-    () => buildLocalDraftReviewHint(todayIntentSuggestion),
-    [todayIntentSuggestion]
-  );
   const startHere = useMemo(() => {
     const firstDueTask = overdueTasks[0] || dueTodayTasks[0] || null;
     const firstOpenWindow = openWindows[0] || null;
@@ -62,8 +52,8 @@ export function HQPage() {
       return {
         label: firstDueTask.title || "Untitled task",
         reason: overdueTasks.length
-          ? "This is behind. Use Inbox to choose the next step; only a final confirmed task can save."
-          : "This is due today. Use Inbox to decide whether it needs the task-only final confirmation.",
+          ? "This is behind. Choose the next step in Inbox."
+          : "This is due today. Review it before adding more.",
         buttonLabel: "Review Inbox",
         to: "/app/easylist/add",
       };
@@ -71,7 +61,7 @@ export function HQPage() {
     if (quickWin) {
       return {
         label: quickWin.title || "Untitled task",
-        reason: `${quickWin.estimatedLength || 20} minutes. Review it in Inbox; final confirmation can save one task only.`,
+        reason: `${quickWin.estimatedLength || 20} minutes. Good for a small gap.`,
         buttonLabel: "Review Inbox",
         to: "/app/easylist/add",
       };
@@ -87,9 +77,9 @@ export function HQPage() {
       };
     }
     return {
-      label: "Remember the next note",
-      reason: "Everything looks calm. Review context in Notes; only final confirmation can save one note.",
-      buttonLabel: "Open Memory",
+      label: "Keep the next note close",
+      reason: "Everything looks calm. Review context in Notes.",
+      buttonLabel: "Open Notes",
       to: "/app/easynotes",
     };
   }, [dueTodayTasks, openWindows, overdueTasks, quickWin]);
@@ -232,18 +222,15 @@ export function HQPage() {
                 {startHere.buttonLabel.replace("Open ", "")}
               </Link>
               <Link to="/app/easylist/add" className="button-secondary">
-                Task-only confirm
+                Capture
               </Link>
             </div>
           </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
-            <span>Capture, classify, confirm safely</span>
+            <span>Command</span>
             <strong>{assistantCommandHintRow}</strong>
-            <small>
-              {localDraftHint.label}: {localDraftHint.title}. Save tasks in Inbox, notes in Notes; plans,
-              reminders, and follow-ups stay previews.
-            </small>
-            <em>Open Inbox</em>
+            <small>Inbox previews first. Tasks and notes still need confirmation.</small>
+            <em>Open</em>
           </button>
           <details className="hq-context-stack">
             <summary>

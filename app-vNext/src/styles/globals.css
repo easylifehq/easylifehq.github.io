@@ -8006,9 +8006,11 @@ button.calendar-detail-card:disabled {
 
 .app-theme-easyhq:not(.command-center-page) .hq-start-card > strong {
   grid-area: read;
+  min-width: 0;
   max-width: 26ch;
   font-size: clamp(1.55rem, 2.4vw, 2.25rem);
   letter-spacing: -0.01em;
+  overflow-wrap: break-word;
 }
 
 .app-theme-easyhq:not(.command-center-page) .hq-today-summary {
@@ -8056,7 +8058,7 @@ button.calendar-detail-card:disabled {
 
 .app-theme-easyhq:not(.command-center-page) .hq-natural-capture {
   grid-area: capture;
-  min-height: 64px;
+  min-height: 58px;
 }
 
 .app-theme-easyhq:not(.command-center-page) .hq-quick-actions {
@@ -13190,7 +13192,7 @@ button.calendar-detail-card:disabled {
 .app-theme-easyhq:not(.command-center-page) .hq-natural-capture {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  min-height: 3.45rem;
+  min-height: 3.2rem;
   background:
     linear-gradient(90deg, rgba(8, 20, 24, 0.04), transparent 45%),
     rgba(255, 255, 255, 0.58);
@@ -13204,8 +13206,8 @@ button.calendar-detail-card:disabled {
 .app-theme-easyhq:not(.command-center-page) .hq-natural-capture small {
   grid-column: 2;
   color: var(--ui-text-secondary, var(--shell-page-text));
-  font-size: 0.76rem;
-  max-width: 50rem;
+  font-size: 0.74rem;
+  max-width: 42rem;
 }
 
 .app-theme-easyhq:not(.command-center-page) .hq-natural-capture em {
@@ -13279,6 +13281,14 @@ button.calendar-detail-card:disabled {
 }
 
 @media (max-width: 760px) {
+  .app-theme-easyhq:not(.command-center-page),
+  .app-theme-easyhq:not(.command-center-page) .assistant-home,
+  .app-theme-easyhq:not(.command-center-page) .hq-start-card {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
   .app-theme-easyhq:not(.command-center-page) .hq-start-card {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -13297,9 +13307,14 @@ button.calendar-detail-card:disabled {
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-start-card > strong {
-    max-width: none;
+    display: block;
+    min-width: 0;
+    width: fit-content;
+    max-width: 24ch;
     font-size: 1.24rem;
     line-height: 1.12;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-today-summary {
@@ -13338,7 +13353,7 @@ button.calendar-detail-card:disabled {
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-natural-capture {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-natural-capture span,
@@ -13348,9 +13363,7 @@ button.calendar-detail-card:disabled {
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-natural-capture em {
-    grid-column: 2;
-    grid-row: 1 / span 3;
-    align-self: center;
+    display: none;
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-quick-actions,

@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+TODAY_COMMAND_SURFACE_IS_LESS_PROOFY
+
+## Stage 17 Task 1 Design Review - 2026-05-12
+
+Verdict: `TODAY_COMMAND_SURFACE_IS_LESS_PROOFY`.
+
+Today now behaves more like a compact command surface and less like an implementation proof packet. The first viewport keeps the assistant read, next move, capture/command affordance, and small context strip, while the save-boundary language is compressed into one calm line.
+
+What works:
+- The command card no longer prints the full slash-separated example chain.
+- The old `Task-only confirm` secondary action is now the simpler `Capture`.
+- The first viewport says the safety boundary once: `Inbox previews first. Tasks and notes still need confirmation.`
+- Desktop and 390px mobile review both showed the command card without clipped helper copy.
+
+Design risk:
+- The Today data is still demo-flavored, especially the `Reply to Maya about Friday plans` example. That is acceptable for this anti-annoyance task, but human review should still judge whether the sample content feels personal enough.
+
+---
+
+## Verdict
 STAGE_16_READY_FOR_HUMAN_REVIEW
 
 ## Stage 16 People + Places Design Proof - 2026-05-12

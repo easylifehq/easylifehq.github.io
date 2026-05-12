@@ -8,30 +8,28 @@ export const assistantCommandHints: AssistantCommandIntent[] = [
   {
     id: "capture",
     label: "Capture",
-    example: "Add a task for the bill tomorrow",
+    example: "Drop one loose thought",
   },
   {
     id: "plan",
     label: "Plan",
-    example: "Block 30 minutes for the proposal",
+    example: "Review today's open time",
   },
   {
     id: "summarize",
     label: "Summarize",
-    example: "Show the three things that need a decision",
+    example: "Show the next decision",
   },
   {
     id: "remember",
-    label: "Remember",
-    example: "Keep the dentist note close",
+    label: "Context",
+    example: "Keep a note close",
   },
   {
     id: "cleanup",
     label: "Clean up",
-    example: "Find overdue tasks I can reschedule",
+    example: "Rescue overdue work",
   },
 ];
 
-export const assistantCommandHintRow = assistantCommandHints
-  .map((hint) => hint.example)
-  .join(" / ");
+export const assistantCommandHintRow = "Drop one loose thought for review";

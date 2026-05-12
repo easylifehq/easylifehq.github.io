@@ -2,6 +2,23 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 17 Task 1 Today Command Surface
+
+- Task: Simplify Today command surface anti-annoyance.
+- Result: Passed build, desktop route inspection, and mobile viewport inspection.
+- Magic signal: today-command-less-proofy
+- Changed files:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/hq/assistantCommandHints.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product evidence: Today now uses `Command`, `Drop one loose thought for review`, and one short boundary line instead of the prior long example chain and proof-like save-lane explanation.
+- Design evidence: 390px mobile inspection showed the assistant read, next action, command affordance, and context strip without clipped command helper text.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no persistence, routing, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, external actions, model calls, calendar sync, notifications, maps, or real memory behavior changed.
+
 ## 2026-05-12 - Stage 17 Anti-Annoyance Task Packet
 
 - Task: Create Stage 17 Anti-Annoyance task packet.
