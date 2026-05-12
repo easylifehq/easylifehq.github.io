@@ -70,7 +70,7 @@ export function buildLocalDraftFromSuggestion(
     fields: buildDraftFields(suggestion, draftType),
     warnings: [
       `${statusLabel}. This ${draftTypeLabel.toLowerCase()} is not saved.`,
-      "No task, note, plan, reminder, follow-up, email, sync, schedule, or memory has been created.",
+      "No saved object or external action has been created.",
     ],
   };
 }
@@ -109,9 +109,9 @@ export function buildLocalDraftReviewHint(suggestion: AssistantIntentSuggestion)
 export const memoryDraftActionOptions: AssistantMemoryDraftActionOption[] = [
   {
     action: "remember",
-    label: "Remember",
+    label: "Keep context",
     draftType: "note",
-    summary: "Hold as an unsaved memory draft.",
+    summary: "Hold as an unsaved context draft.",
   },
   {
     action: "pin-context",
@@ -184,7 +184,7 @@ export function buildNoteHandoffPreview(draft: AssistantLocalDraft): AssistantNo
     contextGroup: "Inbox review",
     pinPreview: false,
     warnings: [
-      "Editable local note preview only. This is not saved and is not real memory.",
+      "Editable local note preview only. This context is not saved yet.",
       "Use the existing note creation flow only when you are ready to create a real note.",
     ],
   };
@@ -231,7 +231,7 @@ export function buildReviewHandoffPreview(draft: AssistantLocalDraft): Assistant
     timingHint: isFollowUp ? "Before next check-in" : "No notification scheduled",
     notes: isFollowUp
       ? `Draft the follow-up language before choosing any real email, text, call, or message action. Source capture: ${source}`
-      : `Review what should be remembered before choosing any real reminder or calendar action. Source capture: ${source}`,
+      : `Review what context should stay visible before choosing any real reminder or calendar action. Source capture: ${source}`,
     warnings: isFollowUp
       ? [
           "Editable local follow-up preview only. This does not send email, text, calls, or messages.",

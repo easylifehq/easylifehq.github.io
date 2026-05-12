@@ -120,9 +120,9 @@ export function EasyNotesLibraryPage() {
     [notes, lastOpenNoteId]
   );
   const memoryDraftSource =
-    lastOpenNote?.bodyText.trim() || lastOpenNote?.title.trim() || "Remember the launch notes and pin the next decision.";
+    lastOpenNote?.bodyText.trim() || lastOpenNote?.title.trim() || "Keep the launch notes close and pin the next decision.";
   const memoryDraftSuggestion = useMemo(
-    () => classifyAssistantIntent(`Remember this context: ${memoryDraftSource}`),
+    () => classifyAssistantIntent(`Keep this context for review: ${memoryDraftSource}`),
     [memoryDraftSource]
   );
   const selectedMemoryDraftOption =
@@ -138,9 +138,9 @@ export function EasyNotesLibraryPage() {
   const memoryBridge = useMemo(
     () => [
       {
-        label: "Remember",
+        label: "Saved context",
         count: notes.length,
-        detail: "Context candidates Today can review later.",
+        detail: "Notes Today can review later.",
       },
       {
         label: "Task cue",
@@ -248,7 +248,7 @@ export function EasyNotesLibraryPage() {
       status: noteId ? "saved" : "blocked",
       receiptLabel: noteId ? "Saved note receipt" : "Save blocked",
       message: noteId
-        ? "Saved one note only. No task, plan, reminder, follow-up, email, calendar item, notification, sync, model call, or real memory was created."
+        ? "Saved one note only. No task, plan, reminder, follow-up, email, calendar item, notification, sync, model call, or real AI memory was created."
         : "No signed-in note save happened in this preview session. Nothing else was created.",
     });
   }
@@ -317,24 +317,24 @@ export function EasyNotesLibraryPage() {
     const count = await cleanUpEmptyNotes();
     setCleanupMessage(
       count
-        ? `${count} empty memory item${count === 1 ? "" : "s"} moved to Recently deleted.`
-        : "No empty memory items to clean up."
+        ? `${count} empty context note${count === 1 ? "" : "s"} moved to Recently deleted.`
+        : "No empty context notes to clean up."
     );
   }
 
   return (
     <PageSection
-      title="Memory"
-      description="Keep context close, then decide what should become a task, a plan, a pinned reference, or a review."
+      title="Notes"
+      description="Keep saved context close, then decide what should become a task, a plan, a pinned reference, or a review."
     >
-        <div className="notes-command-strip" aria-label="Memory actions">
+        <div className="notes-command-strip" aria-label="Notes actions">
           <div className="notes-capture-group">
             <button type="button" className="notes-command-button notes-command-button-primary" onClick={() => void handleCreateNote()}>
               <span aria-hidden="true">+</span>
-              Remember something
+              Keep context
             </button>
             <span className="notes-library-status">
-              {notes.length ? "Review memory below" : "Remember first, sort later"}
+              {notes.length ? "Review saved context below" : "Capture first, sort later"}
             </span>
           </div>
           <div className="notes-secondary-actions">
@@ -345,7 +345,7 @@ export function EasyNotesLibraryPage() {
                 setSearchOpen((current) => !current);
                 window.setTimeout(() => searchInputRef.current?.focus(), 0);
               }}
-              aria-label="Search memory"
+              aria-label="Search notes"
             >
               Search
             </button>
@@ -361,7 +361,7 @@ export function EasyNotesLibraryPage() {
           </div>
         </div>
 
-        <div className="settings-status-grid" aria-label="Assistant memory bridge">
+        <div className="settings-status-grid" aria-label="Assistant context bridge">
           {memoryBridge.map((item) => (
             <article className="settings-status-card" key={item.label}>
               <span>{item.label}</span>
@@ -376,11 +376,10 @@ export function EasyNotesLibraryPage() {
             <span>{localDraftStatusLabels["unsaved-preview"]}</span>
             <h3 id="notes-memory-draft-title">Note/context assistant draft</h3>
             <p>
-              Preview what this context could become. This does not save a note, pin context, create real memory, plan
-              time, or turn anything into a task.
+              Preview what this context could become. Final save creates a normal note only, not automation or AI memory.
             </p>
           </div>
-          <div className="notes-memory-draft-actions" aria-label="Local memory draft actions">
+          <div className="notes-memory-draft-actions" aria-label="Local context draft actions">
             {memoryDraftActionOptions.map((option) => (
               <button
                 key={option.action}
@@ -392,7 +391,7 @@ export function EasyNotesLibraryPage() {
                   setNoteHandoffPreview(null);
                   clearNoteSaveConfirmation();
                 }}
-                title="Local preview only. This does not write memory."
+                title="Local preview only."
               >
                 <strong>{option.label}</strong>
                 <small>{option.summary}</small>
@@ -400,7 +399,7 @@ export function EasyNotesLibraryPage() {
             ))}
           </div>
           {selectedMemoryDraft ? (
-            <article className="notes-memory-draft-preview" aria-label="Unsaved memory draft preview">
+            <article className="notes-memory-draft-preview" aria-label="Unsaved context draft preview">
               <div>
                 <span>{localDraftTypeLabels[selectedMemoryDraft.draftType]}</span>
                 <strong>{selectedMemoryDraft.title}</strong>
@@ -425,14 +424,13 @@ export function EasyNotesLibraryPage() {
                   >
                     Preview note save path
                   </button>
-                  <span>This only prepares an editable local note. It does not save a note or create real memory.</span>
+                  <span>This prepares an editable local note. Final confirmation still decides whether it saves.</span>
                 </div>
               ) : null}
             </article>
           ) : (
             <p className="notes-memory-draft-dismissed">
-              Dismissed locally. No note/context draft was saved, pinned, created, scheduled, synced, or turned into
-              real memory.
+              Dismissed locally. No note/context draft was saved, pinned, created, scheduled, or synced.
             </p>
           )}
           {showNoteHandoff && noteHandoffPreview ? (
@@ -544,7 +542,7 @@ export function EasyNotesLibraryPage() {
                   <p>{noteSaveConfirmation.message}</p>
                   <p>
                     No task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real
-                    memory was created.
+                    AI memory was created.
                   </p>
                 </div>
               ) : null}
@@ -555,7 +553,7 @@ export function EasyNotesLibraryPage() {
         {searchOpen ? (
         <div className="notes-library-toolbar notes-search-toolbar">
           <label className="field-stack notes-search-field">
-            <span>Search memory</span>
+            <span>Search notes</span>
             <input
               id="notes-search"
               ref={searchInputRef}
@@ -582,7 +580,7 @@ export function EasyNotesLibraryPage() {
             <section className="group-block notes-review-block">
               <div className="group-heading">
                 <div>
-                  <h3>Review memory</h3>
+                  <h3>Review context</h3>
                   <p className="note-card-meta">
                     <span>Last touched</span>
                     Keep active context moving
@@ -663,7 +661,7 @@ export function EasyNotesLibraryPage() {
                 setSelectedNoteIds([]);
               }}
             >
-              <option value="">All memory</option>
+              <option value="">All notes</option>
               {folders.map((folder) => (
                 <option key={folder.id} value={folder.id}>
                   {folder.name}
@@ -723,7 +721,7 @@ export function EasyNotesLibraryPage() {
               New group
             </button>
             <button type="button" className="button-secondary compact-button" onClick={() => void handleCleanup()}>
-              Clean up empty memory
+              Clean up empty notes
             </button>
             <Link to="/app/easynotes/trash" className="button-secondary compact-button">
               Recently deleted
@@ -734,9 +732,9 @@ export function EasyNotesLibraryPage() {
         {error ? <p className="error-copy">{error}</p> : null}
         {cleanupMessage ? <p className="helper-copy">{cleanupMessage}</p> : null}
 
-        <div className="group-heading notes-library-results-heading" aria-label="Memory results">
+        <div className="group-heading notes-library-results-heading" aria-label="Notes results">
           <div>
-            <h3>{hasFilters ? "Filtered memory" : "All memory"}</h3>
+            <h3>{hasFilters ? "Filtered notes" : "All notes"}</h3>
             {hasFilters ? (
               <div className="note-card-meta">
                 <span>Showing</span>
@@ -748,11 +746,11 @@ export function EasyNotesLibraryPage() {
         </div>
 
         <div className="notes-library-grid">
-          {isLoading ? <p className="helper-copy">Loading memory...</p> : null}
+          {isLoading ? <p className="helper-copy">Loading notes...</p> : null}
 
           {!isLoading && filteredNotes.length === 0 ? (
             <div className="empty-card-vnext notes-empty-card notes-suite-empty-card">
-              <strong>{hasFilters ? "No memory matches this view" : "No memory yet"}</strong>
+              <strong>{hasFilters ? "No notes match this view" : "No saved context yet"}</strong>
               <p className="helper-copy">
                 {hasFilters
                   ? "Try a different search or context group, or clear filters to return to the thoughts kept for later."
@@ -773,7 +771,7 @@ export function EasyNotesLibraryPage() {
                   checked={selectedNoteIds.includes(note.id)}
                   onChange={() => toggleSelectedNote(note.id)}
                 />
-                <span>Select memory</span>
+                <span>Select note</span>
               </label>
               ) : null}
               <Link to={`/app/easynotes/${note.id}`} className="note-card-link">

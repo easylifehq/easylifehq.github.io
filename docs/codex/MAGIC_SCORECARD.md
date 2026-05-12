@@ -2,6 +2,24 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 17 Task 4 Notes Context Language
+
+- Task: Repair honest Notes/Memory language.
+- Result: Passed build and local route/header inspection.
+- Magic signal: notes-context-less-contradictory
+- Changed files:
+  - `app-vNext/src/components/navigation/AppHeader.tsx`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product evidence: `/app/easynotes?demo=1` now shows `Notes`, `Keep context`, `Saved context`, `Assistant context bridge`, and `Context draft`.
+- Header evidence: signed-in shell navigation reports `current area Notes`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: note save behavior was preserved. No model calls, real memory, sync, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, or persistence behavior changes were added.
+
 ## 2026-05-12 - Stage 17 Task 3 Remove Future Map Filler
 
 - Task: Remove Future Map filler from People + Places.

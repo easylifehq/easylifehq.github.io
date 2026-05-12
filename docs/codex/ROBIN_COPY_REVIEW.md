@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+NOTES_CONTEXT_COPY_IS_HONEST
+
+## Stage 17 Task 4 Copy Review - 2026-05-12
+
+Verdict: `NOTES_CONTEXT_COPY_IS_HONEST`.
+
+Notes now reads less contradictory. The user-facing surface says `Notes`, `Keep context`, `Saved context`, and `Context draft` instead of selling a real assistant memory system that the product does not have yet.
+
+What works:
+- The signed-in header reports the area as `Notes`.
+- The primary Notes action is `Keep context`, not `Remember something`.
+- The assistant bridge says `Context draft` and `Assistant context bridge`, not `Memory draft`.
+- The no-real-memory boundary remains where it matters: final save/receipt copy, not repeated across every helper line.
+
+Copy risk:
+- Settings still has older assistant-memory wording outside this task's owned files. Stage 17 Settings cleanup should remove that last old product-language pocket.
+
+---
+
+## Verdict
 NO_MAP_PROMISE_COPY_IS_HONEST
 
 ## Stage 17 Task 3 Copy Review - 2026-05-12

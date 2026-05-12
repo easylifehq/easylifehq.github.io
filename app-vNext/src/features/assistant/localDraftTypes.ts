@@ -117,7 +117,7 @@ export type AssistantReviewHandoffPreview = {
 
 export const localDraftTypeLabels: Record<AssistantLocalDraftType, string> = {
   task: "Task draft",
-  note: "Memory draft",
+  note: "Context draft",
   plan: "Plan draft",
   reminder: "Reminder draft",
   "follow-up": "Follow-up draft",

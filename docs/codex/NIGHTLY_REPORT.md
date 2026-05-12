@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 17 Task 4 honest Notes/Memory language repair
+
+- Task attempted: Make Notes feel like saved context for the assistant without overclaiming real AI memory.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected: `http://127.0.0.1:4233/app/easynotes?demo=1` in local demo mode.
+- Header inspected: signed-in shell navigation reports current area as `Notes`.
+- Files changed:
+  - `app-vNext/src/components/navigation/AppHeader.tsx`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product simplification: changed the primary route label from `Memory` to `Notes`, changed the main action from `Remember something` to `Keep context`, and changed assistant draft language from `Memory draft` to `Context draft`.
+- Copy repair: replaced repeated defensive no-real-memory warnings with calmer context/save-boundary copy while keeping the final receipt explicit that no real AI memory is created.
+- Boundary preserved: note save behavior was not changed. No model calls, real memory, sync, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, or persistence behavior changes were added.
+
 ## 2026-05-12 - Stage 17 Task 3 remove Future Map filler
 
 - Task attempted: Stop teasing a map before a real map exists and keep People + Places focused on saved place labels.

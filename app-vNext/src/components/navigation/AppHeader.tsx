@@ -15,7 +15,7 @@ export function AppHeader() {
     const pathname = location.pathname;
     if (pathname.startsWith("/app/easylist")) return "Inbox";
     if (pathname.startsWith("/app/easycalendar")) return "Plan";
-    if (pathname.startsWith("/app/easynotes")) return "Memory";
+    if (pathname.startsWith("/app/easynotes")) return "Notes";
     if (pathname.startsWith("/app/easypipeline")) return "Follow-ups";
     if (pathname.startsWith("/app/easycontacts")) return "People";
     if (pathname.startsWith("/app/easyprojects")) return "Projects";
