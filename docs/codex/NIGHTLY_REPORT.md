@@ -1,5 +1,18 @@
 # Codex Nightly Report
 
+## 2026-05-12 - EasyLife People + Places memory plan
+
+- Task attempted: Plan a future EasyContacts upgrade so EasyLife can remember where people live or are moving, and help the user review who they know near a place.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_PEOPLE_PLACES_MEMORY_PLAN.md`
+  - `docs/codex/EASYLIFE_STAGE_16_DECISION_GATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Plan path: `docs/codex/EASYLIFE_PEOPLE_PLACES_MEMORY_PLAN.md`.
+- Plan coverage: assistant people/place memory framing, safe city/region/last-known-place/moved-recently/visit-note fields, optional future map view, privacy guardrails, and evidence needed before implementation.
+- Boundary preserved: This docs-only task does not create implementation tasks, add app code, require exact street addresses, use map APIs/geocoding, add backend/auth/Firebase config/dependency/package/deploy/generated output, or include real personal data.
+
 ## 2026-05-12 - EasyLife Stage 16 decision gate
 
 - Task attempted: Define how Stage 16 should be chosen after human review, without starting it.

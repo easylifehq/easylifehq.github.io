@@ -57,6 +57,18 @@ Evidence required:
 - Whether the fix is copy, layout, or local state.
 - Confirmation that no scheduling, notification, message sending, or saved plan behavior is being added.
 
+### People + Places Memory
+
+Use when review says the next most useful assistant behavior is remembering where people live, moved, or can be visited.
+
+Evidence required:
+- Human review notes approving people/place memory as the next direction.
+- Privacy-light field plan using city/region/freeform place, not required street addresses.
+- Confirmation that the first version does not use map APIs, geocoding, backend changes, dependencies, or real personal data.
+- A bounded EasyContacts file list before any implementation begins.
+
+Plan source: `docs/codex/EASYLIFE_PEOPLE_PLACES_MEMORY_PLAN.md`.
+
 ## Parked Unless Separately Approved
 
 - external actions
@@ -69,6 +81,8 @@ Evidence required:
 - saved plans
 - saved reminders
 - saved follow-ups
+- exact-address people/place memory
+- map APIs or geocoding
 - backend/auth/Firebase config/dependency/package/deploy/generated/secret changes
 
 ## Decision Rules
@@ -77,6 +91,7 @@ Evidence required:
 - If review says the save loop is trustworthy but unproven with real data, choose task or note/context real-user QA.
 - If review says task/note save is clear and useful, choose assistant brain expansion only if the next behavior can be local and approval-first.
 - If review says parked lanes are confusing, choose preview hardening before adding any new saved object type.
+- If review says the assistant needs more personal context and EasyContacts feels valuable, consider People + Places memory before external AI.
 - If review is mixed or vague, do not create Stage 16 implementation tasks. Ask for sharper review notes.
 
 ## Stage 16 Task Creation Rules

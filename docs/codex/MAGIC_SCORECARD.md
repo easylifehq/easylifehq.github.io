@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - EasyLife People + Places Memory Plan
+
+- Task: Create EasyLife People + Places memory plan.
+- Result: Passed docs-only plan creation and build acceptance.
+- Magic signal: people-place-memory-captured
+- Changed files: docs only
+- Plan path: `docs/codex/EASYLIFE_PEOPLE_PLACES_MEMORY_PLAN.md`.
+- Coverage evidence: plan frames the work as assistant people/place memory, defines safe place fields, avoids exact address requirements, keeps map view optional/future, and names evidence required before implementation.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Stage 16 gate evidence: `EASYLIFE_STAGE_16_DECISION_GATE.md` now includes People + Places Memory as a possible direction without starting Stage 16 tasks.
+- Boundary evidence: no app code, map API, geocoding, backend/auth/Firebase config, dependency, package, deploy config, generated output, secrets, or real personal data was added.
+
 ## 2026-05-12 - EasyLife Stage 16 Decision Gate
 
 - Task: Create EasyLife Stage 16 decision gate.
