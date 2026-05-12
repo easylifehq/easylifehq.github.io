@@ -1,5 +1,28 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 17 Anti-Annoyance proof packet
+
+- Task attempted: Prove whether the anti-annoyance pass made EasyLife less frustrating to review.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Routes inspected:
+  - `http://127.0.0.1:4235/app/hq?demo=1`
+  - `http://127.0.0.1:4235/app/easylist/add?demo=1`
+  - `http://127.0.0.1:4235/app/easycalendar/day?demo=1`
+  - `http://127.0.0.1:4235/app/easynotes?demo=1`
+  - `http://127.0.0.1:4235/app/easycontacts?demo=1`
+  - `http://127.0.0.1:4235/app/settings?demo=1`
+- Files changed:
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Blunt judgment: EasyLife is less fake, less wordy, less suite-like, and less proof-scaffolded than before Stage 17, but Inbox remains dense, Settings remains large, and demo content still feels staged in places.
+- Verdict: `READY_FOR_HUMAN_REVIEW`.
+- Boundary preserved: docs-only proof packet. No product UI, routes, settings behavior, persistence, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, external actions, maps, geocoding, model calls, or real memory changed.
+
 ## 2026-05-12 - Stage 17 Task 5 Settings slick assistant cleanup
 
 - Task attempted: Make Settings feel like a slick assistant control panel instead of old EasyLife module sprawl.

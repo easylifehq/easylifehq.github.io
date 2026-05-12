@@ -1,6 +1,6 @@
 # Phase State
 
-Current Phase: stage-17-anti-annoyance-planning
+Current Phase: stage-17-anti-annoyance-proof
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
 Primary Action: Remove the five visible annoyances most likely to make a human reviewer distrust the assistant before adding more features.
@@ -11,13 +11,13 @@ Complexity Budget: Stage 17 tasks must remove, shorten, collapse, hide, or demot
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: ACTIVE_STAGE_17_REPAIR_PLAN
+Parking State: READY_FOR_HUMAN_REVIEW
 Evidence Required: build proof, six-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Complete the five Stage 17 anti-annoyance tasks, then run a blunt proof packet that ends READY_FOR_HUMAN_REVIEW, NEEDS_ONE_MORE_ANTI_ANNOYANCE_PASS, or NOT_READY_FOR_HUMAN_REVIEW.
+Next Phase Criteria: Capture human review notes before Stage 18 or any new feature direction.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-12 - Stage 17 Anti-Annoyance task packet created from blunt product scan.
+Updated At: 2026-05-12 - Stage 17 Anti-Annoyance proof packet ended READY_FOR_HUMAN_REVIEW.
 
 ## Assistant Brain Gate
 
@@ -104,6 +104,10 @@ Prepared Stage 17 queue: docs/codex/NEXT_5_TASKS.md contains exactly five anti-a
 Stage 17 is active by explicit user mission after a blunt product scan found likely human-review frustrations. Stage 17 may tighten Today command copy, consolidate Contacts / People + Places, remove Future map filler, repair Notes/Memory language, and clean up Settings assistant chrome. It must not add new feature surfaces beyond consolidation, copy repair, and visual trust cleanup. It must not add backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, model calls, real memory, maps, geocoding, exact addresses, device location, or real personal data.
 
 Stage 17 proof must inspect Today, Inbox, Plan, Notes, Contacts, and Settings and name remaining annoyances honestly.
+
+Stage 17 proof result: READY_FOR_HUMAN_REVIEW.
+
+Do not create new feature tasks automatically. Human review should inspect Today, Inbox, Plan, Notes, Contacts, and Settings, then decide whether Stage 18 should be taste polish, Inbox simplification, Settings split/cleanup, demo-content personalization, or a different explicit mission.
 
 ## Phase Order
 

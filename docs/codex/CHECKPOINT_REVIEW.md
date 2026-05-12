@@ -3,6 +3,52 @@
 ## Verdict
 READY_FOR_HUMAN_REVIEW
 
+## Stage 17 Anti-Annoyance Proof Packet
+
+Reviewed At: 2026-05-12
+
+Stage 17 proof says EasyLife is less frustrating to review after the anti-annoyance pass. The largest proof-packet tells, fake future-map promise, contradictory Notes/Memory language, and old Settings module-sprawl identity are now removed or softened enough for a human review.
+
+## Stage 17 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 17 Routes Inspected
+
+Local dev review mode: `http://127.0.0.1:4235`
+
+- Today/HQ: `/app/hq?demo=1` rendered `What needs attention now?`, `Command`, and the compressed boundary `Inbox previews first. Tasks and notes still need confirmation.` The old long command example chain and audited first-path distractions were not visible.
+- Inbox/Capture: `/app/easylist/add?demo=1` rendered `Review the intake queue` without route errors. It still carries the most visible assistant-save machinery, but it no longer reads like a standalone EasyList inventory page.
+- Plan: `/app/easycalendar/day?demo=1` rendered `Plan a realistic day` and the day-mode language, including recovery-day framing. It remains preview/static, but it is understandable.
+- Notes: `/app/easynotes?demo=1` rendered `Notes`, `Keep context`, `Saved context`, and `Context draft`. The old `Memory draft` / `Remember something` contradiction was not visible.
+- Contacts: `/app/easycontacts?demo=1` rendered `People memory`, `Visiting somewhere?`, and `People by place`. The fake future-map section was not visible.
+- Settings: `/app/settings?demo=1` rendered `Settings`, `Control Light`, `Control skin`, and `Assistant controls`. The old `Soft Notebook` default identity was not visible.
+
+## Blunt Annoyance Judgment
+
+- Too fake: less than before. The fake map promise is gone and Notes no longer claims real memory, but demo/sample content still makes some surfaces feel staged.
+- Too wordy: improved. Today and Notes are much calmer. Inbox and Settings are still dense because they carry real review/save controls and many settings.
+- Too much like a suite: improved. Today, Inbox, Plan, Notes, and More are now the dominant model. Optional modules still exist, but Settings and More now frame them as parked context.
+- Too much like internal proof scaffolding: improved. The first path no longer reads like a status report, though Inbox still exposes the most proof-like boundary copy once the save flow is inspected.
+- Visually/taste-wise annoying: less annoying, not final-beautiful. The app is now reviewable, but it still needs human taste notes before more polish or expansion.
+
+## Top Three Remaining Annoyances
+
+1. Inbox is still the densest route. It has the right approval-first behavior, but the suggestion, draft, handoff, confirmation, and receipt chain can still feel heavy.
+2. Settings is cleaner but still large. It reads more like assistant controls now, yet advanced/export/install/notification/assistant controls are all still in one big place.
+3. Demo content still weakens the magic. The product direction is clearer, but several examples still feel static or staged instead of personally alive.
+
+## Verdict
+
+READY_FOR_HUMAN_REVIEW
+
+Do not add new feature tasks yet. The next move should be human review of Today, Inbox, Plan, Notes, Contacts, and Settings, with notes captured before Stage 18 or any new feature direction.
+
+---
+
+## Verdict
+READY_FOR_HUMAN_REVIEW
+
 ## Stage 16 People + Places Memory Proof Packet
 
 Reviewed At: 2026-05-12

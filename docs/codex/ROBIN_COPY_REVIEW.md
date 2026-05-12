@@ -1,6 +1,28 @@
 # Robin Copy Review
 
 ## Verdict
+STAGE_17_COPY_READY_FOR_HUMAN_REVIEW
+
+## Stage 17 Anti-Annoyance Copy Proof - 2026-05-12
+
+Verdict: `STAGE_17_COPY_READY_FOR_HUMAN_REVIEW`.
+
+The copy is less defensive and less fake than it was before Stage 17. The biggest offenders were removed: fake map promise, Notes/Memory contradiction, long Today command chain, old Settings identity, and optional-module peer framing.
+
+What works:
+- Today now says the safety boundary once instead of explaining the whole system.
+- Notes says `Keep context`, `Saved context`, and `Context draft` instead of overclaiming memory.
+- Contacts explains saved place labels without promising maps, geocoding, exact addresses, or device location.
+- Settings uses assistant-control language and frames optional surfaces as More context.
+
+Copy risks:
+- Inbox still has the most procedural copy because task save is real and approval-first.
+- Settings still has many deep controls, so even good labels can feel dense.
+- Demo/sample content should be reviewed by a human for taste and personal usefulness.
+
+---
+
+## Verdict
 NOTES_CONTEXT_COPY_IS_HONEST
 
 ## Stage 17 Task 4 Copy Review - 2026-05-12

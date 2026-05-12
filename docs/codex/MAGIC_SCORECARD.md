@@ -2,6 +2,26 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 17 Anti-Annoyance Proof
+
+- Task: Create Stage 17 Anti-Annoyance proof packet.
+- Result: Passed build and six-route local inspection.
+- Magic signal: anti-annoyance-ready-for-human-review
+- Changed files:
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Route evidence: Today, Inbox, Plan, Notes, Contacts, and Settings rendered locally with `?demo=1`.
+- Improvement evidence: targeted stale annoyances were not visible in inspected route DOM: `Soft Notebook`, `Future map preview`, `Memory draft`, `Remember something`, `Useful ideas without crowding today`, `Quiet tools under the surface`, and `Semester layer`.
+- Remaining-annoyance evidence: Inbox still feels dense, Settings remains large, and demo content still feels staged in places.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Verdict: `READY_FOR_HUMAN_REVIEW`.
+- Boundary evidence: docs-only proof packet; no product UI, routes, settings behavior, persistence, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, external actions, maps, geocoding, model calls, or real memory changed.
+
 ## 2026-05-12 - Stage 17 Task 5 Settings Assistant Cleanup
 
 - Task: Clean up Settings as a slick assistant control panel.

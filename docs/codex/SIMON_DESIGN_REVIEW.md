@@ -1,6 +1,29 @@
 # Simon Design Review
 
 ## Verdict
+STAGE_17_READY_FOR_HUMAN_REVIEW
+
+## Stage 17 Anti-Annoyance Design Proof - 2026-05-12
+
+Verdict: `STAGE_17_READY_FOR_HUMAN_REVIEW`.
+
+The anti-annoyance pass made the app less frustrating to look at. Today is less proofy, Contacts is less CRM-like, the fake map preview is gone, Notes reads as context instead of false memory, and Settings opens more like assistant controls.
+
+What works:
+- Today keeps the command surface compact enough for review.
+- Contacts now leads with people/place memory instead of stats and future-map filler.
+- Notes no longer fights itself with Memory/real-memory contradiction in the first route read.
+- Settings has a more technical control-panel feel and no longer leads with `Soft Notebook`.
+- The six inspected routes rendered without route-breaker visual issues.
+
+Still annoying:
+- Inbox remains visually and conceptually heavy because the approval/save machinery is real and multi-step.
+- Settings remains a big utility surface, even after the first impression got better.
+- The product still needs human taste review before declaring the visual language complete.
+
+---
+
+## Verdict
 SETTINGS_FEELS_MORE_ASSISTANT_CONTROL_PANEL
 
 ## Stage 17 Task 5 Design Review - 2026-05-12
