@@ -1,5 +1,17 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 15 assistant save-boundary checklist
+
+- Task attempted: Create a reusable checklist so future assistant-save work does not accidentally add fake AI, hidden writes, or external actions.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_ASSISTANT_SAVE_BOUNDARY_CHECKLIST.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Checklist path: `docs/codex/EASYLIFE_ASSISTANT_SAVE_BOUNDARY_CHECKLIST.md`.
+- Checklist coverage: task save path, note/context save path, preview-only plans, preview-only reminders, preview-only follow-ups, no email/text/call/message sending, no notification scheduling, no calendar sync, no model calls, no real memory claims, demo review mode, and required route proof.
+- Boundary preserved: This docs-only task does not approve new external actions, new saved object types, app code changes, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret changes.
+
 ## 2026-05-12 - Stage 15 tighten Today and Inbox save-lane copy
 
 - Task attempted: Make the two safe save lanes clear with fewer words so Today feels like an assistant surface, not a policy notice.

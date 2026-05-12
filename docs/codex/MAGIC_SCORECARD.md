@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 15 Assistant Save-Boundary Checklist
+
+- Task: Create EasyLife assistant save-boundary checklist.
+- Result: Passed docs-only checklist creation and build acceptance.
+- Magic signal: save-boundaries-made-repeatable
+- Changed files: docs only
+- Checklist path: `docs/codex/EASYLIFE_ASSISTANT_SAVE_BOUNDARY_CHECKLIST.md`.
+- Coverage evidence: task save path, note/context save path, preview-only plans/reminders/follow-ups, no external sending, no notification scheduling, no calendar sync, no model calls, no real memory claims, demo review mode, and required route proof.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: checklist does not approve new saved object types or external actions.
+- No app code change: no backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 15 Tighten Today And Inbox Save-Lane Copy
 
 - Task: Tighten Today and Inbox save-lane copy.
