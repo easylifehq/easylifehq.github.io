@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+STAGE_16_READY_FOR_HUMAN_REVIEW
+
+## Stage 16 People + Places Design Proof - 2026-05-12
+
+Verdict: `STAGE_16_READY_FOR_HUMAN_REVIEW`.
+
+People + Places is reviewable before maps. The strongest surface is now the practical sequence: Contacts first names people/place memory, the visiting prompt asks who is near a saved label, People by place groups the answer, and the future map preview is clearly parked.
+
+What works:
+- The grouped city/region view is more useful than the decorative map-like preview.
+- The visiting prompt gives the user a fast review action without live location or geocoding.
+- The place-memory blocks make individual contacts feel more personal.
+- Today and Settings still render as the broader assistant shell, so Contacts does not become a separate product.
+
+Design risk:
+- Contacts has several stacked sections now. Human review should decide whether the future map preview should be collapsed, moved lower, or removed until a real map mission exists.
+
+---
+
+## Verdict
 PEOPLE_BY_PLACE_IS_REVIEWABLE
 
 ## Stage 16 Task 3 Design Review - 2026-05-12

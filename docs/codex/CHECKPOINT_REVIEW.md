@@ -3,6 +3,60 @@
 ## Verdict
 READY_FOR_HUMAN_REVIEW
 
+## Stage 16 People + Places Memory Proof Packet
+
+Reviewed At: 2026-05-12
+
+Stage 16 proof says People + Places Memory is ready for human review before any map, geocoding, or exact-address work. EasyContacts now supports privacy-light place context through fictional/demo contact labels, a calm place-memory block, a People by place grouped view, and a local "who do I know near this place?" prompt.
+
+## Stage 16 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 16 Routes Inspected
+
+Local dev review mode: `http://127.0.0.1:4231`
+
+- Today/HQ: `/app/hq?demo=1` rendered the assistant shell with Today, Inbox, Plan, Notes, and More, plus the first-viewport assistant read, next move, command/capture surface, and safe save-lane helper.
+- Contacts: `/app/easycontacts?demo=1` rendered `People memory`, `Visiting somewhere?`, `People by place`, `Saved labels only`, `Future map preview`, and `No exact addresses required`.
+- More/Settings: `/app/settings?demo=1` rendered Settings, current assistant status, opening-screen controls, and the Today/Inbox/Plan/Notes shell.
+
+## People + Places Judgment
+
+- Useful: yes. The feature answers the real review question: who do I know near this city or region?
+- Personal: yes. Visit notes, moved-recently context, current city/region, and last-known-place labels feel like memory for people, not sales records.
+- Not CRM-like: mostly yes. Stage 16 softened network/contact-management language, though company, relationship, and follow-up fields still exist as supporting context.
+- Privacy-light: yes. The surfaces use city/region/freeform labels and repeatedly avoid exact addresses, live location, geocoding, and maps.
+- Ready for human review: yes. It is useful enough to test with taste and trust feedback before deciding whether any map/geocoding exploration is worth the added complexity.
+
+## Park Before Maps Or Expansion
+
+Keep these parked unless a later human-approved Stage 17 mission explicitly changes scope:
+
+- map APIs
+- geocoding
+- exact street addresses
+- device location
+- backend/auth/Firebase config changes
+- package/dependency changes
+- generated output or deploy config
+- real personal data fixtures
+- model calls
+- external actions
+
+## Stage 17 Gate
+
+Do not create active Stage 17 implementation tasks yet. The next step is `docs/codex/EASYLIFE_STAGE_17_DECISION_GATE.md`, using human review notes or a new explicit bounded mission to choose between visual trust polish, real-user QA, assistant brain expansion, preview hardening, or People + Places map exploration.
+
+## Final Verdict
+
+READY_FOR_HUMAN_REVIEW
+
+---
+
+## Verdict
+READY_FOR_HUMAN_REVIEW
+
 ## Stage 15 Trustworthy Saved Assistant Loop Proof Packet
 
 Reviewed At: 2026-05-12

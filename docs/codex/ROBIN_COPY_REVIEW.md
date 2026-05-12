@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+STAGE_16_COPY_READY_FOR_HUMAN_REVIEW
+
+## Stage 16 People + Places Copy Proof - 2026-05-12
+
+Verdict: `STAGE_16_COPY_READY_FOR_HUMAN_REVIEW`.
+
+The People + Places copy is honest enough for human review. It frames the feature as saved people/place memory, not a CRM, live nearby search, map, geocoder, address book, or location tracker.
+
+What works:
+- `Visiting somewhere?` matches the user's natural question.
+- `Saved labels only` sets the right trust boundary.
+- `No exact addresses required` and `No exact address needed` keep the privacy posture visible.
+- `Future map preview` prevents the bubble view from implying a real map.
+
+Copy risk:
+- If Stage 17 explores maps, the copy will need a separate privacy/API decision before mentioning coordinates, exact addresses, or live search.
+
+---
+
+## Verdict
 VISITING_PROMPT_COPY_IS_HONEST
 
 ## Stage 16 Task 4 Copy Review - 2026-05-12

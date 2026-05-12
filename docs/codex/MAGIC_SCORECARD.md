@@ -2,6 +2,26 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 16 People + Places Proof
+
+- Task: Create Stage 16 People + Places proof packet.
+- Result: Passed build, route inspection, and human-review readiness decision.
+- Magic signal: people-places-ready-for-human-review
+- Changed files:
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Route evidence: Today, Contacts, and Settings/More rendered in local demo mode.
+- Product evidence: Contacts showed people/place memory fields, place memory blocks, People by place grouping, visiting-somewhere prompt, saved-label-only copy, and future-map boundary.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Verdict: `READY_FOR_HUMAN_REVIEW`.
+- Stage 17 evidence: next work points to `docs/codex/EASYLIFE_STAGE_17_DECISION_GATE.md`; no active Stage 17 implementation tasks were created.
+- Boundary evidence: maps, geocoding, exact addresses, device location, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, model calls, external actions, and real personal data remain parked.
+
 ## 2026-05-12 - Stage 16 Task 4 Visiting Somewhere Prompt
 
 - Task: Add visiting-somewhere assistant prompt.

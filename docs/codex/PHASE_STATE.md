@@ -1,6 +1,6 @@
 # Phase State
 
-Current Phase: stage-16-people-places-memory
+Current Phase: stage-16-people-places-memory-proof
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
 Primary Action: Add privacy-light People + Places memory to EasyContacts so the assistant can remember where people live or are moving.
@@ -11,13 +11,13 @@ Complexity Budget: Stage 16 tasks must stay inside EasyContacts People + Places 
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_STAGE_16
+Parking State: READY_FOR_HUMAN_REVIEW
 Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 16 People + Places Memory is now approved by explicit user mission. Use the prepared tasks in NEXT_5_TASKS.md.
+Next Phase Criteria: Stage 16 People + Places Memory proof says READY_FOR_HUMAN_REVIEW. Use the Stage 17 decision gate only after human review notes or a new explicit bounded mission.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-12 - Stage 16 converted to People + Places Memory; broader decision gate moved to Stage 17.
+Updated At: 2026-05-12 - Stage 16 People + Places Memory proof packet completed with READY_FOR_HUMAN_REVIEW.
 
 ## Assistant Brain Gate
 
@@ -92,6 +92,8 @@ Prepared Stage 16 queue: docs/codex/NEXT_5_TASKS.md contains exactly five People
 Stage 16 may add privacy-light people/place labels to EasyContacts: current city, region, last known place, moved recently, and visit note. It must not require exact street addresses, add map APIs, geocoding, device location, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, real personal data, model calls, or external actions.
 
 Stage 17 decision source: docs/codex/EASYLIFE_STAGE_17_DECISION_GATE.md
+
+Stage 16 proof result: READY_FOR_HUMAN_REVIEW. Do not create active Stage 17 implementation tasks until human review notes or a new explicit bounded mission chooses one direction from the Stage 17 decision gate.
 
 ## Phase Order
 

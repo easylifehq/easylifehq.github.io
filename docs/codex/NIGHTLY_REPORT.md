@@ -1,5 +1,26 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 16 People + Places proof packet
+
+- Task attempted: Prove whether People + Places Memory is ready for human review before any map/geocoding work.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Routes inspected:
+  - `http://127.0.0.1:4231/app/hq?demo=1`
+  - `http://127.0.0.1:4231/app/easycontacts?demo=1`
+  - `http://127.0.0.1:4231/app/settings?demo=1`
+- Files changed:
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Proof judgment: People + Places is useful, personal, mostly not CRM-like, privacy-light, and ready for human review.
+- Verdict: `READY_FOR_HUMAN_REVIEW`.
+- Next gate: Stage 17 should be chosen through `docs/codex/EASYLIFE_STAGE_17_DECISION_GATE.md`; no active Stage 17 implementation tasks were created.
+- Boundary preserved: maps, geocoding, exact addresses, device location, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, model calls, external actions, and real personal data remain out of scope.
+
 ## 2026-05-12 - Stage 16 Task 4 visiting somewhere prompt
 
 - Task attempted: Add a simple assistant-style prompt for "who do I know near this place?" without maps or geocoding.
