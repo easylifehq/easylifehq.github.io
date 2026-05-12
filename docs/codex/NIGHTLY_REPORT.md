@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 14 note-only save boundary copy
+
+- Task attempted: Tighten Notes copy so the second real assistant save path clearly saves a note/context item only, not real memory or broader assistant action.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4222` and inspected `/app/easynotes?demo=1` with headless Chromium. Clicked `Preview note save path`, clicked `Confirm and save note`, and verified the note/context preview plus receipt boundary. Screenshot saved at `.codex-logs/stage14-task3-note-boundary-copy.png`.
+- Files changed:
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Copy tightened:
+  - `Memory-like assistant draft` now reads `Note/context assistant draft`.
+  - The helper copy now says it does not save a note, pin context, create real memory, plan time, or turn anything into a task.
+  - The dismissed state no longer says a memory draft was saved or remembered.
+  - The preview header now says `Note/context save preview`.
+  - The final confirmation says one note can be saved and the receipt says this is note/context only.
+- Boundary preserved: No persistence behavior changed. The receipt still says no task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real memory was created.
+
 ## 2026-05-12 - Stage 14 saved note receipt
 
 - Task attempted: Show a clear receipt after the final-confirmed assistant note save path so the user knows exactly what happened without thinking real memory was created.

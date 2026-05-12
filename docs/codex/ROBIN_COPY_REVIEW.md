@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+NOTE_ONLY_SAVE_BOUNDARY_IS_HONEST
+
+## Stage 14 Task 3 Copy Review - 2026-05-12
+
+Verdict: `NOTE_ONLY_SAVE_BOUNDARY_IS_HONEST`.
+
+The Notes save path now reads as note/context only instead of implying real assistant memory. The visible preview says one note can be saved, the receipt says this is note/context only, and the older loose phrasing around memory drafts and remembering was softened.
+
+What improved:
+- `Memory-like assistant draft` became `Note/context assistant draft`.
+- The preview helper now says it does not save a note, pin context, create real memory, plan time, or turn anything into a task.
+- The dismissed state no longer says a memory draft was saved or remembered.
+- `Note save preview` became `Note/context save preview`.
+- The receipt boundary says no task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real memory was created.
+
+Copy risk:
+- The broader Notes route still uses the product concept of memory/context in headings and search labels. That is acceptable for the app model, but Stage 14 proof should verify the save path itself never claims real AI memory.
+
+---
+
+## Verdict
 NOTE_SAVE_CONFIRMATION_COPY_AVOIDS_REAL_MEMORY
 
 ## Stage 14 Task 1 Copy Review - 2026-05-12

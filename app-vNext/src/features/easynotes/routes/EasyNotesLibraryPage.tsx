@@ -374,10 +374,10 @@ export function EasyNotesLibraryPage() {
         <section className="notes-memory-draft-affordance" aria-labelledby="notes-memory-draft-title">
           <div className="notes-memory-draft-copy">
             <span>{localDraftStatusLabels["unsaved-preview"]}</span>
-            <h3 id="notes-memory-draft-title">Memory-like assistant draft</h3>
+            <h3 id="notes-memory-draft-title">Note/context assistant draft</h3>
             <p>
-              Preview what this context could become. This is not saved, pinned, remembered, planned, or turned into a
-              task.
+              Preview what this context could become. This does not save a note, pin context, create real memory, plan
+              time, or turn anything into a task.
             </p>
           </div>
           <div className="notes-memory-draft-actions" aria-label="Local memory draft actions">
@@ -425,19 +425,20 @@ export function EasyNotesLibraryPage() {
                   >
                     Preview note save path
                   </button>
-                  <span>This only prepares an editable local note. It does not save or remember.</span>
+                  <span>This only prepares an editable local note. It does not save a note or create real memory.</span>
                 </div>
               ) : null}
             </article>
           ) : (
             <p className="notes-memory-draft-dismissed">
-              Dismissed locally. No memory draft was saved, pinned, created, scheduled, synced, or remembered.
+              Dismissed locally. No note/context draft was saved, pinned, created, scheduled, synced, or turned into
+              real memory.
             </p>
           )}
           {showNoteHandoff && noteHandoffPreview ? (
             <article className="notes-note-handoff-preview" aria-label="Editable unsaved note draft preview">
               <div className="assistant-local-draft-header">
-                <span>Note save preview</span>
+                <span>Note/context save preview</span>
                 <strong>Editable unsaved note draft</strong>
               </div>
               <div className="notes-note-handoff-grid">
@@ -478,7 +479,7 @@ export function EasyNotesLibraryPage() {
                       })
                     }
                   />
-                  <span>Preview as pinned context only</span>
+                  <span>Preview as pinned inside the note only</span>
                 </label>
                 <label className="field-stack notes-note-handoff-body">
                   <span>Note body</span>
@@ -504,9 +505,9 @@ export function EasyNotesLibraryPage() {
                   <span>Final confirmation</span>
                   <strong>Save one note</strong>
                   <p>
-                    Note save only: `{noteHandoffPreview.title || "Assistant context note"}` can be saved as one
-                    note/context item. It is not real memory and will not create a task, plan, reminder, follow-up,
-                    email, calendar item, notification, sync, or model call.
+                    Note/context save only: `{noteHandoffPreview.title || "Assistant context note"}` can be saved as
+                    one note. It is not real memory and will not create a task, plan, reminder, follow-up, email,
+                    calendar item, notification, sync, or model call.
                   </p>
                 </div>
                 <button
@@ -533,14 +534,14 @@ export function EasyNotesLibraryPage() {
                       <dd>{noteSaveConfirmation.contextGroup || "No context group"}</dd>
                     </div>
                     <div>
-                      <dt>Pin preview</dt>
-                      <dd>{noteSaveConfirmation.pinPreview ? "Pinned in note only" : "Not pinned"}</dd>
+                      <dt>Note pin</dt>
+                      <dd>{noteSaveConfirmation.pinPreview ? "Pinned inside the saved note only" : "Not pinned"}</dd>
                     </div>
                   </dl>
                   <p>{noteSaveConfirmation.message}</p>
                   <p>
-                    Receipt boundary: no task, plan, reminder, follow-up, email, notification, calendar item, sync,
-                    model call, or real memory was created.
+                    Receipt boundary: this is note/context only. No task, plan, reminder, follow-up, email,
+                    notification, calendar item, sync, model call, or real memory was created.
                   </p>
                 </div>
               ) : null}

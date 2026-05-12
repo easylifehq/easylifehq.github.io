@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 14 Note-Only Save Boundary Copy
+
+- Task: Note-only save boundary copy.
+- Result: Passed copy-only UI implementation, build, and route inspection.
+- Magic signal: note-save-boundary-honest
+- Changed files: 4
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easynotes?demo=1` on local Vite port `4222`, clicked `Preview note save path`, clicked `Confirm and save note`, and verified note/context preview and receipt boundary copy. Screenshot saved at `.codex-logs/stage14-task3-note-boundary-copy.png`.
+- Copy evidence: `Memory-like assistant draft` became `Note/context assistant draft`; the helper copy no longer says saved/pinned/remembered/planned/turned into a task; `Note save preview` became `Note/context save preview`.
+- Boundary evidence: final confirmation says one note can be saved; receipt says this is note/context only and no task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real memory was created.
+- No behavior change: no persistence change, extra write, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 14 Saved Note Receipt
 
 - Task: Saved note receipt.
