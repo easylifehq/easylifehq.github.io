@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 15 Simplify Notes Note/Context Receipt
+
+- Task: Simplify Notes note/context receipt.
+- Result: Passed copy/UI implementation, build, and route inspection.
+- Magic signal: note-context-receipt-calmer
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easynotes?demo=1` on local Vite port `4226`, clicked `Preview note save path`, clicked `Confirm and save note`, and verified `.notes-note-save-receipt`. Screenshot saved at `.codex-logs/stage15-task2-notes-note-receipt.png`.
+- Simplification evidence: confirmation now says `Everything else stays preview-only`; receipt includes `Only saved: Note/context`.
+- Boundary evidence: receipt still shows title/context group and says no task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real memory was created.
+- No behavior change: existing note save behavior is unchanged; no task save, plan save, reminder save, follow-up save, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 15 Simplify Inbox Task-Save Receipt
 
 - Task: Simplify Inbox task-save receipt.

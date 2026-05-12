@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 15 simplify Notes note/context receipt
+
+- Task attempted: Make the Notes note/context confirmation and receipt calmer without implying real memory.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4226` and inspected `/app/easynotes?demo=1` with headless Chromium. Clicked `Preview note save path`, clicked `Confirm and save note`, and verified the note/context receipt. Screenshot saved at `.codex-logs/stage15-task2-notes-note-receipt.png`.
+- Files changed:
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Simplification:
+  - The final confirmation now says `Everything else stays preview-only` instead of repeating the full excluded-action list.
+  - The receipt now includes a compact `Only saved: Note/context` field.
+  - The receipt still shows the note title and context group.
+  - The full boundary remains on the receipt: no task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real memory was created.
+- Guardrails preserved: Existing note save behavior is unchanged. No task save, plan save, reminder save, follow-up save, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 15 simplify Inbox task-save receipt
 
 - Task attempted: Make the Inbox task-save confirmation and receipt easier to scan without weakening the task-only boundary.

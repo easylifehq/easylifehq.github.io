@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+NOTE_CONTEXT_RECEIPT_IS_CALMER_AND_HONEST
+
+## Stage 15 Task 2 Copy Review - 2026-05-12
+
+Verdict: `NOTE_CONTEXT_RECEIPT_IS_CALMER_AND_HONEST`.
+
+The Notes save copy remains honest after simplification. The confirmation now names the one note/context save and says everything else stays preview-only, while the receipt carries the detailed boundary after the user acts.
+
+What improved:
+- The confirmation no longer repeats the full no-task/no-plan/no-email/no-memory list.
+- The receipt now has an `Only saved: Note/context` field.
+- The receipt still shows note title and context group.
+- The receipt still says no task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real memory was created.
+
+Copy risk:
+- This is clearer, but the route still uses Memory as a broader product label. That is acceptable as long as the save action keeps saying note/context and avoids real-memory claims.
+
+---
+
+## Verdict
 COPY_READY_FOR_STAGE_15
 
 ## Stage 14 Copy Proof - 2026-05-12

@@ -506,8 +506,7 @@ export function EasyNotesLibraryPage() {
                   <strong>Save one note</strong>
                   <p>
                     Note/context save only: `{noteHandoffPreview.title || "Assistant context note"}` can be saved as
-                    one note. It is not real memory and will not create a task, plan, reminder, follow-up, email,
-                    calendar item, notification, sync, or model call.
+                    one note. Everything else stays preview-only.
                   </p>
                 </div>
                 <button
@@ -537,11 +536,15 @@ export function EasyNotesLibraryPage() {
                       <dt>Note pin</dt>
                       <dd>{noteSaveConfirmation.pinPreview ? "Pinned inside the saved note only" : "Not pinned"}</dd>
                     </div>
+                    <div className="notes-note-save-receipt-scope">
+                      <dt>Only saved</dt>
+                      <dd>Note/context</dd>
+                    </div>
                   </dl>
                   <p>{noteSaveConfirmation.message}</p>
                   <p>
-                    Receipt boundary: this is note/context only. No task, plan, reminder, follow-up, email,
-                    notification, calendar item, sync, model call, or real memory was created.
+                    No task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real
+                    memory was created.
                   </p>
                 </div>
               ) : null}

@@ -2581,7 +2581,7 @@ textarea::placeholder {
 
 .notes-note-save-receipt-details {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.48rem;
   margin: 0;
 }
@@ -2600,6 +2600,11 @@ textarea::placeholder {
   color: var(--ui-text-primary, var(--shell-page-text));
   font-size: 0.84rem;
   font-weight: 750;
+}
+
+.notes-note-save-receipt-scope {
+  border: 1px solid color-mix(in srgb, #1f8f6a 30%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, #1f8f6a 9%, var(--ui-bg-card, var(--shell-input-bg))) !important;
 }
 
 .notes-library-results-heading {
