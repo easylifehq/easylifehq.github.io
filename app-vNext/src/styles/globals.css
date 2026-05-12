@@ -5098,6 +5098,11 @@ textarea::placeholder {
   line-height: 1.4;
 }
 
+.assistant-task-save-boundary {
+  max-width: 58rem;
+  font-weight: 720;
+}
+
 .assistant-task-save-receipt {
   display: grid;
   gap: 0.62rem;
@@ -5173,7 +5178,8 @@ textarea::placeholder {
 
 .assistant-task-save-receipt-boundary {
   color: var(--ui-text-primary, var(--shell-page-text));
-  font-weight: 760;
+  border: 1px solid color-mix(in srgb, #1f8f6a 26%, var(--ui-border-subtle, var(--shell-card-border)));
+  font-weight: 800;
 }
 
 .assistant-suggestion-actions {

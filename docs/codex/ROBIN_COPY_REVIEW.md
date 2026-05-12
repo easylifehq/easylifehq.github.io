@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+TASK_ONLY_SAVE_BOUNDARY_COPY_IS_CLEAR
+
+## Stage 13 Task 3 Copy Review - 2026-05-12
+
+Verdict: `TASK_ONLY_SAVE_BOUNDARY_COPY_IS_CLEAR`.
+
+The Inbox copy now separates task save from every other assistant draft type. The real action reads as `Preview task-only save row` followed by `Confirm and save task`, while follow-up and reminder remain preview-only review surfaces.
+
+What improved:
+- `Preview: approved locally` now reads `Preview: ready for draft`, which avoids implying all approved drafts can save.
+- `Approval creates...` was replaced with local draft preview copy.
+- `Preview task row handoff` and `Explicit handoff preview` were removed from visible copy.
+- The final confirmation says notes, plans, reminders, follow-ups, email, calendar, notifications, sync, and memory stay preview-only.
+- The receipt repeats the task-only boundary after confirmation.
+
+Copy risk:
+- The route is honest, but still copy-dense. Stage 13 proof should check whether the repeated no-action boundaries feel reassuring or heavy before adding any new save path.
+
+---
+
+## Verdict
 TASK_SAVE_CONFIRMATION_COPY_IS_TASK_ONLY
 
 ## Stage 13 Task 1 Copy Review - 2026-05-12

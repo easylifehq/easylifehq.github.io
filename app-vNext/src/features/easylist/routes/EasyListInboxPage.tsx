@@ -15,10 +15,7 @@ import {
   type AssistantLocalDraftType,
 } from "@/features/assistant/localDraftTypes";
 import { buildTaskDraft, type TaskRowDraft } from "@/features/easylist/components/TaskComposer";
-import {
-  approvalStatePreviewLabels,
-  type AssistantApprovalState,
-} from "@/features/assistant/intentTypes";
+import { type AssistantApprovalState } from "@/features/assistant/intentTypes";
 import { TaskComposer } from "@/features/easylist/components/TaskComposer";
 import { useEasyList } from "@/features/easylist/EasyListContext";
 import { useMemo, useState } from "react";
@@ -31,6 +28,13 @@ const APPROVAL_STATE_OPTIONS: AssistantApprovalState[] = [
   "dismissed",
   "needs-review",
 ];
+const INBOX_PREVIEW_STATE_LABELS: Record<AssistantApprovalState, string> = {
+  suggested: "Preview: suggested",
+  editing: "Preview: editing",
+  approved: "Preview: ready for draft",
+  dismissed: "Preview: dismissed locally",
+  "needs-review": "Preview: needs review",
+};
 
 export function EasyListInboxPage() {
   const { tasks, isLoading, error, addTask } = useEasyList();
@@ -137,6 +141,16 @@ export function EasyListInboxPage() {
       estimatedLength: preview.estimatedLength,
       priorityTier: preview.priorityTier as TaskRowDraft["priorityTier"],
       notes: preview.notes,
+    };
+  }
+
+  function keepTaskSaveCopyNarrow(preview: AssistantTaskRowHandoffPreview): AssistantTaskRowHandoffPreview {
+    return {
+      ...preview,
+      notes: preview.notes.replace(
+        "Review this local handoff before using the existing save action.",
+        "Review this local task row before using the existing save action."
+      ),
     };
   }
 
@@ -293,7 +307,7 @@ export function EasyListInboxPage() {
                 <h3>{assistantSuggestion.title}</h3>
                 <strong>{assistantSuggestion.summary}</strong>
               </div>
-              <div className="assistant-suggestion-actions" aria-label="Preview-only approval actions">
+              <div className="assistant-suggestion-actions" aria-label="Preview-only review actions">
                 <button
                   type="button"
                   className="primary-button"
@@ -349,13 +363,13 @@ export function EasyListInboxPage() {
                   className={visibleApprovalState === state ? "active" : ""}
                   onClick={() => setPreviewApprovalState(state)}
                 >
-                  {approvalStatePreviewLabels[state]}
+                  {INBOX_PREVIEW_STATE_LABELS[state]}
                 </button>
               ))}
             </div>
             <p className={`assistant-approval-state-note assistant-approval-state-note-${activeApprovalState}`}>
-              {approvalStatePreviewLabels[visibleApprovalState]} only. Approval creates an unsaved draft preview here,
-              not a task, note, calendar item, email, sync, or memory.
+              {INBOX_PREVIEW_STATE_LABELS[visibleApprovalState]} only. This creates a local draft preview here,
+              not a saved task, note, calendar item, email, sync, or memory.
             </p>
             <div className="assistant-suggestion-fields" aria-label="Editable-looking suggestion fields">
               {assistantSuggestion.fields.map((field) => (
@@ -427,14 +441,14 @@ export function EasyListInboxPage() {
                     className="button-secondary"
                     onClick={() => {
                       const preview = buildTaskRowHandoffPreview(approvedLocalDraft);
-                      setTaskHandoffPreview(preview);
+                      setTaskHandoffPreview(preview ? keepTaskSaveCopyNarrow(preview) : preview);
                       setShowTaskHandoff(Boolean(preview));
                       clearTaskSaveConfirmation();
                     }}
                   >
-                    Preview task row handoff
+                    Preview task-only save row
                   </button>
-                  <span>This only prepares an editable local row. It does not save.</span>
+                  <span>Only task drafts can reach final save. This row is still unsaved.</span>
                 </div>
               ) : null}
               {canPreviewReviewHandoff ? (
@@ -449,7 +463,7 @@ export function EasyListInboxPage() {
                       clearTaskSaveConfirmation();
                     }}
                   >
-                    Preview {approvedLocalDraft.draftType === "follow-up" ? "follow-up" : "reminder"} handoff
+                    Preview-only {approvedLocalDraft.draftType === "follow-up" ? "follow-up" : "reminder"} review
                   </button>
                   <span>
                     {approvedLocalDraft.draftType === "follow-up"
@@ -462,9 +476,9 @@ export function EasyListInboxPage() {
           ) : null}
 
           {showTaskHandoff && taskHandoffPreview ? (
-            <article className="assistant-task-handoff-preview" aria-label="Editable unsaved task-row preview">
+            <article className="assistant-task-handoff-preview" aria-label="Editable unsaved task-only save preview">
               <div className="assistant-local-draft-header">
-                <span>Explicit handoff preview</span>
+                <span>Task-only save preview</span>
                 <strong>Editable unsaved task row</strong>
               </div>
               <div className="task-row-grid task-row-card assistant-task-handoff-row">
@@ -548,9 +562,10 @@ export function EasyListInboxPage() {
                 <div>
                   <span>Final confirmation</span>
                   <strong>Save one task to {selectedListName}</strong>
-                  <p>
-                    This will save only `{taskHandoffPreview.title || "Untitled task"}` as a {taskHandoffPreview.itemKind}.
-                    It will not create a note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory.
+                  <p className="assistant-task-save-boundary">
+                    Task save only: `{taskHandoffPreview.title || "Untitled task"}` can be saved as one{" "}
+                    {taskHandoffPreview.itemKind}. Notes, plans, reminders, follow-ups, email, calendar,
+                    notifications, sync, and memory stay preview-only.
                   </p>
                 </div>
                 <button
@@ -573,7 +588,7 @@ export function EasyListInboxPage() {
                         ? "Task saved"
                         : taskSaveConfirmation.status === "saving"
                           ? "Saving task"
-                          : "Task save receipt preview"}
+                          : "Task-only receipt preview"}
                     </span>
                     <strong>{taskSaveConfirmation.title || "Untitled task"}</strong>
                   </div>
@@ -600,7 +615,7 @@ export function EasyListInboxPage() {
                   ) : null}
                   <p className="assistant-task-save-receipt-message">{taskSaveConfirmation.message}</p>
                   <p className="assistant-task-save-receipt-boundary">
-                    No email, notification, calendar item, note, memory, or follow-up was created.
+                    Task save only: no email, notification, calendar item, note, memory, reminder, plan, or follow-up was created.
                   </p>
                 </article>
               ) : null}
@@ -608,9 +623,9 @@ export function EasyListInboxPage() {
           ) : null}
 
           {showReviewHandoff && reviewHandoffPreview ? (
-            <article className="assistant-review-handoff-preview" aria-label="Editable unsaved follow-up or reminder preview">
+            <article className="assistant-review-handoff-preview" aria-label="Editable preview-only follow-up or reminder review">
               <div className="assistant-local-draft-header">
-                <span>Explicit handoff preview</span>
+                <span>Preview-only review</span>
                 <strong>
                   Editable unsaved {reviewHandoffPreview.handoffType === "follow-up" ? "follow-up" : "reminder"} review
                 </strong>

@@ -1,5 +1,28 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 13 task-only save boundary copy
+
+- Task attempted: Make it unmistakable that the first real assistant save path saves tasks only.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4217` and inspected `/app/easylist/add?demo=1` with headless Chromium. Verified the task-only save row, final confirmation, receipt, and preview-only follow-up review. Screenshot saved at `.codex-logs/stage13-task3-task-only-boundary.png`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Copy tightened:
+  - Replaced the visible `Preview: approved locally` state with `Preview: ready for draft`.
+  - Replaced `Approval creates...` copy with local draft preview language.
+  - Replaced `Preview task row handoff` with `Preview task-only save row`.
+  - Replaced `Explicit handoff preview` headers with task-only or preview-only review language.
+  - Softened the task-row note from `local handoff` to `local task row`.
+- Task-only boundary:
+  - Final confirmation now says only the task can save and notes, plans, reminders, follow-ups, email, calendar, notifications, sync, and memory stay preview-only.
+  - Receipt now says no email, notification, calendar item, note, memory, reminder, plan, or follow-up was created.
+  - Follow-up and reminder remain preview-only review surfaces with no send/no notification copy.
+- No behavior change: This task does not change persistence, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+
 ## 2026-05-12 - Stage 13 saved task receipt
 
 - Task attempted: After a final-confirmed assistant task save, show a clear receipt so the user knows exactly what happened.

@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 13 Task-Only Save Boundary Copy
+
+- Task: Task-only save boundary copy.
+- Result: Passed local copy/UI implementation, build, and route inspection.
+- Magic signal: task-save-boundary-unmistakable
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4217`, selected `Task draft`, clicked `Preview draft`, clicked `Preview task-only save row`, clicked `Confirm and save task`, and verified task-only confirmation and receipt copy. Screenshot saved at `.codex-logs/stage13-task3-task-only-boundary.png`.
+- Copy evidence: visible route text no longer contains `Approval creates`, `Preview task row handoff`, or `Explicit handoff preview`.
+- Boundary evidence: final confirmation says notes, plans, reminders, follow-ups, email, calendar, notifications, sync, and memory stay preview-only; receipt repeats that no non-task object or external action was created.
+- Preview-only evidence: follow-up and reminder controls use preview-only review language and retain no-send/no-notification boundaries.
+- No behavior change: no persistence, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 13 Saved Task Receipt
 
 - Task: Saved task receipt.
