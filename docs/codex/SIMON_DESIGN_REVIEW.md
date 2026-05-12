@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_STAGE_14
+
+## Stage 13 Design Proof - 2026-05-12
+
+Verdict: `READY_FOR_STAGE_14`.
+
+The first real assistant save path is visually contained enough to continue. Inbox is still the densest route, but the flow is legible: suggestion, selected draft, task-only save row, final confirmation, and receipt. Today points to that path without becoming a saved-task status surface.
+
+What works:
+- Today keeps assistant read, next move, command row, and Due/Plan/Open strip in the first viewport.
+- Inbox makes the only real action look like task save, not broad assistant automation.
+- The receipt stays inside the Inbox approval surface instead of creating a completion dashboard.
+- Plan and Notes handoff previews remain visually separate from real save behavior.
+
+Design risk:
+- Inbox density is acceptable for proof, but Stage 14 should avoid adding a second dense command center. If note save begins, keep the saved note path inside the existing Notes/Memory draft area and avoid touching Today beyond one compact hint.
+
+---
+
+## Verdict
 TODAY_POINTS_TO_TASK_ONLY_INBOX_CONFIRMATION
 
 ## Stage 13 Task 4 Design Review - 2026-05-12

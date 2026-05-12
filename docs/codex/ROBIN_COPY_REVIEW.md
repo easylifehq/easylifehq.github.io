@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+COPY_READY_FOR_STAGE_14
+
+## Stage 13 Copy Proof - 2026-05-12
+
+Verdict: `COPY_READY_FOR_STAGE_14`.
+
+Stage 13 copy makes the task-save boundary clear enough to expand carefully. The real action says task-only, the receipt says what happened, and the surrounding copy keeps notes, plans, reminders, follow-ups, email, calendar, notifications, sync, and memory outside the task save.
+
+What works:
+- `Confirm and save task` is explicit.
+- The receipt repeats task-only and no-external-action boundaries.
+- Today says Inbox final confirmation can save one task only.
+- Follow-up and reminder stay preview-only and avoid send/notification claims.
+- Plan and Notes still say their handoff previews are not saved, scheduled, or real memory.
+
+Copy risk:
+- Stage 14 must not call saved notes "memory." It should say saved note, saved context, or note draft only, and it should keep real memory/model claims parked.
+
+---
+
+## Verdict
 TASK_ONLY_SAVE_BOUNDARY_COPY_IS_CLEAR
 
 ## Stage 13 Task 3 Copy Review - 2026-05-12

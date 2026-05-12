@@ -1,5 +1,28 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 13 proof packet
+
+- Task attempted: Prove whether the first real user-approved assistant task save path is trustworthy before expanding beyond tasks.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4219` and inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` with headless Chromium. Also inspected task-save confirmation/receipt, plan handoff preview, notes handoff preview, and follow-up preview.
+- Proof artifacts:
+  - `.codex-logs/stage13-proof-today.png`
+  - `.codex-logs/stage13-proof-inbox.png`
+  - `.codex-logs/stage13-proof-plan.png`
+  - `.codex-logs/stage13-proof-notes.png`
+  - `.codex-logs/stage13-proof-settings.png`
+  - `.codex-logs/stage13-proof-inbox-task-save.png`
+  - `.codex-logs/stage13-proof-plan-handoff.png`
+  - `.codex-logs/stage13-proof-notes-handoff.png`
+  - `.codex-logs/stage13-proof-followup-preview.png`
+  - `.codex-logs/stage13-proof.json`
+  - `.codex-logs/stage13-proof-targeted-previews.json`
+- Task save verdict: explicit, trustworthy, and contained. The user must preview a task draft, preview a task-only save row, then click `Confirm and save task`. The receipt shows the task title/list and repeats the no-external-action boundary.
+- Preview-only verdict: preserved. Plan says not scheduled and not saved; Notes says not saved and not real memory; follow-up says it does not send email, text, calls, or messages; reminder remains no-notification preview-only copy.
+- What to park before expanding: saved plan, reminder, and follow-up actions should stay parked. Calendar scheduling, notifications, email/text/call/message sending, and real memory claims are not ready.
+- Stage 14 preparation: `NEXT_5_TASKS.md` now prepares a narrow user-approved note save path only, because notes are the safest next saved object after tasks.
+- Final verdict: `READY_FOR_STAGE_14`.
+
 ## 2026-05-12 - Stage 13 Today task-save hint
 
 - Task attempted: Point Today to the safest task-only final confirmation path in Inbox without implying autonomous work.

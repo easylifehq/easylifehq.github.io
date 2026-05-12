@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 13 Proof Packet
+
+- Task: Stage 13 proof packet.
+- Result: Passed build, five-route inspection, targeted task-save inspection, and preview-only boundary inspection.
+- Magic signal: ready-for-stage-14
+- Changed files: docs only
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` on local Vite port `4219`.
+- Task-save evidence: Inbox required task draft selection, task-only save row preview, final `Confirm and save task`, and then rendered a task-only receipt with title/list plus no-external-action copy.
+- Preview-only evidence: Plan handoff said not scheduled and not saved; Notes handoff said not saved and not real memory; follow-up review said no email, text, calls, or messages are sent.
+- Containment evidence: no browser page errors, no cross-route state, no autonomous action copy, no backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change.
+- Verdict: `READY_FOR_STAGE_14`.
+- Stage 14 constraint: expand only to a narrow user-approved note save path. Keep plan scheduling, reminders, follow-ups, external communication, notifications, model calls, and real memory parked.
+
 ## 2026-05-12 - Stage 13 Today Task-Save Hint
 
 - Task: Today task-save hint.

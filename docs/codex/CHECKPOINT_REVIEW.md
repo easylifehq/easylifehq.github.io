@@ -1,6 +1,82 @@
 # Checkpoint Review
 
 ## Verdict
+READY_FOR_STAGE_14
+
+## Stage 13 Narrow User-Approved Task Save Proof Packet
+
+Reviewed At: 2026-05-12
+
+Stage 13 proof says the first real user-approved assistant save path is trustworthy enough to continue. The task path is explicit, task-only, receipt-backed, and contained inside Inbox. Today points to it without showing saved-task data, and Plan, Notes, reminder, and follow-up paths remain preview-only.
+
+## Stage 13 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 13 Routes Inspected
+
+Local preview: `http://127.0.0.1:4219`
+
+- Today/HQ: `/app/hq?demo=1` rendered `What needs attention now?`, the Due/Plan/Open strip, the next move, and the command row. Today says Inbox final confirmation can save one task only and does not show saved-task receipt data.
+- Inbox/Capture: `/app/easylist/add?demo=1` rendered the assistant intake preview, task draft comparison, task-only save row, final confirmation, and task-only receipt. Demo review mode blocked a signed-in write and said no signed-in task save happened.
+- Plan: `/app/easycalendar/day?demo=1` rendered the day-planning surface. After `Preview plan handoff`, the plan preview said it was not scheduled and not saved.
+- Notes/Memory: `/app/easynotes?demo=1` rendered Memory. After `Preview note handoff`, the note preview said it was not saved and not real memory.
+- More/Settings: `/app/settings?demo=1` rendered Settings without route errors.
+
+Screenshots and machine-readable proof were saved in `.codex-logs/`:
+
+- `stage13-proof-today.png`
+- `stage13-proof-inbox.png`
+- `stage13-proof-plan.png`
+- `stage13-proof-notes.png`
+- `stage13-proof-settings.png`
+- `stage13-proof-inbox-task-save.png`
+- `stage13-proof-plan-handoff.png`
+- `stage13-proof-notes-handoff.png`
+- `stage13-proof-followup-preview.png`
+- `stage13-proof.json`
+- `stage13-proof-targeted-previews.json`
+
+No browser page errors were reported.
+
+## Task Save Trust
+
+Trustworthy enough to proceed. The task-save flow requires an explicit user path: choose task draft, preview draft, preview the task-only save row, then click `Confirm and save task`. The confirmation says it can save one task only. The receipt shows the task title and list, and repeats that no email, notification, calendar item, note, memory, reminder, plan, or follow-up was created.
+
+## Containment
+
+Contained. The task save path reuses the existing EasyList task save behavior and does not add cross-route state, model calls, external actions, backend/auth/Firebase config changes, dependencies, package changes, deployment changes, generated output, or secrets.
+
+## Preview-Only Boundaries
+
+Preserved.
+
+- Follow-up remains preview-only and says it does not send email, text, calls, or messages.
+- Reminder remains preview-only and says it does not schedule a notification.
+- Plan handoff remains preview-only and says it is not scheduled and not saved.
+- Notes handoff remains preview-only and says it is not saved and not real memory.
+
+## What Still Feels Fake, Weak, Or Confusing
+
+- Demo review mode cannot prove a real signed-in database write; it intentionally blocks the write for safe inspection. The production path should still be reviewed in a signed-in manual QA pass before broad use.
+- Inbox remains dense because it carries suggestion, draft comparison, task-only row, confirmation, receipt, and the old task composer.
+- The next non-task save path must not imply real memory, scheduling, reminders, or communication. Notes are the safest next expansion because they can use an existing EasyLife note flow without external side effects.
+
+## Park Before Expanding
+
+Do not start saved plan, reminder, or follow-up actions yet. Park calendar scheduling, notifications, email/text/call/message sending, and real memory claims until later proof. Stage 14 should add only a narrow user-approved note save path, with no real memory claim.
+
+## Should Stage 14 Begin?
+
+Yes. Stage 14 may begin as a narrow user-approved note save path only. It should mirror the Stage 13 pattern: final confirmation, receipt, copy boundary, Today/Notes hint, and proof. It must not add model calls, backend changes, Firebase rules/config changes, package/dependency changes, deploy config, generated output, secrets, email sending, notification scheduling, calendar sync, or real memory.
+
+## Final Verdict
+
+READY_FOR_STAGE_14
+
+---
+
+## Verdict
 READY_FOR_STAGE_13
 
 ## Stage 12 Explicit Save-Draft Handoff Proof Packet
