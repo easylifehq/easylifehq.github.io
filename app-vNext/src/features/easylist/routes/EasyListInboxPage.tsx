@@ -228,7 +228,8 @@ export function EasyListInboxPage() {
           <p className="eyebrow">Inbox</p>
           <h2 id="easylist-inbox-title">Review the intake queue</h2>
           <p className="page-section-description">
-            Capture loose input, approve what matters, send time-sensitive work to Plan, and keep context available for Today.
+            Capture loose input, approve what matters, and keep the save paths explicit: tasks confirm here, note/context
+            confirms in Notes, and plans, reminders, and follow-ups stay preview-only.
           </p>
         </header>
 
@@ -293,7 +294,10 @@ export function EasyListInboxPage() {
                 placeholder="Paste one messy thought to classify locally"
               />
             </label>
-            <p>Local preview only. Nothing is saved, sent, synced, or remembered from this card.</p>
+            <p>
+              Local preview only. Task saves require final confirmation here; note/context saves require final
+              confirmation in Notes. Nothing is sent, synced, scheduled, or remembered from this card.
+            </p>
           </div>
 
           <article className={`assistant-suggestion-card assistant-suggestion-card-${assistantSuggestion.intent}`}>
@@ -448,7 +452,7 @@ export function EasyListInboxPage() {
                   >
                     Preview task-only save row
                   </button>
-                  <span>Only task drafts can reach final save. This row is still unsaved.</span>
+                  <span>Only task drafts can reach final save in Inbox. Note/context saves happen in Notes.</span>
                 </div>
               ) : null}
               {canPreviewReviewHandoff ? (
@@ -564,8 +568,8 @@ export function EasyListInboxPage() {
                   <strong>Save one task to {selectedListName}</strong>
                   <p className="assistant-task-save-boundary">
                     Task save only: `{taskHandoffPreview.title || "Untitled task"}` can be saved as one{" "}
-                    {taskHandoffPreview.itemKind}. Notes, plans, reminders, follow-ups, email, calendar,
-                    notifications, sync, and memory stay preview-only.
+                    {taskHandoffPreview.itemKind}. Note/context saves require Notes final confirmation; plans,
+                    reminders, follow-ups, email, calendar, notifications, sync, and memory stay preview-only.
                   </p>
                 </div>
                 <button

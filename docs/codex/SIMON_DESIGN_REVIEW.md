@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+TODAY_AND_INBOX_SAVE_HINTS_STAY_FOCUSED
+
+## Stage 14 Task 4 Design Review - 2026-05-12
+
+Verdict: `TODAY_AND_INBOX_SAVE_HINTS_STAY_FOCUSED`.
+
+Today and Inbox now explain the two safe save lanes without turning either surface into a saved-object dashboard. Today keeps the first viewport centered on assistant read, next move, command/capture, and the small Due/Plan/Open strip. Inbox keeps the task confirmation path local while pointing note/context saves to Notes.
+
+What works:
+- Today says Inbox can save one task and Notes can save one note/context item, then parks plans, reminders, and follow-ups as preview-only.
+- Inbox says tasks confirm here, note/context confirms in Notes, and plans/reminders/follow-ups remain preview-only.
+- The task-only save preview now names Notes final confirmation without showing note data inside Inbox.
+- No cross-route saved note state appears on Today.
+
+Design risk:
+- The safety copy is doing real trust work and is a little dense. Stage 14 proof should decide whether to keep it as-is or compress it after the save boundaries are fully reviewed.
+
+---
+
+## Verdict
 SAVED_NOTE_RECEIPT_STAYS_CONTAINED
 
 ## Stage 14 Task 2 Design Review - 2026-05-12

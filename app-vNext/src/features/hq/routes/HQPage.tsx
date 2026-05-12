@@ -88,7 +88,7 @@ export function HQPage() {
     }
     return {
       label: "Remember the next note",
-      reason: "Everything looks calm, so save the context before it turns into noise.",
+      reason: "Everything looks calm. Review context in Notes; only final confirmation can save one note.",
       buttonLabel: "Open Memory",
       to: "/app/easynotes",
     };
@@ -237,11 +237,11 @@ export function HQPage() {
             </div>
           </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
-            <span>Capture, classify, review task-only</span>
+            <span>Capture, classify, confirm safely</span>
             <strong>{assistantCommandHintRow}</strong>
             <small>
-              {localDraftHint.label}: {localDraftHint.title}. Inbox final confirmation can save one task only;
-              notes, plans, reminders, and follow-ups stay preview-only.
+              {localDraftHint.label}: {localDraftHint.title}. Inbox can save one task; Notes can save one
+              note/context item. Plans, reminders, and follow-ups stay preview-only.
             </small>
             <em>Open Inbox</em>
           </button>

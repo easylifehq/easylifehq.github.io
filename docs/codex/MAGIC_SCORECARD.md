@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 14 Today And Inbox Safe Save-Path Hint
+
+- Task: Today and Inbox safe save-path hint.
+- Result: Passed static wording implementation, build, and route inspection.
+- Magic signal: two-safe-save-lanes-visible
+- Changed files: 5
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/hq?demo=1` and `/app/easylist/add?demo=1` on local Vite port `4223`. Screenshots saved at `.codex-logs/stage14-task4-today-save-hints.png` and `.codex-logs/stage14-task4-inbox-save-hints.png`.
+- Today evidence: command hint says Inbox can save one task, Notes can save one note/context item, and plans/reminders/follow-ups stay preview-only.
+- Inbox evidence: route description and intake preview say task saves require final confirmation in Inbox, note/context saves require final confirmation in Notes, and plans/reminders/follow-ups remain preview-only.
+- Boundary evidence: task save preview names Notes final confirmation without showing saved note data or adding cross-route state.
+- No behavior change: no persistence, cross-route state, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 14 Note-Only Save Boundary Copy
 
 - Task: Note-only save boundary copy.

@@ -1,5 +1,27 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 14 Today and Inbox safe save-path hint
+
+- Task attempted: Explain the two safe save paths now that tasks and notes both require explicit final confirmation.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4223` and inspected `/app/hq?demo=1` and `/app/easylist/add?demo=1` with headless Chromium. Screenshots saved at `.codex-logs/stage14-task4-today-save-hints.png` and `.codex-logs/stage14-task4-inbox-save-hints.png`.
+- Files changed:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Today wording:
+  - The command row now says `Capture, classify, confirm safely`.
+  - The helper says Inbox can save one task and Notes can save one note/context item.
+  - Plans, reminders, and follow-ups still stay preview-only.
+  - Today does not show saved note data or saved task receipt data.
+- Inbox wording:
+  - The route description now says tasks confirm in Inbox, note/context confirms in Notes, and plans/reminders/follow-ups stay preview-only.
+  - The assistant intake preview says task saves require final confirmation here and note/context saves require final confirmation in Notes.
+  - The task-only save preview says note/context saves require Notes final confirmation.
+- Guardrails preserved: No cross-route state, persistence, backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 14 note-only save boundary copy
 
 - Task attempted: Tighten Notes copy so the second real assistant save path clearly saves a note/context item only, not real memory or broader assistant action.
