@@ -1,5 +1,30 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 14 final-confirmed note save handoff
+
+- Task attempted: Let the user save an approved assistant note/context draft only after a final explicit confirmation.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4220` and inspected `/app/easynotes?demo=1` with headless Chromium. Clicked `Preview note save path`, verified final confirmation, clicked `Confirm and save note`, and verified demo review mode blocked a signed-in write. Screenshot saved at `.codex-logs/stage14-task1-note-save-confirmation.png`.
+- Files changed:
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `app-vNext/src/features/easynotes/EasyNotesContext.tsx`
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Explicit final confirmation:
+  - The note preview now renders `Final confirmation` and `Save one note`.
+  - The user must click `Confirm and save note` before the path uses existing EasyLife note creation/save behavior.
+  - The confirmation says exactly which note/context item would be saved.
+- Demo review behavior:
+  - `?demo=1` blocks the signed-in write and reports that no signed-in note save happened, so local proof does not create real user data.
+- Note-only boundary:
+  - The confirmation says this is one note/context item, not real memory.
+  - It says the action will not create a task, plan, reminder, follow-up, email, calendar item, notification, sync, or model call.
+  - The old visible `Explicit handoff preview` copy was softened to `Note save preview`.
+- Follow-up needed: Stage 14 Task 2 should add a clearer saved note receipt after final confirmation.
+
 ## 2026-05-12 - Stage 13 proof packet
 
 - Task attempted: Prove whether the first real user-approved assistant task save path is trustworthy before expanding beyond tasks.

@@ -39,6 +39,7 @@ type EasyNotesContextValue = {
   isLoading: boolean;
   error: string;
   addNote: () => Promise<string | null>;
+  createNoteFromDraft: (draft: NoteDraft) => Promise<string | null>;
   addFolder: (name: string) => Promise<string | null>;
   renameFolder: (folderId: string, name: string) => Promise<void>;
   deleteFolder: (folderId: string) => Promise<void>;
@@ -202,6 +203,16 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       return sortNotes([optimisticNote, ...current]);
     });
 
+    return noteId;
+  }
+
+  async function createNoteFromDraftForUser(draft: NoteDraft) {
+    if (!user) return null;
+
+    const noteId = await addNoteForUser();
+    if (!noteId) return null;
+
+    await saveNoteForUser(noteId, draft);
     return noteId;
   }
 
@@ -381,6 +392,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       isLoading,
       error,
       addNote: addNoteForUser,
+      createNoteFromDraft: createNoteFromDraftForUser,
       addFolder: addFolderForUser,
       renameFolder: renameFolderForUser,
       deleteFolder: deleteFolderForUser,

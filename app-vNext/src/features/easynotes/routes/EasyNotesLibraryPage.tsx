@@ -12,7 +12,9 @@ import {
   localDraftTypeLabels,
   type AssistantMemoryDraftAction,
   type AssistantNoteHandoffPreview,
+  type AssistantNoteSaveConfirmation,
 } from "@/features/assistant/localDraftTypes";
+import type { NoteDraft } from "@/lib/firestore/notes";
 import { useEasyNotes } from "@/features/easynotes/EasyNotesContext";
 
 const lastOpenNoteStorageKey = "easynotes:lastOpenNoteId";
@@ -53,6 +55,7 @@ export function EasyNotesLibraryPage() {
     notes,
     folders,
     addNote,
+    createNoteFromDraft,
     addFolder,
     renameFolder,
     deleteFolder,
@@ -72,6 +75,7 @@ export function EasyNotesLibraryPage() {
   const [memoryDraftAction, setMemoryDraftAction] = useState<AssistantMemoryDraftAction>("remember");
   const [showNoteHandoff, setShowNoteHandoff] = useState(false);
   const [noteHandoffPreview, setNoteHandoffPreview] = useState<AssistantNoteHandoffPreview | null>(null);
+  const [noteSaveConfirmation, setNoteSaveConfirmation] = useState<AssistantNoteSaveConfirmation | null>(null);
   const [lastOpenNoteId] = useState(() => window.localStorage.getItem(lastOpenNoteStorageKey) || "");
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -127,6 +131,10 @@ export function EasyNotesLibraryPage() {
     ? buildLocalDraftFromSuggestion(memoryDraftSuggestion, selectedMemoryDraftOption.draftType)
     : null;
   const canPreviewNoteHandoff = selectedMemoryDraft?.draftType === "note";
+  const isDemoReviewMode = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("demo") === "1" || params.get("visualQa") === "1";
+  }, []);
   const memoryBridge = useMemo(
     () => [
       {
@@ -163,6 +171,82 @@ export function EasyNotesLibraryPage() {
     if (noteId) {
       navigate(`/app/easynotes/${noteId}`);
     }
+  }
+
+  function clearNoteSaveConfirmation() {
+    setNoteSaveConfirmation(null);
+  }
+
+  function buildNoteDraftFromHandoff(preview: AssistantNoteHandoffPreview): NoteDraft | null {
+    const title = preview.title.trim();
+    const bodyText = preview.body.trim();
+    const contextGroup = preview.contextGroup.trim();
+
+    if (!title && !bodyText) return null;
+
+    return {
+      title: title || "Assistant context note",
+      bodyText,
+      tags: contextGroup ? [contextGroup] : [],
+      folderId: "",
+      pinned: preview.pinPreview,
+    };
+  }
+
+  async function handleConfirmNoteSave() {
+    if (!noteHandoffPreview || noteSaveConfirmation?.status === "saving") return;
+
+    const noteDraft = buildNoteDraftFromHandoff(noteHandoffPreview);
+    if (!noteDraft) {
+      setNoteSaveConfirmation({
+        sourcePreviewId: noteHandoffPreview.id,
+        title: noteHandoffPreview.title,
+        contextGroup: noteHandoffPreview.contextGroup,
+        pinPreview: noteHandoffPreview.pinPreview,
+        savedNoteId: null,
+        status: "blocked",
+        message: "Name the note or add body text before saving. Nothing was saved.",
+      });
+      return;
+    }
+
+    setNoteSaveConfirmation({
+      sourcePreviewId: noteHandoffPreview.id,
+      title: noteDraft.title,
+      contextGroup: noteHandoffPreview.contextGroup.trim() || "No context group",
+      pinPreview: noteDraft.pinned,
+      savedNoteId: null,
+      status: "saving",
+      message: "Saving this note only...",
+    });
+
+    if (isDemoReviewMode) {
+      setNoteSaveConfirmation({
+        sourcePreviewId: noteHandoffPreview.id,
+        title: noteDraft.title,
+        contextGroup: noteHandoffPreview.contextGroup.trim() || "No context group",
+        pinPreview: noteDraft.pinned,
+        savedNoteId: null,
+        status: "blocked",
+        message:
+          "Demo review mode: no signed-in note save happened. This final confirmation would save one note only outside demo review; nothing else was created.",
+      });
+      return;
+    }
+
+    const noteId = await createNoteFromDraft(noteDraft);
+
+    setNoteSaveConfirmation({
+      sourcePreviewId: noteHandoffPreview.id,
+      title: noteDraft.title,
+      contextGroup: noteHandoffPreview.contextGroup.trim() || "No context group",
+      pinPreview: noteDraft.pinned,
+      savedNoteId: noteId,
+      status: noteId ? "saved" : "blocked",
+      message: noteId
+        ? "Saved one note only. No task, plan, reminder, follow-up, email, calendar item, notification, sync, model call, or real memory was created."
+        : "No signed-in note save happened in this preview session. Nothing else was created.",
+    });
   }
 
   async function handleCreateFolder() {
@@ -302,6 +386,7 @@ export function EasyNotesLibraryPage() {
                   setMemoryDraftAction(option.action);
                   setShowNoteHandoff(false);
                   setNoteHandoffPreview(null);
+                  clearNoteSaveConfirmation();
                 }}
                 title="Local preview only. This does not write memory."
               >
@@ -331,9 +416,10 @@ export function EasyNotesLibraryPage() {
                       const preview = buildNoteHandoffPreview(selectedMemoryDraft);
                       setNoteHandoffPreview(preview);
                       setShowNoteHandoff(Boolean(preview));
+                      clearNoteSaveConfirmation();
                     }}
                   >
-                    Preview note handoff
+                    Preview note save path
                   </button>
                   <span>This only prepares an editable local note. It does not save or remember.</span>
                 </div>
@@ -347,7 +433,7 @@ export function EasyNotesLibraryPage() {
           {showNoteHandoff && noteHandoffPreview ? (
             <article className="notes-note-handoff-preview" aria-label="Editable unsaved note draft preview">
               <div className="assistant-local-draft-header">
-                <span>Explicit handoff preview</span>
+                <span>Note save preview</span>
                 <strong>Editable unsaved note draft</strong>
               </div>
               <div className="notes-note-handoff-grid">
@@ -357,7 +443,10 @@ export function EasyNotesLibraryPage() {
                     type="text"
                     value={noteHandoffPreview.title}
                     onChange={(event) =>
-                      setNoteHandoffPreview((current) => current ? { ...current, title: event.target.value } : current)
+                      setNoteHandoffPreview((current) => {
+                        clearNoteSaveConfirmation();
+                        return current ? { ...current, title: event.target.value } : current;
+                      })
                     }
                   />
                 </label>
@@ -367,9 +456,10 @@ export function EasyNotesLibraryPage() {
                     type="text"
                     value={noteHandoffPreview.contextGroup}
                     onChange={(event) =>
-                      setNoteHandoffPreview((current) =>
-                        current ? { ...current, contextGroup: event.target.value } : current
-                      )
+                      setNoteHandoffPreview((current) => {
+                        clearNoteSaveConfirmation();
+                        return current ? { ...current, contextGroup: event.target.value } : current;
+                      })
                     }
                   />
                 </label>
@@ -378,9 +468,10 @@ export function EasyNotesLibraryPage() {
                     type="checkbox"
                     checked={noteHandoffPreview.pinPreview}
                     onChange={(event) =>
-                      setNoteHandoffPreview((current) =>
-                        current ? { ...current, pinPreview: event.target.checked } : current
-                      )
+                      setNoteHandoffPreview((current) => {
+                        clearNoteSaveConfirmation();
+                        return current ? { ...current, pinPreview: event.target.checked } : current;
+                      })
                     }
                   />
                   <span>Preview as pinned context only</span>
@@ -391,7 +482,10 @@ export function EasyNotesLibraryPage() {
                     rows={4}
                     value={noteHandoffPreview.body}
                     onChange={(event) =>
-                      setNoteHandoffPreview((current) => current ? { ...current, body: event.target.value } : current)
+                      setNoteHandoffPreview((current) => {
+                        clearNoteSaveConfirmation();
+                        return current ? { ...current, body: event.target.value } : current;
+                      })
                     }
                   />
                 </label>
@@ -401,6 +495,30 @@ export function EasyNotesLibraryPage() {
                   {warning}
                 </p>
               ))}
+              <div className="notes-note-save-confirmation" aria-label="Final note save confirmation">
+                <div>
+                  <span>Final confirmation</span>
+                  <strong>Save one note</strong>
+                  <p>
+                    Note save only: `{noteHandoffPreview.title || "Assistant context note"}` can be saved as one
+                    note/context item. It is not real memory and will not create a task, plan, reminder, follow-up,
+                    email, calendar item, notification, sync, or model call.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="primary-button compact-button"
+                  onClick={() => void handleConfirmNoteSave()}
+                  disabled={noteSaveConfirmation?.status === "saving"}
+                >
+                  {noteSaveConfirmation?.status === "saving" ? "Saving note..." : "Confirm and save note"}
+                </button>
+              </div>
+              {noteSaveConfirmation ? (
+                <p className={`notes-note-save-message notes-note-save-message-${noteSaveConfirmation.status}`}>
+                  {noteSaveConfirmation.message}
+                </p>
+              ) : null}
             </article>
           ) : null}
         </section>

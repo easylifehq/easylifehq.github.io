@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+NOTE_SAVE_CONFIRMATION_COPY_AVOIDS_REAL_MEMORY
+
+## Stage 14 Task 1 Copy Review - 2026-05-12
+
+Verdict: `NOTE_SAVE_CONFIRMATION_COPY_AVOIDS_REAL_MEMORY`.
+
+The first note save copy is narrow enough. It says `Save one note`, names the note/context item, and explicitly says it is not real memory.
+
+What works:
+- `Confirm and save note` is the only real action after the note save preview.
+- Demo review mode says no signed-in note save happened, which keeps local inspection honest.
+- The confirmation says no task, plan, reminder, follow-up, email, calendar item, notification, sync, or model call is created.
+- The visible header now says `Note save preview` instead of broad handoff language.
+
+Copy risk:
+- The next task should add a stronger receipt after a real signed-in note save succeeds, so the user can see exactly what was saved without reading the confirmation again.
+
+---
+
+## Verdict
 COPY_READY_FOR_STAGE_14
 
 ## Stage 13 Copy Proof - 2026-05-12

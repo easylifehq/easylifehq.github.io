@@ -81,6 +81,16 @@ export type AssistantNoteHandoffPreview = {
   warnings: string[];
 };
 
+export type AssistantNoteSaveConfirmation = {
+  sourcePreviewId: string;
+  title: string;
+  contextGroup: string;
+  pinPreview: boolean;
+  savedNoteId: string | null;
+  status: "idle" | "saving" | "saved" | "blocked";
+  message: string;
+};
+
 export type AssistantPlanHandoffPreview = {
   id: string;
   sourceDraftId: string;

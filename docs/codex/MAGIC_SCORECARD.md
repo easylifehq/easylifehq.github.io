@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 14 Final-Confirmed Note Save Handoff
+
+- Task: Final-confirmed note save handoff.
+- Result: Passed local UI/context implementation, build, and route inspection.
+- Magic signal: note-save-requires-final-confirmation
+- Changed files: 7
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easynotes?demo=1` on local Vite port `4220`, clicked `Preview note save path`, verified `Final confirmation`, clicked `Confirm and save note`, and verified the demo-blocked message. Screenshot saved at `.codex-logs/stage14-task1-note-save-confirmation.png`.
+- Save-path evidence: Notes now exposes `createNoteFromDraft`, which uses the existing EasyLife create note and save note behavior for signed-in users.
+- Demo guard: `?demo=1` blocks the signed-in write and reports that no signed-in note save happened.
+- Boundary evidence: note save only; no task, plan, reminder, follow-up, email, calendar item, notification, sync, model call, or real memory is created by this confirmation.
+- Copy evidence: visible `Explicit handoff preview` was softened to `Note save preview`.
+- Follow-up: Stage 14 Task 2 should add a clearer receipt after confirmed note save.
+
 ## 2026-05-12 - Stage 13 Proof Packet
 
 - Task: Stage 13 proof packet.

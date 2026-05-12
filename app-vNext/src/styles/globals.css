@@ -2503,6 +2503,61 @@ textarea::placeholder {
   resize: vertical;
 }
 
+.notes-note-save-confirmation {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.68rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, #1f8f6a 36%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, #1f8f6a 9%, var(--ui-bg-card, var(--shell-input-bg)));
+}
+
+.notes-note-save-confirmation div {
+  display: grid;
+  gap: 0.16rem;
+  min-width: 0;
+}
+
+.notes-note-save-confirmation span {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.notes-note-save-confirmation strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.94rem;
+}
+
+.notes-note-save-confirmation p,
+.notes-note-save-message {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.notes-note-save-message {
+  padding: 0.56rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 72%, transparent);
+}
+
+.notes-note-save-message-saved {
+  border-color: color-mix(in srgb, #1f8f6a 34%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, #1f8f6a 10%, var(--ui-bg-card, var(--shell-input-bg)));
+}
+
+.notes-note-save-message-blocked {
+  border-color: color-mix(in srgb, #b86b2b 34%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, #b86b2b 9%, var(--ui-bg-card, var(--shell-input-bg)));
+}
+
 .notes-library-results-heading {
   margin-top: 1.15rem;
   padding-top: 0.75rem;
@@ -13088,6 +13143,11 @@ button.calendar-detail-card:disabled {
     display: grid;
     grid-template-columns: 1fr;
     max-width: none;
+  }
+
+  .notes-note-save-confirmation {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-natural-capture {
