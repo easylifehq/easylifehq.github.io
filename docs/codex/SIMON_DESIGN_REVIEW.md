@@ -1,6 +1,27 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_STAGE_15
+
+## Stage 14 Design Proof - 2026-05-12
+
+Verdict: `READY_FOR_STAGE_15`.
+
+The task and note save paths are visually contained enough to continue, but Stage 15 should harden and simplify rather than expand. Today explains both save lanes without showing saved note data, Inbox keeps task save local, and Notes keeps note/context save inside the existing review panel.
+
+What works:
+- Today still opens with assistant read, next move, command/capture row, and Due/Plan/Open strip.
+- Inbox has a legible task save sequence: draft, task-only save row, final confirmation, receipt.
+- Notes has a legible note/context save sequence: preview, final confirmation, receipt.
+- Plan, reminder, and follow-up surfaces remain visually separate from real save behavior.
+
+Design risk:
+- Safety copy is dense across Today, Inbox, and Notes. Stage 15 should compress repeated warnings while preserving the boundaries.
+- Do not add saved plans/reminders/follow-ups yet; those would make the assistant feel broader than the current trust contract supports.
+
+---
+
+## Verdict
 TODAY_AND_INBOX_SAVE_HINTS_STAY_FOCUSED
 
 ## Stage 14 Task 4 Design Review - 2026-05-12

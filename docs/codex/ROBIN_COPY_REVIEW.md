@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+COPY_READY_FOR_STAGE_15
+
+## Stage 14 Copy Proof - 2026-05-12
+
+Verdict: `COPY_READY_FOR_STAGE_15`.
+
+Stage 14 copy is honest enough to continue. Task save says task-only, note save says note/context only, and both receipts state what did not happen. The copy still avoids autonomous assistant claims, real memory claims, email/calendar/notification claims, and model-backed action claims.
+
+What works:
+- Task save requires `Confirm and save task` and receipt copy says no non-task object or external action was created.
+- Note save requires `Confirm and save note` and receipt copy says no real memory was created.
+- Today and Inbox name the two safe save lanes without implying the assistant can save everything.
+- Plan, reminder, and follow-up remain preview-only.
+
+Copy risk:
+- The product is safe but repetitive. Stage 15 should compress repeated boundary language into clearer receipt and helper copy, not add new saved action types.
+
+---
+
+## Verdict
 NOTE_ONLY_SAVE_BOUNDARY_IS_HONEST
 
 ## Stage 14 Task 3 Copy Review - 2026-05-12

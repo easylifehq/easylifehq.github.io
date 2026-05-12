@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: stage-14-narrow-user-approved-note-save-path
+Current Phase: stage-15-trustworthy-saved-assistant-loop
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Add the second narrow user-approved save path from an assistant note draft preview into an existing EasyLife flow.
+Primary Action: Harden and simplify the saved task/note assistant loop before any new saved object type is considered.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 14 tasks must add one real note save path only after final explicit user confirmation, and must not add autonomous actions, hidden writes, real memory, external sync, email, notifications, calendar sync, reminders, follow-ups, model calls, or broad persistence.
+Complexity Budget: Stage 15 tasks must simplify and prove the existing task and note/context save paths only; they must not add autonomous actions, hidden writes, real memory, external sync, email, notifications, calendar sync, reminders, follow-ups, model calls, new saved object types, or broad persistence.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_STAGE_14
+Parking State: READY_FOR_STAGE_15
 Evidence Required: build proof, five-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 13 proof now says READY_FOR_STAGE_14. Stage 14 Narrow User-Approved Note Save Path may begin using the prepared tasks in NEXT_5_TASKS.md.
+Next Phase Criteria: Stage 14 proof now says READY_FOR_STAGE_15. Stage 15 Trustworthy Saved Assistant Loop may begin using the prepared tasks in NEXT_5_TASKS.md.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
-Repair Return Phase: stage-14-narrow-user-approved-note-save-path
-Updated At: 2026-05-12 - Stage 13 narrow user-approved task save proof passed; Stage 14 narrow user-approved note save path approved.
+Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
+Updated At: 2026-05-12 - Stage 14 user-approved task and note save proof passed; Stage 15 hardening approved.
 
 ## Assistant Brain Gate
 
@@ -64,6 +64,14 @@ Stage 13 proof result: READY_FOR_STAGE_14.
 Prepared Stage 14 queue: docs/codex/NEXT_5_TASKS.md contains exactly five narrow user-approved note save-path tasks.
 
 Stage 14 may add the second real save action only after a final explicit user confirmation. Use existing EasyLife Notes behavior and call it note/context save, not real memory. Stage 14 must not add hidden writes, automatic saves, real AI/model calls, real memory, email/text/call/message sending, notification scheduling, calendar sync, reminder saves, follow-up saves, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, or secrets.
+
+Stage 14 proof result: READY_FOR_STAGE_15.
+
+## Trustworthy Saved Assistant Loop Gate
+
+Prepared Stage 15 queue: docs/codex/NEXT_5_TASKS.md contains exactly five trustworthy saved assistant loop tasks.
+
+Stage 15 may harden, simplify, and prove the existing task and note/context save paths. It must not add saved plans, saved reminders, saved follow-ups, external communication, notifications, calendar sync, model-backed action, real memory, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, or secrets.
 
 ## Phase Order
 

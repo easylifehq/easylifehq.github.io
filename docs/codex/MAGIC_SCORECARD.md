@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 14 Proof Packet
+
+- Task: Stage 14 proof packet.
+- Result: Passed build, five-route inspection, targeted task-save inspection, targeted note-save inspection, and Stage 15 queue preparation.
+- Magic signal: ready-for-stage-15
+- Changed files: docs only
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` on local Vite port `4224`.
+- Proof artifacts: `.codex-logs/stage14-proof-today.png`, `.codex-logs/stage14-proof-inbox.png`, `.codex-logs/stage14-proof-plan.png`, `.codex-logs/stage14-proof-notes.png`, `.codex-logs/stage14-proof-settings.png`, `.codex-logs/stage14-proof-task-save.png`, `.codex-logs/stage14-proof-note-save.png`, and `.codex-logs/stage14-proof.json`.
+- Task-save evidence: task save requires final confirmation, renders a receipt, and demo review mode blocks signed-in writes.
+- Note-save evidence: note/context save requires final confirmation, renders a receipt with title/context group, avoids real-memory copy, and demo review mode blocks signed-in writes.
+- Boundary evidence: plan, reminder, follow-up, email, notification, calendar sync, model calls, and real memory remain out of scope.
+- Verdict: `READY_FOR_STAGE_15`.
+- Stage 15 constraint: harden and simplify the saved task/note loop only. Do not add saved plans, reminders, follow-ups, external communication, notifications, calendar sync, model calls, or real memory.
+
 ## 2026-05-12 - Stage 14 Today And Inbox Safe Save-Path Hint
 
 - Task: Today and Inbox safe save-path hint.

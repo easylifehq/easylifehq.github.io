@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 14 proof packet
+
+- Task attempted: Prove whether user-approved task and note save paths are trustworthy before expanding beyond tasks/notes.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4224` and inspected `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, and `/app/settings?demo=1` with headless Chromium.
+- Proof artifacts:
+  - `.codex-logs/stage14-proof-today.png`
+  - `.codex-logs/stage14-proof-inbox.png`
+  - `.codex-logs/stage14-proof-plan.png`
+  - `.codex-logs/stage14-proof-notes.png`
+  - `.codex-logs/stage14-proof-settings.png`
+  - `.codex-logs/stage14-proof-task-save.png`
+  - `.codex-logs/stage14-proof-note-save.png`
+  - `.codex-logs/stage14-proof.json`
+- Task save verdict: explicit, trustworthy, and contained. The user must preview a task draft, preview the task-only save row, and click `Confirm and save task`. The receipt says no email, notification, calendar item, note, memory, reminder, plan, or follow-up was created. Demo review mode blocked a signed-in task write.
+- Note save verdict: explicit, trustworthy, and contained. The user must preview the note/context save path and click `Confirm and save note`. The receipt shows title/context group and says no task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real memory was created. Demo review mode blocked a signed-in note write.
+- Out-of-scope verdict: preserved. Plan, reminder, follow-up, email, notifications, calendar sync, model calls, and real memory remain out of scope.
+- Queue update: `NEXT_5_TASKS.md` now marks Stage 14 tasks complete and prepares exactly five Stage 15 Trustworthy Saved Assistant Loop tasks.
+- Final verdict: `READY_FOR_STAGE_15`.
+
 ## 2026-05-12 - Stage 14 Today and Inbox safe save-path hint
 
 - Task attempted: Explain the two safe save paths now that tasks and notes both require explicit final confirmation.
