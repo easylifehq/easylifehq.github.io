@@ -2,6 +2,22 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 16 Task 3 People By Place
+
+- Task: Add People by Place grouped view.
+- Result: Passed build, local route inspection, and future-map boundary review.
+- Magic signal: people-by-place-reviewable
+- Changed files:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Route evidence: `/app/easycontacts?demo=1` showed `People by place`, Denver/Portland city groups, fictional contacts in each group, moved-recently context, and visit notes.
+- Map boundary evidence: the old map-like browse section now says `Future map preview` and explicitly states it is not a live map, geocoded view, or exact-address tool.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no map API, geocoding, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, or real personal data were added.
+
 ## 2026-05-12 - Stage 16 Task 2 Place Memory Block
 
 - Task: Add calm place memory blocks to EasyContacts list/detail surfaces.

@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 16 Task 3 People by Place grouped view
+
+- Task attempted: Let the user review who they know by city or region without using a map yet.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected: `http://127.0.0.1:4231/app/easycontacts?demo=1`.
+- Files changed:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product evidence: added a `People by place` surface grouped by current city/region, with fictional Denver and Portland groups and moved-recently context where relevant.
+- Map boundary: the old bubble browse section is now framed as `Future map preview` and says it is not a live map, geocoded view, or exact-address tool.
+- Boundary preserved: no map API, geocoding, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, or real personal data were added.
+
 ## 2026-05-12 - Stage 16 Task 2 place memory block
 
 - Task attempted: Make each contact show a calm place memory block so the user can remember where people live or moved.

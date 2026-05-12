@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+PEOPLE_BY_PLACE_IS_REVIEWABLE
+
+## Stage 16 Task 3 Design Review - 2026-05-12
+
+Verdict: `PEOPLE_BY_PLACE_IS_REVIEWABLE`.
+
+The new People by place surface gives the user a useful city/region scan without pretending there is a real map. The grouped cards are quieter than the bubble preview and make the practical review action clearer: who do I know near this place?
+
+What works:
+- The section groups fictional contacts by Denver and Portland using current city/region data.
+- Each group shows count, names, visit notes, and moved-recently context when relevant.
+- The future map preview is explicitly labeled as future-only and non-geocoded.
+- The grouped view is easier to scan than a decorative map-like cluster.
+
+Design risk:
+- The page now has several contacts sections. Stage 16 should keep watching density and may need to collapse or reorder the future map preview after the People by place flow is proven.
+
+---
+
+## Verdict
 READY_FOR_HUMAN_REVIEW
 
 ## Stage 15 Design Proof - 2026-05-12

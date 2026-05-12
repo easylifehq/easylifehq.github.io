@@ -8589,6 +8589,54 @@ button.calendar-detail-card:disabled {
   height: 112px;
 }
 
+.contacts-place-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.contacts-place-group {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border-radius: calc(var(--shell-card-radius) - 2px);
+  border: 1px solid var(--ui-border-subtle, rgba(99, 76, 58, 0.12));
+  background: var(--ui-bg-card, #fffdf9);
+}
+
+.contacts-place-group-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.contacts-place-group-top h3 {
+  margin: 0.2rem 0 0;
+}
+
+.contacts-place-people {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.contacts-place-person {
+  display: grid;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.65rem 0.7rem;
+  text-align: left;
+  color: var(--ui-text-primary, inherit);
+  border: 1px solid color-mix(in srgb, var(--app-accent) 16%, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card, #fffdf9) 90%, var(--app-accent) 10%);
+}
+
+.contacts-place-person span,
+.contacts-place-person small {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
 .contact-card-meta-row {
   display: flex;
   flex-wrap: wrap;
@@ -10820,6 +10868,7 @@ button.calendar-detail-card:disabled {
   }
 
   .contacts-focus-grid,
+  .contacts-place-groups,
   .contacts-command-strip {
     grid-template-columns: 1fr;
   }

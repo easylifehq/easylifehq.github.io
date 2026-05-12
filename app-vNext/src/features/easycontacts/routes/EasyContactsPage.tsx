@@ -50,7 +50,7 @@ function getPlaceSummary(contact: EasyContactRecord) {
 }
 
 function PlaceMemoryBlock({ contact, compact = false }: { contact: EasyContactRecord; compact?: boolean }) {
-  const currentPlace = [contact.currentCity, contact.region].filter(Boolean).join(" · ");
+  const currentPlace = [contact.currentCity, contact.region].filter(Boolean).join(" / ");
   const lastKnownIsDifferent = contact.lastKnownPlace && contact.lastKnownPlace !== contact.currentCity;
 
   return (
@@ -110,6 +110,22 @@ export function EasyContactsPage() {
         .slice(0, 8),
     [filteredContacts]
   );
+  const peopleByPlace = useMemo(() => {
+    const groups = new Map<string, EasyContactRecord[]>();
+
+    filteredContacts.forEach((contact) => {
+      const place = contact.currentCity || contact.region || (contact.movedRecently ? contact.lastKnownPlace : "") || "Needs place update";
+      groups.set(place, [...(groups.get(place) || []), contact]);
+    });
+
+    return [...groups.entries()]
+      .map(([place, groupContacts]) => ({ place, contacts: groupContacts }))
+      .sort((left, right) => {
+        if (left.place === "Needs place update") return 1;
+        if (right.place === "Needs place update") return -1;
+        return left.place.localeCompare(right.place);
+      });
+  }, [filteredContacts]);
   const activeThisMonth = useMemo(() => {
     const monthStart = new Date();
     monthStart.setDate(1);
@@ -260,11 +276,40 @@ export function EasyContactsPage() {
       </PageSection>
 
       <PageSection
-        eyebrow="Browse"
-        title="People memory map"
-        description="A quick visual pass over your people and place labels. This is not a live map or geocoded view."
+        eyebrow="Places"
+        title="People by place"
+        description="Review who you know near a city or region before a visit. Map view stays future-only."
       >
-        <div className="contacts-bubble-map" role="list" aria-label="People place memory map">
+        <div className="contacts-place-groups" aria-label="People grouped by place">
+          {peopleByPlace.length ? peopleByPlace.map((group) => (
+            <article key={group.place} className="contacts-place-group">
+              <div className="contacts-place-group-top">
+                <div>
+                  <p className="eyebrow">{group.place === "Needs place update" ? "Place unknown" : "City or region"}</p>
+                  <h3>{group.place}</h3>
+                </div>
+                <span className="chip-pill">{group.contacts.length}</span>
+              </div>
+              <div className="contacts-place-people">
+                {group.contacts.map((contact) => (
+                  <button key={contact.id} type="button" className="contacts-place-person" onClick={() => setSelectedContact(contact)}>
+                    <strong>{contact.fullName || "Unnamed contact"}</strong>
+                    <span>{contact.visitNote || getPlaceSummary(contact)}</span>
+                    {contact.movedRecently ? <small>Moved recently</small> : null}
+                  </button>
+                ))}
+              </div>
+            </article>
+          )) : <div className="empty-card-vnext">No place memory to group yet.</div>}
+        </div>
+      </PageSection>
+
+      <PageSection
+        eyebrow="Browse"
+        title="Future map preview"
+        description="A light place-label preview for now. This is not a live map, geocoded view, or exact-address tool."
+      >
+        <div className="contacts-bubble-map" role="list" aria-label="Future people place map preview">
           {bubbleContacts.length ? (
             bubbleContacts.map((contact, index) => (
               <button
