@@ -10,10 +10,11 @@ import {
   localDraftStatusLabels,
   localDraftTypeLabels,
   type AssistantReviewHandoffPreview,
+  type AssistantTaskSaveConfirmation,
   type AssistantTaskRowHandoffPreview,
   type AssistantLocalDraftType,
 } from "@/features/assistant/localDraftTypes";
-import type { TaskRowDraft } from "@/features/easylist/components/TaskComposer";
+import { buildTaskDraft, type TaskRowDraft } from "@/features/easylist/components/TaskComposer";
 import {
   approvalStatePreviewLabels,
   type AssistantApprovalState,
@@ -41,6 +42,7 @@ export function EasyListInboxPage() {
   const [taskHandoffPreview, setTaskHandoffPreview] = useState<AssistantTaskRowHandoffPreview | null>(null);
   const [showReviewHandoff, setShowReviewHandoff] = useState(false);
   const [reviewHandoffPreview, setReviewHandoffPreview] = useState<AssistantReviewHandoffPreview | null>(null);
+  const [taskSaveConfirmation, setTaskSaveConfirmation] = useState<AssistantTaskSaveConfirmation | null>(null);
   const listNames = useMemo(
     () => Array.from(new Set(["Main", ...tasks.map((task) => task.listName || "Main")])).sort(),
     [tasks]
@@ -63,6 +65,10 @@ export function EasyListInboxPage() {
     () => classifyAssistantIntent(assistantCaptureText),
     [assistantCaptureText]
   );
+  const isDemoReviewMode = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("demo") === "1" || params.get("visualQa") === "1";
+  }, []);
   const activeApprovalState =
     assistantSuggestion.approvalState === "needs-review" ? "needs-review" : previewApprovalState;
   const visibleApprovalState =
@@ -115,6 +121,90 @@ export function EasyListInboxPage() {
 
   if (isLoading) {
     return <LoadingState label="Opening Inbox..." />;
+  }
+
+  function clearTaskSaveConfirmation() {
+    setTaskSaveConfirmation(null);
+  }
+
+  function buildTaskRowFromHandoff(preview: AssistantTaskRowHandoffPreview): TaskRowDraft {
+    return {
+      id: preview.id,
+      itemKind: preview.itemKind,
+      title: preview.title,
+      category: preview.category,
+      dueDate: preview.dueDate,
+      estimatedLength: preview.estimatedLength,
+      priorityTier: preview.priorityTier as TaskRowDraft["priorityTier"],
+      notes: preview.notes,
+    };
+  }
+
+  async function handleConfirmTaskSave() {
+    if (!taskHandoffPreview || taskSaveConfirmation?.status === "saving") return;
+
+    const draft = buildTaskDraft(buildTaskRowFromHandoff(taskHandoffPreview), selectedListName);
+    if (!draft) {
+      setTaskSaveConfirmation({
+        sourcePreviewId: taskHandoffPreview.id,
+        title: taskHandoffPreview.title,
+        listName: selectedListName,
+        itemKind: taskHandoffPreview.itemKind,
+        dueDate: taskHandoffPreview.dueDate,
+        estimatedLength: taskHandoffPreview.estimatedLength,
+        notes: taskHandoffPreview.notes,
+        savedTaskId: null,
+        status: "blocked",
+        message: "Name the task before saving. Nothing was saved.",
+      });
+      return;
+    }
+
+    setTaskSaveConfirmation({
+      sourcePreviewId: taskHandoffPreview.id,
+      title: draft.title,
+      listName: selectedListName,
+      itemKind: draft.itemKind || taskHandoffPreview.itemKind,
+      dueDate: taskHandoffPreview.dueDate,
+      estimatedLength: taskHandoffPreview.estimatedLength,
+      notes: taskHandoffPreview.notes,
+      savedTaskId: null,
+      status: "saving",
+      message: "Saving this task only...",
+    });
+
+    if (isDemoReviewMode) {
+      setTaskSaveConfirmation({
+        sourcePreviewId: taskHandoffPreview.id,
+        title: draft.title,
+        listName: selectedListName,
+        itemKind: draft.itemKind || taskHandoffPreview.itemKind,
+        dueDate: taskHandoffPreview.dueDate,
+        estimatedLength: taskHandoffPreview.estimatedLength,
+        notes: taskHandoffPreview.notes,
+        savedTaskId: null,
+        status: "blocked",
+        message: "Demo review mode: no signed-in task save happened. This final confirmation would save one task only outside demo review; nothing else was created.",
+      });
+      return;
+    }
+
+    const taskId = await addTask(draft);
+
+    setTaskSaveConfirmation({
+      sourcePreviewId: taskHandoffPreview.id,
+      title: draft.title,
+      listName: selectedListName,
+      itemKind: draft.itemKind || taskHandoffPreview.itemKind,
+      dueDate: taskHandoffPreview.dueDate,
+      estimatedLength: taskHandoffPreview.estimatedLength,
+      notes: taskHandoffPreview.notes,
+      savedTaskId: taskId || null,
+      status: taskId ? "saved" : "blocked",
+      message: taskId
+        ? "Saved one task only. No note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory was created."
+        : "No signed-in task save happened in this preview session. Nothing else was created.",
+    });
   }
 
   return (
@@ -184,6 +274,7 @@ export function EasyListInboxPage() {
                   setTaskHandoffPreview(null);
                   setShowReviewHandoff(false);
                   setReviewHandoffPreview(null);
+                  clearTaskSaveConfirmation();
                 }}
                 placeholder="Paste one messy thought to classify locally"
               />
@@ -212,6 +303,7 @@ export function EasyListInboxPage() {
                     setTaskHandoffPreview(null);
                     setShowReviewHandoff(false);
                     setReviewHandoffPreview(null);
+                    clearTaskSaveConfirmation();
                   }}
                   title="Preview only. This does not save anything."
                 >
@@ -226,6 +318,7 @@ export function EasyListInboxPage() {
                     setTaskHandoffPreview(null);
                     setShowReviewHandoff(false);
                     setReviewHandoffPreview(null);
+                    clearTaskSaveConfirmation();
                   }}
                   title="Preview only. This does not edit saved data."
                 >
@@ -240,6 +333,7 @@ export function EasyListInboxPage() {
                     setTaskHandoffPreview(null);
                     setShowReviewHandoff(false);
                     setReviewHandoffPreview(null);
+                    clearTaskSaveConfirmation();
                   }}
                   title="Preview only. This does not dismiss saved data."
                 >
@@ -292,6 +386,7 @@ export function EasyListInboxPage() {
                   setTaskHandoffPreview(null);
                   setShowReviewHandoff(false);
                   setReviewHandoffPreview(null);
+                  clearTaskSaveConfirmation();
                 }}
                 title="Local preview only. This does not create another draft."
               >
@@ -334,6 +429,7 @@ export function EasyListInboxPage() {
                       const preview = buildTaskRowHandoffPreview(approvedLocalDraft);
                       setTaskHandoffPreview(preview);
                       setShowTaskHandoff(Boolean(preview));
+                      clearTaskSaveConfirmation();
                     }}
                   >
                     Preview task row handoff
@@ -350,6 +446,7 @@ export function EasyListInboxPage() {
                       const preview = buildReviewHandoffPreview(approvedLocalDraft);
                       setReviewHandoffPreview(preview);
                       setShowReviewHandoff(Boolean(preview));
+                      clearTaskSaveConfirmation();
                     }}
                   >
                     Preview {approvedLocalDraft.draftType === "follow-up" ? "follow-up" : "reminder"} handoff
@@ -377,7 +474,10 @@ export function EasyListInboxPage() {
                     type="text"
                     value={taskHandoffPreview.title}
                     onChange={(event) =>
-                      setTaskHandoffPreview((current) => current ? { ...current, title: event.target.value } : current)
+                      setTaskHandoffPreview((current) => {
+                        clearTaskSaveConfirmation();
+                        return current ? { ...current, title: event.target.value } : current;
+                      })
                     }
                   />
                 </label>
@@ -386,9 +486,10 @@ export function EasyListInboxPage() {
                   <select
                     value={taskHandoffPreview.itemKind}
                     onChange={(event) =>
-                      setTaskHandoffPreview((current) =>
-                        current ? { ...current, itemKind: event.target.value as TaskRowDraft["itemKind"] } : current
-                      )
+                      setTaskHandoffPreview((current) => {
+                        clearTaskSaveConfirmation();
+                        return current ? { ...current, itemKind: event.target.value as TaskRowDraft["itemKind"] } : current;
+                      })
                     }
                   >
                     <option value="task">Task</option>
@@ -401,7 +502,10 @@ export function EasyListInboxPage() {
                     type="date"
                     value={taskHandoffPreview.dueDate}
                     onChange={(event) =>
-                      setTaskHandoffPreview((current) => current ? { ...current, dueDate: event.target.value } : current)
+                      setTaskHandoffPreview((current) => {
+                        clearTaskSaveConfirmation();
+                        return current ? { ...current, dueDate: event.target.value } : current;
+                      })
                     }
                   />
                 </label>
@@ -413,9 +517,10 @@ export function EasyListInboxPage() {
                     step="5"
                     value={taskHandoffPreview.estimatedLength}
                     onChange={(event) =>
-                      setTaskHandoffPreview((current) =>
-                        current ? { ...current, estimatedLength: event.target.value } : current
-                      )
+                      setTaskHandoffPreview((current) => {
+                        clearTaskSaveConfirmation();
+                        return current ? { ...current, estimatedLength: event.target.value } : current;
+                      })
                     }
                     placeholder="30"
                   />
@@ -426,7 +531,10 @@ export function EasyListInboxPage() {
                     type="text"
                     value={taskHandoffPreview.notes}
                     onChange={(event) =>
-                      setTaskHandoffPreview((current) => current ? { ...current, notes: event.target.value } : current)
+                      setTaskHandoffPreview((current) => {
+                        clearTaskSaveConfirmation();
+                        return current ? { ...current, notes: event.target.value } : current;
+                      })
                     }
                   />
                 </label>
@@ -436,6 +544,29 @@ export function EasyListInboxPage() {
                   {warning}
                 </p>
               ))}
+              <div className="assistant-task-save-confirmation" aria-label="Final task save confirmation">
+                <div>
+                  <span>Final confirmation</span>
+                  <strong>Save one task to {selectedListName}</strong>
+                  <p>
+                    This will save only `{taskHandoffPreview.title || "Untitled task"}` as a {taskHandoffPreview.itemKind}.
+                    It will not create a note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="primary-button compact-button"
+                  onClick={() => void handleConfirmTaskSave()}
+                  disabled={taskSaveConfirmation?.status === "saving"}
+                >
+                  {taskSaveConfirmation?.status === "saving" ? "Saving task..." : "Confirm and save task"}
+                </button>
+              </div>
+              {taskSaveConfirmation ? (
+                <p className={`assistant-task-save-message assistant-task-save-message-${taskSaveConfirmation.status}`}>
+                  {taskSaveConfirmation.message}
+                </p>
+              ) : null}
             </article>
           ) : null}
 

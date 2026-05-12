@@ -1,5 +1,30 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 13 final-confirmed task save handoff
+
+- Task attempted: Let the user save an approved assistant task handoff only after a final explicit confirmation.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4215` and inspected `/app/easylist/add?demo=1` with headless Chromium. Selected `Task draft`, clicked `Preview draft`, clicked `Preview task row handoff`, then verified the final `Confirm and save task` step. Screenshot saved at `.codex-logs/stage13-task1-final-task-save-handoff.png`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/features/easylist/components/TaskComposer.tsx`
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Explicit final confirmation:
+  - The task handoff now renders `Final confirmation` and `Save one task to Main`.
+  - The user must click `Confirm and save task` before the handoff calls the existing EasyList `addTask` path.
+  - The confirmation says exactly which task title and kind will be saved.
+- Demo review behavior:
+  - `?demo=1` blocks the backend write and shows `Demo review mode: no signed-in task save happened...` so local inspection does not create real data.
+  - Outside demo/visual QA review, the same confirmation uses the existing EasyList task save behavior.
+- Task-only boundary:
+  - The confirmation says it will not create a note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory.
+  - The handoff panel still has no submit button; the only real action is the explicit final task-save button.
+- Follow-up needed: Stage 13 Task 2 should add a clearer post-save receipt for real signed-in task saves.
+
 ## 2026-05-11 - Stage 12 Explicit Save-Draft Handoff proof packet
 
 - Task attempted: Prove whether explicit user-approved handoff previews are ready before adding any real saved assistant action.

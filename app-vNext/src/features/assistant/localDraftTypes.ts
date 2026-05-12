@@ -58,6 +58,19 @@ export type AssistantTaskRowHandoffPreview = {
   warnings: string[];
 };
 
+export type AssistantTaskSaveConfirmation = {
+  sourcePreviewId: string;
+  title: string;
+  listName: string;
+  itemKind: "task" | "deadline";
+  dueDate: string;
+  estimatedLength: string;
+  notes: string;
+  savedTaskId: string | null;
+  status: "idle" | "saving" | "saved" | "blocked";
+  message: string;
+};
+
 export type AssistantNoteHandoffPreview = {
   id: string;
   sourceDraftId: string;

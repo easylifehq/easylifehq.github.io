@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 13 Final-Confirmed Task Save Handoff
+
+- Task: Final-confirmed task save handoff.
+- Result: Passed local UI implementation, build, and route inspection.
+- Magic signal: task-save-requires-final-confirmation
+- Changed files: 7
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easylist/add?demo=1` on local Vite port `4215`, selected `Task draft`, clicked `Preview draft`, clicked `Preview task row handoff`, and verified `Confirm and save task`. Screenshot saved at `.codex-logs/stage13-task1-final-task-save-handoff.png`.
+- Save-path evidence: exported and reused the existing `buildTaskDraft` mapping from `TaskComposer`; non-demo confirmation calls the existing EasyList `addTask` path.
+- Demo guard: `?demo=1` blocks backend writes and reports that no signed-in task save happened.
+- Boundary evidence: task save only; no note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory is created by this handoff.
+- Follow-up: Stage 13 Task 2 should add a clearer receipt after confirmed task save.
+
 ## 2026-05-11 - Stage 12 Explicit Save-Draft Handoff Proof
 
 - Task: Stage 12 Explicit Save-Draft Handoff proof packet.

@@ -5059,6 +5059,61 @@ textarea::placeholder {
   box-shadow: none;
 }
 
+.assistant-task-save-confirmation {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.68rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, #1f8f6a 36%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, #1f8f6a 9%, var(--ui-bg-card, var(--shell-input-bg)));
+}
+
+.assistant-task-save-confirmation div {
+  display: grid;
+  gap: 0.16rem;
+  min-width: 0;
+}
+
+.assistant-task-save-confirmation span {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.assistant-task-save-confirmation strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.94rem;
+}
+
+.assistant-task-save-confirmation p,
+.assistant-task-save-message {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.assistant-task-save-message {
+  padding: 0.56rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 72%, transparent);
+}
+
+.assistant-task-save-message-saved {
+  border-color: color-mix(in srgb, #1f8f6a 34%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, #1f8f6a 10%, var(--ui-bg-card, var(--shell-input-bg)));
+}
+
+.assistant-task-save-message-blocked {
+  border-color: color-mix(in srgb, #b86b2b 34%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, #b86b2b 9%, var(--ui-bg-card, var(--shell-input-bg)));
+}
+
 .assistant-suggestion-actions {
   flex: 0 0 auto;
   flex-wrap: wrap;
@@ -5230,6 +5285,11 @@ textarea::placeholder {
 
   .assistant-review-handoff-grid {
     grid-template-columns: 1fr;
+  }
+
+  .assistant-task-save-confirmation {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .easylist-inbox-command {

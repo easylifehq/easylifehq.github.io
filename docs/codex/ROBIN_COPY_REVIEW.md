@@ -1,6 +1,25 @@
 # Robin Copy Review
 
 ## Verdict
+TASK_SAVE_CONFIRMATION_COPY_IS_TASK_ONLY
+
+## Stage 13 Task 1 Copy Review - 2026-05-12
+
+Verdict: `TASK_SAVE_CONFIRMATION_COPY_IS_TASK_ONLY`.
+
+The first real assistant save copy is narrow enough. It says `Save one task`, names the destination list, names the task title, and explicitly says it will not create a note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory.
+
+What works:
+- `Confirm and save task` is the only real action after the handoff preview.
+- Demo review mode says no signed-in task save happened, which keeps local inspection honest.
+- Follow-up, reminder, note, and plan remain outside the save path.
+
+Copy risk:
+- The next task should add a stronger receipt after real signed-in save succeeds, so the user can see exactly what was saved without reading the confirmation copy again.
+
+---
+
+## Verdict
 COPY_READY_FOR_STAGE_13
 
 ## Stage 12 Copy Proof - 2026-05-11

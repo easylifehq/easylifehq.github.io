@@ -45,7 +45,7 @@ const EMPTY_ROW = (priorityTier = 5): TaskRowDraft => ({
 
 const BRAIN_DUMP_DRAFT_KEY = "easylife.easylist.brainDumpDraft";
 
-function buildTaskDraft(row: TaskRowDraft, listName = "Main"): TaskDraft | null {
+export function buildTaskDraft(row: TaskRowDraft, listName = "Main"): TaskDraft | null {
   if (!row.title.trim()) {
     return null;
   }
