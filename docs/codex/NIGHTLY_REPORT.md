@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 13 Today task-save hint
+
+- Task attempted: Point Today to the safest task-only final confirmation path in Inbox without implying autonomous work.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4218` and inspected `/app/hq?demo=1` with headless Chromium and the in-app browser. Screenshot saved at `.codex-logs/stage13-task4-today-task-save-hint.png`.
+- Files changed:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Today wording:
+  - Due and quick-win starts now point to Inbox review instead of implying a background assistant action.
+  - The secondary Today action now says `Task-only confirm`.
+  - The command row says `Capture, classify, review task-only`.
+  - The command hint says Inbox final confirmation can save one task only and notes, plans, reminders, and follow-ups stay preview-only.
+- First viewport check: The inspected Today card still shows assistant read, next move, command/capture input, and the small Due/Plan/Open strip.
+- Guardrails preserved: Today does not show saved task receipt data, does not add cross-route state, does not add persistence, and does not change backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+
 ## 2026-05-12 - Stage 13 task-only save boundary copy
 
 - Task attempted: Make it unmistakable that the first real assistant save path saves tasks only.

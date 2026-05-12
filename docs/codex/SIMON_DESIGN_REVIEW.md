@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+TODAY_POINTS_TO_TASK_ONLY_INBOX_CONFIRMATION
+
+## Stage 13 Task 4 Design Review - 2026-05-12
+
+Verdict: `TODAY_POINTS_TO_TASK_ONLY_INBOX_CONFIRMATION`.
+
+Today now points users toward the safe Inbox path without becoming a saved-task dashboard. The first viewport still centers the assistant read, next move, small Due/Plan/Open strip, and command row.
+
+What works:
+- The command row says Inbox final confirmation can save one task only.
+- The start-here action routes task pressure to Inbox review instead of dashboard completion.
+- The copy says notes, plans, reminders, and follow-ups stay preview-only.
+- Today does not display the saved task receipt or any new saved-task state.
+
+Design risk:
+- The command-row helper sentence is doing a lot of safety work. Stage 13 proof should check whether the task-only warning can stay this compact once the full save path is reviewed.
+
+---
+
+## Verdict
 TASK_SAVE_RECEIPT_KEEPS_INBOX_AS_APPROVAL_QUEUE
 
 ## Stage 13 Task 2 Design Review - 2026-05-12

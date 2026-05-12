@@ -62,18 +62,18 @@ export function HQPage() {
       return {
         label: firstDueTask.title || "Untitled task",
         reason: overdueTasks.length
-          ? "This is behind. Handle it, reschedule it, or intentionally release it before checking the rest."
-          : "This is due today. Decide the next step before checking anything else.",
-        buttonLabel: "Approve Inbox",
-        to: "/app/easylist/dashboard",
+          ? "This is behind. Use Inbox to choose the next step; only a final confirmed task can save."
+          : "This is due today. Use Inbox to decide whether it needs the task-only final confirmation.",
+        buttonLabel: "Review Inbox",
+        to: "/app/easylist/add",
       };
     }
     if (quickWin) {
       return {
         label: quickWin.title || "Untitled task",
-        reason: `${quickWin.estimatedLength || 20} minutes. Clear this small task while the day still has room.`,
-        buttonLabel: "Approve Inbox",
-        to: "/app/easylist/dashboard",
+        reason: `${quickWin.estimatedLength || 20} minutes. Review it in Inbox; final confirmation can save one task only.`,
+        buttonLabel: "Review Inbox",
+        to: "/app/easylist/add",
       };
     }
     if (openWindows.length >= 3) {
@@ -232,17 +232,18 @@ export function HQPage() {
                 {startHere.buttonLabel.replace("Open ", "")}
               </Link>
               <Link to="/app/easylist/add" className="button-secondary">
-                Review Draft
+                Task-only confirm
               </Link>
             </div>
           </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
-            <span>Capture, classify, review, approve</span>
+            <span>Capture, classify, review task-only</span>
             <strong>{assistantCommandHintRow}</strong>
             <small>
-              {localDraftHint.label}: {localDraftHint.title}. {localDraftHint.detail}
+              {localDraftHint.label}: {localDraftHint.title}. Inbox final confirmation can save one task only;
+              notes, plans, reminders, and follow-ups stay preview-only.
             </small>
-            <em>Open</em>
+            <em>Open Inbox</em>
           </button>
           <details className="hq-context-stack">
             <summary>

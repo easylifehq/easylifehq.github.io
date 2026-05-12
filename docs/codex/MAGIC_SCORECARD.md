@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 13 Today Task-Save Hint
+
+- Task: Today task-save hint.
+- Result: Passed static wording implementation, build, and route inspection.
+- Magic signal: today-points-to-task-only-inbox-confirmation
+- Changed files: 4
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium and the in-app browser inspected `/app/hq?demo=1` on local Vite port `4218`. Screenshot saved at `.codex-logs/stage13-task4-today-task-save-hint.png`.
+- First viewport evidence: Today still shows assistant read, next move, command/capture row, and Due/Plan/Open strip.
+- Boundary evidence: Today says Inbox final confirmation can save one task only, and notes, plans, reminders, and follow-ups stay preview-only.
+- No-state evidence: Today does not show saved task receipt data and no cross-route state or persistence was added.
+- Guardrail evidence: no backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 13 Task-Only Save Boundary Copy
 
 - Task: Task-only save boundary copy.
