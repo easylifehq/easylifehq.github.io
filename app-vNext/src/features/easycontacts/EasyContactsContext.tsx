@@ -18,12 +18,20 @@ import { useAuth } from "@/features/auth/AuthContext";
 import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 
 type EasyContactsContextValue = {
-  contacts: ContactRecord[];
+  contacts: EasyContactRecord[];
   isLoading: boolean;
   error: string;
   addContact: (draft: ContactDraft) => Promise<void>;
   saveContact: (contactId: string, draft: ContactDraft) => Promise<void>;
   archiveCurrentContact: (contactId: string) => Promise<void>;
+};
+
+export type EasyContactRecord = ContactRecord & {
+  currentCity?: string;
+  region?: string;
+  lastKnownPlace?: string;
+  movedRecently?: boolean;
+  visitNote?: string;
 };
 
 const EasyContactsContext = createContext<EasyContactsContextValue | undefined>(undefined);
@@ -34,7 +42,7 @@ function isVisualQaMode() {
   return params.get("visualQa") === "1" || params.get("demo") === "1";
 }
 
-const visualQaContacts: ContactRecord[] = [
+const visualQaContacts: EasyContactRecord[] = [
   {
     id: "visual-contact-maya",
     fullName: "Maya Chen",
@@ -50,6 +58,11 @@ const visualQaContacts: ContactRecord[] = [
     lastContactedAt: "2026-04-28",
     nextFollowUpAt: "2026-05-03",
     notes: "Reply today, then move the thread out of the overdue lane.",
+    currentCity: "Portland, OR",
+    region: "Pacific Northwest",
+    lastKnownPlace: "Seattle, WA",
+    movedRecently: true,
+    visitNote: "Check in when visiting Portland this summer.",
     archived: false,
     createdAt: new Date("2026-04-20T10:00:00"),
     updatedAt: new Date("2026-05-03T09:00:00"),
@@ -69,6 +82,11 @@ const visualQaContacts: ContactRecord[] = [
     lastContactedAt: "2026-05-01",
     nextFollowUpAt: "2026-05-06",
     notes: "Send a concise follow-up after the product interview.",
+    currentCity: "Denver, CO",
+    region: "Front Range",
+    lastKnownPlace: "Boulder, CO",
+    movedRecently: false,
+    visitNote: "Good person to ping before a Denver work trip.",
     archived: false,
     createdAt: new Date("2026-04-22T14:00:00"),
     updatedAt: new Date("2026-05-01T16:15:00"),

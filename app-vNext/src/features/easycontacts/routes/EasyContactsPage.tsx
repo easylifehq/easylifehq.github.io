@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { ContactDrawer } from "@/features/easycontacts/components/ContactDrawer";
-import { useEasyContacts } from "@/features/easycontacts/EasyContactsContext";
-import type { ContactDraft, ContactRecord } from "@/lib/firestore/contacts";
+import { useEasyContacts, type EasyContactRecord } from "@/features/easycontacts/EasyContactsContext";
+import type { ContactDraft } from "@/lib/firestore/contacts";
 
 function isFollowUpNeeded(value: string) {
   if (!value) return false;
@@ -40,11 +40,20 @@ function formatRelativeDate(value: string) {
   return `In ${diffDays} days`;
 }
 
+function getPlaceSummary(contact: EasyContactRecord) {
+  const place = contact.currentCity || contact.region || contact.lastKnownPlace;
+  if (!place) return "Place memory not set";
+  if (contact.movedRecently && contact.lastKnownPlace) {
+    return `${place} now; last known ${contact.lastKnownPlace}`;
+  }
+  return place;
+}
+
 export function EasyContactsPage() {
   const { contacts, isLoading, error, addContact, saveContact, archiveCurrentContact } = useEasyContacts();
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
-  const [selectedContact, setSelectedContact] = useState<ContactRecord | null>(null);
+  const [selectedContact, setSelectedContact] = useState<EasyContactRecord | null>(null);
   const [draft, setDraft] = useState<ContactDraft>(emptyDraft);
   const contactParam = searchParams.get("contact");
   const filteredContacts = useMemo(() => {
@@ -52,7 +61,18 @@ export function EasyContactsPage() {
     if (!term) return contacts;
 
     return contacts.filter((contact) =>
-      [contact.fullName, contact.company, contact.role, contact.email, contact.relationship, contact.notes]
+      [
+        contact.fullName,
+        contact.company,
+        contact.role,
+        contact.email,
+        contact.relationship,
+        contact.notes,
+        contact.currentCity,
+        contact.region,
+        contact.lastKnownPlace,
+        contact.visitNote,
+      ]
         .join(" ")
         .toLowerCase()
         .includes(term)
@@ -117,7 +137,7 @@ export function EasyContactsPage() {
 
   return (
     <>
-      <PageSection eyebrow="Network" title="Contacts" description="Keep follow-ups visible, capture people fast, and make your network feel like something you can actually maintain.">
+      <PageSection eyebrow="People memory" title="Contacts" description="Keep people close, remember where they are, and know who to check in with when a place comes up.">
         {error ? <p className="error-copy">{error}</p> : null}
 
         <div className="stats-grid">
@@ -125,6 +145,12 @@ export function EasyContactsPage() {
           <article className="stat-card-vnext"><span>Follow-ups due</span><strong>{contacts.filter((contact) => isFollowUpNeeded(contact.nextFollowUpAt)).length}</strong></article>
           <article className="stat-card-vnext"><span>Active this month</span><strong>{activeThisMonth}</strong></article>
           <article className="stat-card-vnext"><span>Companies</span><strong>{new Set(contacts.map((contact) => contact.company).filter(Boolean)).size}</strong></article>
+        </div>
+
+        <div className="contacts-focus-strip" aria-label="People and place memory">
+          <span>{contacts.filter((contact) => contact.currentCity || contact.region).length} with place memory</span>
+          <span>{contacts.filter((contact) => contact.movedRecently).length} moved recently</span>
+          <span>No exact addresses required</span>
         </div>
 
         <form className="contacts-command-strip" onSubmit={handleQuickAdd}>
@@ -188,6 +214,7 @@ export function EasyContactsPage() {
                 <button key={contact.id} type="button" className="contact-row-card" onClick={() => setSelectedContact(contact)}>
                   <strong>{contact.fullName || "Unnamed contact"}</strong>
                   <span>{contact.company || contact.relationship || "Contact"}</span>
+                  <small>{getPlaceSummary(contact)}</small>
                   <small>{formatRelativeDate(contact.nextFollowUpAt)}</small>
                 </button>
               )) : <div className="empty-card-vnext">Nothing overdue. Your network is caught up.</div>}
@@ -207,7 +234,8 @@ export function EasyContactsPage() {
                 <button key={contact.id} type="button" className="contact-row-card" onClick={() => setSelectedContact(contact)}>
                   <strong>{contact.fullName || "Unnamed contact"}</strong>
                   <span>{contact.company || contact.relationship || "Contact"}</span>
-                  <small>{contact.role || contact.status}</small>
+                  <small>{getPlaceSummary(contact)}</small>
+                  <small>{contact.visitNote || contact.role || contact.status}</small>
                 </button>
               )) : <div className="empty-card-vnext">Add a few people you want to stay in touch with.</div>}
             </div>
@@ -217,8 +245,8 @@ export function EasyContactsPage() {
 
       <PageSection
         eyebrow="Browse"
-        title="Contact map"
-        description="A quick visual pass over your network when you want to remember who is in the mix."
+        title="People memory map"
+        description="A quick visual pass over your people and place labels. This is not a live map or geocoded view."
       >
         <div className="contacts-bubble-map" role="list" aria-label="Contact map">
           {bubbleContacts.length ? (
@@ -231,7 +259,7 @@ export function EasyContactsPage() {
                 onClick={() => setSelectedContact(contact)}
               >
                 <strong>{contact.fullName || "Unnamed"}</strong>
-                <span>{contact.company || contact.relationship || "Contact"}</span>
+                <span>{getPlaceSummary(contact)}</span>
               </button>
             ))
           ) : (
@@ -257,9 +285,11 @@ export function EasyContactsPage() {
               <p>{contact.company || "No company"}{contact.role ? ` | ${contact.role}` : ""}</p>
               <p>{contact.relationship || "No relationship label yet"}</p>
               <div className="contact-card-meta-row">
+                <small>{getPlaceSummary(contact)}</small>
                 <small>{formatRelativeDate(contact.nextFollowUpAt)}</small>
                 <small>{contact.lastContactedAt ? `Last touch ${contact.lastContactedAt}` : "No contact logged yet"}</small>
               </div>
+              {contact.visitNote ? <p>{contact.visitNote}</p> : null}
             </button>
           )) : <div className="empty-card-vnext">No contacts match this filter yet.</div>}
         </div>

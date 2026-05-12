@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 16 Task 1 Contact Place Memory Fields
+
+- Task: Add EasyContacts contact place memory fields.
+- Result: Passed build, local route inspection, and privacy boundary check.
+- Magic signal: people-place-memory-fields-visible
+- Changed files:
+  - `app-vNext/src/features/easycontacts/EasyContactsContext.tsx`
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Field evidence: contacts can expose `currentCity`, `region`, `lastKnownPlace`, `movedRecently`, and `visitNote` without exact addresses.
+- Route evidence: `/app/easycontacts?demo=1` showed People memory framing, two contacts with place memory, one moved-recently count, Portland/Denver fictional place labels, visit notes, and the "not a live map or geocoded view" boundary.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no maps, geocoding, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, exact addresses, or real personal data were added.
+
 ## 2026-05-12 - Convert Stage 16 To People + Places Memory
 
 - Task: Convert Stage 16 to People + Places Memory.

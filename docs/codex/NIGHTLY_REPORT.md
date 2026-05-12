@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 16 Task 1 contact place memory fields
+
+- Task attempted: Let EasyContacts represent where someone lives or recently moved in a privacy-light way.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected: `http://127.0.0.1:4231/app/easycontacts?demo=1`.
+- Files changed:
+  - `app-vNext/src/features/easycontacts/EasyContactsContext.tsx`
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Place fields exposed locally: `currentCity`, `region`, `lastKnownPlace`, `movedRecently`, and `visitNote`.
+- Product evidence: Contacts now frames the surface as people/place memory, shows place-memory and moved-recently counts, includes place summaries in follow-up/warm relationship cards, makes visit notes visible, and keeps the browse section explicit that it is not a live map or geocoded view.
+- Demo data: only fictional demo contacts were given place fields.
+- Boundary preserved: no exact street addresses, maps, geocoding, backend, Firebase rules/config, dependencies, package files, deploy config, generated output, secrets, or real personal data were added.
+
 ## 2026-05-12 - Convert Stage 16 to People + Places Memory
 
 - Task attempted: Make People + Places Memory the approved Stage 16 direction and push the broader decision gate to Stage 17.
