@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+SAVED_NOTE_RECEIPT_STAYS_CONTAINED
+
+## Stage 14 Task 2 Design Review - 2026-05-12
+
+Verdict: `SAVED_NOTE_RECEIPT_STAYS_CONTAINED`.
+
+The saved note receipt is visible without turning Notes into a completion dashboard. It stays below the final confirmation inside the existing note/context review panel and reports the concrete title plus context group before repeating the no-real-memory boundary.
+
+What works:
+- The receipt is compact and scannable: label, note title, context group, pin preview, then boundary copy.
+- Demo review mode is honest and still shows the receipt structure without creating signed-in note data.
+- The receipt keeps external/non-note actions out of scope: no tasks, plans, reminders, follow-ups, email, notifications, calendar items, sync, model calls, or real memory.
+- The Notes surface remains a context review surface instead of gaining a new route-level status area.
+
+Design risk:
+- The note receipt adds another dense proof panel to Notes. Stage 14 should keep future note-save work focused on boundary copy and receipts, not add more dashboard chrome.
+
+---
+
+## Verdict
 READY_FOR_STAGE_14
 
 ## Stage 13 Design Proof - 2026-05-12

@@ -2534,28 +2534,72 @@ textarea::placeholder {
 }
 
 .notes-note-save-confirmation p,
-.notes-note-save-message {
+.notes-note-save-receipt p {
   margin: 0;
   color: var(--ui-text-secondary, var(--shell-muted));
   font-size: 0.84rem;
   line-height: 1.4;
 }
 
-.notes-note-save-message {
-  padding: 0.56rem 0.65rem;
+.notes-note-save-receipt {
+  display: grid;
+  gap: 0.58rem;
+  padding: 0.65rem;
   border-radius: 8px;
   border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
   background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 72%, transparent);
 }
 
-.notes-note-save-message-saved {
+.notes-note-save-receipt-saved {
   border-color: color-mix(in srgb, #1f8f6a 34%, var(--ui-border-subtle, var(--shell-card-border)));
   background: color-mix(in srgb, #1f8f6a 10%, var(--ui-bg-card, var(--shell-input-bg)));
 }
 
-.notes-note-save-message-blocked {
+.notes-note-save-receipt-blocked {
   border-color: color-mix(in srgb, #b86b2b 34%, var(--ui-border-subtle, var(--shell-card-border)));
   background: color-mix(in srgb, #b86b2b 9%, var(--ui-bg-card, var(--shell-input-bg)));
+}
+
+.notes-note-save-receipt-header {
+  display: grid;
+  gap: 0.16rem;
+}
+
+.notes-note-save-receipt-header span,
+.notes-note-save-receipt-details dt {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.notes-note-save-receipt-header strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.95rem;
+}
+
+.notes-note-save-receipt-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.48rem;
+  margin: 0;
+}
+
+.notes-note-save-receipt-details div {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+  padding: 0.48rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 60%, transparent);
+}
+
+.notes-note-save-receipt-details dd {
+  margin: 0;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.84rem;
+  font-weight: 750;
 }
 
 .notes-library-results-heading {
@@ -13148,6 +13192,10 @@ button.calendar-detail-card:disabled {
   .notes-note-save-confirmation {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .notes-note-save-receipt-details {
+    grid-template-columns: 1fr;
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-natural-capture {

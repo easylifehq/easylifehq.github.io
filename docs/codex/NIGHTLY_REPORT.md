@@ -1,5 +1,26 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 14 saved note receipt
+
+- Task attempted: Show a clear receipt after the final-confirmed assistant note save path so the user knows exactly what happened without thinking real memory was created.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local inspection: Started Vite on `http://127.0.0.1:4221` and inspected `/app/easynotes?demo=1` with headless Chromium. Clicked `Preview note save path`, clicked `Confirm and save note`, and verified `.notes-note-save-receipt` on desktop and mobile-sized viewports. Screenshot saved at `.codex-logs/stage14-task2-saved-note-receipt.png`.
+- Files changed:
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Receipt behavior:
+  - The receipt shows the note title and context group after final confirmation.
+  - Demo review mode shows a receipt preview while still saying no signed-in note save happened.
+  - The saved-state receipt label is `Saved note receipt` for real signed-in saves.
+- Boundary preserved:
+  - The receipt says no task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real memory was created.
+  - No extra write path was added beyond the existing note save path introduced in Stage 14 Task 1.
+- Design note: The receipt stays inside the Notes review/handoff panel, so Notes remains a reviewable context surface instead of becoming a completion dashboard.
+
 ## 2026-05-12 - Stage 14 final-confirmed note save handoff
 
 - Task attempted: Let the user save an approved assistant note/context draft only after a final explicit confirmation.

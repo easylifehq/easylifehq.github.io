@@ -88,6 +88,7 @@ export type AssistantNoteSaveConfirmation = {
   pinPreview: boolean;
   savedNoteId: string | null;
   status: "idle" | "saving" | "saved" | "blocked";
+  receiptLabel: string;
   message: string;
 };
 

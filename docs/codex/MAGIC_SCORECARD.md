@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 14 Saved Note Receipt
+
+- Task: Saved note receipt.
+- Result: Passed local UI implementation, build, and route inspection.
+- Magic signal: saved-note-receipt-visible
+- Changed files: 6
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Headless Chromium inspected `/app/easynotes?demo=1` on local Vite port `4221`, clicked `Preview note save path`, clicked `Confirm and save note`, and verified `.notes-note-save-receipt` on desktop and mobile-sized viewports. Screenshot saved at `.codex-logs/stage14-task2-saved-note-receipt.png`.
+- Receipt evidence: receipt shows the note title and context group, with a saved-state label available for real signed-in saves.
+- Demo guard: `?demo=1` still reports that no signed-in note save happened.
+- Boundary evidence: receipt says no task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real memory was created.
+- No-extra-write guarantee: no new write was added beyond the existing note save path; no backend/auth/Firebase config, dependency, package, deploy, generated output, or secret change was made.
+
 ## 2026-05-12 - Stage 14 Final-Confirmed Note Save Handoff
 
 - Task: Final-confirmed note save handoff.

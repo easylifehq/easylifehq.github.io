@@ -205,6 +205,7 @@ export function EasyNotesLibraryPage() {
         pinPreview: noteHandoffPreview.pinPreview,
         savedNoteId: null,
         status: "blocked",
+        receiptLabel: "Save blocked",
         message: "Name the note or add body text before saving. Nothing was saved.",
       });
       return;
@@ -217,6 +218,7 @@ export function EasyNotesLibraryPage() {
       pinPreview: noteDraft.pinned,
       savedNoteId: null,
       status: "saving",
+      receiptLabel: "Saving one note",
       message: "Saving this note only...",
     });
 
@@ -228,6 +230,7 @@ export function EasyNotesLibraryPage() {
         pinPreview: noteDraft.pinned,
         savedNoteId: null,
         status: "blocked",
+        receiptLabel: "Demo receipt preview",
         message:
           "Demo review mode: no signed-in note save happened. This final confirmation would save one note only outside demo review; nothing else was created.",
       });
@@ -243,6 +246,7 @@ export function EasyNotesLibraryPage() {
       pinPreview: noteDraft.pinned,
       savedNoteId: noteId,
       status: noteId ? "saved" : "blocked",
+      receiptLabel: noteId ? "Saved note receipt" : "Save blocked",
       message: noteId
         ? "Saved one note only. No task, plan, reminder, follow-up, email, calendar item, notification, sync, model call, or real memory was created."
         : "No signed-in note save happened in this preview session. Nothing else was created.",
@@ -515,9 +519,30 @@ export function EasyNotesLibraryPage() {
                 </button>
               </div>
               {noteSaveConfirmation ? (
-                <p className={`notes-note-save-message notes-note-save-message-${noteSaveConfirmation.status}`}>
-                  {noteSaveConfirmation.message}
-                </p>
+                <div
+                  className={`notes-note-save-receipt notes-note-save-receipt-${noteSaveConfirmation.status}`}
+                  aria-label="Note save receipt"
+                >
+                  <div className="notes-note-save-receipt-header">
+                    <span>{noteSaveConfirmation.receiptLabel}</span>
+                    <strong>{noteSaveConfirmation.title || "Assistant context note"}</strong>
+                  </div>
+                  <dl className="notes-note-save-receipt-details">
+                    <div>
+                      <dt>Context group</dt>
+                      <dd>{noteSaveConfirmation.contextGroup || "No context group"}</dd>
+                    </div>
+                    <div>
+                      <dt>Pin preview</dt>
+                      <dd>{noteSaveConfirmation.pinPreview ? "Pinned in note only" : "Not pinned"}</dd>
+                    </div>
+                  </dl>
+                  <p>{noteSaveConfirmation.message}</p>
+                  <p>
+                    Receipt boundary: no task, plan, reminder, follow-up, email, notification, calendar item, sync,
+                    model call, or real memory was created.
+                  </p>
+                </div>
               ) : null}
             </article>
           ) : null}
