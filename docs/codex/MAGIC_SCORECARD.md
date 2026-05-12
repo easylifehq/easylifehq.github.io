@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - EasyLife Human Review Notes Template
+
+- Task: Create EasyLife human review notes template.
+- Result: Passed docs-only template creation and build acceptance.
+- Magic signal: human-review-feedback-captured
+- Changed files: docs only
+- Notes template path: `docs/codex/EASYLIFE_HUMAN_REVIEW_NOTES.md`.
+- Coverage evidence: template includes first reaction, route-specific review sections, copy/confusion notes, visual/taste notes, trust concerns, must-fix list, and approved Stage 16 direction.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: template does not invent feedback, create Stage 16 tasks, approve external actions, or change app code, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets.
+
 ## 2026-05-12 - EasyLife Human Review Packet
 
 - Task: Create EasyLife human review packet.

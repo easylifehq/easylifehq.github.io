@@ -1,5 +1,17 @@
 # Codex Nightly Report
 
+## 2026-05-12 - EasyLife human review notes template
+
+- Task attempted: Create a structured place to capture human review feedback before Stage 16.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_HUMAN_REVIEW_NOTES.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Notes template path: `docs/codex/EASYLIFE_HUMAN_REVIEW_NOTES.md`.
+- Template coverage: first reaction, Today review, Inbox/task save review, Notes/note save review, Plan preview-only review, copy/confusion notes, visual/taste notes, trust concerns, must-fix before Stage 16, and approved Stage 16 direction.
+- Boundary preserved: This docs-only task does not invent feedback, create implementation tasks, start Stage 16, add app code, deploy, or change backend/auth/Firebase config, dependencies, package files, generated output, or secrets.
+
 ## 2026-05-12 - EasyLife human review packet
 
 - Task attempted: Make it easy for a human to review EasyLife after Stage 15.
