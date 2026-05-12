@@ -2,6 +2,24 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-12 - Stage 17 Task 5 Settings Assistant Cleanup
+
+- Task: Clean up Settings as a slick assistant control panel.
+- Result: Passed build and local Settings route inspection.
+- Magic signal: settings-assistant-controls-less-module-sprawl
+- Changed files:
+  - `app-vNext/src/features/settings/routes/SettingsPage.tsx`
+  - `app-vNext/src/components/navigation/appProducts.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product evidence: default Settings shows `Control Light`, `Control skin`, `Assistant controls`, `Active control skin`, and `Choose another control skin`.
+- Simplification evidence: removed the static Surface Defaults module-inventory cards and the now-unused CSS for that card list.
+- More evidence: `/app/settings?demo=1&section=apps` shows Today, Inbox, Plan, and Notes as the default path and labels optional surfaces as parked under More.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no routes, settings behavior, persistence, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets changed.
+
 ## 2026-05-12 - Stage 17 Task 4 Notes Context Language
 
 - Task: Repair honest Notes/Memory language.

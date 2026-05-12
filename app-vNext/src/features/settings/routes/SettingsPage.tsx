@@ -44,9 +44,9 @@ const themeOptions: Array<{
 }> = [
   {
     value: "classic",
-    label: "Soft Notebook",
-    description: "Soft paper surfaces, graphite text, and calm blue accents.",
-    tone: "Soft",
+    label: "Control Light",
+    description: "Clean light surfaces, graphite text, and precise blue accents.",
+    tone: "Calm",
   },
   {
     value: "candy",
@@ -107,7 +107,7 @@ const appVisibilityOptions: Array<{
   {
     id: "easynotes",
     label: "Notes",
-    description: "Memory, rough thoughts, and writing context.",
+    description: "Saved context, rough thoughts, and writing drafts.",
     home: "Daily",
   },
   {
@@ -119,31 +119,31 @@ const appVisibilityOptions: Array<{
   {
     id: "easyworkout",
     label: "Workout",
-    description: "Training context when it matters for the day.",
+    description: "Optional training context parked under More.",
     home: "Optional",
   },
   {
     id: "easystatistics",
     label: "Progress",
-    description: "Trends and deeper cross-assistant stats.",
+    description: "Optional trend readout for deeper review.",
     home: "Optional",
   },
   {
     id: "easypipeline",
     label: "Follow-ups",
-    description: "Applications, follow-ups, and job-search momentum.",
+    description: "Optional applications and longer follow-ups.",
     home: "Optional",
   },
   {
     id: "easycontacts",
     label: "People",
-    description: "People, relationship reminders, and networking context.",
+    description: "Optional people and place context.",
     home: "Optional",
   },
   {
     id: "easyprojects",
     label: "Projects",
-    description: "Sections, milestones, and synced tasks.",
+    description: "Optional project sections and milestones.",
     home: "Optional",
   },
 ];
@@ -160,8 +160,8 @@ const appVisibilityGroups: Array<{
   },
   {
     id: "Optional",
-    title: "More context",
-    description: "Show workout, projects, follow-ups, people, or progress only when they matter this week.",
+    title: "Parked in More",
+    description: "Keep workout, projects, follow-ups, people, and progress out of the default path until needed.",
   },
 ];
 
@@ -221,7 +221,7 @@ const experimentalFeatureOptions: Array<{
   },
   {
     id: "projectPlanner",
-    label: "Project Planner AI",
+    label: "Project Planner",
     description: "Drafts project sections, due dates, and linked task suggestions from a rough goal.",
     category: "Projects",
     status: "Active",
@@ -290,16 +290,16 @@ const settingsSections: Array<{
 }> = [
   {
     id: "customize",
-    label: "Personalize",
-    eyebrow: "Appearance",
-    description: "Choose the theme, opening screen, and everyday app setup.",
+    label: "Control Panel",
+    eyebrow: "Assistant Controls",
+    description: "Tune the theme, opening screen, and first assistant path.",
     group: "basics",
   },
   {
     id: "apps",
     label: "More",
     eyebrow: "Assistant Path",
-    description: "Choose what stays in the core path and what waits under More.",
+    description: "Choose what stays core and what remains parked under More.",
     group: "basics",
   },
   {
@@ -311,7 +311,7 @@ const settingsSections: Array<{
   },
   {
     id: "page-settings",
-    label: "Surface Defaults",
+    label: "Surface Tuning",
     eyebrow: "Assistant Defaults",
     description: "Tune how Inbox, Plan, Notes, and optional context open from the assistant.",
     group: "advanced",
@@ -347,15 +347,15 @@ const settingsSections: Array<{
   {
     id: "assistant",
     label: "Assistant",
-    eyebrow: "AI Controls",
-    description: "Set what AI can review, suggest, draft, and never do automatically.",
+    eyebrow: "Assistant Controls",
+    description: "Set what assistant helpers can review, suggest, draft, and never do automatically.",
     group: "advanced",
   },
   {
     id: "experiments",
-    label: "Labs",
+    label: "Feature Switches",
     eyebrow: "Experimental",
-    description: "Preview features that can be switched on or off.",
+    description: "Keep experimental assistant helpers explicit and reversible.",
     group: "advanced",
   },
   {
@@ -364,43 +364,6 @@ const settingsSections: Array<{
     eyebrow: "User Info",
     description: "See your account, app version, and sign-out control.",
     group: "basics",
-  },
-];
-
-const pageSettingsSections: Array<{
-  id: string;
-  label: string;
-  title: string;
-  description: string;
-  status: string;
-}> = [
-  {
-    id: "calendar",
-    label: "Plan",
-    title: "Plan",
-    description: "Wake-up time, day layout, categories, recurring classes, and calendar defaults belong here.",
-    status: "Started",
-  },
-  {
-    id: "list",
-    label: "Inbox",
-    title: "Inbox",
-    description: "Urgency scale, quick-add defaults, archive behavior, and task display controls will live here.",
-    status: "Next",
-  },
-  {
-    id: "notes",
-    label: "Notes",
-    title: "Notes",
-    description: "Open-note behavior, untitled note cleanup, folders, and note-to-task defaults will live here.",
-    status: "Next",
-  },
-  {
-    id: "workout",
-    label: "Workout",
-    title: "Workout",
-    description: "Workout mode defaults, exercise box counts, and logging preferences will live here.",
-    status: "Next",
   },
 ];
 
@@ -416,7 +379,7 @@ const startupRouteOptions: Array<{ value: StartupRoute; label: string; descripti
   { value: "/app/easylist/dashboard", label: "Inbox review", description: "Open straight to captured items." },
   { value: "/app/easylist/add", label: "Capture", description: "Start in fast inbox mode." },
   { value: "/app/easycalendar/day", label: "Plan", description: "Start with today hour by hour." },
-  { value: "/app/easynotes", label: "Notes", description: "Open assistant memory." },
+  { value: "/app/easynotes", label: "Notes", description: "Open saved context." },
   { value: "/app/easynotes/new", label: "Blank note", description: "Start writing immediately." },
   { value: "/app/easyworkout/dashboard", label: "Workout", description: "Open optional training context." },
 ];
@@ -505,13 +468,13 @@ const assistantBoundaries: Array<{
     label: "Data",
     title: "Scoped to your account",
     status: "Review",
-    description: "AI review should use only the current signed-in user's EasyLife data and visible context.",
+    description: "Assistant review should use only the current signed-in user's EasyLife data and visible context.",
   },
   {
     label: "Fallback",
     title: "Manual path stays available",
     status: "Allowed",
-    description: "If AI is unavailable, the app should explain what happened and keep the manual workflow usable.",
+    description: "If helper intelligence is unavailable, the app should explain what happened and keep the manual workflow usable.",
   },
 ];
 
@@ -820,7 +783,7 @@ export function SettingsPage() {
             <strong>{auth.currentUser?.email || user?.email || "EasyLife account"}</strong>
           </article>
           <article className="settings-status-card">
-            <span>Theme</span>
+            <span>Control skin</span>
             <strong>{activeTheme.label}</strong>
           </article>
           <article className="settings-status-card">
@@ -900,23 +863,23 @@ export function SettingsPage() {
       <div className="settings-layout-grid">
         {activeSection === "customize" ? (
         <PageSection
-          eyebrow="Appearance"
-          title="Theme mode"
+          eyebrow="Control panel"
+          title="Assistant controls"
         >
           <div id="customize" className="settings-anchor" />
           <div className="settings-customization-console">
             <div className="settings-theme-overview">
               <div>
-                <span className="settings-card-topline">Current selection</span>
+                <span className="settings-card-topline">Active control skin</span>
                 <strong>{activeTheme.label}</strong>
                 <p>{activeTheme.description}</p>
               </div>
               <span className="settings-state-pill">{activeTheme.tone}</span>
             </div>
             <details className="advanced-disclosure">
-              <summary>Choose another theme</summary>
+              <summary>Choose another control skin</summary>
               <p className="helper-copy">
-                Pick the mood that feels easiest to read. Themes only change color, contrast, and surface tone.
+                Pick the mode that feels easiest to read. This only changes color, contrast, and surface tone.
               </p>
               <div className="settings-option-grid">
                 {themeOptions.map((option) => (
@@ -1054,26 +1017,14 @@ export function SettingsPage() {
           title="Surface defaults"
         >
           <div id="page-settings" className="settings-anchor" />
-          <div className="settings-page-section-list">
-            {pageSettingsSections.map((section) => (
-              <article key={section.id} className={`settings-page-section-card settings-page-section-${section.id}`}>
-                <span className="settings-card-topline">
-                  <span>{section.label}</span>
-                  <span className="settings-state-pill">{section.status}</span>
-                </span>
-                <strong>{section.title}</strong>
-                <p>{section.description}</p>
-              </article>
-            ))}
-          </div>
 
           <aside className="settings-command-note" aria-label="Assistant defaults guidance">
             <div>
-              <span className="settings-card-topline">How surfaces open</span>
-              <strong>Set how EasyLife opens, captures, and routes your work.</strong>
+              <span className="settings-card-topline">Core control lane</span>
+              <strong>Tune Today, Inbox, Plan, and Notes first.</strong>
               <p>
-                These controls tune how each app starts its work while keeping the underlying tools and saved data
-                unchanged.
+                Optional workout, project, people, progress, and follow-up controls stay lower on the page so the
+                assistant path stays focused.
               </p>
             </div>
             <div className="settings-command-tags" aria-label="Covered settings areas">
@@ -1167,9 +1118,9 @@ export function SettingsPage() {
 
             <section className="settings-app-preference-card">
               <div className="panel-header">
-                <p className="eyebrow">Workout</p>
-                <h3>Workout mode defaults</h3>
-                <p>Set how much structure is ready when you hit Start Workout.</p>
+                <p className="eyebrow">More / optional</p>
+                <h3>Training defaults</h3>
+                <p>Keep training setup available without making it part of the first assistant path.</p>
               </div>
               <label className="field-stack">
                 <span>Focused exercise boxes</span>
@@ -1205,9 +1156,9 @@ export function SettingsPage() {
 
             <section className="settings-app-preference-card">
               <div className="panel-header">
-                <p className="eyebrow">Routing</p>
-                <h3>Cross-surface planning</h3>
-                <p>Decide how task follow-ups should move between optional Projects and Follow-ups.</p>
+                <p className="eyebrow">More / optional</p>
+                <h3>Project and follow-up routing</h3>
+                <p>Decide how larger work moves only when you choose to use the optional surfaces.</p>
               </div>
               <label className="field-stack">
                 <span>Project routing</span>
@@ -1252,7 +1203,7 @@ export function SettingsPage() {
         <PageSection
           eyebrow="Assistant Path"
           title="More and core surfaces"
-          description="Choose what stays in Today, Inbox, Plan, and Notes, and what waits under More."
+          description="Keep Today, Inbox, Plan, and Notes as the default path. Park everything else under More."
         >
           <div id="apps" className="settings-anchor" />
           {isLoading ? <p className="helper-copy">Loading your preferences...</p> : null}
@@ -1657,9 +1608,9 @@ export function SettingsPage() {
 
         {activeSection === "assistant" ? (
         <PageSection
-          eyebrow="AI Controls"
+          eyebrow="Assistant controls"
           title="Assistant foundation"
-          description="EasyLife AI stays helpful, review-first, reversible, and scoped to your account."
+          description="Assistant helpers stay helpful, review-first, reversible, and scoped to your account."
         >
           <div id="assistant" className="settings-anchor" />
           <div className="settings-notification-hero">
@@ -1668,14 +1619,14 @@ export function SettingsPage() {
               <strong>{settings.assistant.enabled ? "Enabled" : "Paused"}</strong>
               <p>
                 {settings.assistant.enabled
-                  ? "AI helpers can appear where you have enabled matching preview features."
-                  : "AI helpers stay hidden or inactive until you turn the assistant on."}
+                  ? "Assistant helpers can appear where you have enabled matching preview features."
+                  : "Assistant helpers stay hidden or inactive until you turn the assistant on."}
               </p>
             </article>
             <article>
               <span>Review rule</span>
               <strong>{settings.assistant.requireReviewBeforeSave ? "Required" : "Not required"}</strong>
-              <p>Keep this on so AI suggestions become drafts before anything enters your real data.</p>
+              <p>Keep this on so assistant suggestions become drafts before anything enters your real data.</p>
             </article>
           </div>
 
@@ -1687,7 +1638,7 @@ export function SettingsPage() {
                   <span className="settings-state-pill">{settings.assistant.enabled ? "On" : "Off"}</span>
                 </span>
                 <strong>Use EasyLife assistant helpers</strong>
-                <p>Turns assistant surfaces on or off without changing individual Labs switches.</p>
+                <p>Turns assistant surfaces on or off without changing individual feature switches.</p>
               </div>
               <input
                 type="checkbox"
@@ -1719,7 +1670,7 @@ export function SettingsPage() {
                   <span className="settings-state-pill">Suggestions</span>
                 </span>
                 <strong>Allow cross-surface suggestions</strong>
-                <p>Lets AI suggest moving a thought into Inbox, Plan, Projects, Follow-ups, or Notes.</p>
+                <p>Lets assistant helpers suggest moving a thought into Inbox, Plan, Projects, Follow-ups, or Notes.</p>
               </div>
               <input
                 type="checkbox"
@@ -1735,7 +1686,7 @@ export function SettingsPage() {
                   <span className="settings-state-pill">Review first</span>
                 </span>
                 <strong>Allow draft creation</strong>
-                <p>Allows AI helpers to prepare draft tasks, project plans, or note actions for review.</p>
+                <p>Allows assistant helpers to prepare draft tasks, project plans, or note actions for review.</p>
               </div>
               <input
                 type="checkbox"
@@ -1751,7 +1702,7 @@ export function SettingsPage() {
                   <span className="settings-state-pill">Required</span>
                 </span>
                 <strong>Require review before save</strong>
-                <p>AI output should stay editable and reversible before it changes your workspace.</p>
+                <p>Assistant output should stay editable and reversible before it changes your workspace.</p>
               </div>
               <input
                 type="checkbox"
@@ -1763,7 +1714,7 @@ export function SettingsPage() {
 
           <div className="settings-notification-quiet">
             <label className="field-stack">
-              <span>If AI is unavailable</span>
+              <span>If assistant help is unavailable</span>
               <select
                 value={settings.assistant.fallbackMode}
                 onChange={(event) =>
@@ -1797,8 +1748,8 @@ export function SettingsPage() {
 
       {activeSection === "experiments" ? (
       <PageSection
-        eyebrow="Labs"
-          title="Experimental features"
+        eyebrow="Feature switches"
+          title="Assistant experiments"
       >
         <div id="experiments" className="settings-anchor" />
         <AiCommandCenter />

@@ -1,6 +1,27 @@
 # Simon Design Review
 
 ## Verdict
+SETTINGS_FEELS_MORE_ASSISTANT_CONTROL_PANEL
+
+## Stage 17 Task 5 Design Review - 2026-05-12
+
+Verdict: `SETTINGS_FEELS_MORE_ASSISTANT_CONTROL_PANEL`.
+
+Settings now leads with assistant control language instead of cozy notebook identity or a product-module inventory. The default visual theme reads as `Control Light`, the first section is `Assistant controls`, and optional surfaces are explicitly parked under More.
+
+What works:
+- `Soft Notebook` no longer appears as the default-feeling visual identity.
+- The old static Surface Defaults inventory cards are gone.
+- The More section names Today, Inbox, Plan, and Notes as the default path.
+- Workout, Projects, Follow-ups, People, and Progress now read as optional context rather than peer core apps.
+- Browser inspection showed the Settings hero, More section, and Surface Defaults section using the new assistant-control framing.
+
+Design risk:
+- Settings is still a large page with many deep controls. It is less old-EasyLife now, but a future human review may still want a stricter split between daily controls and advanced/export/install controls.
+
+---
+
+## Verdict
 CONTACTS_PEOPLE_PLACES_IS_LESS_CRM_LIKE
 
 ## Stage 17 Task 2 Design Review - 2026-05-12

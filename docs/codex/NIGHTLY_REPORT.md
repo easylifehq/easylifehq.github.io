@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-12 - Stage 17 Task 5 Settings slick assistant cleanup
+
+- Task attempted: Make Settings feel like a slick assistant control panel instead of old EasyLife module sprawl.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Routes inspected:
+  - `http://127.0.0.1:4234/app/settings?demo=1`
+  - `http://127.0.0.1:4234/app/settings?demo=1&section=apps`
+  - `http://127.0.0.1:4234/app/settings?demo=1&section=page-settings`
+- Files changed:
+  - `app-vNext/src/features/settings/routes/SettingsPage.tsx`
+  - `app-vNext/src/components/navigation/appProducts.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Product simplification: removed the static Surface Defaults card inventory, renamed the default `Soft Notebook` theme to `Control Light`, and reframed the first Settings surface as `Assistant controls`.
+- Optional module demotion: Workout, Projects, Follow-ups, People, and Progress now read as optional More context instead of peer first-path modules.
+- Visual repair: added a more technical Settings hero treatment and tightened status/control language around `Control skin`, `Active control skin`, and `Choose another control skin`.
+- Boundary preserved: no routes, settings behavior, persistence, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets changed.
+
 ## 2026-05-12 - Stage 17 Task 4 honest Notes/Memory language repair
 
 - Task attempted: Make Notes feel like saved context for the assistant without overclaiming real AI memory.
