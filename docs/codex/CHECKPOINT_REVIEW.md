@@ -1,6 +1,44 @@
 # Checkpoint Review
 
 ## Verdict
+READY_FOR_STAGE_28_ASSISTANT_RELIABILITY
+
+## Stage 27 Private Alpha AI Assistant Proof Packet
+
+Reviewed At: 2026-05-17
+
+Stage 27 proof says the private-alpha Inbox assistant lane is safe and understandable enough to continue into reliability hardening. It does not say EasyLife has a finished live AI assistant.
+
+## Stage 27 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 27 Route Evidence
+
+- Route inspected: `/app/easylist/add?demo=1`.
+- The in-app browser connection was unavailable in this session, so proof used headless Chrome DOM inspection.
+- Rendered proof strings included `Assistant intake preview`, `Live fallback preview`, `Live provider dry run`, `Nothing saved or sent`, `Disabled - Provider lane stays off`, `Timeout - No automatic retry`, `Rate limit - Use local rules`, `Validation blocked - Unsafe output is not offered`, `Provider error - Capture is preserved`, and `Local deterministic fallback is available`.
+- `Opening Inbox` was not present, so demo review no longer stays trapped in the loading state.
+
+## Stage 27 Safety Evidence
+
+- Assistant result clarity improved with visible mode/result/next labels.
+- Fallback and failure states are clear enough for private-alpha review.
+- Hidden writes and external actions remain blocked.
+- Existing task and note save behavior remained unchanged.
+- No live provider call, secret, provider SDK, deploy change, generated output, frontend key, broad chat, real memory, notification, sync, geocoding, external action, or saved-object expansion was added.
+
+## Blunt Judgment
+
+This is worth continuing, but only into reliability hardening. Stage 28 should prove fallback matrices, metadata-only logging, route proof, and no-hidden-action guarantees before any next AI gate.
+
+## Verdict
+
+READY_FOR_STAGE_28_ASSISTANT_RELIABILITY
+
+---
+
+## Verdict
 READY_FOR_STAGE_27_BUT_NO_LIVE_PROVIDER_YET
 
 ## Stage 26 First Live Provider Dry Run Proof Packet

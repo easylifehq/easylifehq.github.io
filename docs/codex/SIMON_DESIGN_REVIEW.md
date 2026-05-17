@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_STAGE_28_ASSISTANT_RELIABILITY
+
+## Stage 27 Private Alpha AI Assistant Product Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_28_ASSISTANT_RELIABILITY`.
+
+The private-alpha Inbox lane is understandable enough to keep going. It now communicates the active assistant mode, the result state, the next move, and the fallback condition without looking like a broken provider integration.
+
+Product/design read:
+- Result clarity improved because the lane shows `Mode`, `Result`, and `Next`.
+- Fallback states are clearer because disabled, timeout, rate-limit, validation-blocked, and provider-error states are selectable in one compact control.
+- The route is reviewable in demo mode instead of hanging on `Opening Inbox...`.
+- The lane still looks technical, but that is acceptable for private-alpha reliability work.
+
+Design guard:
+Stage 28 should harden reliability without adding more provider chrome. If a new state needs to appear, reuse the existing compact lane and remove one old warning first.
+
+---
+
+## Verdict
 FALLBACK_STATES_REVIEWABLE
 
 ## Stage 27 Task 3 Fallback And Failure UX Hardening - 2026-05-17

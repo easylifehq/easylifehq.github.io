@@ -1,5 +1,26 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 27 Private Alpha AI Assistant Proof Packet
+
+- Task attempted: Decide whether the private-alpha assistant lane is understandable, safe, and worth continuing.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_AI_ASSISTANT_PROOF_PACKET.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+- Proof verdict: `READY_FOR_STAGE_28_ASSISTANT_RELIABILITY`.
+- Route inspected: `/app/easylist/add?demo=1`.
+- Inspection method: in-app browser connection was unavailable, so proof used headless Chrome DOM inspection at mobile width.
+- Result clarity: improved; the Inbox lane now exposes mode/result/next labels and keeps `Nothing saved or sent` visible.
+- Fallback clarity: disabled, timeout, rate-limit, validation-blocked, and provider-error states are visible and calm.
+- Safety result: hidden writes and external actions remain blocked; existing task/note save paths stayed unchanged.
+- Next queue: `docs/codex/NEXT_5_TASKS.md` now contains exactly five bounded Stage 28 assistant reliability tasks.
+
 ## 2026-05-17 - Stage 27 Task 3 Fallback And Failure UX Hardening
 
 - Task attempted: Make disabled, timeout, rate-limit, validation-rejected, and provider-error states clear and non-scary in the Inbox assistant lane.

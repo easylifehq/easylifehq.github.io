@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+READY_FOR_STAGE_28_ASSISTANT_RELIABILITY
+
+## Stage 27 Private Alpha AI Assistant Copy Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_28_ASSISTANT_RELIABILITY`.
+
+The Inbox assistant lane is safer to read than it was before Stage 27. It still says what is true: provider behavior is not broadly live, local fallback remains available, and nothing is saved or sent without the existing explicit save paths.
+
+Copy proof:
+- `Nothing saved or sent` remains visible.
+- Fallback states say capture is preserved instead of implying data loss.
+- Timeout and provider-error copy say no automatic retry runs.
+- Validation-blocked copy says unsafe output is not offered.
+- The route keeps the next action local and deterministic.
+
+Remaining copy risk:
+The lane still has private-alpha technical language. That is tolerable for Stage 28 reliability, but it should not be marketed as a finished AI assistant.
+
+---
+
+## Verdict
 INBOX_RESULT_CLARITY_READY
 
 ## Stage 27 Task 2 Assistant Result Clarity Polish - 2026-05-17
@@ -900,3 +921,25 @@ The Inbox proof copy is honest enough for Stage 24:
 
 Copy risk:
 - The words are intentionally technical. That is fine for this proof stage, but Stage 26 or later should translate the final user-facing version into calmer trust language once real provider behavior is separately approved.
+# Robin Copy Review
+
+## Verdict
+READY_FOR_STAGE_28_ASSISTANT_RELIABILITY
+
+## Stage 27 Private Alpha AI Assistant Copy Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_28_ASSISTANT_RELIABILITY`.
+
+The Inbox assistant lane is safer to read than it was before Stage 27. It still says what is true: provider behavior is not broadly live, local fallback remains available, and nothing is saved or sent without the existing explicit save paths.
+
+Copy proof:
+- `Nothing saved or sent` remains visible.
+- Fallback states say capture is preserved instead of implying data loss.
+- Timeout and provider-error copy say no automatic retry runs.
+- Validation-blocked copy says unsafe output is not offered.
+- The route keeps the next action local and deterministic.
+
+Remaining copy risk:
+The lane still has private-alpha technical language. That is tolerable for Stage 28 reliability, but it should not be marketed as a finished AI assistant.
+
+---

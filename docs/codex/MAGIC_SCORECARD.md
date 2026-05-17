@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 27 Private Alpha AI Assistant Proof Packet
+
+- Task: Decide whether the private-alpha assistant lane is understandable, safe, and worth continuing.
+- Result: Stage 27 proof packet created with verdict `READY_FOR_STAGE_28_ASSISTANT_RELIABILITY`.
+- Magic signal: private-alpha-lane-safe-enough-for-reliability-hardening
+- Proof packet evidence: `docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_AI_ASSISTANT_PROOF_PACKET.md`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: headless Chrome DOM inspection of `/app/easylist/add?demo=1` found `Assistant intake preview`, `Live fallback preview`, `Live provider dry run`, and `Nothing saved or sent`.
+- Result clarity evidence: the lane exposes mode/result/next labels.
+- Fallback evidence: DOM proof found disabled, timeout, rate-limit, validation-blocked, and provider-error options.
+- Safety evidence: fallback copy says no save, send, schedule, sync, notification, or hidden action happened.
+- Reviewability evidence: `Opening Inbox` was absent from the rendered route.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` now contains exactly five bounded Stage 28 reliability tasks.
+- Boundary evidence: no live provider call, provider SDK, frontend key, secret, deploy change, package/dependency change, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 27 Task 3 Fallback And Failure UX Hardening
 
 - Task: Make disabled, timeout, rate-limit, validation-rejected, and provider-error states clear and non-scary.
