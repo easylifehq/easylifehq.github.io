@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 28 Task 4 Alpha Bug Report Template
+
+- Task: Create a lightweight bug report template for private alpha assistant testing.
+- Result: Alpha testers now have a structured way to report assistant lane failures without pasting raw private input.
+- Magic signal: alpha-bugs-actionable-without-private-data
+- Template evidence: `docs/codex/EASYLIFE_ASSISTANT_ALPHA_BUG_REPORT_TEMPLATE.md`.
+- Route evidence: the template includes a route field and example `/app/easylist/add?demo=1`.
+- Input privacy evidence: testers report typed input category instead of raw private text.
+- State evidence: the template captures assistant source state, source label, destination label, capture pairing, validation state, and fallback state.
+- Safety evidence: the template asks whether anything saved or sent and separately checks for scheduling, syncing, notifications, geocoding, device location, and real memory claims.
+- Screenshot evidence: screenshot guidance tells testers to hide private input, names, contact details, exact places, addresses, secrets, tokens, account info, environment variables, and network payloads.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs only; no app code, deploy change, provider behavior, backend, secret, external action, hidden write, real memory, notification, calendar sync, geocoding, package change, dependency, or generated output was added.
+
 ## 2026-05-17 - Stage 28 Task 3 Source/Destination Consistency Guard
 
 - Task: Make every assistant suggestion clearly say where it came from and where it can go.

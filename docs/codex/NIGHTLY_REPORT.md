@@ -1,5 +1,18 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 28 Task 4 Alpha Bug Report Template
+
+- Task attempted: Create a lightweight bug report template for private alpha assistant testing.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_ASSISTANT_ALPHA_BUG_REPORT_TEMPLATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Template created: `docs/codex/EASYLIFE_ASSISTANT_ALPHA_BUG_REPORT_TEMPLATE.md`.
+- Report fields: route, typed input category without raw private text, assistant source state, validation/fallback state, what looked wrong, whether anything saved or sent, screenshot guidance, expected behavior, and triage severity.
+- Privacy guard: the template explicitly tells testers not to paste private typed input, secrets, raw payloads, provider details, exact places, addresses, contact details, or screenshots containing sensitive data.
+- Boundary preserved: docs only; no app code, deploy change, provider behavior, backend, secret, external action, hidden write, real memory, notification, calendar sync, geocoding, package change, dependency, or generated output was added.
+
 ## 2026-05-17 - Stage 28 Task 3 Source/Destination Consistency Guard
 
 - Task attempted: Make every Inbox assistant suggestion clearly say where it came from and where it can go.
