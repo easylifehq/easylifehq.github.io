@@ -1,5 +1,7 @@
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { assistantAiAvailability, getAssistantAiFallbackCopy } from "@/features/assistant/aiAvailability";
+import { runMockGateway, type MockGatewayForcedFallbackReason } from "@/features/assistant/gateway/mockGateway";
+import { createMockGatewayTypedCaptureRequest } from "@/features/assistant/gateway/mockGatewayRequest";
 import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
 import {
   buildLocalDraftComparisonOptions,
@@ -37,6 +39,14 @@ const INBOX_PREVIEW_STATE_LABELS: Record<AssistantApprovalState, string> = {
   "needs-review": "Review",
 };
 const INBOX_TRUST_LABELS = ["Draft", "Preview", "Task save only", "Note save only"];
+type MockGatewayMode = "normal" | MockGatewayForcedFallbackReason;
+const MOCK_GATEWAY_MODE_OPTIONS: Array<{ value: MockGatewayMode; label: string }> = [
+  { value: "normal", label: "Mock output" },
+  { value: "ai-disabled", label: "AI disabled" },
+  { value: "timeout", label: "Timeout" },
+  { value: "rate-limit", label: "Rate limit" },
+  { value: "circuit-open", label: "Circuit open" },
+];
 const DESTINATION_BY_DRAFT_TYPE: Record<AssistantLocalDraftType, string> = {
   task: "Inbox task save lane",
   note: "Notes save lane",
@@ -77,6 +87,7 @@ export function EasyListInboxPage() {
   const { tasks, isLoading, error, addTask } = useEasyList();
   const [listName, setListName] = useState("Main");
   const [assistantCaptureText, setAssistantCaptureText] = useState("Reply to Maya about Friday plans");
+  const [mockGatewayMode, setMockGatewayMode] = useState<MockGatewayMode>("normal");
   const [previewApprovalState, setPreviewApprovalState] = useState<AssistantApprovalState>("suggested");
   const [selectedDraftType, setSelectedDraftType] = useState<AssistantLocalDraftType>("follow-up");
   const [showTaskHandoff, setShowTaskHandoff] = useState(false);
@@ -128,6 +139,27 @@ export function EasyListInboxPage() {
   const suggestionSourceLabel = isDemoReviewMode ? "Typed demo capture" : "Typed capture";
   const suggestionDestination = DESTINATION_BY_DRAFT_TYPE[activeDraftType] || "Hold for review";
   const inboxAiFallbackCopy = getAssistantAiFallbackCopy("inbox");
+  const mockGatewayRequest = useMemo(
+    () =>
+      createMockGatewayTypedCaptureRequest({
+        requestId: `inbox-mock-${assistantSuggestion.id}`,
+        typedCaptureText: assistantCaptureText,
+        includeDemoFixture: isDemoReviewMode,
+      }),
+    [assistantCaptureText, assistantSuggestion.id, isDemoReviewMode]
+  );
+  const mockGatewayResult = useMemo(
+    () =>
+      runMockGateway(
+        mockGatewayRequest,
+        mockGatewayMode === "normal" ? {} : { forceFallbackReason: mockGatewayMode }
+      ),
+    [mockGatewayMode, mockGatewayRequest]
+  );
+  const mockGatewayOutput =
+    mockGatewayResult.status === "mock-output" ? mockGatewayResult.response.output : null;
+  const mockGatewaySafetyState =
+    mockGatewayResult.status === "mock-output" ? mockGatewayResult.response.safetyState : null;
   const approvedLocalDraft = useMemo(
     () =>
       visibleApprovalState === "approved"
@@ -337,13 +369,101 @@ export function EasyListInboxPage() {
             <div className="assistant-trust-chip-row" aria-label="Assistant save boundaries">
               {[
                 ...INBOX_TRUST_LABELS,
+                "Mock gateway",
+                "No provider",
                 assistantAiAvailability.badge,
                 ...(isDemoReviewMode ? ["Demo"] : []),
               ].map((label) => (
                 <span key={label}>{label}</span>
               ))}
             </div>
+            <label className="field-stack assistant-mock-mode-field">
+              <span>Mock gateway state</span>
+              <select
+                value={mockGatewayMode}
+                onChange={(event) => setMockGatewayMode(event.target.value as MockGatewayMode)}
+              >
+                {MOCK_GATEWAY_MODE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
+
+          {mockGatewayOutput ? (
+            <article className="assistant-mock-gateway-preview assistant-mock-gateway-preview-ok" aria-label="Mock gateway suggestion preview">
+              <div className="assistant-suggestion-topline">
+                <span>Mock gateway</span>
+                <span>No provider</span>
+                <span>{mockGatewaySafetyState}</span>
+              </div>
+              <SourceDestinationRow
+                source={mockGatewayOutput.sources.map((source) => source.sourceLabel).join(", ")}
+                state={`${mockGatewayOutput.state} suggestion`}
+                destination={mockGatewayOutput.destinationLabel}
+              />
+              <div className="assistant-suggestion-main">
+                <div>
+                  <p>Model-shaped preview</p>
+                  <h3>{mockGatewayOutput.title}</h3>
+                  <strong>{mockGatewayOutput.summary}</strong>
+                </div>
+              </div>
+              <div className="assistant-suggestion-fields" aria-label="Mock gateway output fields">
+                {mockGatewayOutput.fields.map((field) => (
+                  <span key={`${field.label}-${field.value}`}>
+                    <small>{field.label}</small>
+                    <strong>{field.value}</strong>
+                    <em>{field.editable ? "editable preview" : "locked context"}</em>
+                  </span>
+                ))}
+              </div>
+              <div className="assistant-mock-confirmation" aria-label="Mock gateway confirmation boundary">
+                <span>{mockGatewayOutput.confirmation.label}</span>
+                <strong>{mockGatewayOutput.confirmation.copy}</strong>
+                <p>No live AI, no provider call, no hidden write.</p>
+              </div>
+            </article>
+          ) : mockGatewayResult.status === "fallback" ? (
+            <article className="assistant-mock-gateway-preview assistant-mock-gateway-preview-fallback" aria-label="Mock gateway fallback preview">
+              <div className="assistant-suggestion-topline">
+                <span>Mock fallback</span>
+                <span>{mockGatewayResult.fallback.reason}</span>
+                <span>No retry</span>
+              </div>
+              <SourceDestinationRow
+                source="Typed capture kept locally"
+                state={mockGatewayResult.fallback.label}
+                destination="Deterministic local draft"
+              />
+              <div className="assistant-suggestion-main">
+                <div>
+                  <p>Fallback state</p>
+                  <h3>{mockGatewayResult.fallback.localSuggestion.title}</h3>
+                  <strong>{mockGatewayResult.fallback.copy}</strong>
+                </div>
+              </div>
+              <div className="assistant-suggestion-fields" aria-label="Mock gateway fallback details">
+                <span>
+                  <small>Local intent</small>
+                  <strong>{mockGatewayResult.fallback.localSuggestion.intent}</strong>
+                  <em>{mockGatewayResult.fallback.localSuggestion.confidenceLabel}</em>
+                </span>
+                <span>
+                  <small>Local draft</small>
+                  <strong>{localDraftTypeLabels[mockGatewayResult.fallback.localDraft.draftType]}</strong>
+                  <em>unsaved</em>
+                </span>
+              </div>
+              <div className="assistant-mock-confirmation" aria-label="Mock gateway fallback boundary">
+                <span>{mockGatewayResult.fallback.retryPolicy.label}</span>
+                <strong>Typed capture is preserved. Nothing saves, sends, syncs, or schedules.</strong>
+                <p>No hidden reads, no hidden writes, no external action.</p>
+              </div>
+            </article>
+          ) : null}
 
           <article className={`assistant-suggestion-card assistant-suggestion-card-${assistantSuggestion.intent}`}>
             <div className="assistant-suggestion-topline">

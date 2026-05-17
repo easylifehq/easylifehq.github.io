@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 22 Task 4 Inbox Mock Gateway Preview Wiring
+
+- Task: Wire Inbox to the local mock gateway path so a mock model-style suggestion is visible without a provider call.
+- Result: Inbox now calls the local mock gateway from the typed capture input and renders either a validated mock output or a stable local fallback.
+- Magic signal: inbox-shows-model-shaped-suggestion-without-provider
+- UI evidence: `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`.
+- Style evidence: `app-vNext/src/styles/globals.css`.
+- Gateway evidence: Inbox calls `createMockGatewayTypedCaptureRequest` and `runMockGateway` only.
+- Visible evidence: local route DOM rendered `Mock gateway`, `No provider`, `Mock gateway state`, source/state/destination, output fields, and confirmation boundary copy.
+- Fallback evidence: selectable local fallback states show typed-capture preservation and deterministic local draft behavior without retries.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live AI, SDK, key, backend service, Firebase config, dependency, deploy config, generated output, secret, external action, hidden write, real memory, saved-object expansion, provider-specific fixture, or save behavior change was added.
+
 ## 2026-05-17 - Stage 22 Task 3 Mock Gateway Fallback States
 
 - Task: Make the mock gateway return stable local fallback states.

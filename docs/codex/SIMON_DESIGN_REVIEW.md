@@ -1,6 +1,28 @@
 # Simon Design Review
 
 ## Verdict
+MOCK_GATEWAY_PREVIEW_REVIEWABLE
+
+## Stage 22 Task 4 Inbox Mock Gateway Preview Wiring - 2026-05-17
+
+Verdict: `MOCK_GATEWAY_PREVIEW_REVIEWABLE`.
+
+Inbox now shows a model-shaped mock gateway preview without turning on a real provider. The preview is visually separate from the existing deterministic local suggestion, which makes the future server-AI path understandable without changing the task or note save lanes.
+
+Rendered proof:
+- `/app/easylist/add?demo=1` rendered `Mock gateway`, `No provider`, and `Mock gateway state`.
+- The mock output card rendered source, state, destination, output fields, and `Review only` confirmation copy.
+- The fallback selector exposes AI-disabled, timeout, rate-limit, and circuit-open local states.
+- The card says `No live AI, no provider call, no hidden write.`
+
+Design read:
+- The gateway preview is clear enough for Stage 22 proof.
+- It is still more technical than a final consumer assistant surface, but that is acceptable because Stage 22 is proving the no-provider path.
+- Existing demo data access warning still appears below the content; it was not introduced here, but it remains a review annoyance to address in a later pass.
+
+---
+
+## Verdict
 READY_FOR_MOCK_SERVER_AI_GATEWAY_IMPLEMENTATION
 
 ## Stage 21 Server AI Gateway Product Proof - 2026-05-17

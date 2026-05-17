@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 22 Task 4 Inbox Mock Gateway Preview Wiring
+
+- Task attempted: Wire Inbox to the local mock gateway path so the user can see a mock model-style suggestion without any provider call.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected: `/app/easylist/add?demo=1` via local dev server on `127.0.0.1:4231`; headless DOM rendered the Inbox page and mock gateway preview.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Preview wired: the existing typed capture now builds a Stage 22 mock gateway request and calls only `runMockGateway`.
+- Visible proof: Inbox renders `Mock gateway`, `No provider`, `Mock gateway state`, source/state/destination, model-shaped output fields, and confirmation copy.
+- Fallback proof: the local selector can show `AI disabled`, `Timeout`, `Rate limit`, and `Circuit open` fallback states without a provider call; empty or invalid input still falls back locally through the gateway path.
+- Existing behavior preserved: task/note save behavior was not changed; manual task save still uses the existing final confirmation path.
+- Inspection note: the demo route still shows the existing data access warning below the content, but the mock gateway preview renders before it and does not add backend/auth/Firebase behavior.
+- Boundary preserved: no live AI, SDKs, keys, backend services, Firebase config, dependencies, deploy config, generated output, secrets, external actions, hidden writes, real memory, saved-object expansion, or provider-specific fixtures were added.
+
 ## 2026-05-17 - Stage 22 Task 3 Mock Gateway Fallback States
 
 - Task attempted: Make the mock gateway return stable local fallback states for timeout, rate limit, circuit open, AI disabled, invalid request, and validation rejected.

@@ -4985,6 +4985,7 @@ textarea::placeholder {
 }
 
 .assistant-intent-input,
+.assistant-mock-gateway-preview,
 .assistant-suggestion-card,
 .assistant-draft-comparison-row,
 .assistant-local-draft-preview {
@@ -5048,6 +5049,7 @@ textarea::placeholder {
 }
 
 .assistant-suggestion-card {
+  grid-column: 2;
   display: grid;
   gap: 0.68rem;
   padding: 0.78rem;
@@ -5055,6 +5057,59 @@ textarea::placeholder {
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 9%, transparent), transparent 48%),
     color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 78%, transparent);
+}
+
+.assistant-mock-gateway-preview {
+  grid-column: 2;
+  display: grid;
+  gap: 0.66rem;
+  padding: 0.74rem;
+  border-color: color-mix(in srgb, #344144 34%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #344144 8%, transparent), transparent 48%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 78%, transparent);
+}
+
+.assistant-mock-gateway-preview-fallback {
+  border-style: dashed;
+  border-color: color-mix(in srgb, #8c6d1f 42%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #8c6d1f 10%, transparent), transparent 52%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 78%, transparent);
+}
+
+.assistant-mock-mode-field {
+  margin-top: 0.1rem;
+}
+
+.assistant-mock-confirmation {
+  display: grid;
+  gap: 0.16rem;
+  padding: 0.56rem 0.62rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 26%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 7%, transparent);
+}
+
+.assistant-mock-confirmation span {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.assistant-mock-confirmation strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.88rem;
+  line-height: 1.28;
+}
+
+.assistant-mock-confirmation p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.78rem;
+  font-weight: 650;
 }
 
 .assistant-local-draft-preview {
@@ -5565,6 +5620,8 @@ textarea::placeholder {
     grid-template-columns: 1fr;
   }
 
+  .assistant-mock-gateway-preview,
+  .assistant-suggestion-card,
   .assistant-local-draft-preview {
     grid-column: auto;
   }
