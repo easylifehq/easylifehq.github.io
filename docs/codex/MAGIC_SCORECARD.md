@@ -2,6 +2,22 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 21 Server AI Gateway Planning Packet
+
+- Task: Plan the server-only gateway path for the first model-backed assistant behavior.
+- Result: Stage 21 gateway plan and exactly five Stage 21 tasks were prepared.
+- Magic signal: first-ai-gateway-is-narrow-and-server-only
+- Plan evidence: `docs/codex/EASYLIFE_STAGE_21_SERVER_AI_GATEWAY_PLAN.md`.
+- First behavior evidence: only Inbox typed-capture suggestion is allowed.
+- Request evidence: future gateway request wraps `stage-20-context-v1` with prompt ID `intake-suggestion`.
+- Response evidence: future gateway response must pass the Stage 20 model output validator before the browser renders it.
+- Secret evidence: provider keys remain server-only and are forbidden in frontend source, docs, fixtures, browser storage, logs, generated assets, and public config.
+- Privacy evidence: default logs are metadata-only; raw typed capture, note bodies, task notes, contact names/place labels, provider raw responses, secrets, auth/session payloads, and full context packets are forbidden by default.
+- Spend evidence: the plan requires per-user caps, short-window throttle, token limits, timeouts, circuit breaker, disable switch, and budget alerts.
+- Fallback evidence: failures return deterministic local fallback and do not loop retries.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live model call, provider SDK, API key, backend service, Firebase config change, dependency, package file, deploy config, generated output, secret, external action, real memory, hidden read, hidden write, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 20 AI Assistant Readiness Proof Packet
 
 - Task: Prove whether EasyLife is ready for server-only AI gateway planning.

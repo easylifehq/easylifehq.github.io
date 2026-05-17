@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 21 Server AI Gateway Planning Packet
+
+- Task attempted: Plan the safest server-only path for the first real model-backed EasyLife assistant behavior.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Plan created: `docs/codex/EASYLIFE_STAGE_21_SERVER_AI_GATEWAY_PLAN.md`.
+- Queue updated: `docs/codex/NEXT_5_TASKS.md` now contains exactly five bounded Stage 21 tasks:
+  - Gateway contract.
+  - Privacy/logging rules.
+  - Rate limits and spend controls.
+  - Mock gateway test plan.
+  - Stage 21 proof packet.
+- First allowed model-backed behavior: Inbox typed-capture suggestion only.
+- Architecture decision: browser creates a Stage 20 context packet, future server gateway filters and prompts, server-held secrets call the provider, Stage 20 output validator gates the response, browser renders only a draft/preview.
+- Boundary preserved: no live model calls, provider SDKs, API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, real memory, hidden reads, hidden writes, or saved-object expansion were added.
+
 ## 2026-05-17 - Stage 20 Task 4 AI-Unavailable Fallback
 
 - Task attempted: Make EasyLife remain useful when AI is unavailable without blocking capture, task save, note save, or Today review.

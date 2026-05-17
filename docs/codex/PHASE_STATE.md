@@ -1,20 +1,20 @@
 # Phase State
 
-Current Phase: stage-20-ai-assistant-readiness-proof
+Current Phase: stage-21-server-ai-gateway-planning
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Prove the safest model-backed assistant architecture is ready for server-only gateway planning before any live model calls are implemented.
+Primary Action: Plan the safest server-only AI gateway for the first suggestion-only model-backed assistant behavior.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 20 may define model-read contracts, prompt registry rules, output validation, secret boundaries, and AI-unavailable fallback behavior. It must not add live model calls, provider SDKs, frontend API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets.
+Complexity Budget: Stage 21 may define server gateway architecture, request/response envelopes, secret handling, logging/privacy rules, rate limits, spend controls, fallback behavior, and mock-gateway test planning. It must not add live model calls, provider SDKs, frontend API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_SERVER_AI_GATEWAY_PLANNING
-Evidence Required: Stage 20 readiness gate, context packet contract, prompt registry contract, model output validation contract, AI-unavailable fallback, route proof, build proof, and Stage 20 proof packet.
+Parking State: SERVER_AI_GATEWAY_PLANNING_READY
+Evidence Required: Stage 21 server AI gateway plan, exactly five Stage 21 Task Contract V2 tasks, build proof, NIGHTLY_REPORT, and MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Create a Stage 21 server AI gateway planning/threat-model packet before any live model-call implementation.
+Next Phase Criteria: Complete the Stage 21 planning tasks, then create a proof packet before any mock server AI gateway implementation.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
 Updated At: 2026-05-17 - Stage 20 AI assistant readiness gate created.
@@ -22,6 +22,16 @@ Updated At: 2026-05-17 - Stage 20 AI assistant readiness gate created.
 Stage 20 Task 4 proof result: AI_UNAVAILABLE_FALLBACK_READY. EasyLife now has a local AI-unavailable contract and small Today/Inbox fallback copy. Capture, deterministic local classification, task save, note save, and Today review remain usable without live AI.
 
 Stage 20 proof result: READY_FOR_SERVER_AI_GATEWAY_PLANNING. The next stage may plan a server-only AI gateway and threat model, but it must not add live model calls, provider SDKs, frontend API keys, backend implementation, Firebase config changes, dependencies, deploy config, generated output, secrets, external actions, real memory, hidden reads, hidden writes, or saved-object expansion without a separate explicit implementation gate.
+
+## Stage 21 Server AI Gateway Planning Gate
+
+Stage 21 source: docs/codex/EASYLIFE_STAGE_21_SERVER_AI_GATEWAY_PLAN.md
+
+Prepared Stage 21 queue: docs/codex/NEXT_5_TASKS.md contains exactly five server AI gateway planning/proof tasks.
+
+Stage 21 may plan a server-only gateway for the first model-backed behavior: Inbox typed-capture suggestion. The behavior must remain suggestion-only, approval-first, and no-hidden-write. It may use Stage 20 context packets, prompt registry IDs, output validator rules, no-AI fallback behavior, and server-side secret boundaries.
+
+Stage 21 must not add live model calls, provider SDKs, frontend API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, real memory, maps, geocoding, exact addresses, device location, hidden reads, hidden writes, saved-object expansion, or real personal data.
 
 ## Assistant Brain Gate
 
