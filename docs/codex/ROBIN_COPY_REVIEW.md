@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+FIRST_LIVE_CALL_LANE_COPY_READY_DISABLED
+
+## Stage 31 Task 4 Inbox First-Live-Call Lane Labels - 2026-05-17
+
+Verdict: `FIRST_LIVE_CALL_LANE_COPY_READY_DISABLED`.
+
+Inbox now names the future provider path as a gated first-call lane, not a broad live assistant. The copy stays honest because it presents the lane as disabled until approval and server-only configuration pass.
+
+Copy proof:
+- The visible source label is `First live call gate`, not a general AI assistant promise.
+- The lane shows `Source`, `Prompt ID`, `Sanitizer`, `Quarantine`, `Fallback`, `Provider`, and `Boundary`.
+- The boundary label says `Nothing saved or sent`.
+- The disabled state says the lane is hidden until explicit approval and server-only configuration.
+- Existing task and note save paths are described as unchanged.
+
+Copy guard:
+Keep saying `First live call gate`, `disabled`, `not-called`, and `Nothing saved or sent` until a separate approval permits exactly one synthetic/private-test provider call. Do not say live AI is generally available.
+
+---
+
+## Verdict
 READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL
 
 ## Stage 30 Controlled Live AI Copy Proof - 2026-05-17

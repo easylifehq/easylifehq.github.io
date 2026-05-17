@@ -32,6 +32,11 @@ import {
 } from "@/features/assistant/serverGateway/serverGatewayLiveDryRunTypes";
 import { buildTaskDraft, type TaskRowDraft } from "@/features/easylist/components/TaskComposer";
 import { type AssistantApprovalState } from "@/features/assistant/intentTypes";
+import {
+  runFirstLiveProviderCallHarness,
+  type FirstLiveProviderCallResponse,
+} from "@/features/assistant/serverGateway/firstLiveProviderCallHarness";
+import { sanitizeProviderDryRunRequest } from "@/features/assistant/serverGateway/providerRequestSanitizer";
 import { TaskComposer } from "@/features/easylist/components/TaskComposer";
 import { useEasyList } from "@/features/easylist/EasyListContext";
 import { useEffect, useMemo, useState } from "react";
@@ -81,7 +86,7 @@ const GATEWAY_PREVIEW_SOURCE_OPTIONS: Array<{
   { value: "local-rules", label: "Local rules", description: "Deterministic draft" },
   { value: "mock-gateway", label: "Mock gateway", description: "No provider" },
   { value: "server-adapter-mock", label: "Server adapter mock", description: "No live AI" },
-  { value: "live-provider-dry-run", label: "Live provider dry run", description: "Disabled lane" },
+  { value: "live-provider-dry-run", label: "First live call gate", description: "Disabled unless approved" },
 ];
 const GATEWAY_RESULT_CLARITY: Record<
   GatewayPreviewSource,
@@ -107,9 +112,9 @@ const GATEWAY_RESULT_CLARITY: Record<
     next: "Use local rules or keep the capture for review.",
   },
   "live-provider-dry-run": {
-    mode: "Live dry-run lane",
-    result: "Provider not connected. Local fallback active.",
-    next: "Use synthetic/private-test capture only.",
+    mode: "First live call gate",
+    result: "Disabled until approval, sanitizer, secret boundary, and quarantine all pass.",
+    next: "Use synthetic/private-test capture only. Nothing saved or sent.",
   },
 };
 const LIVE_DRY_RUN_FALLBACK_GUIDANCE: Record<
@@ -271,6 +276,8 @@ export function EasyListInboxPage() {
   const [taskSaveConfirmation, setTaskSaveConfirmation] = useState<AssistantTaskSaveConfirmation | null>(null);
   const [liveDryRunResult, setLiveDryRunResult] =
     useState<ServerGatewayLiveDryRunResponseEnvelope | null>(null);
+  const [firstLiveCallResult, setFirstLiveCallResult] =
+    useState<FirstLiveProviderCallResponse | null>(null);
   const listNames = useMemo(
     () => Array.from(new Set(["Main", ...tasks.map((task) => task.listName || "Main")])).sort(),
     [tasks]
@@ -363,6 +370,10 @@ export function EasyListInboxPage() {
       }),
     [assistantCaptureText, assistantSuggestion.id]
   );
+  const firstLiveCallSanitizerResult = useMemo(
+    () => sanitizeProviderDryRunRequest(liveDryRunRequest),
+    [liveDryRunRequest]
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -382,6 +393,23 @@ export function EasyListInboxPage() {
     };
   }, [liveDryRunFailureMode, liveDryRunRequest]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    setFirstLiveCallResult(null);
+    void runFirstLiveProviderCallHarness(
+      firstLiveCallSanitizerResult.summary || firstLiveCallSanitizerResult
+    ).then((result) => {
+      if (!cancelled) {
+        setFirstLiveCallResult(result);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [firstLiveCallSanitizerResult]);
+
   const liveDryRunResultIsStale = isServerGatewayLiveDryRunResponseStale(
     liveDryRunResult,
     liveDryRunRequest.contextPacket.requestId
@@ -391,6 +419,21 @@ export function EasyListInboxPage() {
   const liveDryRunFallbackGuidance = liveDryRunResult?.fallback
     ? LIVE_DRY_RUN_FALLBACK_GUIDANCE[liveDryRunResult.fallback.reason]
     : null;
+  const firstLiveCallApprovedTestState =
+    firstLiveCallResult?.approvalVerdict === "APPROVED_FOR_ONE_SYNTHETIC_INBOX_PROVIDER_CALL" &&
+    firstLiveCallResult?.status === "ok";
+  const firstLiveCallSourceState =
+    firstLiveCallSanitizerResult.summary?.sourceLabels
+      .map((source) => source.sourceLabel)
+      .join(", ") || "Typed capture";
+  const firstLiveCallPromptId = firstLiveCallSanitizerResult.summary?.promptId || "intake-suggestion";
+  const firstLiveCallSanitizerState = firstLiveCallSanitizerResult.valid ? "accepted" : "rejected";
+  const firstLiveCallValidationState =
+    firstLiveCallResult?.quarantineState ||
+    firstLiveCallResult?.outputValidationState ||
+    "not run";
+  const firstLiveCallFallbackState = firstLiveCallResult?.fallback?.reason || "none";
+  const firstLiveCallLaneState = firstLiveCallApprovedTestState ? "approved test" : "disabled gate";
   const unguardedGatewayOutput =
     gatewayPreviewSource === "server-adapter-mock"
       ? serverGatewayOutput
@@ -428,14 +471,16 @@ export function EasyListInboxPage() {
   const activeGatewayTopline =
     gatewayPreviewSource === "live-provider-dry-run"
       ? [
-          "Live dry-run lane",
+          "First live call gate",
           liveDryRunResultIsStale
             ? "Stale cleared"
             : duplicateGuardActive
               ? "Duplicate held"
-              : liveDryRunFallbackGuidance?.pill || "Provider not connected",
+              : firstLiveCallApprovedTestState
+                ? "Approved test lane"
+                : "Disabled gate",
           capturePairLabel,
-          `Prompt ${liveDryRunResult?.metadataLog.promptId || "intake-suggestion"}`,
+          `Prompt ${firstLiveCallPromptId}`,
           "Nothing saved or sent",
         ]
       : [activeGatewayLabel, capturePairLabel, "No provider", "No live AI", activeGatewayState];
@@ -448,15 +493,17 @@ export function EasyListInboxPage() {
         }
       : liveDryRunResultIsStale
         ? {
-            mode: "Live dry-run lane",
+            mode: "First live call gate",
             result: "Previous result cleared after capture changed.",
             next: "Current capture will use local fallback until validation finishes.",
           }
         : gatewayPreviewSource === "live-provider-dry-run" && liveDryRunFallbackGuidance
           ? {
-              mode: "Live dry-run lane",
-              result: liveDryRunFallbackGuidance.copy,
-              next: liveDryRunFallbackGuidance.next,
+              mode: "First live call gate",
+              result: firstLiveCallResult?.fallback?.copy || liveDryRunFallbackGuidance.copy,
+              next: firstLiveCallApprovedTestState
+                ? "Approved test only. Still suggestion-only."
+                : "Disabled until explicit approval and server-only secret setup.",
             }
           : GATEWAY_RESULT_CLARITY[gatewayPreviewSource];
   const approvedLocalDraft = useMemo(
@@ -670,7 +717,7 @@ export function EasyListInboxPage() {
                 ...INBOX_TRUST_LABELS,
                 "Mock gateway",
                 "Server adapter mock",
-                "Live provider dry run",
+                "First live call gate",
                 "No provider",
                 assistantAiAvailability.badge,
                 ...(isDemoReviewMode ? ["Demo"] : []),
@@ -902,51 +949,78 @@ export function EasyListInboxPage() {
               />
               <div className="assistant-suggestion-main">
                 <div>
-                  <p>Live-provider dry-run lane</p>
-                  <h3>{liveDryRunFallbackGuidance?.title || "Live dry-run output unavailable"}</h3>
+                  <p>Separately approved first-call lane</p>
+                  <h3>
+                    {firstLiveCallApprovedTestState
+                      ? "Approved test lane visible"
+                      : "First live call remains disabled"}
+                  </h3>
                   <strong>
-                    {liveDryRunFallbackGuidance?.copy || "Output must pass validation before display."}
+                    {firstLiveCallResult?.fallback?.copy ||
+                      liveDryRunFallbackGuidance?.copy ||
+                      "Output must pass sanitizer, secret boundary, validation, and quarantine before display."}
                   </strong>
                 </div>
               </div>
-              <div className="assistant-suggestion-fields" aria-label="Live provider dry-run details">
+              <div
+                className="assistant-suggestion-fields assistant-first-live-lane-labels"
+                aria-label="First live provider call gate details"
+              >
+                <span>
+                  <small>Source</small>
+                  <strong>{firstLiveCallSourceState}</strong>
+                  <em>{firstLiveCallLaneState}</em>
+                </span>
                 <span>
                   <small>Prompt ID</small>
-                  <strong>{liveDryRunResult.metadataLog.promptId}</strong>
+                  <strong>{firstLiveCallPromptId}</strong>
                   <em>Inbox only</em>
                 </span>
                 <span>
-                  <small>Validation</small>
-                  <strong>{liveDryRunResult.outputValidationState || liveDryRunResult.metadataLog.validationResult}</strong>
+                  <small>Sanitizer</small>
+                  <strong>{firstLiveCallSanitizerState}</strong>
+                  <em>required</em>
+                </span>
+                <span>
+                  <small>Quarantine</small>
+                  <strong>{firstLiveCallValidationState}</strong>
                   <em>required</em>
                 </span>
                 <span>
                   <small>Fallback</small>
-                  <strong>{liveDryRunResult.fallback?.reason || "none"}</strong>
-                  <em>{liveDryRunResult.fallback?.preservesTypedCapture ? "capture kept" : "blocked"}</em>
+                  <strong>{firstLiveCallFallbackState}</strong>
+                  <em>{firstLiveCallResult?.fallback?.preservesTypedCapture ? "capture kept" : "available"}</em>
                 </span>
                 <span>
                   <small>Provider</small>
-                  <strong>{liveDryRunResult.providerCallState}</strong>
-                  <em>{liveDryRunResult.runtime}</em>
+                  <strong>{firstLiveCallResult?.providerCallState || "not-called"}</strong>
+                  <em>server only</em>
                 </span>
                 <span>
-                  <small>Retry</small>
-                  <strong>none</strong>
-                  <em>manual only</em>
+                  <small>Boundary</small>
+                  <strong>Nothing saved or sent</strong>
+                  <em>no external action</em>
                 </span>
               </div>
               {liveDryRunFallbackGuidance ? (
                 <div className="assistant-fallback-state-panel" aria-label="Live dry-run fallback guidance">
-                  <span>{liveDryRunFallbackGuidance.pill}</span>
-                  <strong>{liveDryRunFallbackGuidance.next}</strong>
-                  <p>Capture remains editable. No save, send, schedule, sync, or notification happened.</p>
+                  <span>{firstLiveCallFallbackState || liveDryRunFallbackGuidance.pill}</span>
+                  <strong>
+                    {firstLiveCallApprovedTestState
+                      ? "Approved test output still needs review."
+                      : "Hidden until explicit approval and server-only configuration."}
+                  </strong>
+                  <p>Capture remains editable. No save, send, schedule, sync, memory, geocoding, or notification happened.</p>
                 </div>
               ) : null}
-              <div className="assistant-mock-confirmation" aria-label="Live provider dry-run boundary">
+              <div className="assistant-mock-confirmation" aria-label="First live provider call boundary">
                 <span>Nothing saved or sent</span>
-                <strong>Local deterministic fallback is available for this capture.</strong>
-                <p>Existing task and note save paths are unchanged.</p>
+                <strong>
+                  {firstLiveCallApprovedTestState
+                    ? "Approved test lane only. Existing saves are unchanged."
+                    : "First live call lane is disabled until the approval record and secret boundary pass."}
+                </strong>
+                <p>Existing task and note save paths are unchanged. No broad chat or autonomous work.</p>
               </div>
               </>
             ) : gatewayPreviewSource === "live-provider-dry-run" ? (

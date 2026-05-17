@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 31 Task 4 Inbox First-Live-Call Lane Labels
+
+- Task: Let Inbox show the separately approved first live AI lane clearly without implying broad AI availability.
+- Result: Updated Inbox copy and state labels for the first-live-call lane.
+- Magic signal: first-live-call-lane-visible-but-disabled
+- UI evidence: `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`.
+- Label evidence: `First live call gate` replaces the broader `Live provider dry run` label.
+- State evidence: route inspection found source, prompt ID, sanitizer, quarantine, fallback, provider, and boundary labels.
+- Boundary evidence: route inspection found `Nothing saved or sent`, `First live call remains disabled`, and provider state `not-called`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: `/app/easylist/add?demo=1` inspected via local dev server and headless browser DOM.
+- Boundary preserved: no live provider call, frontend key, secret, provider SDK, backend config, deploy config, package/dependency change, generated output, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, saved-object expansion, broad chat, or broad assistant behavior was added.
+
 ## 2026-05-17 - Stage 31 Task 3 First Live Provider Call Harness
 
 - Task: Create the disabled-by-default harness that a future first live provider call must pass through.
