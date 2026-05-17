@@ -236,6 +236,7 @@ const assistantIntakeAllowedRoute = "/app/easylist/add?demo=1";
 const assistantIntakeAllowedPromptId = "intake-suggestion";
 const assistantIntakeMinTypedCaptureLength = 3;
 const assistantIntakeMaxTypedCaptureLength = 2000;
+const assistantIntakeResponseVersion = "stage-32-assistant-intake-response-v1";
 const assistantIntakeAllowedBodyKeys = new Set(["route", "promptId", "typedCapture", "metadata"]);
 const assistantIntakeAllowedMetadataKeys = new Set(["source", "captureId", "clientVersion", "reviewMode"]);
 const assistantIntakeForbiddenKeyPattern =
@@ -267,20 +268,33 @@ const assistantIntakeForbiddenCapturePatterns = [
 
 function buildAssistantIntakeFallback(payload = {}) {
   return {
-    version: "stage-32-assistant-intake-suggestion-scaffold-v1",
-    source: "server-gateway-scaffold",
-    route: assistantIntakeAllowedRoute,
-    promptId: assistantIntakeAllowedPromptId,
+    version: assistantIntakeResponseVersion,
+    source: "assistantIntakeSuggestion",
+    route: payload.route || assistantIntakeAllowedRoute,
+    promptId: payload.promptId || assistantIntakeAllowedPromptId,
+    status: payload.status || "fallback",
+    authState: payload.authState || "verified",
+    requestValidationState: payload.requestValidationState || "accepted",
     providerState: "not-called",
+    providerCallAttempted: false,
     fallbackState: "local-disabled",
     sanitizerState: payload.sanitizerState || "accepted",
     validationState: "not-run",
     quarantineState: "not-run",
-    state: "fallback",
+    outputState: "fallback",
+    suggestion: null,
     destination: "Inbox review",
     confidence: "needs-review",
     nothingSavedOrSent: true,
     requiresApproval: true,
+    hiddenWrites: false,
+    externalActions: false,
+    savesCreated: false,
+    messagesSent: false,
+    calendarChanged: false,
+    notificationsCreated: false,
+    realMemoryCreated: false,
+    rejectionReason: payload.rejectionReason || null,
     message:
       payload.message ||
       "Live AI is still disabled. Keep using the local draft preview; nothing was saved or sent.",
@@ -372,13 +386,55 @@ function validateAssistantIntakeRequestBody(body) {
 
 function rejectAssistantIntakeRequest(response, validation, status, message) {
   response.status(status).json({
-    error: "Assistant intake request rejected.",
-    rejectionReason: validation.reason || "rejected",
     ...buildAssistantIntakeFallback({
+      status: "rejected",
+      authState: "verified",
+      requestValidationState: "rejected",
       sanitizerState: "rejected",
+      rejectionReason: validation.reason || "rejected",
       message,
     }),
+    error: "Assistant intake request rejected.",
   });
+}
+
+async function verifyAssistantIntakeRequest(request, response) {
+  const token = getFirebaseBearerToken(request);
+
+  if (!token) {
+    response.status(401).json({
+      ...buildAssistantIntakeFallback({
+        status: "auth-failed",
+        authState: "missing",
+        requestValidationState: "not-run",
+        sanitizerState: "not-run",
+        rejectionReason: "missing-auth-token",
+        message: "Sign in before requesting an assistant intake suggestion. Nothing was saved or sent.",
+      }),
+      error: "Sign in before requesting an assistant intake suggestion.",
+    });
+    return null;
+  }
+
+  try {
+    return await admin.auth().verifyIdToken(token);
+  } catch (error) {
+    logger.warn("Rejected unauthenticated assistant intake suggestion request", {
+      code: error?.code || "unknown",
+    });
+    response.status(401).json({
+      ...buildAssistantIntakeFallback({
+        status: "auth-failed",
+        authState: "invalid",
+        requestValidationState: "not-run",
+        sanitizerState: "not-run",
+        rejectionReason: "invalid-auth-token",
+        message: "Your session could not be verified. Nothing was saved or sent.",
+      }),
+      error: "Your session could not be verified.",
+    });
+    return null;
+  }
 }
 
 async function verifySignedInRequest(request, response, actionName) {
@@ -415,14 +471,17 @@ exports.assistantIntakeSuggestion = onRequest(
       response.status(405).json({
         error: "Use POST.",
         ...buildAssistantIntakeFallback({
+          status: "rejected",
+          requestValidationState: "rejected",
           sanitizerState: "rejected",
+          rejectionReason: "method-not-allowed",
           message: "Use POST for assistant intake suggestions. Nothing was saved or sent.",
         }),
       });
       return;
     }
 
-    const verifiedUser = await verifySignedInRequest(request, response, "assistant intake suggestion");
+    const verifiedUser = await verifyAssistantIntakeRequest(request, response);
     if (!verifiedUser) return;
 
     const validation = validateAssistantIntakeRequestBody(request.body);
@@ -460,6 +519,12 @@ exports.assistantIntakeSuggestion = onRequest(
 
     response.status(200).json(
       buildAssistantIntakeFallback({
+        status: "fallback",
+        authState: "verified",
+        requestValidationState: "accepted",
+        sanitizerState: "accepted",
+        route: validation.route,
+        promptId: validation.promptId,
         message:
           "The server gateway accepted this Inbox capture, but live AI is still disabled. Nothing was saved or sent.",
       })

@@ -14,6 +14,8 @@ import {
 import {
   firstLiveProviderCallCurrentApprovalVerdict,
   firstLiveProviderCallRequiredApprovalVerdict,
+  isFirstLiveProviderServerResponseEnvelope,
+  normalizeFirstLiveProviderServerResponse,
   runFirstLiveProviderCallHarness,
   validateFirstLiveProviderSanitizedSummary,
 } from "./firstLiveProviderCallHarness";
@@ -126,6 +128,69 @@ export const firstLiveProviderCallHarnessValidationProof = [
 
 export const firstLiveProviderCallHarnessValidationProofPassed =
   firstLiveProviderCallHarnessValidationProof.every((example) => example.passed);
+
+const acceptedServerFallbackEnvelope = {
+  version: "stage-32-assistant-intake-response-v1",
+  source: "assistantIntakeSuggestion",
+  route: liveAiAllowedRoutePath,
+  promptId: "intake-suggestion",
+  status: "fallback",
+  authState: "verified",
+  requestValidationState: "accepted",
+  providerState: "not-called",
+  providerCallAttempted: false,
+  fallbackState: "local-disabled",
+  sanitizerState: "accepted",
+  validationState: "not-run",
+  quarantineState: "not-run",
+  outputState: "fallback",
+  suggestion: null,
+  destination: "Inbox review",
+  confidence: "needs-review",
+  nothingSavedOrSent: true,
+  requiresApproval: true,
+  hiddenWrites: false,
+  externalActions: false,
+  savesCreated: false,
+  messagesSent: false,
+  calendarChanged: false,
+  notificationsCreated: false,
+  realMemoryCreated: false,
+  rejectionReason: null,
+  message: "The server gateway accepted this Inbox capture, but live AI is still disabled. Nothing was saved or sent.",
+} as const;
+
+export const firstLiveProviderServerResponseEnvelopeProof = [
+  {
+    name: "accepts Stage 32 server fallback envelope",
+    passed: isFirstLiveProviderServerResponseEnvelope(acceptedServerFallbackEnvelope),
+  },
+  {
+    name: "normalizes malformed server envelope into fallback",
+    passed:
+      normalizeFirstLiveProviderServerResponse({
+        ...acceptedServerFallbackEnvelope,
+        providerState: "called-by-server-executor",
+        nothingSavedOrSent: false,
+      }).rejectionReason === "invalid-server-response-envelope",
+  },
+  {
+    name: "normalized malformed envelope remains no-action fallback",
+    passed: (() => {
+      const normalized = normalizeFirstLiveProviderServerResponse({ status: "saved" });
+      return (
+        normalized.providerState === "not-called" &&
+        normalized.nothingSavedOrSent === true &&
+        normalized.hiddenWrites === false &&
+        normalized.externalActions === false &&
+        normalized.suggestion === null
+      );
+    })(),
+  },
+];
+
+export const firstLiveProviderServerResponseEnvelopeProofPassed =
+  firstLiveProviderServerResponseEnvelopeProof.every((example) => example.passed);
 
 export async function firstLiveProviderCallHarnessRuntimeProof() {
   let disabledCallCount = 0;

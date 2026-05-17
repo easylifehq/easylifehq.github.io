@@ -1,5 +1,24 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 32 Task 3 Assistant Intake Response Contract
+
+- Task attempted: Make `assistantIntakeSuggestion` return the exact response envelope the frontend expects using fallback/local-disabled output only.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Functions check: Passed with `npm.cmd --prefix functions run lint`.
+- Files changed:
+  - `functions/index.js`
+  - `app-vNext/src/features/assistant/serverGateway/firstLiveProviderCallHarness.ts`
+  - `app-vNext/src/features/assistant/serverGateway/firstLiveProviderCallHarness.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Response envelope: `stage-32-assistant-intake-response-v1`.
+- Envelope states: accepted fallback, rejected request, auth failure, disabled fallback, and future provider-output shape.
+- Required response fields: source, prompt ID, route, auth state, request validation state, sanitizer state, validation state, quarantine state, fallback state, provider state, provider call attempted, destination, confidence, approval requirement, and no-action booleans.
+- Provider boundary: `providerState` remains `not-called`, `providerCallAttempted` remains false, and OpenAI is not called.
+- Saved-output boundary: response always includes `nothingSavedOrSent: true`, `hiddenWrites: false`, `externalActions: false`, `savesCreated: false`, `messagesSent: false`, `calendarChanged: false`, `notificationsCreated: false`, `realMemoryCreated: false`, `requiresApproval: true`, and `suggestion: null`.
+- Frontend compatibility: `firstLiveProviderCallHarness.ts` now exports a server response envelope type, envelope guard, and normalizer that turns malformed server responses into safe local fallback.
+- Boundary preserved: no deploy, live AI call, provider SDK, dependency/package change, deploy config, generated output, frontend key, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 32 Task 2 Assistant Intake Request Guard
 
 - Task attempted: Harden `assistantIntakeSuggestion` request validation before any provider call exists.

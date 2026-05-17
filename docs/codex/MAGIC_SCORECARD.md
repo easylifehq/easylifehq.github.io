@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 32 Task 3 Assistant Intake Response Contract
+
+- Task: Make `assistantIntakeSuggestion` return a stable frontend-compatible fallback response envelope.
+- Result: Response contract added to the Firebase function and frontend harness.
+- Magic signal: server-fallback-envelope-cannot-look-saved
+- Function evidence: `functions/index.js` returns `stage-32-assistant-intake-response-v1`.
+- Frontend evidence: `firstLiveProviderCallHarness.ts` exports `FirstLiveProviderServerResponseEnvelope`, `isFirstLiveProviderServerResponseEnvelope`, and `normalizeFirstLiveProviderServerResponse`.
+- Test evidence: `firstLiveProviderCallHarness.test.ts` includes proof fixtures for accepted fallback envelopes and malformed envelope normalization.
+- State evidence: envelope covers accepted fallback, rejected request, auth failure, disabled fallback, and a future provider-output status without enabling provider calls.
+- Provider evidence: `providerState` remains `not-called` and `providerCallAttempted` remains false.
+- No-action evidence: envelope requires `nothingSavedOrSent: true`, `hiddenWrites: false`, `externalActions: false`, `savesCreated: false`, `messagesSent: false`, `calendarChanged: false`, `notificationsCreated: false`, `realMemoryCreated: false`, `requiresApproval: true`, and `suggestion: null` for fallback responses.
+- Safety evidence: malformed server responses normalize into a trusted fallback rather than rendering as saved output.
+- Boundary evidence: no deploy, live AI call, provider SDK, dependency/package change, deploy config, generated output, frontend key, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, saved-object expansion, or broad assistant behavior was added.
+
 ## 2026-05-17 - Stage 32 Task 2 Assistant Intake Request Guard
 
 - Task: Harden `assistantIntakeSuggestion` request validation before any provider call exists.

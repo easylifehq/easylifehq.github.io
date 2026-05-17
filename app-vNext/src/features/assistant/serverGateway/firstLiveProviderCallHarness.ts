@@ -112,6 +112,44 @@ export type FirstLiveProviderCallFallbackEnvelope = {
   savedObjectExpansion: false;
 };
 
+export type FirstLiveProviderServerResponseStatus =
+  | "fallback"
+  | "rejected"
+  | "auth-failed"
+  | "provider-output";
+
+export type FirstLiveProviderServerResponseEnvelope = {
+  version: "stage-32-assistant-intake-response-v1";
+  source: "assistantIntakeSuggestion";
+  route: typeof liveAiAllowedRoutePath;
+  promptId: typeof liveAiAllowedPromptId;
+  status: FirstLiveProviderServerResponseStatus;
+  authState: "verified" | "missing" | "invalid";
+  requestValidationState: "accepted" | "rejected" | "not-run";
+  providerState: "not-called" | "called-by-server-executor";
+  providerCallAttempted: boolean;
+  fallbackState: "local-disabled" | "none";
+  sanitizerState: "accepted" | "rejected" | "not-run";
+  validationState: "not-run" | "accepted" | "downgraded" | "rejected";
+  quarantineState: "not-run" | "accepted" | "downgraded" | "quarantined";
+  outputState: "fallback" | "preview" | "rejected";
+  suggestion: AssistantModelSuggestionOutput | null;
+  destination: "Inbox review";
+  confidence: "low" | "medium" | "high" | "needs-review";
+  nothingSavedOrSent: true;
+  requiresApproval: true;
+  hiddenWrites: false;
+  externalActions: false;
+  savesCreated: false;
+  messagesSent: false;
+  calendarChanged: false;
+  notificationsCreated: false;
+  realMemoryCreated: false;
+  rejectionReason: string | null;
+  message: string;
+  error?: string;
+};
+
 export type FirstLiveProviderCallResponse = {
   harnessVersion: typeof firstLiveProviderCallHarnessVersion;
   status: "ok" | "fallback";
@@ -138,6 +176,72 @@ export type FirstLiveProviderCallResponse = {
   realMemory: false;
   savedObjectExpansion: false;
 };
+
+export function isFirstLiveProviderServerResponseEnvelope(
+  value: unknown,
+): value is FirstLiveProviderServerResponseEnvelope {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return (
+    value.version === "stage-32-assistant-intake-response-v1" &&
+    value.source === "assistantIntakeSuggestion" &&
+    value.route === liveAiAllowedRoutePath &&
+    value.promptId === liveAiAllowedPromptId &&
+    value.providerState === "not-called" &&
+    value.providerCallAttempted === false &&
+    value.nothingSavedOrSent === true &&
+    value.requiresApproval === true &&
+    value.hiddenWrites === false &&
+    value.externalActions === false &&
+    value.savesCreated === false &&
+    value.messagesSent === false &&
+    value.calendarChanged === false &&
+    value.notificationsCreated === false &&
+    value.realMemoryCreated === false
+  );
+}
+
+export function normalizeFirstLiveProviderServerResponse(
+  value: unknown,
+): FirstLiveProviderServerResponseEnvelope {
+  if (isFirstLiveProviderServerResponseEnvelope(value)) {
+    return value;
+  }
+
+  return {
+    version: "stage-32-assistant-intake-response-v1",
+    source: "assistantIntakeSuggestion",
+    route: liveAiAllowedRoutePath,
+    promptId: liveAiAllowedPromptId,
+    status: "fallback",
+    authState: "invalid",
+    requestValidationState: "rejected",
+    providerState: "not-called",
+    providerCallAttempted: false,
+    fallbackState: "local-disabled",
+    sanitizerState: "rejected",
+    validationState: "not-run",
+    quarantineState: "not-run",
+    outputState: "fallback",
+    suggestion: null,
+    destination: "Inbox review",
+    confidence: "needs-review",
+    nothingSavedOrSent: true,
+    requiresApproval: true,
+    hiddenWrites: false,
+    externalActions: false,
+    savesCreated: false,
+    messagesSent: false,
+    calendarChanged: false,
+    notificationsCreated: false,
+    realMemoryCreated: false,
+    rejectionReason: "invalid-server-response-envelope",
+    message: "The assistant gateway response was not trusted, so local fallback stayed available.",
+    error: "Assistant gateway response rejected.",
+  };
+}
 
 const fallbackCopyByReason: Record<
   FirstLiveProviderCallFallbackReason,
