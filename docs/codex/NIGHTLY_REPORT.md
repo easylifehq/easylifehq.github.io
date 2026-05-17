@@ -1,5 +1,19 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 30 Task 4 Private-Alpha Operator Checklist
+
+- Task attempted: Create the checklist a human must complete before turning on any live AI provider lane.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_30_PRIVATE_ALPHA_OPERATOR_CHECKLIST.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Checklist created: `docs/codex/EASYLIFE_STAGE_30_PRIVATE_ALPHA_OPERATOR_CHECKLIST.md`.
+- Required confirmations covered: provider choice, server-side secret storage, no frontend key, disabled-by-default posture, spend cap, per-user daily rate limit, short-window throttle, kill switch, metadata-only logging, first route, first prompt, first input class, request sanitizer, response quarantine, Stage 20 validation, fallback, rollback, no external actions, and unchanged task/note save behavior.
+- Allowed first test: `/app/easylist/add?demo=1`, Inbox typed capture, prompt `intake-suggestion`, synthetic/demo or explicitly approved private-alpha typed capture only, suggestion-only output, and no automatic save.
+- Do-not-proceed section included: blocks browser-exposed keys, `VITE_` provider secrets, enabled-by-default posture, wrong route/prompt, broad context, missing logging proof, missing kill switch, broken fallback, external actions, broad chat, real memory, email/text sending, notifications, calendar sync, geocoding, device location, hidden writes, automatic saves, saved-object expansion, deploy changes, package/dependency changes, and production rollout.
+- Operator verdict options included: `APPROVED_FOR_SEPARATELY_SCOPED_PRIVATE_ALPHA_CALL` or `NOT_APPROVED_FOR_LIVE_AI`.
+- Boundary preserved: docs only; no code change, real secret, live provider call, provider SDK, deploy change, dependency/package change, backend config, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 30 Task 3 Provider Response Quarantine Path
 
 - Task attempted: Make unsafe provider-style responses quarantine before they can appear as assistant suggestions.

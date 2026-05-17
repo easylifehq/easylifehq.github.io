@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 30 Task 4 Private-Alpha Operator Checklist
+
+- Task: Create the checklist a human must complete before turning on any live AI provider lane.
+- Result: Added a docs-only private-alpha operator checklist.
+- Magic signal: human-operator-gate-before-live-provider
+- Checklist evidence: `docs/codex/EASYLIFE_STAGE_30_PRIVATE_ALPHA_OPERATOR_CHECKLIST.md`.
+- Confirmation evidence: checklist covers provider choice, server-side secret storage, spend cap, rate limit, kill switch, metadata-only logging, no frontend key, first route, first prompt, fallback, rollback, and no external actions.
+- Scope evidence: allowed first test is only `/app/easylist/add?demo=1`, Inbox typed capture, prompt `intake-suggestion`, and synthetic/demo or explicitly approved private-alpha typed capture.
+- Blocker evidence: do-not-proceed section blocks browser-exposed keys, `VITE_` provider secrets, wrong route/prompt, broad context, missing kill switch, missing logging proof, broken fallback, hidden writes, external actions, broad chat, real memory, notifications, calendar sync, geocoding, deploy changes, and production rollout.
+- Verdict evidence: checklist requires `APPROVED_FOR_SEPARATELY_SCOPED_PRIVATE_ALPHA_CALL` or `NOT_APPROVED_FOR_LIVE_AI`.
+- Boundary evidence: docs only; no code change, real secret, live provider call, provider SDK, deploy change, dependency/package change, backend config, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 30 Task 3 Provider Response Quarantine Path
 
 - Task: Make unsafe provider-style responses quarantine before they can appear as assistant suggestions.
