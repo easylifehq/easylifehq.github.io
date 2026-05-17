@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 24 Task 3 Server Adapter Safety Tests
+
+- Task: Prove the server adapter rejects unsafe requests and unsafe output before any real provider exists.
+- Result: Server adapter safety proof fixtures were added.
+- Magic signal: unsafe-ai-output-blocked-before-provider
+- Proof evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewaySafety.test.ts`.
+- Request safety evidence: bounded Inbox typed-capture request is accepted; broad context and unsupported prompt requests are rejected.
+- Output safety evidence: external action claims are rejected; action-like wording is downgraded to needs-review.
+- Fallback safety evidence: timeout, AI-disabled, and validation-rejected states preserve typed capture and stay local.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider SDK, API key, backend config, dependency, package file, deploy config, generated output, secret, live call, provider call, network call, hidden write, real memory, saved-object expansion, or external action was added.
+
 ## 2026-05-17 - Stage 24 Task 2 Server Adapter Mock Handler
 
 - Task: Create a no-provider server adapter mock handler.

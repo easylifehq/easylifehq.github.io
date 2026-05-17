@@ -1,5 +1,17 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 24 Task 3 Server Adapter Safety Tests
+
+- Task attempted: Prove the server adapter rejects unsafe requests and unsafe output before any real provider exists.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewaySafety.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Safety proof added: accepts bounded Inbox typed capture, rejects broad context, rejects unsupported prompt, rejects external action claims, downgrades action-like wording, and proves timeout, AI-disabled, and validation-rejected fallback states.
+- Boundary proof: all safety cases keep provider call state and network call state at `not-called`, keep hidden writes false, and keep external actions false.
+- Boundary preserved: no provider SDKs, API keys, backend config, dependencies, package files, deploy config, generated output, secrets, live calls, provider calls, network calls, hidden writes, real memory, or external actions were added.
+
 ## 2026-05-17 - Stage 24 Task 2 Server Adapter Mock Handler
 
 - Task attempted: Create a no-provider server adapter handler that accepts the Stage 24 request contract and delegates to the existing Stage 22 mock gateway path.
