@@ -1,10 +1,12 @@
-# EasyLife Next Tasks - Stage 27 Private Alpha AI Assistant Prep
+# EasyLife Next Tasks - Stage 27 Private Alpha AI Assistant
 
 Stage 26 proof verdict: `READY_FOR_STAGE_27_BUT_NO_LIVE_PROVIDER_YET`.
 
 Stage 26 proof: `docs/codex/EASYLIFE_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN_PROOF_PACKET.md`
 
 Stage 27 mission: prepare the first private-alpha AI assistant path without making a live provider call yet.
+
+Stage 27 plan: `docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_AI_ASSISTANT_PLAN.md`
 
 Stage 27 must keep parked: broad chat, real user data, frontend API keys, provider keys in docs/logs/commits, hidden reads, hidden writes, automatic saves, sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, saved-object expansion, deploy changes, package/dependency changes, generated output, and production rollout.
 

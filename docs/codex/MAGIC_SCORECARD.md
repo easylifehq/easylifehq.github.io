@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 27 Private Alpha AI Assistant Task Packet
+
+- Task: Plan the private alpha assistant stage after Stage 26 proof.
+- Result: Stage 27 plan and task packet were created.
+- Magic signal: private-alpha-boxed-to-one-lane
+- Plan evidence: `docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_AI_ASSISTANT_PLAN.md`.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 27 tasks.
+- Phase evidence: `docs/codex/PHASE_STATE.md` now records `STAGE_27_PACKET_READY`.
+- Lane evidence: Stage 27 remains limited to `/app/easylist/add?demo=1`, Inbox typed-capture suggestion, and prompt `intake-suggestion`.
+- Input evidence: Stage 27 allows synthetic/demo or explicitly private-test input only.
+- Safety evidence: server-only secret handling, Stage 20 output validation, fallback, no hidden writes, and no external actions remain required.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live provider call, broad chat, real memory, email, calendar sync, notifications, geocoding, device location, broad app context, saved-object expansion, deploy change, package/dependency change, generated output, or secret was added.
+
 ## 2026-05-17 - Stage 26 First Live Provider Dry Run Proof Packet
 
 - Task: Prove whether the first live-provider dry-run lane is safe enough to continue.

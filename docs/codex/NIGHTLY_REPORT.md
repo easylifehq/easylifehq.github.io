@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 27 Private Alpha AI Assistant Task Packet
+
+- Task attempted: Plan the private-alpha assistant stage after Stage 26 proof.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_AI_ASSISTANT_PLAN.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Plan created: `docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_AI_ASSISTANT_PLAN.md`.
+- Queue proof: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 27 tasks.
+- Stage boundary: Stage 27 remains limited to the proven Inbox typed-capture suggestion lane at `/app/easylist/add?demo=1`.
+- Safety carried forward: synthetic/demo or explicitly private-test input only, server-only secret handling, Stage 20 output validation, fallback, no hidden writes, and no external actions.
+- Boundary preserved: no live provider call, broad chat, real memory, email, calendar sync, notifications, geocoding, device location, broad app context, saved-object expansion, deploy change, package/dependency change, generated output, or secret was added.
+
 ## 2026-05-17 - Stage 26 Task 4 Inbox Live Dry-Run Source UI
 
 - Task attempted: Let Inbox show the live-provider dry-run lane clearly without implying saved work or a full AI assistant.

@@ -17,13 +17,15 @@ Done Signal: Stage 1-5 implementation tasks passed build and the five review rou
 Next Phase Criteria: Stage 27 can proceed one task at a time. A first real server-side provider call still requires a later explicit approval gate and must remain synthetic/demo Inbox typed-capture only.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 26 proof completed; Stage 27 private-alpha preparation queued without live provider calls.
+Updated At: 2026-05-17 - Stage 27 private-alpha AI assistant task packet prepared without live provider calls.
+
+Stage 27 plan result: STAGE_27_PACKET_READY. The private-alpha AI assistant plan exists at docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_AI_ASSISTANT_PLAN.md. Stage 27 remains limited to the proven Inbox typed-capture suggestion lane at `/app/easylist/add?demo=1`, prompt `intake-suggestion`, synthetic/demo or explicitly private-test input only, server-only secret handling, Stage 20 output validation, local fallback, no hidden writes, and no external actions.
+
+Prepared Stage 27 queue: docs/codex/NEXT_5_TASKS.md contains exactly five bounded private-alpha AI assistant tasks.
 
 Stage 26 proof result: READY_FOR_STAGE_27_BUT_NO_LIVE_PROVIDER_YET. The route `/app/easylist/add?demo=1` rendered the live-provider dry-run lane and showed `Live provider dry run`, `Prompt intake-suggestion`, `Validation not-run`, `Fallback ai-disabled`, `Synthetic/demo capture`, and `Nothing saved or sent`. No live provider was actually called; only the disabled dry-run seam and fallback were exercised. Stage 27 may prepare private-alpha readiness, but it must not add broad chat, real user data, frontend API keys, provider keys in docs/logs/commits, hidden reads, hidden writes, automatic saves, sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, saved-object expansion, deploy changes, package/dependency changes, generated output, or production rollout.
 
 Stage 26 proof source: docs/codex/EASYLIFE_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN_PROOF_PACKET.md
-
-Prepared Stage 27 queue: docs/codex/NEXT_5_TASKS.md contains exactly five private-alpha preparation tasks.
 
 Stage 26 plan result: STAGE_26_PLAN_READY. The first live provider dry run is limited to `/app/easylist/add?demo=1`, Inbox typed-capture suggestion, synthetic/demo input only, server-side secret handling, Stage 20 context packets, Stage 20 prompt registry, Stage 20 output validation, local fallback, kill switch, spend cap, rate limit, metadata-only logging, rollback plan, and no hidden writes or external actions.
 
