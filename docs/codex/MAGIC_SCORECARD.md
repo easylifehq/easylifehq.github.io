@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 29 Trust And Security Proof Packet
+
+- Task: Prove whether the Inbox assistant lane is safe enough to move toward controlled live AI/private alpha.
+- Result: Stage 29 proof packet created with verdict `READY_FOR_STAGE_30_CONTROLLED_LIVE_AI_GATE`.
+- Magic signal: trust-security-cleared-for-controlled-live-ai-gate
+- Proof packet evidence: `docs/codex/EASYLIFE_STAGE_29_TRUST_SECURITY_PROOF_PACKET.md`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Secret evidence: frontend source, docs, env example, and built output were scanned with verdict `NO_AI_PROVIDER_SECRET_FOUND`; public Firebase web config remains classified as browser config, not an AI provider key.
+- Logging evidence: `serverGatewayLogging.test.ts` proves metadata-only logs exclude raw typed capture, provider raw response markers, and secret-like values.
+- Hidden-write evidence: `serverGatewayActionSafety.test.ts` blocks saved task, saved note/context, and real-memory claims before clean render/save.
+- External-action evidence: `serverGatewayActionSafety.test.ts` blocks sent email/text, scheduled reminder/notification, calendar sync/event, geocoding, and device-location claims before clean render/save.
+- Rollback evidence: `serverGatewayRollback.test.ts` proves disabled, circuit-open/kill-switch, rate-limit, timeout, provider-error, and validation-rejected states fall back while preserving capture and avoiding automatic retry.
+- Next queue evidence: `docs/codex/NEXT_5_TASKS.md` now contains exactly five bounded Stage 30 controlled-live-AI gate tasks.
+- Boundary evidence: no live provider call, provider SDK, frontend API key, real secret, deploy change, backend implementation, package/dependency change, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 29 Task 4 Kill Switch And Rollback Proof
 
 - Task: Prove the assistant lane can be disabled safely and falls back without losing typed capture.
