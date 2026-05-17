@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 23 Task 3 AI Gateway Threat Model
+
+- Task attempted: Create a blunt threat model for the future EasyLife AI gateway.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_23_GATEWAY_THREAT_MODEL.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Threat model created: `docs/codex/EASYLIFE_STAGE_23_GATEWAY_THREAT_MODEL.md`.
+- Threats covered: secret leakage, prompt injection, overbroad context, raw payload logging, unsafe output, hidden writes, external action claims, spend runaway, rate abuse, provider outage, and user trust failures.
+- Mitigation pattern: keep provider keys server-only, use Stage 20 context packets, prompt allowlists, metadata-only logging, Stage 20 output validation, explicit confirmation, rate/spend controls, kill switch, and local fallback.
+- Stage 24 blockers defined: missing Stage 23 docs, provider SDKs/secrets/live calls, broad context, unsupported prompts, missing fallback states, output validation bypass, persistence calls, or raw payload logging.
+- Stage 25 blockers defined: missing no-provider adapter proof, missing secret/rubric/dry-run/human approval checklists, frontend keys, missing rate/spend/logging/fallback controls, real personal data, or scope expansion beyond Inbox typed-capture suggestion.
+- Boundary preserved: no code, live calls, provider SDKs, dependencies, backend config, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, or saved-object expansion were added.
+
 ## 2026-05-17 - Stage 23 Task 2 Gateway Boundary
 
 - Task attempted: Define exactly where request validation, prompt selection, provider calls, output validation, and fallback handling live in the chosen server architecture.

@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 23 Task 3 AI Gateway Threat Model
+
+- Task: Create a blunt threat model for the future EasyLife AI gateway.
+- Result: Stage 23 gateway threat model was created.
+- Magic signal: ai-gateway-threats-block-stage-creep
+- Threat model evidence: `docs/codex/EASYLIFE_STAGE_23_GATEWAY_THREAT_MODEL.md`.
+- Threat coverage evidence: secret leakage, prompt injection, overbroad context, raw payload logging, unsafe output, hidden writes, external action claims, spend runaway, rate abuse, provider outage, and user trust failures are each covered with mitigations.
+- Stage 24 block evidence: no-provider adapter work must stop if it needs provider SDKs, secrets, live calls, broad context, unsupported prompts, missing fallback states, output validation bypass, persistence calls, or raw payload logging.
+- Stage 25 block evidence: provider-readiness work must stop without no-provider adapter proof, secret checklist, provider rubric, dry-run protocol, human approval checklist, rate/spend controls, metadata-only logging, fallback proof, and Inbox-only scope.
+- Trust evidence: model output must remain draft/preview/needs-review until explicit user confirmation through existing save paths.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no code, live call, provider SDK, dependency, backend config, deploy config, generated output, secret, external action, hidden read, hidden write, real memory, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 23 Task 2 Gateway Boundary
 
 - Task: Define the request/response boundary for the future server AI gateway.
