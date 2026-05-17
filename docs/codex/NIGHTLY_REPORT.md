@@ -1,5 +1,30 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 25 Provider Readiness Gate
+
+- Task attempted: Decide whether EasyLife is ready for a separately approved first live provider dry-run after the no-provider server adapter proof.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_25_PROVIDER_READINESS_GATE.md`
+  - `docs/codex/EASYLIFE_STAGE_25_PROVIDER_SELECTION_RUBRIC.md`
+  - `docs/codex/EASYLIFE_STAGE_25_SECRET_MANAGEMENT_CHECKLIST.md`
+  - `docs/codex/EASYLIFE_STAGE_25_LIVE_PROVIDER_DRY_RUN_PROTOCOL.md`
+  - `docs/codex/EASYLIFE_STAGE_25_HUMAN_APPROVAL_CHECKLIST.md`
+  - `docs/codex/EASYLIFE_STAGE_25_PROVIDER_READINESS_PROOF_PACKET.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Existing key audit: `app-vNext/src/lib/firebase/config.ts` contains Firebase web config for project `pipeline-2f422`; it is not an AI provider secret and must not be reused as one.
+- Public env audit: `app-vNext/.env.example` contains a placeholder `VITE_TASK_ANALYZER_URL`; any `VITE_` value is browser-exposed and cannot hold provider secrets.
+- Provider-readiness artifacts created: provider selection rubric, secret management checklist, live-provider dry-run protocol, human approval checklist, and proof packet.
+- Stage 25 proof verdict: `READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN`.
+- Boundary preserved: no provider SDKs, API keys, backend implementation, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, live model calls, external actions, hidden writes, real memory, or saved-object expansion were added.
+- Stage 26 lock: the first live provider dry-run still requires explicit human approval for provider choice, server-side secret storage, spend cap, logging policy, fallback behavior, first prompt, first route, and rollback plan.
+
 ## 2026-05-17 - Stage 24 Task 3 Server Adapter Safety Tests
 
 - Task attempted: Prove the server adapter rejects unsafe requests and unsafe output before any real provider exists.

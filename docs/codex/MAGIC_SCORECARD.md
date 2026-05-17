@@ -2,6 +2,23 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 25 Provider Readiness Gate
+
+- Task: Decide whether EasyLife is ready for a separately approved first live provider dry-run.
+- Result: Stage 25 provider-readiness docs and proof packet were created.
+- Magic signal: live-ai-requires-human-approval
+- Gate evidence: `docs/codex/EASYLIFE_STAGE_25_PROVIDER_READINESS_GATE.md`.
+- Provider rubric evidence: `docs/codex/EASYLIFE_STAGE_25_PROVIDER_SELECTION_RUBRIC.md`.
+- Secret checklist evidence: `docs/codex/EASYLIFE_STAGE_25_SECRET_MANAGEMENT_CHECKLIST.md`.
+- Dry-run protocol evidence: `docs/codex/EASYLIFE_STAGE_25_LIVE_PROVIDER_DRY_RUN_PROTOCOL.md`.
+- Human approval evidence: `docs/codex/EASYLIFE_STAGE_25_HUMAN_APPROVAL_CHECKLIST.md`.
+- Proof packet evidence: `docs/codex/EASYLIFE_STAGE_25_PROVIDER_READINESS_PROOF_PACKET.md`.
+- Existing key audit evidence: `pipeline-2f422` is Firebase web config in `app-vNext/src/lib/firebase/config.ts`, not an AI provider key.
+- Frontend secret evidence: `VITE_` values are browser-exposed; no provider secret may live in frontend env, source, docs, fixtures, logs, commits, screenshots, or generated bundles.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Verdict evidence: `READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN`, with explicit human approval still required before any live provider call.
+- Boundary evidence: no provider SDK, API key, backend implementation, Firebase config change, dependency, package file, deploy config, generated output, secret, live model call, external action, hidden write, real memory, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 24 Task 3 Server Adapter Safety Tests
 
 - Task: Prove the server adapter rejects unsafe requests and unsafe output before any real provider exists.

@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN
+
+## Stage 25 Provider Readiness Product Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN`.
+
+This was not visual UI work. The product value is that EasyLife can now move toward a first live provider dry-run without pretending it already has live AI.
+
+Product read:
+- The first live behavior remains narrow: Inbox typed-capture suggestion only.
+- The app still keeps local fallback as the usable baseline.
+- The stage does not add a new visible AI claim, route, provider panel, or broad assistant surface.
+- The existing `pipeline-2f422` Firebase config is explicitly not treated as an AI provider secret.
+
+Design guard for Stage 26:
+Do not make the app look more magical than it is. If Stage 26 happens, the visible route should still say what is true: synthetic/demo input, server-only provider dry-run, validated suggestion, no hidden write, and local fallback if unavailable.
+
+---
+
+## Verdict
 READY_FOR_STAGE_24_SERVER_ADAPTER_IMPLEMENTATION
 
 ## Stage 23 Server Architecture Product Proof - 2026-05-17

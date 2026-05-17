@@ -1,6 +1,38 @@
 # Checkpoint Review
 
 ## Verdict
+READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN
+
+## Stage 25 Provider Readiness Proof Packet
+
+Reviewed At: 2026-05-17
+
+Stage 25 proof says EasyLife is ready for a separately approved first live provider dry-run. It does not approve live model calls automatically, and it does not approve provider SDKs, API keys, backend implementation, Firebase config changes, dependencies, deploy config, generated output, secrets, external actions, hidden writes, real memory, or saved-object expansion.
+
+## Stage 25 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 25 Evidence
+
+- Provider selection rubric exists and rejects provider choice by hype or convenience.
+- Secret management checklist exists and forbids frontend API keys, including any provider key in `VITE_` variables.
+- Live-provider dry-run protocol exists and limits the first live test to synthetic/demo Inbox typed capture.
+- Human approval checklist exists and requires explicit approval before Stage 26 can make any live provider call.
+- Existing `pipeline-2f422` key reference is Firebase web config, not an AI provider secret.
+- `VITE_TASK_ANALYZER_URL` is a public endpoint placeholder only, not a safe place for provider secrets.
+
+## Blunt Judgment
+
+EasyLife does not have live AI yet. The readiness work is real progress because it blocks the dangerous shortcuts: frontend keys, broad assistant context, hidden writes, raw logging, provider calls without validation, and accidental live enablement. Stage 26 can be requested next, but only as a narrow first live provider dry-run after explicit human approval.
+
+## Verdict
+
+READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN
+
+---
+
+## Verdict
 READY_FOR_STAGE_24_SERVER_ADAPTER_IMPLEMENTATION
 
 ## Stage 23 Server Architecture Proof Packet

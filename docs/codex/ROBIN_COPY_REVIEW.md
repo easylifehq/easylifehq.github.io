@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN
+
+## Stage 25 Provider Readiness Copy Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN`.
+
+Stage 25 copy is appropriately cautious. It says EasyLife is ready for a separately approved first live provider dry-run, not that live AI is already enabled.
+
+Copy proof:
+- First behavior is consistently named as Inbox typed-capture suggestion.
+- The existing `pipeline-2f422` key is described as Firebase web config, not an AI provider secret.
+- `VITE_` environment variables are called browser-exposed and unsafe for provider secrets.
+- The dry-run protocol requires synthetic/demo input, source attribution, output validation, fallback, rate/spend checks, logging checks, and kill-switch proof.
+- The human approval checklist requires explicit approval before Stage 26 can proceed.
+
+Copy guard for Stage 26:
+Use `first live provider dry-run`, `synthetic/demo input`, `server-only key`, `validated suggestion`, and `nothing saved or sent`. Do not use `AI is live`, `assistant handled it`, `remembered`, `scheduled`, `synced`, `emailed`, or `background work`.
+
+---
+
+## Verdict
 READY_FOR_STAGE_24_SERVER_ADAPTER_IMPLEMENTATION
 
 ## Stage 23 Server Architecture Copy Proof - 2026-05-17

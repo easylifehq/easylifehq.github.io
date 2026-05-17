@@ -3,7 +3,7 @@
 Current Phase: stage-25-provider-readiness-gate
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Prove provider readiness before any separately approved first live provider dry-run.
+Primary Action: Hold for explicit human approval before any Stage 26 first live provider dry-run.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
@@ -11,13 +11,19 @@ Complexity Budget: Stage 25 may create provider-readiness docs only: provider se
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: STAGE_25_QUEUE_READY
+Parking State: READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN
 Evidence Required: Stage 24 proof packet, provider selection rubric, secret management checklist, live-provider dry-run protocol, human approval checklist, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Complete provider-readiness rubric, secret checklist, dry-run protocol, human approval checklist, and Stage 25 proof before any Stage 26 live-provider dry-run can be separately approved.
+Next Phase Criteria: Start Stage 26 only after explicit human approval of provider choice, server-side secret storage, spend cap, logging policy, fallback behavior, first prompt, first route, and rollback plan.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 24 proof passed and Stage 25 provider-readiness gate prepared.
+Updated At: 2026-05-17 - Stage 25 provider-readiness proof passed; Stage 26 is allowed only as a separately approved first live provider dry-run.
+
+Stage 25 proof result: READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN. Provider selection rubric, secret management checklist, live-provider dry-run protocol, human approval checklist, and proof packet exist. Existing `pipeline-2f422` key reference is Firebase web config, not an AI provider key. `VITE_` environment values are browser-exposed and may not hold provider secrets. This result does not approve live model calls automatically; Stage 26 still requires explicit approval and server-only secret handling.
+
+Stage 25 proof source: docs/codex/EASYLIFE_STAGE_25_PROVIDER_READINESS_PROOF_PACKET.md
+
+Stage 25 completed queue: docs/codex/NEXT_5_TASKS.md contains exactly five completed provider-readiness tasks.
 
 Stage 24 proof result: READY_FOR_STAGE_25_PROVIDER_READINESS_GATE. The no-provider server adapter accepts safe Inbox typed-capture requests, rejects unsafe requests, validates outputs through the Stage 20/22 path, preserves fallback, exposes `Server adapter mock` in Inbox, and never calls a provider or network. This does not approve live model calls, provider SDKs, API keys, backend implementation, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, or saved-object expansion.
 
