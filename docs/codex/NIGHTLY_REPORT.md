@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 29 Task 4 Kill Switch And Rollback Proof
+
+- Task attempted: Prove the assistant lane can be disabled safely and falls back without losing typed capture.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayRollback.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- TypeScript proof added: `serverGatewayRollbackProof()` runs disabled, circuit-open/kill-switch, rate-limit, timeout, provider-error, and validation-rejected paths through the live dry-run gateway.
+- Typed capture proof: every rollback/fallback state must preserve the synthetic typed capture and mark `preservesTypedCapture`.
+- Retry proof: every rollback/fallback state must keep `automaticRetry` false.
+- Local fallback proof: every rollback/fallback state must keep deterministic local fallback available.
+- Provider execution proof: disabled, circuit-open, and rate-limited paths assert zero provider-executor attempts.
+- Boundary proof: all rollback states keep hidden writes and external actions false.
+- Boundary preserved: no deploy change, secret, provider SDK, dependency, backend config, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 29 Task 3 Hidden-Write And External-Action Audit
 
 - Task attempted: Prove hostile assistant output cannot create hidden writes or external actions.
