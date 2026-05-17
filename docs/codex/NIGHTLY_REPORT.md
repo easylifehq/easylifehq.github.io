@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 18 Review Repair task packet
+
+- Task attempted: Turn human/agent review findings into a focused Stage 18 repair pass before adding new assistant capability.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_18_REVIEW_REPAIR_PLAN.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Stage 18 mission: repair current review risks around live mobile proof, public/marketing module-suite language, Inbox trust/copy compression, remaining Memory/Remember wording, and legacy Command Center route behavior.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five Stage 18 Task Contract V2-compatible tasks.
+- Acceptance evidence: build passed after the docs-only packet was written.
+- Boundary preserved: docs-only packet. No product UI, routes, settings behavior, persistence, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, external actions, maps, geocoding, model calls, real memory, or saved assistant behavior changed.
+
 ## 2026-05-12 - Stage 17 Anti-Annoyance proof packet
 
 - Task attempted: Prove whether the anti-annoyance pass made EasyLife less frustrating to review.

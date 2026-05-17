@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: stage-17-anti-annoyance-proof
+Current Phase: stage-18-review-repair-packet
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Remove the five visible annoyances most likely to make a human reviewer distrust the assistant before adding more features.
+Primary Action: Repair review risks around mobile proof, public suite language, Inbox trust copy, memory wording, and legacy command route behavior before adding more assistant capability.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 17 tasks must remove, shorten, collapse, hide, or demote existing clutter. They must not add new feature surfaces beyond consolidation, copy repair, and visual trust cleanup.
+Complexity Budget: Stage 18 tasks must prove, remove, shorten, collapse, hide, demote, or align existing surfaces. They must not add new assistant capability beyond review repair.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_HUMAN_REVIEW
-Evidence Required: build proof, six-route review notes, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, NIGHTLY_REPORT, MAGIC_SCORECARD.
+Parking State: ACTIVE_REVIEW_REPAIR
+Evidence Required: build proof, Stage 18 plan, exactly five Task Contract V2 tasks, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Capture human review notes before Stage 18 or any new feature direction.
+Next Phase Criteria: Complete Stage 18 repair tasks and proof before Stage 19 contextual assistant work.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-12 - Stage 17 Anti-Annoyance proof packet ended READY_FOR_HUMAN_REVIEW.
+Updated At: 2026-05-17 - Stage 18 Review Repair task packet created from human/agent review findings.
 
 ## Assistant Brain Gate
 
@@ -108,6 +108,18 @@ Stage 17 proof must inspect Today, Inbox, Plan, Notes, Contacts, and Settings an
 Stage 17 proof result: READY_FOR_HUMAN_REVIEW.
 
 Do not create new feature tasks automatically. Human review should inspect Today, Inbox, Plan, Notes, Contacts, and Settings, then decide whether Stage 18 should be taste polish, Inbox simplification, Settings split/cleanup, demo-content personalization, or a different explicit mission.
+
+## Stage 18 Review Repair Gate
+
+Stage 18 source: docs/codex/EASYLIFE_STAGE_18_REVIEW_REPAIR_PLAN.md
+
+Prepared Stage 18 queue: docs/codex/NEXT_5_TASKS.md contains exactly five review-repair tasks.
+
+Stage 18 is active by explicit user mission after three external review attempts. The reviewers could not access localhost, so Stage 18 starts with a real local mobile proof and then repairs the most credible signals: public/marketing module-suite language, Inbox trust/copy density, remaining Memory/Remember wording, and old Command Center route risk.
+
+Stage 18 may inspect, prove, shorten, demote, align, or repair existing surfaces. It must not add new assistant capability, model calls, real memory, saved plans, saved reminders, saved follow-ups, email/text/call/message sending, notifications, calendar sync, maps, geocoding, exact addresses, device location, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, or real personal data.
+
+Stage 18 proof must inspect the repaired surfaces and decide whether EasyLife can move to Stage 19 contextual assistant work.
 
 ## Phase Order
 
