@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 22 Task 3 Mock Gateway Fallback States
+
+- Task attempted: Make the mock gateway return stable local fallback states for timeout, rate limit, circuit open, AI disabled, invalid request, and validation rejected.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/gateway/mockGatewayFallbacks.ts`
+  - `app-vNext/src/features/assistant/gateway/mockGateway.ts`
+  - `app-vNext/src/features/assistant/gateway/mockGateway.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Fallback states created: `timeout`, `rate-limit`, `circuit-open`, `ai-disabled`, `invalid-request`, and `validation-rejected`.
+- Local preservation proof: every fallback keeps the typed capture text, exposes deterministic local classifier output, and builds an unsaved local draft preview.
+- Retry proof: fallback and success results set `automaticRetry: false`; no background retry loop exists.
+- Gateway proof: valid requests return validated mock output; forced unavailable states return fallback; invalid requests return `invalid-request`; rejected synthetic output returns `validation-rejected` with no renderable output.
+- Boundary preserved: no provider calls, SDKs, API keys, backend services, dependencies, secrets, deploy config, external actions, hidden reads, hidden writes, real memory, saved-object expansion, or automatic background retries were added.
+
 ## 2026-05-17 - Stage 22 Task 2 Mock Gateway Response Validator Path
 
 - Task attempted: Create the no-provider mock response path and prove all returned mock outputs pass through Stage 20 validation.

@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 22 Task 3 Mock Gateway Fallback States
+
+- Task: Make the mock gateway return stable local fallback states.
+- Result: Mock gateway fallback state module, gateway runner, and proof fixtures were added.
+- Magic signal: fallback-keeps-capture-and-local-draft
+- Fallback evidence: `app-vNext/src/features/assistant/gateway/mockGatewayFallbacks.ts`.
+- Gateway evidence: `app-vNext/src/features/assistant/gateway/mockGateway.ts`.
+- Fixture evidence: `app-vNext/src/features/assistant/gateway/mockGateway.test.ts`.
+- State evidence: `timeout`, `rate-limit`, `circuit-open`, `ai-disabled`, `invalid-request`, and `validation-rejected` all produce stable fallback states.
+- Typed capture evidence: fallback states preserve the original typed capture and expose deterministic local classifier/draft behavior.
+- Retry evidence: gateway results use `automaticRetry: false`; no automatic background retry behavior was added.
+- Rejection evidence: invalid requests and validation-rejected mock outputs return fallback results with no renderable mock output.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider call, SDK, API key, backend service, dependency, secret, deploy config, external action, hidden read, hidden write, real memory, saved-object expansion, or automatic retry loop was added.
+
 ## 2026-05-17 - Stage 22 Task 2 Mock Gateway Response Validator Path
 
 - Task: Create the no-provider mock response path and prove every returned mock output passes Stage 20 validation.
