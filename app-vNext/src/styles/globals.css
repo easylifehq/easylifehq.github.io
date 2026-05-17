@@ -5150,6 +5150,37 @@ textarea::placeholder {
   font-weight: 650;
 }
 
+.assistant-result-clarity {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr 1fr;
+  gap: 0.42rem;
+}
+
+.assistant-result-clarity span {
+  display: grid;
+  min-width: 0;
+  gap: 0.14rem;
+  padding: 0.5rem 0.56rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 70%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 58%, transparent);
+}
+
+.assistant-result-clarity small {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.assistant-result-clarity strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.8rem;
+  font-weight: 760;
+  line-height: 1.2;
+}
+
 .assistant-local-draft-preview {
   grid-column: 2;
   display: grid;
@@ -5695,6 +5726,10 @@ textarea::placeholder {
   }
 
   .assistant-source-destination-row {
+    grid-template-columns: 1fr;
+  }
+
+  .assistant-result-clarity {
     grid-template-columns: 1fr;
   }
 

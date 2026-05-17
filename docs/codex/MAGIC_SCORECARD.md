@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 27 Task 2 Assistant Result Clarity Polish
+
+- Task: Make the Inbox assistant result easier to understand during private alpha without expanding capability.
+- Result: Inbox assistant gateway results now include a compact `Mode`, `Result`, and `Next` summary.
+- Magic signal: result-state-clear-before-live-ai
+- UI evidence: `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`.
+- Styling evidence: `app-vNext/src/styles/globals.css`.
+- Source clarity evidence: result summary distinguishes local rules, mock gateway, server-adapter mock, and live dry-run lane.
+- Live dry-run evidence: copy says `Provider not connected` and `Provider is not connected here. Local fallback is active.`
+- Boundary evidence: `Nothing saved or sent` remains visible and existing task/note save paths are unchanged.
+- Repetition evidence: repeated warning copy was shortened without weakening safety boundaries.
+- Inspection evidence: `/app/easylist/add?demo=1` rendered locally with the new result clarity labels.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no new AI behavior, hidden write, external action, backend config, dependency, deploy, generated output, secret, or save behavior change was added.
+
 ## 2026-05-17 - Stage 27 Task 1 Private Alpha Test Protocol
 
 - Task: Create a private alpha test protocol for the proven Inbox assistant lane.

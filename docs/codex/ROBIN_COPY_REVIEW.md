@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+INBOX_RESULT_CLARITY_READY
+
+## Stage 27 Task 2 Assistant Result Clarity Polish - 2026-05-17
+
+Verdict: `INBOX_RESULT_CLARITY_READY`.
+
+Inbox now explains the assistant result in plainer terms before the technical details. The gateway result card has a compact `Mode`, `Result`, and `Next` row, so a private-alpha tester can tell whether they are seeing local rules, mock gateway, server-adapter mock, or the live dry-run lane.
+
+Copy proof:
+- Live dry-run says `Provider not connected`.
+- The result summary says `Provider not connected. Local fallback active.`
+- The boundary still says `Nothing saved or sent`.
+- Existing task and note save paths are explicitly unchanged.
+- Repeated warning copy was shortened instead of expanded.
+
+Copy guard:
+Keep saying `provider not connected`, `local fallback`, `preview`, and `nothing saved or sent` until a real server-side provider call is separately approved and proven. Do not say `AI handled this`, `live assistant`, `remembered`, `scheduled`, `synced`, or `sent`.
+
+---
+
+## Verdict
 READY_FOR_STAGE_27_BUT_NO_LIVE_PROVIDER_YET
 
 ## Stage 26 First Live Provider Dry Run Copy Proof - 2026-05-17

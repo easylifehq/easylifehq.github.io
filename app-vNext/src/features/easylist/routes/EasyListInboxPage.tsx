@@ -65,6 +65,35 @@ const GATEWAY_PREVIEW_SOURCE_OPTIONS: Array<{
   { value: "server-adapter-mock", label: "Server adapter mock", description: "No live AI" },
   { value: "live-provider-dry-run", label: "Live provider dry run", description: "Disabled lane" },
 ];
+const GATEWAY_RESULT_CLARITY: Record<
+  GatewayPreviewSource,
+  {
+    mode: string;
+    result: string;
+    next: string;
+  }
+> = {
+  "local-rules": {
+    mode: "Local rules",
+    result: "Deterministic preview. No provider.",
+    next: "Review, edit, or use the existing save confirmation.",
+  },
+  "mock-gateway": {
+    mode: "Mock gateway",
+    result: "No-provider model-shaped preview.",
+    next: "Check source, destination, then keep or discard the draft.",
+  },
+  "server-adapter-mock": {
+    mode: "Server adapter mock",
+    result: "Server-shaped fallback. No network.",
+    next: "Use local rules or keep the capture for review.",
+  },
+  "live-provider-dry-run": {
+    mode: "Live dry-run lane",
+    result: "Provider not connected. Local fallback active.",
+    next: "Use synthetic/private-test capture only.",
+  },
+};
 const DESTINATION_BY_DRAFT_TYPE: Record<AssistantLocalDraftType, string> = {
   task: "Inbox task save lane",
   note: "Notes save lane",
@@ -250,13 +279,13 @@ export function EasyListInboxPage() {
   const activeGatewayTopline =
     gatewayPreviewSource === "live-provider-dry-run"
       ? [
-          activeGatewayLabel,
+          "Live dry-run lane",
+          "Provider not connected",
           `Prompt ${liveDryRunResult?.metadataLog.promptId || "intake-suggestion"}`,
-          `Validation ${liveDryRunResult?.outputValidationState || liveDryRunResult?.metadataLog.validationResult || "loading"}`,
-          `Fallback ${liveDryRunResult?.fallback?.reason || "none"}`,
           "Nothing saved or sent",
         ]
       : [activeGatewayLabel, "No provider", "No live AI", activeGatewayState];
+  const activeGatewayClarity = GATEWAY_RESULT_CLARITY[gatewayPreviewSource];
   const approvedLocalDraft = useMemo(
     () =>
       visibleApprovalState === "approved"
@@ -518,6 +547,20 @@ export function EasyListInboxPage() {
                 <span key={label}>{label}</span>
               ))}
             </div>
+            <div className="assistant-result-clarity" aria-label="Assistant result summary">
+              <span>
+                <small>Mode</small>
+                <strong>{activeGatewayClarity.mode}</strong>
+              </span>
+              <span>
+                <small>Result</small>
+                <strong>{activeGatewayClarity.result}</strong>
+              </span>
+              <span>
+                <small>Next</small>
+                <strong>{activeGatewayClarity.next}</strong>
+              </span>
+            </div>
             {activeGatewayOutput ? (
               <>
               <SourceDestinationRow
@@ -546,10 +589,10 @@ export function EasyListInboxPage() {
                 <strong>{activeGatewayOutput.confirmation.copy}</strong>
                 <p>
                   {gatewayPreviewSource === "live-provider-dry-run"
-                    ? "Live dry-run output still must pass validation first. No save behavior changed."
+                    ? "Validated preview only. Existing saves are unchanged."
                     : gatewayPreviewSource === "server-adapter-mock"
-                    ? "Server adapter mock only. No network, provider call, hidden write, or save behavior change."
-                    : "No live AI, no provider call, no hidden write."}
+                    ? "Server adapter mock only. No network or hidden write."
+                    : "No provider call or hidden write."}
                 </p>
               </div>
               </>
@@ -581,8 +624,8 @@ export function EasyListInboxPage() {
               </div>
               <div className="assistant-mock-confirmation" aria-label="Mock gateway fallback boundary">
                 <span>{mockGatewayResult.fallback.retryPolicy.label}</span>
-                <strong>Typed capture is preserved. Nothing saves, sends, syncs, or schedules.</strong>
-                <p>No hidden reads, no hidden writes, no external action.</p>
+                <strong>Typed capture is preserved. Nothing saves or sends.</strong>
+                <p>No hidden read, retry, or external action.</p>
               </div>
               </>
             ) : gatewayPreviewSource === "server-adapter-mock" &&
@@ -620,8 +663,8 @@ export function EasyListInboxPage() {
               </div>
               <div className="assistant-mock-confirmation" aria-label="Server adapter fallback boundary">
                 <span>No retry</span>
-                <strong>Server adapter mock is no-provider. Local rules stay available; nothing saves automatically.</strong>
-                <p>No external action, no hidden read, no hidden write.</p>
+                <strong>Server adapter mock is no-provider. Local rules stay available.</strong>
+                <p>Nothing saves automatically.</p>
               </div>
               </>
             ) : gatewayPreviewSource === "live-provider-dry-run" && liveDryRunResult ? (
@@ -662,8 +705,8 @@ export function EasyListInboxPage() {
               </div>
               <div className="assistant-mock-confirmation" aria-label="Live provider dry-run boundary">
                 <span>Nothing saved or sent</span>
-                <strong>Live-provider dry run is server-shaped and disabled here. Existing task and note save paths are unchanged.</strong>
-                <p>No frontend key, no provider SDK, no hidden write.</p>
+                <strong>Provider is not connected here. Local fallback is active.</strong>
+                <p>Existing task and note save paths are unchanged.</p>
               </div>
               </>
             ) : gatewayPreviewSource === "live-provider-dry-run" ? (
@@ -676,7 +719,7 @@ export function EasyListInboxPage() {
               <div className="assistant-mock-confirmation" aria-label="Live dry-run loading boundary">
                 <span>Nothing saved or sent</span>
                 <strong>Preparing the disabled live-provider dry-run lane.</strong>
-                <p>No frontend key, no provider SDK, no hidden write.</p>
+                <p>Provider remains disconnected.</p>
               </div>
               </>
             ) : (
@@ -708,7 +751,7 @@ export function EasyListInboxPage() {
               <div className="assistant-mock-confirmation" aria-label="Local rules boundary">
                 <span>Local rules</span>
                 <strong>Deterministic preview only. Use the existing confirmation controls for any save.</strong>
-                <p>No live AI, no server call, no hidden write.</p>
+                <p>No provider or hidden write.</p>
               </div>
               </>
             )}
@@ -807,7 +850,7 @@ export function EasyListInboxPage() {
               ))}
             </div>
             <p className="assistant-suggestion-warning">
-              Preview only. No task, note, plan, reminder, follow-up, email, sync, or notification is created here.
+              Preview only. Nothing is created here.
             </p>
           </article>
 

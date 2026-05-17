@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 27 Task 2 Assistant Result Clarity Polish
+
+- Task attempted: Make the Inbox assistant result easier to understand during private alpha without expanding capability.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- UI change: the assistant gateway result now includes a compact `Mode`, `Result`, and `Next` summary so the user can tell whether the result is local rules, mock gateway, server-adapter mock, or live dry-run lane.
+- Copy change: live dry-run now says `Provider not connected` and `Provider is not connected here. Local fallback is active.`
+- Boundary copy: `Nothing saved or sent` remains visible, and existing task/note save paths are explicitly unchanged.
+- Repetition removed: long repeated warning copy was shortened to focused local statements like `Nothing saves or sends`, `Nothing saves automatically`, and `Preview only. Nothing is created here.`
+- Inspection result: `/app/easylist/add?demo=1` rendered locally with the new `Mode`, `Result`, `Next`, `Provider not connected`, and `Nothing saved or sent` copy.
+- Boundary preserved: task and note save behavior stayed unchanged. No new AI behavior, hidden write, external action, backend config, dependency, deploy, generated output, or secret was added.
+
 ## 2026-05-17 - Stage 27 Task 1 Private Alpha Test Protocol
 
 - Task attempted: Create a private alpha test protocol for the proven Inbox assistant lane.
