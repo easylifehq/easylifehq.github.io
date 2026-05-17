@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 29 Trust And Security Hardening Task Packet
+
+- Task attempted: Plan the trust/security hardening pass before any broader assistant expansion.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_29_TRUST_SECURITY_PLAN.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Plan created: `docs/codex/EASYLIFE_STAGE_29_TRUST_SECURITY_PLAN.md`.
+- Stage focus: secret leakage checks, frontend bundle/key scan, logging redaction proof, hidden-write audit, external-action audit, rollback/kill-switch checklist, and private alpha readiness.
+- Queue proof: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 29 tasks.
+- Boundary preserved: docs-first planning only; no broader assistant capability, deploy change, provider SDK, API key, backend config, package/dependency change, generated output, secret, hidden write, external action, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 28 Task 4 Alpha Bug Report Template
 
 - Task attempted: Create a lightweight bug report template for private alpha assistant testing.

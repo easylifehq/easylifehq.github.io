@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 29 Trust And Security Hardening Task Packet
+
+- Task: Plan trust/security hardening before any broader assistant expansion.
+- Result: Stage 29 plan and five-task queue created.
+- Magic signal: trust-security-before-capability-expansion
+- Plan evidence: `docs/codex/EASYLIFE_STAGE_29_TRUST_SECURITY_PLAN.md`.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 29 tasks.
+- Secret evidence: first task covers secret leakage checks and frontend bundle/key scanning without printing or committing secrets.
+- Redaction evidence: second task covers metadata-only logging and alpha bug report redaction.
+- Hidden-action evidence: third task covers hidden-write and external-action hostile input fixtures.
+- Rollback evidence: fourth task covers disabled-state, rollback, and kill-switch proof.
+- Gate evidence: fifth task creates the private-alpha readiness proof packet.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs-first planning only; no broader assistant capability, deploy change, provider SDK, API key, backend config, package/dependency change, generated output, secret, hidden write, external action, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 28 Assistant Reliability Proof Packet
 
 - Task: Prove whether the Inbox assistant lane is reliable enough for broader private review.

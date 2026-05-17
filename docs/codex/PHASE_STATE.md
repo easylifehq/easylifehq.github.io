@@ -12,18 +12,22 @@ Before/After Judgment: Each assistant brain task must make EasyLife more useful 
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
 Parking State: STAGE_29_PACKET_READY_NO_LIVE_PROVIDER_YET
-Evidence Required: Stage 29 logging/redaction proof, secret exposure scan, prompt-injection fixtures, disabled-state/kill-switch proof, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
+Evidence Required: Stage 29 plan, secret leakage and frontend bundle/key scan, logging redaction proof, hidden-write audit, external-action audit, rollback/kill-switch checklist, private-alpha readiness proof, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
 Next Phase Criteria: Stage 29 can proceed one task at a time. A first real server-side provider call still requires a later explicit approval gate and must remain synthetic/demo Inbox typed-capture only.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 28 assistant reliability proof completed; Stage 29 trust/security hardening queue prepared without live provider calls.
+Updated At: 2026-05-17 - Stage 29 trust/security hardening task packet prepared without live provider calls.
+
+Stage 29 plan result: STAGE_29_PACKET_READY. The trust and security hardening plan exists at docs/codex/EASYLIFE_STAGE_29_TRUST_SECURITY_PLAN.md. Stage 29 focuses on secret leakage checks, frontend bundle/key scan, logging redaction proof, hidden-write audit, external-action audit, rollback/kill-switch checklist, and private alpha readiness. It remains limited to the proven Inbox typed-capture suggestion lane at `/app/easylist/add?demo=1`.
+
+Prepared Stage 29 queue: docs/codex/NEXT_5_TASKS.md contains exactly five bounded trust/security hardening tasks.
 
 Stage 28 proof result: READY_FOR_STAGE_29_TRUST_SECURITY_HARDENING. The private-alpha Inbox assistant lane passed build and route proof for reliability hardening. Edge-case output rejects/downgrades/falls back, duplicate and stale suggestions are guarded, source/destination labels are explicit, and alpha bug reports can be captured without raw private text. This does not approve broad chat, real user data by default, frontend keys, provider SDKs, live provider calls, secrets, deploy changes, generated output, real memory, notifications, calendar sync, geocoding, external actions, hidden writes, or saved-object expansion.
 
 Stage 28 proof source: docs/codex/EASYLIFE_STAGE_28_ASSISTANT_RELIABILITY_PROOF_PACKET.md
 
-Prepared Stage 29 queue: docs/codex/NEXT_5_TASKS.md contains exactly five trust/security hardening tasks.
+Historical Stage 29 queue: docs/codex/NEXT_5_TASKS.md was prepared from Stage 28 proof and has now been refreshed by the Stage 29 task packet.
 
 Stage 28 plan result: STAGE_28_PACKET_READY. The assistant reliability plan exists at docs/codex/EASYLIFE_STAGE_28_ASSISTANT_RELIABILITY_PLAN.md. Stage 28 focuses on deterministic retries disabled by default, validation edge cases, poor/empty model output handling, duplicate suggestion prevention, source/destination consistency, and alpha tester bug report format. It remains limited to the proven Inbox typed-capture suggestion lane at `/app/easylist/add?demo=1`.
 
