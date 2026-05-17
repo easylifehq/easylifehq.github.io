@@ -22,6 +22,9 @@ import { createServerGatewayTypedCaptureRequest } from "@/features/assistant/ser
 import { runServerGatewayLiveDryRun } from "@/features/assistant/serverGateway/serverGatewayLiveDryRun";
 import {
   createServerGatewayLiveDryRunTypedCaptureRequest,
+  serverGatewayLiveDryRunAllowedRuntime,
+  type ServerGatewayLiveDryRunFallbackReason,
+  type ServerGatewayLiveDryRunOptions,
   type ServerGatewayLiveDryRunResponseEnvelope,
 } from "@/features/assistant/serverGateway/serverGatewayLiveDryRunTypes";
 import { buildTaskDraft, type TaskRowDraft } from "@/features/easylist/components/TaskComposer";
@@ -48,12 +51,24 @@ const INBOX_PREVIEW_STATE_LABELS: Record<AssistantApprovalState, string> = {
 const INBOX_TRUST_LABELS = ["Draft", "Preview", "Task save only", "Note save only"];
 type MockGatewayMode = "normal" | MockGatewayForcedFallbackReason;
 type GatewayPreviewSource = "local-rules" | "mock-gateway" | "server-adapter-mock" | "live-provider-dry-run";
+type LiveDryRunFailureMode = "disabled" | "timeout" | "rate-limit" | "validation-rejected" | "provider-error";
 const MOCK_GATEWAY_MODE_OPTIONS: Array<{ value: MockGatewayMode; label: string }> = [
   { value: "normal", label: "Mock output" },
   { value: "ai-disabled", label: "AI disabled" },
   { value: "timeout", label: "Timeout" },
   { value: "rate-limit", label: "Rate limit" },
   { value: "circuit-open", label: "Circuit open" },
+];
+const LIVE_DRY_RUN_FAILURE_OPTIONS: Array<{
+  value: LiveDryRunFailureMode;
+  label: string;
+  description: string;
+}> = [
+  { value: "disabled", label: "Disabled", description: "Provider lane stays off" },
+  { value: "timeout", label: "Timeout", description: "No automatic retry" },
+  { value: "rate-limit", label: "Rate limit", description: "Use local rules" },
+  { value: "validation-rejected", label: "Validation blocked", description: "Unsafe output is not offered" },
+  { value: "provider-error", label: "Provider error", description: "Capture is preserved" },
 ];
 const GATEWAY_PREVIEW_SOURCE_OPTIONS: Array<{
   value: GatewayPreviewSource;
@@ -94,6 +109,70 @@ const GATEWAY_RESULT_CLARITY: Record<
     next: "Use synthetic/private-test capture only.",
   },
 };
+const LIVE_DRY_RUN_FALLBACK_GUIDANCE: Record<
+  ServerGatewayLiveDryRunFallbackReason,
+  {
+    pill: string;
+    title: string;
+    copy: string;
+    next: string;
+  }
+> = {
+  "ai-disabled": {
+    pill: "Paused",
+    title: "Live lane is off",
+    copy: "Typed capture stays here. Local rules can still draft a suggestion.",
+    next: "Use local fallback or keep editing the capture.",
+  },
+  "server-only-required": {
+    pill: "Server only",
+    title: "Provider call blocked in browser",
+    copy: "The browser cannot call a provider. Local fallback stays available.",
+    next: "Keep reviewing locally until a server path is enabled.",
+  },
+  "provider-unconfigured": {
+    pill: "Not configured",
+    title: "Provider is not connected",
+    copy: "No server-side provider executor is configured. Nothing was sent.",
+    next: "Use the deterministic fallback.",
+  },
+  "invalid-request": {
+    pill: "Blocked",
+    title: "Request stayed inside the guardrails",
+    copy: "The request was outside the synthetic Inbox typed-capture boundary.",
+    next: "Use typed Inbox capture only.",
+  },
+  timeout: {
+    pill: "Timed out",
+    title: "The live lane took too long",
+    copy: "Typed capture is preserved. EasyLife will not retry in the background.",
+    next: "Use local fallback or try again manually later.",
+  },
+  "rate-limit": {
+    pill: "Throttled",
+    title: "The live lane is taking a breather",
+    copy: "Typed capture is preserved. No data was lost or saved.",
+    next: "Use local rules until the limit clears.",
+  },
+  "circuit-open": {
+    pill: "Disabled",
+    title: "Kill switch is active",
+    copy: "Provider calls are disabled. Local fallback remains available.",
+    next: "Keep using local rules.",
+  },
+  "validation-rejected": {
+    pill: "Blocked",
+    title: "Unsafe output was blocked",
+    copy: "The output did not pass validation, so it was not shown as a suggestion.",
+    next: "Use local fallback and keep the capture unchanged.",
+  },
+  "provider-error": {
+    pill: "Fallback",
+    title: "Provider lane hit an error",
+    copy: "Typed capture stays here. Nothing was saved, sent, or retried.",
+    next: "Use local fallback and retry manually later if needed.",
+  },
+};
 const DESTINATION_BY_DRAFT_TYPE: Record<AssistantLocalDraftType, string> = {
   task: "Inbox task save lane",
   note: "Notes save lane",
@@ -102,6 +181,40 @@ const DESTINATION_BY_DRAFT_TYPE: Record<AssistantLocalDraftType, string> = {
   "follow-up": "Follow-up preview only",
   unsure: "Hold for review",
 };
+
+function liveDryRunOptionsForMode(mode: LiveDryRunFailureMode): ServerGatewayLiveDryRunOptions {
+  switch (mode) {
+    case "timeout":
+      return { config: { timeout: true } };
+    case "rate-limit":
+      return { config: { rateLimited: true } };
+    case "validation-rejected":
+      return {
+        config: {
+          enabled: true,
+          runtime: serverGatewayLiveDryRunAllowedRuntime,
+          providerConfigured: true,
+        },
+        serverOnlyProviderExecutor: () => ({
+          unsafeInstruction: "Save this task and send a follow-up without asking.",
+        }),
+      };
+    case "provider-error":
+      return {
+        config: {
+          enabled: true,
+          runtime: serverGatewayLiveDryRunAllowedRuntime,
+          providerConfigured: true,
+        },
+        serverOnlyProviderExecutor: () => {
+          throw new Error("Synthetic provider failure preview.");
+        },
+      };
+    case "disabled":
+    default:
+      return {};
+  }
+}
 
 function SourceDestinationRow({
   source,
@@ -137,6 +250,7 @@ export function EasyListInboxPage() {
   const [gatewayPreviewSource, setGatewayPreviewSource] =
     useState<GatewayPreviewSource>("live-provider-dry-run");
   const [mockGatewayMode, setMockGatewayMode] = useState<MockGatewayMode>("normal");
+  const [liveDryRunFailureMode, setLiveDryRunFailureMode] = useState<LiveDryRunFailureMode>("disabled");
   const [previewApprovalState, setPreviewApprovalState] = useState<AssistantApprovalState>("suggested");
   const [selectedDraftType, setSelectedDraftType] = useState<AssistantLocalDraftType>("follow-up");
   const [showTaskHandoff, setShowTaskHandoff] = useState(false);
@@ -242,7 +356,10 @@ export function EasyListInboxPage() {
     let cancelled = false;
 
     setLiveDryRunResult(null);
-    void runServerGatewayLiveDryRun(liveDryRunRequest).then((result) => {
+    void runServerGatewayLiveDryRun(
+      liveDryRunRequest,
+      liveDryRunOptionsForMode(liveDryRunFailureMode)
+    ).then((result) => {
       if (!cancelled) {
         setLiveDryRunResult(result);
       }
@@ -251,9 +368,12 @@ export function EasyListInboxPage() {
     return () => {
       cancelled = true;
     };
-  }, [liveDryRunRequest]);
+  }, [liveDryRunFailureMode, liveDryRunRequest]);
 
   const liveDryRunOutput = liveDryRunResult?.status === "ok" ? liveDryRunResult.output : null;
+  const liveDryRunFallbackGuidance = liveDryRunResult?.fallback
+    ? LIVE_DRY_RUN_FALLBACK_GUIDANCE[liveDryRunResult.fallback.reason]
+    : null;
   const activeGatewayOutput =
     gatewayPreviewSource === "server-adapter-mock"
       ? serverGatewayOutput
@@ -280,12 +400,19 @@ export function EasyListInboxPage() {
     gatewayPreviewSource === "live-provider-dry-run"
       ? [
           "Live dry-run lane",
-          "Provider not connected",
+          liveDryRunFallbackGuidance?.pill || "Provider not connected",
           `Prompt ${liveDryRunResult?.metadataLog.promptId || "intake-suggestion"}`,
           "Nothing saved or sent",
         ]
       : [activeGatewayLabel, "No provider", "No live AI", activeGatewayState];
-  const activeGatewayClarity = GATEWAY_RESULT_CLARITY[gatewayPreviewSource];
+  const activeGatewayClarity =
+    gatewayPreviewSource === "live-provider-dry-run" && liveDryRunFallbackGuidance
+      ? {
+          mode: "Live dry-run lane",
+          result: liveDryRunFallbackGuidance.copy,
+          next: liveDryRunFallbackGuidance.next,
+        }
+      : GATEWAY_RESULT_CLARITY[gatewayPreviewSource];
   const approvedLocalDraft = useMemo(
     () =>
       visibleApprovalState === "approved"
@@ -324,7 +451,7 @@ export function EasyListInboxPage() {
     [activeLaneItems]
   );
 
-  if (isLoading) {
+  if (isLoading && !isDemoReviewMode) {
     return <LoadingState label="Opening Inbox..." />;
   }
 
@@ -518,6 +645,21 @@ export function EasyListInboxPage() {
                 ))}
               </select>
             </label>
+            {gatewayPreviewSource === "live-provider-dry-run" ? (
+              <label className="field-stack assistant-mock-mode-field">
+                <span>Live fallback preview</span>
+                <select
+                  value={liveDryRunFailureMode}
+                  onChange={(event) => setLiveDryRunFailureMode(event.target.value as LiveDryRunFailureMode)}
+                >
+                  {LIVE_DRY_RUN_FAILURE_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label} - {option.description}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : null}
           </div>
 
           <article
@@ -677,8 +819,10 @@ export function EasyListInboxPage() {
               <div className="assistant-suggestion-main">
                 <div>
                   <p>Live-provider dry-run lane</p>
-                  <h3>{liveDryRunResult.fallback?.label || "Live dry-run output unavailable"}</h3>
-                  <strong>{liveDryRunResult.fallback?.copy || "Output must pass validation before display."}</strong>
+                  <h3>{liveDryRunFallbackGuidance?.title || "Live dry-run output unavailable"}</h3>
+                  <strong>
+                    {liveDryRunFallbackGuidance?.copy || "Output must pass validation before display."}
+                  </strong>
                 </div>
               </div>
               <div className="assistant-suggestion-fields" aria-label="Live provider dry-run details">
@@ -702,10 +846,22 @@ export function EasyListInboxPage() {
                   <strong>{liveDryRunResult.providerCallState}</strong>
                   <em>{liveDryRunResult.runtime}</em>
                 </span>
+                <span>
+                  <small>Retry</small>
+                  <strong>none</strong>
+                  <em>manual only</em>
+                </span>
               </div>
+              {liveDryRunFallbackGuidance ? (
+                <div className="assistant-fallback-state-panel" aria-label="Live dry-run fallback guidance">
+                  <span>{liveDryRunFallbackGuidance.pill}</span>
+                  <strong>{liveDryRunFallbackGuidance.next}</strong>
+                  <p>Capture remains editable. No save, send, schedule, sync, or notification happened.</p>
+                </div>
+              ) : null}
               <div className="assistant-mock-confirmation" aria-label="Live provider dry-run boundary">
                 <span>Nothing saved or sent</span>
-                <strong>Provider is not connected here. Local fallback is active.</strong>
+                <strong>Local deterministic fallback is available for this capture.</strong>
                 <p>Existing task and note save paths are unchanged.</p>
               </div>
               </>

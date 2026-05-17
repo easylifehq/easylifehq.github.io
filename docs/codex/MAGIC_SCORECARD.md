@@ -2,6 +2,22 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 27 Task 3 Fallback And Failure UX Hardening
+
+- Task: Make disabled, timeout, rate-limit, validation-rejected, and provider-error states clear and non-scary.
+- Result: Inbox live dry-run fallback states now render as calm local-review states with deterministic fallback guidance.
+- Magic signal: provider-failure-feels-safe-not-scary
+- UI evidence: `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`.
+- Styling evidence: `app-vNext/src/styles/globals.css`.
+- Fallback options evidence: `Live fallback preview` offers `Disabled`, `Timeout`, `Rate limit`, `Validation blocked`, and `Provider error`.
+- Preserve-capture evidence: fallback guidance says capture remains editable and points back to local deterministic fallback.
+- Retry evidence: live dry-run details show `Retry: none` and `manual only`.
+- Boundary evidence: copy says no save, send, schedule, sync, notification, hidden write, or provider action happened.
+- Reviewability evidence: demo mode no longer stays stuck on `Opening Inbox...` while list data is loading.
+- Inspection evidence: headless Chrome DOM inspection of `/app/easylist/add?demo=1` found the fallback selector, all five failure options, and the no-save/no-send boundary copy.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no new provider behavior, secret, external action, save, deploy change, package change, generated output, hidden write, or automatic retry was added.
+
 ## 2026-05-17 - Stage 27 Task 2 Assistant Result Clarity Polish
 
 - Task: Make the Inbox assistant result easier to understand during private alpha without expanding capability.

@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 27 Task 3 Fallback And Failure UX Hardening
+
+- Task attempted: Make disabled, timeout, rate-limit, validation-rejected, and provider-error states clear and non-scary in the Inbox assistant lane.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- UX change: the live dry-run lane now has a compact `Live fallback preview` control for `Disabled`, `Timeout`, `Rate limit`, `Validation blocked`, and `Provider error`.
+- Fallback copy: each state now says the capture is preserved, local rules remain available, no background retry runs, and nothing was saved, sent, scheduled, synced, or notified.
+- Local fallback: the result summary points the user back to deterministic local rules instead of making provider failures feel like broken app state.
+- Reviewability repair: `/app/easylist/add?demo=1` no longer blocks on `Opening Inbox...` while list data is loading, so demo review can inspect the local assistant lane without real data.
+- Inspection result: headless Chrome DOM inspection at mobile width found `Live fallback preview`, all five fallback options, `No save, send, schedule, sync, or notification happened`, and `Local deterministic fallback is available`.
+- Boundary preserved: no new provider behavior, secret, external action, save, deploy change, package change, generated output, hidden write, or retry behavior was added.
+
 ## 2026-05-17 - Stage 27 Task 2 Assistant Result Clarity Polish
 
 - Task attempted: Make the Inbox assistant result easier to understand during private alpha without expanding capability.

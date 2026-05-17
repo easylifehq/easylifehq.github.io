@@ -1,6 +1,31 @@
 # Simon Design Review
 
 ## Verdict
+FALLBACK_STATES_REVIEWABLE
+
+## Stage 27 Task 3 Fallback And Failure UX Hardening - 2026-05-17
+
+Verdict: `FALLBACK_STATES_REVIEWABLE`.
+
+The Inbox live dry-run lane now treats failure states like normal assistant states instead of emergency messages. The user can preview disabled, timeout, rate-limit, validation-blocked, and provider-error states from one compact control.
+
+Design proof:
+- The result summary changes per fallback state, so the user sees the practical next move.
+- The guidance says typed capture is preserved and local rules remain available.
+- The boundary copy stays compact: no save, send, schedule, sync, notification, background retry, or provider claim.
+- The new fallback guidance panel is smaller than another full proof card and sits inside the existing gateway preview.
+
+Route proof:
+- `npm.cmd run build` passed from `app-vNext`.
+- Headless Chrome DOM inspection of `/app/easylist/add?demo=1` at mobile width found the rendered Inbox route, `Live fallback preview`, all five fallback options, and the no-save/no-send boundary copy.
+- Demo mode now bypasses the loading-only state while list data is pending, so the route is reviewable without real data.
+
+Design guard:
+Do not keep adding provider/debug controls to Inbox. The next private-alpha UI work should either reuse this compact lane or remove proof copy once real testing gives confidence.
+
+---
+
+## Verdict
 READY_FOR_STAGE_27_BUT_NO_LIVE_PROVIDER_YET
 
 ## Stage 26 First Live Provider Dry Run Product Proof - 2026-05-17
