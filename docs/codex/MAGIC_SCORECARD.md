@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 22 Mock Server AI Gateway Packet
+
+- Task: Plan the no-provider mock gateway implementation stage approved by Stage 21.
+- Result: Stage 22 mock gateway plan and exactly five Stage 22 tasks were prepared.
+- Magic signal: mock-gateway-before-real-ai
+- Plan evidence: `docs/codex/EASYLIFE_STAGE_22_MOCK_GATEWAY_PLAN.md`.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 22 tasks.
+- First behavior evidence: Inbox typed-capture suggestion remains the only allowed behavior.
+- Contract evidence: Stage 22 must use `stage-20-context-v1`, `intake-suggestion`, `stage-20-output-v1`, `validateAssistantModelOutput`, and `stage-21-gateway-request-v1`.
+- Implementation evidence: local/server-shaped mock gateway modules are planned under `app-vNext/src/features/assistant/gateway/`.
+- UI evidence: only the Inbox mock preview task is UI-facing, and it must label behavior as mock/no-provider.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider SDK, API key, backend service, Firebase config, dependency, package file, deploy config, generated output, secret, live model call, external action, hidden read, hidden write, real memory, saved-object expansion, or real personal data was added.
+
 ## 2026-05-17 - Stage 21 Server AI Gateway Proof Packet
 
 - Task: Prove whether EasyLife is ready for a mock server AI gateway implementation stage.

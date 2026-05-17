@@ -1,23 +1,29 @@
 # Phase State
 
-Current Phase: stage-21-server-ai-gateway-planning
+Current Phase: stage-22-mock-server-ai-gateway
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Plan the safest server-only AI gateway for the first suggestion-only model-backed assistant behavior.
+Primary Action: Implement a no-provider local/server-shaped mock gateway for the first suggestion-only assistant behavior.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 21 may define server gateway architecture, request/response envelopes, secret handling, logging/privacy rules, rate limits, spend controls, fallback behavior, and mock-gateway test planning. It must not add live model calls, provider SDKs, frontend API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets.
+Complexity Budget: Stage 22 may implement local/server-shaped mock gateway request validation, response validation, fallback states, Inbox preview wiring, and proof. It must not add live model calls, provider SDKs, frontend API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_MOCK_SERVER_AI_GATEWAY_IMPLEMENTATION
-Evidence Required: Stage 21 proof packet, gateway contract, privacy/logging rules, rate/spend controls, mock test plan, build proof, MAGIC_SCORECARD, and NEXT_5_TASKS reconciliation.
+Parking State: MOCK_GATEWAY_PACKET_READY
+Evidence Required: Stage 22 mock gateway plan, exactly five Stage 22 Task Contract V2 tasks, build proof, NIGHTLY_REPORT, and MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Create an explicit Stage 22 mock server AI gateway implementation packet before any code work; do not add live model calls.
+Next Phase Criteria: Complete Stage 22 mock gateway implementation tasks and proof before choosing real server architecture.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 21 proof packet created.
+Updated At: 2026-05-17 - Stage 22 mock gateway packet created.
+
+Stage 22 source: docs/codex/EASYLIFE_STAGE_22_MOCK_GATEWAY_PLAN.md
+
+Prepared Stage 22 queue: docs/codex/NEXT_5_TASKS.md contains exactly five no-provider mock gateway tasks.
+
+Stage 22 may implement a local/server-shaped mock gateway for Inbox typed-capture suggestion only. It must use Stage 20 context packets, Stage 20 prompt IDs, and Stage 20 output validation. It must not add live model calls, provider SDKs, API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, real memory, hidden reads, hidden writes, saved-object expansion, or real personal data.
 
 Stage 21 proof result: READY_FOR_MOCK_SERVER_AI_GATEWAY_IMPLEMENTATION. EasyLife is ready to plan a no-provider mock gateway implementation stage that uses Stage 20 context packets, `intake-suggestion`, Stage 20 output validation, metadata-only logging, rate/spend controls, and local fallback behavior. This does not approve live model calls, provider SDKs, API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, real memory, hidden reads, hidden writes, or saved-object expansion.
 

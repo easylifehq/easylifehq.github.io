@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 22 Mock Server AI Gateway Packet
+
+- Task attempted: Plan the no-provider mock gateway implementation stage approved by Stage 21.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Plan created: `docs/codex/EASYLIFE_STAGE_22_MOCK_GATEWAY_PLAN.md`.
+- Queue updated: `docs/codex/NEXT_5_TASKS.md` now contains exactly five bounded Stage 22 tasks:
+  - Mock gateway request contract.
+  - Mock gateway response validator path.
+  - Mock gateway fallback states.
+  - Inbox mock gateway preview wiring.
+  - Stage 22 proof packet.
+- First behavior remains: Inbox typed-capture suggestion only.
+- Contract requirement preserved: Stage 22 must use Stage 20 context packets, Stage 20 prompt IDs, and Stage 20 output validation.
+- Implementation boundary defined: local/server-shaped mock gateway only; no provider, no backend service, no secrets.
+- Boundary preserved: no provider SDKs, API keys, backend services, Firebase config, dependencies, package files, deploy config, generated output, secrets, live model calls, external actions, hidden reads, hidden writes, real memory, saved-object expansion, or real personal data were added.
+
 ## 2026-05-17 - Stage 21 Task 4 Mock Gateway Test Plan
 
 - Task attempted: Define a no-provider mock gateway test plan before any real model integration exists.
