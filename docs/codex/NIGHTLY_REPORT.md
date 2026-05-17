@@ -1,5 +1,18 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 24 Task 2 Server Adapter Mock Handler
+
+- Task attempted: Create a no-provider server adapter handler that accepts the Stage 24 request contract and delegates to the existing Stage 22 mock gateway path.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayMockHandler.ts`
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayMockHandler.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Handler added: `runServerGatewayMockHandler` validates Stage 24 requests before translating them to the Stage 22 mock gateway request envelope.
+- Delegation proof: accepted requests delegate to Stage 22 mock output, invalid Stage 24 requests fall back before mock output, timeout preserves typed capture, unsafe synthetic output becomes validation fallback, and all responses report no provider call, no network call, no external actions, and no hidden writes.
+- Boundary preserved: no network call, provider call, provider SDK, API key, backend service, Firebase config change, dependency, package file, deploy config, generated output, secret, external action, hidden read, hidden write, automatic retry, real memory, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 24 Task 1 Server Adapter Types And Contract
 
 - Task attempted: Create the typed server adapter contract that future real AI calls must use.

@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 24 Task 2 Server Adapter Mock Handler
+
+- Task: Create a no-provider server adapter mock handler.
+- Result: Server adapter mock handler and proof fixtures were added.
+- Magic signal: adapter-delegates-to-proven-mock
+- Handler evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayMockHandler.ts`.
+- Proof evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayMockHandler.test.ts`.
+- Delegation evidence: valid Stage 24 requests are translated into the existing Stage 22 mock gateway request envelope after Stage 24 validation passes.
+- Fallback evidence: invalid Stage 24 requests, timeout fallback, and validation-rejected mock output preserve typed capture and never automatically retry.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no network call, provider call, provider SDK, API key, backend service, Firebase config change, dependency, package file, deploy config, generated output, secret, external action, hidden read, hidden write, automatic retry, real memory, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 24 Task 1 Server Adapter Types And Contract
 
 - Task: Create the typed server adapter contract that future real AI calls must use.
