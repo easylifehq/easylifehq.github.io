@@ -1,6 +1,32 @@
 # Robin Copy Review
 
 ## Verdict
+ASSISTANT_CONTEXT_LANGUAGE_CLEANED
+
+## Stage 18 Task 4 Remaining Memory/Remember Cleanup - 2026-05-17
+
+Verdict: `ASSISTANT_CONTEXT_LANGUAGE_CLEANED`.
+
+Today, Inbox, and Notes no longer expose Memory/Remember language in the rendered review text. The route copy now stays on `Notes`, `Saved context`, `Context draft`, `Keep context`, and `Pin context`, which is much less likely to make a reviewer think EasyLife has model-backed memory.
+
+What changed:
+- The local Notes draft action/type names moved from memory framing to context framing.
+- The assistant preview helper now returns `Saved context` instead of `Memory`.
+- The command hint id moved from `remember` to `context`.
+- The note save receipt removed the `real AI memory` phrase and now lists only the concrete actions that did not happen.
+- The public People menu description now says `Keep context and follow-ups`.
+
+Rendered proof:
+- `/app/hq?demo=1`, `/app/easylist/add?demo=1`, and `/app/easynotes?demo=1` rendered at 390 x 844.
+- Rendered route text did not include `Memory`, `Remember`, `AI memory`, `real memory`, `real AI memory`, or `memory context`.
+
+Copy risk:
+- The classifier intentionally still understands `remember` as input text because users will type it naturally.
+- The older `/app/command` route still has command-status memory wording; that is parked for Stage 18 Task 5 instead of being half-fixed here.
+
+---
+
+## Verdict
 INBOX_TRUST_COPY_COMPRESSED
 
 ## Stage 18 Task 3 Inbox Trust Copy Review - 2026-05-17

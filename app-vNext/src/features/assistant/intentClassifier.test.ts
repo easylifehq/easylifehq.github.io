@@ -14,7 +14,7 @@ export const intentClassifierExamples: IntentExample[] = [
     expectedApprovalState: "suggested",
   },
   {
-    text: "Remember to call the dentist tomorrow morning",
+    text: "Remind me to call the dentist tomorrow morning",
     expectedIntent: "reminder",
     expectedApprovalState: "suggested",
   },

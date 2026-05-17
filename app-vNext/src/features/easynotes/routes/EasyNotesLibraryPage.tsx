@@ -5,12 +5,12 @@ import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
 import {
   buildNoteHandoffPreview,
   buildLocalDraftFromSuggestion,
-  memoryDraftActionOptions,
+  contextDraftActionOptions,
 } from "@/features/assistant/localDraftBuilder";
 import {
   localDraftStatusLabels,
   localDraftTypeLabels,
-  type AssistantMemoryDraftAction,
+  type AssistantContextDraftAction,
   type AssistantNoteHandoffPreview,
   type AssistantNoteSaveConfirmation,
 } from "@/features/assistant/localDraftTypes";
@@ -32,7 +32,7 @@ function formatDate(value: Date | null) {
   }).format(value);
 }
 
-function getMemoryCue(value: Date | null) {
+function getContextCue(value: Date | null) {
   if (!value) return "Recent";
 
   const ageInDays = Math.floor((Date.now() - value.getTime()) / 86400000);
@@ -43,10 +43,10 @@ function getMemoryCue(value: Date | null) {
   return "";
 }
 
-function renderMemoryCue(value: Date | null) {
-  const cue = getMemoryCue(value);
+function renderContextCue(value: Date | null) {
+  const cue = getContextCue(value);
 
-  return cue ? <em className="note-memory-cue">{cue}</em> : null;
+  return cue ? <em className="note-context-cue">{cue}</em> : null;
 }
 
 export function EasyNotesLibraryPage() {
@@ -72,7 +72,7 @@ export function EasyNotesLibraryPage() {
   const [cleanupMessage, setCleanupMessage] = useState("");
   const [toolsOpen, setToolsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [memoryDraftAction, setMemoryDraftAction] = useState<AssistantMemoryDraftAction>("remember");
+  const [contextDraftAction, setContextDraftAction] = useState<AssistantContextDraftAction>("keep-context");
   const [showNoteHandoff, setShowNoteHandoff] = useState(false);
   const [noteHandoffPreview, setNoteHandoffPreview] = useState<AssistantNoteHandoffPreview | null>(null);
   const [noteSaveConfirmation, setNoteSaveConfirmation] = useState<AssistantNoteSaveConfirmation | null>(null);
@@ -119,23 +119,23 @@ export function EasyNotesLibraryPage() {
     () => notes.find((note) => note.id === lastOpenNoteId) || notes[0] || null,
     [notes, lastOpenNoteId]
   );
-  const memoryDraftSource =
+  const contextDraftSource =
     lastOpenNote?.bodyText.trim() || lastOpenNote?.title.trim() || "Keep the launch notes close and pin the next decision.";
-  const memoryDraftSuggestion = useMemo(
-    () => classifyAssistantIntent(`Keep this context for review: ${memoryDraftSource}`),
-    [memoryDraftSource]
+  const contextDraftSuggestion = useMemo(
+    () => classifyAssistantIntent(`Keep this context for review: ${contextDraftSource}`),
+    [contextDraftSource]
   );
-  const selectedMemoryDraftOption =
-    memoryDraftActionOptions.find((option) => option.action === memoryDraftAction) || memoryDraftActionOptions[0];
-  const selectedMemoryDraft = selectedMemoryDraftOption?.draftType
-    ? buildLocalDraftFromSuggestion(memoryDraftSuggestion, selectedMemoryDraftOption.draftType)
+  const selectedContextDraftOption =
+    contextDraftActionOptions.find((option) => option.action === contextDraftAction) || contextDraftActionOptions[0];
+  const selectedContextDraft = selectedContextDraftOption?.draftType
+    ? buildLocalDraftFromSuggestion(contextDraftSuggestion, selectedContextDraftOption.draftType)
     : null;
-  const canPreviewNoteHandoff = selectedMemoryDraft?.draftType === "note";
+  const canPreviewNoteHandoff = selectedContextDraft?.draftType === "note";
   const isDemoReviewMode = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get("demo") === "1" || params.get("visualQa") === "1";
   }, []);
-  const memoryBridge = useMemo(
+  const contextBridge = useMemo(
     () => [
       {
         label: "Saved context",
@@ -248,7 +248,7 @@ export function EasyNotesLibraryPage() {
       status: noteId ? "saved" : "blocked",
       receiptLabel: noteId ? "Saved note receipt" : "Save blocked",
       message: noteId
-        ? "Saved one note only. No task, plan, reminder, follow-up, email, calendar item, notification, sync, model call, or real AI memory was created."
+        ? "Saved one note only. No task, plan, reminder, follow-up, email, calendar item, notification, sync, or model call was created."
         : "No signed-in note save happened in this preview session. Nothing else was created.",
     });
   }
@@ -362,7 +362,7 @@ export function EasyNotesLibraryPage() {
         </div>
 
         <div className="settings-status-grid" aria-label="Assistant context bridge">
-          {memoryBridge.map((item) => (
+          {contextBridge.map((item) => (
             <article className="settings-status-card" key={item.label}>
               <span>{item.label}</span>
               <strong>{item.count}</strong>
@@ -371,22 +371,22 @@ export function EasyNotesLibraryPage() {
           ))}
         </div>
 
-        <section className="notes-memory-draft-affordance" aria-labelledby="notes-memory-draft-title">
-          <div className="notes-memory-draft-copy">
+        <section className="notes-context-draft-affordance" aria-labelledby="notes-context-draft-title">
+          <div className="notes-context-draft-copy">
             <span>{localDraftStatusLabels["unsaved-preview"]}</span>
-            <h3 id="notes-memory-draft-title">Note/context assistant draft</h3>
+            <h3 id="notes-context-draft-title">Note/context assistant draft</h3>
             <p>
-              Preview what this context could become. Final save creates a normal note only, not automation or AI memory.
+              Preview what this context could become. Final save creates a normal note only.
             </p>
           </div>
-          <div className="notes-memory-draft-actions" aria-label="Local context draft actions">
-            {memoryDraftActionOptions.map((option) => (
+          <div className="notes-context-draft-actions" aria-label="Local context draft actions">
+            {contextDraftActionOptions.map((option) => (
               <button
                 key={option.action}
                 type="button"
-                className={memoryDraftAction === option.action ? "active" : ""}
+                className={contextDraftAction === option.action ? "active" : ""}
                 onClick={() => {
-                  setMemoryDraftAction(option.action);
+                  setContextDraftAction(option.action);
                   setShowNoteHandoff(false);
                   setNoteHandoffPreview(null);
                   clearNoteSaveConfirmation();
@@ -398,14 +398,14 @@ export function EasyNotesLibraryPage() {
               </button>
             ))}
           </div>
-          {selectedMemoryDraft ? (
-            <article className="notes-memory-draft-preview" aria-label="Unsaved context draft preview">
+          {selectedContextDraft ? (
+            <article className="notes-context-draft-preview" aria-label="Unsaved context draft preview">
               <div>
-                <span>{localDraftTypeLabels[selectedMemoryDraft.draftType]}</span>
-                <strong>{selectedMemoryDraft.title}</strong>
-                <p>{selectedMemoryDraft.body}</p>
+                <span>{localDraftTypeLabels[selectedContextDraft.draftType]}</span>
+                <strong>{selectedContextDraft.title}</strong>
+                <p>{selectedContextDraft.body}</p>
               </div>
-              {selectedMemoryDraft.warnings.map((warning) => (
+              {selectedContextDraft.warnings.map((warning) => (
                 <p key={warning} className="assistant-local-draft-warning">
                   {warning}
                 </p>
@@ -416,7 +416,7 @@ export function EasyNotesLibraryPage() {
                     type="button"
                     className="button-secondary"
                     onClick={() => {
-                      const preview = buildNoteHandoffPreview(selectedMemoryDraft);
+                      const preview = buildNoteHandoffPreview(selectedContextDraft);
                       setNoteHandoffPreview(preview);
                       setShowNoteHandoff(Boolean(preview));
                       clearNoteSaveConfirmation();
@@ -429,7 +429,7 @@ export function EasyNotesLibraryPage() {
               ) : null}
             </article>
           ) : (
-            <p className="notes-memory-draft-dismissed">
+            <p className="notes-context-draft-dismissed">
               Dismissed locally. No note/context draft was saved, pinned, created, scheduled, or synced.
             </p>
           )}
@@ -542,7 +542,7 @@ export function EasyNotesLibraryPage() {
                   <p>{noteSaveConfirmation.message}</p>
                   <p>
                     No task, plan, reminder, follow-up, email, notification, calendar item, sync, model call, or real
-                    AI memory was created.
+                    model-backed recall was created.
                   </p>
                 </div>
               ) : null}
@@ -598,7 +598,7 @@ export function EasyNotesLibraryPage() {
                           <p className="note-card-meta">
                             <span>Updated</span>
                             {formatDate(note.updatedAt || note.createdAt)}
-                            {renderMemoryCue(note.updatedAt || note.createdAt)}
+                            {renderContextCue(note.updatedAt || note.createdAt)}
                           </p>
                         </div>
                         <div className="note-card-badges">
@@ -781,7 +781,7 @@ export function EasyNotesLibraryPage() {
                   <p className="note-card-meta">
                     <span>Updated</span>
                     {formatDate(note.updatedAt || note.createdAt)}
-                    {renderMemoryCue(note.updatedAt || note.createdAt)}
+                    {renderContextCue(note.updatedAt || note.createdAt)}
                   </p>
                 </div>
                 <div className="note-card-badges">

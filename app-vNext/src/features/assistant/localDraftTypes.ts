@@ -36,10 +36,10 @@ export type AssistantLocalDraftComparisonOption = {
   recommended: boolean;
 };
 
-export type AssistantMemoryDraftAction = "remember" | "pin-context" | "task" | "plan" | "dismiss";
+export type AssistantContextDraftAction = "keep-context" | "pin-context" | "task" | "plan" | "dismiss";
 
-export type AssistantMemoryDraftActionOption = {
-  action: AssistantMemoryDraftAction;
+export type AssistantContextDraftActionOption = {
+  action: AssistantContextDraftAction;
   label: string;
   draftType: AssistantLocalDraftType | null;
   summary: string;

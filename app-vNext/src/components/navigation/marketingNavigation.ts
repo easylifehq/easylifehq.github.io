@@ -34,7 +34,7 @@ export const marketingProductItems: ProductsMenuItem[] = [
   {
     href: "/easycontacts",
     label: "People",
-    description: "Remember context and follow-ups.",
+    description: "Keep context and follow-ups.",
   },
   {
     href: "/easyworkout",

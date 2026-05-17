@@ -2,6 +2,32 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 18 Task 4 Assistant Context Language
+
+- Task: Clean remaining Memory/Remember copy and domain labels.
+- Result: Passed build and Today/Inbox/Notes route inspection.
+- Magic signal: assistant-context-language-is-honest
+- Changed files:
+  - `app-vNext/src/components/navigation/marketingNavigation.ts`
+  - `app-vNext/src/features/assistant/intentClassifier.ts`
+  - `app-vNext/src/features/assistant/intentClassifier.test.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.test.ts`
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `app-vNext/src/features/hq/assistantCommandHints.ts`
+  - `app-vNext/src/features/hq/assistantPreview.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Proof evidence: `/app/hq?demo=1`, `/app/easylist/add?demo=1`, and `/app/easynotes?demo=1` rendered without `Memory`, `Remember`, `AI memory`, `real memory`, `real AI memory`, or `memory context` in the inspected route text.
+- Copy evidence: Notes now uses `Saved context`, `Context draft`, `Keep context`, and `Pin context`; assistant preview now uses `Saved context`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: copy/domain-label cleanup only; no note save behavior, task save behavior, routing, persistence, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, model calls, or real memory behavior changed.
+- Parked evidence: `/app/command` still has legacy memory wording and remains Stage 18 Task 5.
+
 ## 2026-05-17 - Stage 18 Task 3 Inbox Trust Compression
 
 - Task: Compress Inbox trust and save-boundary copy.

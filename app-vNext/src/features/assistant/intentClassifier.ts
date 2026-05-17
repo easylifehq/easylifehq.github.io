@@ -138,7 +138,7 @@ export function classifyAssistantIntent(sourceText: string): AssistantIntentSugg
 
 export const assistantIntentExamples = [
   "Reply to Maya about Friday plans",
-  "Remember to call the dentist tomorrow morning",
+  "Remind me to call the dentist tomorrow morning",
   "Block 30 minutes tomorrow for the proposal",
   "Remind me to move laundry tonight",
   "buy groceries this weekend",

@@ -1,4 +1,4 @@
-export type AssistantPreviewKind = "today" | "capture" | "plan" | "memory";
+export type AssistantPreviewKind = "today" | "capture" | "plan" | "context";
 
 export type AssistantPreviewInput = {
   recommendedLabel: string;
@@ -31,10 +31,10 @@ const assistantPreviewExamples: Record<AssistantPreviewKind, AssistantPreviewAct
     action: "Use the next open block",
     reason: "Give the next window one job before adding more.",
   },
-  memory: {
-    kind: "memory",
-    label: "Memory",
-    action: "Save the useful detail",
+  context: {
+    kind: "context",
+    label: "Saved context",
+    action: "Keep the useful detail",
     reason: "Keep the note close for a later follow-up.",
   },
 };
@@ -48,7 +48,7 @@ export function getLocalAssistantPreview(input: AssistantPreviewInput): Assistan
   }
 
   if (route.includes("easynotes") || label.includes("note") || label.includes("remember")) {
-    return assistantPreviewExamples.memory;
+    return assistantPreviewExamples.context;
   }
 
   if (route.includes("easylist/add") || label.includes("capture") || label.includes("inbox")) {

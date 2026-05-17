@@ -1,5 +1,5 @@
 export type AssistantCommandIntent = {
-  id: "capture" | "plan" | "summarize" | "remember" | "cleanup";
+  id: "capture" | "plan" | "summarize" | "context" | "cleanup";
   label: string;
   example: string;
 };
@@ -21,7 +21,7 @@ export const assistantCommandHints: AssistantCommandIntent[] = [
     example: "Show the next decision",
   },
   {
-    id: "remember",
+    id: "context",
     label: "Context",
     example: "Keep a note close",
   },

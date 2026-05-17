@@ -1,5 +1,33 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 18 Task 4 remaining Memory/Remember cleanup
+
+- Task attempted: Remove remaining language that implies real AI memory from assistant context labels.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Routes inspected at 390 x 844:
+  - `http://127.0.0.1:4231/app/hq?demo=1`
+  - `http://127.0.0.1:4231/app/easylist/add?demo=1`
+  - `http://127.0.0.1:4231/app/easynotes?demo=1`
+- Files changed:
+  - `app-vNext/src/components/navigation/marketingNavigation.ts`
+  - `app-vNext/src/features/assistant/intentClassifier.ts`
+  - `app-vNext/src/features/assistant/intentClassifier.test.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.test.ts`
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `app-vNext/src/features/hq/assistantCommandHints.ts`
+  - `app-vNext/src/features/hq/assistantPreview.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Product simplification: renamed the local Notes draft action/types/classes from memory framing to context framing, changed the assistant preview card from `Memory` to `Saved context`, and changed the public People menu description from `Remember context` to `Keep context`.
+- Copy proof: rendered Today, Inbox, and Notes text did not include `Memory`, `Remember`, `AI memory`, `real memory`, `real AI memory`, or `memory context`.
+- Behavior preserved: the classifier still accepts `remember` as a natural user input synonym, but no inspected route sells saved notes as model-backed memory. Note save behavior, task save behavior, routing, persistence, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, and secrets were unchanged.
+- Remaining parked risk: the legacy `/app/command` route still has separate memory/status language and remains the explicit Stage 18 Task 5 target.
+
 ## 2026-05-17 - Stage 18 Task 3 Inbox trust compression
 
 - Task attempted: Make Inbox feel trustworthy without reading like a policy notice.

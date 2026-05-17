@@ -21,7 +21,7 @@ export const localDraftBuilderExamples: LocalDraftExample[] = [
     expectedDraftType: "plan",
   },
   {
-    text: "Remember to call the dentist tomorrow morning",
+    text: "Remind me to call the dentist tomorrow morning",
     expectedDraftType: "reminder",
   },
   {

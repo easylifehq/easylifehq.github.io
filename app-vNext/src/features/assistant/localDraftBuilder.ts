@@ -5,7 +5,7 @@ import {
   type AssistantLocalDraft,
   type AssistantLocalDraftComparisonOption,
   type AssistantLocalDraftType,
-  type AssistantMemoryDraftActionOption,
+  type AssistantContextDraftActionOption,
   type AssistantNoteHandoffPreview,
   type AssistantPlanHandoffPreview,
   type AssistantReviewHandoffPreview,
@@ -106,9 +106,9 @@ export function buildLocalDraftReviewHint(suggestion: AssistantIntentSuggestion)
   };
 }
 
-export const memoryDraftActionOptions: AssistantMemoryDraftActionOption[] = [
+export const contextDraftActionOptions: AssistantContextDraftActionOption[] = [
   {
-    action: "remember",
+    action: "keep-context",
     label: "Keep context",
     draftType: "note",
     summary: "Hold as an unsaved context draft.",
