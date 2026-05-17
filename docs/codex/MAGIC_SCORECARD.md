@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 26 Task 3 Live Dry-Run Validation And Fallback Proof
+
+- Task: Prove provider-style output cannot render unless Stage 20 validation accepts or safely downgrades it.
+- Result: Stage 26 live dry-run validation proof fixture was added.
+- Magic signal: provider-output-validated-before-render
+- Proof evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveValidation.test.ts`.
+- Accepted evidence: safe synthetic Inbox output returns `ok` with `outputValidationState: accepted`.
+- Rejection evidence: hidden-action and external-action claims return `validation-rejected` fallback before any output can render.
+- Downgrade evidence: action-like wording returns `ok` only after validator downgrades it to `needs-review` and `Needs review`.
+- Fallback evidence: timeout, disabled, invalid request, and validation-rejected cases preserve typed capture locally.
+- Retry evidence: every fallback checked by the proof keeps `automaticRetry: false`.
+- Logging evidence: metadata logs are metadata-only and do not include raw typed capture text by default.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no real user data, provider SDK, frontend API key, actual secret, backend config change, package/dependency change, deploy config, generated output, external action, hidden write, real memory, saved-object expansion, or live provider call was added.
+
 ## 2026-05-17 - Stage 26 Task 2 Server-Shaped Live Dry-Run Gateway Seam
 
 - Task: Create a disabled-by-default live dry-run gateway seam for Inbox typed-capture suggestions.

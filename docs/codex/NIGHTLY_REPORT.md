@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 26 Task 3 Live Dry-Run Validation And Fallback Proof
+
+- Task attempted: Prove real provider-style output cannot render unless Stage 20 validation accepts or safely downgrades it.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveValidation.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Validation proof added: `serverGatewayLiveValidationProof` exercises the Stage 26 live dry-run seam with injected server-only synthetic provider outputs.
+- Accepted proof: a bounded Inbox typed-capture output returns `ok` only after `validateAssistantModelOutput` marks it `accepted`.
+- Hidden-action proof: output claiming an automatic save/reminder is rejected before render and falls back with `validation-rejected`.
+- External-action proof: output claiming an email was sent is rejected before render and falls back with `validation-rejected`.
+- Downgrade proof: action-like wording such as "ready to save" is downgraded to `needs-review` with destination `Needs review`.
+- Fallback proof: timeout, disabled, invalid request, and validation-rejected cases preserve local fallback boundaries.
+- Retry/logging proof: fallback envelopes keep `automaticRetry: false`, and metadata logs exclude raw typed capture text by default.
+- Boundary preserved: no real user data, provider SDK, frontend API key, actual secret, backend config change, package/dependency change, deploy config, generated output, external action, hidden write, real memory, saved-object expansion, or live provider call was added.
+
 ## 2026-05-17 - Stage 26 Task 2 Server-Shaped Live Dry-Run Gateway Seam
 
 - Task attempted: Create a disabled-by-default live dry-run gateway seam for Inbox typed-capture suggestions.
