@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 22 Task 1 Mock Gateway Request Contract
+
+- Task: Create a local server-shaped gateway request contract for Inbox typed-capture suggestions.
+- Result: Mock gateway request types, validation, and proof fixtures were added.
+- Magic signal: mock-gateway-rejects-loose-requests-before-output
+- Contract evidence: `app-vNext/src/features/assistant/gateway/mockGatewayTypes.ts`.
+- Validator evidence: `app-vNext/src/features/assistant/gateway/mockGatewayRequest.ts`.
+- Fixture evidence: `app-vNext/src/features/assistant/gateway/mockGatewayRequest.test.ts`.
+- Accepted request evidence: bounded Inbox typed-capture request validates with current route, typed capture, and optional demo fixture.
+- Rejection evidence: unsupported prompt, non-Inbox route, selected-task context, forbidden broad context, empty typed capture, and too many sources are rejected.
+- Source boundary evidence: Stage 22 Task 1 allows only `current-route`, `typed-capture`, and `demo-fixture` before any mock response exists.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider SDK, API key, backend service, Firebase config, dependency, package file, deploy config, generated output, secret, live model call, external action, hidden read, hidden write, real memory, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 22 Mock Server AI Gateway Packet
 
 - Task: Plan the no-provider mock gateway implementation stage approved by Stage 21.

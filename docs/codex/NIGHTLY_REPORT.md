@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 22 Task 1 Mock Gateway Request Contract
+
+- Task attempted: Create a local server-shaped gateway request contract for Inbox typed-capture suggestions.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/gateway/mockGatewayTypes.ts`
+  - `app-vNext/src/features/assistant/gateway/mockGatewayRequest.ts`
+  - `app-vNext/src/features/assistant/gateway/mockGatewayRequest.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Contract created: `stage-21-gateway-request-v1` local mock envelope with `intake-suggestion`, `inbox`, and a Stage 20 context packet.
+- Validation added: request version, prompt ID, surface, route, path, context packet, allowed source types, typed capture presence, typed capture length, and max source count.
+- Accepted proof: bounded Inbox typed-capture request with current route, typed capture, and optional demo fixture.
+- Rejection proof: unsupported prompt, non-Inbox route, selected-task context, forbidden broad context, empty typed capture, and too many sources.
+- Boundary preserved: no provider SDKs, API keys, backend services, Firebase config, dependencies, package files, deploy config, generated output, secrets, live model calls, external actions, hidden reads, hidden writes, real memory, or saved-object expansion were added.
+
 ## 2026-05-17 - Stage 22 Mock Server AI Gateway Packet
 
 - Task attempted: Plan the no-provider mock gateway implementation stage approved by Stage 21.
