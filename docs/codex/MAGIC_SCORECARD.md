@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 30 Task 3 Provider Response Quarantine Path
+
+- Task: Make unsafe provider-style responses quarantine before they can appear as assistant suggestions.
+- Result: Added Stage 30 provider response quarantine path and TypeScript proof fixtures.
+- Magic signal: unsafe-provider-output-blocked-before-render
+- Quarantine evidence: `app-vNext/src/features/assistant/serverGateway/providerResponseQuarantine.ts`.
+- Proof evidence: `app-vNext/src/features/assistant/serverGateway/providerResponseQuarantine.test.ts`.
+- Validation evidence: quarantine path calls Stage 20 `validateAssistantModelOutput` before any output can become renderable.
+- Pass-through evidence: accepted output remains accepted; action-like downgraded output passes only as `needs-review`.
+- Quarantine evidence: proof quarantines malformed response, hidden-write claim, external-action claim, real-memory claim, missing source, missing destination, and unsupported intent.
+- Raw-response evidence: quarantined output is not renderable as a suggestion and keeps `rawProviderResponseVisible: false`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider call, secret, provider SDK, deploy change, dependency/package change, backend config, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 30 Task 2 Provider Dry-Run Request Sanitizer
 
 - Task: Create a sanitizer proving only approved synthetic/private-alpha typed capture can become a provider request.

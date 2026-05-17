@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 30 Task 3 Provider Response Quarantine Path
+
+- Task attempted: Make unsafe provider-style responses quarantine before they can appear as assistant suggestions.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/providerResponseQuarantine.ts`
+  - `app-vNext/src/features/assistant/serverGateway/providerResponseQuarantine.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Quarantine path added: `stage-30-provider-response-quarantine-v1`.
+- Validator use: all provider-style output goes through the Stage 20 `validateAssistantModelOutput` contract before it can be accepted, downgraded, or quarantined.
+- Allowed outcomes: accepted output may pass through only after validation; downgraded output may pass through only as `needs-review`.
+- Quarantined outcomes: malformed response, hidden-write claim, external-action claim, real-memory claim, missing source, missing destination, unsupported intent, and generic validation rejection.
+- Raw response protection: quarantined output sets `rawProviderResponseVisible: false` and `renderableAsSuggestion: false`.
+- Proof artifact: `providerResponseQuarantine.test.ts` covers accepted output, downgraded output, malformed response, hidden-write claim, external-action claim, real-memory claim, missing source, missing destination, and unsupported intent.
+- Boundary preserved: TypeScript/local validation only; no provider call, secret, provider SDK, deploy change, dependency/package change, backend config, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 30 Task 2 Provider Dry-Run Request Sanitizer
 
 - Task attempted: Create a sanitizer proving only approved synthetic/private-alpha typed capture can become a provider request.
