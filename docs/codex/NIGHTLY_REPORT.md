@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 22 Task 2 Mock Gateway Response Validator Path
+
+- Task attempted: Create the no-provider mock response path and prove all returned mock outputs pass through Stage 20 validation.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/gateway/mockGatewayResponse.ts`
+  - `app-vNext/src/features/assistant/gateway/mockGatewayResponse.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Response path created: `stage-22-mock-response-v1` validates the Stage 22 request first, synthesizes a local Inbox intake suggestion, then runs it through `validateAssistantModelOutput`.
+- Accepted proof: synthetic task, note/context, follow-up, and unsure outputs all validate as accepted Stage 20 `AssistantIntakeSuggestionOutputV1` shapes.
+- Generated proof: typed captures produce task, note/context, follow-up, or unsure mock responses with source attribution and approval-first confirmation language.
+- Rejection proof: hidden autosave/message claims, external email/scheduling claims, malformed confirmation, and invalid requests return fallback responses with no renderable output.
+- Downgrade proof: action-like save wording is downgraded to `needs-review` / `Needs review` before it can be offered.
+- Boundary preserved: no provider-specific fixtures, provider SDKs, API keys, backend services, Firebase config, dependencies, package files, deploy config, generated output, secrets, live model calls, external actions, hidden reads, hidden writes, real memory, or saved-object expansion were added.
+
 ## 2026-05-17 - Stage 22 Task 1 Mock Gateway Request Contract
 
 - Task attempted: Create a local server-shaped gateway request contract for Inbox typed-capture suggestions.

@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 22 Task 2 Mock Gateway Response Validator Path
+
+- Task: Create the no-provider mock response path and prove every returned mock output passes Stage 20 validation.
+- Result: Mock gateway response creation, synthetic output validation, and proof fixtures were added.
+- Magic signal: mock-output-cannot-bypass-stage-20-validation
+- Response path evidence: `app-vNext/src/features/assistant/gateway/mockGatewayResponse.ts`.
+- Fixture evidence: `app-vNext/src/features/assistant/gateway/mockGatewayResponse.test.ts`.
+- Accepted output evidence: task, note/context, follow-up, and unsure mock fixtures pass `validateAssistantModelOutput`.
+- Generated response evidence: typed captures route through request validation, synthetic local output creation, and Stage 20 output validation before returning an output.
+- Rejection evidence: hidden autosave/message claims, external email/scheduling claims, malformed confirmation, and invalid requests return fallback with no `output`.
+- Downgrade evidence: action-like save wording returns a downgraded `needs-review` output instead of an accepted action-ready response.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider-specific fixture, provider SDK, API key, backend service, Firebase config, dependency, package file, deploy config, generated output, secret, live model call, external action, hidden read, hidden write, real memory, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 22 Task 1 Mock Gateway Request Contract
 
 - Task: Create a local server-shaped gateway request contract for Inbox typed-capture suggestions.
