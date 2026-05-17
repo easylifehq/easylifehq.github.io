@@ -1,5 +1,24 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 31 Task 1 First Live AI Approval Record
+
+- Task attempted: Create the explicit human approval record required before any first live provider call.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_APPROVAL_RECORD.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Approval record created: `docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_APPROVAL_RECORD.md`.
+- Provider choice: pending, so the record ends with `NOT_APPROVED_FOR_LIVE_AI`.
+- Server-side secret placeholder confirmed: `SERVER_AI_PROVIDER_API_KEY`.
+- Frontend provider keys remain forbidden; `VITE_` provider secrets remain forbidden because they are browser-exposed.
+- First route confirmed: `/app/easylist/add?demo=1`.
+- First prompt confirmed: `intake-suggestion`.
+- First behavior confirmed: Inbox typed-capture suggestion only.
+- Allowed input confirmed: synthetic/demo typed capture or explicitly approved private-alpha typed capture only.
+- Required controls documented: spend cap, rate limit, kill switch, metadata-only logging, fallback, rollback, and no-external-action boundary.
+- Boundary preserved: docs only; no live provider call, real API key, provider SDK, backend implementation, deploy config, package/dependency change, generated output, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 30 Task 4 Private-Alpha Operator Checklist
 
 - Task attempted: Create the checklist a human must complete before turning on any live AI provider lane.

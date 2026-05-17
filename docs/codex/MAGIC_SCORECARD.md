@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 31 Task 1 First Live AI Approval Record
+
+- Task: Create the explicit approval record required before any first live provider call.
+- Result: Approval record created, but live AI is not approved yet because provider choice is still pending.
+- Magic signal: live-ai-gate-stays-honest-until-provider-choice
+- Approval record evidence: `docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_APPROVAL_RECORD.md`.
+- Verdict evidence: record ends with `NOT_APPROVED_FOR_LIVE_AI`.
+- Secret evidence: server-side placeholder name confirmed as `SERVER_AI_PROVIDER_API_KEY`; frontend API keys and `VITE_` provider secrets remain forbidden.
+- Lane evidence: first route remains `/app/easylist/add?demo=1`, first prompt remains `intake-suggestion`, and first behavior remains Inbox typed-capture suggestion only.
+- Input evidence: only synthetic/demo typed capture or explicitly approved private-alpha typed capture is allowed.
+- Control evidence: spend cap, rate limit, kill switch, metadata-only logging, fallback, rollback, and no-external-action boundary are defined as required before approval.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live provider call, real API key, provider SDK, backend implementation, deploy config, package/dependency change, generated output, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, saved-object expansion, or broad assistant behavior was added.
+
 ## 2026-05-17 - Stage 30 Controlled Live AI Proof Packet
 
 - Task: Decide whether EasyLife is ready for a separately approved first live AI provider call.
