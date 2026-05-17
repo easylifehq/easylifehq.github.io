@@ -814,3 +814,18 @@ What improved:
 
 Design risk:
 - The gateway proof surface is still technical by nature. That is acceptable for Stage 24, but the final user-facing AI version should collapse this into a quieter provenance label once the architecture is proven.
+
+## Stage 24 Proof Design Review - 2026-05-17
+
+Verdict: `READY_FOR_PROVIDER_READINESS_GATE`.
+
+The Stage 24 visible proof is acceptable because it keeps technical provenance inside the existing Inbox gateway panel instead of turning Inbox into a server architecture dashboard.
+
+What works:
+- The user can see `Server adapter mock` without seeing a fake live-AI claim.
+- `No provider` and `No live AI` are visible near the proof lane.
+- Local rules and mock gateway remain available as comparison modes.
+- The real save path stays separate from the proof label.
+
+Design caution:
+- This should not be the final user-facing AI control. Once live AI is approved later, provenance should become a small status line, not a permanent technical selector.

@@ -1,23 +1,29 @@
 # Phase State
 
-Current Phase: stage-24-no-provider-server-adapter
+Current Phase: stage-25-provider-readiness-gate
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Implement a no-provider server adapter shell/mock path without adding live model calls.
+Primary Action: Prove provider readiness before any separately approved first live provider dry-run.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 24 may add local TypeScript server-adapter contract modules, no-provider mock handler modules, safety tests, and a compact Inbox server-adapter mock label/toggle. It must not add live model calls, provider SDKs, frontend API keys, backend production behavior, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets without a separate explicit implementation gate.
+Complexity Budget: Stage 25 may create provider-readiness docs only: provider selection rubric, secret management checklist, live-provider dry-run protocol, human approval checklist, and proof. It must not add live model calls, provider SDKs, frontend API keys, backend production behavior, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets without a separate explicit implementation gate.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: STAGE_24_PLAN_READY
-Evidence Required: Stage 23 proof packet, architecture ADR, gateway boundary, threat model, rollout/fallback plan, exactly five Stage 24 tasks, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
+Parking State: STAGE_25_QUEUE_READY
+Evidence Required: Stage 24 proof packet, provider selection rubric, secret management checklist, live-provider dry-run protocol, human approval checklist, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Complete no-provider server adapter contract, mock handler, safety tests, Inbox preview label/toggle, and Stage 24 proof before any provider-readiness work.
+Next Phase Criteria: Complete provider-readiness rubric, secret checklist, dry-run protocol, human approval checklist, and Stage 25 proof before any Stage 26 live-provider dry-run can be separately approved.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 24 no-provider server adapter plan created.
+Updated At: 2026-05-17 - Stage 24 proof passed and Stage 25 provider-readiness gate prepared.
+
+Stage 24 proof result: READY_FOR_STAGE_25_PROVIDER_READINESS_GATE. The no-provider server adapter accepts safe Inbox typed-capture requests, rejects unsafe requests, validates outputs through the Stage 20/22 path, preserves fallback, exposes `Server adapter mock` in Inbox, and never calls a provider or network. This does not approve live model calls, provider SDKs, API keys, backend implementation, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, or saved-object expansion.
+
+Stage 24 proof source: docs/codex/EASYLIFE_STAGE_24_SERVER_ADAPTER_PROOF_PACKET.md
+
+Prepared Stage 25 queue: docs/codex/NEXT_5_TASKS.md contains exactly five provider-readiness tasks.
 
 Stage 24 plan result: STAGE_24_PLAN_READY. The no-provider server adapter plan exists at docs/codex/EASYLIFE_STAGE_24_SERVER_ADAPTER_PLAN.md. Stage 24 may implement local TypeScript server-adapter contract modules, no-provider mock handler modules, safety tests, and a compact Inbox server-adapter mock label/toggle only. It must keep first behavior to Inbox typed-capture suggestion and must not add live model calls, provider SDKs, API keys, secrets, external actions, hidden writes, real memory, saved-object expansion, deploy config, production backend behavior, Firebase config changes, dependencies, package files, or generated output.
 

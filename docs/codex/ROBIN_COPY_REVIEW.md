@@ -800,3 +800,19 @@ The six-route proof rendered the main path with assistant language:
 - Settings/More: `Settings`
 
 The remaining copy caveats are non-blocking: deeper optional/direct routes can still carry legacy labels, and Stage 10 copy must avoid implying real AI automation, real memory, email sending, sync, or hidden writes.
+
+---
+
+# Stage 24 Server Adapter Copy Proof - 2026-05-17
+
+Copy verdict: `COPY_READY_FOR_PROVIDER_READINESS_GATE`.
+
+The Inbox proof copy is honest enough for Stage 24:
+
+- `Server adapter mock` says this is architecture proof, not a live assistant.
+- `No provider` and `No live AI` are explicit.
+- The confirmation copy says there is no network call, provider call, hidden write, or save behavior change.
+- Fallback copy preserves local capture and avoids automatic retry language.
+
+Copy risk:
+- The words are intentionally technical. That is fine for this proof stage, but Stage 26 or later should translate the final user-facing version into calmer trust language once real provider behavior is separately approved.

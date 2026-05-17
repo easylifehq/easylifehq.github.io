@@ -900,3 +900,36 @@ Yes. Start Stage 9 with one bounded surface at a time. Fold remaining module-lan
 
 ## Recommendation
 Move from proof repair into Stage 9 visual polish. Do not add new assistant features until the shell and first-route polish pass.
+
+---
+
+# Stage 24 Server Adapter Proof - 2026-05-17
+
+## Verdict
+
+READY_FOR_STAGE_25_PROVIDER_READINESS_GATE
+
+## What Passed
+
+- Build passed with `npm.cmd run build` from `app-vNext`.
+- Inbox route `/app/easylist/add?demo=1` rendered the server-adapter proof labels in local inspection.
+- The adapter contract allows only Inbox typed-capture suggestion.
+- Safe bounded requests are accepted.
+- Broad context, unsupported prompts, wrong routes, empty capture, and provider-like envelope keys are rejected.
+- Unsafe output is rejected or downgraded before normal rendering.
+- Fallback preserves typed capture and keeps deterministic local behavior available.
+- Provider and network call states remain `not-called`.
+
+## What Remains Parked
+
+- Live provider integration.
+- Provider SDKs and API keys.
+- Backend/Firebase implementation changes.
+- External actions.
+- Hidden reads or hidden writes.
+- Real memory.
+- Saved plans, reminders, and follow-ups.
+
+## Blunt Read
+
+Stage 24 is ready for a provider-readiness gate, not live AI. The next stage should decide provider criteria, secret handling, dry-run rules, and human approval requirements before any real model call exists.
