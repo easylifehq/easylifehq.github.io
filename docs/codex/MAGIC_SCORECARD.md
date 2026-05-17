@@ -2,6 +2,24 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 23 Server Architecture Decision Packet
+
+- Task: Choose the safest real server architecture for the future EasyLife AI gateway after Stage 22 mock gateway proof.
+- Result: Stage 23 server architecture decision packet was created.
+- Magic signal: firebase-function-gateway-before-live-ai
+- Decision evidence: `docs/codex/EASYLIFE_STAGE_23_SERVER_ARCHITECTURE_DECISION.md`.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 23 docs/proof tasks.
+- Recommended architecture evidence: a narrow Firebase Cloud Function / HTTPS callable gateway is recommended for the first real Inbox typed-capture suggestion gateway.
+- Rejection evidence: static-only provider calls are rejected because provider secrets cannot be protected in frontend code or browser-visible config.
+- Mock evidence: the Stage 22 local/dev mock adapter remains valid for development, proof, UI review, and fallback, but not for production provider secrets.
+- Fallback architecture evidence: generic serverless remains an acceptable fallback if Firebase Functions is not used; a separate minimal API service is parked as heavier future infrastructure.
+- Secret evidence: provider secrets must stay server-side only and remain forbidden in frontend source, Vite public env vars, docs, fixtures, browser storage, logs, screenshots, generated assets, or commits.
+- Validation evidence: the server boundary must validate Stage 20 context packets, prompt ID `intake-suggestion`, route/surface, source types, rate/spend state, and kill switch before provider calls; Stage 20 output validation gates any usable response.
+- Privacy evidence: metadata-only logging remains the default; raw typed capture, note bodies, task notes, contact names/place labels, provider raw responses, full prompts with user content, auth/session payloads, full context packets, and secrets remain forbidden.
+- Rollback evidence: disabled-by-default posture, kill switch, local fallback, no queued replay, and no background retries are required.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live model call, provider SDK, API key, backend implementation, Firebase config change, dependency, package file, deploy config, generated output, secret, external action, hidden read, hidden write, real memory, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 22 Mock Gateway Proof Packet
 
 - Task: Prove whether the no-provider mock gateway is ready before choosing real server architecture.

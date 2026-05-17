@@ -3,7 +3,7 @@
 Current Phase: stage-23-server-architecture-decision
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Decide the real server architecture for a future AI gateway without adding live model calls yet.
+Primary Action: Execute the Stage 23 server architecture decision path without adding live model calls yet.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
@@ -11,13 +11,19 @@ Complexity Budget: Stage 23 may choose server runtime, endpoint boundary, secret
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_STAGE_23_SERVER_ARCHITECTURE_DECISION
-Evidence Required: Stage 22 mock gateway proof packet, build proof, Inbox route proof, accepted/rejected/downgraded/fallback/no-AI fixture proof, NIGHTLY_REPORT, and MAGIC_SCORECARD.
+Parking State: STAGE_23_PACKET_READY
+Evidence Required: Stage 23 architecture decision packet, exactly five Stage 23 tasks, Stage 22 mock gateway proof packet, build proof, NIGHTLY_REPORT, and MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Create a Stage 23 server architecture decision packet before any live provider integration.
+Next Phase Criteria: Complete Stage 23 architecture ADR, gateway boundary decision, threat model, rollout/fallback decision, and proof packet before any server adapter implementation.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 22 mock gateway proof completed.
+Updated At: 2026-05-17 - Stage 23 server architecture decision packet created.
+
+Stage 23 decision result: STAGE_23_PACKET_READY. The recommended first real AI gateway architecture is a narrow Firebase Cloud Function / HTTPS callable gateway for Inbox typed-capture suggestion only. Static-only provider calls are rejected because frontend API keys cannot be protected. The Stage 22 local/mock adapter remains approved for development, proof, and fallback only. Generic serverless is an acceptable fallback, while a separate minimal API service is parked until the product needs heavier isolation or operations. This packet does not approve live model calls, provider SDKs, API keys, backend implementation, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, or saved-object expansion.
+
+Stage 23 source: docs/codex/EASYLIFE_STAGE_23_SERVER_ARCHITECTURE_DECISION.md
+
+Prepared Stage 23 queue: docs/codex/NEXT_5_TASKS.md contains exactly five server architecture decision tasks.
 
 Stage 22 proof result: READY_FOR_STAGE_23_SERVER_ARCHITECTURE_DECISION. The no-provider mock gateway is narrow enough to choose the real server architecture next. It uses Stage 20 context packets, the `intake-suggestion` prompt ID, Stage 20 output validation, accepted/rejected/downgraded fixture proof, stable timeout/fallback/no-AI states, and visible Inbox proof. This does not approve live model calls, provider SDKs, API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, real memory, hidden reads, hidden writes, saved-object expansion, or real personal data.
 

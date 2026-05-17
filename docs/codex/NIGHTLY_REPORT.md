@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 23 Server Architecture Decision Packet
+
+- Task attempted: Choose the safest real server architecture for the future EasyLife AI gateway after Stage 22 mock gateway proof.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_23_SERVER_ARCHITECTURE_DECISION.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Recommended architecture: narrow Firebase Cloud Function / HTTPS callable gateway for the first real AI gateway behavior.
+- First behavior preserved: Inbox typed-capture suggestion only.
+- Architecture comparison: static-only provider calls rejected; local/dev mock adapter kept for proof and fallback; generic serverless accepted as fallback; Firebase/Cloud Function recommended; separate minimal API service parked.
+- Secret boundary: provider keys must remain server-side only and are forbidden in frontend source, public env vars, docs, fixtures, browser storage, generated assets, logs, screenshots, or commits.
+- Validation boundary: server validates request envelope, prompt ID, route/surface, context packet, rate/spend state, and kill switch before any provider call; Stage 20 output validator gates the response before usable output returns.
+- Privacy/logging boundary: metadata-only logging by default; raw typed capture, note bodies, task notes, contact names/place labels, provider raw responses, prompts with user content, auth/session payloads, full context packets, and secrets remain forbidden.
+- Rollback/fallback boundary: disabled-by-default posture, kill switch, conservative rate/spend controls, no automatic background retries, and deterministic local fallback.
+- Queue update: `docs/codex/NEXT_5_TASKS.md` now contains exactly five Stage 23 docs/proof tasks.
+- Boundary preserved: no live model calls, provider SDKs, API keys, backend implementation, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, or saved-object expansion were added.
+
 ## 2026-05-17 - Stage 22 Mock Gateway Proof Packet
 
 - Task attempted: Prove whether the no-provider mock gateway is ready before choosing real server architecture.
