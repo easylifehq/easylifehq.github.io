@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 26 Task 2 Server-Shaped Live Dry-Run Gateway Seam
+
+- Task attempted: Create a disabled-by-default live dry-run gateway seam for Inbox typed-capture suggestions.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveDryRunTypes.ts`
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveDryRun.ts`
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveDryRun.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Gateway seam added: Stage 26 live dry-run request/response/fallback/metadata types and `runServerGatewayLiveDryRun`.
+- Disabled-by-default proof: the seam falls back with `ai-disabled` unless explicitly enabled.
+- Route proof: live dry-run validation allows only `/app/easylist/add?demo=1`.
+- Prompt proof: live dry-run validation allows only `intake-suggestion`.
+- Synthetic/demo proof: live dry-run validation requires `Synthetic typed capture` and a `demo-fixture` source.
+- Browser safety proof: browser runtime returns `server-only-required` and does not call the injected provider executor.
+- Secret boundary proof: response metadata exposes only the placeholder `SERVER_AI_PROVIDER_API_KEY`, never a real key.
+- Provider seam proof: a server-only injected executor can produce synthetic output, but every result still passes `validateAssistantModelOutput` before rendering.
+- Boundary preserved: no provider SDKs, frontend API keys, actual secrets, real user data, hidden reads, hidden writes, saves, sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, deploy config, package/dependency changes, generated output, or real provider implementation were added.
+
 ## 2026-05-17 - Stage 26 Task 1 Provider And Server-Secret Confirmation
 
 - Task attempted: Create the final confirmation note before any live provider implementation begins.

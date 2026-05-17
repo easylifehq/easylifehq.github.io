@@ -2,6 +2,22 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 26 Task 2 Server-Shaped Live Dry-Run Gateway Seam
+
+- Task: Create a disabled-by-default live dry-run gateway seam for Inbox typed-capture suggestions.
+- Result: Stage 26 server-shaped live dry-run seam and proof fixtures were added.
+- Magic signal: server-only-seam-before-live-provider
+- Type contract evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveDryRunTypes.ts`.
+- Runtime evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveDryRun.ts`.
+- Proof fixture evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveDryRun.test.ts`.
+- Request proof: accepts only `/app/easylist/add?demo=1`, `intake-suggestion`, Stage 20 context packets, synthetic typed capture, and demo fixture sources.
+- Disabled proof: gateway is disabled by default and returns local fallback before any provider executor can run.
+- Browser proof: browser runtime returns `server-only-required`, never calls the provider executor, and reports `directBrowserProviderRequest: false`.
+- Secret proof: the only visible secret reference is placeholder `SERVER_AI_PROVIDER_API_KEY`; no actual key or provider credential is present.
+- Validation proof: injected server-only output must pass `validateAssistantModelOutput` before returning as renderable output.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider SDK, frontend API key, actual secret, real user data, hidden read, hidden write, save, send, schedule, sync, notification, calendar change, real memory, geocoding, device location, external action, deploy config, package/dependency change, generated output, or real provider implementation was added.
+
 ## 2026-05-17 - Stage 26 Task 1 Provider And Server-Secret Confirmation
 
 - Task: Confirm provider placeholder, server-side secret placeholder, spend/rate limits, logging, fallback, prompt, route, and rollback before implementation.
