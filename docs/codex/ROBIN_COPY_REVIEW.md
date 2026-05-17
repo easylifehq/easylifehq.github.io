@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+SOURCE_DESTINATION_GUARD_READY
+
+## Stage 28 Task 3 Source/Destination Consistency Guard - 2026-05-17
+
+Verdict: `SOURCE_DESTINATION_GUARD_READY`.
+
+Inbox now keeps source and destination language explicit enough for alpha review. Suggestions show where they came from, what state they are in, and where they can go before any save path is available.
+
+Copy proof:
+- Visible suggestion rows use `Source`, `State`, and `Destination`.
+- Ambiguous destinations are routed to `Needs review` or rejected.
+- Duplicate or stale suggestions are held for review instead of presented as current work.
+- Broad save wording is downgraded before it can sound like a real save action.
+- `Nothing saved or sent` remains visible in the gateway/dry-run lane.
+
+Copy guard:
+Keep destination labels concrete: `Inbox task draft`, `Notes context draft`, `Plan preview only`, `Reminder preview only`, `Follow-up preview only`, `Hold for review`, or `Local fallback only`. Do not use vague save labels like `save to EasyLife`, `use this`, `assistant saved item`, or `wherever it belongs`.
+
+---
+
+## Verdict
 READY_FOR_STAGE_28_ASSISTANT_RELIABILITY
 
 ## Stage 27 Private Alpha AI Assistant Copy Proof - 2026-05-17

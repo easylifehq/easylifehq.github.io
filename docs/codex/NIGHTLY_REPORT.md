@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 28 Task 3 Source/Destination Consistency Guard
+
+- Task attempted: Make every Inbox assistant suggestion clearly say where it came from and where it can go.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/modelContracts/modelOutputValidator.ts`
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayReliability.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Source label proof: Inbox already renders `SourceDestinationRow` across local, mock gateway, server-adapter mock, live dry-run, fallback, duplicate-held, draft preview, task handoff, and reminder/follow-up preview states.
+- Destination label proof: every visible assistant lane has an explicit destination such as `Inbox task draft`, `Notes context draft`, `Hold for review`, `Local fallback only`, `Deterministic local draft`, or a final-confirmation task list destination.
+- Validator guard: model output now downgrades to `needs-review` when intent and destination do not match, while unknown or missing destination labels reject through the existing schema.
+- Ambiguous save guard: broad save wording such as `save it wherever EasyLife thinks it should go` now downgrades instead of rendering as a clean save candidate.
+- Fixture proof: reliability fixtures now cover wrong destination downgrade, unknown destination rejection, missing destination rejection, and ambiguous save-language downgrade.
+- Inspection result: `/app/easylist/add?demo=1` returned HTTP 200 on the local review server; the in-app Browser pane was unavailable, so verification used the local dev route response plus built asset string checks for `Source`, `Destination`, `Capture #`, `Needs review`, and `Nothing saved or sent`.
+- Boundary preserved: no new saved destination, backend, deploy change, secret, provider behavior, external action, hidden write, real memory, notification, calendar sync, geocoding, package change, dependency, or generated output was added.
+
 ## 2026-05-17 - Stage 28 Task 2 Duplicate And Stale Suggestion Guard
 
 - Task attempted: Prevent the Inbox assistant lane from showing confusing duplicate or stale suggestions.

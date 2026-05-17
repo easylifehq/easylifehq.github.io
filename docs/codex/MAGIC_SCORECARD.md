@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 28 Task 3 Source/Destination Consistency Guard
+
+- Task: Make every assistant suggestion clearly say where it came from and where it can go.
+- Result: Inbox source/destination labels remain visible, and unsafe model-shaped destination ambiguity is now downgraded or rejected before display.
+- Magic signal: no-ambiguous-save-lane
+- UI evidence: `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx` already renders `SourceDestinationRow` for active suggestions, fallbacks, duplicate-held output, local deterministic output, draft previews, task handoff, and preview-only reminder/follow-up states.
+- Validator evidence: `app-vNext/src/features/assistant/modelContracts/modelOutputValidator.ts` now maps expected destinations by intent and downgrades intent/destination mismatches to `Needs review`.
+- Rejection evidence: unknown and missing destination labels reject through the known destination schema.
+- Ambiguous copy evidence: broad action wording such as `save this`, `save it wherever`, or `use this` downgrades instead of being offered as a clean save candidate.
+- Fixture evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayReliability.test.ts` covers wrong destination downgrade, unknown destination rejection, missing destination rejection, and ambiguous save-language downgrade.
+- Inspection evidence: `/app/easylist/add?demo=1` returned HTTP 200 locally; built asset checks found `Source`, `Destination`, `Capture #`, `Needs review`, and `Nothing saved or sent`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no new saved destination, backend, deploy change, secret, provider behavior, external action, hidden write, real memory, notification, calendar sync, geocoding, package change, dependency, or generated output was added.
+
 ## 2026-05-17 - Stage 28 Task 2 Duplicate And Stale Suggestion Guard
 
 - Task: Prevent confusing duplicate or stale suggestions in the Inbox assistant lane.

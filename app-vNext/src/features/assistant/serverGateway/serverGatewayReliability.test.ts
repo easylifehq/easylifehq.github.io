@@ -81,19 +81,6 @@ function hasOverconfidentLanguage(output: AssistantModelSuggestionOutput): boole
   );
 }
 
-function hasWrongDestination(output: AssistantModelSuggestionOutput): boolean {
-  const expectedDestinationByIntent = {
-    task: "Inbox task draft",
-    note: "Notes context draft",
-    plan: "Plan preview only",
-    reminder: "Reminder preview only",
-    "follow-up": "Follow-up preview only",
-    unsure: "Needs review",
-  } as const;
-
-  return output.destinationLabel !== expectedDestinationByIntent[output.intent];
-}
-
 function duplicateSignature(output: AssistantModelSuggestionOutput): string {
   return JSON.stringify({
     promptId: output.promptId,
@@ -105,10 +92,6 @@ function duplicateSignature(output: AssistantModelSuggestionOutput): string {
 }
 
 function reliabilityFallbackReason(output: AssistantModelSuggestionOutput): string | undefined {
-  if (hasWrongDestination(output)) {
-    return "wrong-destination";
-  }
-
   if (hasOverconfidentLanguage(output)) {
     return "overconfident-language";
   }
@@ -245,7 +228,7 @@ export const serverGatewayReliabilityEdgeCaseFixtures: ReliabilityFixture[] = [
     expectedOutcome: "rejected",
   },
   {
-    name: "wrong destination falls back",
+    name: "wrong destination downgrades to needs-review",
     value: outputFactory({
       intent: "note",
       destinationLabel: "Inbox task draft",
@@ -258,7 +241,38 @@ export const serverGatewayReliabilityEdgeCaseFixtures: ReliabilityFixture[] = [
         },
       ],
     }),
-    expectedOutcome: "fallback",
+    expectedOutcome: "downgraded",
+  },
+  {
+    name: "unknown destination rejects",
+    value: {
+      ...outputFactory(),
+      destinationLabel: "Assistant saved item",
+    },
+    expectedOutcome: "rejected",
+  },
+  {
+    name: "missing destination rejects",
+    value: {
+      ...outputFactory(),
+      destinationLabel: undefined,
+    },
+    expectedOutcome: "rejected",
+  },
+  {
+    name: "ambiguous save language downgrades",
+    value: outputFactory({
+      title: "Ambiguous save claim",
+      summary: "Use this and save it wherever EasyLife thinks it should go.",
+      fields: [
+        {
+          label: "Task title",
+          value: "Use this and save it wherever EasyLife thinks it should go.",
+          editable: true,
+        },
+      ],
+    }),
+    expectedOutcome: "downgraded",
   },
   {
     name: "overconfident language falls back",

@@ -48,10 +48,22 @@ const downgradeOnlyPatterns = [
   /will save/i,
   /ready to save/i,
   /saved to/i,
+  /save (this|it|everything|anywhere|wherever)/i,
+  /save (to|into) (the )?(app|assistant|EasyLife)/i,
+  /use this/i,
   /scheduled/i,
   /remembered/i,
   /sent/i,
 ];
+
+const expectedDestinationByIntent: Record<AssistantIntentType, AssistantModelDestinationLabel> = {
+  task: "Inbox task draft",
+  note: "Notes context draft",
+  plan: "Plan preview only",
+  reminder: "Reminder preview only",
+  "follow-up": "Follow-up preview only",
+  unsure: "Needs review",
+};
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value && typeof value === "object" && !Array.isArray(value));
@@ -77,6 +89,11 @@ function hasForbiddenClaim(value: unknown): boolean {
 function hasDowngradeClaim(value: unknown): boolean {
   const outputText = textFromOutput(value);
   return downgradeOnlyPatterns.some((pattern) => pattern.test(outputText));
+}
+
+function hasDestinationMismatch(value: AssistantModelSuggestionOutput): boolean {
+  const expectedDestination = expectedDestinationByIntent[value.intent];
+  return value.destinationLabel !== expectedDestination && value.destinationLabel !== "Needs review";
 }
 
 function validateSources(value: unknown, errors: string[]) {
@@ -162,7 +179,7 @@ function downgradeOutput(value: AssistantModelSuggestionOutput): AssistantModelS
     },
     warnings: [
       ...value.warnings,
-      "Downgraded because output wording implied an action or saved state.",
+      "Downgraded because output wording implied an action, saved state, or ambiguous destination.",
     ],
   };
 }
@@ -248,8 +265,20 @@ export function validateAssistantModelOutput(value: unknown): AssistantModelOutp
 
   const typedOutput = value as AssistantModelSuggestionOutput;
 
+  if (hasDestinationMismatch(typedOutput)) {
+    warnings.push("Model output was downgraded to needs-review because intent and destination did not match.");
+
+    return {
+      valid: true,
+      safetyState: "downgraded",
+      errors,
+      warnings,
+      output: downgradeOutput(typedOutput),
+    };
+  }
+
   if (hasDowngradeClaim(value)) {
-    warnings.push("Model output was downgraded to needs-review because wording was action-like.");
+    warnings.push("Model output was downgraded to needs-review because wording was action-like or ambiguous.");
 
     return {
       valid: true,
