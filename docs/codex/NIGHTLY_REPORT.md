@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 30 Task 2 Provider Dry-Run Request Sanitizer
+
+- Task attempted: Create a sanitizer proving only approved synthetic/private-alpha typed capture can become a provider request.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/providerRequestSanitizer.ts`
+  - `app-vNext/src/features/assistant/serverGateway/providerRequestSanitizer.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Sanitizer added: `stage-30-provider-request-sanitizer-v1`.
+- Accepted inputs: Inbox typed-capture suggestion requests at `/app/easylist/add?demo=1` with prompt `intake-suggestion`, using either `Synthetic typed capture` plus demo fixture or `Private alpha typed capture` without demo fixture.
+- Sanitized summary: preserves prompt id, route, output schema, bounded source labels, typed-capture text, input class, character/word counts, minimum-needed read policy, suggestions-only confirmation policy, and removed-context notes.
+- Rejected classes: wrong route, unsupported prompt, generic/unapproved typed-capture label, provider key envelope, `VITE_` provider key envelope, contact source, exact street address, email/contact detail capture, note body context, calendar contents, broad task list, and full context packet.
+- Secret handling proof: sanitizer errors report pattern/key classes only; the proof fixture confirms secret-like values are not echoed in errors.
+- Boundary preserved: TypeScript/local validation only; no provider call, secret, provider SDK, deploy change, dependency/package change, backend config, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 30 Task 1 Live AI Environment Contract
 
 - Task attempted: Define the disabled-by-default environment contract for a future live AI provider.

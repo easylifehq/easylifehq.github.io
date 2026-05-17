@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 30 Task 2 Provider Dry-Run Request Sanitizer
+
+- Task: Create a sanitizer proving only approved synthetic/private-alpha typed capture can become a provider request.
+- Result: Added Stage 30 provider dry-run request sanitizer and TypeScript proof fixtures.
+- Magic signal: provider-request-is-minimum-needed-before-live-ai
+- Sanitizer evidence: `app-vNext/src/features/assistant/serverGateway/providerRequestSanitizer.ts`.
+- Proof evidence: `app-vNext/src/features/assistant/serverGateway/providerRequestSanitizer.test.ts`.
+- Accepted-lane evidence: only `/app/easylist/add?demo=1`, prompt `intake-suggestion`, Inbox typed capture, and bounded source labels can produce a sanitized request summary.
+- Synthetic/private-alpha evidence: proof accepts `Synthetic typed capture` with demo fixture and `Private alpha typed capture` without demo fixture.
+- Rejection evidence: proof rejects wrong route, unsupported prompt, unapproved typed-capture label, provider key envelope, `VITE_` key envelope, contact source, exact street address, email/contact detail capture, note body context, calendar contents, broad task list, and full context packet.
+- Redaction evidence: secret-like values are not echoed in sanitizer errors.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider call, secret, provider SDK, deploy change, dependency/package change, backend config, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 30 Task 1 Live AI Environment Contract
 
 - Task: Define the disabled-by-default environment contract for a future live AI provider.
