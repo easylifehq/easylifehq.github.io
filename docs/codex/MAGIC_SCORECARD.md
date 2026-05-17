@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 21 Task 1 Server AI Gateway Contract
+
+- Task: Define the exact contract for the first server AI gateway endpoint.
+- Result: Gateway contract was created.
+- Magic signal: gateway-contract-is-narrow-before-ai
+- Contract evidence: `docs/codex/EASYLIFE_STAGE_21_GATEWAY_CONTRACT.md`.
+- Endpoint evidence: planned endpoint is `POST /api/assistant/intake-suggestion`.
+- Prompt evidence: only `intake-suggestion` is allowed.
+- Request evidence: `stage-21-gateway-request-v1` must wrap `stage-20-context-v1` and may include only current route, typed capture, and optional demo fixture.
+- Response evidence: `stage-21-gateway-response-v1` returns only Stage 20 validated model output or stable fallback.
+- Error evidence: invalid request, unsupported prompt, forbidden context, too large, rate-limited, AI disabled, provider timeout/error, validation rejected, and server error are defined.
+- Fallback evidence: fallback preserves typed capture, local classifier, local draft preview, manual task save, and manual note/context save.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider SDK, API key, backend service, Firebase config change, dependency, package file, deploy config, generated output, secret, live model call, external action, hidden read, hidden write, or real personal data was added.
+
 ## 2026-05-17 - Stage 21 Server AI Gateway Planning Packet
 
 - Task: Plan the server-only gateway path for the first model-backed assistant behavior.

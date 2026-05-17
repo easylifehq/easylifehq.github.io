@@ -1,5 +1,18 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 21 Task 1 Server AI Gateway Contract
+
+- Task attempted: Define the exact server gateway endpoint contract for the first model-backed assistant behavior.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Contract created: `docs/codex/EASYLIFE_STAGE_21_GATEWAY_CONTRACT.md`.
+- Future endpoint named: `POST /api/assistant/intake-suggestion`.
+- Exact allowed prompt ID: `intake-suggestion`.
+- First allowed behavior: Inbox typed-capture suggestion only.
+- Request envelope: `stage-21-gateway-request-v1` wrapping a `stage-20-context-v1` packet with current-route and typed-capture sources only, plus optional demo fixture.
+- Response envelope: `stage-21-gateway-response-v1` returning Stage 20 validated output or a stable fallback state.
+- Error/fallback states defined: invalid request, unsupported prompt, forbidden context, too large, rate-limited, AI disabled, provider timeout/error, validation rejected, and server error.
+- Boundary preserved: no provider SDKs, API keys, backend services, Firebase config, dependencies, package files, deploy config, generated output, secrets, live model calls, external actions, hidden reads, hidden writes, or real personal data were added.
+
 ## 2026-05-17 - Stage 21 Server AI Gateway Planning Packet
 
 - Task attempted: Plan the safest server-only path for the first real model-backed EasyLife assistant behavior.
