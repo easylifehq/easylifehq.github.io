@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 20 Task 4 AI-Unavailable Fallback
+
+- Task: Add local AI-unavailable fallback behavior without blocking core manual flows.
+- Result: AI availability contract, Today fallback, and Inbox fallback were added.
+- Magic signal: ai-off-still-usable
+- Contract evidence: `app-vNext/src/features/assistant/aiAvailability.ts` exports `assistantAiAvailability`, `assistantAiFallbackCopy`, `isLiveAssistantAiAvailable`, and `getAssistantAiFallbackCopy`.
+- Today evidence: `/app/hq?demo=1` rendered `Local mode` and `Local mode. Capture, Today review, task saves, and note saves still work.`
+- Inbox evidence: `/app/easylist/add?demo=1` rendered `Local mode`, `Live AI off`, `Local rules are active; saves still need your final confirmation.`, and the existing classifier input.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live model call, provider SDK, backend/auth/Firebase change, dependency, package file, deploy config, generated output, secret, external action, hidden write, manual save behavior change, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 20 Task 3 Model Output Validation Contract
 
 - Task: Create deterministic validation for future model output before rendering or save offers.

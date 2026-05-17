@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 20 Task 4 AI-Unavailable Fallback
+
+- Task attempted: Make EasyLife remain useful when AI is unavailable without blocking capture, task save, note save, or Today review.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/aiAvailability.ts`
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Contract created: `assistantAiAvailability` with `status: unavailable`, `badge: Local mode`, and deterministic local mode copy.
+- Today fallback: `/app/hq?demo=1` rendered `Local mode` and `Local mode. Capture, Today review, task saves, and note saves still work.`
+- Inbox fallback: `/app/easylist/add?demo=1` rendered `Local mode`, `Live AI off`, `Local rules are active; saves still need your final confirmation.`, and the existing classifier input.
+- Boundary preserved: no live model calls, provider SDKs, backend/auth/Firebase changes, dependencies, package files, deploy config, generated output, secrets, external actions, hidden writes, or saved-object expansion were added.
+
 ## 2026-05-17 - Stage 20 Task 3 Model Output Validation Contract
 
 - Task attempted: Create a deterministic validator so future AI output cannot be rendered or offered for save unless it matches known safe assistant shapes.

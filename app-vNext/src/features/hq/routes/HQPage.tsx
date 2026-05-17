@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { PageSection } from "@/components/ui/PageSection";
+import { assistantAiAvailability, getAssistantAiFallbackCopy } from "@/features/assistant/aiAvailability";
 import { assistantCommandHintRow } from "@/features/hq/assistantCommandHints";
 import { getLocalAssistantContextRead } from "@/features/hq/assistantPreview";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
@@ -235,6 +236,7 @@ function HQPageContent() {
       : null,
   ].filter((item): item is { label: string; title: string; detail: string; to: string } => Boolean(item)).slice(0, 3);
   const assistantRead = contextLead;
+  const todayAiFallbackCopy = getAssistantAiFallbackCopy("today");
 
   function openNaturalCapture() {
     window.dispatchEvent(new Event("easylife:open-capture"));
@@ -251,6 +253,7 @@ function HQPageContent() {
               <p>Assistant read</p>
               <h1 id="hq-title">What needs attention now?</h1>
             </div>
+            <span className="assistant-availability-pill">{assistantAiAvailability.badge}</span>
           </div>
           <strong>{assistantRead}</strong>
           <div className="hq-today-summary" aria-label="Today summary">
@@ -279,7 +282,7 @@ function HQPageContent() {
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
             <span>Command</span>
             <strong>{assistantCommandHintRow}</strong>
-            <small>Drafts first. You approve saves.</small>
+            <small>{todayAiFallbackCopy}</small>
             <em>Open</em>
           </button>
           <details className="hq-context-stack">

@@ -1,6 +1,25 @@
 # Robin Copy Review
 
 ## Verdict
+AI_UNAVAILABLE_COPY_READY
+
+## Stage 20 Task 4 AI-Unavailable Fallback Copy - 2026-05-17
+
+Verdict: `AI_UNAVAILABLE_COPY_READY`.
+
+The fallback copy avoids pretending live AI exists. It uses direct state labels: `Local mode`, `Live AI off`, and `Local rules are active; saves still need your final confirmation.`
+
+Copy proof:
+- Today says `Local mode. Capture, Today review, task saves, and note saves still work.`
+- Inbox says `Local rules are active; saves still need your final confirmation.`
+- The copy does not imply model calls, hidden reads, automatic saves, email/calendar sync, notifications, real memory, geocoding, or external actions.
+
+Copy risk:
+- This is still deterministic local assistant behavior, not a live AI assistant. That is the correct boundary for Stage 20.
+
+---
+
+## Verdict
 STAGE_20_PROMPT_REGISTRY_COPY_READY
 
 ## Stage 20 Task 2 Assistant Prompt Registry Contract - 2026-05-17

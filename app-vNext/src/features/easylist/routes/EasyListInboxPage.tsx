@@ -1,4 +1,5 @@
 import { LoadingState } from "@/components/feedback/LoadingState";
+import { assistantAiAvailability, getAssistantAiFallbackCopy } from "@/features/assistant/aiAvailability";
 import { classifyAssistantIntent } from "@/features/assistant/intentClassifier";
 import {
   buildLocalDraftComparisonOptions,
@@ -126,6 +127,7 @@ export function EasyListInboxPage() {
       : assistantSuggestion.intent;
   const suggestionSourceLabel = isDemoReviewMode ? "Typed demo capture" : "Typed capture";
   const suggestionDestination = DESTINATION_BY_DRAFT_TYPE[activeDraftType] || "Hold for review";
+  const inboxAiFallbackCopy = getAssistantAiFallbackCopy("inbox");
   const approvedLocalDraft = useMemo(
     () =>
       visibleApprovalState === "approved"
@@ -333,7 +335,11 @@ export function EasyListInboxPage() {
               />
             </label>
             <div className="assistant-trust-chip-row" aria-label="Assistant save boundaries">
-              {[...INBOX_TRUST_LABELS, ...(isDemoReviewMode ? ["Demo"] : [])].map((label) => (
+              {[
+                ...INBOX_TRUST_LABELS,
+                assistantAiAvailability.badge,
+                ...(isDemoReviewMode ? ["Demo"] : []),
+              ].map((label) => (
                 <span key={label}>{label}</span>
               ))}
             </div>
@@ -349,6 +355,10 @@ export function EasyListInboxPage() {
               state={`${INBOX_PREVIEW_STATE_LABELS[visibleApprovalState]} suggestion`}
               destination={suggestionDestination}
             />
+            <p className="assistant-ai-fallback-copy">
+              <span>{assistantAiAvailability.label}</span>
+              {inboxAiFallbackCopy}
+            </p>
             <div className="assistant-suggestion-main">
               <div>
                 <p id="assistant-intent-preview-title">Suggested next shape</p>

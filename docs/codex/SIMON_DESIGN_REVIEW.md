@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+AI_UNAVAILABLE_FALLBACK_READY
+
+## Stage 20 Task 4 AI-Unavailable Fallback - 2026-05-17
+
+Verdict: `AI_UNAVAILABLE_FALLBACK_READY`.
+
+Today and Inbox stay usable when live AI is unavailable. The fallback is intentionally small: Today shows a compact `Local mode` badge beside the assistant read and a short command-row note that capture, Today review, task saves, and note saves still work. Inbox shows `Local mode` in the trust chips and a compact `Live AI off` line inside the suggestion card.
+
+Rendered proof:
+- `/app/hq?demo=1` rendered `Local mode` and `Local mode. Capture, Today review, task saves, and note saves still work.`
+- `/app/easylist/add?demo=1` rendered `Local mode`, `Live AI off`, `Local rules are active; saves still need your final confirmation.`, and the classifier input.
+
+Design read:
+- The fallback does not dominate Today's first viewport.
+- The deterministic local classifier/draft flow remains visible in Inbox.
+- Manual task and note save paths are not blocked.
+
+---
+
+## Verdict
 READY_FOR_STAGE_20
 
 ## Stage 19 Contextual Assistant Visual/Product Proof - 2026-05-17

@@ -5002,11 +5002,30 @@ textarea::placeholder {
 }
 
 .assistant-intent-input p,
-.assistant-suggestion-warning {
+.assistant-suggestion-warning,
+.assistant-ai-fallback-copy {
   margin: 0;
   color: var(--ui-text-secondary, var(--shell-muted));
   font-size: 0.82rem;
   line-height: 1.42;
+}
+
+.assistant-ai-fallback-copy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.34rem 0.5rem;
+  align-items: center;
+  padding: 0.45rem 0.55rem;
+  border: 1px dashed color-mix(in srgb, var(--app-accent, var(--shell-accent)) 22%, var(--ui-border-subtle, var(--shell-card-border)));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 6%, transparent);
+}
+
+.assistant-ai-fallback-copy span {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.7rem;
+  font-weight: 850;
+  text-transform: uppercase;
 }
 
 .assistant-trust-chip-row {
@@ -7642,6 +7661,16 @@ button.calendar-detail-card:disabled {
   font-weight: 850;
   line-height: 1;
   text-transform: uppercase;
+}
+
+.assistant-availability-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0.18rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 22%, var(--ui-border-subtle) 78%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 7%, transparent);
 }
 
 .hq-today-summary {
