@@ -8783,3 +8783,23 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Simon improvement score: SCORE: 7; DIRECTION: improved; ACTIVE_PACK: AI Personal Assistant Proof Repair; REASON: the review path is reliable and the auth entry now matches the assistant model, so Stage 9 visual polish can start with remaining route chrome/copy cleanup.
 - Follow-up: Stage 9 visual polish, shell chrome first.
+
+## Stage 24 Task 4 Check - 2026-05-17
+
+- Task: Inbox server-adapter preview toggle.
+- Result: Passed
+- Magic signal: server-adapter-provenance-visible
+- Active work pack: Stage 24 No-Provider Server Adapter
+- Task class: feature
+- Task risk: low
+- Changed files: 5
+- Materiality signal: impact=visible, surface-files=2, docs-files=3, source-lines=focused, css-only=False
+- Added affordance: one compact source selector inside the existing Inbox gateway panel for Local rules, Mock gateway, and Server adapter mock.
+- Safety proof: the default `Server adapter mock` label is paired with `No provider`, `No live AI`, no network/provider call copy, and no save behavior change.
+- Acceptance evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route inspected: /app/easylist/add?demo=1 with local dev server plus headless DOM inspection.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: Stage 24 proof packet before Stage 25 provider-readiness planning.

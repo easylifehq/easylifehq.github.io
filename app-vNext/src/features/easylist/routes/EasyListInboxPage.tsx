@@ -17,6 +17,8 @@ import {
   type AssistantTaskRowHandoffPreview,
   type AssistantLocalDraftType,
 } from "@/features/assistant/localDraftTypes";
+import { runServerGatewayMockHandler } from "@/features/assistant/serverGateway/serverGatewayMockHandler";
+import { createServerGatewayTypedCaptureRequest } from "@/features/assistant/serverGateway/serverGatewayTypes";
 import { buildTaskDraft, type TaskRowDraft } from "@/features/easylist/components/TaskComposer";
 import { type AssistantApprovalState } from "@/features/assistant/intentTypes";
 import { TaskComposer } from "@/features/easylist/components/TaskComposer";
@@ -40,12 +42,22 @@ const INBOX_PREVIEW_STATE_LABELS: Record<AssistantApprovalState, string> = {
 };
 const INBOX_TRUST_LABELS = ["Draft", "Preview", "Task save only", "Note save only"];
 type MockGatewayMode = "normal" | MockGatewayForcedFallbackReason;
+type GatewayPreviewSource = "local-rules" | "mock-gateway" | "server-adapter-mock";
 const MOCK_GATEWAY_MODE_OPTIONS: Array<{ value: MockGatewayMode; label: string }> = [
   { value: "normal", label: "Mock output" },
   { value: "ai-disabled", label: "AI disabled" },
   { value: "timeout", label: "Timeout" },
   { value: "rate-limit", label: "Rate limit" },
   { value: "circuit-open", label: "Circuit open" },
+];
+const GATEWAY_PREVIEW_SOURCE_OPTIONS: Array<{
+  value: GatewayPreviewSource;
+  label: string;
+  description: string;
+}> = [
+  { value: "local-rules", label: "Local rules", description: "Deterministic draft" },
+  { value: "mock-gateway", label: "Mock gateway", description: "No provider" },
+  { value: "server-adapter-mock", label: "Server adapter mock", description: "No live AI" },
 ];
 const DESTINATION_BY_DRAFT_TYPE: Record<AssistantLocalDraftType, string> = {
   task: "Inbox task save lane",
@@ -87,6 +99,8 @@ export function EasyListInboxPage() {
   const { tasks, isLoading, error, addTask } = useEasyList();
   const [listName, setListName] = useState("Main");
   const [assistantCaptureText, setAssistantCaptureText] = useState("Reply to Maya about Friday plans");
+  const [gatewayPreviewSource, setGatewayPreviewSource] =
+    useState<GatewayPreviewSource>("server-adapter-mock");
   const [mockGatewayMode, setMockGatewayMode] = useState<MockGatewayMode>("normal");
   const [previewApprovalState, setPreviewApprovalState] = useState<AssistantApprovalState>("suggested");
   const [selectedDraftType, setSelectedDraftType] = useState<AssistantLocalDraftType>("follow-up");
@@ -160,6 +174,39 @@ export function EasyListInboxPage() {
     mockGatewayResult.status === "mock-output" ? mockGatewayResult.response.output : null;
   const mockGatewaySafetyState =
     mockGatewayResult.status === "mock-output" ? mockGatewayResult.response.safetyState : null;
+  const serverGatewayRequest = useMemo(
+    () =>
+      createServerGatewayTypedCaptureRequest({
+        requestId: `inbox-server-adapter-${assistantSuggestion.id}`,
+        typedCaptureText: assistantCaptureText,
+        includeDemoFixture: isDemoReviewMode,
+      }),
+    [assistantCaptureText, assistantSuggestion.id, isDemoReviewMode]
+  );
+  const serverGatewayResult = useMemo(
+    () =>
+      runServerGatewayMockHandler(
+        serverGatewayRequest,
+        mockGatewayMode === "normal" ? {} : { forceFallbackReason: mockGatewayMode }
+      ),
+    [mockGatewayMode, serverGatewayRequest]
+  );
+  const serverGatewayOutput = serverGatewayResult.status === "ok" ? serverGatewayResult.output : null;
+  const activeGatewayOutput =
+    gatewayPreviewSource === "server-adapter-mock"
+      ? serverGatewayOutput
+      : gatewayPreviewSource === "mock-gateway"
+        ? mockGatewayOutput
+        : null;
+  const activeGatewayLabel =
+    GATEWAY_PREVIEW_SOURCE_OPTIONS.find((option) => option.value === gatewayPreviewSource)?.label ||
+    "Local rules";
+  const activeGatewayState =
+    gatewayPreviewSource === "server-adapter-mock"
+      ? serverGatewayResult.outputValidationState || serverGatewayResult.requestValidationState
+      : gatewayPreviewSource === "mock-gateway"
+        ? mockGatewaySafetyState || mockGatewayResult.status
+        : "deterministic";
   const approvedLocalDraft = useMemo(
     () =>
       visibleApprovalState === "approved"
@@ -370,6 +417,7 @@ export function EasyListInboxPage() {
               {[
                 ...INBOX_TRUST_LABELS,
                 "Mock gateway",
+                "Server adapter mock",
                 "No provider",
                 assistantAiAvailability.badge,
                 ...(isDemoReviewMode ? ["Demo"] : []),
@@ -392,27 +440,50 @@ export function EasyListInboxPage() {
             </label>
           </div>
 
-          {mockGatewayOutput ? (
-            <article className="assistant-mock-gateway-preview assistant-mock-gateway-preview-ok" aria-label="Mock gateway suggestion preview">
-              <div className="assistant-suggestion-topline">
-                <span>Mock gateway</span>
-                <span>No provider</span>
-                <span>{mockGatewaySafetyState}</span>
-              </div>
+          <article
+            className={`assistant-mock-gateway-preview ${
+              activeGatewayOutput || gatewayPreviewSource === "local-rules"
+                ? "assistant-mock-gateway-preview-ok"
+                : "assistant-mock-gateway-preview-fallback"
+            }`}
+            aria-label="Assistant gateway source preview"
+          >
+            <div className="assistant-gateway-source-toggle" aria-label="Assistant preview source">
+              {GATEWAY_PREVIEW_SOURCE_OPTIONS.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={gatewayPreviewSource === option.value ? "active" : ""}
+                  onClick={() => setGatewayPreviewSource(option.value)}
+                  title={option.description}
+                >
+                  <strong>{option.label}</strong>
+                  <small>{option.description}</small>
+                </button>
+              ))}
+            </div>
+            <div className="assistant-suggestion-topline">
+              <span>{activeGatewayLabel}</span>
+              <span>No provider</span>
+              <span>No live AI</span>
+              <span>{activeGatewayState}</span>
+            </div>
+            {activeGatewayOutput ? (
+              <>
               <SourceDestinationRow
-                source={mockGatewayOutput.sources.map((source) => source.sourceLabel).join(", ")}
-                state={`${mockGatewayOutput.state} suggestion`}
-                destination={mockGatewayOutput.destinationLabel}
+                source={activeGatewayOutput.sources.map((source) => source.sourceLabel).join(", ")}
+                state={`${activeGatewayOutput.state} suggestion`}
+                destination={activeGatewayOutput.destinationLabel}
               />
               <div className="assistant-suggestion-main">
                 <div>
                   <p>Model-shaped preview</p>
-                  <h3>{mockGatewayOutput.title}</h3>
-                  <strong>{mockGatewayOutput.summary}</strong>
+                  <h3>{activeGatewayOutput.title}</h3>
+                  <strong>{activeGatewayOutput.summary}</strong>
                 </div>
               </div>
-              <div className="assistant-suggestion-fields" aria-label="Mock gateway output fields">
-                {mockGatewayOutput.fields.map((field) => (
+              <div className="assistant-suggestion-fields" aria-label="Gateway output fields">
+                {activeGatewayOutput.fields.map((field) => (
                   <span key={`${field.label}-${field.value}`}>
                     <small>{field.label}</small>
                     <strong>{field.value}</strong>
@@ -420,19 +491,18 @@ export function EasyListInboxPage() {
                   </span>
                 ))}
               </div>
-              <div className="assistant-mock-confirmation" aria-label="Mock gateway confirmation boundary">
-                <span>{mockGatewayOutput.confirmation.label}</span>
-                <strong>{mockGatewayOutput.confirmation.copy}</strong>
-                <p>No live AI, no provider call, no hidden write.</p>
+              <div className="assistant-mock-confirmation" aria-label="Gateway confirmation boundary">
+                <span>{activeGatewayOutput.confirmation.label}</span>
+                <strong>{activeGatewayOutput.confirmation.copy}</strong>
+                <p>
+                  {gatewayPreviewSource === "server-adapter-mock"
+                    ? "Server adapter mock only. No network, provider call, hidden write, or save behavior change."
+                    : "No live AI, no provider call, no hidden write."}
+                </p>
               </div>
-            </article>
-          ) : mockGatewayResult.status === "fallback" ? (
-            <article className="assistant-mock-gateway-preview assistant-mock-gateway-preview-fallback" aria-label="Mock gateway fallback preview">
-              <div className="assistant-suggestion-topline">
-                <span>Mock fallback</span>
-                <span>{mockGatewayResult.fallback.reason}</span>
-                <span>No retry</span>
-              </div>
+              </>
+            ) : gatewayPreviewSource === "mock-gateway" && mockGatewayResult.status === "fallback" ? (
+              <>
               <SourceDestinationRow
                 source="Typed capture kept locally"
                 state={mockGatewayResult.fallback.label}
@@ -462,8 +532,80 @@ export function EasyListInboxPage() {
                 <strong>Typed capture is preserved. Nothing saves, sends, syncs, or schedules.</strong>
                 <p>No hidden reads, no hidden writes, no external action.</p>
               </div>
-            </article>
-          ) : null}
+              </>
+            ) : gatewayPreviewSource === "server-adapter-mock" &&
+              serverGatewayResult.status === "fallback" &&
+              serverGatewayResult.fallback ? (
+              <>
+              <SourceDestinationRow
+                source="Server adapter mock"
+                state={serverGatewayResult.fallback.label}
+                destination="Deterministic local draft"
+              />
+              <div className="assistant-suggestion-main">
+                <div>
+                  <p>Server adapter fallback</p>
+                  <h3>{serverGatewayResult.fallback.reason}</h3>
+                  <strong>{serverGatewayResult.fallback.copy}</strong>
+                </div>
+              </div>
+              <div className="assistant-suggestion-fields" aria-label="Server adapter fallback details">
+                <span>
+                  <small>Provider</small>
+                  <strong>{serverGatewayResult.providerCallState}</strong>
+                  <em>no live AI</em>
+                </span>
+                <span>
+                  <small>Network</small>
+                  <strong>{serverGatewayResult.networkCallState}</strong>
+                  <em>no request sent</em>
+                </span>
+                <span>
+                  <small>Typed capture</small>
+                  <strong>{serverGatewayResult.fallback.preservesTypedCapture ? "preserved" : "blocked"}</strong>
+                  <em>local only</em>
+                </span>
+              </div>
+              <div className="assistant-mock-confirmation" aria-label="Server adapter fallback boundary">
+                <span>No retry</span>
+                <strong>Server adapter mock is no-provider. Local rules stay available; nothing saves automatically.</strong>
+                <p>No external action, no hidden read, no hidden write.</p>
+              </div>
+              </>
+            ) : (
+              <>
+              <SourceDestinationRow
+                source={suggestionSourceLabel}
+                state="Local deterministic suggestion"
+                destination={suggestionDestination}
+              />
+              <div className="assistant-suggestion-main">
+                <div>
+                  <p>Local rules preview</p>
+                  <h3>{assistantSuggestion.title}</h3>
+                  <strong>{assistantSuggestion.summary}</strong>
+                </div>
+              </div>
+              <div className="assistant-suggestion-fields" aria-label="Local rules preview details">
+                <span>
+                  <small>Intent</small>
+                  <strong>{assistantSuggestion.intent}</strong>
+                  <em>{assistantSuggestion.confidenceLabel}</em>
+                </span>
+                <span>
+                  <small>Save path</small>
+                  <strong>{suggestionDestination}</strong>
+                  <em>unchanged</em>
+                </span>
+              </div>
+              <div className="assistant-mock-confirmation" aria-label="Local rules boundary">
+                <span>Local rules</span>
+                <strong>Deterministic preview only. Use the existing confirmation controls for any save.</strong>
+                <p>No live AI, no server call, no hidden write.</p>
+              </div>
+              </>
+            )}
+          </article>
 
           <article className={`assistant-suggestion-card assistant-suggestion-card-${assistantSuggestion.intent}`}>
             <div className="assistant-suggestion-topline">

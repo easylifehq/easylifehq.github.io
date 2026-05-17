@@ -799,3 +799,18 @@ continue to Stage 10 Assistant Brain Foundation
 - Desktop screenshots were captured for all six routes; Today was also captured at 390px mobile.
 - No browser page errors were reported.
 - Final verdict: `READY_FOR_HUMAN_VISUAL_REVIEW`.
+
+## Stage 24 Task 4 Design Review - 2026-05-17
+
+Verdict: `SERVER_ADAPTER_MOCK_VISIBLE_WITHOUT_PANEL_SPRAWL`.
+
+Inbox now exposes the provenance of the assistant suggestion in the same existing gateway proof panel. The user can switch between `Local rules`, `Mock gateway`, and `Server adapter mock`, and the default state makes the Stage 24 path visible.
+
+What improved:
+- `Server adapter mock` is explicitly labeled in the Inbox proof surface.
+- The panel repeats `No provider` and `No live AI`, which keeps the feature honest before real provider work exists.
+- No separate server-adapter panel was added, so Inbox did not get another large proof block.
+- The existing save lane remains visually separate from the gateway proof lane.
+
+Design risk:
+- The gateway proof surface is still technical by nature. That is acceptable for Stage 24, but the final user-facing AI version should collapse this into a quieter provenance label once the architecture is proven.

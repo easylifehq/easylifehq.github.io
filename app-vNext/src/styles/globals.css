@@ -5082,6 +5082,44 @@ textarea::placeholder {
   margin-top: 0.1rem;
 }
 
+.assistant-gateway-source-toggle {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.assistant-gateway-source-toggle button {
+  display: grid;
+  min-width: 0;
+  gap: 0.1rem;
+  padding: 0.46rem 0.52rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 74%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, var(--shell-chip-bg)) 66%, transparent);
+  color: var(--ui-text-primary, var(--shell-page-text));
+  text-align: left;
+  cursor: pointer;
+}
+
+.assistant-gateway-source-toggle button.active {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 52%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 14%, transparent), transparent 58%),
+    color-mix(in srgb, var(--ui-bg-card-elevated, var(--shell-chip-bg)) 76%, transparent);
+}
+
+.assistant-gateway-source-toggle strong {
+  overflow-wrap: anywhere;
+  font-size: 0.78rem;
+  line-height: 1.12;
+}
+
+.assistant-gateway-source-toggle small {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.68rem;
+  font-weight: 760;
+}
+
 .assistant-mock-confirmation {
   display: grid;
   gap: 0.16rem;

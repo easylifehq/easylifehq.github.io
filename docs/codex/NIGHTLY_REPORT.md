@@ -5992,3 +5992,18 @@
 - Proof blockers remaining: no route/auth review blocker remains. Remaining visible module/subnav language should be handled inside Stage 9 shell/copy polish.
 - Visual polish decision: READY_FOR_VISUAL_PASS.
 - Risks or follow-up needed: Low. Start Stage 9 with shell chrome and remaining module-language cleanup; do not add new assistant features.
+
+## 2026-05-17 Stage 24 Task 4 - Inbox Server-Adapter Preview Toggle
+
+- Task attempted: Stage 24 Task 4 - Inbox server-adapter preview toggle. User pain: the Inbox proof surface needed to show whether a suggestion came from local rules, the Stage 22 mock gateway, or the Stage 24 server-adapter mock without implying live AI. Skill/workflow: incremental frontend implementation with no-provider gateway safety. Target: app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx, app-vNext/src/features/assistant/serverGateway/serverGatewayMockHandler.ts, app-vNext/src/styles/globals.css, docs/codex/NIGHTLY_REPORT.md, docs/codex/SIMON_DESIGN_REVIEW.md, docs/codex/MAGIC_SCORECARD.md. Change: reused the existing Inbox mock gateway panel and added a compact source selector for Local rules, Mock gateway, and Server adapter mock. First screen rule: keep the existing Inbox assistant preview as the review surface and avoid a second large panel. Remove/simplify: consolidated gateway provenance into one panel instead of adding another proof block. Guardrails: no provider SDKs, API keys, backend services, Firebase config, dependency/package/deploy/generated/secrets changes, external actions, hidden reads, hidden writes, real memory, live AI, or saved-object expansion. Acceptance: `npm.cmd run build` from `app-vNext`.
+- Build result: Passed (`npm.cmd run build` from `app-vNext`).
+- Files changed:
+- app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx
+- app-vNext/src/styles/globals.css
+- docs/codex/NIGHTLY_REPORT.md
+- docs/codex/SIMON_DESIGN_REVIEW.md
+- docs/codex/MAGIC_SCORECARD.md
+- Server-adapter proof: default preview source is `Server adapter mock`; the panel labels `No provider`, `No live AI`, and states that there is no network/provider call or save behavior change.
+- Save behavior: existing task and note save paths were not changed.
+- Route inspected: `/app/easylist/add?demo=1` with local dev server plus headless DOM inspection; rendered labels found: `Server adapter mock`, `No provider`, `No live AI`, `Local rules`, and `Mock gateway`.
+- Risks or follow-up needed: Low. Stage 24 proof should verify the server-adapter mock accepts safe requests, rejects unsafe requests, preserves fallback, and never calls a provider.
