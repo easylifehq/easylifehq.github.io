@@ -2,6 +2,62 @@
 
 Date: 2026-05-17
 
+## 2026-05-17 - OpenAI / Provider Key Rescan
+
+Verdict: `NO_DANGEROUS_PROVIDER_SECRET_CANDIDATE_FOUND`
+
+Build proof: Passed with `npm.cmd run build` from `app-vNext`.
+
+Scan rule: secret-like values were never printed. Findings below are path plus redacted finding type/classification only.
+
+Scope checked:
+
+- Frontend source: `app-vNext/src`
+- Built output after build: `app-vNext/dist`
+- Docs: `docs`
+- Env files/examples: `app-vNext/.env.example`
+- Config-like files in the EasyLife repo, including Firebase config files
+
+Summary:
+
+- Dangerous secret candidates: `0`
+- Real OpenAI/provider key value found: `no`
+- Real frontend AI provider key found: `no`
+- Built bundle AI provider secret found: `no`
+- Existing public Firebase web config found: `yes`, expected and not an AI provider key
+
+### Redacted Findings By Path
+
+| Path | Redacted finding type | Classification |
+| --- | --- | --- |
+| `app-vNext/src/features/assistant/serverGateway/providerRequestSanitizer.test.ts` | OpenAI-style secret prefix fixture | test fixture |
+| `app-vNext/src/features/assistant/serverGateway/liveAiEnvironment.ts` | provider secret placeholder name | placeholder |
+| `app-vNext/src/features/assistant/serverGateway/liveAiEnvironment.test.ts` | provider secret placeholder / forbidden browser env names | test fixture |
+| `app-vNext/src/features/assistant/serverGateway/liveProviderSecretBoundary.test.ts` | provider secret placeholder / forbidden browser env names | test fixture |
+| `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveDryRunTypes.ts` | provider secret placeholder name | placeholder |
+| `app-vNext/src/features/easylist/components/TaskComposer.tsx` | generic `KEY` text inside ordinary UI/type names | false positive |
+| `app-vNext/dist/assets/EasyListInboxPage-*.js` | provider secret placeholder name | placeholder |
+| `app-vNext/src/lib/firebase/config.ts` | Google/Firebase API-key-like web config | public Firebase config |
+| `app-vNext/dist/assets/index-*.js` | Google/Firebase API-key-like web config in built bundle | public Firebase config |
+| `old-site/easylist/js/firebase-config.js` | Google/Firebase API-key-like web config | public Firebase config |
+| `old-site/easynotes/js/firebase-config.js` | Google/Firebase API-key-like web config | public Firebase config |
+| `old-site/easypipeline/js/firebase-config.js` | Google/Firebase API-key-like web config | public Firebase config |
+| `old-site/js/firebase-config.js` | Google/Firebase API-key-like web config | public Firebase config |
+| `docs/codex/*` | provider secret placeholder names and warning text | placeholder |
+| `docs/FIREBASE_RULES_VERIFICATION.md` | provider env-name mention in docs | placeholder |
+| `docs/openai-task-analyzer.md` | provider env-name mention in docs | placeholder |
+| `app-vNext/.env.example` | no provider secret match | clean |
+
+Notes:
+
+- `SERVER_AI_PROVIDER_API_KEY` appears only as a placeholder/reference name.
+- `VITE_` provider-secret names appear only in test/doc warnings that forbid browser-exposed provider secrets.
+- OpenAI-style `sk-...` matches in tests are fixtures, and broad `sk-...` matches elsewhere are false positives from ordinary words/class names.
+- Firebase web config remains public browser config and must not be reused as an AI provider key.
+- The actual OpenAI key should stay outside the repo in a server-only secret store.
+
+---
+
 Verdict: `NO_AI_PROVIDER_SECRET_FOUND`
 
 Secondary note: `PUBLIC_FIREBASE_WEB_CONFIG_PRESENT`
