@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Existing Firebase AI Functions Audit
+
+- Task: Audit existing Firebase AI endpoints before redeploy.
+- Result: Audit report created and redeploy held.
+- Magic signal: existing-openai-functions-are-real-but-not-stage31-bounded
+- Audit evidence: `docs/codex/EASYLIFE_EXISTING_FIREBASE_AI_FUNCTIONS_AUDIT.md`.
+- Function evidence: `functions/index.js` defines `analyzeTaskBrainDump` and `planProjectWithAi` with Firebase Functions secret `OPENAI_API_KEY`.
+- Call-site evidence: EasyList `TaskComposer` can call `analyzeTaskBrainDump` via `VITE_TASK_ANALYZER_URL`; EasyProjects `projectAiPlanner` defaults to the production `planProjectWithAi` function URL.
+- Stage 31 mismatch evidence: existing endpoints are not limited to `/app/easylist/add?demo=1`, do not use prompt `intake-suggestion`, and do not pass through the Stage 30 sanitizer, Stage 20 output validator, Stage 30 quarantine path, or Stage 31 first-call harness.
+- Redeploy decision: do not redeploy yet for the Stage 31 lane because it would refresh broader existing AI endpoints.
+- Safest-next-step evidence: align or park existing Firebase AI endpoints before deploy, then create a narrow Stage 31 `intake-suggestion` gateway separately.
+- Boundary evidence: audit/docs only; no deploy, secret read, secret value print, live AI call, provider SDK change, backend implementation change, Firebase config change, package/dependency change, generated output, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, saved-object expansion, or broad assistant behavior was added.
+
 ## 2026-05-17 - Server-Only OpenAI Secret Setup Plan
 
 - Task: Define where `SERVER_AI_PROVIDER_API_KEY` should live for the first EasyLife live AI call.

@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Existing Firebase AI Functions Audit
+
+- Task attempted: Audit existing Firebase Functions AI endpoints before redeploy.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Audit report created: `docs/codex/EASYLIFE_EXISTING_FIREBASE_AI_FUNCTIONS_AUDIT.md`.
+- Functions inspected: `functions/index.js`.
+- Existing OpenAI functions: `analyzeTaskBrainDump` and `planProjectWithAi`.
+- Secret expected by existing functions: `OPENAI_API_KEY`.
+- Frontend call sites inspected:
+  - `app-vNext/src/features/easylist/components/TaskComposer.tsx`
+  - `app-vNext/src/features/easyprojects/lib/projectAiPlanner.ts`
+  - `app-vNext/src/features/easyprojects/routes/EasyProjectsHomePage.tsx`
+- Redeploy decision: do not redeploy yet if the goal is the Stage 31 first-live-AI lane.
+- Reason: redeploying would refresh existing broader AI endpoints, including EasyProjects project planning, not just `/app/easylist/add?demo=1` with prompt `intake-suggestion`.
+- Stage 31 mismatch: existing functions do not use the Stage 20 prompt registry, Stage 30 request sanitizer, Stage 20 output validator, Stage 30 quarantine path, or Stage 31 first-call harness.
+- Safest next step: align or park existing Firebase AI endpoints before redeploy, then create the narrow `intake-suggestion` gateway separately.
+- Boundary preserved: audit/docs only; no deploy, no secret read, no secret value printed, no live AI call, no provider SDK change, no backend implementation change, no Firebase config change, no package/dependency change, no generated output, no hidden write, no external action, no real memory, calendar sync, notification, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Server-Only OpenAI Secret Setup Plan
 
 - Task attempted: Define exactly where `SERVER_AI_PROVIDER_API_KEY` should live for the first EasyLife live AI call.
