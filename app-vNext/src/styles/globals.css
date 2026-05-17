@@ -2381,6 +2381,48 @@ textarea::placeholder {
   color: var(--ui-text-primary, var(--shell-page-text));
 }
 
+.notes-context-recall-hint {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.72rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.72rem 0 0.9rem;
+  padding: 0.68rem 0.72rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 26%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent), transparent 55%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 76%, transparent);
+}
+
+.notes-context-recall-hint div {
+  display: grid;
+  gap: 0.14rem;
+  min-width: min(100%, 260px);
+}
+
+.notes-context-recall-hint span {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.notes-context-recall-hint strong {
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.96rem;
+  line-height: 1.2;
+}
+
+.notes-context-recall-hint p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.84rem;
+  line-height: 1.38;
+}
+
 .notes-context-draft-affordance {
   display: grid;
   grid-template-columns: minmax(180px, 0.28fr) minmax(0, 1fr);

@@ -1,6 +1,31 @@
 # Robin Copy Review
 
 ## Verdict
+NOTES_CONTEXT_RECALL_COPY_READY
+
+## Stage 19 Task 4 Notes Saved-Context Recall Hints - 2026-05-17
+
+Verdict: `NOTES_CONTEXT_RECALL_COPY_READY`.
+
+Notes now hints how saved context can be useful for Today without pretending EasyLife has real AI memory or automatic recall. The route points to one concrete saved note and asks the user to open it manually when reviewing Today or drafting Inbox items.
+
+What changed:
+- Added a `Useful for Today` cue based on pinned/recent notes and simple local task/plan cue patterns.
+- The cue says `nothing is recalled automatically`.
+- The saved-context status now says `Manual context for Today review.`
+- The note draft helper was shortened to `Preview a normal note save. Nothing else changes.`
+
+Rendered proof:
+- `/app/easynotes?demo=1` rendered `Useful for Today`, `Sunday reset brief`, `Open context`, and `nothing is recalled automatically`.
+- The rendered route did not include real-memory or AI-memory claims.
+- The route had no horizontal overflow at 390 px.
+
+Copy risk:
+- This is still manual context review, not a model-backed assistant brain. That is the right trust boundary for this stage.
+
+---
+
+## Verdict
 INBOX_SOURCE_DESTINATION_COPY_READY
 
 ## Stage 19 Task 2 Inbox Source And Destination Clarity - 2026-05-17

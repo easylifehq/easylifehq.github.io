@@ -1,5 +1,26 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 19 Task 4 Notes saved-context recall hints
+
+- Task attempted: Make Notes surface context useful for Today honestly without claiming real memory.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected:
+  - `http://127.0.0.1:4231/app/easynotes?demo=1`
+- Files changed:
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Product change: Notes now shows one `Useful for Today` saved-context cue, selected from pinned/recent/task/plan-cue notes, with a direct `Open context` path.
+- Render proof: `/app/easynotes?demo=1` rendered `Sunday reset brief`, `Pinned context for review.`, and `Open it when reviewing Today or drafting Inbox items; nothing is recalled automatically.`
+- Copy simplification: softened the status card to `Manual context for Today review.` and shortened the note draft helper to `Preview a normal note save. Nothing else changes.`
+- Trust proof: rendered route text did not include real-memory or AI-memory claims.
+- Mobile proof: headless Chrome inspection at 390 x 844 reported no horizontal overflow.
+- Boundary preserved: note save behavior was unchanged; no search, sync, model calls, background recall, hidden reads/writes, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, or real personal data were added.
+
 ## 2026-05-17 - Stage 19 Task 3 Plan capacity assistant read
 
 - Task attempted: Make Plan better explain light/normal/push/recovery day using existing local data only.

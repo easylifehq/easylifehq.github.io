@@ -2,6 +2,27 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 19 Task 4 Notes Saved-Context Recall Hints
+
+- Task: Make Notes surface context useful for Today honestly without claiming real memory.
+- Result: Passed build and Notes route inspection.
+- Magic signal: notes-context-can-guide-today-manually
+- Changed files:
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Recall evidence: `/app/easynotes?demo=1` rendered `Useful for Today`, `Sunday reset brief`, and `Open context`.
+- Trust evidence: the cue says `nothing is recalled automatically`, and the status card says `Manual context for Today review.`
+- Copy simplification evidence: the note draft helper is now `Preview a normal note save. Nothing else changes.`
+- Negative evidence: rendered route text did not include real-memory or AI-memory claims.
+- Mobile evidence: 390 x 844 inspection reported no horizontal overflow.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: note save behavior was unchanged; no search, sync, model calls, background recall, hidden reads/writes, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, or real personal data were added.
+
 ## 2026-05-17 - Stage 19 Task 3 Plan Capacity Assistant Read
 
 - Task: Make Plan better explain light/normal/push/recovery day using existing local data only.

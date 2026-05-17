@@ -49,6 +49,16 @@ function renderContextCue(value: Date | null) {
   return cue ? <em className="note-context-cue">{cue}</em> : null;
 }
 
+function getNoteCueReason(note: { title: string; bodyText: string; tags: string[]; pinned: boolean }) {
+  const searchable = `${note.title} ${note.bodyText} ${note.tags.join(" ")}`;
+
+  if (note.pinned) return "Pinned context for review.";
+  if (PLAN_CUE_PATTERN.test(searchable)) return "Mentions time, deadlines, or blocks.";
+  if (TASK_CUE_PATTERN.test(searchable)) return "Looks like action hiding in text.";
+
+  return "Recent saved context.";
+}
+
 export function EasyNotesLibraryPage() {
   const navigate = useNavigate();
   const {
@@ -101,6 +111,15 @@ export function EasyNotesLibraryPage() {
         .slice(0, 6),
     [notes]
   );
+  const recallNoteForToday = useMemo(
+    () =>
+      pinnedNotes[0] ||
+      recentNotes.find((note) => PLAN_CUE_PATTERN.test(`${note.title} ${note.bodyText} ${note.tags.join(" ")}`)) ||
+      recentNotes.find((note) => TASK_CUE_PATTERN.test(`${note.title} ${note.bodyText} ${note.tags.join(" ")}`)) ||
+      recentNotes[0] ||
+      null,
+    [pinnedNotes, recentNotes]
+  );
 
   const filteredNotes = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -140,7 +159,7 @@ export function EasyNotesLibraryPage() {
       {
         label: "Saved context",
         count: notes.length,
-        detail: "Notes Today can review later.",
+        detail: "Manual context for Today review.",
       },
       {
         label: "Task cue",
@@ -371,12 +390,33 @@ export function EasyNotesLibraryPage() {
           ))}
         </div>
 
+        <section className="notes-context-recall-hint" aria-label="Saved context useful for Today">
+          <div>
+            <span>Useful for Today</span>
+            <strong>{recallNoteForToday ? recallNoteForToday.title.trim() || "Untitled note" : "No saved context yet"}</strong>
+            <p>
+              {recallNoteForToday
+                ? `${getNoteCueReason(recallNoteForToday)} Open it when reviewing Today or drafting Inbox items; nothing is recalled automatically.`
+                : "Keep one note here and it can become a manual context cue when you review Today."}
+            </p>
+          </div>
+          {recallNoteForToday ? (
+            <Link to={`/app/easynotes/${recallNoteForToday.id}`} className="button-secondary compact-button">
+              Open context
+            </Link>
+          ) : (
+            <button type="button" className="button-secondary compact-button" onClick={() => void handleCreateNote()}>
+              Keep context
+            </button>
+          )}
+        </section>
+
         <section className="notes-context-draft-affordance" aria-labelledby="notes-context-draft-title">
           <div className="notes-context-draft-copy">
             <span>{localDraftStatusLabels["unsaved-preview"]}</span>
             <h3 id="notes-context-draft-title">Note/context assistant draft</h3>
             <p>
-              Preview what this context could become. Final save creates a normal note only.
+              Preview a normal note save. Nothing else changes.
             </p>
           </div>
           <div className="notes-context-draft-actions" aria-label="Local context draft actions">
