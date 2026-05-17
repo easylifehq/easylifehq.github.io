@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 24 No-Provider Server Adapter Plan
+
+- Task attempted: Plan the implementation stage for a no-provider server adapter that follows the Stage 23 architecture decision.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_24_SERVER_ADAPTER_PLAN.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Plan created: `docs/codex/EASYLIFE_STAGE_24_SERVER_ADAPTER_PLAN.md`.
+- Stage 24 mission: implement a no-provider server adapter shell/mock path that delegates to the Stage 22 mock gateway path.
+- First behavior preserved: Inbox typed-capture suggestion only.
+- Queue status: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 24 tasks.
+- Boundary preserved: no live model calls, provider SDKs, API keys, secrets, external actions, hidden writes, real memory, saved-object expansion, deploy config, production backend behavior, Firebase config changes, dependencies, package files, or generated output were added.
+
 ## 2026-05-17 - Stage 23 Task 4 Gateway Rollout And Fallback
 
 - Task attempted: Define how the AI gateway can be rolled out safely and disabled instantly.

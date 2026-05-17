@@ -11,13 +11,17 @@ Complexity Budget: Stage 24 may add local TypeScript server-adapter contract mod
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_STAGE_24_SERVER_ADAPTER_IMPLEMENTATION
+Parking State: STAGE_24_PLAN_READY
 Evidence Required: Stage 23 proof packet, architecture ADR, gateway boundary, threat model, rollout/fallback plan, exactly five Stage 24 tasks, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
 Next Phase Criteria: Complete no-provider server adapter contract, mock handler, safety tests, Inbox preview label/toggle, and Stage 24 proof before any provider-readiness work.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 23 proof completed.
+Updated At: 2026-05-17 - Stage 24 no-provider server adapter plan created.
+
+Stage 24 plan result: STAGE_24_PLAN_READY. The no-provider server adapter plan exists at docs/codex/EASYLIFE_STAGE_24_SERVER_ADAPTER_PLAN.md. Stage 24 may implement local TypeScript server-adapter contract modules, no-provider mock handler modules, safety tests, and a compact Inbox server-adapter mock label/toggle only. It must keep first behavior to Inbox typed-capture suggestion and must not add live model calls, provider SDKs, API keys, secrets, external actions, hidden writes, real memory, saved-object expansion, deploy config, production backend behavior, Firebase config changes, dependencies, package files, or generated output.
+
+Stage 24 queue: docs/codex/NEXT_5_TASKS.md contains exactly five bounded no-provider server adapter tasks.
 
 Stage 23 proof result: READY_FOR_STAGE_24_SERVER_ADAPTER_IMPLEMENTATION. The architecture decision packet, architecture ADR, gateway boundary, threat model, rollout/fallback decision, and build proof are complete. Stage 24 may implement a no-provider server adapter shell/mock path only. This does not approve live model calls, provider SDKs, API keys, backend production behavior, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, or saved-object expansion.
 

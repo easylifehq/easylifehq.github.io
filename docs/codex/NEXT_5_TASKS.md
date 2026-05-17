@@ -4,6 +4,8 @@ Stage 23 proof verdict: `READY_FOR_STAGE_24_SERVER_ADAPTER_IMPLEMENTATION`.
 
 Stage 23 proof: `docs/codex/EASYLIFE_STAGE_23_SERVER_ARCHITECTURE_PROOF_PACKET.md`
 
+Stage 24 plan: `docs/codex/EASYLIFE_STAGE_24_SERVER_ADAPTER_PLAN.md`
+
 Stage 24 mission: implement a no-provider server adapter shell/mock path that follows the Stage 23 architecture decision.
 
 Stage 24 must not add live model calls, provider SDKs, API keys, backend production behavior, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, or saved-object expansion.
