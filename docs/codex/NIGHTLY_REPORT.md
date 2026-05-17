@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 31 Task 2 Live Provider Secret Boundary
+
+- Task attempted: Create the server-only secret boundary contract for the future first live provider call.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/liveProviderSecretBoundary.ts`
+  - `app-vNext/src/features/assistant/serverGateway/liveProviderSecretBoundary.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Contract added: `stage-31-live-provider-secret-boundary-v1`.
+- Secret placeholder: references only `SERVER_AI_PROVIDER_API_KEY`.
+- Server-only boundary: configured/unconfigured state is reported by metadata only; the boundary does not read, print, return, or expose a real provider key.
+- Browser protection: browser runtime is blocked, frontend secret exposure is false, and provider calls from browser remain forbidden.
+- `VITE_` protection: `VITE_` provider secret names are rejected because they are browser-exposed.
+- Fallback proof: unconfigured server state requires local fallback and does not allow provider calls.
+- Secret-value proof: secret-like value fields and explicit attempted secret reads are rejected without echoing the submitted value.
+- Boundary preserved: TypeScript/local proof only; no live provider call, real API key, provider SDK, backend config, deploy config, package/dependency change, generated output, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 31 Task 1 First Live AI Approval Record
 
 - Task attempted: Create the explicit human approval record required before any first live provider call.

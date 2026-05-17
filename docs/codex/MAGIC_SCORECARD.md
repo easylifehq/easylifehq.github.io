@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 31 Task 2 Live Provider Secret Boundary
+
+- Task: Create the server-only secret boundary contract for the future first live provider call.
+- Result: Added a TypeScript-only secret boundary contract and proof fixtures.
+- Magic signal: provider-secret-stays-server-side-and-value-free
+- Contract evidence: `app-vNext/src/features/assistant/serverGateway/liveProviderSecretBoundary.ts`.
+- Proof evidence: `app-vNext/src/features/assistant/serverGateway/liveProviderSecretBoundary.test.ts`.
+- Placeholder evidence: contract references only `SERVER_AI_PROVIDER_API_KEY`.
+- Runtime evidence: server runtime can report configured/unconfigured state; browser runtime is blocked.
+- `VITE_` evidence: `VITE_AI_PROVIDER_API_KEY` is rejected as browser-exposed.
+- Secret-value evidence: secret-like value fields and attempted secret reads are rejected without echoing the submitted value.
+- Fallback evidence: unconfigured state requires local fallback and does not allow provider calls.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live provider call, real API key, provider SDK, backend config, deploy config, package/dependency change, generated output, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, saved-object expansion, or broad assistant behavior was added.
+
 ## 2026-05-17 - Stage 31 Task 1 First Live AI Approval Record
 
 - Task: Create the explicit approval record required before any first live provider call.
