@@ -36,6 +36,41 @@ const INBOX_PREVIEW_STATE_LABELS: Record<AssistantApprovalState, string> = {
   "needs-review": "Review",
 };
 const INBOX_TRUST_LABELS = ["Draft", "Preview", "Task save only", "Note save only"];
+const DESTINATION_BY_DRAFT_TYPE: Record<AssistantLocalDraftType, string> = {
+  task: "Inbox task save lane",
+  note: "Notes save lane",
+  plan: "Plan preview only",
+  reminder: "Reminder preview only",
+  "follow-up": "Follow-up preview only",
+  unsure: "Hold for review",
+};
+
+function SourceDestinationRow({
+  source,
+  state,
+  destination,
+}: {
+  source: string;
+  state: string;
+  destination: string;
+}) {
+  return (
+    <dl className="assistant-source-destination-row" aria-label="Suggestion source, state, and destination">
+      <div>
+        <dt>Source</dt>
+        <dd>{source}</dd>
+      </div>
+      <div>
+        <dt>State</dt>
+        <dd>{state}</dd>
+      </div>
+      <div>
+        <dt>Destination</dt>
+        <dd>{destination}</dd>
+      </div>
+    </dl>
+  );
+}
 
 export function EasyListInboxPage() {
   const { tasks, isLoading, error, addTask } = useEasyList();
@@ -89,6 +124,8 @@ export function EasyListInboxPage() {
     draftComparisonOptions.some((option) => option.draftType === selectedDraftType)
       ? selectedDraftType
       : assistantSuggestion.intent;
+  const suggestionSourceLabel = isDemoReviewMode ? "Typed demo capture" : "Typed capture";
+  const suggestionDestination = DESTINATION_BY_DRAFT_TYPE[activeDraftType] || "Hold for review";
   const approvedLocalDraft = useMemo(
     () =>
       visibleApprovalState === "approved"
@@ -307,6 +344,11 @@ export function EasyListInboxPage() {
               <span>{assistantSuggestion.intent}</span>
               <span>{assistantSuggestion.confidenceLabel}</span>
             </div>
+            <SourceDestinationRow
+              source={suggestionSourceLabel}
+              state={`${INBOX_PREVIEW_STATE_LABELS[visibleApprovalState]} suggestion`}
+              destination={suggestionDestination}
+            />
             <div className="assistant-suggestion-main">
               <div>
                 <p id="assistant-intent-preview-title">Suggested next shape</p>
@@ -419,6 +461,11 @@ export function EasyListInboxPage() {
                 <span>{localDraftStatusLabels[approvedLocalDraft.status]}</span>
                 <strong>{localDraftTypeLabels[approvedLocalDraft.draftType]}</strong>
               </div>
+              <SourceDestinationRow
+                source="Approved local suggestion"
+                state="Unsaved draft preview"
+                destination={DESTINATION_BY_DRAFT_TYPE[approvedLocalDraft.draftType]}
+              />
               <div className="assistant-local-draft-body">
                 <small>Draft title</small>
                 <h3>{approvedLocalDraft.title}</h3>
@@ -480,6 +527,11 @@ export function EasyListInboxPage() {
                 <span>Task save only</span>
                 <strong>Editable task row</strong>
               </div>
+              <SourceDestinationRow
+                source="Approved task draft"
+                state="Editable unsaved row"
+                destination={`${selectedListName} list after final confirmation`}
+              />
               <div className="task-row-grid task-row-card assistant-task-handoff-row">
                 <label className="field-stack task-row-field">
                   <span>Task</span>
@@ -627,6 +679,15 @@ export function EasyListInboxPage() {
                   Editable {reviewHandoffPreview.handoffType === "follow-up" ? "follow-up" : "reminder"} preview
                 </strong>
               </div>
+              <SourceDestinationRow
+                source="Approved local draft"
+                state="Preview only"
+                destination={
+                  reviewHandoffPreview.handoffType === "follow-up"
+                    ? "No message destination"
+                    : "No notification destination"
+                }
+              />
               <div className="assistant-review-handoff-grid">
                 <label className="field-stack">
                   <span>Review title</span>

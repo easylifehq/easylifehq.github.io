@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 19 Task 2 Inbox source and destination clarity
+
+- Task attempted: Make every Inbox assistant suggestion show source, draft state, and destination before save.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected:
+  - `http://127.0.0.1:4231/app/easylist/add?demo=1`
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Product change: Inbox now uses a compact source/state/destination row on the main suggestion card, approved local draft preview, task handoff preview, and reminder/follow-up preview cards.
+- Source proof: demo capture renders as `SOURCE` / `Typed demo capture` before any save path.
+- Destination proof: the default follow-up suggestion renders `DESTINATION` / `Follow-up preview only`, the task draft renders `DESTINATION` / `Inbox task save lane`, and the task handoff preview renders `DESTINATION` / `Main list after final confirmation`.
+- Mobile proof: headless Chrome inspection at 390 x 844 reported no horizontal overflow.
+- Boundary preserved: no behavior expansion, persistence changes, email/Gmail/API/source integrations, hidden writes, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, or real personal data were added.
+
 ## 2026-05-17 - Stage 19 Task 1 Today local context synthesis
 
 - Task attempted: Make Today's assistant read more specific using existing local task, event, note/context, and people/place hints.

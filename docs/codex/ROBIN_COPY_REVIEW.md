@@ -1,6 +1,32 @@
 # Robin Copy Review
 
 ## Verdict
+INBOX_SOURCE_DESTINATION_COPY_READY
+
+## Stage 19 Task 2 Inbox Source And Destination Clarity - 2026-05-17
+
+Verdict: `INBOX_SOURCE_DESTINATION_COPY_READY`.
+
+Inbox suggestions now explain where the suggestion came from, what state it is in, and where it can go before any save action. The copy is still compact: it uses source/state/destination labels instead of adding another warning paragraph.
+
+What changed:
+- The assistant suggestion card shows `SOURCE`, `STATE`, and `DESTINATION`.
+- Demo input is labeled as `Typed demo capture`.
+- Preview-only outcomes say `Follow-up preview only` or `Reminder preview only`.
+- Task drafts say `Inbox task save lane`.
+- The task handoff preview says `Main list after final confirmation`.
+
+Rendered proof:
+- `/app/easylist/add?demo=1` rendered the source/state/destination rows at 390 x 844.
+- The approved local draft preview and task handoff preview both kept destination visible.
+- The route reported no horizontal overflow at mobile width.
+
+Copy risk:
+- Inbox remains the densest assistant route, but this pass makes the density more trustworthy by naming source and destination at the exact moment of review.
+
+---
+
+## Verdict
 STAGE_18_COPY_READY_FOR_STAGE_19
 
 ## Stage 18 Review Repair Copy Proof - 2026-05-17

@@ -2,6 +2,26 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 19 Task 2 Inbox Source And Destination Clarity
+
+- Task: Make every Inbox assistant suggestion show source, draft state, and destination before save.
+- Result: Passed build and Inbox route inspection.
+- Magic signal: inbox-suggestions-show-source-state-destination
+- Changed files:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Source evidence: `/app/easylist/add?demo=1` rendered `SOURCE` / `Typed demo capture` on the assistant suggestion.
+- State evidence: the suggestion and draft preview rendered draft/preview states before save.
+- Destination evidence: follow-up stayed `Follow-up preview only`, task draft stayed `Inbox task save lane`, and task handoff preview said `Main list after final confirmation`.
+- Mobile evidence: 390 x 844 inspection reported no horizontal overflow.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no behavior expansion, persistence changes, hidden writes, source integrations, model calls, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, or real personal data were added.
+
 ## 2026-05-17 - Stage 19 Task 1 Today Context Synthesis
 
 - Task: Make Today's assistant read more specific using existing local app context.

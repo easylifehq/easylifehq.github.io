@@ -137,6 +137,8 @@ Stage 19 may improve Today context synthesis, Inbox source clarity, Plan capacit
 
 Stage 19 Task 1 proof result: TODAY_CONTEXT_SYNTHESIS_READY.
 
+Stage 19 Task 2 proof result: INBOX_SOURCE_DESTINATION_READY.
+
 Stage 19 proof must inspect Today, Inbox, Plan, Notes, Contacts, and Settings and decide whether contextual assistant usefulness is credible enough for Stage 20.
 
 ## Phase Order

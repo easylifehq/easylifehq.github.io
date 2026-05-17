@@ -5058,6 +5058,39 @@ textarea::placeholder {
   gap: 0.45rem;
 }
 
+.assistant-source-destination-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.42rem;
+  margin: 0;
+}
+
+.assistant-source-destination-row div {
+  display: grid;
+  min-width: 0;
+  gap: 0.12rem;
+  padding: 0.46rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 70%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 68%, transparent);
+}
+
+.assistant-source-destination-row dt {
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.assistant-source-destination-row dd {
+  margin: 0;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.8rem;
+  font-weight: 760;
+  line-height: 1.18;
+}
+
 .assistant-suggestion-topline,
 .assistant-suggestion-fields,
 .assistant-approval-state-picker,
@@ -5494,6 +5527,10 @@ textarea::placeholder {
   }
 
   .assistant-task-save-receipt-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .assistant-source-destination-row {
     grid-template-columns: 1fr;
   }
 
