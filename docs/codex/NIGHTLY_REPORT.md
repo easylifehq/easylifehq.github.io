@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 26 First Live Provider Dry Run Plan
+
+- Task attempted: Plan the first real model-provider dry run for EasyLife using the Stage 25 approval.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN_PLAN.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Plan created: `docs/codex/EASYLIFE_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN_PLAN.md`.
+- Stage 26 route lock: `/app/easylist/add?demo=1`.
+- Stage 26 behavior lock: Inbox typed-capture suggestion only.
+- Input lock: synthetic/demo typed capture only.
+- Secret lock: provider key must be server-side only; no frontend API keys, no `VITE_` provider secrets, and no actual secret values in docs, logs, screenshots, commits, or browser bundles.
+- Queue status: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 26 tasks.
+- Boundary preserved in this planning task: no live provider call, no broad AI assistant behavior, no real user data, no hidden writes, no saving/sending/scheduling/syncing/notifications/calendar changes, no real memory, no geocoding, no device location, no external actions, no saved-object expansion, no package/dependency changes, no deploy config, no generated output, and no secrets were added.
+
 ## 2026-05-17 - Stage 25 Provider Readiness Gate
 
 - Task attempted: Decide whether EasyLife is ready for a separately approved first live provider dry-run after the no-provider server adapter proof.

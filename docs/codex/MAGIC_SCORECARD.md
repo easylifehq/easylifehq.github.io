@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 26 First Live Provider Dry Run Plan
+
+- Task: Plan the first real model-provider dry run for EasyLife.
+- Result: Stage 26 first live provider dry-run plan was created.
+- Magic signal: live-provider-boxed-before-first-call
+- Plan evidence: `docs/codex/EASYLIFE_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN_PLAN.md`.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 26 tasks.
+- Route evidence: first dry-run route is `/app/easylist/add?demo=1`.
+- Behavior evidence: first dry-run behavior is Inbox typed-capture suggestion only.
+- Input evidence: synthetic/demo typed capture only.
+- Secret evidence: provider key must be server-side only; `pipeline-2f422` remains Firebase web config, not an AI provider key, and `VITE_` env vars remain unsafe for provider secrets.
+- Safety evidence: Stage 26 requires Stage 20 context packets, Stage 20 prompt registry, Stage 20 output validation, local fallback, kill switch, spend cap, rate limit, metadata-only logging, rollback plan, and no hidden writes or external actions.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live provider call, broad AI assistant behavior, real user data, frontend key, provider secret, hidden write, saved object expansion, external action, package/dependency change, deploy config, generated output, or secret was added.
+
 ## 2026-05-17 - Stage 25 Provider Readiness Gate
 
 - Task: Decide whether EasyLife is ready for a separately approved first live provider dry-run.
