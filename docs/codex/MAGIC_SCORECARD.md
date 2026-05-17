@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 30 Task 1 Live AI Environment Contract
+
+- Task: Define the disabled-by-default environment contract for a future live AI provider.
+- Result: Added Stage 30 live AI environment constants and TypeScript proof fixtures.
+- Magic signal: live-ai-disabled-by-default-before-provider-call
+- Contract evidence: `app-vNext/src/features/assistant/serverGateway/liveAiEnvironment.ts`.
+- Proof evidence: `app-vNext/src/features/assistant/serverGateway/liveAiEnvironment.test.ts`.
+- Scope evidence: contract allows only `/app/easylist/add?demo=1` and prompt `intake-suggestion`.
+- Secret evidence: server-side placeholder name is `SERVER_AI_PROVIDER_API_KEY`; `VITE_` provider secret names are explicitly rejected.
+- State evidence: provider call state labels cover disabled, blocked-in-browser, server-secret-missing, server-ready-after-human-approval, called-by-server-only, and fallback.
+- Safety evidence: canonical proof rejects enabled-by-default posture and browser provider calls.
+- Boundary evidence: no real secret, live provider call, provider SDK, deploy config, dependency/package change, backend config, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 30 Controlled Live AI Gate Task Packet
 
 - Task: Plan the narrowest controlled path from the proven Inbox assistant lane toward live AI.

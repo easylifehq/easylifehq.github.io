@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 30 Task 1 Live AI Environment Contract
+
+- Task attempted: Define the disabled-by-default environment contract for a future live AI provider.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/liveAiEnvironment.ts`
+  - `app-vNext/src/features/assistant/serverGateway/liveAiEnvironment.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Contract added: `stage-30-live-ai-environment-v1`.
+- Allowed lane: `/app/easylist/add?demo=1`, prompt `intake-suggestion`, Inbox typed-capture suggestion only.
+- Secret placeholder: `SERVER_AI_PROVIDER_API_KEY` as a server-side placeholder name only.
+- Disabled posture: `SERVER_AI_PROVIDER_ENABLED` defaults to false; the contract rejects enabled-by-default posture.
+- Browser safety: `VITE_` provider secret names, browser provider calls, and frontend provider SDK assumptions are forbidden.
+- Provider call state labels defined: disabled, blocked-in-browser, server-secret-missing, server-ready-after-human-approval, called-by-server-only, and fallback.
+- Proof artifact: `liveAiEnvironment.test.ts` exports fixtures for canonical validation, route/prompt alignment with the proven dry-run lane, `VITE_` rejection, enabled-by-default rejection, and browser-call rejection.
+- Boundary preserved: no real secret, live provider call, provider SDK, deploy config, dependency/package change, backend config, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 30 Controlled Live AI Gate Task Packet
 
 - Task attempted: Plan the narrowest controlled path from the proven Inbox assistant lane toward live AI.
