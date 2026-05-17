@@ -2,6 +2,17 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 20 Task 1 Assistant Context Packet Contract
+
+- Task: Define a pure local context packet contract before any model-backed assistant call exists.
+- Result: Context packet contract and proof fixture were added.
+- Magic signal: assistant-context-is-bounded-before-ai
+- Contract evidence: `app-vNext/src/features/assistant/modelContracts/contextPacket.ts` exports `stage-20-context-v1`, `minimum-needed-only`, and `suggestions-only`.
+- Allowed source evidence: the contract permits only typed capture, selected task, selected note/context, selected day summary, selected contact place labels, current route, and demo fixture.
+- Rejection evidence: `contextPacketProof` rejects broad app export, secret-bearing fields, and exact location fields.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no model call, provider SDK, frontend API key, secret, backend/auth/Firebase config change, dependency, package file, deploy config, generated output, real personal data, hidden read, broad database export, exact address, device location, map/geocoding source, email/calendar sync, external action, or hidden write was added.
+
 ## 2026-05-17 - Stage 20 AI Assistant Readiness Gate
 
 - Task: Decide whether EasyLife is ready for model-backed assistant work and define the safest architecture.

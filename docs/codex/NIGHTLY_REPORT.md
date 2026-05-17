@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 20 Task 1 Assistant Context Packet Contract
+
+- Task attempted: Define the first bounded assistant context-packet contract so any later model request can prove exactly what local context is allowed.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/modelContracts/contextPacket.ts`
+  - `app-vNext/src/features/assistant/modelContracts/contextPacket.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Contract created: `stage-20-context-v1` with `minimum-needed-only` read policy and `suggestions-only` confirmation policy.
+- Allowed context sources: typed capture, selected task, selected note/context, selected day summary, selected contact place labels, current route, and demo fixture.
+- Rejection proof: the fixture rejects broad app export, secret-bearing fields, and exact location fields.
+- Boundary preserved: no model calls, provider SDKs, frontend API keys, secrets, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, real personal data, hidden reads, broad database export, exact addresses, device location, maps, geocoding, email/calendar sync, external actions, or hidden writes were added.
+
 ## 2026-05-17 - Stage 20 AI Assistant Readiness Gate
 
 - Task attempted: Create the Stage 20 readiness gate for model-backed assistant work and define the safest architecture before live model calls.
