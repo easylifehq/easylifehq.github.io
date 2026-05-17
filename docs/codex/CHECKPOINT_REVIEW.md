@@ -1,6 +1,45 @@
 # Checkpoint Review
 
 ## Verdict
+READY_FOR_STAGE_33_FIRST_PROVIDER_CALL_IMPLEMENTATION
+
+## Stage 32 Narrow Gateway Proof Packet
+
+Reviewed At: 2026-05-17
+
+Stage 32 proof says the new `assistantIntakeSuggestion` gateway scaffold is narrow enough for the first provider-call implementation stage. It does not say a live AI call was made.
+
+## Stage 32 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 32 Functions Check
+
+Passed: `npm.cmd --prefix functions run lint`.
+
+## Stage 32 Evidence
+
+- `assistantIntakeSuggestion` exists in `functions/index.js`.
+- It is separate from `analyzeTaskBrainDump` and `planProjectWithAi`.
+- It accepts only route `/app/easylist/add?demo=1` and prompt `intake-suggestion`.
+- It accepts only bounded typed capture plus safe metadata.
+- It returns disabled/fallback only with `providerState: not-called`, `providerCallAttempted: false`, `suggestion: null`, and `nothingSavedOrSent: true`.
+- It attaches the existing Firebase Functions secret binding but does not call `openAiApiKey.value()` and does not call OpenAI.
+- The frontend has `VITE_ASSISTANT_INTAKE_SUGGESTION_URL` as a function URL only, not a provider key.
+- Inbox does not call the old `analyzeTaskBrainDump` endpoint for this lane.
+- Old AI endpoints were not deployed, modified, or expanded.
+
+## Blunt Judgment
+
+Proceed to Stage 33 only if the work stays inside `assistantIntakeSuggestion`. Do not expand the old AI endpoints, do not add broad chat, and do not add frontend provider keys.
+
+## Verdict
+
+READY_FOR_STAGE_33_FIRST_PROVIDER_CALL_IMPLEMENTATION
+
+---
+
+## Verdict
 NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL
 
 ## Stage 31 First Live AI Call Readiness Proof Packet

@@ -2,6 +2,22 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 32 Narrow Gateway Proof Packet
+
+- Task: Prove whether the new `assistantIntakeSuggestion` gateway scaffold is ready for a separately approved live provider implementation.
+- Result: `READY_FOR_STAGE_33_FIRST_PROVIDER_CALL_IMPLEMENTATION`.
+- Magic signal: narrow-server-door-ready-provider-still-off.
+- Proof packet: `docs/codex/EASYLIFE_STAGE_32_NARROW_GATEWAY_PROOF_PACKET.md`.
+- Function evidence: `functions/index.js` exports `assistantIntakeSuggestion`.
+- Separation evidence: `assistantIntakeSuggestion` is separate from `analyzeTaskBrainDump` and `planProjectWithAi`.
+- Route/prompt evidence: only `/app/easylist/add?demo=1` and `intake-suggestion` are accepted.
+- Fallback evidence: response envelope remains disabled/fallback with `providerState: not-called`, `providerCallAttempted: false`, `suggestion: null`, and `nothingSavedOrSent: true`.
+- Provider evidence: the function does not call `openAiApiKey.value()` and does not call OpenAI yet.
+- Frontend evidence: only `VITE_ASSISTANT_INTAKE_SUGGESTION_URL` was added; no frontend provider key exists.
+- Legacy endpoint evidence: old broader AI endpoints were not modified, redeployed, expanded, or wired into the Inbox lane.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; `npm.cmd --prefix functions run lint` passed.
+- Boundary evidence: no deploy, live AI call, frontend provider key, provider SDK change, dependency/package change, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 32 Task 4 Inbox Gateway Client Wiring
 
 - Task: Wire Inbox to optionally call `assistantIntakeSuggestion` while preserving local fallback.

@@ -1,23 +1,25 @@
 # Phase State
 
-Current Phase: stage-31-first-live-ai-call-readiness-blocked
+Current Phase: stage-33-first-provider-call-implementation-ready
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Keep the first live provider call blocked until the Stage 31 approval record explicitly approves exactly one synthetic/private-alpha Inbox provider call.
+Primary Action: Implement the first real server-side provider call only inside the narrow `assistantIntakeSuggestion` lane.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
-What Not To Build: Do not deploy, do not add broad AI assistant behavior, do not use real user data by default, do not expose frontend API keys, do not commit secrets, do not make live provider calls without a separate explicit approval gate, do not add hidden writes, and do not add sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, or saved-object expansion.
+What Not To Build: Do not deploy without a separate explicit request, do not add broad AI assistant behavior, do not use real user data by default, do not expose frontend API keys, do not commit secrets, do not expand old AI endpoints, do not add hidden writes, and do not add sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, or saved-object expansion.
 No More Features Lock: true
-Complexity Budget: Stage 31 may prepare exactly one separately approved first live provider call path for Inbox typed-capture suggestion only. It must start with a human approval record and must not broaden into chat, memory, sending, scheduling, sync, notifications, geocoding, device location, hidden writes, or saved-object expansion.
+Complexity Budget: Stage 33 may implement exactly one server-side provider call path for Inbox typed-capture suggestion only through `assistantIntakeSuggestion`. It must not broaden into chat, memory, sending, scheduling, sync, notifications, geocoding, device location, hidden writes, old endpoint expansion, or saved-object expansion.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: STAGE_31_BLOCKED_BY_NOT_APPROVED_LIVE_AI_RECORD
-Evidence Required: Stage 31 approval record updated to `APPROVED_FOR_ONE_SYNTHETIC_INBOX_PROVIDER_CALL`, provider choice, server-side secret storage, spend cap, rate limit, kill switch, metadata-only logging, fallback, rollback, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
+Parking State: STAGE_33_READY_FOR_FIRST_PROVIDER_CALL_IMPLEMENTATION
+Evidence Required: Stage 33 provider implementation proof must verify `assistantIntakeSuggestion` is the only new provider path, frontend provider keys remain absent, route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, response validation/fallback, metadata-only logging, no hidden writes, no external actions, build proof, functions lint, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Actual first live provider call implementation can proceed only after a separate human approval task updates `docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_APPROVAL_RECORD.md` from `NOT_APPROVED_FOR_LIVE_AI` to `APPROVED_FOR_ONE_SYNTHETIC_INBOX_PROVIDER_CALL` and confirms provider choice, server-side secret storage, spend cap, rate limit, kill switch, metadata-only logging, route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, fallback, rollback, and no external actions.
+Next Phase Criteria: Stage 34 may begin only after Stage 33 proof shows the first provider call path is safe, bounded, useful, validated, fallback-ready, and still limited to Inbox typed-capture suggestion.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 31 first live AI call readiness proof completed with `NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL`.
+Updated At: 2026-05-17 - Stage 32 narrow gateway proof completed with `READY_FOR_STAGE_33_FIRST_PROVIDER_CALL_IMPLEMENTATION`.
+
+Stage 32 proof result: READY_FOR_STAGE_33_FIRST_PROVIDER_CALL_IMPLEMENTATION. The proof packet exists at docs/codex/EASYLIFE_STAGE_32_NARROW_GATEWAY_PROOF_PACKET.md. `assistantIntakeSuggestion` exists as a separate Firebase Function from `analyzeTaskBrainDump` and `planProjectWithAi`; accepts only POST, verified auth, route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, and bounded typed capture; returns disabled/fallback only; does not call OpenAI yet; and the frontend has only a URL endpoint variable, not a provider key. Build and functions lint passed. Stage 33 may implement the first server-side provider call in this narrow lane only.
 
 Stage 31 readiness proof result: NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL. The proof packet exists at docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_CALL_PROOF_PACKET.md. Build passed and `/app/easylist/add?demo=1` shows `First live call gate`, `First live call remains disabled`, `Provider not-called`, and `Nothing saved or sent`. Approval record, server-only secret boundary, first-call harness, sanitizer, quarantine, local fallback, no-frontend-key proof, no-hidden-write proof, and no-external-action proof exist. The blocker is that docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_APPROVAL_RECORD.md currently ends `NOT_APPROVED_FOR_LIVE_AI`, so no real provider call was made and no actual provider-call implementation should begin yet.
 

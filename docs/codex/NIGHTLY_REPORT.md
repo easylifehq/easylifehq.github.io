@@ -1,5 +1,29 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 32 Narrow Gateway Proof Packet
+
+- Task attempted: Prove whether `assistantIntakeSuggestion` is ready for Stage 33 first provider call implementation.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Functions check: Passed with `npm.cmd --prefix functions run lint`.
+- Proof packet: `docs/codex/EASYLIFE_STAGE_32_NARROW_GATEWAY_PROOF_PACKET.md`.
+- Verdict: `READY_FOR_STAGE_33_FIRST_PROVIDER_CALL_IMPLEMENTATION`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_32_NARROW_GATEWAY_PROOF_PACKET.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Function evidence: `assistantIntakeSuggestion` exists and remains separate from `analyzeTaskBrainDump` and `planProjectWithAi`.
+- Accepted lane: route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, bounded typed capture, and safe metadata only.
+- Fallback evidence: `providerState: not-called`, `providerCallAttempted: false`, `fallbackState: local-disabled`, `suggestion: null`, and `nothingSavedOrSent: true`.
+- Provider evidence: `assistantIntakeSuggestion` does not call `openAiApiKey.value()` and does not call OpenAI yet.
+- Frontend evidence: no frontend OpenAI/provider key exists; `VITE_ASSISTANT_INTAKE_SUGGESTION_URL` is URL-only.
+- Old endpoint boundary: old AI endpoints were not deployed, modified, expanded, or used by the new Inbox gateway lane.
+- Stage 33 queue: prepared exactly five first-provider-call implementation/proof tasks.
+- Boundary preserved: no deploy, live AI call, provider SDK change, dependency/package change, frontend provider key, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 32 Task 4 Inbox Gateway Client Wiring
 
 - Task attempted: Wire Inbox to optionally call `assistantIntakeSuggestion` only when explicitly configured, while preserving local fallback.
