@@ -1,5 +1,18 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Server-Only OpenAI Secret Setup Plan
+
+- Task attempted: Define exactly where `SERVER_AI_PROVIDER_API_KEY` should live for the first EasyLife live AI call.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Plan created: `docs/codex/EASYLIFE_SERVER_ONLY_OPENAI_SECRET_SETUP_PLAN.md`.
+- Provider: OpenAI.
+- Server-side placeholder: `SERVER_AI_PROVIDER_API_KEY`.
+- Local dev setup: use a server-process runtime secret/session outside the repo; do not write the key to `app-vNext/.env`, docs, source, generated output, or browser storage.
+- Production setup: use server platform secret storage attached only to the future narrow `assistantIntakeSuggestion` gateway.
+- Frontend boundary: no frontend keys, no `VITE_` provider secrets, no Firebase web config key reuse, and no committed env files.
+- First behavior remains locked to `/app/easylist/add?demo=1` with prompt `intake-suggestion`.
+- Boundary preserved: docs only; no real API key, live provider call, provider SDK, backend implementation, Firebase config change, deploy config, package/dependency change, generated output, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 31 First Live AI Call Readiness Proof Packet
 
 - Task attempted: Decide whether EasyLife is ready for the actual first live provider call implementation.
