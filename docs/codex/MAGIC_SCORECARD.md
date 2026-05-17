@@ -2,6 +2,24 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 18 Task 5 Command Center Route Audit
+
+- Task: Audit and align `/app/command`.
+- Result: Passed build and command/main-nav route inspection.
+- Magic signal: command-center-is-demoted-and-approval-first
+- Changed files:
+  - `app-vNext/src/components/navigation/appProducts.ts`
+  - `app-vNext/src/features/hq/routes/CommandCenterPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Proof evidence: `/app/command?demo=1` rendered with `Legacy review`, `Draft review`, and explicit copy that nothing sends, syncs, schedules, or saves unless the user chooses a specific save action.
+- Negative evidence: rendered command text did not contain `Memory status`, `Command the day`, `Time-block it`, `Stage calendar item`, `Email Triage`, `Email command`, or `Calendar command`.
+- Navigation evidence: `/app/hq?demo=1` kept Today, Inbox, Plan, Notes, and More as the primary model; `Draft review` appears under More.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no new AI/model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, external sending, notification scheduling, calendar sync, or real memory behavior was added.
+
 ## 2026-05-17 - Stage 18 Task 4 Assistant Context Language
 
 - Task: Clean remaining Memory/Remember copy and domain labels.

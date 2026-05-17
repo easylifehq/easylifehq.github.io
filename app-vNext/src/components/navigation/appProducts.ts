@@ -47,8 +47,8 @@ export const appProductItems: AppProductItem[] = [
   },
   {
     href: "/app/command",
-    label: "Review",
-    description: "Optional command review",
+    label: "Draft review",
+    description: "Legacy local review",
     group: "More",
     groupDescription: "Open when you need extra context.",
   },

@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 18 Task 5 Command Center route audit
+
+- Task attempted: Make old `/app/command` stop undermining the approval-first assistant model.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Routes inspected at 390 x 844:
+  - `http://127.0.0.1:4231/app/command?demo=1`
+  - `http://127.0.0.1:4231/app/hq?demo=1`
+- Files changed:
+  - `app-vNext/src/components/navigation/appProducts.ts`
+  - `app-vNext/src/features/hq/routes/CommandCenterPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Product simplification: `/app/command` now presents itself as `Legacy review` / `Draft review`, points back to Today and Inbox as the primary assistant path, and states that nothing sends, syncs, schedules, or saves unless the user chooses a specific save action.
+- Route repair: removed old `Memory` status wording, removed the direct `Time-block it` action from the legacy route, softened email/calendar labels into follow-up and Plan previews, and changed More navigation from `Review` to `Draft review`.
+- Inspection proof: rendered `/app/command?demo=1` contained `Legacy review`, `Draft review`, and the approval line, and did not contain `Memory status`, `Command the day`, `Time-block it`, `Stage calendar item`, `Email Triage`, `Email command`, or `Calendar command`.
+- Main nav proof: rendered `/app/hq?demo=1` kept the primary model as Today, Inbox, Plan, Notes, and More, with `Draft review` only under More.
+- Boundary preserved: no new AI/model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, external sending, notification scheduling, calendar sync, or real memory behavior was added.
+
 ## 2026-05-17 - Stage 18 Task 4 remaining Memory/Remember cleanup
 
 - Task attempted: Remove remaining language that implies real AI memory from assistant context labels.

@@ -17,7 +17,7 @@ import {
 } from "@/features/easylist/lib/taskUtils";
 import type { PriorityTier } from "@/lib/firestore/tasks";
 
-type CommandIntent = "task" | "email" | "calendar" | "note" | "project" | "review" | "contact" | "workout";
+type CommandIntent = "task" | "followup" | "plan" | "note" | "project" | "review" | "contact" | "workout";
 
 type CommandDraft = {
   intent: CommandIntent;
@@ -32,17 +32,17 @@ type CommandDraft = {
   actionLabel: string;
 };
 
-const commandExample = "add a task, save a note, or plan the next block";
+const commandExample = "draft a task, note context, or plan review";
 
 const intentMeta: Record<CommandIntent, { label: string; routeLabel: string }> = {
-  task: { label: "Task", routeLabel: "EasyList" },
-  email: { label: "Email", routeLabel: "Email Triage" },
-  calendar: { label: "Calendar", routeLabel: "Calendar" },
-  note: { label: "Note", routeLabel: "Notes" },
-  project: { label: "Project", routeLabel: "Projects" },
-  review: { label: "Review", routeLabel: "Today Review" },
-  contact: { label: "Contact", routeLabel: "Contacts" },
-  workout: { label: "Workout", routeLabel: "Workout" },
+  task: { label: "Task draft", routeLabel: "Inbox" },
+  followup: { label: "Follow-up draft", routeLabel: "Inbox" },
+  plan: { label: "Plan preview", routeLabel: "Plan" },
+  note: { label: "Context draft", routeLabel: "Notes" },
+  project: { label: "Project draft", routeLabel: "Projects" },
+  review: { label: "Review task", routeLabel: "Today" },
+  contact: { label: "People note", routeLabel: "People" },
+  workout: { label: "Workout note", routeLabel: "Workout" },
 };
 
 function addDays(date: Date, days: number) {
@@ -91,46 +91,46 @@ function parseCommand(value: string): CommandDraft {
 
   if (/\b(email|gmail|inbox|reply|respond|archive)\b/.test(lower)) {
     return {
-      intent: "email",
-      title: cleanTitle(text, [/^\s*(email|reply|respond to)\s+/i], "Review email"),
+      intent: "followup",
+      title: cleanTitle(text, [/^\s*(email|reply|respond to)\s+/i], "Review follow-up"),
       dueDate,
       priorityTier,
       estimatedLength: estimatedLength || 8,
-      category: "Email",
-      route: "/app/easylist/email",
-      helper: "Email command. Open Gmail triage, then approve task, draft, or archive actions.",
+      category: "Follow-up",
+      route: "/app/easylist/add",
+      helper: "Follow-up draft. Save an Inbox task before taking any real email, text, call, or message action.",
       confidence: "High",
-      actionLabel: "Save review task",
+      actionLabel: "Save follow-up task",
     };
   }
 
   if (/\b(calendar|schedule|meeting|appointment|at \d|am|pm)\b/.test(lower)) {
     return {
-      intent: "calendar",
-      title: cleanTitle(text, [/^\s*(schedule|calendar)\s+/i], "New calendar item"),
+      intent: "plan",
+      title: cleanTitle(text, [/^\s*(schedule|calendar)\s+/i], "New plan item"),
       dueDate,
       priorityTier: 4,
       estimatedLength: estimatedLength || 30,
-      category: "Calendar",
+      category: "Plan",
       route: "/app/easycalendar/day",
-      helper: "Calendar command. Use the day view to place this into time.",
+      helper: "Plan preview. Open Plan before placing anything on the day.",
       confidence: /\b(at \d|am|pm)\b/.test(lower) ? "High" : "Medium",
-      actionLabel: "Stage calendar item",
+      actionLabel: "Stage plan preview",
     };
   }
 
-  if (/\b(note|idea|thought|remember)\b/.test(lower)) {
+  if (/\b(note|idea|thought|remember|context)\b/.test(lower)) {
     return {
       intent: "note",
-      title: cleanTitle(text, [/^\s*(note|remember)\s+/i], "New note"),
+      title: cleanTitle(text, [/^\s*(note|context|remember)\s+/i], "New note"),
       dueDate: null,
       priorityTier: 6,
       estimatedLength: null,
       category: "Notes",
       route: "/app/easynotes/new",
-      helper: "Note command. Capture this as context before it becomes clutter.",
+      helper: "Context draft. Open Notes when you are ready to save a normal note.",
       confidence: "High",
-      actionLabel: "Stage note",
+      actionLabel: "Stage context draft",
     };
   }
 
@@ -143,9 +143,9 @@ function parseCommand(value: string): CommandDraft {
       estimatedLength,
       category: "Projects",
       route: "/app/easyprojects",
-      helper: "Project command. Start with a project shell, then break it into tasks.",
+      helper: "Project draft. Open Projects before turning it into a larger plan.",
       confidence: "Medium",
-      actionLabel: "Stage project",
+      actionLabel: "Stage project draft",
     };
   }
 
@@ -157,8 +157,8 @@ function parseCommand(value: string): CommandDraft {
       priorityTier: 4,
       estimatedLength: estimatedLength || 20,
       category: "Review",
-      route: "/app/command",
-      helper: "Review command. Keep the next decision in this cockpit before opening deeper tools.",
+      route: "/app/hq",
+      helper: "Review task. Save one task or open Today for the main assistant path.",
       confidence: "High",
       actionLabel: "Save planning task",
     };
@@ -171,11 +171,11 @@ function parseCommand(value: string): CommandDraft {
       dueDate,
       priorityTier,
       estimatedLength: estimatedLength || 10,
-      category: "Contacts",
+      category: "People",
       route: "/app/easycontacts",
-      helper: "Contact command. Keep the relationship visible, then choose whether it needs a task.",
+      helper: "People note. Save an Inbox task before any real call, text, or message.",
       confidence: "Medium",
-      actionLabel: "Stage follow-up",
+      actionLabel: "Stage people note",
     };
   }
 
@@ -188,7 +188,7 @@ function parseCommand(value: string): CommandDraft {
       estimatedLength: estimatedLength || 45,
       category: "Workout",
       route: "/app/easyworkout/log",
-      helper: "Workout command. Open the logger with the session shape already in mind.",
+      helper: "Workout note. Open Workout before logging anything.",
       confidence: "Medium",
       actionLabel: "Stage workout",
     };
@@ -202,14 +202,14 @@ function parseCommand(value: string): CommandDraft {
     estimatedLength,
     category: "Inbox",
     route: "/app/easylist/dashboard",
-    helper: "Task command. Save it to EasyList, then decide whether it needs time.",
+    helper: "Task draft. Save one task to Inbox, then decide whether it needs time.",
     confidence: text.length > 8 ? "Medium" : "Low",
-    actionLabel: "Save to EasyList",
+    actionLabel: "Save task to Inbox",
   };
 }
 
 export function CommandCenterPage() {
-  const { events, taskBlocks, tasks, addTask, scheduleTask, error } = useEasyCalendar();
+  const { events, taskBlocks, tasks, addTask, error } = useEasyCalendar();
   const location = useLocation();
   const [command, setCommand] = useState("");
   const [status, setStatus] = useState("Type one thing, then choose where it belongs.");
@@ -279,9 +279,9 @@ export function CommandCenterPage() {
       to: "/app/easycalendar/day",
     },
     {
-      label: "Memory",
-      value: "Notes ready",
-      detail: "Save context you will need later",
+      label: "Notes",
+      value: "Context ready",
+      detail: "Save normal notes in Notes",
       to: "/app/easynotes",
     },
   ];
@@ -289,8 +289,8 @@ export function CommandCenterPage() {
   async function saveCommandTask() {
     if (!parsedCommand?.title) return;
 
-    if (parsedCommand.intent === "calendar" || parsedCommand.intent === "note" || parsedCommand.intent === "project" || parsedCommand.intent === "contact" || parsedCommand.intent === "workout") {
-      setStatus(`Open ${intentMeta[parsedCommand.intent].routeLabel} to finish this one. I kept it as a staged command.`);
+    if (parsedCommand.intent === "plan" || parsedCommand.intent === "note" || parsedCommand.intent === "project" || parsedCommand.intent === "contact" || parsedCommand.intent === "workout") {
+      setStatus(`Open ${intentMeta[parsedCommand.intent].routeLabel} to finish this preview. Nothing was saved here.`);
       return;
     }
 
@@ -298,7 +298,7 @@ export function CommandCenterPage() {
       itemKind: parsedCommand.dueDate ? "deadline" : "task",
       title: parsedCommand.title,
       notes: [parsedCommand.helper, `Original command: ${command}`].join("\n"),
-      listName: parsedCommand.category === "Email" ? "Email" : "Inbox",
+      listName: "Inbox",
       category: parsedCommand.category,
       dueDate: parsedCommand.dueDate,
       estimatedLength: parsedCommand.estimatedLength,
@@ -307,20 +307,7 @@ export function CommandCenterPage() {
       recurring: false,
     });
     setCommand("");
-    setStatus(`Saved "${parsedCommand.title}" to EasyList.`);
-  }
-
-  async function scheduleNextMove() {
-    if (!nextMove || !openWindows[0]) return;
-    const duration = Math.max(15, Math.min(nextMove.estimatedLength || 30, openWindows[0].minutes));
-    const endAt = new Date(openWindows[0].startAt.getTime() + duration * 60000);
-    await scheduleTask(nextMove, {
-      startAt: openWindows[0].startAt,
-      endAt,
-      planningState: "scheduled",
-      userAdjusted: false,
-    });
-    setStatus(`Placed "${nextMove.title}" into the next open window.`);
+    setStatus(`Saved one Inbox task: "${parsedCommand.title}". No email, note, plan, notification, or calendar item was created.`);
   }
 
   return (
@@ -329,37 +316,38 @@ export function CommandCenterPage() {
 
       <section className="command-hero" aria-labelledby="command-title">
         <div>
-          <p className="eyebrow">Today</p>
-          <h1 id="command-title">Command the day.</h1>
+          <p className="eyebrow">Legacy review</p>
+          <h1 id="command-title">Review one draft.</h1>
           <p>
-            Start with one loose thought. EasyLife can hold it as a task, note, plan item, or review point.
+            This older route stays available for review, but Today and Inbox are the primary assistant path.
+            Nothing sends, syncs, schedules, or saves unless you choose a specific save action.
           </p>
         </div>
         <div className="command-hero-readout">
-          <span>Current state</span>
+          <span>Draft state</span>
           <strong>{nextMove ? nextMove.title : "Capture the next loose end"}</strong>
           <p>
             {overdueTasks.length
               ? `${overdueTasks.length} overdue item${overdueTasks.length === 1 ? "" : "s"} need recovery.`
               : dueTodayTasks.length
                 ? `${dueTodayTasks.length} item${dueTodayTasks.length === 1 ? "" : "s"} are due today.`
-                : `${formatDuration(openMinutes)} open on the calendar.`}
+                : `${formatDuration(openMinutes)} open in Plan.`}
           </p>
           <div className="task-composer-actions">
             <Link className="primary-button" to={nextMove ? "/app/easylist/dashboard" : "/app/easylist/add"}>
-              {nextMove ? "Open next task" : "Capture something"}
+              {nextMove ? "Review in Inbox" : "Capture in Inbox"}
             </Link>
-            <button className="button-secondary" type="button" onClick={scheduleNextMove} disabled={!nextMove || !openWindows[0]}>
-              Time-block it
-            </button>
+            <Link className="button-secondary" to="/app/easycalendar/day">
+              Review in Plan
+            </Link>
           </div>
         </div>
       </section>
 
-      <PageSection eyebrow="Command" title="One input">
+      <PageSection eyebrow="Draft review" title="One input">
         <div className="command-palette-panel">
           <label className="field-stack">
-            <span>Command</span>
+            <span>Draft input</span>
             <textarea
               value={command}
               onChange={(event) => setCommand(event.target.value)}
@@ -402,7 +390,7 @@ export function CommandCenterPage() {
         </div>
       </PageSection>
 
-      <section className="command-status-row" aria-label="Today, Inbox, Plan, and Memory status">
+      <section className="command-status-row" aria-label="Today, Inbox, Plan, and Notes status">
         {cockpitStatuses.map((item) => (
           <Link to={item.to} key={item.label}>
             <span>{item.label}</span>

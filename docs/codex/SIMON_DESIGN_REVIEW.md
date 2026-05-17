@@ -1,6 +1,32 @@
 # Simon Design Review
 
 ## Verdict
+COMMAND_CENTER_DEMOTED_AND_ALIGNED
+
+## Stage 18 Task 5 Command Center Route Audit - 2026-05-17
+
+Verdict: `COMMAND_CENTER_DEMOTED_AND_ALIGNED`.
+
+The old `/app/command` route is no longer pretending to be the main assistant cockpit. It now reads as a legacy draft-review surface and points back to Today/Inbox as the primary assistant path.
+
+What changed:
+- Hero copy changed from broad command-center framing to `Legacy review` and `Review one draft`.
+- The first viewport now says nothing sends, syncs, schedules, or saves unless the user chooses a specific save action.
+- The direct `Time-block it` button was replaced by a route to Plan, so this page no longer silently schedules from the old command surface.
+- The status row now says Today, Inbox, Plan, and Notes; the old `Memory` label is gone.
+- More navigation now says `Draft review` instead of generic `Review`, keeping the route demoted under More.
+
+Rendered proof:
+- `/app/command?demo=1` rendered with `Legacy review`, `Draft review`, and the explicit approval-first line.
+- Rendered command text did not contain `Memory status`, `Command the day`, `Time-block it`, `Stage calendar item`, `Email Triage`, `Email command`, or `Calendar command`.
+- `/app/hq?demo=1` still showed Today, Inbox, Plan, Notes, and More as the primary model, with `Draft review` only under More.
+
+Design risk:
+- `/app/command` is still an older surface and should not become the main assistant route again. It is acceptable as a demoted local review tool while Today/Inbox remain the real review path.
+
+---
+
+## Verdict
 MOBILE_REVIEWABLE_WITH_INBOX_BLOCKER
 
 ## Stage 18 Task 1 Mobile Review Proof - 2026-05-17
