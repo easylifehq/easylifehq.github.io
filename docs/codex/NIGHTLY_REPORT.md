@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 26 Task 1 Provider And Server-Secret Confirmation
+
+- Task attempted: Create the final confirmation note before any live provider implementation begins.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_26_PROVIDER_SECRET_CONFIRMATION.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Confirmation created: `docs/codex/EASYLIFE_STAGE_26_PROVIDER_SECRET_CONFIRMATION.md`.
+- Provider choice: placeholder only, `APPROVED_MODEL_PROVIDER=TBD_SERVER_SIDE_PROVIDER`.
+- Secret placeholder: `SERVER_AI_PROVIDER_API_KEY`.
+- Existing key clarification: `pipeline-2f422` remains Firebase web config and is not an AI provider key.
+- Browser env clarification: `VITE_` variables are browser-exposed and cannot hold provider secrets.
+- Dry-run limits: maximum 5 provider requests, maximum total spend 1.00 USD, per-user daily cap 10 synthetic requests, one request per 60 seconds, 15 second timeout, no automatic retries.
+- First route/prompt/behavior: `/app/easylist/add?demo=1`, `intake-suggestion`, Inbox typed-capture suggestion only.
+- Boundary preserved: no live AI call, provider SDK, frontend API key, actual secret, real user data, backend implementation, dependency/package change, deploy config, generated output, external action, hidden read, hidden write, save, send, schedule, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 26 First Live Provider Dry Run Plan
 
 - Task attempted: Plan the first real model-provider dry run for EasyLife using the Stage 25 approval.
