@@ -2,6 +2,24 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 28 Task 1 Assistant Output Edge-Case Fixtures
+
+- Task: Add edge-case fixtures for bad/empty/duplicated/overconfident assistant output.
+- Result: Stage 28 reliability fixture proof added.
+- Magic signal: bad-output-does-not-slip-through-as-accepted
+- Test evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayReliability.test.ts`.
+- Empty output evidence: empty object rejects.
+- Duplicate evidence: duplicated assistant suggestion identity falls back.
+- Source evidence: missing source rejects.
+- Destination evidence: wrong intent-to-destination pairing falls back.
+- Confidence evidence: overconfident/no-review-needed language falls back.
+- Intent evidence: unsupported intent rejects.
+- Length evidence: too-long suggestion falls back.
+- Hidden action evidence: automatic save/scheduled-reminder wording rejects.
+- Summary evidence: `serverGatewayReliabilitySummary.acceptedBadCases` is `0`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider call, secret, deploy change, dependency, generated output, hidden write, external action, runtime capability expansion, broad chat, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 28 Assistant Reliability Task Packet
 
 - Task: Plan reliability hardening for the Inbox assistant lane before expanding capability.

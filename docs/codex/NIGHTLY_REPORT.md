@@ -1,5 +1,18 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 28 Task 1 Assistant Output Edge-Case Fixtures
+
+- Task attempted: Add edge-case fixtures for bad, empty, duplicated, and overconfident assistant output.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayReliability.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Fixture coverage: empty output, duplicate suggestions, missing source, wrong destination, overconfident language, unsupported intent, too-long suggestion, and hidden-action wording.
+- Proof behavior: every bad fixture is expected to reject or fall back; `serverGatewayReliabilitySummary.acceptedBadCases` remains `0`.
+- Validator boundary: hard schema and hidden-action failures use `validateAssistantModelOutput`; reliability-only cases such as duplicate, wrong destination, overconfidence, and excessive length are represented as fallback fixtures without adding provider behavior.
+- Boundary preserved: no provider call, secret, deploy change, dependency, generated output, hidden write, external action, runtime behavior expansion, broad chat, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 28 Assistant Reliability Task Packet
 
 - Task attempted: Plan reliability hardening for the Inbox assistant lane before expanding capability.
