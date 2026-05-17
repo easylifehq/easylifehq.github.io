@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 32 Task 1 Narrow Assistant Intake Function Scaffold
+
+- Task: Add `assistantIntakeSuggestion` as the narrow Stage 31 Firebase Functions lane without calling OpenAI.
+- Result: Function scaffold added.
+- Magic signal: narrow-server-doorway-exists-provider-still-asleep
+- Function evidence: `functions/index.js` now exports `assistantIntakeSuggestion`.
+- Secret evidence: the function attaches existing Firebase Functions secret `OPENAI_API_KEY`, but does not read or print its value and does not make a provider call.
+- Request evidence: POST-only, verified Firebase auth, exact route `/app/easylist/add?demo=1`, exact prompt `intake-suggestion`, visible `typedCapture`, and 2000-character capture limit.
+- Response evidence: returns local disabled/fallback envelope with `providerState: not-called`, `fallbackState: local-disabled`, `nothingSavedOrSent: true`, and `requiresApproval: true`.
+- Logging evidence: metadata-only logging uses route, prompt ID, typed capture length, provider state, fallback state, and limits; raw typed capture and secrets are not logged.
+- Legacy evidence: existing `analyzeTaskBrainDump` and `planProjectWithAi` were not modified or deployed.
+- Boundary evidence: no deploy, live AI call, provider SDK, dependency/package change, deploy config, generated output, frontend key, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, saved-object expansion, or broad assistant behavior was added.
+
 ## 2026-05-17 - Existing Firebase AI Functions Audit
 
 - Task: Audit existing Firebase AI endpoints before redeploy.

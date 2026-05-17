@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 32 Task 1 Narrow Assistant Intake Function Scaffold
+
+- Task attempted: Add a new Firebase Functions endpoint scaffold for the Stage 31 first live assistant lane without calling OpenAI.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Functions check: Passed with `npm.cmd --prefix functions run lint`.
+- Files changed:
+  - `functions/index.js`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Endpoint added: `assistantIntakeSuggestion`.
+- Secret boundary: attaches existing Firebase Functions secret `OPENAI_API_KEY`, but does not call `openAiApiKey.value()` and does not call OpenAI.
+- Accepted lane: POST only, verified Firebase auth, route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, visible `typedCapture`, max typed capture length 2000 characters.
+- Response behavior: returns local disabled/fallback response with `providerState: not-called`, `fallbackState: local-disabled`, `nothingSavedOrSent: true`, and `requiresApproval: true`.
+- Logging: metadata-only route, prompt ID, typed capture length, provider state, fallback state, and limits; no raw typed capture or secret values.
+- Existing functions preserved: `analyzeTaskBrainDump` and `planProjectWithAi` were not changed or deployed.
+- Boundary preserved: no deploy, live AI call, provider SDK, dependency/package change, deploy config, generated output, frontend key, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Existing Firebase AI Functions Audit
 
 - Task attempted: Audit existing Firebase Functions AI endpoints before redeploy.

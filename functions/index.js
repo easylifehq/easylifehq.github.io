@@ -232,6 +232,32 @@ function getFirebaseBearerToken(request) {
   return authHeader.startsWith("Bearer ") ? authHeader.slice("Bearer ".length) : "";
 }
 
+const assistantIntakeAllowedRoute = "/app/easylist/add?demo=1";
+const assistantIntakeAllowedPromptId = "intake-suggestion";
+const assistantIntakeMaxTypedCaptureLength = 2000;
+
+function buildAssistantIntakeFallback(payload = {}) {
+  return {
+    version: "stage-32-assistant-intake-suggestion-scaffold-v1",
+    source: "server-gateway-scaffold",
+    route: assistantIntakeAllowedRoute,
+    promptId: assistantIntakeAllowedPromptId,
+    providerState: "not-called",
+    fallbackState: "local-disabled",
+    sanitizerState: payload.sanitizerState || "accepted",
+    validationState: "not-run",
+    quarantineState: "not-run",
+    state: "fallback",
+    destination: "Inbox review",
+    confidence: "needs-review",
+    nothingSavedOrSent: true,
+    requiresApproval: true,
+    message:
+      payload.message ||
+      "Live AI is still disabled. Keep using the local draft preview; nothing was saved or sent.",
+  };
+}
+
 async function verifySignedInRequest(request, response, actionName) {
   const token = getFirebaseBearerToken(request);
 
@@ -248,6 +274,120 @@ async function verifySignedInRequest(request, response, actionName) {
     return null;
   }
 }
+
+exports.assistantIntakeSuggestion = onRequest(
+  {
+    cors: allowedCorsOrigins,
+    secrets: [openAiApiKey],
+    timeoutSeconds: 30,
+    memory: "256MiB",
+  },
+  async (request, response) => {
+    if (request.method === "OPTIONS") {
+      response.status(204).send("");
+      return;
+    }
+
+    if (request.method !== "POST") {
+      response.status(405).json({
+        error: "Use POST.",
+        ...buildAssistantIntakeFallback({
+          sanitizerState: "rejected",
+          message: "Use POST for assistant intake suggestions. Nothing was saved or sent.",
+        }),
+      });
+      return;
+    }
+
+    const verifiedUser = await verifySignedInRequest(request, response, "assistant intake suggestion");
+    if (!verifiedUser) return;
+
+    const route = String(request.body?.route || "").trim();
+    const promptId = String(request.body?.promptId || "").trim();
+    const typedCapture = String(request.body?.typedCapture || "").trim();
+    const typedCaptureLength = typedCapture.length;
+
+    if (route !== assistantIntakeAllowedRoute) {
+      logger.info("Rejected assistant intake suggestion route", {
+        route,
+        promptId,
+        typedCaptureLength,
+      });
+      response.status(400).json({
+        error: "Assistant intake is limited to the Inbox demo route.",
+        ...buildAssistantIntakeFallback({
+          sanitizerState: "rejected",
+          message: "This assistant lane only accepts Inbox demo typed capture. Nothing was saved or sent.",
+        }),
+      });
+      return;
+    }
+
+    if (promptId !== assistantIntakeAllowedPromptId) {
+      logger.info("Rejected assistant intake suggestion prompt", {
+        route,
+        promptId,
+        typedCaptureLength,
+      });
+      response.status(400).json({
+        error: "Unsupported assistant prompt.",
+        ...buildAssistantIntakeFallback({
+          sanitizerState: "rejected",
+          message: "This assistant lane only accepts the intake-suggestion prompt. Nothing was saved or sent.",
+        }),
+      });
+      return;
+    }
+
+    if (!typedCapture) {
+      logger.info("Rejected empty assistant intake capture", {
+        route,
+        promptId,
+        typedCaptureLength,
+      });
+      response.status(400).json({
+        error: "Typed capture is required.",
+        ...buildAssistantIntakeFallback({
+          sanitizerState: "rejected",
+          message: "Add visible typed capture before requesting an assistant suggestion. Nothing was saved or sent.",
+        }),
+      });
+      return;
+    }
+
+    if (typedCaptureLength > assistantIntakeMaxTypedCaptureLength) {
+      logger.info("Rejected oversized assistant intake capture", {
+        route,
+        promptId,
+        typedCaptureLength,
+        maxTypedCaptureLength: assistantIntakeMaxTypedCaptureLength,
+      });
+      response.status(413).json({
+        error: "Typed capture is too long.",
+        ...buildAssistantIntakeFallback({
+          sanitizerState: "rejected",
+          message: "Shorten the typed capture before requesting an assistant suggestion. Nothing was saved or sent.",
+        }),
+      });
+      return;
+    }
+
+    logger.info("Assistant intake suggestion scaffold returned fallback", {
+      route,
+      promptId,
+      typedCaptureLength,
+      providerState: "not-called",
+      fallbackState: "local-disabled",
+    });
+
+    response.status(200).json(
+      buildAssistantIntakeFallback({
+        message:
+          "The server gateway accepted this Inbox capture, but live AI is still disabled. Nothing was saved or sent.",
+      })
+    );
+  }
+);
 
 function clampGmailMaxResults(value) {
   const parsed = Number(value);
