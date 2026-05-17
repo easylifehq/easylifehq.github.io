@@ -1,6 +1,28 @@
 # Robin Copy Review
 
 ## Verdict
+READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL
+
+## Stage 30 Controlled Live AI Copy Proof - 2026-05-17
+
+Verdict: `READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL`.
+
+The copy boundary is honest enough for the next gate: EasyLife may prepare a separately approved first live provider call, but it must not say live AI is generally enabled.
+
+Copy proof:
+- The proof packet says this is not yet a live AI assistant.
+- The operator checklist requires explicit approval before any provider call.
+- The request sanitizer rejects broad/private context before provider use.
+- The response quarantine blocks hidden-write, external-action, real-memory, and malformed output before clean display.
+- The next task queue starts with an approval record instead of implementation.
+
+Copy guard:
+Allowed Stage 31 language: `separately approved first live provider call`, `server-side secret`, `sanitized request`, `quarantined response`, `nothing saved or sent`.
+Forbidden Stage 31 language unless truly implemented: `AI handled this`, `remembered`, `scheduled`, `sent`, `synced`, `geocoded`, `automatic`, `live assistant is on for everything`.
+
+---
+
+## Verdict
 READY_FOR_STAGE_30_CONTROLLED_LIVE_AI_GATE
 
 ## Stage 29 Trust And Security Copy Proof - 2026-05-17

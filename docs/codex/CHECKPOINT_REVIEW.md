@@ -1,6 +1,37 @@
 # Checkpoint Review
 
 ## Verdict
+READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL
+
+## Stage 30 Controlled Live AI Gate Proof Packet
+
+Reviewed At: 2026-05-17
+
+Stage 30 proof says EasyLife is ready for a separately approved first live provider call. It does not say EasyLife has live AI turned on, and it does not approve broad assistant behavior.
+
+## Stage 30 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 30 Evidence
+
+- Live AI environment contract keeps live AI disabled by default, server-side secret placeholder `SERVER_AI_PROVIDER_API_KEY`, exact route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, and `VITE_` provider-secret prohibition.
+- Provider request sanitizer accepts only synthetic/demo or explicitly approved private-alpha Inbox typed capture and rejects broad/private context.
+- Provider response quarantine uses Stage 20 output validation and blocks malformed, hidden-write, external-action, real-memory, missing-source/destination, and unsupported-intent output before display.
+- Private-alpha operator checklist requires provider choice, server-side secret storage, spend cap, rate limit, kill switch, metadata-only logging, no frontend key, first route/prompt, fallback, rollback, and no external actions.
+- No real provider key, provider SDK, deploy config, backend implementation, live provider call, hidden write, external action, real memory, or saved-object expansion was added.
+
+## Blunt Judgment
+
+Stage 30 is ready for the next gate, but the next gate must start with explicit human approval. Do not run a live provider call until the Stage 31 approval record exists and says approved.
+
+## Verdict
+
+READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL
+
+---
+
+## Verdict
 READY_FOR_STAGE_30_CONTROLLED_LIVE_AI_GATE
 
 ## Stage 29 Trust And Security Proof Packet

@@ -1,23 +1,27 @@
 # Phase State
 
-Current Phase: stage-30-controlled-live-ai-gate-ready
+Current Phase: stage-31-separately-approved-first-live-ai-call-gate
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Prepare the controlled live AI gate for the narrow Inbox typed-capture suggestion lane, without making a live provider call yet.
+Primary Action: Require explicit human approval before any first live provider call for the narrow Inbox typed-capture suggestion lane.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not deploy, do not add broad AI assistant behavior, do not use real user data by default, do not expose frontend API keys, do not commit secrets, do not make live provider calls without a separate explicit approval gate, do not add hidden writes, and do not add sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, or saved-object expansion.
 No More Features Lock: true
-Complexity Budget: Stage 30 may add a disabled-by-default live AI environment contract, provider request sanitizer, provider response quarantine, private-alpha operator checklist, and proof packet. It must not make a live provider call yet unless a later explicit gate approves it.
+Complexity Budget: Stage 31 may prepare exactly one separately approved first live provider call path for Inbox typed-capture suggestion only. It must start with a human approval record and must not broaden into chat, memory, sending, scheduling, sync, notifications, geocoding, device location, hidden writes, or saved-object expansion.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: STAGE_30_GATE_READY_NO_LIVE_PROVIDER_CALL_YET
-Evidence Required: Stage 30 env contract, provider request sanitizer, provider response quarantine, private-alpha operator checklist, proof packet, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
+Parking State: STAGE_31_REQUIRES_EXPLICIT_HUMAN_APPROVAL_BEFORE_LIVE_PROVIDER_CALL
+Evidence Required: Stage 31 approval record, server-side secret boundary, first-call harness proof, Inbox state proof if UI changes, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 30 can proceed one task at a time. A first real server-side provider call still requires a later explicit approval gate and must remain synthetic/demo or explicitly private-alpha Inbox typed-capture only.
+Next Phase Criteria: Stage 31 can proceed only after the human approval record explicitly approves provider choice, server-side secret storage, spend cap, rate limit, kill switch, metadata-only logging, route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, fallback, rollback, and no external actions.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 29 trust/security proof passed and Stage 30 controlled live AI gate prepared without live provider calls.
+Updated At: 2026-05-17 - Stage 30 controlled live AI gate proof passed and Stage 31 prepared as an explicit human-approval gate before any first live provider call.
+
+Stage 30 proof result: READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL. The Stage 30 controlled live AI proof packet exists at docs/codex/EASYLIFE_STAGE_30_CONTROLLED_LIVE_AI_PROOF_PACKET.md. It verifies the live AI env contract, provider request sanitizer, provider response quarantine, private-alpha operator checklist, no frontend keys, no broad context, no hidden writes, no external actions, and local fallback availability. This result does not implement or run a live provider call.
+
+Prepared Stage 31 queue: docs/codex/NEXT_5_TASKS.md contains exactly five bounded tasks. Stage 31 must begin with an explicit human approval record before any live provider call. If the approval record is missing or incomplete, no live provider call may run.
 
 Stage 29 proof result: READY_FOR_STAGE_30_CONTROLLED_LIVE_AI_GATE. The Stage 29 trust/security proof packet exists at docs/codex/EASYLIFE_STAGE_29_TRUST_SECURITY_PROOF_PACKET.md. It verifies frontend and built-bundle secret scans, metadata-only logging, hidden-write audit, external-action audit, kill-switch/rollback behavior, fallback behavior, no frontend API keys, and no real-memory/external-action claims. This result does not approve a live provider call. Stage 30 may prepare the controlled live AI gate only.
 

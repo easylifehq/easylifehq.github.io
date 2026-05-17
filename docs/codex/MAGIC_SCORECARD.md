@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 30 Controlled Live AI Proof Packet
+
+- Task: Decide whether EasyLife is ready for a separately approved first live AI provider call.
+- Result: Stage 30 proof packet created with verdict `READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL`.
+- Magic signal: controlled-live-ai-gate-cleared-with-human-approval-required
+- Proof packet evidence: `docs/codex/EASYLIFE_STAGE_30_CONTROLLED_LIVE_AI_PROOF_PACKET.md`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Environment evidence: live AI disabled by default; server secret placeholder `SERVER_AI_PROVIDER_API_KEY`; `VITE_` provider secrets forbidden; route `/app/easylist/add?demo=1`; prompt `intake-suggestion`.
+- Request evidence: sanitizer accepts only approved Inbox typed capture and rejects secrets, auth/session data, contact details, exact addresses, note bodies, broad task lists, calendar contents, and full context packets.
+- Response evidence: quarantine uses Stage 20 output validation and blocks malformed, hidden-write, external-action, real-memory, missing source/destination, and unsupported-intent output before display.
+- Operator evidence: checklist requires provider choice, server-side secret storage, spend cap, rate limit, kill switch, metadata-only logging, no frontend key, first route/prompt, fallback, rollback, and no external actions.
+- Next gate evidence: `docs/codex/NEXT_5_TASKS.md` now contains exactly five Stage 31 tasks and starts with explicit human approval before any live provider call.
+- Boundary evidence: no live provider call, provider SDK, API key, deploy config, backend implementation, package/dependency change, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, saved-object expansion, or broad assistant behavior was added.
+
 ## 2026-05-17 - Stage 30 Task 4 Private-Alpha Operator Checklist
 
 - Task: Create the checklist a human must complete before turning on any live AI provider lane.

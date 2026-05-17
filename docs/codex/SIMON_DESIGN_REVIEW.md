@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL
+
+## Stage 30 Controlled Live AI Product Proof - 2026-05-17
+
+Verdict: `READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL`.
+
+Stage 30 did not add visible UI or new assistant chrome, which is correct. It prepares a live-provider gate without making the app look like live AI is broadly available.
+
+Product/design read:
+- The first live lane remains one route: `/app/easylist/add?demo=1`.
+- The first prompt remains one behavior: `intake-suggestion`.
+- The route should continue to feel like a bounded alpha lane, not a general chat assistant.
+- Stage 31 must not add a large technical panel unless it replaces or shortens existing proof copy.
+
+Design guard:
+Any Stage 31 UI must stay compact: source, prompt, sanitizer, quarantine/validation, fallback, and `nothing saved or sent`. No broad chat, magic memory, sent/scheduled/synced claims, or new dashboard.
+
+---
+
+## Verdict
 READY_FOR_STAGE_30_CONTROLLED_LIVE_AI_GATE
 
 ## Stage 29 Trust And Security Product Proof - 2026-05-17
