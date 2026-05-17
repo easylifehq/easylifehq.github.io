@@ -18,7 +18,7 @@ import { buildTaskDraft, type TaskRowDraft } from "@/features/easylist/component
 import { type AssistantApprovalState } from "@/features/assistant/intentTypes";
 import { TaskComposer } from "@/features/easylist/components/TaskComposer";
 import { useEasyList } from "@/features/easylist/EasyListContext";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const FOLLOW_UP_PATTERN = /\b(email|reply|respond|follow up|follow-up|call|text|message)\b/i;
 const APPROVAL_STATE_OPTIONS: AssistantApprovalState[] = [
@@ -29,12 +29,13 @@ const APPROVAL_STATE_OPTIONS: AssistantApprovalState[] = [
   "needs-review",
 ];
 const INBOX_PREVIEW_STATE_LABELS: Record<AssistantApprovalState, string> = {
-  suggested: "Preview: suggested",
-  editing: "Preview: editing",
-  approved: "Preview: ready for draft",
-  dismissed: "Preview: dismissed locally",
-  "needs-review": "Preview: needs review",
+  suggested: "Draft",
+  editing: "Editing",
+  approved: "Preview",
+  dismissed: "Dismissed",
+  "needs-review": "Review",
 };
+const INBOX_TRUST_LABELS = ["Draft", "Preview", "Task save only", "Note save only"];
 
 export function EasyListInboxPage() {
   const { tasks, isLoading, error, addTask } = useEasyList();
@@ -69,6 +70,9 @@ export function EasyListInboxPage() {
     () => classifyAssistantIntent(assistantCaptureText),
     [assistantCaptureText]
   );
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+  }, []);
   const isDemoReviewMode = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get("demo") === "1" || params.get("visualQa") === "1";
@@ -108,9 +112,9 @@ export function EasyListInboxPage() {
         detail: "Already has time context for Today.",
       },
       {
-        label: "Remember",
+        label: "Context",
         count: activeLaneItems.filter((task) => task.notes || task.category).length,
-        detail: "Carries notes or memory context.",
+        detail: "Has notes or saved context.",
       },
       {
         label: "Follow up",
@@ -169,7 +173,7 @@ export function EasyListInboxPage() {
         notes: taskHandoffPreview.notes,
         savedTaskId: null,
         status: "blocked",
-        message: "Name the task before saving. Nothing was saved.",
+        message: "Add a task name first.",
       });
       return;
     }
@@ -198,7 +202,7 @@ export function EasyListInboxPage() {
         notes: taskHandoffPreview.notes,
         savedTaskId: null,
         status: "blocked",
-        message: "Demo review mode: no signed-in task save happened. This final confirmation would save one task only outside demo review; nothing else was created.",
+        message: "Demo: no task saved. Outside demo, this would save one task only.",
       });
       return;
     }
@@ -215,9 +219,7 @@ export function EasyListInboxPage() {
       notes: taskHandoffPreview.notes,
       savedTaskId: taskId || null,
       status: taskId ? "saved" : "blocked",
-      message: taskId
-        ? "Saved one task only. No note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory was created."
-        : "No signed-in task save happened in this preview session. Nothing else was created.",
+      message: taskId ? "Saved one task only." : "No task saved in this preview session.",
     });
   }
 
@@ -228,8 +230,7 @@ export function EasyListInboxPage() {
           <p className="eyebrow">Inbox</p>
           <h2 id="easylist-inbox-title">Review the intake queue</h2>
           <p className="page-section-description">
-            Capture loose input, approve what matters, and keep the save paths explicit: tasks confirm here, note/context
-            confirms in Notes, and plans, reminders, and follow-ups stay preview-only.
+            Draft first. Tasks save here after final confirmation. Notes save in Notes. Plans, reminders, and follow-ups stay preview-only.
           </p>
         </header>
 
@@ -239,7 +240,7 @@ export function EasyListInboxPage() {
             <strong>{nextReviewItem?.title || "No unresolved input is waiting."}</strong>
             <p>
               {nextReviewItem
-                ? "Approve it, add time context, remember the detail, or release it before adding more."
+                ? "Approve it, add time context, keep the detail, or release it."
                 : "Use the command row below when a new thought needs somewhere safe to land."}
             </p>
           </div>
@@ -271,7 +272,7 @@ export function EasyListInboxPage() {
               ))}
             </datalist>
           </label>
-          <p>Keep scope quiet. Today only needs the next thing worth approving.</p>
+          <p>Keep scope quiet. Review one lane at a time.</p>
         </div>
 
         <section className="assistant-intent-preview" aria-labelledby="assistant-intent-preview-title">
@@ -294,9 +295,11 @@ export function EasyListInboxPage() {
                 placeholder="Paste one messy thought to classify locally"
               />
             </label>
-            <p>
-              Local preview only. Nothing saves, sends, syncs, schedules, or remembers until final confirmation.
-            </p>
+            <div className="assistant-trust-chip-row" aria-label="Assistant save boundaries">
+              {[...INBOX_TRUST_LABELS, ...(isDemoReviewMode ? ["Demo"] : [])].map((label) => (
+                <span key={label}>{label}</span>
+              ))}
+            </div>
           </div>
 
           <article className={`assistant-suggestion-card assistant-suggestion-card-${assistantSuggestion.intent}`}>
@@ -324,7 +327,7 @@ export function EasyListInboxPage() {
                   }}
                   title="Preview only. This does not save anything."
                 >
-                  Preview draft
+                  Preview
                 </button>
                 <button
                   type="button"
@@ -339,7 +342,7 @@ export function EasyListInboxPage() {
                   }}
                   title="Preview only. This does not edit saved data."
                 >
-                  Edit preview
+                  Edit
                 </button>
                 <button
                   type="button"
@@ -354,7 +357,7 @@ export function EasyListInboxPage() {
                   }}
                   title="Preview only. This does not dismiss saved data."
                 >
-                  Dismiss preview
+                  Dismiss
                 </button>
               </div>
             </div>
@@ -371,8 +374,7 @@ export function EasyListInboxPage() {
               ))}
             </div>
             <p className={`assistant-approval-state-note assistant-approval-state-note-${activeApprovalState}`}>
-              {INBOX_PREVIEW_STATE_LABELS[visibleApprovalState]} only. This creates a local draft preview here,
-              not a saved task, note, calendar item, email, sync, or memory.
+              {INBOX_PREVIEW_STATE_LABELS[visibleApprovalState]} only. Nothing changes until final confirmation.
             </p>
             <div className="assistant-suggestion-fields" aria-label="Editable-looking suggestion fields">
               {assistantSuggestion.fields.map((field) => (
@@ -383,15 +385,13 @@ export function EasyListInboxPage() {
                 </span>
               ))}
             </div>
-            {assistantSuggestion.warnings.map((warning) => (
-              <p key={warning} className="assistant-suggestion-warning">
-                {warning}
-              </p>
-            ))}
+            <p className="assistant-suggestion-warning">
+              Preview only. No task, note, plan, reminder, follow-up, email, sync, or notification is created here.
+            </p>
           </article>
 
           <div className="assistant-draft-comparison-row" aria-label="Compare local draft shapes">
-            <span>Compare unsaved shapes</span>
+            <span>Preview shapes</span>
             {draftComparisonOptions.map((option) => (
               <button
                 key={option.draftType}
@@ -414,7 +414,7 @@ export function EasyListInboxPage() {
           </div>
 
           {approvedLocalDraft ? (
-            <article className="assistant-local-draft-preview" aria-label="Unsaved local draft preview">
+            <article className="assistant-local-draft-preview" aria-label="Local draft preview">
               <div className="assistant-local-draft-header">
                 <span>{localDraftStatusLabels[approvedLocalDraft.status]}</span>
                 <strong>{localDraftTypeLabels[approvedLocalDraft.draftType]}</strong>
@@ -432,11 +432,7 @@ export function EasyListInboxPage() {
                   </span>
                 ))}
               </div>
-              {approvedLocalDraft.warnings.map((warning) => (
-                <p key={warning} className="assistant-local-draft-warning">
-                  {warning}
-                </p>
-              ))}
+              <p className="assistant-local-draft-warning">Draft only. Review before any save path.</p>
               {canPreviewTaskHandoff ? (
                 <div className="assistant-handoff-actions">
                   <button
@@ -449,9 +445,9 @@ export function EasyListInboxPage() {
                       clearTaskSaveConfirmation();
                     }}
                   >
-                    Preview task-only save row
+                    Task save preview
                   </button>
-                  <span>Only task drafts can reach final save in Inbox. Note/context saves happen in Notes.</span>
+                  <span>Task save only. Notes save in Notes.</span>
                 </div>
               ) : null}
               {canPreviewReviewHandoff ? (
@@ -466,12 +462,12 @@ export function EasyListInboxPage() {
                       clearTaskSaveConfirmation();
                     }}
                   >
-                    Preview-only {approvedLocalDraft.draftType === "follow-up" ? "follow-up" : "reminder"} review
+                    Preview {approvedLocalDraft.draftType === "follow-up" ? "follow-up" : "reminder"}
                   </button>
                   <span>
                     {approvedLocalDraft.draftType === "follow-up"
-                      ? "This does not send email, text, calls, or messages."
-                      : "This does not schedule a notification."}
+                      ? "No message sent."
+                      : "No notification scheduled."}
                   </span>
                 </div>
               ) : null}
@@ -479,10 +475,10 @@ export function EasyListInboxPage() {
           ) : null}
 
           {showTaskHandoff && taskHandoffPreview ? (
-            <article className="assistant-task-handoff-preview" aria-label="Editable unsaved task-only save preview">
+            <article className="assistant-task-handoff-preview" aria-label="Editable task-only save preview">
               <div className="assistant-local-draft-header">
-                <span>Task-only save preview</span>
-                <strong>Editable unsaved task row</strong>
+                <span>Task save only</span>
+                <strong>Editable task row</strong>
               </div>
               <div className="task-row-grid task-row-card assistant-task-handoff-row">
                 <label className="field-stack task-row-field">
@@ -556,18 +552,13 @@ export function EasyListInboxPage() {
                   />
                 </label>
               </div>
-              {taskHandoffPreview.warnings.map((warning) => (
-                <p key={warning} className="assistant-local-draft-warning">
-                  {warning}
-                </p>
-              ))}
+              <p className="assistant-local-draft-warning">Task save only. Final confirmation required.</p>
               <div className="assistant-task-save-confirmation" aria-label="Final task save confirmation">
                 <div>
                   <span>Final confirmation</span>
                   <strong>Save one task to {selectedListName}</strong>
                   <p className="assistant-task-save-boundary">
-                    Task save only: `{taskHandoffPreview.title || "Untitled task"}` can be saved as one{" "}
-                    {taskHandoffPreview.itemKind}. Everything else stays preview-only.
+                    Task save only: `{taskHandoffPreview.title || "Untitled task"}` as one {taskHandoffPreview.itemKind}.
                   </p>
                 </div>
                 <button
@@ -621,7 +612,7 @@ export function EasyListInboxPage() {
                   ) : null}
                   <p className="assistant-task-save-receipt-message">{taskSaveConfirmation.message}</p>
                   <p className="assistant-task-save-receipt-boundary">
-                    No note, plan, reminder, follow-up, email, calendar item, notification, sync, or memory was created.
+                    Notes, plans, reminders, follow-ups, email, calendar, notifications, sync, and saved context stayed untouched.
                   </p>
                 </article>
               ) : null}
@@ -633,7 +624,7 @@ export function EasyListInboxPage() {
               <div className="assistant-local-draft-header">
                 <span>Preview-only review</span>
                 <strong>
-                  Editable unsaved {reviewHandoffPreview.handoffType === "follow-up" ? "follow-up" : "reminder"} review
+                  Editable {reviewHandoffPreview.handoffType === "follow-up" ? "follow-up" : "reminder"} preview
                 </strong>
               </div>
               <div className="assistant-review-handoff-grid">
@@ -682,11 +673,11 @@ export function EasyListInboxPage() {
                   />
                 </label>
               </div>
-              {reviewHandoffPreview.warnings.map((warning) => (
-                <p key={warning} className="assistant-local-draft-warning">
-                  {warning}
-                </p>
-              ))}
+              <p className="assistant-local-draft-warning">
+                {reviewHandoffPreview.handoffType === "follow-up"
+                  ? "Preview only. No message sent."
+                  : "Preview only. No notification scheduled."}
+              </p>
             </article>
           ) : null}
         </section>

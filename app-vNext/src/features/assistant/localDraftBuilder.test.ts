@@ -42,8 +42,8 @@ export const localDraftBuilderProof = localDraftBuilderExamples.map((example) =>
     draft.status === "unsaved-preview" &&
     draft.approvalState === "approved" &&
     draft.sourceSuggestionId === suggestion.id &&
-    draft.warnings.some((warning) => warning.includes("not saved")) &&
-    draft.warnings.some((warning) => warning.includes("No task"));
+    draft.warnings.some((warning) => warning.includes("Not saved")) &&
+    draft.warnings.some((warning) => warning.includes("Preview only"));
 
   return {
     text: example.text,

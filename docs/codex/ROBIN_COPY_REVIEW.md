@@ -1,6 +1,32 @@
 # Robin Copy Review
 
 ## Verdict
+INBOX_TRUST_COPY_COMPRESSED
+
+## Stage 18 Task 3 Inbox Trust Copy Review - 2026-05-17
+
+Verdict: `INBOX_TRUST_COPY_COMPRESSED`.
+
+Inbox now feels less like a policy notice. The route still says what matters, but the safety model is carried by short labels and exact button copy instead of repeated paragraphs.
+
+What changed:
+- The top route now says `Draft first` and names the two real save lanes briefly.
+- The assistant intake preview uses `Draft`, `Preview`, `Task save only`, `Note save only`, and `Demo` chips.
+- The approval state buttons are shorter: `Draft`, `Editing`, `Preview`, `Dismissed`, and `Review`.
+- The queue strip now says `Context` instead of `Remember`, and no longer says `memory context`.
+- Follow-up and reminder previews use short boundary copy such as `No message sent` and `No notification scheduled`.
+
+Rendered proof:
+- `/app/easylist/add?demo=1` rendered at the intake queue top.
+- Rendered route text included the compact trust chips.
+- Rendered route text did not include `Remember` or `memory context`.
+
+Copy risk:
+- Inbox is still the densest assistant route because it contains suggestion, draft comparison, handoff preview, final confirmation, and task row entry in one page. The next visual pass should consider progressive disclosure, but this task intentionally kept save behavior unchanged.
+
+---
+
+## Verdict
 PUBLIC_ASSISTANT_ENTRANCE_COPY_READY
 
 ## Stage 18 Task 2 Public/Marketing Copy Review - 2026-05-17

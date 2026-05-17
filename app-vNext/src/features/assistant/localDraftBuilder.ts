@@ -69,8 +69,8 @@ export function buildLocalDraftFromSuggestion(
     approvalState: "approved",
     fields: buildDraftFields(suggestion, draftType),
     warnings: [
-      `${statusLabel}. This ${draftTypeLabel.toLowerCase()} is not saved.`,
-      "No saved object or external action has been created.",
+      `${statusLabel}: ${draftTypeLabel}. Not saved.`,
+      "Preview only.",
     ],
   };
 }
@@ -165,8 +165,8 @@ export function buildTaskRowHandoffPreview(draft: AssistantLocalDraft): Assistan
     priorityTier: 5,
     notes: buildTaskHandoffNotes(draft),
     warnings: [
-      "Editable local task-row preview only. This has not been saved.",
-      "Use the existing task save action below only when you are ready to create a real task.",
+      "Task save only.",
+      "Final confirmation required.",
     ],
   };
 }
@@ -234,12 +234,12 @@ export function buildReviewHandoffPreview(draft: AssistantLocalDraft): Assistant
       : `Review what context should stay visible before choosing any real reminder or calendar action. Source capture: ${source}`,
     warnings: isFollowUp
       ? [
-          "Editable local follow-up preview only. This does not send email, text, calls, or messages.",
-          "This follow-up is not saved automatically. Choose any real next action yourself.",
+          "Preview only.",
+          "No message sent.",
         ]
       : [
-          "Editable local reminder preview only. This does not schedule a notification.",
-          "This reminder is not saved automatically. Choose any real next action yourself.",
+          "Preview only.",
+          "No notification scheduled.",
         ],
   };
 }

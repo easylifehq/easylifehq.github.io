@@ -45,7 +45,7 @@ export const intentClassifierProof = intentClassifierExamples.map((example) => {
   const passed =
     suggestion.intent === example.expectedIntent &&
     suggestion.approvalState === example.expectedApprovalState &&
-    suggestion.warnings.some((warning) => warning.includes("Nothing is saved"));
+    suggestion.warnings.some((warning) => warning.includes("Draft only"));
 
   return {
     text: example.text,

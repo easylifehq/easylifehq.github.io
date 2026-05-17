@@ -1,5 +1,28 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 18 Task 3 Inbox trust compression
+
+- Task attempted: Make Inbox feel trustworthy without reading like a policy notice.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected:
+  - `http://127.0.0.1:4231/app/easylist/add?demo=1`
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/features/assistant/intentTypes.ts`
+  - `app-vNext/src/features/assistant/intentClassifier.ts`
+  - `app-vNext/src/features/assistant/intentClassifier.test.ts`
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.test.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Product simplification: compressed repeated save-boundary warnings into short state labels: `Draft`, `Preview`, `Task save only`, `Note save only`, and `Demo`.
+- Inbox proof: local render starts at `Review the intake queue`, includes the compact chips, and no longer exposes `Remember` or `memory context` in the route text.
+- Behavior preserved: the existing task save path, final confirmation, and task receipt remain intact; no note, plan, reminder, follow-up, email, calendar, notification, sync, model, backend, auth, Firebase config, dependency, package, deploy, generated output, secret, or persistence behavior was added.
+
 ## 2026-05-17 - Stage 18 Task 2 public/marketing module-language cleanup
 
 - Task attempted: Make public/login first impression say one assistant, not a product family.

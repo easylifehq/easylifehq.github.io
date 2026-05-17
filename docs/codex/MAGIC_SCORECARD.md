@@ -2,6 +2,29 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 18 Task 3 Inbox Trust Compression
+
+- Task: Compress Inbox trust and save-boundary copy.
+- Result: Passed build and Inbox route inspection.
+- Magic signal: inbox-trust-copy-is-compact
+- Changed files:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/features/assistant/intentTypes.ts`
+  - `app-vNext/src/features/assistant/intentClassifier.ts`
+  - `app-vNext/src/features/assistant/intentClassifier.test.ts`
+  - `app-vNext/src/features/assistant/localDraftTypes.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.ts`
+  - `app-vNext/src/features/assistant/localDraftBuilder.test.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Proof evidence: `/app/easylist/add?demo=1` rendered with the intake queue first and showed `Draft`, `Preview`, `Task save only`, `Note save only`, and `Demo`.
+- Copy evidence: rendered route text no longer exposed the old `Remember` / `memory context` language.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: task save behavior, final confirmation, and receipt remain unchanged; no new persistence or external action behavior was added.
+
 ## 2026-05-17 - Stage 18 Task 2 Public Assistant Entrance
 
 - Task: Clean public/marketing module-language.

@@ -52,9 +52,9 @@ export const approvalStateLabels: Record<AssistantApprovalState, string> = {
 };
 
 export const approvalStatePreviewLabels: Record<AssistantApprovalState, string> = {
-  suggested: "Preview: suggested",
-  editing: "Preview: editing",
-  approved: "Preview: approved locally",
-  dismissed: "Preview: dismissed locally",
-  "needs-review": "Preview: needs review",
+  suggested: "Draft",
+  editing: "Editing",
+  approved: "Preview",
+  dismissed: "Dismissed",
+  "needs-review": "Review",
 };

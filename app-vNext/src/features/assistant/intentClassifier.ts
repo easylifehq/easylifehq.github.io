@@ -35,7 +35,7 @@ const intentRules: IntentRule[] = [
     intent: "note",
     confidence: "medium",
     pattern: /\b(note|idea|thought|remember|context|save this|pin)\b/i,
-    summary: "Looks like context worth keeping as memory.",
+    summary: "Looks like context worth keeping.",
   },
   {
     intent: "task",
@@ -74,7 +74,7 @@ function toTitle(text: string) {
 function buildFields(intent: AssistantIntentType, title: string) {
   const primaryLabel =
     intent === "note"
-      ? "Memory title"
+      ? "Context title"
       : intent === "plan"
         ? "Plan item"
         : intent === "reminder"
@@ -113,7 +113,7 @@ export function classifyAssistantIntent(sourceText: string): AssistantIntentSugg
       confidenceLabel: confidenceLanguage.low,
       approvalState: "needs-review",
       fields: buildFields("unsure", "Review captured input"),
-      warnings: ["Nothing will be created until you approve an edited suggestion."],
+      warnings: ["Draft only until you approve."],
     };
   }
 
@@ -132,7 +132,7 @@ export function classifyAssistantIntent(sourceText: string): AssistantIntentSugg
     confidenceLabel: confidenceLanguage[confidence],
     approvalState: confidence === "low" ? "needs-review" : "suggested",
     fields: buildFields(intent, title),
-    warnings: ["Local suggestion only. Nothing is saved, sent, synced, or remembered until a later approved action exists."],
+    warnings: ["Draft only. Nothing saves or sends here."],
   };
 }
 

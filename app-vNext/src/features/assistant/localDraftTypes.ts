@@ -125,5 +125,5 @@ export const localDraftTypeLabels: Record<AssistantLocalDraftType, string> = {
 };
 
 export const localDraftStatusLabels: Record<AssistantLocalDraftStatus, string> = {
-  "unsaved-preview": "Unsaved local preview",
+  "unsaved-preview": "Draft",
 };

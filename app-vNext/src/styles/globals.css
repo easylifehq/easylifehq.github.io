@@ -4959,6 +4959,25 @@ textarea::placeholder {
   line-height: 1.42;
 }
 
+.assistant-trust-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.34rem;
+}
+
+.assistant-trust-chip-row span {
+  display: inline-flex;
+  min-height: 1.52rem;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 24%, var(--ui-border-subtle, var(--shell-card-border)));
+  padding: 0.16rem 0.46rem;
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, transparent);
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.7rem;
+  font-weight: 820;
+}
+
 .assistant-suggestion-card {
   display: grid;
   gap: 0.68rem;
