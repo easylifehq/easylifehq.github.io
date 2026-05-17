@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 32 Task 2 Assistant Intake Request Guard
+
+- Task attempted: Harden `assistantIntakeSuggestion` request validation before any provider call exists.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Functions check: Passed with `npm.cmd --prefix functions run lint`.
+- Files changed:
+  - `functions/index.js`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Guard added: `validateAssistantIntakeRequestBody`.
+- Accepted lane: request body may contain only `route`, `promptId`, `typedCapture`, and bounded `metadata`; metadata may contain only `source`, `captureId`, `clientVersion`, and `reviewMode`.
+- Required route and prompt: `/app/easylist/add?demo=1` and `intake-suggestion`.
+- Typed capture guard: requires visible typed capture, enforces minimum length 3 and maximum length 2000.
+- Forbidden context guard: rejects broad/private keys including note bodies, contact data, calendar data, auth/session payloads, secrets, provider key names, exact addresses, coordinates, geocoding, Gmail/email/phone/message, billing/payment, medical, and SSN-like context.
+- Secret-shaped text guard: rejects provider-key-shaped strings, `VITE_` secret names, secret assignment text, exact-address-like text, and coordinate-like text.
+- Rejection behavior: returns metadata-only `rejectionReason` and local fallback with `nothingSavedOrSent: true`; logs reason, path, route/prompt when accepted, and typed capture length only.
+- Boundary preserved: no OpenAI call, deploy, provider SDK, dependency/package change, deploy config, generated output, frontend key, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 32 Task 1 Narrow Assistant Intake Function Scaffold
 
 - Task attempted: Add a new Firebase Functions endpoint scaffold for the Stage 31 first live assistant lane without calling OpenAI.

@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 32 Task 2 Assistant Intake Request Guard
+
+- Task: Harden `assistantIntakeSuggestion` request validation before any provider call exists.
+- Result: Request sanitizer/guard added.
+- Magic signal: bounded-inbox-capture-only-before-provider
+- Guard evidence: `functions/index.js` includes `validateAssistantIntakeRequestBody`.
+- Accepted-body evidence: only `route`, `promptId`, `typedCapture`, and bounded `metadata` are allowed.
+- Metadata evidence: only `source`, `captureId`, `clientVersion`, and `reviewMode` are allowed.
+- Route/prompt evidence: only `/app/easylist/add?demo=1` and `intake-suggestion` pass.
+- Typed-capture evidence: visible typed capture is required with 3-2000 character length.
+- Forbidden-context evidence: broad/private keys for notes, contacts, calendars, auth/session, secrets, provider keys, addresses, coordinates, geocoding, Gmail/email/phone/message, billing/payment, medical, and SSN-like context are rejected before any provider path.
+- Secret-text evidence: provider-key-shaped strings, `VITE_` secret names, secret assignment text, exact-address-like text, and coordinate-like text are rejected.
+- Rejection evidence: client receives metadata-only `rejectionReason` and local fallback; logs omit raw typed capture and secret values.
+- Boundary evidence: no OpenAI call, deploy, provider SDK, dependency/package change, deploy config, generated output, frontend key, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, saved-object expansion, or broad assistant behavior was added.
+
 ## 2026-05-17 - Stage 32 Task 1 Narrow Assistant Intake Function Scaffold
 
 - Task: Add `assistantIntakeSuggestion` as the narrow Stage 31 Firebase Functions lane without calling OpenAI.

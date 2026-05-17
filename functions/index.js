@@ -234,7 +234,36 @@ function getFirebaseBearerToken(request) {
 
 const assistantIntakeAllowedRoute = "/app/easylist/add?demo=1";
 const assistantIntakeAllowedPromptId = "intake-suggestion";
+const assistantIntakeMinTypedCaptureLength = 3;
 const assistantIntakeMaxTypedCaptureLength = 2000;
+const assistantIntakeAllowedBodyKeys = new Set(["route", "promptId", "typedCapture", "metadata"]);
+const assistantIntakeAllowedMetadataKeys = new Set(["source", "captureId", "clientVersion", "reviewMode"]);
+const assistantIntakeForbiddenKeyPattern =
+  /(secret|token|auth|session|cookie|password|api.?key|openai|vite|note|notes|contact|contacts|calendar|event|events|address|location|latitude|longitude|geocode|gmail|email|phone|message|firestore|database|billing|payment|ssn|medical)/i;
+const assistantIntakeForbiddenCapturePatterns = [
+  {
+    reason: "provider-key-shaped-text",
+    pattern:
+      /\b(?:sk-(?:proj-)?[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{20,}|xox[baprs]-[A-Za-z0-9-]{20,})\b/,
+  },
+  {
+    reason: "vite-secret-name",
+    pattern: /\bVITE_[A-Z0-9_]*(?:KEY|SECRET|TOKEN|OPENAI|PROVIDER|AUTH)[A-Z0-9_]*\b/i,
+  },
+  {
+    reason: "secret-like-text",
+    pattern: /\b(?:api[_-]?key|secret|access[_-]?token|auth[_-]?token|password)\s*[:=]/i,
+  },
+  {
+    reason: "exact-address-like-text",
+    pattern:
+      /\b\d{1,6}\s+[A-Za-z0-9.'-]+(?:\s+[A-Za-z0-9.'-]+){0,5}\s+(?:street|st\.?|avenue|ave\.?|road|rd\.?|drive|dr\.?|lane|ln\.?|boulevard|blvd\.?|court|ct\.?|place|pl\.?|way)\b/i,
+  },
+  {
+    reason: "coordinate-like-text",
+    pattern: /\b(?:lat(?:itude)?|lng|long(?:itude)?)\s*[:=]\s*-?\d+(?:\.\d+)?/i,
+  },
+];
 
 function buildAssistantIntakeFallback(payload = {}) {
   return {
@@ -256,6 +285,100 @@ function buildAssistantIntakeFallback(payload = {}) {
       payload.message ||
       "Live AI is still disabled. Keep using the local draft preview; nothing was saved or sent.",
   };
+}
+
+function findForbiddenAssistantIntakeKey(value, path = "body") {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+
+  for (const [key, nextValue] of Object.entries(value)) {
+    const nextPath = `${path}.${key}`;
+    if (assistantIntakeForbiddenKeyPattern.test(key)) {
+      return { reason: "forbidden-context-key", path: nextPath };
+    }
+
+    const nested = findForbiddenAssistantIntakeKey(nextValue, nextPath);
+    if (nested) {
+      return nested;
+    }
+  }
+
+  return null;
+}
+
+function validateAssistantIntakeRequestBody(body) {
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return { ok: false, reason: "invalid-body" };
+  }
+
+  const bodyKeys = Object.keys(body);
+  const unsupportedBodyKey = bodyKeys.find((key) => !assistantIntakeAllowedBodyKeys.has(key));
+  if (unsupportedBodyKey) {
+    return { ok: false, reason: "unsupported-body-key", path: `body.${unsupportedBodyKey}` };
+  }
+
+  const metadata = body.metadata;
+  if (metadata !== undefined) {
+    if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
+      return { ok: false, reason: "invalid-metadata" };
+    }
+
+    const unsupportedMetadataKey = Object.keys(metadata).find(
+      (key) => !assistantIntakeAllowedMetadataKeys.has(key)
+    );
+    if (unsupportedMetadataKey) {
+      return { ok: false, reason: "unsupported-metadata-key", path: `body.metadata.${unsupportedMetadataKey}` };
+    }
+  }
+
+  const forbiddenKey = findForbiddenAssistantIntakeKey(body);
+  if (forbiddenKey) {
+    return forbiddenKey;
+  }
+
+  const route = String(body.route || "").trim();
+  const promptId = String(body.promptId || "").trim();
+  const typedCapture = String(body.typedCapture || "").trim();
+  const typedCaptureLength = typedCapture.length;
+
+  if (route !== assistantIntakeAllowedRoute) {
+    return { ok: false, reason: "unsupported-route", route, promptId, typedCaptureLength };
+  }
+
+  if (promptId !== assistantIntakeAllowedPromptId) {
+    return { ok: false, reason: "unsupported-prompt", route, promptId, typedCaptureLength };
+  }
+
+  if (!typedCapture) {
+    return { ok: false, reason: "missing-typed-capture", route, promptId, typedCaptureLength };
+  }
+
+  if (typedCaptureLength < assistantIntakeMinTypedCaptureLength) {
+    return { ok: false, reason: "typed-capture-too-short", route, promptId, typedCaptureLength };
+  }
+
+  if (typedCaptureLength > assistantIntakeMaxTypedCaptureLength) {
+    return { ok: false, reason: "typed-capture-too-long", route, promptId, typedCaptureLength };
+  }
+
+  const forbiddenCapture = assistantIntakeForbiddenCapturePatterns.find((item) => item.pattern.test(typedCapture));
+  if (forbiddenCapture) {
+    return { ok: false, reason: forbiddenCapture.reason, route, promptId, typedCaptureLength };
+  }
+
+  return { ok: true, route, promptId, typedCapture, typedCaptureLength };
+}
+
+function rejectAssistantIntakeRequest(response, validation, status, message) {
+  response.status(status).json({
+    error: "Assistant intake request rejected.",
+    rejectionReason: validation.reason || "rejected",
+    ...buildAssistantIntakeFallback({
+      sanitizerState: "rejected",
+      message,
+    }),
+  });
 }
 
 async function verifySignedInRequest(request, response, actionName) {
@@ -302,80 +425,35 @@ exports.assistantIntakeSuggestion = onRequest(
     const verifiedUser = await verifySignedInRequest(request, response, "assistant intake suggestion");
     if (!verifiedUser) return;
 
-    const route = String(request.body?.route || "").trim();
-    const promptId = String(request.body?.promptId || "").trim();
-    const typedCapture = String(request.body?.typedCapture || "").trim();
-    const typedCaptureLength = typedCapture.length;
+    const validation = validateAssistantIntakeRequestBody(request.body);
 
-    if (route !== assistantIntakeAllowedRoute) {
-      logger.info("Rejected assistant intake suggestion route", {
-        route,
-        promptId,
-        typedCaptureLength,
+    if (!validation.ok) {
+      logger.info("Rejected assistant intake suggestion request", {
+        reason: validation.reason,
+        path: validation.path || "not-provided",
+        route: validation.route || "not-accepted",
+        promptId: validation.promptId || "not-accepted",
+        typedCaptureLength: validation.typedCaptureLength || 0,
       });
-      response.status(400).json({
-        error: "Assistant intake is limited to the Inbox demo route.",
-        ...buildAssistantIntakeFallback({
-          sanitizerState: "rejected",
-          message: "This assistant lane only accepts Inbox demo typed capture. Nothing was saved or sent.",
-        }),
-      });
-      return;
-    }
 
-    if (promptId !== assistantIntakeAllowedPromptId) {
-      logger.info("Rejected assistant intake suggestion prompt", {
-        route,
-        promptId,
-        typedCaptureLength,
-      });
-      response.status(400).json({
-        error: "Unsupported assistant prompt.",
-        ...buildAssistantIntakeFallback({
-          sanitizerState: "rejected",
-          message: "This assistant lane only accepts the intake-suggestion prompt. Nothing was saved or sent.",
-        }),
-      });
-      return;
-    }
+      const status = validation.reason === "typed-capture-too-long" ? 413 : 400;
+      const message =
+        validation.reason === "missing-typed-capture"
+          ? "Add visible typed capture before requesting an assistant suggestion. Nothing was saved or sent."
+          : validation.reason === "typed-capture-too-short"
+            ? "Add a little more visible typed capture before requesting an assistant suggestion. Nothing was saved or sent."
+            : validation.reason === "typed-capture-too-long"
+              ? "Shorten the typed capture before requesting an assistant suggestion. Nothing was saved or sent."
+              : "This assistant lane only accepts bounded Inbox typed capture. Nothing was saved or sent.";
 
-    if (!typedCapture) {
-      logger.info("Rejected empty assistant intake capture", {
-        route,
-        promptId,
-        typedCaptureLength,
-      });
-      response.status(400).json({
-        error: "Typed capture is required.",
-        ...buildAssistantIntakeFallback({
-          sanitizerState: "rejected",
-          message: "Add visible typed capture before requesting an assistant suggestion. Nothing was saved or sent.",
-        }),
-      });
-      return;
-    }
-
-    if (typedCaptureLength > assistantIntakeMaxTypedCaptureLength) {
-      logger.info("Rejected oversized assistant intake capture", {
-        route,
-        promptId,
-        typedCaptureLength,
-        maxTypedCaptureLength: assistantIntakeMaxTypedCaptureLength,
-      });
-      response.status(413).json({
-        error: "Typed capture is too long.",
-        ...buildAssistantIntakeFallback({
-          sanitizerState: "rejected",
-          message: "Shorten the typed capture before requesting an assistant suggestion. Nothing was saved or sent.",
-        }),
-      });
+      rejectAssistantIntakeRequest(response, validation, status, message);
       return;
     }
 
     logger.info("Assistant intake suggestion scaffold returned fallback", {
-      route,
-      promptId,
-      typedCaptureLength,
+      route: validation.route,
+      promptId: validation.promptId,
+      typedCaptureLength: validation.typedCaptureLength,
       providerState: "not-called",
       fallbackState: "local-disabled",
     });
