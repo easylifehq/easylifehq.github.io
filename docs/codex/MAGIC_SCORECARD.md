@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 31 Task 3 First Live Provider Call Harness
+
+- Task: Create the disabled-by-default harness that a future first live provider call must pass through.
+- Result: Added a TypeScript-only first live provider call harness and proof fixtures.
+- Magic signal: live-provider-call-path-exists-but-stays-gated
+- Harness evidence: `app-vNext/src/features/assistant/serverGateway/firstLiveProviderCallHarness.ts`.
+- Proof evidence: `app-vNext/src/features/assistant/serverGateway/firstLiveProviderCallHarness.test.ts`.
+- Approval evidence: required verdict is `APPROVED_FOR_ONE_SYNTHETIC_INBOX_PROVIDER_CALL`; current approval remains `NOT_APPROVED_FOR_LIVE_AI`.
+- Sanitizer evidence: harness accepts only sanitized summaries for `/app/easylist/add?demo=1`, prompt `intake-suggestion`, and Inbox typed-capture suggestion.
+- Secret evidence: harness requires configured server-only secret boundary metadata; unconfigured state falls back before any provider executor.
+- Quarantine evidence: provider-style output is accepted only after provider response quarantine; hidden-write/external-action wording falls back as quarantined.
+- Fallback evidence: disabled, approval-missing, invalid summary, unconfigured, timeout, quarantined, and provider-error states preserve typed capture, keep deterministic fallback available, and do not auto-retry.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live provider call, real API key, provider SDK, backend config, deploy config, package/dependency change, generated output, hidden read, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, saved-object expansion, or broad assistant behavior was added.
+
 ## 2026-05-17 - Stage 31 Task 2 Live Provider Secret Boundary
 
 - Task: Create the server-only secret boundary contract for the future first live provider call.

@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 31 Task 3 First Live Provider Call Harness
+
+- Task attempted: Create the disabled-by-default harness that a future first live provider call must pass through.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/firstLiveProviderCallHarness.ts`
+  - `app-vNext/src/features/assistant/serverGateway/firstLiveProviderCallHarness.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Harness added: `stage-31-first-live-provider-call-harness-v1`.
+- Approval gate: harness requires `APPROVED_FOR_ONE_SYNTHETIC_INBOX_PROVIDER_CALL`; the current Stage 31 approval record remains `NOT_APPROVED_FOR_LIVE_AI`.
+- Sanitizer gate: harness accepts only Stage 30 sanitized Inbox typed-capture request summaries for `/app/easylist/add?demo=1` and prompt `intake-suggestion`.
+- Secret gate: harness requires the Stage 31 server-only secret boundary to report configured server state; unconfigured state falls back.
+- Quarantine gate: all provider-style output passes through provider response quarantine before it can become an accepted suggestion.
+- Fallback proof: disabled, approval-missing, invalid summary, unconfigured, timeout, quarantined, and provider-error states preserve typed capture, keep deterministic local fallback available, avoid automatic retry, and do not save or act externally.
+- Boundary preserved: TypeScript/local harness only; no live provider call, real API key, provider SDK, backend config, deploy config, package/dependency change, generated output, hidden read, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 31 Task 2 Live Provider Secret Boundary
 
 - Task attempted: Create the server-only secret boundary contract for the future first live provider call.
