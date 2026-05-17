@@ -1,6 +1,51 @@
 # Simon Design Review
 
 ## Verdict
+MOBILE_REVIEWABLE_WITH_INBOX_BLOCKER
+
+## Stage 18 Task 1 Mobile Review Proof - 2026-05-17
+
+Verdict: `MOBILE_REVIEWABLE_WITH_INBOX_BLOCKER`.
+
+The current EasyLife build was inspected at a 390 x 844 mobile viewport across login, Today, Inbox, Plan, Notes, Contacts, and Settings. The good news: no route showed horizontal page overflow, and the main assistant shell is usable on a phone. The bad news: Inbox is the clear mobile blocker because it loaded at `scrollY` around 2706 instead of the top of the page, landing the reviewer in the draft comparison / task row area instead of the intake queue header.
+
+Routes inspected:
+- `/login`
+- `/app/hq?demo=1`
+- `/app/easylist/add?demo=1`
+- `/app/easycalendar/day?demo=1`
+- `/app/easynotes?demo=1`
+- `/app/easycontacts?demo=1`
+- `/app/settings?demo=1`
+
+Top mobile annoyances:
+1. Inbox opens in the middle of the route instead of at the top. The first visible mobile read was `Compare unsaved shapes`, draft buttons, and quick task rows, not `Review the intake queue`. This makes the most important approval surface feel broken or disorienting.
+2. Inbox is still the densest mobile route. Even ignoring the scroll-position bug, it carries assistant suggestion state, draft comparisons, task rows, priority controls, and safety copy in one long flow.
+3. Inbox still exposes `Remember` / `memory context` language in the queue strip and warning copy. That undermines the newer saved-context language.
+4. Settings is reviewable but visually compressed. The section selector appears as a dense run of labels: `Control PanelMorePlanInstallNotificationsAccountAdvanced...`.
+5. Plan is functional but busy on mobile. The first viewport repeats the week-strip day labels and capacity stats before deeper planning value appears.
+6. Login is calm, but `EasyLifeHQ` and the compact brand/navigation text still carry a little old-product-suite residue.
+7. Contacts is useful but still follow-up heavy. The first viewport works, yet `2 due now`, overdue names, and place stats can still read a little CRM-adjacent.
+
+Best mobile page: Today. It opens with the clearest assistant shape: one assistant read, one start-here move, the Due/Plan/Open strip, and one command/capture affordance.
+
+Worst mobile page: Inbox. It needs the next repair pass most because the mobile starting position is wrong and the content density is highest.
+
+Mobile reviewability:
+- Login: reviewable.
+- Today: reviewable.
+- Inbox: not reviewable enough until the scroll-position / density issue is repaired.
+- Plan: reviewable with density notes.
+- Notes: reviewable.
+- Contacts: reviewable.
+- Settings: reviewable with density notes.
+
+Design read:
+The app is mobile-reviewable as a system, but not ready to ask a critical reviewer to judge Inbox. Stage 18 should keep Task 3 focused on Inbox trust compression and should include the mobile opening-position issue as part of that repair.
+
+---
+
+## Verdict
 STAGE_17_READY_FOR_HUMAN_REVIEW
 
 ## Stage 17 Anti-Annoyance Design Proof - 2026-05-12

@@ -2,6 +2,23 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 18 Task 1 Mobile Review Proof
+
+- Task: Run live mobile review proof.
+- Result: Passed build and seven-route mobile inspection.
+- Magic signal: mobile-reviewable-with-inbox-blocker
+- Changed files:
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Route evidence: `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, `/app/easycontacts?demo=1`, and `/app/settings?demo=1` were inspected at 390 x 844.
+- Layout evidence: no inspected route reported horizontal overflow at the mobile viewport.
+- Best page evidence: Today had the clearest mobile assistant shape.
+- Worst page evidence: Inbox loaded around `scrollY` 2706 and exposed draft comparison / task rows instead of the top intake queue, making it the highest-priority repair target.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs/proof only; no product UI, routes, settings behavior, persistence, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, external actions, maps, geocoding, model calls, real memory, or saved assistant behavior changed.
+
 ## 2026-05-17 - Stage 18 Review Repair Task Packet
 
 - Task: Create Stage 18 Review Repair task packet.

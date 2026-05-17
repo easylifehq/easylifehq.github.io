@@ -1,5 +1,28 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 18 Task 1 live mobile review proof
+
+- Task attempted: Inspect current EasyLife routes at mobile width so Stage 18 stops relying on stale agent guesses.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Routes inspected at 390 x 844:
+  - `http://127.0.0.1:4231/login`
+  - `http://127.0.0.1:4231/app/hq?demo=1`
+  - `http://127.0.0.1:4231/app/easylist/add?demo=1`
+  - `http://127.0.0.1:4231/app/easycalendar/day?demo=1`
+  - `http://127.0.0.1:4231/app/easynotes?demo=1`
+  - `http://127.0.0.1:4231/app/easycontacts?demo=1`
+  - `http://127.0.0.1:4231/app/settings?demo=1`
+- Files changed:
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Mobile proof result: no inspected route showed horizontal page overflow at the mobile viewport.
+- Best mobile page: Today, because it keeps the assistant read, start-here move, command/capture affordance, and small status strip visible.
+- Worst mobile page: Inbox, because it opened around `scrollY` 2706 and showed draft comparison / task rows instead of the intake queue header.
+- Top repair signal: Stage 18 Task 3 should treat Inbox mobile opening position, copy density, and remaining `Remember` / `memory context` language as the highest-priority mobile/trust repair.
+- Boundary preserved: docs/proof only. No product UI, routes, settings behavior, persistence, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, external actions, maps, geocoding, model calls, real memory, or saved assistant behavior changed.
+
 ## 2026-05-17 - Stage 18 Review Repair task packet
 
 - Task attempted: Turn human/agent review findings into a focused Stage 18 repair pass before adding new assistant capability.
