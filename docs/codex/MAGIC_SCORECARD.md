@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 20 Task 3 Model Output Validation Contract
+
+- Task: Create deterministic validation for future model output before rendering or save offers.
+- Result: Model output types, validator, and proof fixture were added.
+- Magic signal: raw-ai-output-is-not-trusted
+- Contract evidence: `app-vNext/src/features/assistant/modelContracts/modelOutputTypes.ts` exports `stage-20-output-v1`.
+- Allowed shape evidence: outputs must name prompt ID, expected schema, known intent, known confidence, source list, destination label, draft/preview/needs-review state, editable fields, explicit confirmation, and warnings.
+- Accepted fixture evidence: `modelOutputValidatorProof` accepts safe task draft and safe Today read outputs.
+- Rejection fixture evidence: `modelOutputValidatorProof` rejects hidden autosave claims, unsupported intents, and missing explicit confirmation.
+- Downgrade fixture evidence: action-like wording is downgraded to `needs-review` with destination `Needs review`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live model call, provider SDK, backend/auth/Firebase change, dependency, package file, deploy config, generated output, secret, external action, hidden write, or save behavior was added.
+
 ## 2026-05-17 - Stage 20 Task 2 Assistant Prompt Registry Contract
 
 - Task: Create a local prompt registry contract before any live model prompts exist.

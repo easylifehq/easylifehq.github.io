@@ -1,5 +1,24 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 20 Task 3 Model Output Validation Contract
+
+- Task attempted: Create a deterministic validator so future AI output cannot be rendered or offered for save unless it matches known safe assistant shapes.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/modelContracts/modelOutputTypes.ts`
+  - `app-vNext/src/features/assistant/modelContracts/modelOutputValidator.ts`
+  - `app-vNext/src/features/assistant/modelContracts/modelOutputValidator.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Contract created: `stage-20-output-v1`.
+- Allowed output shape: prompt ID, expected schema name, known intent, known confidence, draft/preview/needs-review state, known destination label, title, summary, source list, editable fields, explicit confirmation requirement, and warnings.
+- Accepted proof: safe task draft and safe Today read fixtures validate as accepted.
+- Rejection proof: hidden autosave claims, unsupported intents, and missing explicit confirmation are rejected.
+- Downgrade proof: action-like wording such as `ready to save` is downgraded to `needs-review` and `Needs review`.
+- Boundary preserved: no live model calls, provider SDKs, backend/auth/Firebase changes, dependencies, package files, deploy config, generated output, secrets, or external actions were added.
+
 ## 2026-05-17 - Stage 20 Task 2 Assistant Prompt Registry Contract
 
 - Task attempted: Create a reviewable local prompt registry so future model-backed assistant prompts are named, bounded, and kept out of UI components.
