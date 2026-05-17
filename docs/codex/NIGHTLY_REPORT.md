@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 23 Task 2 Gateway Boundary
+
+- Task attempted: Define exactly where request validation, prompt selection, provider calls, output validation, and fallback handling live in the chosen server architecture.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_23_GATEWAY_BOUNDARY.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Boundary document created: `docs/codex/EASYLIFE_STAGE_23_GATEWAY_BOUNDARY.md`.
+- Browser boundary: capture visible Inbox typed text, build Stage 20 context packet, render validated draft/preview/fallback, and keep local deterministic fallback available.
+- Server boundary: validate envelope/context/prompt/surface/rate/spend/kill-switch, choose reviewed prompt, call provider later with server-held secrets, validate output, log metadata only, and return fallback on failure.
+- Provider boundary: untrusted text generator only; it receives approved prompt/context later and performs no app actions.
+- Contract anchors: `stage-20-context-v1`, `stage-20-prompts-v1`, `intake-suggestion`, `AssistantIntakeSuggestionOutputV1`, and `validateAssistantModelOutput`.
+- First behavior preserved: Inbox typed-capture suggestion only using `current-route`, `typed-capture`, and optional `demo-fixture`.
+- Boundary preserved: no implementation, provider SDKs, API keys, backend services, dependencies, package files, deploy config, generated output, secrets, live calls, external actions, hidden reads, hidden writes, real memory, or saved-object expansion were added.
+
 ## 2026-05-17 - Stage 23 Task 1 Architecture ADR
 
 - Task attempted: Write the architecture decision record for the first server-only AI gateway.

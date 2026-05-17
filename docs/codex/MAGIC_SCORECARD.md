@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 23 Task 2 Gateway Boundary
+
+- Task: Define the request/response boundary for the future server AI gateway.
+- Result: Stage 23 gateway boundary document was created.
+- Magic signal: browser-renders-server-trusts-provider-is-untrusted
+- Boundary evidence: `docs/codex/EASYLIFE_STAGE_23_GATEWAY_BOUNDARY.md`.
+- Browser evidence: browser may build Stage 20 context packets and render only validated draft/preview/fallback states; it may not hold keys, choose arbitrary prompts, send broad context, call providers, or mutate data from model output.
+- Server evidence: server owns request validation, prompt allowlist, rate/spend controls, kill switch, provider call, output validation, metadata-only logging, and fallback response.
+- Provider evidence: provider is treated as an untrusted text generator and performs no app decisions or external actions.
+- Contract evidence: boundary names `stage-20-context-v1`, `stage-20-prompts-v1`, prompt ID `intake-suggestion`, schema `AssistantIntakeSuggestionOutputV1`, and `validateAssistantModelOutput`.
+- First behavior evidence: first server gateway remains Inbox typed-capture suggestion only with `current-route`, `typed-capture`, and optional `demo-fixture`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no implementation, provider SDK, API key, backend service, dependency, package file, deploy config, generated output, secret, live call, external action, hidden read, hidden write, real memory, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 23 Task 1 Architecture ADR
 
 - Task: Write the architecture decision record for the first server-only AI gateway.
