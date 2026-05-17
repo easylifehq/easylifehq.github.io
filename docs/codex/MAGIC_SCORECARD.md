@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 29 Task 3 Hidden-Write And External-Action Audit
+
+- Task: Prove hostile assistant output cannot create hidden writes or external actions.
+- Result: Added TypeScript proof fixture for hostile model-shaped action claims.
+- Magic signal: hostile-output-cannot-become-hidden-action
+- Test evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayActionSafety.test.ts`.
+- Coverage evidence: saved task, saved note/context, sent email, sent text, scheduled reminder, scheduled notification, calendar sync, calendar event, real memory, geocoding, and device-location claims are tested.
+- Gate evidence: each fixture must reject, downgrade, fall back, or become `needs-review` before clean render/save.
+- Boundary evidence: proof asserts hidden writes, external actions, frontend secret exposure, and direct browser provider requests remain false.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Scope evidence: no provider call, secret, deploy change, dependency, generated output, backend config, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 29 Task 2 Logging Redaction Proof
 
 - Task: Prove assistant gateway logging stays metadata-only.
