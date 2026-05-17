@@ -1,5 +1,29 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 32 Task 4 Inbox Gateway Client Wiring
+
+- Task attempted: Wire Inbox to optionally call `assistantIntakeSuggestion` only when explicitly configured, while preserving local fallback.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Functions check: Passed with `npm.cmd --prefix functions run lint`.
+- Local route check: `/app/easylist/add?demo=1` returned HTTP 200 from `npm.cmd run dev -- --host 127.0.0.1 --port 4231`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/features/assistant/serverGateway/firstLiveProviderCallHarness.ts`
+  - `app-vNext/src/features/assistant/serverGateway/firstLiveProviderCallHarness.test.ts`
+  - `app-vNext/src/vite-env.d.ts`
+  - `app-vNext/.env.example`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Frontend endpoint variable: `VITE_ASSISTANT_INTAKE_SUGGESTION_URL`.
+- Secret boundary: the endpoint variable is only a function URL placeholder and no provider key variable was added.
+- Missing endpoint behavior: Inbox keeps local fallback and reports `endpoint-missing`.
+- Auth behavior: configured endpoint requires a Firebase ID token before the client POST runs.
+- Request body: only `route`, `promptId`, `typedCapture`, and safe `metadata` are sent.
+- Old endpoint boundary: the Inbox client does not call `analyzeTaskBrainDump`.
+- UI evidence: the existing first-live-call lane now displays gateway call state, endpoint state, fallback state, provider state, prompt ID, sanitizer/quarantine state, and "nothing saved or sent."
+- Provider boundary: the function still returns disabled/fallback output only; no live AI provider call was added.
+- Boundary preserved: no deploy, provider SDK, dependency/package change, provider key, frontend secret, old AI endpoint use, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 32 Task 3 Assistant Intake Response Contract
 
 - Task attempted: Make `assistantIntakeSuggestion` return the exact response envelope the frontend expects using fallback/local-disabled output only.

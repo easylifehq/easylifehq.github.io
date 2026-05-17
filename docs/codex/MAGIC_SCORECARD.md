@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 32 Task 4 Inbox Gateway Client Wiring
+
+- Task: Wire Inbox to optionally call `assistantIntakeSuggestion` while preserving local fallback.
+- Result: Optional configured-endpoint client path added to the existing first-live-call lane.
+- Magic signal: function-url-only-no-secret-client
+- Endpoint evidence: `VITE_ASSISTANT_INTAKE_SUGGESTION_URL` was added as a URL-only frontend variable.
+- No-secret evidence: no `VITE_` provider key variable or provider secret was added.
+- Auth evidence: client helper requires an auth token before calling a configured endpoint.
+- Request evidence: client sends only `route`, `promptId`, `typedCapture`, and safe metadata.
+- Fallback evidence: missing endpoint, missing auth, malformed server response, and failed request all normalize into local fallback with `providerState: not-called` and `nothingSavedOrSent: true`.
+- UI evidence: Inbox shows gateway call state, endpoint state, provider state, fallback state, prompt ID, sanitizer/quarantine state, and "nothing saved or sent" in the existing assistant lane.
+- Old endpoint evidence: no `analyzeTaskBrainDump` wiring was added to Inbox.
+- Provider evidence: the deployed function path is not called during build, and the server function still returns disabled/fallback only.
+- Boundary evidence: no deploy, live AI provider call, provider SDK, dependency/package change, provider key, frontend secret, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 32 Task 3 Assistant Intake Response Contract
 
 - Task: Make `assistantIntakeSuggestion` return a stable frontend-compatible fallback response envelope.

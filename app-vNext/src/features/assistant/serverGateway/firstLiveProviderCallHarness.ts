@@ -150,6 +150,74 @@ export type FirstLiveProviderServerResponseEnvelope = {
   error?: string;
 };
 
+export type AssistantIntakeSuggestionClientMetadata = {
+  source?: "inbox-assistant-lane";
+  captureId?: string;
+  clientVersion?: string;
+  reviewMode?: "demo" | "private-alpha";
+};
+
+export type AssistantIntakeSuggestionClientRequest = {
+  endpointUrl?: string;
+  authToken?: string;
+  route: typeof liveAiAllowedRoutePath;
+  promptId: typeof liveAiAllowedPromptId;
+  typedCapture: string;
+  metadata?: AssistantIntakeSuggestionClientMetadata;
+  fetcher?: typeof fetch;
+};
+
+export type AssistantIntakeSuggestionClientCallState =
+  | "endpoint-missing"
+  | "auth-token-missing"
+  | "request-sent"
+  | "request-failed"
+  | "response-normalized";
+
+export type AssistantIntakeSuggestionClientResult = {
+  callState: AssistantIntakeSuggestionClientCallState;
+  endpointConfigured: boolean;
+  authTokenPresent: boolean;
+  response: FirstLiveProviderServerResponseEnvelope;
+};
+
+function buildFirstLiveProviderServerFallbackEnvelope(
+  overrides: Partial<FirstLiveProviderServerResponseEnvelope> = {},
+): FirstLiveProviderServerResponseEnvelope {
+  return {
+    version: "stage-32-assistant-intake-response-v1",
+    source: "assistantIntakeSuggestion",
+    route: liveAiAllowedRoutePath,
+    promptId: liveAiAllowedPromptId,
+    status: "fallback",
+    authState: "invalid",
+    requestValidationState: "rejected",
+    providerState: "not-called",
+    providerCallAttempted: false,
+    fallbackState: "local-disabled",
+    sanitizerState: "rejected",
+    validationState: "not-run",
+    quarantineState: "not-run",
+    outputState: "fallback",
+    suggestion: null,
+    destination: "Inbox review",
+    confidence: "needs-review",
+    nothingSavedOrSent: true,
+    requiresApproval: true,
+    hiddenWrites: false,
+    externalActions: false,
+    savesCreated: false,
+    messagesSent: false,
+    calendarChanged: false,
+    notificationsCreated: false,
+    realMemoryCreated: false,
+    rejectionReason: "invalid-server-response-envelope",
+    message: "The assistant gateway response was not trusted, so local fallback stayed available.",
+    error: "Assistant gateway response rejected.",
+    ...overrides,
+  };
+}
+
 export type FirstLiveProviderCallResponse = {
   harnessVersion: typeof firstLiveProviderCallHarnessVersion;
   status: "ok" | "fallback";
@@ -210,37 +278,88 @@ export function normalizeFirstLiveProviderServerResponse(
     return value;
   }
 
-  return {
-    version: "stage-32-assistant-intake-response-v1",
-    source: "assistantIntakeSuggestion",
-    route: liveAiAllowedRoutePath,
-    promptId: liveAiAllowedPromptId,
-    status: "fallback",
-    authState: "invalid",
-    requestValidationState: "rejected",
-    providerState: "not-called",
-    providerCallAttempted: false,
-    fallbackState: "local-disabled",
-    sanitizerState: "rejected",
-    validationState: "not-run",
-    quarantineState: "not-run",
-    outputState: "fallback",
-    suggestion: null,
-    destination: "Inbox review",
-    confidence: "needs-review",
-    nothingSavedOrSent: true,
-    requiresApproval: true,
-    hiddenWrites: false,
-    externalActions: false,
-    savesCreated: false,
-    messagesSent: false,
-    calendarChanged: false,
-    notificationsCreated: false,
-    realMemoryCreated: false,
-    rejectionReason: "invalid-server-response-envelope",
-    message: "The assistant gateway response was not trusted, so local fallback stayed available.",
-    error: "Assistant gateway response rejected.",
-  };
+  return buildFirstLiveProviderServerFallbackEnvelope();
+}
+
+export async function requestAssistantIntakeSuggestion(
+  request: AssistantIntakeSuggestionClientRequest,
+): Promise<AssistantIntakeSuggestionClientResult> {
+  const endpointUrl = request.endpointUrl?.trim();
+  const authToken = request.authToken?.trim();
+
+  if (!endpointUrl) {
+    return {
+      callState: "endpoint-missing",
+      endpointConfigured: false,
+      authTokenPresent: Boolean(authToken),
+      response: buildFirstLiveProviderServerFallbackEnvelope({
+        authState: authToken ? "verified" : "missing",
+        requestValidationState: "not-run",
+        sanitizerState: "not-run",
+        rejectionReason: "endpoint-missing",
+        message: "No assistant intake endpoint is configured. Local fallback stayed available.",
+        error: "Assistant intake endpoint missing.",
+      }),
+    };
+  }
+
+  if (!authToken) {
+    return {
+      callState: "auth-token-missing",
+      endpointConfigured: true,
+      authTokenPresent: false,
+      response: buildFirstLiveProviderServerFallbackEnvelope({
+        status: "auth-failed",
+        authState: "missing",
+        requestValidationState: "not-run",
+        sanitizerState: "not-run",
+        rejectionReason: "missing-auth-token",
+        message: "Sign in before requesting the assistant intake gateway. Local fallback stayed available.",
+        error: "Missing auth token.",
+      }),
+    };
+  }
+
+  try {
+    const fetcher = request.fetcher ?? fetch;
+    const serverResponse = await fetcher(endpointUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        route: request.route,
+        promptId: request.promptId,
+        typedCapture: request.typedCapture,
+        metadata: request.metadata,
+      }),
+    });
+    const payload = await serverResponse.json().catch(() => null);
+
+    return {
+      callState: isFirstLiveProviderServerResponseEnvelope(payload)
+        ? "request-sent"
+        : "response-normalized",
+      endpointConfigured: true,
+      authTokenPresent: true,
+      response: normalizeFirstLiveProviderServerResponse(payload),
+    };
+  } catch {
+    return {
+      callState: "request-failed",
+      endpointConfigured: true,
+      authTokenPresent: true,
+      response: buildFirstLiveProviderServerFallbackEnvelope({
+        authState: "verified",
+        requestValidationState: "not-run",
+        sanitizerState: "not-run",
+        rejectionReason: "request-failed",
+        message: "The assistant intake endpoint could not be reached. Local fallback stayed available.",
+        error: "Assistant intake endpoint request failed.",
+      }),
+    };
+  }
 }
 
 const fallbackCopyByReason: Record<

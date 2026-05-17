@@ -16,6 +16,7 @@ import {
   firstLiveProviderCallRequiredApprovalVerdict,
   isFirstLiveProviderServerResponseEnvelope,
   normalizeFirstLiveProviderServerResponse,
+  requestAssistantIntakeSuggestion,
   runFirstLiveProviderCallHarness,
   validateFirstLiveProviderSanitizedSummary,
 } from "./firstLiveProviderCallHarness";
@@ -191,6 +192,116 @@ export const firstLiveProviderServerResponseEnvelopeProof = [
 
 export const firstLiveProviderServerResponseEnvelopeProofPassed =
   firstLiveProviderServerResponseEnvelopeProof.every((example) => example.passed);
+
+export async function assistantIntakeSuggestionClientRuntimeProof() {
+  let sentBodies: unknown[] = [];
+
+  const missingEndpoint = await requestAssistantIntakeSuggestion({
+    route: liveAiAllowedRoutePath,
+    promptId: "intake-suggestion",
+    typedCapture: "Synthetic capture only.",
+    authToken: "redacted-test-token",
+  });
+
+  const missingAuth = await requestAssistantIntakeSuggestion({
+    endpointUrl: "https://example.invalid/assistantIntakeSuggestion",
+    route: liveAiAllowedRoutePath,
+    promptId: "intake-suggestion",
+    typedCapture: "Synthetic capture only.",
+  });
+
+  const acceptedServerEnvelope = await requestAssistantIntakeSuggestion({
+    endpointUrl: "https://example.invalid/assistantIntakeSuggestion",
+    route: liveAiAllowedRoutePath,
+    promptId: "intake-suggestion",
+    typedCapture: "Synthetic capture only.",
+    authToken: "redacted-test-token",
+    metadata: {
+      source: "inbox-assistant-lane",
+      captureId: "capture-proof",
+      clientVersion: "stage-32-task-4",
+      reviewMode: "demo",
+    },
+    fetcher: async (_url, init) => {
+      sentBodies = [JSON.parse(String(init?.body || "{}"))];
+      return {
+        json: async () => acceptedServerFallbackEnvelope,
+      } as Response;
+    },
+  });
+
+  const normalizedBadEnvelope = await requestAssistantIntakeSuggestion({
+    endpointUrl: "https://example.invalid/assistantIntakeSuggestion",
+    route: liveAiAllowedRoutePath,
+    promptId: "intake-suggestion",
+    typedCapture: "Synthetic capture only.",
+    authToken: "redacted-test-token",
+    fetcher: async () =>
+      ({
+        json: async () => ({
+          status: "saved",
+          providerState: "called-by-browser",
+          nothingSavedOrSent: false,
+        }),
+      }) as Response,
+  });
+
+  const failedRequest = await requestAssistantIntakeSuggestion({
+    endpointUrl: "https://example.invalid/assistantIntakeSuggestion",
+    route: liveAiAllowedRoutePath,
+    promptId: "intake-suggestion",
+    typedCapture: "Synthetic capture only.",
+    authToken: "redacted-test-token",
+    fetcher: async () => {
+      throw new Error("Synthetic network failure.");
+    },
+  });
+
+  const sentBody = sentBodies[0] as Record<string, unknown> | undefined;
+
+  return [
+    {
+      name: "missing endpoint keeps local fallback",
+      passed:
+        missingEndpoint.callState === "endpoint-missing" &&
+        missingEndpoint.endpointConfigured === false &&
+        missingEndpoint.response.providerState === "not-called" &&
+        missingEndpoint.response.nothingSavedOrSent === true,
+    },
+    {
+      name: "configured endpoint requires auth token before call",
+      passed:
+        missingAuth.callState === "auth-token-missing" &&
+        missingAuth.authTokenPresent === false &&
+        missingAuth.response.status === "auth-failed",
+    },
+    {
+      name: "client sends only approved request body keys",
+      passed:
+        acceptedServerEnvelope.callState === "request-sent" &&
+        sentBody !== undefined &&
+        Object.keys(sentBody).sort().join(",") === "metadata,promptId,route,typedCapture" &&
+        sentBody?.route === liveAiAllowedRoutePath &&
+        sentBody?.promptId === "intake-suggestion",
+    },
+    {
+      name: "malformed server response normalizes into safe fallback",
+      passed:
+        normalizedBadEnvelope.callState === "response-normalized" &&
+        normalizedBadEnvelope.response.rejectionReason === "invalid-server-response-envelope" &&
+        normalizedBadEnvelope.response.providerState === "not-called" &&
+        normalizedBadEnvelope.response.nothingSavedOrSent === true,
+    },
+    {
+      name: "failed endpoint request preserves local fallback",
+      passed:
+        failedRequest.callState === "request-failed" &&
+        failedRequest.response.rejectionReason === "request-failed" &&
+        failedRequest.response.hiddenWrites === false &&
+        failedRequest.response.externalActions === false,
+    },
+  ];
+}
 
 export async function firstLiveProviderCallHarnessRuntimeProof() {
   let disabledCallCount = 0;

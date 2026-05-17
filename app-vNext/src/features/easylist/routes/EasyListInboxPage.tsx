@@ -33,12 +33,16 @@ import {
 import { buildTaskDraft, type TaskRowDraft } from "@/features/easylist/components/TaskComposer";
 import { type AssistantApprovalState } from "@/features/assistant/intentTypes";
 import {
+  requestAssistantIntakeSuggestion,
   runFirstLiveProviderCallHarness,
+  type AssistantIntakeSuggestionClientResult,
   type FirstLiveProviderCallResponse,
 } from "@/features/assistant/serverGateway/firstLiveProviderCallHarness";
+import { liveAiAllowedPromptId, liveAiAllowedRoutePath } from "@/features/assistant/serverGateway/liveAiEnvironment";
 import { sanitizeProviderDryRunRequest } from "@/features/assistant/serverGateway/providerRequestSanitizer";
 import { TaskComposer } from "@/features/easylist/components/TaskComposer";
 import { useEasyList } from "@/features/easylist/EasyListContext";
+import { auth } from "@/lib/firebase/client";
 import { useEffect, useMemo, useState } from "react";
 
 const FOLLOW_UP_PATTERN = /\b(email|reply|respond|follow up|follow-up|call|text|message)\b/i;
@@ -57,6 +61,8 @@ const INBOX_PREVIEW_STATE_LABELS: Record<AssistantApprovalState, string> = {
   "needs-review": "Review",
 };
 const INBOX_TRUST_LABELS = ["Draft", "Preview", "Task save only", "Note save only"];
+const ASSISTANT_INTAKE_SUGGESTION_ENDPOINT =
+  import.meta.env.VITE_ASSISTANT_INTAKE_SUGGESTION_URL?.trim() || "";
 type MockGatewayMode = "normal" | MockGatewayForcedFallbackReason;
 type GatewayPreviewSource = "local-rules" | "mock-gateway" | "server-adapter-mock" | "live-provider-dry-run";
 type LiveDryRunFailureMode = "disabled" | "timeout" | "rate-limit" | "validation-rejected" | "provider-error";
@@ -278,6 +284,8 @@ export function EasyListInboxPage() {
     useState<ServerGatewayLiveDryRunResponseEnvelope | null>(null);
   const [firstLiveCallResult, setFirstLiveCallResult] =
     useState<FirstLiveProviderCallResponse | null>(null);
+  const [assistantIntakeClientResult, setAssistantIntakeClientResult] =
+    useState<AssistantIntakeSuggestionClientResult | null>(null);
   const listNames = useMemo(
     () => Array.from(new Set(["Main", ...tasks.map((task) => task.listName || "Main")])).sort(),
     [tasks]
@@ -410,6 +418,56 @@ export function EasyListInboxPage() {
     };
   }, [firstLiveCallSanitizerResult]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    if (gatewayPreviewSource !== "live-provider-dry-run") {
+      setAssistantIntakeClientResult(null);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    setAssistantIntakeClientResult(null);
+
+    async function runAssistantIntakeClient() {
+      let authToken: string | undefined;
+
+      try {
+        authToken =
+          ASSISTANT_INTAKE_SUGGESTION_ENDPOINT && auth.currentUser
+            ? await auth.currentUser.getIdToken()
+            : undefined;
+      } catch {
+        authToken = undefined;
+      }
+
+      const result = await requestAssistantIntakeSuggestion({
+        endpointUrl: ASSISTANT_INTAKE_SUGGESTION_ENDPOINT,
+        authToken,
+        route: liveAiAllowedRoutePath,
+        promptId: liveAiAllowedPromptId,
+        typedCapture: assistantCaptureText,
+        metadata: {
+          source: "inbox-assistant-lane",
+          captureId: assistantSuggestion.id,
+          clientVersion: "stage-32-task-4",
+          reviewMode: isDemoReviewMode ? "demo" : "private-alpha",
+        },
+      });
+
+      if (!cancelled) {
+        setAssistantIntakeClientResult(result);
+      }
+    }
+
+    void runAssistantIntakeClient();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [assistantCaptureText, assistantSuggestion.id, gatewayPreviewSource, isDemoReviewMode]);
+
   const liveDryRunResultIsStale = isServerGatewayLiveDryRunResponseStale(
     liveDryRunResult,
     liveDryRunRequest.contextPacket.requestId
@@ -428,11 +486,19 @@ export function EasyListInboxPage() {
       .join(", ") || "Typed capture";
   const firstLiveCallPromptId = firstLiveCallSanitizerResult.summary?.promptId || "intake-suggestion";
   const firstLiveCallSanitizerState = firstLiveCallSanitizerResult.valid ? "accepted" : "rejected";
+  const assistantIntakeServerResponse = assistantIntakeClientResult?.response || null;
+  const assistantIntakeEndpointState = ASSISTANT_INTAKE_SUGGESTION_ENDPOINT ? "endpoint configured" : "endpoint missing";
+  const assistantIntakeCallState = assistantIntakeClientResult?.callState || assistantIntakeEndpointState;
   const firstLiveCallValidationState =
+    assistantIntakeServerResponse?.quarantineState ||
+    assistantIntakeServerResponse?.validationState ||
     firstLiveCallResult?.quarantineState ||
     firstLiveCallResult?.outputValidationState ||
     "not run";
-  const firstLiveCallFallbackState = firstLiveCallResult?.fallback?.reason || "none";
+  const firstLiveCallFallbackState =
+    assistantIntakeServerResponse?.fallbackState || firstLiveCallResult?.fallback?.reason || "none";
+  const firstLiveCallProviderState =
+    assistantIntakeServerResponse?.providerState || firstLiveCallResult?.providerCallState || "not-called";
   const firstLiveCallLaneState = firstLiveCallApprovedTestState ? "approved test" : "disabled gate";
   const unguardedGatewayOutput =
     gatewayPreviewSource === "server-adapter-mock"
@@ -474,6 +540,8 @@ export function EasyListInboxPage() {
           "First live call gate",
           liveDryRunResultIsStale
             ? "Stale cleared"
+            : assistantIntakeClientResult?.callState === "request-sent"
+              ? "Function fallback received"
             : duplicateGuardActive
               ? "Duplicate held"
               : firstLiveCallApprovedTestState
@@ -481,6 +549,7 @@ export function EasyListInboxPage() {
                 : "Disabled gate",
           capturePairLabel,
           `Prompt ${firstLiveCallPromptId}`,
+          assistantIntakeEndpointState,
           "Nothing saved or sent",
         ]
       : [activeGatewayLabel, capturePairLabel, "No provider", "No live AI", activeGatewayState];
@@ -498,12 +567,15 @@ export function EasyListInboxPage() {
             next: "Current capture will use local fallback until validation finishes.",
           }
         : gatewayPreviewSource === "live-provider-dry-run" && liveDryRunFallbackGuidance
-          ? {
-              mode: "First live call gate",
-              result: firstLiveCallResult?.fallback?.copy || liveDryRunFallbackGuidance.copy,
-              next: firstLiveCallApprovedTestState
-                ? "Approved test only. Still suggestion-only."
-                : "Disabled until explicit approval and server-only secret setup.",
+        ? {
+            mode: "First live call gate",
+            result:
+              assistantIntakeServerResponse?.message ||
+              firstLiveCallResult?.fallback?.copy ||
+              liveDryRunFallbackGuidance.copy,
+            next: firstLiveCallApprovedTestState
+              ? "Approved test only. Still suggestion-only."
+              : "Disabled until explicit approval and server-only secret setup.",
             }
           : GATEWAY_RESULT_CLARITY[gatewayPreviewSource];
   const approvedLocalDraft = useMemo(
@@ -718,6 +790,7 @@ export function EasyListInboxPage() {
                 "Mock gateway",
                 "Server adapter mock",
                 "First live call gate",
+                ASSISTANT_INTAKE_SUGGESTION_ENDPOINT ? "Function endpoint configured" : "Function endpoint missing",
                 "No provider",
                 assistantAiAvailability.badge,
                 ...(isDemoReviewMode ? ["Demo"] : []),
@@ -972,6 +1045,11 @@ export function EasyListInboxPage() {
                   <em>{firstLiveCallLaneState}</em>
                 </span>
                 <span>
+                  <small>Gateway</small>
+                  <strong>{assistantIntakeCallState}</strong>
+                  <em>{assistantIntakeClientResult?.authTokenPresent ? "auth token" : "local fallback"}</em>
+                </span>
+                <span>
                   <small>Prompt ID</small>
                   <strong>{firstLiveCallPromptId}</strong>
                   <em>Inbox only</em>
@@ -989,11 +1067,17 @@ export function EasyListInboxPage() {
                 <span>
                   <small>Fallback</small>
                   <strong>{firstLiveCallFallbackState}</strong>
-                  <em>{firstLiveCallResult?.fallback?.preservesTypedCapture ? "capture kept" : "available"}</em>
+                  <em>
+                    {assistantIntakeServerResponse?.nothingSavedOrSent
+                      ? "nothing saved"
+                      : firstLiveCallResult?.fallback?.preservesTypedCapture
+                        ? "capture kept"
+                        : "available"}
+                  </em>
                 </span>
                 <span>
                   <small>Provider</small>
-                  <strong>{firstLiveCallResult?.providerCallState || "not-called"}</strong>
+                  <strong>{firstLiveCallProviderState}</strong>
                   <em>server only</em>
                 </span>
                 <span>

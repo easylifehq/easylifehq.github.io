@@ -5,6 +5,7 @@ interface ImportMetaEnv {
   readonly VITE_PROJECT_PLANNER_URL?: string;
   readonly VITE_GMAIL_SYNC_URL?: string;
   readonly VITE_GMAIL_DRAFT_URL?: string;
+  readonly VITE_ASSISTANT_INTAKE_SUGGESTION_URL?: string;
 }
 
 interface ImportMeta {
