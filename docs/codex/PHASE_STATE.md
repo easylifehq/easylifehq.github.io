@@ -1,9 +1,9 @@
 # Phase State
 
-Current Phase: stage-31-separately-approved-first-live-ai-call-gate
+Current Phase: stage-31-first-live-ai-call-readiness-blocked
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Require explicit human approval before any first live provider call for the narrow Inbox typed-capture suggestion lane.
+Primary Action: Keep the first live provider call blocked until the Stage 31 approval record explicitly approves exactly one synthetic/private-alpha Inbox provider call.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not deploy, do not add broad AI assistant behavior, do not use real user data by default, do not expose frontend API keys, do not commit secrets, do not make live provider calls without a separate explicit approval gate, do not add hidden writes, and do not add sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, or saved-object expansion.
 No More Features Lock: true
@@ -11,17 +11,19 @@ Complexity Budget: Stage 31 may prepare exactly one separately approved first li
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: STAGE_31_REQUIRES_EXPLICIT_HUMAN_APPROVAL_BEFORE_LIVE_PROVIDER_CALL
-Evidence Required: Stage 31 approval record, server-side secret boundary, first-call harness proof, Inbox state proof if UI changes, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
+Parking State: STAGE_31_BLOCKED_BY_NOT_APPROVED_LIVE_AI_RECORD
+Evidence Required: Stage 31 approval record updated to `APPROVED_FOR_ONE_SYNTHETIC_INBOX_PROVIDER_CALL`, provider choice, server-side secret storage, spend cap, rate limit, kill switch, metadata-only logging, fallback, rollback, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 31 can proceed only after the human approval record explicitly approves provider choice, server-side secret storage, spend cap, rate limit, kill switch, metadata-only logging, route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, fallback, rollback, and no external actions.
+Next Phase Criteria: Actual first live provider call implementation can proceed only after a separate human approval task updates `docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_APPROVAL_RECORD.md` from `NOT_APPROVED_FOR_LIVE_AI` to `APPROVED_FOR_ONE_SYNTHETIC_INBOX_PROVIDER_CALL` and confirms provider choice, server-side secret storage, spend cap, rate limit, kill switch, metadata-only logging, route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, fallback, rollback, and no external actions.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 30 controlled live AI gate proof passed and Stage 31 prepared as an explicit human-approval gate before any first live provider call.
+Updated At: 2026-05-17 - Stage 31 first live AI call readiness proof completed with `NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL`.
+
+Stage 31 readiness proof result: NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL. The proof packet exists at docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_CALL_PROOF_PACKET.md. Build passed and `/app/easylist/add?demo=1` shows `First live call gate`, `First live call remains disabled`, `Provider not-called`, and `Nothing saved or sent`. Approval record, server-only secret boundary, first-call harness, sanitizer, quarantine, local fallback, no-frontend-key proof, no-hidden-write proof, and no-external-action proof exist. The blocker is that docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_APPROVAL_RECORD.md currently ends `NOT_APPROVED_FOR_LIVE_AI`, so no real provider call was made and no actual provider-call implementation should begin yet.
 
 Stage 30 proof result: READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL. The Stage 30 controlled live AI proof packet exists at docs/codex/EASYLIFE_STAGE_30_CONTROLLED_LIVE_AI_PROOF_PACKET.md. It verifies the live AI env contract, provider request sanitizer, provider response quarantine, private-alpha operator checklist, no frontend keys, no broad context, no hidden writes, no external actions, and local fallback availability. This result does not implement or run a live provider call.
 
-Prepared Stage 31 queue: docs/codex/NEXT_5_TASKS.md contains exactly five bounded tasks. Stage 31 must begin with an explicit human approval record before any live provider call. If the approval record is missing or incomplete, no live provider call may run.
+Completed Stage 31 proof queue: docs/codex/NEXT_5_TASKS.md contains exactly five completed Stage 31 gate/proof tasks. The result is blocked, not ready: no live provider call may run until a separate approval task updates the approval record to `APPROVED_FOR_ONE_SYNTHETIC_INBOX_PROVIDER_CALL`.
 
 Stage 29 proof result: READY_FOR_STAGE_30_CONTROLLED_LIVE_AI_GATE. The Stage 29 trust/security proof packet exists at docs/codex/EASYLIFE_STAGE_29_TRUST_SECURITY_PROOF_PACKET.md. It verifies frontend and built-bundle secret scans, metadata-only logging, hidden-write audit, external-action audit, kill-switch/rollback behavior, fallback behavior, no frontend API keys, and no real-memory/external-action claims. This result does not approve a live provider call. Stage 30 may prepare the controlled live AI gate only.
 

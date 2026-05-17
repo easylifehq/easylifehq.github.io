@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL
+
+## Stage 31 First Live AI Call Copy Proof - 2026-05-17
+
+Verdict: `NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL`.
+
+The copy is honest: it says the lane is a `First live call gate`, shows `Nothing saved or sent`, and keeps the provider state at `not-called`. The blocker is not copy quality; the blocker is approval. The approval record still says `NOT_APPROVED_FOR_LIVE_AI`.
+
+Copy proof:
+- Route copy shows `First live call remains disabled`.
+- Route copy shows `Hidden until explicit approval and server-only configuration`.
+- Route copy shows `Nothing saved or sent`.
+- The proof packet says no real provider call was made.
+- No copy claims saved output, sent messages, scheduling, sync, real memory, geocoding, device location, or autonomous work.
+
+Copy guard:
+Do not say `live AI is on` or `assistant handled this` in the next step. If the approval record is updated later, the first live call copy should still say synthetic/private-alpha, one route, one prompt, suggestion-only, and no hidden actions.
+
+---
+
+## Verdict
 FIRST_LIVE_CALL_LANE_COPY_READY_DISABLED
 
 ## Stage 31 Task 4 Inbox First-Live-Call Lane Labels - 2026-05-17

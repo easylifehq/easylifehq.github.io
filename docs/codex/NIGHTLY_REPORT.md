@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 31 First Live AI Call Readiness Proof Packet
+
+- Task attempted: Decide whether EasyLife is ready for the actual first live provider call implementation.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected: `/app/easylist/add?demo=1` with local dev server on `127.0.0.1:4231` and headless browser DOM inspection.
+- Proof packet created: `docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_CALL_PROOF_PACKET.md`.
+- Verdict: `NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL`.
+- Real provider call status: no real provider call was made.
+- Approval record: exists, but currently ends `NOT_APPROVED_FOR_LIVE_AI`.
+- Server-only secret boundary: exists and references only `SERVER_AI_PROVIDER_API_KEY`; browser runtime and `VITE_` provider secret names remain blocked.
+- Harness: first-call harness exists and remains disabled by default.
+- Sanitizer: required before provider-shaped request summaries can proceed.
+- Quarantine: required before provider-style output can render cleanly.
+- Local fallback: route and harness show disabled fallback; typed capture remains preserved.
+- Route proof: `/app/easylist/add?demo=1` shows `First live call gate`, `First live call remains disabled`, `Provider not-called`, and `Nothing saved or sent`.
+- Boundary preserved: no frontend API key, secret, provider SDK, backend config, deploy config, package/dependency change, generated output, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, saved-object expansion, broad chat, or broad assistant behavior was added.
+
 ## 2026-05-17 - Stage 31 Task 4 Inbox First-Live-Call Lane Labels
 
 - Task attempted: Let Inbox show the separately approved first live AI lane clearly without implying broad AI availability.

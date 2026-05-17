@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 31 First Live AI Call Readiness Proof Packet
+
+- Task: Decide whether EasyLife is ready for the actual first live provider call implementation.
+- Result: Proof packet created with verdict `NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL`.
+- Magic signal: first-live-call-path-is-built-but-human-approval-blocks-provider
+- Proof packet evidence: `docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_CALL_PROOF_PACKET.md`.
+- Approval evidence: `docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_APPROVAL_RECORD.md` exists but ends `NOT_APPROVED_FOR_LIVE_AI`.
+- Secret evidence: `liveProviderSecretBoundary.ts` references only `SERVER_AI_PROVIDER_API_KEY`, rejects `VITE_` provider secret names, blocks browser runtime access, and reports configured/unconfigured state without reading or printing a key.
+- Harness evidence: `firstLiveProviderCallHarness.ts` remains disabled by default and returns fallback unless approval, sanitizer, secret boundary, rate/spend/circuit controls, and executor requirements pass.
+- Sanitizer evidence: `providerRequestSanitizer.ts` is required before provider-shaped request summaries can proceed.
+- Quarantine evidence: `providerResponseQuarantine.ts` is required before provider-style output can render cleanly.
+- Route evidence: `/app/easylist/add?demo=1` shows `First live call gate`, `First live call remains disabled`, `Provider not-called`, and `Nothing saved or sent`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no real provider call, frontend key, secret, provider SDK, backend config, deploy config, package/dependency change, generated output, hidden write, external action, real memory, calendar sync, notification, geocoding, device location, saved-object expansion, broad chat, or broad assistant behavior was added.
+
 ## 2026-05-17 - Stage 31 Task 4 Inbox First-Live-Call Lane Labels
 
 - Task: Let Inbox show the separately approved first live AI lane clearly without implying broad AI availability.

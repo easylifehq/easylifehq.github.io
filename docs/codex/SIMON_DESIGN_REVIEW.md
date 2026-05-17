@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL
+
+## Stage 31 First Live AI Call Product Proof - 2026-05-17
+
+Verdict: `NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL`.
+
+The visible Inbox lane is doing the right product job: it shows a bounded first-call gate, not a broad AI assistant. It is compact enough for this phase and it makes the important state visible: source, prompt, sanitizer, quarantine, fallback, provider, and `Nothing saved or sent`.
+
+Product/design read:
+- `/app/easylist/add?demo=1` is still the only inspected live-call route.
+- The first-call lane is visible as disabled, not as live AI.
+- The page shows `Provider not-called`, which is the correct state for this proof.
+- The UI is ready to support a later approved synthetic call, but the approval record blocks that call today.
+
+Design guard:
+The next task must not add broad chat or a larger proof dashboard. If a real provider call is approved later, keep the visible state in this same narrow lane and keep the output suggestion-only.
+
+---
+
+## Verdict
 READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL
 
 ## Stage 30 Controlled Live AI Product Proof - 2026-05-17

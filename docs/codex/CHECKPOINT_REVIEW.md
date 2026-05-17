@@ -1,6 +1,40 @@
 # Checkpoint Review
 
 ## Verdict
+NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL
+
+## Stage 31 First Live AI Call Readiness Proof Packet
+
+Reviewed At: 2026-05-17
+
+Stage 31 proof says EasyLife has the right safety rails for the first live provider call path, but the actual call is blocked because the approval record currently says `NOT_APPROVED_FOR_LIVE_AI`.
+
+## Stage 31 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 31 Evidence
+
+- Approval record exists at `docs/codex/EASYLIFE_STAGE_31_FIRST_LIVE_AI_APPROVAL_RECORD.md`, but it ends `NOT_APPROVED_FOR_LIVE_AI`.
+- Server-only secret boundary exists and references only `SERVER_AI_PROVIDER_API_KEY`.
+- First-call harness exists and remains disabled by default.
+- Sanitizer is required before any provider-shaped request can proceed.
+- Response quarantine is required before any provider-style output can render cleanly.
+- `/app/easylist/add?demo=1` shows `First live call gate`, `First live call remains disabled`, `Provider not-called`, and `Nothing saved or sent`.
+- No real provider call was made.
+- No frontend API key, provider SDK, backend config, deploy config, hidden write, external action, real memory, notification, calendar sync, geocoding, device location, or saved-object expansion was added.
+
+## Blunt Judgment
+
+Do not implement the actual live provider call yet. The next step is a separate human approval update that changes the Stage 31 approval record from `NOT_APPROVED_FOR_LIVE_AI` to `APPROVED_FOR_ONE_SYNTHETIC_INBOX_PROVIDER_CALL` after provider choice, server-side secret handling, spend cap, rate limit, kill switch, logging policy, fallback, and rollback are confirmed.
+
+## Verdict
+
+NOT_READY_FOR_ACTUAL_FIRST_LIVE_PROVIDER_CALL
+
+---
+
+## Verdict
 READY_FOR_SEPARATELY_APPROVED_FIRST_LIVE_AI_CALL
 
 ## Stage 30 Controlled Live AI Gate Proof Packet
