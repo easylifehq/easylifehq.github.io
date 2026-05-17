@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 21 Task 2 Gateway Privacy And Logging Rules
+
+- Task: Define metadata-only privacy and logging rules before any server AI gateway exists.
+- Result: Gateway privacy/logging contract was created.
+- Magic signal: gateway-logs-metadata-not-life-data
+- Contract evidence: `docs/codex/EASYLIFE_STAGE_21_GATEWAY_PRIVACY_LOGGING.md`.
+- Allowed metadata evidence: normal logs may contain request ID, timestamp, gateway version, endpoint, prompt ID, surface, route ID, source types, source count, length/token/latency buckets, validation state, fallback reason, error code, and rate-limit state.
+- Forbidden payload evidence: raw typed capture, note bodies, task notes, contact names/place labels, provider raw responses, provider raw request payloads, prompt-completed text, full prompts with user content, secrets, auth/session payloads, and full context packets are forbidden by default.
+- Redaction evidence: typed capture becomes a length bucket; note/task/contact/place values become source types; validator failures log rule names and error classes instead of raw payloads.
+- Retention evidence: raw payload retention is `0 days` by default and operational metadata is short-lived.
+- Debug opt-in evidence: deeper debugging is off by default, time-limited, narrowly scoped, redacted, cleaned up, and synthetic-fixture-first.
+- Privacy review evidence: future gateway changes must prove metadata-only logs, server-only secrets, no raw provider response retention, and fallback without payload logging.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no backend service, logging service, analytics, dependency, package file, provider SDK, API key, secret, deploy config, generated output, live model call, or real personal data was added.
+
 ## 2026-05-17 - Stage 21 Task 1 Server AI Gateway Contract
 
 - Task: Define the exact contract for the first server AI gateway endpoint.

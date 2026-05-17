@@ -1,5 +1,18 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 21 Task 2 Gateway Privacy And Logging Rules
+
+- Task attempted: Define privacy, logging, redaction, and retention rules before any server AI gateway exists.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Contract created: `docs/codex/EASYLIFE_STAGE_21_GATEWAY_PRIVACY_LOGGING.md`.
+- Metadata-only logging defined for request ID, timestamp, gateway version, endpoint, prompt ID, surface, route ID, context source types, source count, length/token/latency buckets, validation state, fallback reason, error code, and rate-limit state.
+- Forbidden raw payload logging defined for raw typed capture, note bodies, task notes, contact names/place labels, provider raw responses, provider raw request payloads, prompt-completed text, full prompts with user content, secrets, auth/session payloads, and full context packets.
+- Redaction rules defined: store source types and buckets instead of user values; never rely on truncation for user content; log validator rule names and error classes instead of raw payloads.
+- Retention expectations defined: raw payload retention is `0 days` by default; operational metadata stays short-lived; aggregate counters may live longer only when they contain no user content or reversible personal data.
+- Debugging opt-in rules defined: off by default, time-limited, narrowly scoped, redacted, cleaned up, and synthetic-fixture-first.
+- Privacy review checks defined so future gateway changes fail closed if metadata-only logging cannot be honored.
+- Boundary preserved: no backend services, logging services, analytics, dependencies, package files, provider SDKs, API keys, secrets, deploy config, generated output, live model calls, or real personal data were added.
+
 ## 2026-05-17 - Stage 21 Task 1 Server AI Gateway Contract
 
 - Task attempted: Define the exact server gateway endpoint contract for the first model-backed assistant behavior.
