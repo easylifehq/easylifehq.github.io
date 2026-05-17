@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: stage-18-review-repair-packet
+Current Phase: stage-19-ready
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Repair review risks around mobile proof, public suite language, Inbox trust copy, memory wording, and legacy command route behavior before adding more assistant capability.
+Primary Action: Choose a bounded Stage 19 mission after Stage 18 review repair passed; keep external actions and real AI claims parked.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 18 tasks must prove, remove, shorten, collapse, hide, demote, or align existing surfaces. They must not add new assistant capability beyond review repair.
+Complexity Budget: Stage 19 is not approved for new capability until a bounded mission is written. Default to contextual usefulness using existing safe local/demo data, not external actions.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: ACTIVE_REVIEW_REPAIR
-Evidence Required: build proof, Stage 18 plan, exactly five Task Contract V2 tasks, NIGHTLY_REPORT, MAGIC_SCORECARD.
+Parking State: READY_FOR_STAGE_19
+Evidence Required: Stage 18 proof packet, build proof, mobile route inspection, NIGHTLY_REPORT, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Complete Stage 18 repair tasks and proof before Stage 19 contextual assistant work.
+Next Phase Criteria: Start Stage 19 only from an explicit bounded mission; safest next lane is contextual assistant usefulness using existing local/demo data.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 18 Review Repair task packet created from human/agent review findings.
+Updated At: 2026-05-17 - Stage 18 proof packet completed with READY_FOR_STAGE_19.
 
 ## Assistant Brain Gate
 
@@ -120,6 +120,12 @@ Stage 18 is active by explicit user mission after three external review attempts
 Stage 18 may inspect, prove, shorten, demote, align, or repair existing surfaces. It must not add new assistant capability, model calls, real memory, saved plans, saved reminders, saved follow-ups, email/text/call/message sending, notifications, calendar sync, maps, geocoding, exact addresses, device location, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, or real personal data.
 
 Stage 18 proof must inspect the repaired surfaces and decide whether EasyLife can move to Stage 19 contextual assistant work.
+
+Stage 18 proof result: READY_FOR_STAGE_19.
+
+Stage 18 proof source: docs/codex/EASYLIFE_STAGE_18_PROOF_PACKET.md
+
+Do not create Stage 19 tasks automatically. Stage 19 should be created from an explicit user mission, and should not expand to model calls, external actions, real memory, notifications, calendar sync, maps, geocoding, exact addresses, backend/auth/Firebase config changes, dependencies, generated output, deploy config, secrets, or real personal data without a separate approved gate.
 
 ## Phase Order
 

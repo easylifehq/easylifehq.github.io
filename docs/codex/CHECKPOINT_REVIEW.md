@@ -1,6 +1,46 @@
 # Checkpoint Review
 
 ## Verdict
+READY_FOR_STAGE_19
+
+## Stage 18 Review Repair Proof Packet
+
+Reviewed At: 2026-05-17
+
+Stage 18 proof says the stale-language, trust-copy, and mobile-review blockers are repaired enough to move forward. This is not a "ship it to everyone" verdict. It means the review-repair pass completed its job and the next stage can be planned from a bounded mission instead of staying stuck in repair.
+
+## Stage 18 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 18 Routes Inspected
+
+Local dev review mode: `http://127.0.0.1:4231`
+
+- Login: `/login` rendered `Open your assistant` without old above-fold product-family labels.
+- Today: `/app/hq?demo=1` rendered `What needs attention now?`, one next move, and compact approval-first capture language.
+- Inbox: `/app/easylist/add?demo=1` rendered `Review the intake queue`, compact trust chips, and task/note save boundaries.
+- Plan: `/app/easycalendar/day?demo=1` rendered `Plan a realistic day` and preview-only plan draft language.
+- Notes: `/app/easynotes?demo=1` rendered `Notes`, `Saved context`, and `Context draft` without real-memory claims.
+- Contacts: `/app/easycontacts?demo=1` rendered `People memory`, `People by place`, and `Visiting somewhere?` without future-map filler.
+- Settings: `/app/settings?demo=1` rendered `Settings`, `Control Light`, and `Assistant controls`.
+- Command: `/app/command?demo=1` rendered `Legacy review` / `Draft review` and explicit no-send/no-sync/no-schedule/no-save-without-choice copy.
+
+## Blunt Remaining Annoyances
+
+1. Inbox is still dense and remains the route most likely to annoy a reviewer.
+2. Settings is cleaner but still large.
+3. The assistant is approval-first and useful, but it is not a real model-backed assistant brain yet.
+
+## Verdict
+
+READY_FOR_STAGE_19
+
+Do not expand to external actions, notifications, calendar sync, model calls, or real memory just because Stage 18 passed. Stage 19 should be a bounded assistant-usefulness mission using existing safe local/demo data.
+
+---
+
+## Verdict
 READY_FOR_HUMAN_REVIEW
 
 ## Stage 17 Anti-Annoyance Proof Packet

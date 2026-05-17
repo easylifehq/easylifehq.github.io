@@ -1,6 +1,31 @@
 # Simon Design Review
 
 ## Verdict
+STAGE_18_READY_FOR_STAGE_19_WITH_DENSITY_NOTES
+
+## Stage 18 Review Repair Design Proof - 2026-05-17
+
+Verdict: `STAGE_18_READY_FOR_STAGE_19_WITH_DENSITY_NOTES`.
+
+The review-repair pass made EasyLife easier to open without immediately feeling like an old suite or an internal proof packet. The mobile first path is now coherent: Login introduces one assistant, Today opens with a focused assistant read, Inbox starts at the intake queue, Notes uses saved-context language, Contacts avoids fake map scaffolding, Settings uses assistant-control framing, and the old Command route is demoted.
+
+Mobile proof:
+- Routes inspected at 390 x 844: `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, `/app/easycontacts?demo=1`, `/app/settings?demo=1`, and `/app/command?demo=1`.
+- No inspected route showed horizontal page overflow in the proof run.
+- Inbox now starts at `Review the intake queue` instead of landing mid-page.
+
+Design read:
+- Best current first impression: Today. It has the clearest assistant rhythm and least proof-scaffold feeling.
+- Most fragile route: Inbox. It is now honest and starts correctly, but it is still heavy because it contains the most behavior.
+- Settings is acceptable for review, but it is still a dense control panel.
+- Command is safe enough as a demoted legacy route; it should not become the main assistant surface again.
+
+Design verdict:
+Stage 18 fixed the review blockers. Move to Stage 19, but keep Stage 19 bounded and do not add new feature sprawl.
+
+---
+
+## Verdict
 COMMAND_CENTER_DEMOTED_AND_ALIGNED
 
 ## Stage 18 Task 5 Command Center Route Audit - 2026-05-17

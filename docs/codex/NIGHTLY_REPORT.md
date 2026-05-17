@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 18 Proof Packet
+
+- Task attempted: Prove whether Stage 18 review-repair fixed stale-language, trust-copy, and mobile review issues.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Proof packet: `docs/codex/EASYLIFE_STAGE_18_PROOF_PACKET.md`.
+- Routes inspected at 390 x 844:
+  - `http://127.0.0.1:4231/login`
+  - `http://127.0.0.1:4231/app/hq?demo=1`
+  - `http://127.0.0.1:4231/app/easylist/add?demo=1`
+  - `http://127.0.0.1:4231/app/easycalendar/day?demo=1`
+  - `http://127.0.0.1:4231/app/easynotes?demo=1`
+  - `http://127.0.0.1:4231/app/easycontacts?demo=1`
+  - `http://127.0.0.1:4231/app/settings?demo=1`
+  - `http://127.0.0.1:4231/app/command?demo=1`
+- Mobile proof: all inspected routes rendered at 390 px width without horizontal page overflow in the proof run.
+- Stale-language proof: login did not expose old above-fold product-family terms; Notes and active assistant routes did not present saved context as real AI memory; `/app/command` rendered as `Legacy review` / `Draft review`.
+- Trust proof: Today, Inbox, Notes, Plan, and Command all preserved approval-first language; no route claimed email sending, calendar sync, notifications, real memory, or autonomous work.
+- Blunt remaining annoyances: Inbox is still the heaviest route, Settings is still dense, and EasyLife is not a real model-backed AI assistant yet.
+- Verdict: `READY_FOR_STAGE_19`.
+
 ## 2026-05-17 - Stage 18 Task 5 Command Center route audit
 
 - Task attempted: Make old `/app/command` stop undermining the approval-first assistant model.

@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 18 Proof Packet
+
+- Task: Prove whether review-repair fixed stale-language, trust-copy, and mobile issues.
+- Result: Passed build and rendered all requested review routes.
+- Magic signal: review-repair-is-ready-for-stage-19
+- Proof packet: `docs/codex/EASYLIFE_STAGE_18_PROOF_PACKET.md`
+- Route evidence: `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, `/app/easycontacts?demo=1`, `/app/settings?demo=1`, and `/app/command?demo=1` rendered at a 390 x 844 mobile viewport.
+- Mobile evidence: no inspected route showed horizontal page overflow in the proof run.
+- Copy evidence: login no longer exposed old above-fold product-family labels; Notes used saved-context language; Inbox used compact trust chips; Command rendered as `Legacy review` / `Draft review`.
+- Trust evidence: inspected routes kept approval-first boundaries and did not claim external sending, calendar sync, notifications, real memory, model calls, or autonomous work.
+- Blunt risk evidence: Inbox is still dense, Settings is still large, and EasyLife is not yet a real model-backed assistant brain.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Verdict: `READY_FOR_STAGE_19`.
+
 ## 2026-05-17 - Stage 18 Task 5 Command Center Route Audit
 
 - Task: Audit and align `/app/command`.

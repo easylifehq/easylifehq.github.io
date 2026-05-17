@@ -1,6 +1,31 @@
 # Robin Copy Review
 
 ## Verdict
+STAGE_18_COPY_READY_FOR_STAGE_19
+
+## Stage 18 Review Repair Copy Proof - 2026-05-17
+
+Verdict: `STAGE_18_COPY_READY_FOR_STAGE_19`.
+
+The stale-language and trust-copy issues are repaired enough to move out of this repair pass. The public/login surfaces now say EasyLife is one assistant workspace. Inbox uses shorter state labels instead of repeated policy paragraphs. Notes uses context language instead of real-memory language. Command now says it is a legacy review surface and repeats the approval-first boundary.
+
+Copy proof:
+- `/login` did not render `EasyHQ`, `EasyList`, `EasyCalendar`, `EasyContacts`, `Products`, or `Explore products`.
+- `/app/easynotes?demo=1` rendered `Notes`, `Saved context`, and `Context draft`, without visible real-memory claims.
+- `/app/easylist/add?demo=1` rendered compact trust chips: `Draft`, `Preview`, `Task save only`, `Note save only`, and `Demo`.
+- `/app/command?demo=1` rendered `Legacy review`, `Draft review`, and "nothing sends, syncs, schedules, or saves unless you choose a specific save action."
+
+Copy risk:
+- Inbox is still the copy-densest route, even after compression.
+- Settings still has many labels because the controls are still consolidated.
+- The word `People memory` remains on Contacts. It is acceptable for people/place memory, but if the user reacts badly, rename it to `People + places` in the next repair pass.
+
+Copy verdict:
+READY_FOR_STAGE_19
+
+---
+
+## Verdict
 ASSISTANT_CONTEXT_LANGUAGE_CLEANED
 
 ## Stage 18 Task 4 Remaining Memory/Remember Cleanup - 2026-05-17
