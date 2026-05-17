@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 24 Task 1 Server Adapter Types And Contract
+
+- Task: Create the typed server adapter contract that future real AI calls must use.
+- Result: Server adapter contract module and proof fixtures were added.
+- Magic signal: typed-server-boundary-before-provider
+- Contract evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayTypes.ts`.
+- Proof evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayContract.test.ts`.
+- Stage 20 reuse evidence: contract names `stage-20-context-v1`, `stage-20-output-v1`, `intake-suggestion`, and `AssistantIntakeSuggestionOutputV1`.
+- Safety evidence: proof accepts bounded Inbox typed capture and rejects unsupported prompt, wrong output schema, non-Inbox route, broad context, selected-task context, empty capture, provider config, and too many sources.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider SDK, API key, backend service, Firebase config change, dependency, package file, deploy config, generated output, secret, external action, hidden write, real memory, provider call, or network call was added.
+
 ## 2026-05-17 - Stage 24 No-Provider Server Adapter Plan
 
 - Task: Plan the no-provider server adapter implementation stage.

@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 24 Task 1 Server Adapter Types And Contract
+
+- Task attempted: Create the typed server adapter contract that future real AI calls must use.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayTypes.ts`
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayContract.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Contract added: request envelope, response envelope, fallback envelope, and validation state for the no-provider server adapter.
+- Stage 20 reuse: request contract anchors `stage-20-context-v1`, `stage-20-output-v1`, prompt ID `intake-suggestion`, and output schema `AssistantIntakeSuggestionOutputV1`.
+- First behavior lock: Inbox typed-capture suggestion only.
+- Safety proof: contract proof accepts a bounded Inbox request and rejects unsupported prompt, wrong schema, non-Inbox route, selected-task context, broad context, empty capture, provider config, and too many sources.
+- Boundary preserved: no provider SDKs, API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, hidden writes, real memory, network calls, or provider calls were added.
+
 ## 2026-05-17 - Stage 24 No-Provider Server Adapter Plan
 
 - Task attempted: Plan the implementation stage for a no-provider server adapter that follows the Stage 23 architecture decision.
