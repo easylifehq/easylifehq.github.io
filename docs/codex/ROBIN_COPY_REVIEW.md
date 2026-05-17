@@ -1,6 +1,30 @@
 # Robin Copy Review
 
 ## Verdict
+READY_FOR_STAGE_29_TRUST_SECURITY_HARDENING
+
+## Stage 28 Assistant Reliability Copy Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_29_TRUST_SECURITY_HARDENING`.
+
+The Inbox assistant lane is clear enough for broader private review. It still uses alpha/proof language, but the important copy boundaries are visible: source, destination, validation/fallback state, duplicate/stale state, and `Nothing saved or sent`.
+
+Copy proof:
+- Bad output is rejected, downgraded, or routed to fallback instead of being offered as a confident save candidate.
+- Wrong destination and ambiguous save wording are not allowed to read as clean save paths.
+- Stale and duplicate suggestions are held or cleared with review wording.
+- The bug report template asks for typed input category instead of raw private text.
+- Screenshot guidance tells testers to hide private input, names, contact details, exact places, addresses, secrets, tokens, account info, environment variables, and network payloads.
+
+Remaining copy risk:
+The lane is still technical. That is acceptable for Stage 29 trust/security hardening, but it should not be described as a finished AI assistant or marketed as live autonomous help.
+
+Copy guard:
+Keep using precise labels: `Draft`, `Preview`, `Needs review`, `Fallback`, `Source`, `Destination`, and `Nothing saved or sent`. Do not say `AI handled this`, `assistant completed this`, `remembered`, `scheduled`, `sent`, `synced`, or `automatic`.
+
+---
+
+## Verdict
 SOURCE_DESTINATION_GUARD_READY
 
 ## Stage 28 Task 3 Source/Destination Consistency Guard - 2026-05-17

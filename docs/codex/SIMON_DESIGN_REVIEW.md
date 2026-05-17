@@ -1,6 +1,32 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_STAGE_29_TRUST_SECURITY_HARDENING
+
+## Stage 28 Assistant Reliability Product Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_29_TRUST_SECURITY_HARDENING`.
+
+The Inbox assistant lane is reliable enough for broader private review because it now behaves like a bounded alpha surface instead of a loose demo. It shows the lane, fallback states, source/destination labels, and no-save boundary in the rendered route.
+
+Product/design read:
+- The route is inspectable at `/app/easylist/add?demo=1`.
+- Source, state, and destination labels give testers enough orientation to know what happened.
+- Duplicate and stale suggestions are held or cleared instead of looking like fresh assistant work.
+- Fallback states are visible without implying provider success or data loss.
+- The alpha bug report template gives testers a path to report problems without dumping private text.
+
+Route proof:
+- `npm.cmd run build` passed from `app-vNext`.
+- Local Chrome headless DOM inspection found `Assistant intake preview`, `Live fallback preview`, `Live provider dry run`, `Nothing saved or sent`, `Source`, `Destination`, `Capture`, and the expected fallback states.
+- The in-app Browser pane was unavailable, so no screenshot-based design review was completed in this session.
+
+Design guard:
+Stage 29 should not add more assistant chrome. It should harden trust and security around the same Inbox lane, and if any visible state is added, it should replace or compress existing proof copy.
+
+---
+
+## Verdict
 READY_FOR_STAGE_28_ASSISTANT_RELIABILITY
 
 ## Stage 27 Private Alpha AI Assistant Product Proof - 2026-05-17

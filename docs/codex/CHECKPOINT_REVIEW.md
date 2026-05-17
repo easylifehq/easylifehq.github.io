@@ -1,6 +1,45 @@
 # Checkpoint Review
 
 ## Verdict
+READY_FOR_STAGE_29_TRUST_SECURITY_HARDENING
+
+## Stage 28 Assistant Reliability Proof Packet
+
+Reviewed At: 2026-05-17
+
+Stage 28 proof says the private-alpha Inbox assistant lane is reliable enough for broader private review, but only into trust/security hardening. It does not say EasyLife has a finished live AI assistant.
+
+## Stage 28 Build Result
+
+Passed: `npm.cmd run build` from `app-vNext`.
+
+## Stage 28 Route Evidence
+
+- Route inspected: `/app/easylist/add?demo=1`.
+- The in-app Browser pane was unavailable in this session, so proof used local Chrome headless DOM inspection.
+- Rendered proof strings included `Assistant intake preview`, `Live fallback preview`, `Live provider dry run`, `Nothing saved or sent`, `Source`, `Destination`, `Capture`, `Local deterministic fallback`, `Disabled`, `Timeout`, `Rate limit`, `Validation blocked`, and `Provider error`.
+- Route returned HTTP 200.
+
+## Stage 28 Reliability Evidence
+
+- Empty, unsupported, missing-source, missing-destination, unknown-destination, and hidden-action output is rejected.
+- Wrong intent/destination pairing and ambiguous save language downgrade to needs-review.
+- Duplicate suggestions and overconfident/too-long output fall back instead of being offered as clean save candidates.
+- Stale live dry-run output is cleared or labeled stale before display.
+- Source, state, and destination labels are visible across local, mock, server-adapter mock, live dry-run, fallback, duplicate-held, draft preview, task handoff, and preview-only states.
+- Alpha bug reporting now captures route, typed input category, assistant state, validation/fallback state, visible problem, save/send boundary, and screenshot guidance without raw private text.
+
+## Blunt Judgment
+
+Stage 28 is good enough to continue, but the next stage should not expand capability. Stage 29 should harden privacy, logging/redaction, secret exposure, prompt-injection handling, disabled-state clarity, and the final pre-provider trust gate.
+
+## Verdict
+
+READY_FOR_STAGE_29_TRUST_SECURITY_HARDENING
+
+---
+
+## Verdict
 READY_FOR_STAGE_28_ASSISTANT_RELIABILITY
 
 ## Stage 27 Private Alpha AI Assistant Proof Packet

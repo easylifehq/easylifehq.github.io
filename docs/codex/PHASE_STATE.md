@@ -1,23 +1,29 @@
 # Phase State
 
-Current Phase: stage-28-assistant-reliability-planned
+Current Phase: stage-29-trust-security-hardening-planned
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Execute reliability hardening for the private-alpha Inbox assistant lane before any broader AI assistant behavior.
+Primary Action: Execute trust, security, privacy, and failure-boundary hardening before any broader AI assistant behavior.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not deploy, do not add broad AI assistant behavior, do not use real user data, do not expose frontend API keys, do not commit secrets, do not add hidden writes, and do not add sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, or saved-object expansion.
 No More Features Lock: true
-Complexity Budget: Stage 28 may add retry/fallback proof matrices, validation edge-case tests, poor/empty output handling, duplicate suggestion prevention, source/destination consistency hardening, alpha tester bug report format, and a proof packet. It must not make a live provider call yet unless a later explicit gate approves it.
+Complexity Budget: Stage 29 may add metadata-only logging/redaction proof, secret exposure scanning, prompt-injection fixtures, disabled-state/kill-switch review, and a proof packet. It must not make a live provider call yet unless a later explicit gate approves it.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: STAGE_28_PACKET_READY_NO_LIVE_PROVIDER_YET
-Evidence Required: Stage 28 plan, fallback/retry reliability matrix, validation edge-case proof, duplicate suggestion proof, source/destination consistency proof, alpha tester bug report template, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
+Parking State: STAGE_29_PACKET_READY_NO_LIVE_PROVIDER_YET
+Evidence Required: Stage 29 logging/redaction proof, secret exposure scan, prompt-injection fixtures, disabled-state/kill-switch proof, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 28 can proceed one task at a time. A first real server-side provider call still requires a later explicit approval gate and must remain synthetic/demo Inbox typed-capture only.
+Next Phase Criteria: Stage 29 can proceed one task at a time. A first real server-side provider call still requires a later explicit approval gate and must remain synthetic/demo Inbox typed-capture only.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 28 assistant reliability task packet prepared without live provider calls.
+Updated At: 2026-05-17 - Stage 28 assistant reliability proof completed; Stage 29 trust/security hardening queue prepared without live provider calls.
+
+Stage 28 proof result: READY_FOR_STAGE_29_TRUST_SECURITY_HARDENING. The private-alpha Inbox assistant lane passed build and route proof for reliability hardening. Edge-case output rejects/downgrades/falls back, duplicate and stale suggestions are guarded, source/destination labels are explicit, and alpha bug reports can be captured without raw private text. This does not approve broad chat, real user data by default, frontend keys, provider SDKs, live provider calls, secrets, deploy changes, generated output, real memory, notifications, calendar sync, geocoding, external actions, hidden writes, or saved-object expansion.
+
+Stage 28 proof source: docs/codex/EASYLIFE_STAGE_28_ASSISTANT_RELIABILITY_PROOF_PACKET.md
+
+Prepared Stage 29 queue: docs/codex/NEXT_5_TASKS.md contains exactly five trust/security hardening tasks.
 
 Stage 28 plan result: STAGE_28_PACKET_READY. The assistant reliability plan exists at docs/codex/EASYLIFE_STAGE_28_ASSISTANT_RELIABILITY_PLAN.md. Stage 28 focuses on deterministic retries disabled by default, validation edge cases, poor/empty model output handling, duplicate suggestion prevention, source/destination consistency, and alpha tester bug report format. It remains limited to the proven Inbox typed-capture suggestion lane at `/app/easylist/add?demo=1`.
 

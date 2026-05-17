@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 28 Assistant Reliability Proof Packet
+
+- Task: Prove whether the Inbox assistant lane is reliable enough for broader private review.
+- Result: Stage 28 proof packet created with verdict `READY_FOR_STAGE_29_TRUST_SECURITY_HARDENING`.
+- Magic signal: reliable-enough-for-private-review-not-finished-ai
+- Proof packet evidence: `docs/codex/EASYLIFE_STAGE_28_ASSISTANT_RELIABILITY_PROOF_PACKET.md`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: `/app/easylist/add?demo=1` returned HTTP 200 and local Chrome headless DOM inspection found `Assistant intake preview`, `Live fallback preview`, `Live provider dry run`, `Nothing saved or sent`, `Source`, `Destination`, `Capture`, and all main fallback states.
+- Edge-case evidence: empty, unsupported, missing-source, missing-destination, unknown-destination, and hidden-action output rejects; wrong destination and ambiguous save wording downgrade; duplicate, overconfident, and too-long output fall back.
+- Duplicate/stale evidence: duplicate-looking suggestions are held for review, current capture pairing is visible, and stale live dry-run output is cleared or labeled stale.
+- Source/destination evidence: local, mock, server-adapter mock, live dry-run, fallback, duplicate-held, draft preview, task handoff, and preview-only states all show source/state/destination labels.
+- Alpha reporting evidence: `docs/codex/EASYLIFE_ASSISTANT_ALPHA_BUG_REPORT_TEMPLATE.md` captures route, typed input category, assistant source state, validation/fallback state, visible problem, save/send boundary, and privacy-safe screenshot guidance.
+- Next queue evidence: `docs/codex/NEXT_5_TASKS.md` now contains exactly five Stage 29 trust/security hardening tasks.
+- Boundary evidence: no broad chat, real user data by default, frontend key, provider key, provider SDK, live provider call, backend config, deploy change, package/dependency change, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 28 Task 4 Alpha Bug Report Template
 
 - Task: Create a lightweight bug report template for private alpha assistant testing.
