@@ -1,6 +1,33 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_STAGE_20
+
+## Stage 19 Contextual Assistant Visual/Product Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_20`.
+
+Stage 19 made the main assistant path feel more responsive to local context without adding another dashboard. The strongest visual/product proof is Today: it now opens with one synthesized assistant read that pulls together task pressure, saved context, and People + Places.
+
+Rendered proof:
+- `/app/hq?demo=1` rendered `1 overdue. Saved context: Sunday reset brief. Maya Chen may matter near Portland, OR from saved labels.`
+- `/app/easycalendar/day?demo=1` rendered `Assistant capacity read` and `Recovery day`.
+- `/app/easynotes?demo=1` rendered `Useful for Today`.
+- `/app/easycontacts?demo=1` rendered `Maya Chen near Portland, OR`.
+- Login, Today, Inbox, Plan, Notes, Contacts, Settings, and Command rendered at 390 px without horizontal overflow.
+
+Design read:
+- EasyLife now feels more like one assistant reading local context than a bundle of static demo panels.
+- Today is the strongest review route.
+- Contacts is useful in a personal way now that People + Places feeds Today.
+- Plan reads less like a calendar module and more like a capacity read.
+- The remaining weak spots are Inbox density and Settings size.
+
+Stage 20 should not add feature sprawl. Good next directions are either human-review repair, Summer operating-plan execution, or a carefully planned model-contract stage.
+
+---
+
+## Verdict
 PEOPLE_PLACES_TODAY_TIE_IN_READY
 
 ## Stage 19 Task 5 People + Places Today Tie-In - 2026-05-17

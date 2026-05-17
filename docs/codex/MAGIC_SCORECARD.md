@@ -2,6 +2,23 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 19 Contextual Assistant Proof Packet
+
+- Task: Prove whether EasyLife now feels like it is reading local context instead of showing static demo panels.
+- Result: Passed build and route inspection.
+- Magic signal: local-context-assistant-ready-for-stage-20
+- Proof packet: `docs/codex/EASYLIFE_STAGE_19_PROOF_PACKET.md`
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: `/login`, `/app/hq?demo=1`, `/app/easylist/add?demo=1`, `/app/easycalendar/day?demo=1`, `/app/easynotes?demo=1`, `/app/easycontacts?demo=1`, `/app/settings?demo=1`, and `/app/command?demo=1` rendered at 390 x 844 without horizontal overflow.
+- Today evidence: `/app/hq?demo=1` rendered `1 overdue. Saved context: Sunday reset brief. Maya Chen may matter near Portland, OR from saved labels.`
+- Inbox evidence: `/app/easylist/add?demo=1` rendered `SOURCE`, `DESTINATION`, `Draft`, `Preview`, `Task save only`, and `Note save only`.
+- Plan evidence: `/app/easycalendar/day?demo=1` rendered `Assistant capacity read`, `Recovery day`, and preview-only plan language.
+- Notes evidence: `/app/easynotes?demo=1` rendered `Useful for Today`, `Manual context for Today review.`, and `nothing is recalled automatically.`
+- Contacts evidence: `/app/easycontacts?demo=1` rendered `Maya Chen near Portland, OR` and `Saved labels only. No maps, geocoding, exact addresses, or device location.`
+- Command evidence: `/app/command?demo=1` remained demoted as `Legacy review`.
+- Verdict evidence: `READY_FOR_STAGE_20`.
+- Boundary evidence: Stage 19 remained local/deterministic and did not add model calls, hidden writes, saved plans/reminders/follow-ups, email/text/call/message sending, notifications, calendar sync, maps, geocoding, exact addresses, device location, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, fake memory, or real personal data.
+
 ## 2026-05-17 - Stage 19 Task 5 People + Places Today Tie-In
 
 - Task: Let Today and Contacts hint who may matter near a place using saved labels only.

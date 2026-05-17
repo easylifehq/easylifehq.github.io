@@ -1,6 +1,34 @@
 # Robin Copy Review
 
 ## Verdict
+READY_FOR_STAGE_20
+
+## Stage 19 Contextual Assistant Copy Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_20`.
+
+The Stage 19 copy now supports the product claim better: EasyLife drafts, previews, reads local context, and makes boundaries visible without pretending to run hidden automation.
+
+Copy proof:
+- Login rendered `Open your assistant` and did not expose old above-fold module-suite labels.
+- Today rendered `Maya Chen may matter near Portland, OR from saved labels.`
+- Inbox rendered `SOURCE`, `DESTINATION`, `Draft`, `Preview`, `Task save only`, and `Note save only`.
+- Plan rendered `Preview the shape locally before anything is placed on the day.`
+- Notes rendered `nothing is recalled automatically.`
+- Contacts rendered `Saved labels only. No maps, geocoding, exact addresses, or device location.`
+- Command still rendered as `Legacy review`, keeping the old route demoted.
+
+Copy read:
+- The local-context promise is now believable.
+- The approval-first boundary is still visible.
+- The no-real-memory/no-map/no-sync language is honest without dominating every first viewport.
+- Inbox is still the wordiest route, but the words now explain source and destination instead of adding vague policy copy.
+
+Stage 20 should keep the same copy discipline: say exactly what EasyLife reads, drafts, previews, or saves. Do not imply model calls, live sync, notifications, email sending, geocoding, or real memory until those contracts are real.
+
+---
+
+## Verdict
 NOTES_CONTEXT_RECALL_COPY_READY
 
 ## Stage 19 Task 4 Notes Saved-Context Recall Hints - 2026-05-17

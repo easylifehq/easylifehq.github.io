@@ -1,5 +1,28 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 19 Contextual Assistant Proof Packet
+
+- Task attempted: Prove whether EasyLife now feels like it is reading local context instead of showing static demo panels.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Proof packet: `docs/codex/EASYLIFE_STAGE_19_PROOF_PACKET.md`.
+- Routes inspected at 390 x 844:
+  - `http://127.0.0.1:4231/login`
+  - `http://127.0.0.1:4231/app/hq?demo=1`
+  - `http://127.0.0.1:4231/app/easylist/add?demo=1`
+  - `http://127.0.0.1:4231/app/easycalendar/day?demo=1`
+  - `http://127.0.0.1:4231/app/easynotes?demo=1`
+  - `http://127.0.0.1:4231/app/easycontacts?demo=1`
+  - `http://127.0.0.1:4231/app/settings?demo=1`
+  - `http://127.0.0.1:4231/app/command?demo=1`
+- Route proof: all inspected routes rendered without horizontal page overflow at 390 px.
+- Context proof: Today rendered `1 overdue. Saved context: Sunday reset brief. Maya Chen may matter near Portland, OR from saved labels.`
+- Inbox proof: Inbox rendered `SOURCE`, `DESTINATION`, `Draft`, `Preview`, `Task save only`, and `Note save only`.
+- Plan proof: Plan rendered `Assistant capacity read`, `Recovery day`, and preview-only plan language.
+- Notes proof: Notes rendered `Useful for Today`, `Manual context for Today review.`, and `nothing is recalled automatically.`
+- Contacts proof: Contacts rendered `Maya Chen near Portland, OR` and `Saved labels only. No maps, geocoding, exact addresses, or device location.`
+- Verdict: `READY_FOR_STAGE_20`.
+- Boundary preserved: Stage 19 remains deterministic/local and does not add model calls, hidden writes, saved plans/reminders/follow-ups, email/text/call/message sending, notifications, calendar sync, maps, geocoding, exact addresses, device location, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, fake memory, or real personal data.
+
 ## 2026-05-17 - Stage 19 Task 5 People + Places Today tie-in
 
 - Task attempted: Let Today and Contacts hint who may matter near a place using saved labels only.
