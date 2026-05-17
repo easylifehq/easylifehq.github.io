@@ -216,7 +216,7 @@ function PublicHomeRoute() {
   const { settings, isLoading: isSettingsLoading } = useSettings();
 
   if (isAuthLoading || (user && isSettingsLoading)) {
-    return <LoadingState label="Opening EasyLifeHQ..." />;
+    return <LoadingState label="Opening EasyLife..." />;
   }
 
   if (user) {
@@ -260,7 +260,7 @@ function PreserveSearchRedirect({ to }: { to: string }) {
 
 export function AppRouter() {
   return (
-    <Suspense fallback={<LoadingState label="Loading EasyLifeHQ..." />}>
+    <Suspense fallback={<LoadingState label="Loading EasyLife..." />}>
       <Routes>
         <Route element={<MarketingLayout />}>
           <Route path="/" element={<PublicHomeRoute />} />

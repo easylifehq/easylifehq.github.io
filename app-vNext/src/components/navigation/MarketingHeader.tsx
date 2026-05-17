@@ -20,8 +20,8 @@ export function MarketingHeader() {
         <Link to="/" className="site-brand">
           <span className="brand-badge">EL</span>
           <div>
-            <p className="brand-kicker">Daily workspace</p>
-            <strong className="site-brand-title">EasyLifeHQ</strong>
+            <p className="brand-kicker">Private assistant</p>
+            <strong className="site-brand-title">EasyLife</strong>
           </div>
         </Link>
         <span className="site-mobile-cue">Assistant preview</span>

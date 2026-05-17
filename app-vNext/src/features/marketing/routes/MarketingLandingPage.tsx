@@ -86,7 +86,7 @@ const demoSteps = [
   },
   {
     title: "Move it when it grows",
-    description: "Send tasks into Calendar, Projects, Pipeline, or Notes when more structure is useful.",
+    description: "Move it into a plan, project, follow-up, or note only when more structure is useful.",
   },
   {
     title: "Review safely",
@@ -99,7 +99,7 @@ export function MarketingLandingPage() {
     <main className="marketing-page">
       <section className="marketing-hero">
         <div className="marketing-hero-copy">
-          <p className="eyebrow">EasyLifeHQ</p>
+          <p className="eyebrow">EasyLife</p>
           <h1>One calm assistant for the things you actually have to handle.</h1>
           <p>
             Start with Today, catch loose thoughts in Inbox, shape the day in Plan,
@@ -108,7 +108,7 @@ export function MarketingLandingPage() {
 
           <div className="marketing-hero-actions">
             <Link to="/login" className="button-primary">
-              Open EasyLifeHQ
+              Open EasyLife
             </Link>
             <a href="#assistant-map" className="button-secondary">
               See Assistant Flow

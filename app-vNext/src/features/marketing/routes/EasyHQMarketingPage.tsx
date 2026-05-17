@@ -3,24 +3,24 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyHQMarketingPage() {
   return (
     <ProductMarketingPage
-      eyebrow="EasyHQ"
+      eyebrow="Today"
       heroTitle="Open the app and know where to go next."
-      heroDescription="EasyHQ is a calm launch point for the day, the next useful action, and the apps you actually use."
-      heroPoints={["Startup page", "Daily pulse", "Quick actions", "App switching"]}
+      heroDescription="Today is the assistant launch point for the day, the next useful action, and the areas you actually need."
+      heroPoints={["Startup page", "Daily read", "Quick actions", "Assistant flow"]}
       heroCardTitle="Less wandering. More starting."
-      heroCardBody="HQ keeps the important entry points close so the whole suite feels like one app instead of scattered tools."
-      featuresTitle="A cleaner way into the suite"
-      featuresDescription="HQ is where EasyLife becomes a practical daily workspace instead of a pile of pages."
+      heroCardBody="Today keeps the important entry points close so EasyLife feels like one assistant instead of scattered tools."
+      featuresTitle="A cleaner way into the assistant"
+      featuresDescription="Today is where EasyLife becomes a practical daily workspace instead of a pile of pages."
       features={[
         {
           tag: "Launch",
           title: "Pick where the app opens",
-          description: "Use Settings to open at HQ, the last-used screen, tasks, calendar, notes, or workout.",
+          description: "Use Settings to open at Today, the last-used screen, Inbox, Plan, Notes, or another saved area.",
         },
         {
           tag: "Focus",
           title: "See the day without digging",
-          description: "Use the daily pulse and start-here prompts to choose the next app with less guessing.",
+          description: "Use the daily read and start-here prompts to choose the next move with less guessing.",
         },
         {
           tag: "Mobile",
@@ -31,7 +31,7 @@ export function EasyHQMarketingPage() {
       stepsTitle="Start from today's workspace"
       steps={[
         {
-          title: "Open EasyLifeHQ",
+          title: "Open EasyLife",
           description: "Launch from the browser or your phone home screen.",
         },
         {
@@ -39,24 +39,24 @@ export function EasyHQMarketingPage() {
           description: "Scan the daily pulse, visible apps, and quick entry points.",
         },
         {
-          title: "Jump into the right app",
-          description: "Move to tasks, calendar, notes, workout, projects, pipeline, contacts, or stats.",
+          title: "Jump into the right area",
+          description: "Move to Inbox, Plan, Notes, People, or another area when the next move needs more structure.",
         },
       ]}
       ctaTitle="Make the app feel like home base."
-      ctaBody="EasyHQ keeps the suite simple by giving everything a clear front door."
+      ctaBody="Today keeps the assistant simple by giving everything a clear front door."
       demoPath={[
         {
           title: "Show startup settings",
-          description: "Pick HQ or last-used as the launch target.",
+          description: "Pick Today or last-used as the launch target.",
         },
         {
           title: "Use quick actions",
           description: "Open the most common capture paths from one place.",
         },
         {
-          title: "Switch apps",
-          description: "Show how the suite stays connected without feeling crowded.",
+          title: "Switch areas",
+          description: "Show how the assistant flow stays connected without feeling crowded.",
         },
       ]}
     />

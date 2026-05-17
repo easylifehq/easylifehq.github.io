@@ -4,9 +4,9 @@ export function EasyWorkoutMarketingPage() {
   return (
     <ProductMarketingPage
       pageClassName="marketing-page--preview-realism marketing-page--mobile-quiet-tags marketing-page--easyworkout-mobile-density"
-      eyebrow="EasyWorkout"
+      eyebrow="Workout"
       heroTitle="Start a workout and log without fighting the app."
-      heroDescription="EasyWorkout keeps normal workout browsing separate from Gym Mode, so logging in the middle of a lift stays fast."
+      heroDescription="Workout keeps normal browsing separate from Gym Mode, so logging in the middle of a lift stays fast."
       heroPoints={["Gym Mode", "Free-form exercises", "Routines", "Compact sets"]}
       heroCardTitle="A workout logger that gets out of the way."
       heroCardBody="Start the session, type the exercise you actually did, add grip or setup notes, and move on."
@@ -54,7 +54,7 @@ export function EasyWorkoutMarketingPage() {
         },
       ]}
       ctaTitle="Make workout logging feel lightweight."
-      ctaBody="EasyWorkout is for getting the session down without turning the gym into data entry homework."
+      ctaBody="Workout is for getting the session down without turning the gym into data entry homework."
     />
   );
 }

@@ -4,9 +4,9 @@ export function EasyCalendarMarketingPage() {
   return (
     <ProductMarketingPage
       pageClassName="marketing-page--mobile-preview-lift marketing-page--easycalendar-preview marketing-page--feature-section-restraint marketing-page--light-demo-band"
-      eyebrow="EasyCalendar"
+      eyebrow="Plan"
       heroTitle="See when your life is full and where real work still fits."
-      heroDescription="EasyCalendar mixes fixed commitments with flexible task blocks so your schedule becomes something you can actually plan around."
+      heroDescription="Plan mixes fixed commitments with flexible task blocks so your schedule becomes something you can actually plan around."
       heroPoints={["Day and week views", "Fixed vs flexible blocks", "Open window detection", "Plan My Day"]}
       heroCardTitle="A calmer time system."
       heroCardBody="Fixed events stay solid, task blocks stay flexible, and open windows become useful space instead of guesswork."
@@ -18,7 +18,7 @@ export function EasyCalendarMarketingPage() {
         { app: "4:00 PM", detail: "Workout buffer" },
       ]}
       featuresTitle="Built to answer when things happen"
-      featuresDescription="EasyCalendar is where the week planner actually lives, with a clear split between commitments and work you can move."
+      featuresDescription="Plan is where the week planner lives, with a clear split between commitments and work you can move."
       features={[
         {
           tag: "Clarity",
@@ -32,7 +32,7 @@ export function EasyCalendarMarketingPage() {
         },
         {
           tag: "Flow",
-          title: "Connected to EasyList",
+          title: "Connected to Inbox",
           description: "Tasks can be scheduled, completed, reopened, and managed directly from the calendar.",
         },
       ]}
@@ -43,7 +43,7 @@ export function EasyCalendarMarketingPage() {
           description: "Anchor the real immovable parts of the day first.",
         },
         {
-          title: "Pull in work from EasyList",
+          title: "Pull in work from Inbox",
           description: "Turn open time into flexible task blocks that still feel movable and realistic.",
         },
         {
@@ -52,7 +52,7 @@ export function EasyCalendarMarketingPage() {
         },
       ]}
       ctaTitle="Make your time visible before it disappears."
-      ctaBody="EasyCalendar helps you see what the day can actually hold instead of stuffing more into it than reality allows."
+      ctaBody="Plan helps you see what the day can actually hold instead of stuffing more into it than reality allows."
       demoPath={[
         {
           title: "Open day view",
@@ -64,7 +64,7 @@ export function EasyCalendarMarketingPage() {
         },
         {
           title: "Place a task",
-          description: "Send a task from EasyList into open time.",
+          description: "Send a task from Inbox into open time.",
         },
       ]}
     />

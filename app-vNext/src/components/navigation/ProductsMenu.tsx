@@ -21,7 +21,7 @@ type ProductsMenuProps = {
 
 export function ProductsMenu({
   items,
-  label = "Products",
+  label = "Areas",
   panelLabel,
   className = "",
   panelClassName = "",

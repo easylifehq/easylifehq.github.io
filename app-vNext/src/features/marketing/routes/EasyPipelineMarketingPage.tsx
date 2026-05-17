@@ -4,10 +4,10 @@ export function EasyPipelineMarketingPage() {
   return (
     <ProductMarketingPage
       pageClassName="marketing-page--grouped-workflow"
-      eyebrow="EasyPipeline"
+      eyebrow="Follow-ups"
       heroTitle="Stay on top of every application, follow-up, and opportunity."
-      heroDescription="EasyPipeline turns your job search into a clearer workflow so applications, follow-ups, and outreach stop slipping through the cracks."
-      heroPoints={["Track stages", "Follow-up reminders", "Clean mobile stats", "Contacts splitting into EasyContacts"]}
+      heroDescription="Follow-ups turns your job search into a clearer workflow so applications, outreach, and next steps stop slipping through the cracks."
+      heroPoints={["Track stages", "Follow-up reminders", "Clean mobile stats", "People context"]}
       heroCardTitle="A calmer application tracker."
       heroCardBody="Instead of scattered spreadsheets and forgotten tabs, keep your search in one place with clear stages and next actions."
       featuresTitle="A job search system that feels organized"
@@ -25,8 +25,8 @@ export function EasyPipelineMarketingPage() {
         },
         {
           tag: "Contacts",
-          title: "Contacts are becoming their own app",
-          description: "EasyContacts will separate relationship tracking from the main application board so Pipeline stays focused.",
+          title: "People context stays close",
+          description: "People details stay separate from the main application board so follow-ups stay focused.",
         },
       ]}
       stepsTitle="Track, follow up, and stay in motion"
@@ -45,7 +45,7 @@ export function EasyPipelineMarketingPage() {
         },
       ]}
       ctaTitle="Run your search like a real workflow."
-      ctaBody="EasyPipeline is for job hunts that need a system, not just another scattered list of company names."
+      ctaBody="Follow-ups is for job hunts that need a system, not just another scattered list of company names."
       demoPath={[
         {
           title: "Add an opportunity",
@@ -56,7 +56,7 @@ export function EasyPipelineMarketingPage() {
           description: "Use the dashboard to show what needs attention next.",
         },
         {
-          title: "Route from EasyList",
+          title: "Route from Inbox",
           description: "Show how a job-search task can become a pipeline follow-up.",
         },
       ]}

@@ -2,6 +2,36 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 18 Task 2 Public Assistant Entrance
+
+- Task: Clean public/marketing module-language.
+- Result: Passed build and public/login copy inspection.
+- Magic signal: public-first-impression-is-one-assistant
+- Changed files:
+  - `app-vNext/src/app/router/index.tsx`
+  - `app-vNext/src/components/navigation/MarketingHeader.tsx`
+  - `app-vNext/src/components/navigation/ProductsMenu.tsx`
+  - `app-vNext/src/features/auth/routes/LoginPage.tsx`
+  - `app-vNext/src/features/marketing/components/ProductMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyContactsMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyHQMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyNotesMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyPipelineMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyProjectsMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyStatisticsMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/MarketingLandingPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Proof evidence: `/login` rendered with `EasyLife`, `Private assistant`, and the assistant path, with no old above-fold product-family terms.
+- Public landing evidence: source now leads with `EasyLife`, `One calm assistant...`, and `Open EasyLife`; headless root render reached the auth-loading fallback, which now says `Opening EasyLife...`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: frontend copy/UI only; no route deletion, backend/auth provider behavior, Firebase config, dependencies, package files, deploy config, generated output, secrets, model calls, real memory, external sync, notifications, or autonomous assistant behavior changed.
+
 ## 2026-05-17 - Stage 18 Task 1 Mobile Review Proof
 
 - Task: Run live mobile review proof.

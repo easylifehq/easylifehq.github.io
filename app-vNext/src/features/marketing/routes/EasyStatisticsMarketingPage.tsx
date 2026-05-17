@@ -3,10 +3,10 @@ import { ProductMarketingPage } from "@/features/marketing/components/ProductMar
 export function EasyStatisticsMarketingPage() {
   return (
     <ProductMarketingPage
-      eyebrow="EasyStatistics"
+      eyebrow="Progress"
       heroTitle="Keep progress fun without crowding every page."
-      heroDescription="EasyStatistics gives progress, trends, and app-by-app data a dedicated place so the core tools stay clean."
-      heroPoints={["Overview", "Per-app stats", "Trends", "Less page clutter"]}
+      heroDescription="Progress gives trends and area-by-area data a dedicated place so the core assistant stays clean."
+      heroPoints={["Overview", "Area stats", "Trends", "Less page clutter"]}
       heroCardTitle="The numbers get their own room."
       heroCardBody="Stats are useful when you ask for them, not when they are crammed into every workflow."
       featuresTitle="Progress without claustrophobia"
@@ -19,7 +19,7 @@ export function EasyStatisticsMarketingPage() {
         },
         {
           tag: "Deep dive",
-          title: "Per-app detail",
+          title: "Per-area detail",
           description: "Open the specific stats for the page or workflow you care about.",
         },
         {
@@ -31,11 +31,11 @@ export function EasyStatisticsMarketingPage() {
       stepsTitle="Review progress when you want it"
       steps={[
         {
-          title: "Open EasyStatistics",
+          title: "Open Progress",
           description: "Start with the overall dashboard.",
         },
         {
-          title: "Choose an app",
+          title: "Choose an area",
           description: "Look deeper into the workflow that needs attention.",
         },
         {
@@ -44,7 +44,7 @@ export function EasyStatisticsMarketingPage() {
         },
       ]}
       ctaTitle="Use data without letting it run the app."
-      ctaBody="EasyStatistics keeps the fun metrics available while the main pages stay focused."
+      ctaBody="Progress keeps the fun metrics available while the main pages stay focused."
     />
   );
 }

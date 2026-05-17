@@ -56,10 +56,10 @@ export function ProductMarketingPage({
     ? `marketing-page marketing-page--product ${pageClassName}`
     : "marketing-page marketing-page--product";
   const previewItems = heroPreviewItems ?? [
-    { app: "EasyHQ", detail: "Daily pulse" },
-    { app: "EasyList", detail: "Brain dumps" },
-    { app: "EasyCalendar", detail: "Plan My Day" },
-    { app: "EasyNotes", detail: "Draft handoff to EasyList" },
+    { app: "Today", detail: "Daily read" },
+    { app: "Inbox", detail: "Loose inputs" },
+    { app: "Plan", detail: "Day shape" },
+    { app: "Notes", detail: "Context drafts" },
   ];
 
   return (

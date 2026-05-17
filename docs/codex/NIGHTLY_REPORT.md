@@ -1,5 +1,37 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 18 Task 2 public/marketing module-language cleanup
+
+- Task attempted: Make public/login first impression say one assistant, not a product family.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Routes inspected:
+  - `http://127.0.0.1:4231/login`
+  - `http://127.0.0.1:4231/`
+- Files changed:
+  - `app-vNext/src/app/router/index.tsx`
+  - `app-vNext/src/components/navigation/MarketingHeader.tsx`
+  - `app-vNext/src/components/navigation/ProductsMenu.tsx`
+  - `app-vNext/src/features/auth/routes/LoginPage.tsx`
+  - `app-vNext/src/features/marketing/components/ProductMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyCalendarMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyContactsMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyHQMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyListMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyNotesMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyPipelineMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyProjectsMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyStatisticsMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/EasyWorkoutMarketingPage.tsx`
+  - `app-vNext/src/features/marketing/routes/MarketingLandingPage.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Product simplification: public chrome now leads with `EasyLife`, `Private assistant`, and assistant areas instead of `EasyLifeHQ`, `Products`, or named mini-app branding above the fold.
+- Login proof: rendered `/login` with a fresh Chrome profile and confirmed no `EasyLifeHQ`, `EasyHQ`, `EasyList`, `EasyCalendar`, `EasyContacts`, `Products`, or `Explore products` text in the rendered first impression.
+- Public landing proof: `/` still held on the unauthenticated auth-loading fallback in headless render, but that fallback now says `Opening EasyLife...`; source inspection confirms the landing hero says `EasyLife`, `One calm assistant...`, and `Open EasyLife`.
+- Boundary preserved: frontend copy/UI only. No routes deleted, no auth provider behavior changed, no backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, persistence, model calls, real memory, email sync, calendar sync, notifications, or autonomous assistant behavior added.
+
 ## 2026-05-17 - Stage 18 Task 1 live mobile review proof
 
 - Task attempted: Inspect current EasyLife routes at mobile width so Stage 18 stops relying on stale agent guesses.

@@ -4,12 +4,12 @@ export function EasyListMarketingPage() {
   return (
     <ProductMarketingPage
       pageClassName="marketing-page--mobile-dense-hero marketing-page--easylist-preview marketing-page--desktop-rhythm-repair marketing-page--light-demo-band"
-      eyebrow="EasyList"
+      eyebrow="Inbox"
       heroTitle="Clear the annoying stuff. Protect your real time."
-      heroDescription="EasyList is the task system for all the small life and admin things that clutter your brain before bigger work can happen."
+      heroDescription="Inbox is where small life and admin things land before you decide what they should become."
       heroPoints={["Brain dumps", "Flexible planner", "Archive history"]}
       heroCardTitle="A task system that keeps the noise manageable."
-      heroCardBody="EasyList is where quick obligations, admin chores, reminders, and loose tasks stop living in your head and start moving."
+      heroCardBody="Quick obligations, admin chores, reminders, and loose tasks stop living in your head and become reviewable."
       heroPreviewContext="Calendar prep"
       heroPreviewItems={[
         { app: "Inbox", detail: "6 quick tasks captured", status: "Review" },
@@ -47,12 +47,12 @@ export function EasyListMarketingPage() {
           description: "Use due dates, priorities, and categories so you can tell urgent work from background clutter.",
         },
         {
-          title: "Send work into EasyCalendar",
+          title: "Send work into Plan",
           description: "Place the real work into open time instead of leaving everything as a static list.",
         },
       ]}
       ctaTitle="Make life admin feel smaller."
-      ctaBody="Use EasyList when the little tasks are starting to steal too much attention from the work you actually care about."
+      ctaBody="Use Inbox when the little tasks are starting to steal too much attention from the work you actually care about."
       demoPath={[
         {
           title: "Add one task",
@@ -64,7 +64,7 @@ export function EasyListMarketingPage() {
         },
         {
           title: "Send work to time",
-          description: "Open task details and send the task into EasyCalendar.",
+          description: "Open task details and send the task into Plan.",
         },
       ]}
     />

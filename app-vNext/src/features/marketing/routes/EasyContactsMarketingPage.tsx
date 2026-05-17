@@ -4,14 +4,14 @@ export function EasyContactsMarketingPage() {
   return (
     <ProductMarketingPage
       pageClassName="marketing-page--lead-features"
-      eyebrow="EasyContacts"
-      heroTitle="Remember the people attached to the work."
-      heroDescription="EasyContacts keeps names, context, and follow-ups separate from the pipeline board so relationships stay clear."
+      eyebrow="People"
+      heroTitle="Keep track of the people attached to the work."
+      heroDescription="People keeps names, context, places, and follow-ups separate from heavier project work so relationships stay clear."
       heroPoints={["People", "Context", "Follow-ups", "Pipeline links"]}
       heroCardTitle="A simple relationship memory."
       heroCardBody="Keep useful context close without stuffing every person into tasks, notes, or applications."
       featuresTitle="Contacts without the spreadsheet fog"
-      featuresDescription="EasyContacts is for remembering who matters, why they matter, and what needs follow-up."
+      featuresDescription="People is for keeping track of who matters, why they matter, and what needs follow-up."
       features={[
         {
           tag: "Context",
@@ -41,11 +41,11 @@ export function EasyContactsMarketingPage() {
         },
         {
           title: "Return when it matters",
-          description: "Use EasyContacts when a name should not disappear after one note.",
+          description: "Use People when a name should not disappear after one note.",
         },
       ]}
       ctaTitle="Stop losing useful people-context."
-      ctaBody="EasyContacts keeps relationship details from getting buried in your task list."
+      ctaBody="People keeps relationship details from getting buried in your task list."
     />
   );
 }

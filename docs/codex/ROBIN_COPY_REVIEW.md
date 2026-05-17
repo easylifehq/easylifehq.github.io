@@ -1,6 +1,32 @@
 # Robin Copy Review
 
 ## Verdict
+PUBLIC_ASSISTANT_ENTRANCE_COPY_READY
+
+## Stage 18 Task 2 Public/Marketing Copy Review - 2026-05-17
+
+Verdict: `PUBLIC_ASSISTANT_ENTRANCE_COPY_READY`.
+
+Public and login copy now presents EasyLife as one assistant workspace instead of a family of named products. The first impression uses `EasyLife`, `Private assistant`, `One private assistant workspace`, and Today/Inbox/Plan/Notes language rather than `EasyLifeHQ`, `Products`, `Explore products`, or `EasyList` / `EasyCalendar` / `EasyContacts` branding.
+
+What changed:
+- Public header brand now reads `EasyLife` with `Private assistant`.
+- Login opens with `EasyLife` and `One private assistant workspace for Today, Inbox, Plan, and Notes`.
+- Public landing hero says `EasyLife` and `Open EasyLife`.
+- Product detail page eyebrows are demoted to assistant areas like Today, Inbox, Plan, Notes, People, Follow-ups, Projects, Workout, and Progress.
+- Shared product preview rows now use Today, Inbox, Plan, and Notes rather than old app names.
+
+Rendered proof:
+- `/login` rendered without `EasyLifeHQ`, `EasyHQ`, `EasyList`, `EasyCalendar`, `EasyContacts`, `Products`, or `Explore products`.
+- `/` rendered the public auth-loading fallback in headless Chrome, and that fallback now says `Opening EasyLife...` instead of `Opening EasyLifeHQ...`.
+
+Copy risk:
+- Public product detail route paths still contain legacy route names such as `/easylist` and component/function names remain internal. That is acceptable for this pass because the visible copy has been reframed.
+- The root public landing should get another browser pass after the auth-loading behavior is easier to bypass in headless review.
+
+---
+
+## Verdict
 STAGE_17_COPY_READY_FOR_HUMAN_REVIEW
 
 ## Stage 17 Anti-Annoyance Copy Proof - 2026-05-12

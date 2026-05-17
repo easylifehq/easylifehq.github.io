@@ -72,10 +72,10 @@ export function LoginPage() {
       <section className="auth-card-vnext">
         <div className="auth-intro-grid">
           <div>
-            <p className="eyebrow">EasyLifeHQ</p>
+            <p className="eyebrow">EasyLife</p>
             <h1>{title}</h1>
             <p className="auth-copy">
-              Start with Today, catch loose thoughts in Inbox, shape the day in Plan, and keep context close in Notes.
+              One private assistant workspace for Today, Inbox, Plan, and Notes.
             </p>
           </div>
           <div className="auth-proof-card">
