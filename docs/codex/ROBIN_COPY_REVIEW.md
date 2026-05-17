@@ -1,6 +1,31 @@
 # Robin Copy Review
 
 ## Verdict
+READY_FOR_STAGE_23_SERVER_ARCHITECTURE_DECISION
+
+## Stage 22 Mock Gateway Copy Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_23_SERVER_ARCHITECTURE_DECISION`.
+
+The Stage 22 copy keeps the boundary honest. It says `Mock gateway`, `No provider`, `Local mode`, `Preview`, and `No live AI, no provider call, no hidden write.` It does not market the behavior as live AI.
+
+Copy proof:
+- Request contract is limited to `intake-suggestion` for Inbox typed capture only.
+- Visible output names source, state, and destination before any save path.
+- Accepted outputs remain draft/preview/needs-review shapes.
+- Hidden-action and external-action claims are rejected.
+- Action-like save wording is downgraded to `needs-review`.
+- Fallback copy preserves typed capture and says no background retry will run.
+
+Copy risk:
+- Inbox is now carrying a lot of technical safety copy because it is proving the gateway path.
+- Stage 23 should keep user-facing language narrow: server architecture decision, not live assistant launch.
+
+Do not say EasyLife has live AI yet.
+
+---
+
+## Verdict
 READY_FOR_MOCK_SERVER_AI_GATEWAY_IMPLEMENTATION
 
 ## Stage 21 Server AI Gateway Copy Proof - 2026-05-17

@@ -1,5 +1,29 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 22 Mock Gateway Proof Packet
+
+- Task attempted: Prove whether the no-provider mock gateway is ready before choosing real server architecture.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected: `/app/easylist/add?demo=1` on the local dev server at `127.0.0.1:4231`.
+- Inspection method: the in-app browser pane was unavailable in this session, so route proof used headless Chrome DOM inspection.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_22_MOCK_GATEWAY_PROOF_PACKET.md`
+  - `docs/codex/CHECKPOINT_REVIEW.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Rendered proof: Inbox rendered `Mock gateway`, `No provider`, `Mock gateway state`, fallback options, source/state/destination labels, `Model-shaped preview`, and `No live AI, no provider call, no hidden write.`
+- Accepted proof: bounded Inbox typed-capture requests and task/note/follow-up/unsure outputs pass the mock gateway path.
+- Rejected proof: unsupported prompt, non-Inbox route, selected-task context, broad context, empty capture, too many sources, hidden autosave/message claims, external email/scheduling claims, malformed confirmation, and invalid request cases are rejected.
+- Downgrade proof: action-like save wording is downgraded to `needs-review` / `Needs review`.
+- Timeout/fallback/no-AI proof: timeout, rate-limit, circuit-open, AI-disabled, invalid-request, and validation-rejected cases preserve typed capture, expose deterministic local fallback, and never automatically retry.
+- Contract proof: Stage 22 uses Stage 20 context packets, prompt IDs, and output validator.
+- Verdict: `READY_FOR_STAGE_23_SERVER_ARCHITECTURE_DECISION`.
+- Risks or follow-up needed: Inbox remains dense, and the existing demo data-access warning still appears under the route content. Stage 23 should decide server architecture, not add live AI.
+- Boundary preserved: no live AI, provider SDKs, API keys, backend services, Firebase config, dependencies, package files, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, saved-object expansion, or real personal data were added.
+
 ## 2026-05-17 - Stage 22 Task 4 Inbox Mock Gateway Preview Wiring
 
 - Task attempted: Wire Inbox to the local mock gateway path so the user can see a mock model-style suggestion without any provider call.

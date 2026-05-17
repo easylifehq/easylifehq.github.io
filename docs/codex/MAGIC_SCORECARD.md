@@ -2,6 +2,24 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 22 Mock Gateway Proof Packet
+
+- Task: Prove whether the no-provider mock gateway is ready before choosing real server architecture.
+- Result: Stage 22 proof packet was created.
+- Magic signal: mock-gateway-ready-for-server-architecture-decision
+- Proof packet: `docs/codex/EASYLIFE_STAGE_22_MOCK_GATEWAY_PROOF_PACKET.md`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: `/app/easylist/add?demo=1` rendered `Mock gateway`, `No provider`, `Mock gateway state`, source/state/destination, `Model-shaped preview`, and `No live AI, no provider call, no hidden write.`
+- Context evidence: mock requests use `stage-20-context-v1` and allow only current route, typed capture, and optional demo fixture for the first behavior.
+- Prompt evidence: mock gateway allows only `intake-suggestion`.
+- Validator evidence: mock outputs pass through `validateAssistantModelOutput` before rendering.
+- Accepted proof: bounded request plus task, note/context, follow-up, and unsure outputs are accepted.
+- Rejected proof: unsupported prompt, non-Inbox route, selected-task context, broad context, empty capture, too many sources, hidden autosave/message claims, external email/scheduling claims, malformed confirmation, and invalid request cases are rejected.
+- Downgraded proof: action-like save wording is downgraded to `needs-review` and `Needs review`.
+- Fallback proof: timeout, rate-limit, circuit-open, AI-disabled, invalid-request, and validation-rejected states preserve typed capture, expose deterministic local fallback, and never automatically retry.
+- Verdict evidence: `READY_FOR_STAGE_23_SERVER_ARCHITECTURE_DECISION`.
+- Boundary evidence: no live model call, provider SDK, API key, backend service, Firebase config change, dependency, package file, deploy config, generated output, secret, external action, real memory, hidden read, hidden write, saved-object expansion, or real personal data was added.
+
 ## 2026-05-17 - Stage 22 Task 4 Inbox Mock Gateway Preview Wiring
 
 - Task: Wire Inbox to the local mock gateway path so a mock model-style suggestion is visible without a provider call.

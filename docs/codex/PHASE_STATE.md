@@ -1,23 +1,25 @@
 # Phase State
 
-Current Phase: stage-22-mock-server-ai-gateway
+Current Phase: stage-23-server-architecture-decision
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Implement a no-provider local/server-shaped mock gateway for the first suggestion-only assistant behavior.
+Primary Action: Decide the real server architecture for a future AI gateway without adding live model calls yet.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 22 may implement local/server-shaped mock gateway request validation, response validation, fallback states, Inbox preview wiring, and proof. It must not add live model calls, provider SDKs, frontend API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets.
+Complexity Budget: Stage 23 may choose server runtime, endpoint boundary, secret storage, request validation location, response validation location, metadata-only logging, rate/spend controls, fallback behavior, and mock-to-real provider swap strategy. It must not add live model calls, provider SDKs, frontend API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets without a separate explicit implementation gate.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: MOCK_GATEWAY_PACKET_READY
-Evidence Required: Stage 22 mock gateway plan, exactly five Stage 22 Task Contract V2 tasks, build proof, NIGHTLY_REPORT, and MAGIC_SCORECARD.
+Parking State: READY_FOR_STAGE_23_SERVER_ARCHITECTURE_DECISION
+Evidence Required: Stage 22 mock gateway proof packet, build proof, Inbox route proof, accepted/rejected/downgraded/fallback/no-AI fixture proof, NIGHTLY_REPORT, and MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Complete Stage 22 mock gateway implementation tasks and proof before choosing real server architecture.
+Next Phase Criteria: Create a Stage 23 server architecture decision packet before any live provider integration.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 22 mock gateway packet created.
+Updated At: 2026-05-17 - Stage 22 mock gateway proof completed.
+
+Stage 22 proof result: READY_FOR_STAGE_23_SERVER_ARCHITECTURE_DECISION. The no-provider mock gateway is narrow enough to choose the real server architecture next. It uses Stage 20 context packets, the `intake-suggestion` prompt ID, Stage 20 output validation, accepted/rejected/downgraded fixture proof, stable timeout/fallback/no-AI states, and visible Inbox proof. This does not approve live model calls, provider SDKs, API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, real memory, hidden reads, hidden writes, saved-object expansion, or real personal data.
 
 Stage 22 source: docs/codex/EASYLIFE_STAGE_22_MOCK_GATEWAY_PLAN.md
 

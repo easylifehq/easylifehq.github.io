@@ -1,6 +1,31 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_STAGE_23_SERVER_ARCHITECTURE_DECISION
+
+## Stage 22 Mock Gateway Product Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_23_SERVER_ARCHITECTURE_DECISION`.
+
+The Inbox mock gateway is reviewable as a technical proof. It does not look like final consumer magic, but it does make the future model path visible without pretending a provider is live.
+
+Rendered proof:
+- `/app/easylist/add?demo=1` rendered `Mock gateway`, `No provider`, and `Mock gateway state`.
+- The mock output card rendered source, state, destination, output fields, and `Review only` confirmation copy.
+- The fallback selector exposed `AI disabled`, `Timeout`, `Rate limit`, and `Circuit open`.
+- The card says `No live AI, no provider call, no hidden write.`
+
+Design/product read:
+- The mock gateway is clear enough for architecture proof.
+- Inbox remains the densest route and should not receive more visible machinery until the real architecture is chosen.
+- The existing demo data-access warning below the content is still annoying, but it did not prevent route proof.
+
+Next design guard:
+Stage 23 should be architecture decision work, not another visible Inbox panel.
+
+---
+
+## Verdict
 MOCK_GATEWAY_PREVIEW_REVIEWABLE
 
 ## Stage 22 Task 4 Inbox Mock Gateway Preview Wiring - 2026-05-17
