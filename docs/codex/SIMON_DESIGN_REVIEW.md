@@ -1,6 +1,31 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_SERVER_AI_GATEWAY_PLANNING
+
+## Stage 20 AI Assistant Readiness Visual/Product Proof - 2026-05-17
+
+Verdict: `READY_FOR_SERVER_AI_GATEWAY_PLANNING`.
+
+The visible app is holding the right product posture for server AI planning: Today, Inbox, Plan, Notes, Contacts, Settings, and Command remain reviewable without live AI. The no-AI fallback is visible but not dominant, and the local assistant surfaces still preserve manual review.
+
+Rendered proof:
+- Today rendered `What needs attention now?`, `Local mode`, and saved-context language.
+- Inbox rendered the assistant intake preview, `Live AI off`, local-rules fallback copy, and typed demo capture.
+- Plan rendered `Assistant capacity read`, `Preview`, and `Recovery day`.
+- Notes rendered `Saved context` and `nothing is recalled automatically`.
+- Contacts rendered `Saved labels only` and `No maps`.
+- Settings rendered `Assistant controls`.
+- Command remained demoted as `Legacy review` / `Draft review`.
+
+Design read:
+- The app does not look blocked when AI is off.
+- The approval-first assistant shell is visually credible enough for gateway planning.
+- The next risk is architectural, not visual: do not add a live model before server-only secrets, validation, and failure handling are designed.
+
+---
+
+## Verdict
 AI_UNAVAILABLE_FALLBACK_READY
 
 ## Stage 20 Task 4 AI-Unavailable Fallback - 2026-05-17

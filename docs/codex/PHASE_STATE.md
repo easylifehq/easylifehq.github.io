@@ -1,9 +1,9 @@
 # Phase State
 
-Current Phase: stage-20-ai-assistant-readiness-gate
+Current Phase: stage-20-ai-assistant-readiness-proof
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Define the safest model-backed assistant architecture before any live model calls are implemented.
+Primary Action: Prove the safest model-backed assistant architecture is ready for server-only gateway planning before any live model calls are implemented.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
@@ -11,15 +11,17 @@ Complexity Budget: Stage 20 may define model-read contracts, prompt registry rul
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_MODEL_ARCHITECTURE_NOT_MODEL_CALLS
-Evidence Required: Stage 20 readiness gate, exactly five Task Contract V2 tasks, build proof, NIGHTLY_REPORT, MAGIC_SCORECARD.
+Parking State: READY_FOR_SERVER_AI_GATEWAY_PLANNING
+Evidence Required: Stage 20 readiness gate, context packet contract, prompt registry contract, model output validation contract, AI-unavailable fallback, route proof, build proof, and Stage 20 proof packet.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Run the five Stage 20 tasks one at a time, then create a proof packet before any server AI gateway or live model-call stage.
+Next Phase Criteria: Create a Stage 21 server AI gateway planning/threat-model packet before any live model-call implementation.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
 Updated At: 2026-05-17 - Stage 20 AI assistant readiness gate created.
 
 Stage 20 Task 4 proof result: AI_UNAVAILABLE_FALLBACK_READY. EasyLife now has a local AI-unavailable contract and small Today/Inbox fallback copy. Capture, deterministic local classification, task save, note save, and Today review remain usable without live AI.
+
+Stage 20 proof result: READY_FOR_SERVER_AI_GATEWAY_PLANNING. The next stage may plan a server-only AI gateway and threat model, but it must not add live model calls, provider SDKs, frontend API keys, backend implementation, Firebase config changes, dependencies, deploy config, generated output, secrets, external actions, real memory, hidden reads, hidden writes, or saved-object expansion without a separate explicit implementation gate.
 
 ## Assistant Brain Gate
 

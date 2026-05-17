@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+READY_FOR_SERVER_AI_GATEWAY_PLANNING
+
+## Stage 20 AI Assistant Readiness Copy Proof - 2026-05-17
+
+Verdict: `READY_FOR_SERVER_AI_GATEWAY_PLANNING`.
+
+The copy supports gateway planning without overclaiming live AI. Stage 20 says exactly what is true: EasyLife has local contracts, local deterministic suggestions, reviewable prompts, validated output shapes, and a no-AI fallback. It does not say a model is live.
+
+Copy proof:
+- Context packets use source labels and bounded reads.
+- Prompt entries require source attribution and approval-first language.
+- Model output validation rejects hidden-action and external-action claims.
+- Today and Inbox use `Local mode` / `Live AI off` language.
+- Frontend API keys remain explicitly forbidden.
+
+Copy risk:
+- Stage 21 must not drift into magic language. It should say `server gateway planning`, not `turn on AI`.
+
+---
+
+## Verdict
 AI_UNAVAILABLE_COPY_READY
 
 ## Stage 20 Task 4 AI-Unavailable Fallback Copy - 2026-05-17

@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 20 AI Assistant Readiness Proof Packet
+
+- Task: Prove whether EasyLife is ready for server-only AI gateway planning.
+- Result: Stage 20 proof packet was created.
+- Magic signal: server-ai-gateway-planning-ready
+- Proof packet: `docs/codex/EASYLIFE_STAGE_20_AI_ASSISTANT_PROOF_PACKET.md`
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: Today, Inbox, Plan, Notes, Contacts, Settings, and Command were inspected on the local dev server.
+- Context evidence: `stage-20-context-v1` allows only typed capture, selected task, selected note/context, selected day summary, selected contact place label, current route, and demo fixture.
+- Prompt evidence: `stage-20-prompts-v1` centralizes `intake-suggestion`, `today-context-read`, `plan-capacity-read`, `note-context-draft`, and `people-place-cue`.
+- Validation evidence: model output validator rejects hidden-action/external-action claims and downgrades action-like wording to needs-review.
+- Fallback evidence: Today and Inbox render `Local mode` / `Live AI off` fallback copy while manual capture, task save, note save, and Today review remain usable.
+- Verdict evidence: `READY_FOR_SERVER_AI_GATEWAY_PLANNING`.
+- Boundary evidence: no live model call, provider SDK, frontend API key, backend/auth/Firebase change, dependency, package file, deploy config, generated output, secret, external action, real memory, hidden read, hidden write, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 20 Task 4 AI-Unavailable Fallback
 
 - Task: Add local AI-unavailable fallback behavior without blocking core manual flows.
