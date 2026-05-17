@@ -1,23 +1,29 @@
 # Phase State
 
-Current Phase: stage-23-server-architecture-decision
+Current Phase: stage-24-no-provider-server-adapter
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Execute the Stage 23 server architecture decision path without adding live model calls yet.
+Primary Action: Implement a no-provider server adapter shell/mock path without adding live model calls.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 23 may choose server runtime, endpoint boundary, secret storage, request validation location, response validation location, metadata-only logging, rate/spend controls, fallback behavior, and mock-to-real provider swap strategy. It must not add live model calls, provider SDKs, frontend API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets without a separate explicit implementation gate.
+Complexity Budget: Stage 24 may add local TypeScript server-adapter contract modules, no-provider mock handler modules, safety tests, and a compact Inbox server-adapter mock label/toggle. It must not add live model calls, provider SDKs, frontend API keys, backend production behavior, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets without a separate explicit implementation gate.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: STAGE_23_PACKET_READY
-Evidence Required: Stage 23 architecture decision packet, exactly five Stage 23 tasks, Stage 22 mock gateway proof packet, build proof, NIGHTLY_REPORT, and MAGIC_SCORECARD.
+Parking State: READY_FOR_STAGE_24_SERVER_ADAPTER_IMPLEMENTATION
+Evidence Required: Stage 23 proof packet, architecture ADR, gateway boundary, threat model, rollout/fallback plan, exactly five Stage 24 tasks, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Complete Stage 23 architecture ADR, gateway boundary decision, threat model, rollout/fallback decision, and proof packet before any server adapter implementation.
+Next Phase Criteria: Complete no-provider server adapter contract, mock handler, safety tests, Inbox preview label/toggle, and Stage 24 proof before any provider-readiness work.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 23 server architecture decision packet created.
+Updated At: 2026-05-17 - Stage 23 proof completed.
+
+Stage 23 proof result: READY_FOR_STAGE_24_SERVER_ADAPTER_IMPLEMENTATION. The architecture decision packet, architecture ADR, gateway boundary, threat model, rollout/fallback decision, and build proof are complete. Stage 24 may implement a no-provider server adapter shell/mock path only. This does not approve live model calls, provider SDKs, API keys, backend production behavior, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, or saved-object expansion.
+
+Stage 23 proof source: docs/codex/EASYLIFE_STAGE_23_SERVER_ARCHITECTURE_PROOF_PACKET.md
+
+Prepared Stage 24 queue: docs/codex/NEXT_5_TASKS.md contains exactly five no-provider server adapter tasks.
 
 Stage 23 decision result: STAGE_23_PACKET_READY. The recommended first real AI gateway architecture is a narrow Firebase Cloud Function / HTTPS callable gateway for Inbox typed-capture suggestion only. Static-only provider calls are rejected because frontend API keys cannot be protected. The Stage 22 local/mock adapter remains approved for development, proof, and fallback only. Generic serverless is an acceptable fallback, while a separate minimal API service is parked until the product needs heavier isolation or operations. This packet does not approve live model calls, provider SDKs, API keys, backend implementation, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, or saved-object expansion.
 
