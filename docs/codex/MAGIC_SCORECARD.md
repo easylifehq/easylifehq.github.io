@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 23 Task 4 Gateway Rollout And Fallback
+
+- Task: Define safe rollout, instant disable, and fallback behavior for the future AI gateway.
+- Result: Stage 23 gateway rollout/fallback decision was created.
+- Magic signal: disabled-by-default-ai-rollout
+- Decision evidence: `docs/codex/EASYLIFE_STAGE_23_GATEWAY_ROLLOUT_FALLBACK.md`.
+- Disabled evidence: default gateway state is AI unavailable/local fallback, not live AI.
+- Kill switch evidence: future kill switch must be server-side, stop provider calls immediately, preserve typed capture, and avoid queued replay/background retries.
+- Fallback evidence: local deterministic classifier, unsaved draft preview, manual task save, and manual note/context save remain usable.
+- Rate/spend evidence: per-user cap, short-window throttle, token/context limits, timeout, circuit breaker, kill switch, spend warning, hard cap, and metadata-only counters are required before provider use.
+- Rollout order evidence: local mock -> server adapter mock -> provider dry-run -> private user test.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live call, provider SDK, API key, backend service, dependency, package file, deploy config, generated output, secret, external action, hidden read, hidden write, real memory, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 23 Task 3 AI Gateway Threat Model
 
 - Task: Create a blunt threat model for the future EasyLife AI gateway.

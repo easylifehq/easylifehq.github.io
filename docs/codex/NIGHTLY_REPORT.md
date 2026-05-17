@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 23 Task 4 Gateway Rollout And Fallback
+
+- Task attempted: Define how the AI gateway can be rolled out safely and disabled instantly.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_23_GATEWAY_ROLLOUT_FALLBACK.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Rollout/fallback decision created: `docs/codex/EASYLIFE_STAGE_23_GATEWAY_ROLLOUT_FALLBACK.md`.
+- Disabled-by-default posture defined: AI gateway starts off; local deterministic fallback, typed capture, manual task save, and manual note/context save remain usable.
+- Kill switch expectations defined: server-side kill switch stops provider calls immediately, returns AI-unavailable fallback, preserves typed capture, and avoids queued replay or background retries.
+- Rate/spend safety defined: per-user caps, short-window throttle, context/token limits, timeout, no automatic background retry, circuit breaker, spend warning, hard cap, and metadata-only usage counters.
+- Staged testing order defined: local mock, server adapter mock, provider dry-run, then private user test.
+- Rollback behavior defined: disable provider calls, keep local fallback, keep existing saves, and never replay old requests.
+- Boundary preserved: no live calls, provider SDKs, API keys, backend services, dependencies, package files, deploy config, generated output, secrets, external actions, hidden reads, hidden writes, real memory, or saved-object expansion were added.
+
 ## 2026-05-17 - Stage 23 Task 3 AI Gateway Threat Model
 
 - Task attempted: Create a blunt threat model for the future EasyLife AI gateway.
