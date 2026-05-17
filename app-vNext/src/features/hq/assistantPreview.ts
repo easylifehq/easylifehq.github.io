@@ -12,6 +12,16 @@ export type AssistantPreviewAction = {
   reason: string;
 };
 
+export type AssistantContextSummaryInput = {
+  overdueCount: number;
+  dueTodayCount: number;
+  eventCount: number;
+  openTimeLabel: string;
+  noteTitle?: string;
+  contactName?: string;
+  contactPlace?: string;
+};
+
 const assistantPreviewExamples: Record<AssistantPreviewKind, AssistantPreviewAction> = {
   today: {
     kind: "today",
@@ -56,4 +66,22 @@ export function getLocalAssistantPreview(input: AssistantPreviewInput): Assistan
   }
 
   return assistantPreviewExamples.today;
+}
+
+export function getLocalAssistantContextRead(input: AssistantContextSummaryInput) {
+  const pressure =
+    input.overdueCount > 0
+      ? `${input.overdueCount} overdue`
+      : input.dueTodayCount > 0
+        ? `${input.dueTodayCount} due today`
+        : input.eventCount > 0
+          ? `${input.eventCount} plan item${input.eventCount === 1 ? "" : "s"}`
+          : `${input.openTimeLabel} open`;
+  const context = input.noteTitle ? `Saved context: ${input.noteTitle}` : "No saved context is leading.";
+  const people =
+    input.contactName && input.contactPlace
+      ? `${input.contactName} is the people/place cue near ${input.contactPlace}.`
+      : "No people/place cue needs attention.";
+
+  return `${pressure}. ${context}. ${people}`;
 }

@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { PageSection } from "@/components/ui/PageSection";
 import { assistantCommandHintRow } from "@/features/hq/assistantCommandHints";
+import { getLocalAssistantContextRead } from "@/features/hq/assistantPreview";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
+import { EasyContactsProvider, useEasyContacts } from "@/features/easycontacts/EasyContactsContext";
+import { EasyNotesProvider, useEasyNotes } from "@/features/easynotes/EasyNotesContext";
 import {
   formatDuration,
   formatTimeLabel,
@@ -23,8 +26,16 @@ function isSameDate(left: Date | null, right: Date) {
   return Boolean(left && startOfDay(left).getTime() === startOfDay(right).getTime());
 }
 
-export function HQPage() {
+function parseDate(value?: string) {
+  if (!value) return null;
+  const parsed = new Date(`${value}T00:00:00`);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function HQPageContent() {
   const { events, taskBlocks, tasks, error } = useEasyCalendar();
+  const { notes } = useEasyNotes();
+  const { contacts } = useEasyContacts();
   const lastAppRoute = useLastAppRoute();
   const today = startOfDay(new Date());
 
@@ -38,6 +49,16 @@ export function HQPage() {
   const openMinutes = openWindows.reduce((sum, window) => sum + window.minutes, 0);
   const mostUrgent = overdueTasks[0] || dueTodayTasks[0] || null;
   const mostUrgentLabel = overdueTasks[0]?.title || dueTodayTasks[0]?.title || "";
+  const savedContextNote = notes.find((note) => note.pinned) || notes[0] || null;
+  const dueContact = contacts
+    .filter((contact) => {
+      const followUpAt = parseDate(contact.nextFollowUpAt);
+      return followUpAt && followUpAt.getTime() <= today.getTime();
+    })
+    .sort((left, right) => (parseDate(left.nextFollowUpAt)?.getTime() || 0) - (parseDate(right.nextFollowUpAt)?.getTime() || 0))[0] || null;
+  const placeContact =
+    contacts.find((contact) => contact.currentCity || contact.region || contact.visitNote) || dueContact || null;
+  const contactPlace = placeContact?.currentCity || placeContact?.region || placeContact?.lastKnownPlace || "";
   const quickWin = sortActiveTasks(tasks.filter((task) => !task.completed && (task.estimatedLength || 999) <= 20))[0] || null;
   const todaySummary = [
     { label: "Due", value: `${overdueTasks.length + dueTodayTasks.length}` },
@@ -114,6 +135,26 @@ export function HQPage() {
           to: "/app/easycalendar/day",
         }
       : null,
+    savedContextNote
+      ? {
+          label: savedContextNote.pinned ? "Pinned context" : "Saved context",
+          title: savedContextNote.title || "Untitled note",
+          detail: savedContextNote.tags.length
+            ? `Tags: ${savedContextNote.tags.slice(0, 2).join(", ")}`
+            : "Keep this note close before deciding the next move.",
+          to: "/app/easynotes",
+        }
+      : null,
+    placeContact && contactPlace
+      ? {
+          label: dueContact?.id === placeContact.id ? "People cue" : "Place cue",
+          title: placeContact.fullName || "Someone in People",
+          detail: dueContact?.id === placeContact.id
+            ? `Follow-up is due; place label is ${contactPlace}.`
+            : `Saved place label: ${contactPlace}.`,
+          to: "/app/easycontacts",
+        }
+      : null,
     followUpTasks[0]
       ? {
           label: "Follow-up hint",
@@ -140,8 +181,16 @@ export function HQPage() {
           detail: "Add a loose thought to Inbox or keep the day open.",
           to: "/app/easylist/add",
         },
-      ]).slice(0, 3);
-  const contextLead = contextItems[0]?.title || "No pressure is standing out.";
+      ]).slice(0, 4);
+  const contextLead = getLocalAssistantContextRead({
+    overdueCount: overdueTasks.length,
+    dueTodayCount: dueTodayTasks.length,
+    eventCount: todayEvents.length,
+    openTimeLabel: formatDuration(openMinutes),
+    noteTitle: savedContextNote?.title || undefined,
+    contactName: placeContact?.fullName || undefined,
+    contactPlace: contactPlace || undefined,
+  });
   const attentionItems = [
     overdueTasks[0]
       ? {
@@ -178,13 +227,7 @@ export function HQPage() {
         }
       : null,
   ].filter((item): item is { label: string; title: string; detail: string; to: string } => Boolean(item)).slice(0, 3);
-  const assistantRead = overdueTasks.length
-    ? "One recovery thread is leading the stack. Clear it, reschedule it, or release it."
-    : dueTodayTasks.length > 3
-      ? "Today has enough moving parts. Pick one list, one time block, and keep the rest quiet."
-      : nextEvents.length
-        ? "Plan has shape. Use open windows for work that would otherwise leak."
-        : "The day is open. Capture the loose ends before they become noise.";
+  const assistantRead = contextLead;
 
   function openNaturalCapture() {
     window.dispatchEvent(new Event("easylife:open-capture"));
@@ -229,7 +272,7 @@ export function HQPage() {
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
             <span>Command</span>
             <strong>{assistantCommandHintRow}</strong>
-            <small>Inbox previews first. Tasks and notes still need confirmation.</small>
+            <small>Drafts first. You approve saves.</small>
             <em>Open</em>
           </button>
           <details className="hq-context-stack">
@@ -277,5 +320,15 @@ export function HQPage() {
         </div>
       </PageSection>
     </main>
+  );
+}
+
+export function HQPage() {
+  return (
+    <EasyNotesProvider>
+      <EasyContactsProvider>
+        <HQPageContent />
+      </EasyContactsProvider>
+    </EasyNotesProvider>
   );
 }

@@ -32,4 +32,4 @@ export const assistantCommandHints: AssistantCommandIntent[] = [
   },
 ];
 
-export const assistantCommandHintRow = "Drop one loose thought for review";
+export const assistantCommandHintRow = "Drop one loose thought";

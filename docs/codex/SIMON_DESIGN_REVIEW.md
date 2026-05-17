@@ -1,6 +1,28 @@
 # Simon Design Review
 
 ## Verdict
+TODAY_CONTEXT_SYNTHESIS_READY
+
+## Stage 19 Task 1 Today Local Context Synthesis - 2026-05-17
+
+Verdict: `TODAY_CONTEXT_SYNTHESIS_READY`.
+
+Today now feels more like it is reading the local app state instead of repeating a generic command-surface message. The first assistant read can combine task pressure, plan shape, saved note context, and a people/place cue into one concise line.
+
+Rendered proof:
+- `/app/hq?demo=1` rendered at 390 px wide without horizontal page overflow.
+- The assistant read rendered: `1 overdue. Saved context: Sunday reset brief. Maya Chen is the people/place cue near Portland, OR.`
+- The first viewport still contained the assistant read, due/plan/open strip, start-here next move, compact command/capture affordance, and collapsed context stack.
+- The command helper was shortened to `Drafts first. You approve saves.`
+
+Design read:
+- This is a real contextual improvement, not an added dashboard.
+- It makes Today more specific without pretending to be model-backed.
+- The risk is that the context read can become long as more signals are added. Keep future Stage 19 work to one concise assistant sentence, not a paragraph.
+
+---
+
+## Verdict
 STAGE_18_READY_FOR_STAGE_19_WITH_DENSITY_NOTES
 
 ## Stage 18 Review Repair Design Proof - 2026-05-17

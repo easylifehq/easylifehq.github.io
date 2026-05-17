@@ -2,6 +2,25 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 19 Task 1 Today Context Synthesis
+
+- Task: Make Today's assistant read more specific using existing local app context.
+- Result: Passed build and Today route inspection.
+- Magic signal: today-reads-local-context
+- Changed files:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/hq/assistantPreview.ts`
+  - `app-vNext/src/features/hq/assistantCommandHints.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Context evidence: Today rendered a deterministic read combining task pressure, saved note context, and people/place context: `1 overdue. Saved context: Sunday reset brief. Maya Chen is the people/place cue near Portland, OR.`
+- First-viewport evidence: `/app/hq?demo=1` kept assistant read, due/plan/open strip, start-here next move, compact command/capture, and collapsed context.
+- Simplification evidence: command helper shortened to `Drafts first. You approve saves.`
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no persistence changes, model calls, backend/auth/Firebase config changes, calendar sync, notifications, hidden writes, real memory, maps, geocoding, external actions, dependencies, package files, deploy config, generated output, secrets, or real personal data were added.
+
 ## 2026-05-17 - Stage 19 Contextual Assistant Packet
 
 - Task: Create Stage 19 contextual assistant task packet.

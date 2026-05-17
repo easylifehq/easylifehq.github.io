@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 19 Task 1 Today local context synthesis
+
+- Task attempted: Make Today's assistant read more specific using existing local task, event, note/context, and people/place hints.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected:
+  - `http://127.0.0.1:4231/app/hq?demo=1`
+- Files changed:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/hq/assistantPreview.ts`
+  - `app-vNext/src/features/hq/assistantCommandHints.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+- Product change: Today now wraps local Notes and Contacts context providers for the Today route and synthesizes a deterministic assistant read from local task pressure, plan count/open time, saved context, and people/place cues.
+- Render proof: `/app/hq?demo=1` rendered `1 overdue. Saved context: Sunday reset brief. Maya Chen is the people/place cue near Portland, OR.`
+- First-viewport proof: Today still opened with assistant read, due/plan/open strip, start-here next move, command/capture affordance, and collapsed context.
+- Simplification: shortened the command helper from a longer save-boundary sentence to `Drafts first. You approve saves.`
+- Boundary preserved: no persistence changes, model calls, backend/auth/Firebase config changes, calendar sync, notifications, hidden writes, real memory, maps, geocoding, external actions, dependencies, package files, deploy config, generated output, secrets, or real personal data were added.
+
 ## 2026-05-17 - Stage 19 Contextual Assistant Task Packet
 
 - Task attempted: Create the Stage 19 contextual assistant task packet.
