@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 20 AI Assistant Readiness Gate
+
+- Task attempted: Create the Stage 20 readiness gate for model-backed assistant work and define the safest architecture before live model calls.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Plan created: `docs/codex/EASYLIFE_STAGE_20_AI_ASSISTANT_READINESS_GATE.md`.
+- Queue updated: `docs/codex/NEXT_5_TASKS.md` now contains exactly five Stage 20 Task Contract V2 tasks:
+  - Assistant context packet contract.
+  - Prompt registry contract.
+  - Model output validation contract.
+  - AI-unavailable fallback.
+  - Stage 20 proof packet.
+- Phase updated: `docs/codex/PHASE_STATE.md` now marks Stage 20 as `READY_FOR_MODEL_ARCHITECTURE_NOT_MODEL_CALLS`.
+- Architecture decision: any future model gateway must be server-only; frontend API keys are forbidden.
+- Guardrail preserved: Stage 20 does not approve live model calls, provider SDKs, API keys, backend services, Firebase rules/config changes, package/dependency changes, deploy config, generated output, secrets, hidden writes, hidden reads, new saved object types, external actions, email/text/call/message sending, notifications, calendar sync, maps, geocoding, exact addresses, device location, real memory, or real personal data.
+
 ## 2026-05-17 - Stage 19 Contextual Assistant Proof Packet
 
 - Task attempted: Prove whether EasyLife now feels like it is reading local context instead of showing static demo panels.

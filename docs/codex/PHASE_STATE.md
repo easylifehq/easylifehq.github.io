@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: stage-19-contextual-assistant-proof
+Current Phase: stage-20-ai-assistant-readiness-gate
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Prove the existing local-context assistant path and hold for a deliberate Stage 20 mission.
+Primary Action: Define the safest model-backed assistant architecture before any live model calls are implemented.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 19 may add contextual reads and clearer local hints only. It must not add new saved object types, external actions, model-backed reasoning, or broad redesign.
+Complexity Budget: Stage 20 may define model-read contracts, prompt registry rules, output validation, secret boundaries, and AI-unavailable fallback behavior. It must not add live model calls, provider SDKs, frontend API keys, backend services, Firebase config changes, dependencies, package files, deploy config, generated output, or secrets.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_STAGE_20
-Evidence Required: Stage 19 proof packet, route inspection proof, build proof, NIGHTLY_REPORT, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, MAGIC_SCORECARD.
+Parking State: READY_FOR_MODEL_ARCHITECTURE_NOT_MODEL_CALLS
+Evidence Required: Stage 20 readiness gate, exactly five Task Contract V2 tasks, build proof, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Run the five Stage 19 tasks one at a time, then create a proof packet before any Stage 20 expansion.
+Next Phase Criteria: Run the five Stage 20 tasks one at a time, then create a proof packet before any server AI gateway or live model-call stage.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 19 contextual assistant proof completed.
+Updated At: 2026-05-17 - Stage 20 AI assistant readiness gate created.
 
 ## Assistant Brain Gate
 
@@ -152,6 +152,18 @@ Stage 19 proof source: docs/codex/EASYLIFE_STAGE_19_PROOF_PACKET.md
 Stage 19 proof inspected Today, Inbox, Plan, Notes, Contacts, Settings, plus Command as a regression check, and found contextual assistant usefulness credible enough for Stage 20.
 
 Stage 20 must be created from an explicit mission. Good candidate directions are human-review repair, Summer operating-plan execution planning, a model-contract stage, or Inbox simplification. Do not add model calls, hidden writes, saved plans/reminders/follow-ups, email/text/call/message sending, notifications, calendar sync, maps, geocoding, exact addresses, device location, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, fake memory, or real personal data without a separate approved gate.
+
+## Stage 20 AI Assistant Readiness Gate
+
+Stage 20 source: docs/codex/EASYLIFE_STAGE_20_AI_ASSISTANT_READINESS_GATE.md
+
+Prepared Stage 20 queue: docs/codex/NEXT_5_TASKS.md contains exactly five AI assistant readiness tasks.
+
+Stage 20 verdict: READY_FOR_MODEL_ARCHITECTURE_NOT_MODEL_CALLS.
+
+Stage 20 may define context-packet contracts, prompt registry rules, model output validation, AI-unavailable fallback behavior, and a proof packet. It must not implement live model calls, provider SDKs, API keys, frontend API keys, backend services, Firebase rules/config changes, dependencies, package files, deployment config, generated output, secrets, hidden writes, hidden reads, new saved object types, external actions, email/text/call/message sending, notifications, calendar sync, maps, geocoding, exact addresses, device location, real memory, or real personal data.
+
+Server-only architecture is required for any later model gateway. Frontend API keys are forbidden because browser bundles expose them to users, devtools, extensions, scraped builds, and network logs.
 
 ## Phase Order
 
