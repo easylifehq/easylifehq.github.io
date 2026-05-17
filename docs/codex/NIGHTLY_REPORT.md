@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 27 Task 1 Private Alpha Test Protocol
+
+- Task attempted: Create a private alpha test protocol for the proven Inbox assistant lane.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_TEST_PROTOCOL.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Protocol created: `docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_TEST_PROTOCOL.md`.
+- Tester boundary: Spencer, explicitly invited private-alpha reviewers, and Codex/local QA agents may test the lane under protocol limits.
+- Input boundary: synthetic/demo typed capture is preferred; real private-test input is optional and must be explicitly chosen and low-risk.
+- Forbidden input boundary: no secrets, credentials, medical/legal/financial/tax/sensitive details, real email bodies, note bodies, full task notes, exact addresses, phone numbers, broad app context, or private screenshots.
+- Screenshot/log boundary: screenshots may capture the Inbox lane with synthetic/demo input; logs are metadata-only and must not include raw typed capture, provider raw response, secrets, note bodies, task notes, contact names, place labels, auth/session payloads, or full context packets.
+- Failure conditions: secret exposure, browser-side provider call, broad context, wrong prompt, validation bypass, hidden-action claims, failed fallback, automatic replay, raw typed-capture logging, or unclear save boundary stop testing.
+- Boundary preserved: no code, provider config, secrets, deploy, live provider call, broad chat, real memory, email, calendar sync, notifications, geocoding, device location, broad app context, hidden write, external action, saved-object expansion, package/dependency change, or generated output was added.
+
 ## 2026-05-17 - Stage 27 Private Alpha AI Assistant Task Packet
 
 - Task attempted: Plan the private-alpha assistant stage after Stage 26 proof.

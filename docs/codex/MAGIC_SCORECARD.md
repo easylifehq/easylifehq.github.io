@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 27 Task 1 Private Alpha Test Protocol
+
+- Task: Create a private alpha test protocol for the proven Inbox assistant lane.
+- Result: Protocol created for safe private-alpha testing.
+- Magic signal: private-alpha-has-rules-before-live-provider
+- Protocol evidence: `docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_TEST_PROTOCOL.md`.
+- Tester evidence: protocol limits testing to Spencer, explicitly invited private-alpha reviewers, and Codex/local QA agents under synthetic/demo defaults.
+- Input evidence: synthetic/demo input is preferred; real private-test input is optional and explicitly controlled.
+- Forbidden input evidence: secrets, sensitive details, real email/note bodies, full task notes, exact addresses, phone numbers, broad app context, and private screenshots are forbidden.
+- Logging evidence: metadata-only logging is allowed; raw typed capture, full context packets, provider raw responses, secrets, auth/session payloads, contact names, place labels, note bodies, and task notes are forbidden.
+- Failure evidence: protocol defines stop conditions for secret exposure, browser provider calls, validation bypass, hidden-action claims, raw payload logging, failed fallback, automatic replay, and unclear save boundaries.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no code, provider config, secrets, deploy, live provider call, broad chat, real memory, email, calendar sync, notifications, geocoding, device location, broad app context, hidden write, external action, saved-object expansion, package/dependency change, or generated output was added.
+
 ## 2026-05-17 - Stage 27 Private Alpha AI Assistant Task Packet
 
 - Task: Plan the private alpha assistant stage after Stage 26 proof.
