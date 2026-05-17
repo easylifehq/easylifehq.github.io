@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 21 Task 3 Gateway Rate Limits And Spend Controls
+
+- Task attempted: Define cost, abuse, retry, timeout, and disable-switch controls before any model provider is connected.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Contract created: `docs/codex/EASYLIFE_STAGE_21_GATEWAY_RATE_LIMITS.md`.
+- Per-user daily request cap defined: first behavior starts with a small daily cap and hard fallback once reached.
+- Short-window throttle defined: rapid loops and accidental double-submits must fail closed to local fallback.
+- Token/context limits defined: Inbox first behavior may use only current route, typed capture, optional demo fixture, small source count, and compact output budget.
+- Timeout behavior defined: short provider/gateway timeout expectations with local fallback and no invisible long-running work.
+- Retry policy defined: no automatic background retries; at most one immediate transient transport retry before response, never after validation failure or rate/budget limits.
+- Circuit breaker defined for repeated provider timeouts/errors, validation rejection spikes, budget pressure, unsafe output, or privacy/logging policy failure.
+- Kill switch / disable switch defined: server-side provider calls can be disabled immediately while local deterministic behavior remains available.
+- Spend budget alert expectations defined with warning threshold, hard cap, metadata-only counters, and no paid-provider retry loops.
+- Failure rule preserved: all failures return local fallback and never save, send, sync, schedule, remember, geocode, notify, mutate data, or start background work.
+- Boundary preserved: no provider SDKs, live calls, backend implementation, monitoring services, dependencies, package files, deploy config, generated output, API keys, secrets, hidden reads, hidden writes, or external actions were added.
+
 ## 2026-05-17 - Stage 21 Task 2 Gateway Privacy And Logging Rules
 
 - Task attempted: Define privacy, logging, redaction, and retention rules before any server AI gateway exists.

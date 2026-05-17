@@ -2,6 +2,24 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 21 Task 3 Gateway Rate Limits And Spend Controls
+
+- Task: Define cost, abuse, retry, timeout, and disable-switch controls before any model provider is connected.
+- Result: Gateway rate/spend contract was created.
+- Magic signal: gateway-fails-local-before-it-spends-or-loops
+- Contract evidence: `docs/codex/EASYLIFE_STAGE_21_GATEWAY_RATE_LIMITS.md`.
+- Daily cap evidence: first behavior defines a small per-user daily request cap with hard local fallback after the cap is reached.
+- Throttle evidence: rapid request windows must fail closed to local fallback before any provider call.
+- Context evidence: first behavior allows only current route, typed capture, and optional demo fixture with small source count, typed-capture length, and output budget limits.
+- Timeout evidence: short provider and gateway timeout expectations are defined, with no invisible long-running work.
+- Retry evidence: no automatic background retries; validation failure, forbidden context, rate limits, and budget caps never retry.
+- Circuit breaker evidence: repeated provider failures, validation rejection spikes, spend pressure, unsafe output, or privacy/logging policy failure opens the circuit and returns local fallback.
+- Kill switch evidence: server-side disable switch must stop provider calls immediately while local deterministic behavior stays available.
+- Spend evidence: warning threshold, hard cap, metadata-only usage counters, and no paid-provider retry loops are required before provider connection.
+- Fallback evidence: every failure path preserves typed capture locally and returns deterministic local fallback without hidden writes.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider SDK, live call, backend implementation, monitoring service, dependency, package file, deploy config, generated output, API key, secret, hidden read, hidden write, or external action was added.
+
 ## 2026-05-17 - Stage 21 Task 2 Gateway Privacy And Logging Rules
 
 - Task: Define metadata-only privacy and logging rules before any server AI gateway exists.
