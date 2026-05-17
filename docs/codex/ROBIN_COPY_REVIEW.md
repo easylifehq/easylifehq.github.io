@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+READY_FOR_STAGE_27_BUT_NO_LIVE_PROVIDER_YET
+
+## Stage 26 First Live Provider Dry Run Copy Proof - 2026-05-17
+
+Verdict: `READY_FOR_STAGE_27_BUT_NO_LIVE_PROVIDER_YET`.
+
+Stage 26 copy is honest: it says `Live provider dry run`, `Prompt intake-suggestion`, `Fallback ai-disabled`, `Synthetic/demo capture`, and `Nothing saved or sent`. It does not say live AI is broadly enabled. It does not claim the assistant saved, sent, scheduled, synced, remembered, geocoded, or acted in the background.
+
+Copy proof:
+- Source is named `Synthetic/demo capture`.
+- Prompt is shown as `intake-suggestion`.
+- The route says `Nothing saved or sent`.
+- The boundary copy says `No frontend key, no provider SDK, no hidden write.`
+- The proof packet says no live provider was actually called.
+
+Copy guard:
+Stage 27 may say `private alpha preparation`, `server-side provider only`, and `synthetic/demo first`. It must not say `AI is live`, `assistant handled this`, `remembered`, `scheduled`, `synced`, `sent`, or `automatic`.
+
+---
+
+## Verdict
 LIVE_DRY_RUN_COPY_HONEST
 
 ## Stage 26 Task 4 Inbox Live Dry-Run Source UI - 2026-05-17

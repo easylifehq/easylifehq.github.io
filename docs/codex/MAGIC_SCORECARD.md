@@ -2,6 +2,24 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 26 First Live Provider Dry Run Proof Packet
+
+- Task: Prove whether the first live-provider dry-run lane is safe enough to continue.
+- Result: Stage 26 proof packet was created with verdict `READY_FOR_STAGE_27_BUT_NO_LIVE_PROVIDER_YET`.
+- Magic signal: dry-run-safe-no-live-provider-yet
+- Proof packet evidence: `docs/codex/EASYLIFE_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN_PROOF_PACKET.md`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: `/app/easylist/add?demo=1` returned HTTP 200 locally.
+- Render evidence: headless Chrome DOM inspection found `Live provider dry run`, `Prompt intake-suggestion`, `Validation not-run`, `Fallback ai-disabled`, `Synthetic/demo capture`, and `Nothing saved or sent`.
+- Provider evidence: no live provider was actually called; only the disabled dry-run seam and fallback were exercised.
+- Input evidence: dry-run lane uses synthetic/demo typed capture only.
+- Secret evidence: server-side placeholder remains `SERVER_AI_PROVIDER_API_KEY`; no actual key was exposed or committed.
+- Prompt evidence: only `intake-suggestion` is allowed.
+- Context evidence: request path uses Stage 20 context packet names and typed-capture-only sources.
+- Validation evidence: provider-style output must pass `validateAssistantModelOutput`; hidden-action and external-action claims are rejected, and action-like wording is downgraded.
+- Fallback evidence: disabled, timeout, rate-limit, circuit-open, invalid-request, provider-unconfigured, provider-error, and validation-rejected states preserve typed capture locally with no automatic retry.
+- Boundary evidence: no hidden write, save, send, schedule, sync, notification, calendar change, real memory, geocoding, device location, external action, broad chat, provider SDK, frontend key, package/dependency change, deploy config, generated output, or secret was added.
+
 ## 2026-05-17 - Stage 26 Task 4 Inbox Live Dry-Run Source UI
 
 - Task: Let Inbox show the live-provider dry-run lane clearly without implying saved work or a full AI assistant.

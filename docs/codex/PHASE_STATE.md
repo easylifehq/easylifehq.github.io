@@ -1,29 +1,35 @@
 # Phase State
 
-Current Phase: stage-26-first-live-provider-dry-run
+Current Phase: stage-27-private-alpha-ai-assistant-prep
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Plan the first live provider dry run without broadening EasyLife into an unbounded AI assistant.
+Primary Action: Prepare the private-alpha AI assistant path after proving Stage 26 did not call a live provider yet.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not deploy, do not add broad AI assistant behavior, do not use real user data, do not expose frontend API keys, do not commit secrets, do not add hidden writes, and do not add sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, or saved-object expansion.
 No More Features Lock: true
-Complexity Budget: Stage 26 may plan and then run one guarded live-provider dry-run for Inbox typed-capture suggestion only. It must use synthetic/demo typed capture, server-side secret handling, Stage 20 context packets, Stage 20 prompt registry, Stage 20 output validation, local fallback, kill switch, spend cap, rate limit, metadata-only logging, rollback plan, and no-hidden-action proof.
+Complexity Budget: Stage 27 may prepare provider readiness, a server-only executor stub, metadata-only logging proof, Inbox private-alpha copy, and a proof packet. It must not make a live provider call yet unless a later explicit gate approves it.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: STAGE_26_QUEUE_READY
-Evidence Required: Stage 25 proof packet, Stage 26 plan, provider/secret confirmation, server-only dry-run implementation proof, output validation proof, Inbox route proof, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
+Parking State: STAGE_27_QUEUE_READY_NO_LIVE_PROVIDER_YET
+Evidence Required: Stage 26 proof packet, Stage 27 readiness confirmation, server-only executor stub proof, metadata-only logging proof, Inbox route proof, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 26 can proceed one task at a time, starting with final provider and server-secret confirmation. Stage 27 cannot be created until the Stage 26 proof packet says the first live-provider dry run is safe to continue.
+Next Phase Criteria: Stage 27 can proceed one task at a time. A first real server-side provider call still requires a later explicit approval gate and must remain synthetic/demo Inbox typed-capture only.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 26 first live provider dry-run plan prepared from Stage 25 approval.
+Updated At: 2026-05-17 - Stage 26 proof completed; Stage 27 private-alpha preparation queued without live provider calls.
+
+Stage 26 proof result: READY_FOR_STAGE_27_BUT_NO_LIVE_PROVIDER_YET. The route `/app/easylist/add?demo=1` rendered the live-provider dry-run lane and showed `Live provider dry run`, `Prompt intake-suggestion`, `Validation not-run`, `Fallback ai-disabled`, `Synthetic/demo capture`, and `Nothing saved or sent`. No live provider was actually called; only the disabled dry-run seam and fallback were exercised. Stage 27 may prepare private-alpha readiness, but it must not add broad chat, real user data, frontend API keys, provider keys in docs/logs/commits, hidden reads, hidden writes, automatic saves, sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, saved-object expansion, deploy changes, package/dependency changes, generated output, or production rollout.
+
+Stage 26 proof source: docs/codex/EASYLIFE_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN_PROOF_PACKET.md
+
+Prepared Stage 27 queue: docs/codex/NEXT_5_TASKS.md contains exactly five private-alpha preparation tasks.
 
 Stage 26 plan result: STAGE_26_PLAN_READY. The first live provider dry run is limited to `/app/easylist/add?demo=1`, Inbox typed-capture suggestion, synthetic/demo input only, server-side secret handling, Stage 20 context packets, Stage 20 prompt registry, Stage 20 output validation, local fallback, kill switch, spend cap, rate limit, metadata-only logging, rollback plan, and no hidden writes or external actions.
 
 Stage 26 source: docs/codex/EASYLIFE_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN_PLAN.md
 
-Prepared Stage 26 queue: docs/codex/NEXT_5_TASKS.md contains exactly five bounded first-live-provider-dry-run tasks.
+Completed Stage 26 queue: provider confirmation, server-shaped dry-run seam, validation/fallback proof, Inbox live dry-run source UI, and Stage 26 proof packet. `docs/codex/NEXT_5_TASKS.md` has been advanced to the Stage 27 queue.
 
 Stage 25 proof result: READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN. Provider selection rubric, secret management checklist, live-provider dry-run protocol, human approval checklist, and proof packet exist. Existing `pipeline-2f422` key reference is Firebase web config, not an AI provider key. `VITE_` environment values are browser-exposed and may not hold provider secrets. This result does not approve live model calls automatically; Stage 26 still requires explicit approval and server-only secret handling.
 
