@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 29 Task 2 Logging Redaction Proof
+
+- Task: Prove assistant gateway logging stays metadata-only.
+- Result: Added TypeScript proof fixture for metadata-only gateway logging.
+- Magic signal: metadata-only-assistant-gateway-logs
+- Test evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayLogging.test.ts`.
+- Raw capture evidence: raw typed capture is preserved in fallback state but excluded from `metadataLog`.
+- Provider response evidence: provider raw-response marker stays out of `metadataLog`.
+- Secret evidence: a secret-like invalid request rejects without logging the secret-like value in metadata or errors.
+- Metadata allowlist evidence: proof permits route, prompt id, schema version, validation result, latency bucket, token estimate bucket, rate-limit bucket, provider-call-attempted, request id, and `metadataOnly`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no real provider call, external logging service, dependency, deploy config, secret, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 29 Task 1 Frontend Secret And Bundle Scan Protocol
 
 - Task: Prove no AI provider key appears in frontend source or built assets.

@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 29 Task 2 Logging Redaction Proof
+
+- Task attempted: Prove assistant gateway logging stays metadata-only.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayLogging.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- TypeScript proof added: `serverGatewayLoggingProof()` checks accepted, disabled fallback, and invalid secret-like request paths.
+- Raw typed capture proof: fixture preserves typed capture in fallback state, but metadata logs do not include the raw typed capture marker.
+- Provider raw response proof: fixture simulates provider-executor exposure to a raw-response marker while metadata logs exclude that marker.
+- Secret redaction proof: invalid request containing a secret-like value is rejected without logging the value in metadata or validation errors.
+- Allowed metadata proof: metadata keeps only route, prompt id, schema version, validation result, latency bucket, token estimate bucket, rate-limit bucket, provider-call-attempted, request id, and metadata-only flag.
+- External logging proof: no external logging service, provider SDK, live provider call, dependency, deploy config, secret, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 29 Task 1 Frontend Secret And Bundle Scan Protocol
 
 - Task attempted: Prove no AI provider key appears in frontend source, docs, env examples, or built assets.
