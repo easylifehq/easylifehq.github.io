@@ -1,5 +1,26 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 19 Task 3 Plan capacity assistant read
+
+- Task attempted: Make Plan better explain light/normal/push/recovery day using existing local data only.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Route inspected:
+  - `http://127.0.0.1:4231/app/easycalendar/day?demo=1`
+- Files changed:
+  - `app-vNext/src/features/easycalendar/routes/EasyCalendarDayPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Product change: Plan now renders an `Assistant capacity read` that explains the selected day mode from existing scheduled minutes, open minutes, fixed commitments, focus blocks, and overdue count.
+- Render proof: `/app/easycalendar/day?demo=1` rendered `Recovery day`, `1 overdue item needs rescue before this day takes on more.`, and `Next planning action`.
+- Simplification: removed the repeated context-strip pills that duplicated fixed/focus/open-window metrics already shown in the capacity card.
+- Preview-only proof: the assistant plan draft still says `Preview the shape locally before anything is placed on the day.`
+- Mobile proof: headless Chrome inspection at 390 x 844 reported no horizontal overflow.
+- Boundary preserved: no scheduling algorithm expansion, saved plan behavior, calendar sync, notifications, model calls, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, or secrets were added.
+
 ## 2026-05-17 - Stage 19 Task 2 Inbox source and destination clarity
 
 - Task attempted: Make every Inbox assistant suggestion show source, draft state, and destination before save.

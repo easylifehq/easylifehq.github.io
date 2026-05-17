@@ -1,6 +1,28 @@
 # Simon Design Review
 
 ## Verdict
+PLAN_CAPACITY_READ_READY
+
+## Stage 19 Task 3 Plan Capacity Assistant Read - 2026-05-17
+
+Verdict: `PLAN_CAPACITY_READ_READY`.
+
+Plan now explains why a day is light, normal, push, or recovery instead of only naming the mode. The read is deterministic and grounded in existing local day data: scheduled minutes, open minutes, fixed commitments, focus blocks, and overdue items.
+
+Rendered proof:
+- `/app/easycalendar/day?demo=1` rendered at 390 px wide without horizontal page overflow.
+- The capacity card rendered `Assistant capacity read`, `Recovery day`, `1 overdue item needs rescue before this day takes on more.`, and `Next planning action`.
+- The plan handoff card still says `Preview the shape locally before anything is placed on the day.`
+- The old context strip repeating fixed/focus/open-window labels is gone.
+
+Design read:
+- This makes Plan feel more assistant-like without claiming a scheduling engine.
+- The mode explanation gives the user a reason, not just a label.
+- The remaining risk is that Plan still has a busy timeline below the fold, but the first read is clearer and more honest now.
+
+---
+
+## Verdict
 TODAY_CONTEXT_SYNTHESIS_READY
 
 ## Stage 19 Task 1 Today Local Context Synthesis - 2026-05-17

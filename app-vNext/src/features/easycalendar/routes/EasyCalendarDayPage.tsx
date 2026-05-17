@@ -160,6 +160,17 @@ export function EasyCalendarDayPage() {
   const activeDayModeOption = dayModeOptions.find((mode) => mode.id === activeDayMode) || dayModeOptions[1];
   const fixedCommitmentLabel = `${fixedEventCount} fixed commitment${fixedEventCount === 1 ? "" : "s"}`;
   const focusBlockLabel = `${taskBlockCount} focus block${taskBlockCount === 1 ? "" : "s"}`;
+  const overdueItemVerb = recoveryTaskCount === 1 ? "needs" : "need";
+  const capacityReason =
+    activeDayMode === "recovery"
+      ? recoveryTaskCount
+        ? `${recoveryTaskCount} overdue item${recoveryTaskCount === 1 ? "" : "s"} ${overdueItemVerb} rescue before this day takes on more.`
+        : `${formatDuration(scheduledMinutes)} is already planned, so this day needs recovery space.`
+      : activeDayMode === "light"
+        ? `${formatDuration(openMinutes)} is open after ${formatDuration(scheduledMinutes)} planned; keep one useful block and leave the margin alone.`
+        : activeDayMode === "push"
+          ? `${formatDuration(openMinutes)} is open around ${fixedCommitmentLabel} and ${focusBlockLabel}; extras should wait.`
+          : `${formatDuration(scheduledMinutes)} planned with ${formatDuration(openMinutes)} open; choose one main block and one admin pass.`;
   const nextPlanningAction = recoveryTaskCount
     ? "Start by rescuing overdue work before adding anything new."
     : isOverloaded
@@ -434,9 +445,10 @@ export function EasyCalendarDayPage() {
 
         <div className="calendar-plan-read" aria-label="Assistant day planning read">
           <div className="calendar-plan-read-main">
-            <span>Day capacity</span>
+            <span>Assistant capacity read</span>
             <strong>{activeDayModeOption.label}</strong>
-            <p>{activeDayModeOption.detail}</p>
+            <p>{capacityReason}</p>
+            <em>{activeDayModeOption.detail}</em>
           </div>
           <div className="calendar-plan-read-metrics" aria-label="Day planning metrics">
             <span><strong>{formatDuration(scheduledMinutes)}</strong> planned</span>
@@ -448,12 +460,6 @@ export function EasyCalendarDayPage() {
             <span>Next planning action</span>
             <p>{nextPlanningAction}</p>
           </div>
-        </div>
-
-        <div className="calendar-plan-context-strip" aria-label="Plan context">
-          <span>{fixedCommitmentLabel}</span>
-          <span>{focusBlockLabel}</span>
-          <span>{openWindows.length} open window{openWindows.length === 1 ? "" : "s"}</span>
         </div>
 
         <div className="calendar-plan-handoff-card" aria-label="Assistant plan handoff preview">
