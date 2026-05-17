@@ -1,6 +1,26 @@
 # Robin Copy Review
 
 ## Verdict
+STAGE_20_PROMPT_REGISTRY_COPY_READY
+
+## Stage 20 Task 2 Assistant Prompt Registry Contract - 2026-05-17
+
+Verdict: `STAGE_20_PROMPT_REGISTRY_COPY_READY`.
+
+The prompt registry preserves the approval-first/no-hidden-action boundary. Prompt wording asks future model output to return sourced drafts, reads, cues, and review moves only. It does not ask the model to save, send, sync, schedule, remember, geocode, use device location, access secrets, or perform external actions.
+
+Copy proof:
+- Each prompt has source-attribution required.
+- Each prompt has approval-first language required.
+- Each prompt has no-AI fallback copy.
+- Rejection fixtures catch external-action prompt text, unsupported context source types, and missing source attribution.
+
+Copy risk:
+- This is still architecture only. It does not make EasyLife smarter yet, but it makes future smart behavior easier to review without letting prompts drift into UI components.
+
+---
+
+## Verdict
 READY_FOR_STAGE_20
 
 ## Stage 19 Contextual Assistant Copy Proof - 2026-05-17

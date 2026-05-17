@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 20 Task 2 Assistant Prompt Registry Contract
+
+- Task: Create a local prompt registry contract before any live model prompts exist.
+- Result: Prompt registry contract and proof fixture were added.
+- Magic signal: assistant-prompts-are-centralized-and-reviewable
+- Registry evidence: `app-vNext/src/features/assistant/prompts/promptRegistry.ts` exports `stage-20-prompts-v1`.
+- Prompt ID evidence: the registry contains `intake-suggestion`, `today-context-read`, `plan-capacity-read`, `note-context-draft`, and `people-place-cue`.
+- Reviewability evidence: every prompt entry names allowed source types, forbidden inputs, expected output schema, source-attribution requirement, approval-first requirement, fallback copy, and prompt template.
+- Rejection evidence: `promptRegistryProof` rejects prompts that ask for external actions, unsupported context source types, or missing source attribution.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live model call, provider SDK, frontend API key, secret, backend/auth/Firebase config change, dependency, package file, deploy config, generated output, external action, hidden write, or scattered UI prompt was added.
+
 ## 2026-05-17 - Stage 20 Task 1 Assistant Context Packet Contract
 
 - Task: Define a pure local context packet contract before any model-backed assistant call exists.

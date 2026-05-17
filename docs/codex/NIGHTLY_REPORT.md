@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 20 Task 2 Assistant Prompt Registry Contract
+
+- Task attempted: Create a reviewable local prompt registry so future model-backed assistant prompts are named, bounded, and kept out of UI components.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/assistant/prompts/promptRegistry.ts`
+  - `app-vNext/src/features/assistant/prompts/promptRegistry.test.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Registry created: `stage-20-prompts-v1`.
+- Prompt IDs created: `intake-suggestion`, `today-context-read`, `plan-capacity-read`, `note-context-draft`, and `people-place-cue`.
+- Contract proof: each prompt names allowed source types, forbidden inputs, expected output schema, required source attribution, required approval-first language, and no-AI fallback copy.
+- Rejection proof: the fixture rejects prompts that ask for external actions, unsupported context sources, or missing source attribution.
+- Boundary preserved: no live model calls, provider SDKs, frontend API keys, secrets, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, external actions, or hidden writes were added.
+
 ## 2026-05-17 - Stage 20 Task 1 Assistant Context Packet Contract
 
 - Task attempted: Define the first bounded assistant context-packet contract so any later model request can prove exactly what local context is allowed.
