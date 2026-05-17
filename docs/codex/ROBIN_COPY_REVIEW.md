@@ -1,6 +1,28 @@
 # Robin Copy Review
 
 ## Verdict
+READY_FOR_MOCK_SERVER_AI_GATEWAY_IMPLEMENTATION
+
+## Stage 21 Server AI Gateway Copy Proof - 2026-05-17
+
+Verdict: `READY_FOR_MOCK_SERVER_AI_GATEWAY_IMPLEMENTATION`.
+
+The Stage 21 language is narrow and honest enough for a mock gateway stage. It does not say EasyLife has live AI. It says the next safe step is to test a no-provider gateway path for one suggestion-only Inbox behavior.
+
+Copy proof:
+- First behavior is named as `Inbox typed-capture suggestion`, not broad chat or "ask AI anything."
+- Gateway output is described as draft, preview, needs-review, or fallback.
+- Logging copy forbids raw typed capture, note bodies, task notes, contact names/place labels, provider raw responses, secrets, auth/session payloads, and full context packets by default.
+- Rate/spend copy says failures return local fallback, not retries or background work.
+- Mock plan copy requires Stage 20 validation and rejects fake saved actions.
+
+Copy risk:
+- The next stage must keep saying "mock gateway" and "no provider" until real provider integration is explicitly approved.
+- Do not market this as a live AI assistant yet.
+
+---
+
+## Verdict
 READY_FOR_SERVER_AI_GATEWAY_PLANNING
 
 ## Stage 20 AI Assistant Readiness Copy Proof - 2026-05-17

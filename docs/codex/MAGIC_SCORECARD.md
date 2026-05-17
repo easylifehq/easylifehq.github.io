@@ -2,6 +2,24 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 21 Server AI Gateway Proof Packet
+
+- Task: Prove whether EasyLife is ready for a mock server AI gateway implementation stage.
+- Result: Stage 21 proof packet was created.
+- Magic signal: mock-gateway-ready-without-live-ai
+- Proof packet: `docs/codex/EASYLIFE_STAGE_21_SERVER_AI_GATEWAY_PROOF_PACKET.md`.
+- Request evidence: `stage-21-gateway-request-v1` wraps `stage-20-context-v1` for planned `POST /api/assistant/intake-suggestion`.
+- Prompt evidence: first gateway allows only `intake-suggestion`.
+- Validation evidence: all gateway output must pass Stage 20 output validation before rendering or fall back locally.
+- Secret evidence: provider secrets remain server-only and are forbidden in frontend source, docs, fixtures, browser storage, logs, generated assets, and public config.
+- Privacy evidence: metadata-only logging is defined; raw typed capture, note bodies, task notes, contact names/place labels, provider raw responses, auth/session payloads, and full context packets are forbidden by default.
+- Rate/spend evidence: daily caps, short-window throttle, token/context limits, timeout/retry policy, circuit breaker, kill switch, and budget alert expectations are defined.
+- Fallback evidence: failures preserve typed capture locally and keep deterministic classifier, local draft preview, manual task save, and manual note/context save available.
+- Mock evidence: accepted, rejected, downgraded, timeout, fallback, and no-AI cases are defined without provider-specific fixtures.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Verdict evidence: `READY_FOR_MOCK_SERVER_AI_GATEWAY_IMPLEMENTATION`.
+- Boundary evidence: no live model call, provider SDK, API key, backend service, Firebase config, dependency, package file, deploy config, generated output, secret, external action, real memory, hidden read, hidden write, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 21 Task 4 Mock Gateway Test Plan
 
 - Task: Define a no-provider mock gateway test plan before real model integration exists.

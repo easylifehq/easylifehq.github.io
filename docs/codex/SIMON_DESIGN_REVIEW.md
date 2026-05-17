@@ -1,6 +1,28 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_MOCK_SERVER_AI_GATEWAY_IMPLEMENTATION
+
+## Stage 21 Server AI Gateway Product Proof - 2026-05-17
+
+Verdict: `READY_FOR_MOCK_SERVER_AI_GATEWAY_IMPLEMENTATION`.
+
+This was an architecture/product proof, not a visual redesign. The visible app remains in local assistant mode, and Stage 21 now defines the safe path for a mock server AI gateway that can be tested without turning on real model calls.
+
+Product proof:
+- The first behavior is narrow: Inbox typed-capture suggestion only.
+- The response must stay draft, preview, needs-review, or fallback.
+- The mock plan must use the same context packet, prompt ID, and output validator path that a real gateway would use later.
+- Every failure returns local fallback instead of blocking Today, Inbox, Plan, Notes, Contacts, Settings, or Command.
+
+Design/product read:
+- This gate protects the assistant product from becoming fake magic.
+- Mock gateway work is now a reasonable next step because it can prove the flow without provider cost, secrets, or hidden actions.
+- Live AI remains parked until mock gateway proof exists.
+
+---
+
+## Verdict
 READY_FOR_SERVER_AI_GATEWAY_PLANNING
 
 ## Stage 20 AI Assistant Readiness Visual/Product Proof - 2026-05-17
