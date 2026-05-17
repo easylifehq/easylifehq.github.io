@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 21 Task 4 Mock Gateway Test Plan
+
+- Task attempted: Define a no-provider mock gateway test plan before any real model integration exists.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Plan created: `docs/codex/EASYLIFE_STAGE_21_MOCK_GATEWAY_TEST_PLAN.md`.
+- Stage 20 context packet requirement defined: mock requests must wrap `stage-20-context-v1` and use only current route, typed capture, and optional demo fixture for the first Inbox behavior.
+- Stage 20 prompt requirement defined: first mock gateway may execute only `intake-suggestion`; other prompt IDs are negative-test inputs for unsupported prompt/surface handling.
+- Stage 20 output validator requirement defined: every mock response must pass through `validateAssistantModelOutput` before it can be rendered or treated as usable.
+- Accepted output cases defined for task draft, note preview, follow-up preview, and unsure needs-review outputs.
+- Rejected output cases defined for hidden autosave, external action, calendar/notification action, real memory, unsupported prompt, forbidden context, and missing confirmation.
+- Downgraded output cases defined for action-like `ready to save`, `saved to`, and `scheduled` wording.
+- Timeout/fallback cases defined for timeout, rate limit, circuit open, AI disabled, and validation rejected.
+- No-AI fallback proof defined: Today, Inbox, Plan, Notes, Contacts, Settings, and Command must remain usable without provider calls.
+- Boundary preserved: no live model calls, provider SDKs, API keys, backend services, Firebase config, dependencies, package files, deploy config, generated output, secrets, external actions, hidden writes, or real personal data were added.
+
 ## 2026-05-17 - Stage 21 Task 3 Gateway Rate Limits And Spend Controls
 
 - Task attempted: Define cost, abuse, retry, timeout, and disable-switch controls before any model provider is connected.

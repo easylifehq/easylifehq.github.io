@@ -2,6 +2,23 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 21 Task 4 Mock Gateway Test Plan
+
+- Task: Define a no-provider mock gateway test plan before real model integration exists.
+- Result: Mock gateway test plan was created.
+- Magic signal: mock-gateway-proves-the-real-safety-path
+- Plan evidence: `docs/codex/EASYLIFE_STAGE_21_MOCK_GATEWAY_TEST_PLAN.md`.
+- Context evidence: mock requests must wrap `stage-20-context-v1` and first behavior may use only current route, typed capture, and optional demo fixture.
+- Prompt evidence: first mock gateway may execute only `intake-suggestion`; other Stage 20 prompt IDs are negative-test inputs for this endpoint.
+- Validator evidence: mock responses must pass through `validateAssistantModelOutput`; no mock output may bypass Stage 20 validation.
+- Accepted fixture evidence: task draft, note preview, follow-up preview, and unsure needs-review cases are defined.
+- Rejected fixture evidence: hidden autosave, external action, calendar/notification action, real memory, unsupported prompt, forbidden context, and missing confirmation cases are defined.
+- Downgraded fixture evidence: action-like `ready to save`, `saved to`, and `scheduled` wording must downgrade to needs-review.
+- Timeout/fallback evidence: timeout, rate limit, circuit open, AI disabled, and validation rejected cases return local fallback.
+- No-AI evidence: Today, Inbox, Plan, Notes, Contacts, Settings, and Command must remain usable without provider calls.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no live model call, provider SDK, API key, backend service, Firebase config, dependency, package file, deploy config, generated output, secret, external action, hidden write, or real personal data was added.
+
 ## 2026-05-17 - Stage 21 Task 3 Gateway Rate Limits And Spend Controls
 
 - Task: Define cost, abuse, retry, timeout, and disable-switch controls before any model provider is connected.
