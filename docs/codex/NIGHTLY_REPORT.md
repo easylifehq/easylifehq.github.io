@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 23 Task 1 Architecture ADR
+
+- Task attempted: Write the architecture decision record for the first server-only AI gateway.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_23_SERVER_ARCHITECTURE_ADR.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- ADR created: `docs/codex/EASYLIFE_STAGE_23_SERVER_ARCHITECTURE_ADR.md`.
+- Recommended architecture: narrow Firebase Cloud Function / HTTPS callable gateway.
+- First behavior lock: Inbox typed-capture suggestion only with prompt ID `intake-suggestion`.
+- Frontend API key decision: forbidden because browser-visible keys can be extracted from source, public env vars, generated assets, devtools, network-visible config, logs, screenshots, or commits.
+- Static-only decision: kept for deterministic fallback and mock proof, rejected for live provider calls.
+- Broad backend decision: rejected for first AI behavior because it expands auth, logging, route, and hidden-read/write risk before the narrow provider path is proven.
+- Boundary preserved: no provider SDKs, API keys, backend implementation, Firebase config changes, dependencies, package files, deploy config, generated output, secrets, live calls, external actions, hidden reads, hidden writes, real memory, or saved-object expansion were added.
+
 ## 2026-05-17 - Stage 23 Server Architecture Decision Packet
 
 - Task attempted: Choose the safest real server architecture for the future EasyLife AI gateway after Stage 22 mock gateway proof.

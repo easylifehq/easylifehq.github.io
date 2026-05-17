@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 23 Task 1 Architecture ADR
+
+- Task: Write the architecture decision record for the first server-only AI gateway.
+- Result: Stage 23 architecture ADR was created.
+- Magic signal: server-only-ai-gateway-adr
+- ADR evidence: `docs/codex/EASYLIFE_STAGE_23_SERVER_ARCHITECTURE_ADR.md`.
+- Recommended architecture evidence: a narrow Firebase Cloud Function / HTTPS callable gateway is accepted for the first real provider integration path.
+- First behavior evidence: Inbox typed-capture suggestion remains the only approved first behavior, using prompt ID `intake-suggestion`.
+- Frontend key evidence: frontend API keys remain forbidden because browser-visible keys can be extracted and cannot enforce spend, abuse, prompt, or logging boundaries.
+- Static-only evidence: static/local behavior remains valid for deterministic fallback and no-provider mock proof, but is rejected for live provider calls.
+- Backend scope evidence: broad backend expansion is rejected for the first AI path; the future gateway must remain single-purpose and approval-first.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no provider SDK, API key, backend implementation, Firebase config change, dependency, package file, deploy config, generated output, secret, live call, external action, hidden read, hidden write, real memory, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 23 Server Architecture Decision Packet
 
 - Task: Choose the safest real server architecture for the future EasyLife AI gateway after Stage 22 mock gateway proof.
