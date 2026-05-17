@@ -137,6 +137,63 @@ const projectPlanSchema = {
   required: ["summary", "risks", "sections"],
 };
 
+const assistantIntakeSuggestionSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    intent: {
+      type: "string",
+      enum: ["task", "note", "plan", "reminder", "follow-up", "unsure"],
+      description: "The best local assistant intent for the typed capture.",
+    },
+    confidence: {
+      type: "string",
+      enum: ["low", "medium", "needs-review"],
+      description: "Use needs-review when the intent, destination, or fields are ambiguous.",
+    },
+    state: {
+      type: "string",
+      enum: ["draft", "preview", "needs-review"],
+      description: "The suggestion is never saved. It is only a reviewable draft or preview.",
+    },
+    destinationLabel: {
+      type: "string",
+      enum: ["Inbox review", "Inbox task draft", "Notes context draft", "Plan preview", "Reminder preview", "Follow-up preview"],
+      description: "Where the suggestion may be reviewed. This is not a saved destination.",
+    },
+    title: {
+      type: "string",
+      description: "Short reviewable suggestion title. Do not claim anything was saved, sent, scheduled, synced, or remembered.",
+    },
+    summary: {
+      type: "string",
+      description: "One plain-language sentence explaining the draft suggestion. Do not include hidden action claims.",
+    },
+    fields: {
+      type: "array",
+      minItems: 1,
+      maxItems: 4,
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          label: { type: "string" },
+          value: { type: "string" },
+          editable: { type: "boolean" },
+        },
+        required: ["label", "value", "editable"],
+      },
+    },
+    warnings: {
+      type: "array",
+      maxItems: 3,
+      items: { type: "string" },
+      description: "Short warning labels only, such as 'Review before saving'.",
+    },
+  },
+  required: ["intent", "confidence", "state", "destinationLabel", "title", "summary", "fields", "warnings"],
+};
+
 function readOutputText(responseBody) {
   if (typeof responseBody.output_text === "string") {
     return responseBody.output_text;
@@ -237,8 +294,26 @@ const assistantIntakeAllowedPromptId = "intake-suggestion";
 const assistantIntakeMinTypedCaptureLength = 3;
 const assistantIntakeMaxTypedCaptureLength = 2000;
 const assistantIntakeResponseVersion = "stage-32-assistant-intake-response-v1";
-const assistantIntakeAllowedBodyKeys = new Set(["route", "promptId", "typedCapture", "metadata"]);
+const assistantIntakeProviderEnabledEnvName = "ASSISTANT_INTAKE_PROVIDER_ENABLED";
+const assistantIntakeAllowedBodyKeys = new Set([
+  "route",
+  "promptId",
+  "typedCapture",
+  "metadata",
+  "liveCallRequested",
+]);
 const assistantIntakeAllowedMetadataKeys = new Set(["source", "captureId", "clientVersion", "reviewMode"]);
+const assistantIntakeAllowedIntents = new Set(["task", "note", "plan", "reminder", "follow-up", "unsure"]);
+const assistantIntakeAllowedConfidence = new Set(["low", "medium", "needs-review"]);
+const assistantIntakeAllowedStates = new Set(["draft", "preview", "needs-review"]);
+const assistantIntakeAllowedDestinations = new Set([
+  "Inbox review",
+  "Inbox task draft",
+  "Notes context draft",
+  "Plan preview",
+  "Reminder preview",
+  "Follow-up preview",
+]);
 const assistantIntakeForbiddenKeyPattern =
   /(secret|token|auth|session|cookie|password|api.?key|openai|vite|note|notes|contact|contacts|calendar|event|events|address|location|latitude|longitude|geocode|gmail|email|phone|message|firestore|database|billing|payment|ssn|medical)/i;
 const assistantIntakeForbiddenCapturePatterns = [
@@ -301,6 +376,61 @@ function buildAssistantIntakeFallback(payload = {}) {
   };
 }
 
+function buildAssistantIntakeProviderEnvelope(validation, suggestion) {
+  return {
+    version: assistantIntakeResponseVersion,
+    source: "assistantIntakeSuggestion",
+    route: validation.route,
+    promptId: validation.promptId,
+    status: "provider-output",
+    authState: "verified",
+    requestValidationState: "accepted",
+    providerState: "called-by-server-executor",
+    providerCallAttempted: true,
+    fallbackState: "none",
+    sanitizerState: "accepted",
+    validationState: "accepted",
+    quarantineState: "accepted",
+    outputState: "preview",
+    suggestion,
+    destination: "Inbox review",
+    confidence: suggestion.confidence || "needs-review",
+    nothingSavedOrSent: true,
+    requiresApproval: true,
+    hiddenWrites: false,
+    externalActions: false,
+    savesCreated: false,
+    messagesSent: false,
+    calendarChanged: false,
+    notificationsCreated: false,
+    realMemoryCreated: false,
+    rejectionReason: null,
+    message:
+      "Provider-backed suggestion returned for review only. Nothing was saved, sent, scheduled, synced, or remembered.",
+  };
+}
+
+function buildAssistantIntakeProviderFallback(validation, payload = {}) {
+  return {
+    ...buildAssistantIntakeFallback({
+      status: "fallback",
+      authState: "verified",
+      requestValidationState: "accepted",
+      sanitizerState: "accepted",
+      route: validation.route,
+      promptId: validation.promptId,
+      rejectionReason: payload.rejectionReason || "provider-fallback",
+      message:
+        payload.message ||
+        "The provider path could not return a trusted suggestion. Local fallback stayed available.",
+    }),
+    providerState: payload.providerCallAttempted ? "called-by-server-executor" : "not-called",
+    providerCallAttempted: Boolean(payload.providerCallAttempted),
+    validationState: payload.validationState || "not-run",
+    quarantineState: payload.quarantineState || "not-run",
+  };
+}
+
 function findForbiddenAssistantIntakeKey(value, path = "body") {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return null;
@@ -346,6 +476,10 @@ function validateAssistantIntakeRequestBody(body) {
     }
   }
 
+  if (body.liveCallRequested !== undefined && typeof body.liveCallRequested !== "boolean") {
+    return { ok: false, reason: "invalid-live-call-request-flag" };
+  }
+
   const forbiddenKey = findForbiddenAssistantIntakeKey(body);
   if (forbiddenKey) {
     return forbiddenKey;
@@ -381,7 +515,14 @@ function validateAssistantIntakeRequestBody(body) {
     return { ok: false, reason: forbiddenCapture.reason, route, promptId, typedCaptureLength };
   }
 
-  return { ok: true, route, promptId, typedCapture, typedCaptureLength };
+  return {
+    ok: true,
+    route,
+    promptId,
+    typedCapture,
+    typedCaptureLength,
+    liveCallRequested: body.liveCallRequested === true,
+  };
 }
 
 function rejectAssistantIntakeRequest(response, validation, status, message) {
@@ -396,6 +537,191 @@ function rejectAssistantIntakeRequest(response, validation, status, message) {
     }),
     error: "Assistant intake request rejected.",
   });
+}
+
+function isAssistantIntakeProviderGateEnabled() {
+  return process.env[assistantIntakeProviderEnabledEnvName] === "true";
+}
+
+function truncateAssistantField(value, maxLength) {
+  return String(value || "").trim().slice(0, maxLength);
+}
+
+function destinationForAssistantIntent(intent) {
+  switch (intent) {
+    case "task":
+      return "Inbox task draft";
+    case "note":
+      return "Notes context draft";
+    case "plan":
+      return "Plan preview";
+    case "reminder":
+      return "Reminder preview";
+    case "follow-up":
+      return "Follow-up preview";
+    default:
+      return "Inbox review";
+  }
+}
+
+function normalizeAssistantIntakeSuggestion(parsed, validation) {
+  const intent = assistantIntakeAllowedIntents.has(parsed?.intent) ? parsed.intent : "unsure";
+  const confidence = assistantIntakeAllowedConfidence.has(parsed?.confidence) ? parsed.confidence : "needs-review";
+  const state = assistantIntakeAllowedStates.has(parsed?.state) ? parsed.state : "needs-review";
+  const destinationLabel = assistantIntakeAllowedDestinations.has(parsed?.destinationLabel)
+    ? parsed.destinationLabel
+    : destinationForAssistantIntent(intent);
+  const fields = Array.isArray(parsed?.fields)
+    ? parsed.fields
+        .map((field) => ({
+          label: truncateAssistantField(field?.label, 40),
+          value: truncateAssistantField(field?.value, 160),
+          editable: field?.editable !== false,
+        }))
+        .filter((field) => field.label && field.value)
+        .slice(0, 4)
+    : [];
+  const warnings = Array.isArray(parsed?.warnings)
+    ? parsed.warnings.map((warning) => truncateAssistantField(warning, 90)).filter(Boolean).slice(0, 3)
+    : [];
+
+  const normalized = {
+    version: "stage-20-output-v1",
+    promptId: assistantIntakeAllowedPromptId,
+    outputSchemaName: "AssistantIntakeSuggestionOutputV1",
+    intent,
+    confidence,
+    state,
+    destinationLabel,
+    title: truncateAssistantField(parsed?.title, 90) || "Review captured thought",
+    summary:
+      truncateAssistantField(parsed?.summary, 220) ||
+      "Review this suggestion before choosing any save path.",
+    sources: [
+      {
+        sourceId: "assistant-intake-typed-capture",
+        sourceLabel: "Typed capture",
+      },
+    ],
+    fields: fields.length
+      ? fields
+      : [
+          {
+            label: "Captured text",
+            value: truncateAssistantField(validation.typedCapture, 160),
+            editable: true,
+          },
+        ],
+    confirmation: {
+      required: true,
+      label: "Review only",
+      copy: "Nothing is saved or sent.",
+    },
+    warnings,
+  };
+
+  const serialized = JSON.stringify(normalized).toLowerCase();
+  const forbiddenOutputClaims = [
+    "saved automatically",
+    "i saved",
+    "sent email",
+    "sent text",
+    "scheduled",
+    "synced",
+    "remembered",
+    "real memory",
+    "calendar event",
+    "notification",
+    "geocoded",
+    "device location",
+  ];
+
+  if (forbiddenOutputClaims.some((claim) => serialized.includes(claim))) {
+    return {
+      ok: false,
+      reason: "provider-output-hidden-action-claim",
+    };
+  }
+
+  return {
+    ok: true,
+    suggestion: normalized,
+  };
+}
+
+async function runAssistantIntakeProviderExecutor(validation) {
+  const apiKey = openAiApiKey.value();
+  const model = process.env.OPENAI_MODEL || "gpt-5-mini";
+
+  const openAiResponse = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model,
+      input: [
+        {
+          role: "system",
+          content: [
+            "You are the EasyLife assistant intake suggestion engine.",
+            "Return one reviewable suggestion for the typed capture only.",
+            "Do not claim anything was saved, sent, scheduled, synced, remembered, geocoded, or done externally.",
+            "The user must approve every save later in the app.",
+            "Use conservative confidence and needs-review when ambiguous.",
+          ].join(" "),
+        },
+        {
+          role: "user",
+          content: [
+            `Route: ${assistantIntakeAllowedRoute}`,
+            `Prompt: ${assistantIntakeAllowedPromptId}`,
+            "Typed capture:",
+            validation.typedCapture,
+          ].join("\n\n"),
+        },
+      ],
+      text: {
+        format: {
+          type: "json_schema",
+          name: "assistant_intake_suggestion",
+          strict: true,
+          schema: assistantIntakeSuggestionSchema,
+        },
+      },
+    }),
+  });
+
+  const responseBody = await openAiResponse.json();
+
+  if (!openAiResponse.ok) {
+    logger.error("Assistant intake provider call failed", {
+      status: openAiResponse.status,
+      code: responseBody?.error?.code || "unknown",
+      type: responseBody?.error?.type || "unknown",
+    });
+    return {
+      ok: false,
+      reason: "provider-error",
+      providerCallAttempted: true,
+    };
+  }
+
+  try {
+    const parsed = JSON.parse(readOutputText(responseBody));
+    const normalized = normalizeAssistantIntakeSuggestion(parsed, validation);
+    return {
+      ...normalized,
+      providerCallAttempted: true,
+    };
+  } catch {
+    return {
+      ok: false,
+      reason: "provider-output-parse-failed",
+      providerCallAttempted: true,
+    };
+  }
 }
 
 async function verifyAssistantIntakeRequest(request, response) {
@@ -509,26 +835,89 @@ exports.assistantIntakeSuggestion = onRequest(
       return;
     }
 
-    logger.info("Assistant intake suggestion scaffold returned fallback", {
+    const providerGateEnabled = isAssistantIntakeProviderGateEnabled();
+
+    if (!validation.liveCallRequested || !providerGateEnabled) {
+      logger.info("Assistant intake suggestion returned disabled fallback", {
+        route: validation.route,
+        promptId: validation.promptId,
+        typedCaptureLength: validation.typedCaptureLength,
+        liveCallRequested: validation.liveCallRequested,
+        providerGateEnabled,
+        providerState: "not-called",
+        fallbackState: "local-disabled",
+      });
+
+      response.status(200).json(
+        buildAssistantIntakeFallback({
+          status: "fallback",
+          authState: "verified",
+          requestValidationState: "accepted",
+          sanitizerState: "accepted",
+          route: validation.route,
+          promptId: validation.promptId,
+          rejectionReason: validation.liveCallRequested ? "server-gate-disabled" : "live-call-not-requested",
+          message:
+            "The server gateway accepted this Inbox capture, but live AI is still disabled. Nothing was saved or sent.",
+        })
+      );
+      return;
+    }
+
+    logger.info("Assistant intake suggestion provider executor starting", {
       route: validation.route,
       promptId: validation.promptId,
       typedCaptureLength: validation.typedCaptureLength,
-      providerState: "not-called",
-      fallbackState: "local-disabled",
+      providerGateEnabled,
+      providerState: "called-by-server-executor",
     });
 
-    response.status(200).json(
-      buildAssistantIntakeFallback({
-        status: "fallback",
-        authState: "verified",
-        requestValidationState: "accepted",
-        sanitizerState: "accepted",
+    let providerResult;
+    try {
+      providerResult = await runAssistantIntakeProviderExecutor(validation);
+    } catch {
+      providerResult = {
+        ok: false,
+        reason: "provider-request-failed",
+        providerCallAttempted: true,
+      };
+    }
+
+    if (!providerResult.ok || !providerResult.suggestion) {
+      logger.warn("Assistant intake suggestion provider executor returned fallback", {
         route: validation.route,
         promptId: validation.promptId,
-        message:
-          "The server gateway accepted this Inbox capture, but live AI is still disabled. Nothing was saved or sent.",
-      })
-    );
+        typedCaptureLength: validation.typedCaptureLength,
+        reason: providerResult.reason || "provider-fallback",
+        providerState: providerResult.providerCallAttempted ? "called-by-server-executor" : "not-called",
+      });
+
+      response.status(200).json(
+        buildAssistantIntakeProviderFallback(validation, {
+          providerCallAttempted: Boolean(providerResult.providerCallAttempted),
+          rejectionReason: providerResult.reason || "provider-fallback",
+          validationState:
+            providerResult.reason === "provider-output-hidden-action-claim" ? "rejected" : "not-run",
+          quarantineState:
+            providerResult.reason === "provider-output-hidden-action-claim" ? "quarantined" : "not-run",
+          message:
+            "The provider path could not return a trusted suggestion. Local fallback stayed available and nothing was saved or sent.",
+        })
+      );
+      return;
+    }
+
+    logger.info("Assistant intake suggestion provider executor returned trusted preview", {
+      route: validation.route,
+      promptId: validation.promptId,
+      typedCaptureLength: validation.typedCaptureLength,
+      intent: providerResult.suggestion.intent,
+      confidence: providerResult.suggestion.confidence,
+      providerState: "called-by-server-executor",
+      nothingSavedOrSent: true,
+    });
+
+    response.status(200).json(buildAssistantIntakeProviderEnvelope(validation, providerResult.suggestion));
   }
 );
 

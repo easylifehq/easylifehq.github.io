@@ -1,5 +1,26 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 33 Task 1 Assistant Intake Provider Executor Behind Disabled Gate
+
+- Task attempted: Add the OpenAI provider executor code path to `assistantIntakeSuggestion`, but keep it disabled by default.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Functions check: Passed with `npm.cmd --prefix functions run lint`.
+- Files changed:
+  - `functions/index.js`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Provider executor: added `runAssistantIntakeProviderExecutor`.
+- Secret boundary: uses existing Firebase Functions secret binding `OPENAI_API_KEY` server-side only and reads it only inside the gated provider executor branch.
+- Disabled default: provider execution requires both `liveCallRequested: true` in the request and server env gate `ASSISTANT_INTAKE_PROVIDER_ENABLED=true`; default behavior remains disabled/fallback.
+- Prompt boundary: executor uses prompt `intake-suggestion` only.
+- Input boundary: executor sends only route, prompt ID, and `typedCapture` to the provider.
+- Output boundary: requested provider response uses strict JSON schema-like output for one reviewable assistant intake suggestion.
+- Validation boundary: normalized provider output is converted into a preview envelope with `nothingSavedOrSent: true`, `requiresApproval: true`, `hiddenWrites: false`, and `externalActions: false`; hidden-action/external-action wording falls back instead.
+- Logging boundary: logs route, prompt ID, typed capture length, provider state, intent/confidence, and error code/type metadata only; raw typed capture, secret values, and provider raw response are not logged.
+- Provider-call proof: no provider call was made during build or functions lint.
+- Existing endpoint boundary: `analyzeTaskBrainDump` and `planProjectWithAi` were not modified.
+- Boundary preserved: no deploy, frontend key, provider SDK, dependency/package change, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 32 Narrow Gateway Proof Packet
 
 - Task attempted: Prove whether `assistantIntakeSuggestion` is ready for Stage 33 first provider call implementation.

@@ -2,6 +2,24 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 33 Task 1 Assistant Intake Provider Executor Behind Disabled Gate
+
+- Task: Add OpenAI provider executor code path to `assistantIntakeSuggestion` while keeping it disabled by default.
+- Result: Server-only provider executor branch added behind explicit request and server env gates.
+- Magic signal: provider-wire-installed-gate-still-closed.
+- Function evidence: `functions/index.js` now includes `runAssistantIntakeProviderExecutor`.
+- Secret evidence: the executor uses the existing Firebase Functions secret binding `OPENAI_API_KEY` only inside the gated branch.
+- Gate evidence: provider execution requires `liveCallRequested: true` and `ASSISTANT_INTAKE_PROVIDER_ENABLED=true`; missing either returns disabled fallback.
+- Prompt evidence: only `intake-suggestion` is used.
+- Input evidence: only route, prompt ID, and typed capture are included in provider input.
+- Schema evidence: provider call requests strict JSON schema-like output for one reviewable assistant intake suggestion.
+- Output evidence: trusted output is normalized into a preview envelope with `nothingSavedOrSent: true`, `requiresApproval: true`, `hiddenWrites: false`, and `externalActions: false`.
+- Fallback evidence: provider errors, parse failures, and hidden-action output claims return local fallback instead of saved output.
+- Logging evidence: logs remain metadata-only and omit raw typed capture, secret values, and provider raw response.
+- Legacy evidence: `analyzeTaskBrainDump` and `planProjectWithAi` were not modified.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; `npm.cmd --prefix functions run lint` passed.
+- Boundary evidence: no deploy, provider call during build/tests, frontend key, provider SDK, dependency/package change, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 32 Narrow Gateway Proof Packet
 
 - Task: Prove whether the new `assistantIntakeSuggestion` gateway scaffold is ready for a separately approved live provider implementation.
