@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 29 Task 1 Frontend Secret And Bundle Scan Protocol
+
+- Task attempted: Prove no AI provider key appears in frontend source, docs, env examples, or built assets.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_29_SECRET_SCAN_REPORT.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Scan report created: `docs/codex/EASYLIFE_STAGE_29_SECRET_SCAN_REPORT.md`.
+- Scan scope: `app-vNext/src`, `docs`, `app-vNext/.env.example`, and `app-vNext/dist` after build.
+- Provider secret result: `NO_AI_PROVIDER_SECRET_FOUND`.
+- Redaction rule: searches reported pattern names, paths, counts, and redacted classifications only; no raw secret values were printed or committed.
+- False-positive classification: loose OpenAI-style `sk-` matches came from `task-save` class names and scorecard labels, not credentials.
+- Public config classification: one Google-key-shaped value appears in the existing Firebase web config and built bundle; this is expected browser-exposed Firebase web config, not an AI provider key, and remains unsuitable for provider-secret storage.
+- Env example result: `app-vNext/.env.example` had no provider secret match.
+- Boundary preserved: docs and safe local checks only; no app code, deploy change, provider SDK, API key, backend config, package/dependency change, committed generated output, secret, hidden write, external action, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 29 Trust And Security Hardening Task Packet
 
 - Task attempted: Plan the trust/security hardening pass before any broader assistant expansion.

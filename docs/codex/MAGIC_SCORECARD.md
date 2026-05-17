@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 29 Task 1 Frontend Secret And Bundle Scan Protocol
+
+- Task: Prove no AI provider key appears in frontend source or built assets.
+- Result: Secret scan report created with verdict `NO_AI_PROVIDER_SECRET_FOUND`.
+- Magic signal: no-ai-provider-secret-in-frontend-or-bundle
+- Report evidence: `docs/codex/EASYLIFE_STAGE_29_SECRET_SCAN_REPORT.md`.
+- Scan scope evidence: `app-vNext/src`, `docs`, `app-vNext/.env.example`, and `app-vNext/dist` after build were checked.
+- Redaction evidence: scan output used pattern names, file paths, counts, and redacted classifications only; no raw secret values were printed or committed.
+- False-positive evidence: OpenAI-style `sk-` matches were classified as `task-save` class-name/scorecard false positives.
+- Firebase evidence: one Google-key-shaped value appears in the existing public Firebase web config and built bundle; classified as expected public Firebase web config, not an AI provider key.
+- Env example evidence: `app-vNext/.env.example` had no provider secret match.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs and safe local checks only; no app code, deploy change, provider SDK, API key, backend config, package/dependency change, committed generated output, secret, hidden write, external action, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 29 Trust And Security Hardening Task Packet
 
 - Task: Plan trust/security hardening before any broader assistant expansion.
