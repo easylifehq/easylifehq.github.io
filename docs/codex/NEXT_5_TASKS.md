@@ -2,6 +2,8 @@
 
 Stage 29 proof verdict: `READY_FOR_STAGE_30_CONTROLLED_LIVE_AI_GATE`.
 
+Stage 30 plan: `docs/codex/EASYLIFE_STAGE_30_CONTROLLED_LIVE_AI_GATE.md`
+
 Stage 30 mission: prepare the narrowest controlled path toward a separately approved first live provider call for the Inbox typed-capture suggestion lane.
 
 Stage 30 must keep parked: broad chat, real user data by default, frontend API keys, provider keys in docs/logs/commits, hidden reads, hidden writes, automatic saves, sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, saved-object expansion, deploy changes, package/dependency changes, generated output, provider SDKs, and production rollout.

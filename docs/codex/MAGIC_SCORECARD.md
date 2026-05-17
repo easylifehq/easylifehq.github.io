@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 30 Controlled Live AI Gate Task Packet
+
+- Task: Plan the narrowest controlled path from the proven Inbox assistant lane toward live AI.
+- Result: Stage 30 controlled live AI gate plan and five-task queue created.
+- Magic signal: controlled-live-ai-gate-before-provider-call
+- Plan evidence: `docs/codex/EASYLIFE_STAGE_30_CONTROLLED_LIVE_AI_GATE.md`.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 30 tasks.
+- Scope evidence: Stage 30 covers only `/app/easylist/add?demo=1`, Inbox typed-capture suggestion, and prompt `intake-suggestion`.
+- Secret evidence: provider secret must be server-side only; frontend API keys and `VITE_` provider secrets remain forbidden.
+- Approval evidence: a later explicit human approval gate is required before any real provider call.
+- Boundary evidence: no live provider call, broad chat, real memory, email/text sending, calendar sync, notifications, geocoding, device location, hidden write, saved-object expansion, deploy change, provider SDK, package/dependency change, backend implementation, generated output, provider key, or frontend API key was added.
+
 ## 2026-05-17 - Stage 29 Trust And Security Proof Packet
 
 - Task: Prove whether the Inbox assistant lane is safe enough to move toward controlled live AI/private alpha.

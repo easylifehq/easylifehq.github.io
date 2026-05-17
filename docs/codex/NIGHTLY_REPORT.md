@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 30 Controlled Live AI Gate Task Packet
+
+- Task attempted: Plan the narrowest controlled path from the proven Inbox assistant lane toward live AI.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_30_CONTROLLED_LIVE_AI_GATE.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Plan created: `docs/codex/EASYLIFE_STAGE_30_CONTROLLED_LIVE_AI_GATE.md`.
+- Stage scope: Inbox typed-capture suggestion only at `/app/easylist/add?demo=1`, prompt `intake-suggestion`.
+- Launch posture: live AI disabled by default; provider secret server-side only; frontend API keys and `VITE_` provider secrets forbidden.
+- Human approval requirement: provider choice, server-side secret storage, spend cap, rate limit, kill switch, rollback, metadata-only logging, request sanitizer, response quarantine, first route, first prompt, first input class, fallback behavior, and failure conditions require later explicit approval before any real provider call.
+- Queue proof: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 30 tasks.
+- Boundary preserved: docs-first planning only; no live provider call, broad chat, real memory, email/text sending, calendar sync, notifications, geocoding, device location, hidden write, saved-object expansion, deploy change, provider SDK, package/dependency change, backend implementation, generated output, provider key, or frontend API key was added.
+
 ## 2026-05-17 - Stage 29 Task 4 Kill Switch And Rollback Proof
 
 - Task attempted: Prove the assistant lane can be disabled safely and falls back without losing typed capture.
