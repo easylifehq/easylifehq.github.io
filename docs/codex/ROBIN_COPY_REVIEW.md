@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+LIVE_DRY_RUN_COPY_HONEST
+
+## Stage 26 Task 4 Inbox Live Dry-Run Source UI - 2026-05-17
+
+Verdict: `LIVE_DRY_RUN_COPY_HONEST`.
+
+The new Inbox lane says what is true: `Live provider dry run`, `Prompt intake-suggestion`, validation/fallback state, and `Nothing saved or sent`. It does not say live AI is broadly enabled, and it does not imply the assistant saved, sent, scheduled, synced, or remembered anything.
+
+Copy proof:
+- Source is named `Synthetic/demo capture`.
+- Prompt is shown as `intake-suggestion`.
+- Fallback state is visible while the dry-run lane is disabled.
+- Boundary copy says existing task and note save paths are unchanged.
+- The panel keeps `No frontend key`, `No provider SDK`, and `No hidden write` as short state copy rather than a long policy block.
+
+Copy guard:
+Keep using `dry run`, `synthetic/demo`, `validated`, `fallback`, and `nothing saved or sent`. Do not switch to `AI handled this`, `assistant completed this`, or `live assistant` until the real provider path is explicitly enabled and proven.
+
+---
+
+## Verdict
 READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN
 
 ## Stage 25 Provider Readiness Copy Proof - 2026-05-17

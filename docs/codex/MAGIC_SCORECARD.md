@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 26 Task 4 Inbox Live Dry-Run Source UI
+
+- Task: Let Inbox show the live-provider dry-run lane clearly without implying saved work or a full AI assistant.
+- Result: Inbox now has a compact `Live provider dry run` lane in the existing assistant gateway source selector.
+- Magic signal: live-provider-lane-visible-but-disabled
+- UI evidence: `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`.
+- Styling evidence: `app-vNext/src/styles/globals.css`.
+- Source evidence: live lane uses `Synthetic/demo capture` only.
+- Prompt evidence: visible state includes `Prompt intake-suggestion`.
+- Validation/fallback evidence: visible state includes validation and fallback state from the Stage 26 dry-run response.
+- Trust evidence: visible copy says `Nothing saved or sent`, and existing task/note save behavior is unchanged.
+- Inspection evidence: `/app/easylist/add?demo=1` returned HTTP 200 locally; build output contained the new lane strings after the in-app Browser pane was unavailable.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no real user data, frontend key, secret, provider SDK, dependency/package change, deploy config, generated output, hidden write, save, send, schedule, sync, notification, calendar change, real memory, geocoding, device location, external action, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 26 Task 3 Live Dry-Run Validation And Fallback Proof
 
 - Task: Prove provider-style output cannot render unless Stage 20 validation accepts or safely downgrades it.

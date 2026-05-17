@@ -1,6 +1,28 @@
 # Simon Design Review
 
 ## Verdict
+LIVE_DRY_RUN_LANE_REVIEWABLE
+
+## Stage 26 Task 4 Inbox Live Dry-Run Source UI - 2026-05-17
+
+Verdict: `LIVE_DRY_RUN_LANE_REVIEWABLE`.
+
+Inbox now exposes `Live provider dry run` in the existing compact gateway source selector instead of adding another large technical panel. The selected lane displays source, prompt ID, validation state, fallback state, provider state, and `Nothing saved or sent`.
+
+Design proof:
+- The source selector uses four compact options: local rules, mock gateway, server adapter mock, and live provider dry run.
+- The live dry-run lane defaults to disabled/fallback state, which is visually honest and does not look like a fully live assistant.
+- The grid now uses responsive auto-fit columns so the extra lane can wrap without forcing a wide control.
+
+Inspection note:
+`/app/easylist/add?demo=1` was reachable locally. The in-app Browser pane was unavailable during this task, so visual verification was limited to build success and built asset text proof rather than a screenshot.
+
+Design guard:
+Do not add more provider/debug chrome to Inbox before Stage 26 proof. If more state is needed, collapse it behind one details row.
+
+---
+
+## Verdict
 READY_FOR_STAGE_26_FIRST_LIVE_PROVIDER_DRY_RUN
 
 ## Stage 25 Provider Readiness Product Proof - 2026-05-17

@@ -1,5 +1,22 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 26 Task 4 Inbox Live Dry-Run Source UI
+
+- Task attempted: Let Inbox show the live-provider dry-run lane clearly without implying saved work or a full AI assistant.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Inbox UI change: the assistant gateway source selector now includes `Live provider dry run` as the default visible lane.
+- Live dry-run proof: the lane uses `createServerGatewayLiveDryRunTypedCaptureRequest` and `runServerGatewayLiveDryRun` with the default disabled configuration, so it shows fallback state rather than a live provider result.
+- Visible state shown: source `Synthetic/demo capture`, prompt ID `intake-suggestion`, validation state, fallback state, provider call state, and the copy `Nothing saved or sent`.
+- Inspection result: `/app/easylist/add?demo=1` returned HTTP 200 on the local review server; the in-app Browser pane was unavailable, so route verification used the successful build plus built asset string checks for the new live dry-run lane text.
+- Boundary preserved: existing task and note save behavior stayed unchanged. No real user data, frontend key, secret, provider SDK, dependency/package change, deploy config, generated output, hidden write, save, send, schedule, sync, notification, calendar change, real memory, geocoding, device location, external action, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 26 Task 3 Live Dry-Run Validation And Fallback Proof
 
 - Task attempted: Prove real provider-style output cannot render unless Stage 20 validation accepts or safely downgrades it.

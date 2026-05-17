@@ -19,6 +19,11 @@ import {
 } from "@/features/assistant/localDraftTypes";
 import { runServerGatewayMockHandler } from "@/features/assistant/serverGateway/serverGatewayMockHandler";
 import { createServerGatewayTypedCaptureRequest } from "@/features/assistant/serverGateway/serverGatewayTypes";
+import { runServerGatewayLiveDryRun } from "@/features/assistant/serverGateway/serverGatewayLiveDryRun";
+import {
+  createServerGatewayLiveDryRunTypedCaptureRequest,
+  type ServerGatewayLiveDryRunResponseEnvelope,
+} from "@/features/assistant/serverGateway/serverGatewayLiveDryRunTypes";
 import { buildTaskDraft, type TaskRowDraft } from "@/features/easylist/components/TaskComposer";
 import { type AssistantApprovalState } from "@/features/assistant/intentTypes";
 import { TaskComposer } from "@/features/easylist/components/TaskComposer";
@@ -42,7 +47,7 @@ const INBOX_PREVIEW_STATE_LABELS: Record<AssistantApprovalState, string> = {
 };
 const INBOX_TRUST_LABELS = ["Draft", "Preview", "Task save only", "Note save only"];
 type MockGatewayMode = "normal" | MockGatewayForcedFallbackReason;
-type GatewayPreviewSource = "local-rules" | "mock-gateway" | "server-adapter-mock";
+type GatewayPreviewSource = "local-rules" | "mock-gateway" | "server-adapter-mock" | "live-provider-dry-run";
 const MOCK_GATEWAY_MODE_OPTIONS: Array<{ value: MockGatewayMode; label: string }> = [
   { value: "normal", label: "Mock output" },
   { value: "ai-disabled", label: "AI disabled" },
@@ -58,6 +63,7 @@ const GATEWAY_PREVIEW_SOURCE_OPTIONS: Array<{
   { value: "local-rules", label: "Local rules", description: "Deterministic draft" },
   { value: "mock-gateway", label: "Mock gateway", description: "No provider" },
   { value: "server-adapter-mock", label: "Server adapter mock", description: "No live AI" },
+  { value: "live-provider-dry-run", label: "Live provider dry run", description: "Disabled lane" },
 ];
 const DESTINATION_BY_DRAFT_TYPE: Record<AssistantLocalDraftType, string> = {
   task: "Inbox task save lane",
@@ -100,7 +106,7 @@ export function EasyListInboxPage() {
   const [listName, setListName] = useState("Main");
   const [assistantCaptureText, setAssistantCaptureText] = useState("Reply to Maya about Friday plans");
   const [gatewayPreviewSource, setGatewayPreviewSource] =
-    useState<GatewayPreviewSource>("server-adapter-mock");
+    useState<GatewayPreviewSource>("live-provider-dry-run");
   const [mockGatewayMode, setMockGatewayMode] = useState<MockGatewayMode>("normal");
   const [previewApprovalState, setPreviewApprovalState] = useState<AssistantApprovalState>("suggested");
   const [selectedDraftType, setSelectedDraftType] = useState<AssistantLocalDraftType>("follow-up");
@@ -109,6 +115,8 @@ export function EasyListInboxPage() {
   const [showReviewHandoff, setShowReviewHandoff] = useState(false);
   const [reviewHandoffPreview, setReviewHandoffPreview] = useState<AssistantReviewHandoffPreview | null>(null);
   const [taskSaveConfirmation, setTaskSaveConfirmation] = useState<AssistantTaskSaveConfirmation | null>(null);
+  const [liveDryRunResult, setLiveDryRunResult] =
+    useState<ServerGatewayLiveDryRunResponseEnvelope | null>(null);
   const listNames = useMemo(
     () => Array.from(new Set(["Main", ...tasks.map((task) => task.listName || "Main")])).sort(),
     [tasks]
@@ -192,11 +200,38 @@ export function EasyListInboxPage() {
     [mockGatewayMode, serverGatewayRequest]
   );
   const serverGatewayOutput = serverGatewayResult.status === "ok" ? serverGatewayResult.output : null;
+  const liveDryRunRequest = useMemo(
+    () =>
+      createServerGatewayLiveDryRunTypedCaptureRequest({
+        requestId: `inbox-live-dry-run-${assistantSuggestion.id}`,
+        typedCaptureText: assistantCaptureText || "Synthetic demo capture only.",
+      }),
+    [assistantCaptureText, assistantSuggestion.id]
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    setLiveDryRunResult(null);
+    void runServerGatewayLiveDryRun(liveDryRunRequest).then((result) => {
+      if (!cancelled) {
+        setLiveDryRunResult(result);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [liveDryRunRequest]);
+
+  const liveDryRunOutput = liveDryRunResult?.status === "ok" ? liveDryRunResult.output : null;
   const activeGatewayOutput =
     gatewayPreviewSource === "server-adapter-mock"
       ? serverGatewayOutput
       : gatewayPreviewSource === "mock-gateway"
         ? mockGatewayOutput
+        : gatewayPreviewSource === "live-provider-dry-run"
+          ? liveDryRunOutput || null
         : null;
   const activeGatewayLabel =
     GATEWAY_PREVIEW_SOURCE_OPTIONS.find((option) => option.value === gatewayPreviewSource)?.label ||
@@ -206,7 +241,22 @@ export function EasyListInboxPage() {
       ? serverGatewayResult.outputValidationState || serverGatewayResult.requestValidationState
       : gatewayPreviewSource === "mock-gateway"
         ? mockGatewaySafetyState || mockGatewayResult.status
+        : gatewayPreviewSource === "live-provider-dry-run"
+          ? liveDryRunResult?.outputValidationState ||
+            liveDryRunResult?.fallback?.reason ||
+            liveDryRunResult?.metadataLog.validationResult ||
+            "loading"
         : "deterministic";
+  const activeGatewayTopline =
+    gatewayPreviewSource === "live-provider-dry-run"
+      ? [
+          activeGatewayLabel,
+          `Prompt ${liveDryRunResult?.metadataLog.promptId || "intake-suggestion"}`,
+          `Validation ${liveDryRunResult?.outputValidationState || liveDryRunResult?.metadataLog.validationResult || "loading"}`,
+          `Fallback ${liveDryRunResult?.fallback?.reason || "none"}`,
+          "Nothing saved or sent",
+        ]
+      : [activeGatewayLabel, "No provider", "No live AI", activeGatewayState];
   const approvedLocalDraft = useMemo(
     () =>
       visibleApprovalState === "approved"
@@ -418,6 +468,7 @@ export function EasyListInboxPage() {
                 ...INBOX_TRUST_LABELS,
                 "Mock gateway",
                 "Server adapter mock",
+                "Live provider dry run",
                 "No provider",
                 assistantAiAvailability.badge,
                 ...(isDemoReviewMode ? ["Demo"] : []),
@@ -463,10 +514,9 @@ export function EasyListInboxPage() {
               ))}
             </div>
             <div className="assistant-suggestion-topline">
-              <span>{activeGatewayLabel}</span>
-              <span>No provider</span>
-              <span>No live AI</span>
-              <span>{activeGatewayState}</span>
+              {activeGatewayTopline.map((label) => (
+                <span key={label}>{label}</span>
+              ))}
             </div>
             {activeGatewayOutput ? (
               <>
@@ -495,7 +545,9 @@ export function EasyListInboxPage() {
                 <span>{activeGatewayOutput.confirmation.label}</span>
                 <strong>{activeGatewayOutput.confirmation.copy}</strong>
                 <p>
-                  {gatewayPreviewSource === "server-adapter-mock"
+                  {gatewayPreviewSource === "live-provider-dry-run"
+                    ? "Live dry-run output still must pass validation first. No save behavior changed."
+                    : gatewayPreviewSource === "server-adapter-mock"
                     ? "Server adapter mock only. No network, provider call, hidden write, or save behavior change."
                     : "No live AI, no provider call, no hidden write."}
                 </p>
@@ -570,6 +622,61 @@ export function EasyListInboxPage() {
                 <span>No retry</span>
                 <strong>Server adapter mock is no-provider. Local rules stay available; nothing saves automatically.</strong>
                 <p>No external action, no hidden read, no hidden write.</p>
+              </div>
+              </>
+            ) : gatewayPreviewSource === "live-provider-dry-run" && liveDryRunResult ? (
+              <>
+              <SourceDestinationRow
+                source="Synthetic/demo capture"
+                state={`Validation ${liveDryRunResult.outputValidationState || liveDryRunResult.metadataLog.validationResult}`}
+                destination="Local fallback only"
+              />
+              <div className="assistant-suggestion-main">
+                <div>
+                  <p>Live-provider dry-run lane</p>
+                  <h3>{liveDryRunResult.fallback?.label || "Live dry-run output unavailable"}</h3>
+                  <strong>{liveDryRunResult.fallback?.copy || "Output must pass validation before display."}</strong>
+                </div>
+              </div>
+              <div className="assistant-suggestion-fields" aria-label="Live provider dry-run details">
+                <span>
+                  <small>Prompt ID</small>
+                  <strong>{liveDryRunResult.metadataLog.promptId}</strong>
+                  <em>Inbox only</em>
+                </span>
+                <span>
+                  <small>Validation</small>
+                  <strong>{liveDryRunResult.outputValidationState || liveDryRunResult.metadataLog.validationResult}</strong>
+                  <em>required</em>
+                </span>
+                <span>
+                  <small>Fallback</small>
+                  <strong>{liveDryRunResult.fallback?.reason || "none"}</strong>
+                  <em>{liveDryRunResult.fallback?.preservesTypedCapture ? "capture kept" : "blocked"}</em>
+                </span>
+                <span>
+                  <small>Provider</small>
+                  <strong>{liveDryRunResult.providerCallState}</strong>
+                  <em>{liveDryRunResult.runtime}</em>
+                </span>
+              </div>
+              <div className="assistant-mock-confirmation" aria-label="Live provider dry-run boundary">
+                <span>Nothing saved or sent</span>
+                <strong>Live-provider dry run is server-shaped and disabled here. Existing task and note save paths are unchanged.</strong>
+                <p>No frontend key, no provider SDK, no hidden write.</p>
+              </div>
+              </>
+            ) : gatewayPreviewSource === "live-provider-dry-run" ? (
+              <>
+              <SourceDestinationRow
+                source="Synthetic/demo capture"
+                state="Preparing validation"
+                destination="Local fallback only"
+              />
+              <div className="assistant-mock-confirmation" aria-label="Live dry-run loading boundary">
+                <span>Nothing saved or sent</span>
+                <strong>Preparing the disabled live-provider dry-run lane.</strong>
+                <p>No frontend key, no provider SDK, no hidden write.</p>
               </div>
               </>
             ) : (
