@@ -19,7 +19,10 @@ import {
 } from "@/features/assistant/localDraftTypes";
 import { runServerGatewayMockHandler } from "@/features/assistant/serverGateway/serverGatewayMockHandler";
 import { createServerGatewayTypedCaptureRequest } from "@/features/assistant/serverGateway/serverGatewayTypes";
-import { runServerGatewayLiveDryRun } from "@/features/assistant/serverGateway/serverGatewayLiveDryRun";
+import {
+  isServerGatewayLiveDryRunResponseStale,
+  runServerGatewayLiveDryRun,
+} from "@/features/assistant/serverGateway/serverGatewayLiveDryRun";
 import {
   createServerGatewayLiveDryRunTypedCaptureRequest,
   serverGatewayLiveDryRunAllowedRuntime,
@@ -182,6 +185,14 @@ const DESTINATION_BY_DRAFT_TYPE: Record<AssistantLocalDraftType, string> = {
   unsure: "Hold for review",
 };
 
+function normalizeAssistantMatchText(value: string) {
+  return value.replace(/\s+/g, " ").trim().toLowerCase();
+}
+
+function buildCapturePairLabel(suggestionId: string) {
+  return `Capture ${suggestionId.replace(/^local-intent-/, "#")}`;
+}
+
 function liveDryRunOptionsForMode(mode: LiveDryRunFailureMode): ServerGatewayLiveDryRunOptions {
   switch (mode) {
     case "timeout":
@@ -301,6 +312,7 @@ export function EasyListInboxPage() {
     draftComparisonOptions.some((option) => option.draftType === selectedDraftType)
       ? selectedDraftType
       : assistantSuggestion.intent;
+  const capturePairLabel = buildCapturePairLabel(assistantSuggestion.id);
   const suggestionSourceLabel = isDemoReviewMode ? "Typed demo capture" : "Typed capture";
   const suggestionDestination = DESTINATION_BY_DRAFT_TYPE[activeDraftType] || "Hold for review";
   const inboxAiFallbackCopy = getAssistantAiFallbackCopy("inbox");
@@ -370,18 +382,33 @@ export function EasyListInboxPage() {
     };
   }, [liveDryRunFailureMode, liveDryRunRequest]);
 
-  const liveDryRunOutput = liveDryRunResult?.status === "ok" ? liveDryRunResult.output : null;
+  const liveDryRunResultIsStale = isServerGatewayLiveDryRunResponseStale(
+    liveDryRunResult,
+    liveDryRunRequest.contextPacket.requestId
+  );
+  const liveDryRunOutput =
+    liveDryRunResult?.status === "ok" && !liveDryRunResultIsStale ? liveDryRunResult.output : null;
   const liveDryRunFallbackGuidance = liveDryRunResult?.fallback
     ? LIVE_DRY_RUN_FALLBACK_GUIDANCE[liveDryRunResult.fallback.reason]
     : null;
-  const activeGatewayOutput =
+  const unguardedGatewayOutput =
     gatewayPreviewSource === "server-adapter-mock"
       ? serverGatewayOutput
       : gatewayPreviewSource === "mock-gateway"
         ? mockGatewayOutput
         : gatewayPreviewSource === "live-provider-dry-run"
           ? liveDryRunOutput || null
-        : null;
+          : null;
+  const duplicateCandidateTitle = normalizeAssistantMatchText(
+    unguardedGatewayOutput?.title || assistantSuggestion.title
+  );
+  const duplicateExistingTask = activeLaneItems.find(
+    (task) => normalizeAssistantMatchText(task.title) === duplicateCandidateTitle
+  );
+  const duplicateGuardActive = Boolean(
+    unguardedGatewayOutput && duplicateExistingTask && gatewayPreviewSource !== "local-rules"
+  );
+  const activeGatewayOutput = duplicateGuardActive ? null : unguardedGatewayOutput;
   const activeGatewayLabel =
     GATEWAY_PREVIEW_SOURCE_OPTIONS.find((option) => option.value === gatewayPreviewSource)?.label ||
     "Local rules";
@@ -391,28 +418,47 @@ export function EasyListInboxPage() {
       : gatewayPreviewSource === "mock-gateway"
         ? mockGatewaySafetyState || mockGatewayResult.status
         : gatewayPreviewSource === "live-provider-dry-run"
-          ? liveDryRunResult?.outputValidationState ||
-            liveDryRunResult?.fallback?.reason ||
-            liveDryRunResult?.metadataLog.validationResult ||
-            "loading"
+          ? liveDryRunResultIsStale
+            ? "stale"
+            : liveDryRunResult?.outputValidationState ||
+              liveDryRunResult?.fallback?.reason ||
+              liveDryRunResult?.metadataLog.validationResult ||
+              "loading"
         : "deterministic";
   const activeGatewayTopline =
     gatewayPreviewSource === "live-provider-dry-run"
       ? [
           "Live dry-run lane",
-          liveDryRunFallbackGuidance?.pill || "Provider not connected",
+          liveDryRunResultIsStale
+            ? "Stale cleared"
+            : duplicateGuardActive
+              ? "Duplicate held"
+              : liveDryRunFallbackGuidance?.pill || "Provider not connected",
+          capturePairLabel,
           `Prompt ${liveDryRunResult?.metadataLog.promptId || "intake-suggestion"}`,
           "Nothing saved or sent",
         ]
-      : [activeGatewayLabel, "No provider", "No live AI", activeGatewayState];
+      : [activeGatewayLabel, capturePairLabel, "No provider", "No live AI", activeGatewayState];
   const activeGatewayClarity =
-    gatewayPreviewSource === "live-provider-dry-run" && liveDryRunFallbackGuidance
+    duplicateGuardActive
       ? {
-          mode: "Live dry-run lane",
-          result: liveDryRunFallbackGuidance.copy,
-          next: liveDryRunFallbackGuidance.next,
+          mode: activeGatewayLabel,
+          result: "Possible duplicate held for review.",
+          next: "Check the existing task before saving anything new.",
         }
-      : GATEWAY_RESULT_CLARITY[gatewayPreviewSource];
+      : liveDryRunResultIsStale
+        ? {
+            mode: "Live dry-run lane",
+            result: "Previous result cleared after capture changed.",
+            next: "Current capture will use local fallback until validation finishes.",
+          }
+        : gatewayPreviewSource === "live-provider-dry-run" && liveDryRunFallbackGuidance
+          ? {
+              mode: "Live dry-run lane",
+              result: liveDryRunFallbackGuidance.copy,
+              next: liveDryRunFallbackGuidance.next,
+            }
+          : GATEWAY_RESULT_CLARITY[gatewayPreviewSource];
   const approvedLocalDraft = useMemo(
     () =>
       visibleApprovalState === "approved"
@@ -706,7 +752,7 @@ export function EasyListInboxPage() {
             {activeGatewayOutput ? (
               <>
               <SourceDestinationRow
-                source={activeGatewayOutput.sources.map((source) => source.sourceLabel).join(", ")}
+                source={`${activeGatewayOutput.sources.map((source) => source.sourceLabel).join(", ")} · ${capturePairLabel}`}
                 state={`${activeGatewayOutput.state} suggestion`}
                 destination={activeGatewayOutput.destinationLabel}
               />
@@ -738,10 +784,44 @@ export function EasyListInboxPage() {
                 </p>
               </div>
               </>
+            ) : duplicateGuardActive ? (
+              <>
+              <SourceDestinationRow
+                source={`${activeGatewayLabel} · ${capturePairLabel}`}
+                state="Possible duplicate held"
+                destination="Hold for review"
+              />
+              <div className="assistant-suggestion-main">
+                <div>
+                  <p>Duplicate guard</p>
+                  <h3>Possible duplicate suggestion</h3>
+                  <strong>
+                    This looks like an existing task: {duplicateExistingTask?.title || "matching task"}.
+                  </strong>
+                </div>
+              </div>
+              <div className="assistant-suggestion-fields" aria-label="Duplicate suggestion guard details">
+                <span>
+                  <small>Current capture</small>
+                  <strong>{capturePairLabel}</strong>
+                  <em>source paired</em>
+                </span>
+                <span>
+                  <small>Action</small>
+                  <strong>Held for review</strong>
+                  <em>no auto-save</em>
+                </span>
+              </div>
+              <div className="assistant-mock-confirmation" aria-label="Duplicate suggestion boundary">
+                <span>No retry</span>
+                <strong>Duplicate-looking output is not offered as a fresh suggestion.</strong>
+                <p>No suggestion history is created. Nothing saves automatically.</p>
+              </div>
+              </>
             ) : gatewayPreviewSource === "mock-gateway" && mockGatewayResult.status === "fallback" ? (
               <>
               <SourceDestinationRow
-                source="Typed capture kept locally"
+                source={`Typed capture kept locally · ${capturePairLabel}`}
                 state={mockGatewayResult.fallback.label}
                 destination="Deterministic local draft"
               />
@@ -775,7 +855,7 @@ export function EasyListInboxPage() {
               serverGatewayResult.fallback ? (
               <>
               <SourceDestinationRow
-                source="Server adapter mock"
+                source={`Server adapter mock · ${capturePairLabel}`}
                 state={serverGatewayResult.fallback.label}
                 destination="Deterministic local draft"
               />
@@ -812,8 +892,12 @@ export function EasyListInboxPage() {
             ) : gatewayPreviewSource === "live-provider-dry-run" && liveDryRunResult ? (
               <>
               <SourceDestinationRow
-                source="Synthetic/demo capture"
-                state={`Validation ${liveDryRunResult.outputValidationState || liveDryRunResult.metadataLog.validationResult}`}
+                source={`Synthetic/demo capture · ${capturePairLabel}`}
+                state={
+                  liveDryRunResultIsStale
+                    ? "Stale result cleared"
+                    : `Validation ${liveDryRunResult.outputValidationState || liveDryRunResult.metadataLog.validationResult}`
+                }
                 destination="Local fallback only"
               />
               <div className="assistant-suggestion-main">
@@ -868,8 +952,8 @@ export function EasyListInboxPage() {
             ) : gatewayPreviewSource === "live-provider-dry-run" ? (
               <>
               <SourceDestinationRow
-                source="Synthetic/demo capture"
-                state="Preparing validation"
+                source={`Synthetic/demo capture · ${capturePairLabel}`}
+                state="Cleared until current capture validates"
                 destination="Local fallback only"
               />
               <div className="assistant-mock-confirmation" aria-label="Live dry-run loading boundary">
@@ -881,9 +965,9 @@ export function EasyListInboxPage() {
             ) : (
               <>
               <SourceDestinationRow
-                source={suggestionSourceLabel}
-                state="Local deterministic suggestion"
-                destination={suggestionDestination}
+                source={`${suggestionSourceLabel} · ${capturePairLabel}`}
+                state={duplicateExistingTask ? "Possible duplicate review" : "Local deterministic suggestion"}
+                destination={duplicateExistingTask ? "Hold for review" : suggestionDestination}
               />
               <div className="assistant-suggestion-main">
                 <div>
@@ -919,9 +1003,13 @@ export function EasyListInboxPage() {
               <span>{assistantSuggestion.confidenceLabel}</span>
             </div>
             <SourceDestinationRow
-              source={suggestionSourceLabel}
-              state={`${INBOX_PREVIEW_STATE_LABELS[visibleApprovalState]} suggestion`}
-              destination={suggestionDestination}
+              source={`${suggestionSourceLabel} · ${capturePairLabel}`}
+              state={
+                duplicateExistingTask
+                  ? "Possible duplicate review"
+                  : `${INBOX_PREVIEW_STATE_LABELS[visibleApprovalState]} suggestion`
+              }
+              destination={duplicateExistingTask ? "Hold for review" : suggestionDestination}
             />
             <p className="assistant-ai-fallback-copy">
               <span>{assistantAiAvailability.label}</span>
@@ -1006,7 +1094,9 @@ export function EasyListInboxPage() {
               ))}
             </div>
             <p className="assistant-suggestion-warning">
-              Preview only. Nothing is created here.
+              {duplicateExistingTask
+                ? `Possible duplicate of "${duplicateExistingTask.title}". Review before creating anything new.`
+                : "Preview only. Nothing is created here."}
             </p>
           </article>
 

@@ -14,6 +14,13 @@ import {
   type ServerGatewayLiveDryRunResponseEnvelope,
 } from "./serverGatewayLiveDryRunTypes";
 
+export function isServerGatewayLiveDryRunResponseStale(
+  response: ServerGatewayLiveDryRunResponseEnvelope | null | undefined,
+  currentRequestId: string,
+) {
+  return Boolean(response?.requestId && response.requestId !== currentRequestId);
+}
+
 export async function runServerGatewayLiveDryRun(
   value: unknown,
   options: ServerGatewayLiveDryRunOptions = {},

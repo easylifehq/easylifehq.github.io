@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 28 Task 2 Duplicate And Stale Suggestion Guard
+
+- Task attempted: Prevent the Inbox assistant lane from showing confusing duplicate or stale suggestions.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`
+  - `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveDryRun.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Source/capture pairing: gateway and local preview rows now include a visible capture fingerprint such as `Capture #...` so a suggestion can be tied back to the current typed capture.
+- Stale guard: live dry-run responses are checked against the current request id; stale results are cleared from the visible output path and labeled as stale/cleared instead of being offered as current.
+- Duplicate guard: gateway output that matches an existing unresolved task title is held for review and shown as a duplicate guard instead of a fresh suggestion.
+- Local duplicate cue: the deterministic local suggestion card now marks matching existing task titles as `Possible duplicate review` and holds the destination for review.
+- Inspection result: `/app/easylist/add?demo=1` returned HTTP 200 on the local review server; the in-app Browser pane was unavailable, so verification used the local dev route response plus built asset string checks for `Capture #`, `Possible duplicate suggestion`, `Cleared until current capture validates`, `Stale result cleared`, `Duplicate-looking output`, and `Nothing saved or sent`.
+- Boundary preserved: no auto-save, auto-retry, persistent suggestion history, provider expansion, secret, backend config, deploy change, package change, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 28 Task 1 Assistant Output Edge-Case Fixtures
 
 - Task attempted: Add edge-case fixtures for bad, empty, duplicated, and overconfident assistant output.

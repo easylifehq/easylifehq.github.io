@@ -2,6 +2,23 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 28 Task 2 Duplicate And Stale Suggestion Guard
+
+- Task: Prevent confusing duplicate or stale suggestions in the Inbox assistant lane.
+- Result: Inbox now shows capture-paired suggestions and blocks stale/duplicate-looking gateway output from presenting as fresh.
+- Magic signal: current-capture-or-held-for-review
+- UI evidence: `app-vNext/src/features/easylist/routes/EasyListInboxPage.tsx`.
+- Helper evidence: `app-vNext/src/features/assistant/serverGateway/serverGatewayLiveDryRun.ts`.
+- Capture pairing evidence: local and gateway rows include a visible `Capture #...` fingerprint.
+- Stale evidence: live dry-run results are compared to the current request id before display; mismatched results are marked stale/cleared.
+- Duplicate evidence: gateway output matching an existing unresolved task title renders `Possible duplicate suggestion` and `Duplicate-looking output is not offered as a fresh suggestion.`
+- Local duplicate evidence: the local deterministic card marks matching task titles as `Possible duplicate review` and routes them to `Hold for review`.
+- Retry evidence: duplicate guard and stale guard add no automatic retry.
+- History evidence: no persistent suggestion history was created.
+- Inspection evidence: `/app/easylist/add?demo=1` returned HTTP 200 locally; built asset checks found `Capture #`, stale/cleared copy, duplicate guard copy, and `Nothing saved or sent`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no auto-save, provider expansion, secret, backend config, deploy change, package change, generated output, hidden write, external action, real memory, notification, calendar sync, geocoding, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 28 Task 1 Assistant Output Edge-Case Fixtures
 
 - Task: Add edge-case fixtures for bad/empty/duplicated/overconfident assistant output.
