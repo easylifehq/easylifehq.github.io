@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: stage-19-ready
+Current Phase: stage-19-contextual-assistant-packet
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Choose a bounded Stage 19 mission after Stage 18 review repair passed; keep external actions and real AI claims parked.
+Primary Action: Use existing local app context more intelligently so EasyLife feels more like a real assistant without model calls or hidden writes.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not edit Firebase rules, auth setup, backend config, package/dependency files, generated output, secrets, deployment config, data shapes, or root deployed files.
 No More Features Lock: true
-Complexity Budget: Stage 19 is not approved for new capability until a bounded mission is written. Default to contextual usefulness using existing safe local/demo data, not external actions.
+Complexity Budget: Stage 19 may add contextual reads and clearer local hints only. It must not add new saved object types, external actions, model-backed reasoning, or broad redesign.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_STAGE_19
-Evidence Required: Stage 18 proof packet, build proof, mobile route inspection, NIGHTLY_REPORT, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, ROBIN_COPY_REVIEW, MAGIC_SCORECARD.
+Parking State: STAGE_19_TASKS_READY
+Evidence Required: Stage 19 plan, exactly five Task Contract V2 tasks, build proof, NIGHTLY_REPORT, MAGIC_SCORECARD.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Start Stage 19 only from an explicit bounded mission; safest next lane is contextual assistant usefulness using existing local/demo data.
+Next Phase Criteria: Run the five Stage 19 tasks one at a time, then create a proof packet before any Stage 20 expansion.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 18 proof packet completed with READY_FOR_STAGE_19.
+Updated At: 2026-05-17 - Stage 19 contextual assistant task packet created.
 
 ## Assistant Brain Gate
 
@@ -126,6 +126,16 @@ Stage 18 proof result: READY_FOR_STAGE_19.
 Stage 18 proof source: docs/codex/EASYLIFE_STAGE_18_PROOF_PACKET.md
 
 Do not create Stage 19 tasks automatically. Stage 19 should be created from an explicit user mission, and should not expand to model calls, external actions, real memory, notifications, calendar sync, maps, geocoding, exact addresses, backend/auth/Firebase config changes, dependencies, generated output, deploy config, secrets, or real personal data without a separate approved gate.
+
+## Stage 19 Contextual Assistant Gate
+
+Stage 19 source: docs/codex/EASYLIFE_STAGE_19_CONTEXTUAL_ASSISTANT_PLAN.md
+
+Prepared Stage 19 queue: docs/codex/NEXT_5_TASKS.md contains exactly five contextual assistant tasks.
+
+Stage 19 may improve Today context synthesis, Inbox source clarity, Plan capacity/readiness, Notes/context recall hints, and Contacts/People + Places tie-ins using existing local/demo app context. It must not add model calls, hidden writes, saved plans, saved reminders, saved follow-ups, email/text/call/message sending, notifications, calendar sync, maps, geocoding, exact addresses, device location, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, fake memory, or real personal data.
+
+Stage 19 proof must inspect Today, Inbox, Plan, Notes, Contacts, and Settings and decide whether contextual assistant usefulness is credible enough for Stage 20.
 
 ## Phase Order
 

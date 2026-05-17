@@ -1,5 +1,19 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 19 Contextual Assistant Task Packet
+
+- Task attempted: Create the Stage 19 contextual assistant task packet.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Plan created: `docs/codex/EASYLIFE_STAGE_19_CONTEXTUAL_ASSISTANT_PLAN.md`.
+- Queue updated: `docs/codex/NEXT_5_TASKS.md` now contains exactly five Stage 19 Task Contract V2 tasks:
+  - Today context synthesis.
+  - Inbox source clarity.
+  - Plan capacity/readiness.
+  - Notes/context recall hints.
+  - Contacts/People + Places tie-in.
+- Phase updated: `docs/codex/PHASE_STATE.md` now marks Stage 19 as `STAGE_19_TASKS_READY`.
+- Guardrail preserved: Stage 19 does not approve model calls, hidden writes, saved plans/reminders/follow-ups, email/text/call/message sending, notifications, calendar sync, maps, geocoding, exact addresses, backend/auth/Firebase config changes, dependencies, package files, deploy config, generated output, secrets, fake memory, or real personal data.
+
 ## 2026-05-17 - Stage 18 Proof Packet
 
 - Task attempted: Prove whether Stage 18 review-repair fixed stale-language, trust-copy, and mobile review issues.
