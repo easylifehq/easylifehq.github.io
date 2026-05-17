@@ -1,5 +1,29 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 19 Task 5 People + Places Today tie-in
+
+- Task attempted: Let Today and Contacts hint who may matter near a place using saved labels only.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Routes inspected:
+  - `http://127.0.0.1:4231/app/hq?demo=1`
+  - `http://127.0.0.1:4231/app/easycontacts?demo=1`
+- Files changed:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/hq/assistantPreview.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Product change: Contacts now renders a compact `Today cue` inside the place review panel, and Today now phrases the people/place assistant read as a saved-label cue.
+- Render proof: `/app/hq?demo=1` rendered `Maya Chen may matter near Portland, OR from saved labels.` and `/app/easycontacts?demo=1` rendered `Maya Chen near Portland, OR`.
+- Boundary proof: Contacts rendered `Saved labels only. No maps, geocoding, exact addresses, or device location.`
+- Simplification: shortened the old place helper from a longer field inventory sentence into one saved-label boundary line.
+- Mobile proof: headless Chrome inspection at 390 x 844 reported no horizontal overflow on Today or Contacts.
+- Boundary preserved: no maps, geocoding, exact addresses, device location, model calls, hidden matching, external actions, backend/auth/Firebase config, dependencies, package files, deploy config, generated output, secrets, or real personal data were added.
+
 ## 2026-05-17 - Stage 19 Task 4 Notes saved-context recall hints
 
 - Task attempted: Make Notes surface context useful for Today honestly without claiming real memory.

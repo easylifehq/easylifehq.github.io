@@ -32,6 +32,10 @@ function parseDate(value?: string) {
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
+function getContactPlaceLabel(contact: { currentCity?: string; region?: string; lastKnownPlace?: string }) {
+  return contact.currentCity || contact.region || contact.lastKnownPlace || "";
+}
+
 function HQPageContent() {
   const { events, taskBlocks, tasks, error } = useEasyCalendar();
   const { notes } = useEasyNotes();
@@ -57,8 +61,11 @@ function HQPageContent() {
     })
     .sort((left, right) => (parseDate(left.nextFollowUpAt)?.getTime() || 0) - (parseDate(right.nextFollowUpAt)?.getTime() || 0))[0] || null;
   const placeContact =
-    contacts.find((contact) => contact.currentCity || contact.region || contact.visitNote) || dueContact || null;
-  const contactPlace = placeContact?.currentCity || placeContact?.region || placeContact?.lastKnownPlace || "";
+    (dueContact && getContactPlaceLabel(dueContact) ? dueContact : null) ||
+    contacts.find((contact) => getContactPlaceLabel(contact) && (contact.visitNote || contact.movedRecently)) ||
+    contacts.find((contact) => getContactPlaceLabel(contact)) ||
+    null;
+  const contactPlace = placeContact ? getContactPlaceLabel(placeContact) : "";
   const quickWin = sortActiveTasks(tasks.filter((task) => !task.completed && (task.estimatedLength || 999) <= 20))[0] || null;
   const todaySummary = [
     { label: "Due", value: `${overdueTasks.length + dueTodayTasks.length}` },
@@ -147,11 +154,11 @@ function HQPageContent() {
       : null,
     placeContact && contactPlace
       ? {
-          label: dueContact?.id === placeContact.id ? "People cue" : "Place cue",
+          label: dueContact?.id === placeContact.id ? "People due" : "People near place",
           title: placeContact.fullName || "Someone in People",
           detail: dueContact?.id === placeContact.id
-            ? `Follow-up is due; place label is ${contactPlace}.`
-            : `Saved place label: ${contactPlace}.`,
+            ? `Follow-up is due; saved place label only: ${contactPlace}.`
+            : `Saved label only: ${contactPlace}. No map lookup.`,
           to: "/app/easycontacts",
         }
       : null,

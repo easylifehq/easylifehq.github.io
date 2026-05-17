@@ -2,6 +2,29 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 19 Task 5 People + Places Today Tie-In
+
+- Task: Let Today and Contacts hint who may matter near a place using saved labels only.
+- Result: Passed build and Today/Contacts route inspection.
+- Magic signal: people-places-feeds-today-without-maps
+- Changed files:
+  - `app-vNext/src/features/easycontacts/routes/EasyContactsPage.tsx`
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/hq/assistantPreview.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+- Today evidence: `/app/hq?demo=1` rendered `Maya Chen may matter near Portland, OR from saved labels.`
+- Contacts evidence: `/app/easycontacts?demo=1` rendered `Maya Chen near Portland, OR` in the place review cue.
+- Boundary evidence: Contacts rendered `Saved labels only. No maps, geocoding, exact addresses, or device location.`
+- Simplification evidence: the old place helper was compressed into one saved-label boundary line instead of another field inventory sentence.
+- Mobile evidence: Today and Contacts rendered at 390 x 844 without horizontal overflow.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Negative evidence: no map API, geocoding, exact address, device location, hidden matching, model call, external action, backend/auth/Firebase config change, dependency, package file, deploy config, generated output, secret, or real personal data was added.
+
 ## 2026-05-17 - Stage 19 Task 4 Notes Saved-Context Recall Hints
 
 - Task: Make Notes surface context useful for Today honestly without claiming real memory.

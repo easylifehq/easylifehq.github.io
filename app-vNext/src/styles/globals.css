@@ -8529,6 +8529,42 @@ button.calendar-detail-card:disabled {
   font-weight: 780;
 }
 
+.contacts-place-assistant-hint {
+  display: grid;
+  gap: 0.22rem;
+  padding: 0.68rem 0.72rem;
+  border: 1px dashed color-mix(in srgb, var(--app-accent) 28%, var(--ui-border-subtle, rgba(99, 76, 58, 0.12)));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card, #fffdf9) 78%, var(--app-accent) 8%);
+}
+
+.contacts-place-assistant-hint span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.contacts-place-assistant-hint strong,
+.contacts-place-assistant-hint p {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.contacts-place-assistant-hint strong {
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 0.94rem;
+  line-height: 1.2;
+}
+
+.contacts-place-assistant-hint p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.84rem;
+  line-height: 1.32;
+}
+
 .pipeline-command-strip input,
 .contacts-command-strip input,
 .pipeline-command-strip select {

@@ -49,6 +49,12 @@ function getPlaceSummary(contact: EasyContactRecord) {
   return place;
 }
 
+function getPlaceCueDetail(contact: EasyContactRecord) {
+  if (contact.visitNote) return contact.visitNote;
+  if (contact.movedRecently && contact.lastKnownPlace) return `Moved recently from ${contact.lastKnownPlace}.`;
+  return "Open the contact before a trip.";
+}
+
 function PlaceMemoryBlock({ contact, compact = false }: { contact: EasyContactRecord; compact?: boolean }) {
   const currentPlace = [contact.currentCity, contact.region].filter(Boolean).join(" · ");
   const lastKnownIsDifferent = contact.lastKnownPlace && contact.lastKnownPlace !== contact.currentCity;
@@ -137,6 +143,8 @@ export function EasyContactsPage() {
       )
       .slice(0, 3);
   }, [filteredContacts, placeReviewQuery]);
+  const placeReviewAnchor = placeReviewQuery.trim() || "this place";
+  const primaryPlaceMatch = placeReviewMatches[0] || null;
   useEffect(() => {
     if (!contactParam) return;
     const matchingContact = contacts.find((contact) => contact.id === contactParam);
@@ -230,7 +238,16 @@ export function EasyContactsPage() {
                 </button>
               ))}
             </div>
-            <p className="helper-copy">Uses saved city, region, last known place, and visit notes. No map, geocoding, exact address, or device location.</p>
+            <div className="contacts-place-assistant-hint" aria-label="People and place cue for Today">
+              <span>Today cue</span>
+              <strong>{primaryPlaceMatch ? `${primaryPlaceMatch.fullName || "Someone"} near ${placeReviewAnchor}` : "No saved match yet"}</strong>
+              <p>
+                {primaryPlaceMatch
+                  ? `${getPlaceSummary(primaryPlaceMatch)}. ${getPlaceCueDetail(primaryPlaceMatch)}`
+                  : `Add a city or region label later if someone should surface near ${placeReviewAnchor}.`}
+              </p>
+            </div>
+            <p className="helper-copy">Saved labels only. No maps, geocoding, exact addresses, or device location.</p>
             <div className="contacts-overview-list">
               {placeReviewMatches.length ? placeReviewMatches.map((contact) => (
                 <button key={contact.id} type="button" className="contacts-place-person" onClick={() => setSelectedContact(contact)}>

@@ -1,6 +1,28 @@
 # Simon Design Review
 
 ## Verdict
+PEOPLE_PLACES_TODAY_TIE_IN_READY
+
+## Stage 19 Task 5 People + Places Today Tie-In - 2026-05-17
+
+Verdict: `PEOPLE_PLACES_TODAY_TIE_IN_READY`.
+
+People + Places now feels more connected to the assistant loop. Contacts can answer "who might matter near this place?" with a compact saved-label cue, and Today can surface the same kind of people/place signal without pretending to know live location.
+
+Rendered proof:
+- `/app/hq?demo=1` rendered at 390 px wide without horizontal page overflow.
+- Today rendered `Maya Chen may matter near Portland, OR from saved labels.`
+- `/app/easycontacts?demo=1` rendered at 390 px wide without horizontal page overflow.
+- Contacts rendered `Maya Chen near Portland, OR` and `Saved labels only. No maps, geocoding, exact addresses, or device location.`
+
+Design read:
+- This is a useful tie-in, not a fake map preview.
+- The Contacts first screen still centers on who needs attention, where people are, and who is near a place.
+- The remaining risk is that Contacts can still feel dense below the first screen; future work should simplify lists before adding more people/place behavior.
+
+---
+
+## Verdict
 PLAN_CAPACITY_READ_READY
 
 ## Stage 19 Task 3 Plan Capacity Assistant Read - 2026-05-17

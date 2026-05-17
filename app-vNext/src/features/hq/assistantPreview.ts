@@ -80,7 +80,7 @@ export function getLocalAssistantContextRead(input: AssistantContextSummaryInput
   const context = input.noteTitle ? `Saved context: ${input.noteTitle}` : "No saved context is leading.";
   const people =
     input.contactName && input.contactPlace
-      ? `${input.contactName} is the people/place cue near ${input.contactPlace}.`
+      ? `${input.contactName} may matter near ${input.contactPlace} from saved labels.`
       : "No people/place cue needs attention.";
 
   return `${pressure}. ${context}. ${people}`;
