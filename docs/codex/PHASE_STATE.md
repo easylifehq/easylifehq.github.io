@@ -1,27 +1,29 @@
 # Phase State
 
-Current Phase: stage-28-assistant-reliability-ready
+Current Phase: stage-28-assistant-reliability-planned
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Harden the private-alpha Inbox assistant lane before any broader AI assistant behavior.
+Primary Action: Execute reliability hardening for the private-alpha Inbox assistant lane before any broader AI assistant behavior.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not deploy, do not add broad AI assistant behavior, do not use real user data, do not expose frontend API keys, do not commit secrets, do not add hidden writes, and do not add sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, or saved-object expansion.
 No More Features Lock: true
-Complexity Budget: Stage 28 may add reliability proof matrices, metadata-only logging contracts, Inbox result clarity hardening, route proof checklists, and a proof packet. It must not make a live provider call yet unless a later explicit gate approves it.
+Complexity Budget: Stage 28 may add retry/fallback proof matrices, validation edge-case tests, poor/empty output handling, duplicate suggestion prevention, source/destination consistency hardening, alpha tester bug report format, and a proof packet. It must not make a live provider call yet unless a later explicit gate approves it.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: STAGE_28_QUEUE_READY_NO_LIVE_PROVIDER_YET
-Evidence Required: Stage 27 proof packet, Stage 28 fallback reliability matrix, metadata-only logging proof, Inbox route proof, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
+Parking State: STAGE_28_PACKET_READY_NO_LIVE_PROVIDER_YET
+Evidence Required: Stage 28 plan, fallback/retry reliability matrix, validation edge-case proof, duplicate suggestion proof, source/destination consistency proof, alpha tester bug report template, build proof, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
 Next Phase Criteria: Stage 28 can proceed one task at a time. A first real server-side provider call still requires a later explicit approval gate and must remain synthetic/demo Inbox typed-capture only.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 27 private-alpha AI assistant proof completed; Stage 28 reliability queue prepared without live provider calls.
+Updated At: 2026-05-17 - Stage 28 assistant reliability task packet prepared without live provider calls.
 
-Stage 27 proof result: READY_FOR_STAGE_28_ASSISTANT_RELIABILITY. The private-alpha Inbox assistant lane is understandable, safe, and worth continuing into reliability hardening. Route `/app/easylist/add?demo=1` rendered with `Assistant intake preview`, `Live fallback preview`, `Live provider dry run`, `Nothing saved or sent`, and all five fallback options. Hidden writes and external actions remain blocked. This does not approve broad chat, real user data by default, frontend keys, provider SDKs, live provider calls, secrets, deploy changes, generated output, real memory, notifications, calendar sync, geocoding, or saved-object expansion.
+Stage 28 plan result: STAGE_28_PACKET_READY. The assistant reliability plan exists at docs/codex/EASYLIFE_STAGE_28_ASSISTANT_RELIABILITY_PLAN.md. Stage 28 focuses on deterministic retries disabled by default, validation edge cases, poor/empty model output handling, duplicate suggestion prevention, source/destination consistency, and alpha tester bug report format. It remains limited to the proven Inbox typed-capture suggestion lane at `/app/easylist/add?demo=1`.
 
 Prepared Stage 28 queue: docs/codex/NEXT_5_TASKS.md contains exactly five bounded assistant reliability tasks.
+
+Stage 27 proof result: READY_FOR_STAGE_28_ASSISTANT_RELIABILITY. The private-alpha Inbox assistant lane is understandable, safe, and worth continuing into reliability hardening. Route `/app/easylist/add?demo=1` rendered with `Assistant intake preview`, `Live fallback preview`, `Live provider dry run`, `Nothing saved or sent`, and all five fallback options. Hidden writes and external actions remain blocked. This does not approve broad chat, real user data by default, frontend keys, provider SDKs, live provider calls, secrets, deploy changes, generated output, real memory, notifications, calendar sync, geocoding, or saved-object expansion.
 
 Stage 27 plan result: STAGE_27_PACKET_READY. The private-alpha AI assistant plan exists at docs/codex/EASYLIFE_STAGE_27_PRIVATE_ALPHA_AI_ASSISTANT_PLAN.md. Stage 27 remains limited to the proven Inbox typed-capture suggestion lane at `/app/easylist/add?demo=1`, prompt `intake-suggestion`, synthetic/demo or explicitly private-test input only, server-only secret handling, Stage 20 output validation, local fallback, no hidden writes, and no external actions.
 

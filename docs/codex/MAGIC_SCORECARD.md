@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 28 Assistant Reliability Task Packet
+
+- Task: Plan reliability hardening for the Inbox assistant lane before expanding capability.
+- Result: Stage 28 reliability plan and task queue created.
+- Magic signal: reliability-before-capability-expansion
+- Plan evidence: `docs/codex/EASYLIFE_STAGE_28_ASSISTANT_RELIABILITY_PLAN.md`.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 28 tasks.
+- Retry evidence: first task requires proving automatic retry is disabled by default across fallback states.
+- Validation evidence: second task covers empty, malformed, vague, overconfident, and unsafe output.
+- Duplicate evidence: third task covers suggestion identity and duplicate prevention.
+- Consistency evidence: fourth task covers source/state/destination labels across assistant lanes.
+- Alpha evidence: fifth task creates a bug report format and Stage 28 proof packet.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no broad chat, real memory, external action, calendar sync, notification, geocoding, device location, hidden write, saved-object expansion, deploy change, package/dependency change, generated output, provider SDK, frontend key, secret, or live provider call was added.
+
 ## 2026-05-17 - Stage 27 Private Alpha AI Assistant Proof Packet
 
 - Task: Decide whether the private-alpha assistant lane is understandable, safe, and worth continuing.

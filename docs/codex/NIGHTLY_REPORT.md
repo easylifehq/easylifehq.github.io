@@ -1,5 +1,20 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 28 Assistant Reliability Task Packet
+
+- Task attempted: Plan reliability hardening for the Inbox assistant lane before expanding capability.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_28_ASSISTANT_RELIABILITY_PLAN.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Plan created: `docs/codex/EASYLIFE_STAGE_28_ASSISTANT_RELIABILITY_PLAN.md`.
+- Stage focus: deterministic retries disabled by default, validation edge cases, poor/empty model output handling, duplicate suggestion prevention, source/destination consistency, and alpha tester bug report format.
+- Queue proof: `docs/codex/NEXT_5_TASKS.md` contains exactly five bounded Stage 28 tasks.
+- Boundary preserved: no broad chat, real memory, external actions, calendar sync, notifications, geocoding, device location, hidden writes, saved-object expansion, deployment change, package/dependency change, generated output, provider SDK, frontend key, secret, or live provider call was added.
+
 ## 2026-05-17 - Stage 27 Private Alpha AI Assistant Proof Packet
 
 - Task attempted: Decide whether the private-alpha assistant lane is understandable, safe, and worth continuing.
