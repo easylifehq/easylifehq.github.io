@@ -28,7 +28,7 @@ export function AppHeader() {
   return (
     <header className="app-header">
       <div className="app-header-main">
-        <div className="app-suite-control" role="group" aria-label={`EasyLife assistant navigation, current area ${currentApp}`}>
+        <div className="app-suite-control" role="group" aria-label={`EasyLife assistant menu, current area ${currentApp}`}>
           <div className="app-header-brand">
             <Link to="/app/hq" className="site-brand" aria-label="Go to Today">
               <span className="brand-badge">EL</span>
@@ -49,7 +49,7 @@ export function AppHeader() {
                   </Link>
                 );
               })}
-              <ProductsMenu items={shellMoreItems} label="More" panelLabel="More" panelClassName="app-more-panel" />
+              <ProductsMenu items={shellMoreItems} label="Menu" panelLabel="Menu" panelClassName="app-more-panel" />
             </nav>
           </div>
         </div>

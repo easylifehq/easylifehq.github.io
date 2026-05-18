@@ -371,7 +371,7 @@ export function UniversalCapture() {
     if (location.pathname.startsWith("/app/easycontacts")) {
       return { mode: "contact" as CaptureMode, label: "Add contact", to: "/app/easycontacts", hint: "Contacts" };
     }
-    return { mode: "task" as CaptureMode, label: "Open full Add Task page", to: "/app/easylist/add", hint: "EasyList" };
+    return { mode: "task" as CaptureMode, label: "Open full Inbox capture", to: "/app/easylist/add", hint: "Inbox" };
   }, [location.pathname]);
   const captureModes = useMemo(
     () =>

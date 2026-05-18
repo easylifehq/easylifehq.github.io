@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Week-Test Polish Task 1 Assistant Shell Naming Cleanup
+
+- Task: Make the logged-in app shell read as one EasyLife assistant, not EasyLifeHQ or a visible suite of Easy* apps.
+- Result: Shell naming cleanup completed; build and local HQ route inspection passed.
+- Magic signal: old-suite-labels-removed-from-shell.
+- Header evidence: `AppHeader` shows `EasyLife` and uses `Menu` for the overflow trigger.
+- Menu evidence: app area labels are Today, Inbox, Plan, Notes, People, Projects, Workout, Progress, Settings, and Review.
+- Accessibility evidence: `ProductsMenu` close control now says `Close menu`, not apps menu.
+- Capture evidence: quick capture uses `Inbox` / `Open full Inbox capture` instead of exposing the old `EasyList` label from Today.
+- Old-label evidence: targeted source scan no longer finds visible `EasyLifeHQ`, `EasyHQ`, `EasyList`, `EasyNotes`, `EasyCalendar`, `EasyProjects`, `EasyWorkout`, `EasyStatistics`, `Apps`, `Command Center`, or `Resume EasyLife` in the logged-in shell targets.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; `/app/hq?demo=1` rendered the cleaned shell, and `/app/hq` reached the normal auth/session gate in headless without old suite labels.
+- Route evidence: route behavior unchanged; this is UI/copy only.
+- Boundary evidence: no deploy, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 33 First Provider Call Readiness Proof Packet
 
 - Task: Decide whether EasyLife is ready to deploy and run exactly one synthetic `assistantIntakeSuggestion` provider test.

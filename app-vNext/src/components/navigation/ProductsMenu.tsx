@@ -109,7 +109,7 @@ export function ProductsMenu({
       <button
         type="button"
         className={`menu-backdrop${isOpen ? " open" : ""}`}
-        aria-label="Close apps menu"
+        aria-label="Close menu"
         onClick={() => setIsOpen(false)}
       />
 

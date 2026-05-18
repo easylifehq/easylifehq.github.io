@@ -1,6 +1,28 @@
 # Simon Design Review
 
 ## Verdict
+WEEK_TEST_SHELL_NAMING_CLEANER
+
+## Week-Test Polish Task 1 Product Review - 2026-05-17
+
+Verdict: `WEEK_TEST_SHELL_NAMING_CLEANER`.
+
+The local app shell is now aligned with the one-assistant model. The production screenshot showed old suite labels like `EasyLifeHQ` and `Apps`, but this branch presents the logged-in shell as `EasyLife` with a calmer `Menu` trigger and assistant-area labels.
+
+Product/design read:
+- The top shell says `EasyLife`.
+- The menu trigger says `Menu`.
+- Primary visible areas read as Today, Inbox, Plan, and Notes.
+- Secondary menu labels read as People, Projects, Workout, Progress, Settings, and Review instead of Easy* product inventory.
+- Quick capture from Today now says Inbox instead of exposing the old EasyList label.
+- This should be much less annoying for a phone field test once the branch is deployed or run locally.
+
+Design guard:
+Do not reintroduce `EasyLifeHQ`, `EasyHQ`, `EasyList`, `EasyNotes`, `EasyCalendar`, `Apps`, or `Command Center` as first-screen navigation language. Internal route/class names can remain if they are not visible.
+
+---
+
+## Verdict
 READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY
 
 ## Stage 33 First Provider Call Product Proof - 2026-05-17

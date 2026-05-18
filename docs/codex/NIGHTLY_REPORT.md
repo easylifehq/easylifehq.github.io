@@ -1,5 +1,25 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Week-Test Polish Task 1 Assistant Shell Naming Cleanup
+
+- Task attempted: Make the logged-in app shell read as one EasyLife assistant instead of EasyLifeHQ or a suite of Easy* apps.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local route inspection: Passed on `/app/hq?demo=1`; `/app/hq` was checked locally and reached the normal auth/session gate in headless without exposing old suite labels.
+- Files changed:
+  - `app-vNext/src/components/navigation/AppHeader.tsx`
+  - `app-vNext/src/components/navigation/ProductsMenu.tsx`
+  - `app-vNext/src/components/navigation/appProducts.ts`
+  - `app-vNext/src/features/experiments/UniversalCapture.tsx`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Shell naming: app header now presents `EasyLife` with a `Menu` trigger instead of the old `Apps`/suite framing.
+- Menu naming: visible app area labels are assistant-shell labels: Today, Inbox, Plan, Notes, People, Projects, Workout, Progress, Settings.
+- Quick capture naming: Today quick capture now points to `Inbox` / `Open full Inbox capture` instead of surfacing the old `EasyList` product label.
+- Old suite cleanup: hidden menu accessibility copy now says `Close menu`; command/local review wording is softened to `Review` / `Local draft review`.
+- Route behavior: unchanged.
+- Boundary preserved: no deploy, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 33 Task 3 First Synthetic Provider Call Operator Switch
 
 - Task attempted: Create the final manual operator switch needed for exactly one synthetic `assistantIntakeSuggestion` provider test.
