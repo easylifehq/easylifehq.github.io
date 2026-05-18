@@ -8,6 +8,8 @@ This is not a full product audit. The point is to catch the moments where the ap
 
 Live AI provider testing is parked until after this week unless explicitly resumed.
 
+AI assistant resume note: `docs/codex/EASYLIFE_AI_ASSISTANT_RESUME_NOTE.md`
+
 ## Routes To Use
 
 Open these on your phone:
@@ -77,3 +79,7 @@ Severity: tiny / annoying / blocks use
 - Real memory claims
 - Geocoding or device location
 - Hidden writes or automatic saves
+
+## After The Week
+
+Restart AI work from `docs/codex/EASYLIFE_AI_ASSISTANT_RESUME_NOTE.md`, not from a new broad assistant plan.

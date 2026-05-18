@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-18 - EasyLife AI Assistant Resume Marker
+
+- Task: Mark the AI assistant resume point before the one-week phone field test.
+- Result: Resume note created; build passed.
+- Magic signal: ai-work-has-a-clear-reentry-point.
+- Resume note: `docs/codex/EASYLIFE_AI_ASSISTANT_RESUME_NOTE.md`.
+- Current AI state: `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY`.
+- Next-action evidence: resume note points to the Stage 33 manual operator flow for exactly one synthetic `assistantIntakeSuggestion` provider test.
+- Field-test evidence: phone field-test packet now points back to the AI resume note for after the week.
+- Guardrail evidence: broad chat, real private data by default, frontend keys, hidden writes, external actions, real memory, geocoding/device location, and saved-object expansion remain parked.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs only; no deploy, app code, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, saved-object expansion, or new implementation tasks were added.
+
 ## 2026-05-18 - EasyLife One-Week Phone Field Test Packet
 
 - Task: Create a phone field-test guide for one week of real EasyLife use.

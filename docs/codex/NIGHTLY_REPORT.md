@@ -1,5 +1,21 @@
 # Codex Nightly Report
 
+## 2026-05-18 - EasyLife AI Assistant Resume Marker
+
+- Task attempted: Make it easy to pick up the AI assistant work after the one-week phone field test.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_AI_ASSISTANT_RESUME_NOTE.md`
+  - `docs/codex/EASYLIFE_ONE_WEEK_PHONE_FIELD_TEST.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Resume marker: AI assistant work is parked at `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY`.
+- Resume path: restart from `docs/codex/EASYLIFE_AI_ASSISTANT_RESUME_NOTE.md`, Stage 33 readiness proof, and `docs/codex/NEXT_5_TASKS.md`.
+- Next AI action: one manual synthetic `assistantIntakeSuggestion` provider test only, followed by immediate gate closure and result proof.
+- Field-test note: live AI provider testing remains parked during the phone field test unless explicitly resumed.
+- Boundary preserved: docs only; no deploy, app code, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, saved-object expansion, or new implementation tasks were added.
+
 ## 2026-05-18 - EasyLife One-Week Phone Field Test Packet
 
 - Task attempted: Create a simple guide for using EasyLife on a phone for one week and capturing what needs to improve.
