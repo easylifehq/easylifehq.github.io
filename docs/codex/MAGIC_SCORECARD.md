@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 33 Task 3 First Synthetic Provider Call Operator Switch
+
+- Task: Create the final manual operator switch for exactly one synthetic `assistantIntakeSuggestion` provider test.
+- Result: Manual operator switch added; build and functions check passed.
+- Magic signal: one-call-door-has-four-locks.
+- Gate evidence: provider execution now requires `ASSISTANT_INTAKE_PROVIDER_ENABLED=true`, no active kill switch, `liveCallRequested: true`, and exact operator confirmation.
+- Kill switch evidence: `ASSISTANT_INTAKE_PROVIDER_KILL_SWITCH=true` blocks provider execution and returns fallback.
+- Operator evidence: request must include `operatorConfirmation: "I_APPROVE_ONE_SYNTHETIC_ASSISTANT_INTAKE_PROVIDER_TEST"`.
+- Synthetic evidence: request must use metadata `source: operator-test`, metadata `reviewMode: synthetic-demo`, and typed capture beginning with `[synthetic]` or `[demo]`.
+- Route/prompt evidence: only `/app/easylist/add?demo=1` and `intake-suggestion` remain allowed.
+- Manual proof: `docs/codex/EASYLIFE_STAGE_33_FIRST_PROVIDER_CALL_OPERATOR_SWITCH.md` defines the future test steps and explicitly says not to run them during this task.
+- Provider-call evidence: no provider call was made.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; `npm.cmd --prefix functions run lint` passed.
+- Boundary evidence: no deploy, frontend key, provider SDK, dependency/package change, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, raw private text approval, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 33 Task 2 Assistant Intake Provider Output Quarantine
 
 - Task: Validate/quarantine `assistantIntakeSuggestion` provider-style output before it can return to the frontend.

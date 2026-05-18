@@ -332,12 +332,16 @@ const assistantIntakeMinTypedCaptureLength = 3;
 const assistantIntakeMaxTypedCaptureLength = 2000;
 const assistantIntakeResponseVersion = "stage-32-assistant-intake-response-v1";
 const assistantIntakeProviderEnabledEnvName = "ASSISTANT_INTAKE_PROVIDER_ENABLED";
+const assistantIntakeProviderKillSwitchEnvName = "ASSISTANT_INTAKE_PROVIDER_KILL_SWITCH";
+const assistantIntakeOperatorConfirmationPhrase =
+  "I_APPROVE_ONE_SYNTHETIC_ASSISTANT_INTAKE_PROVIDER_TEST";
 const assistantIntakeAllowedBodyKeys = new Set([
   "route",
   "promptId",
   "typedCapture",
   "metadata",
   "liveCallRequested",
+  "operatorConfirmation",
 ]);
 const assistantIntakeAllowedMetadataKeys = new Set(["source", "captureId", "clientVersion", "reviewMode"]);
 const assistantIntakeAllowedIntents = new Set(["task", "note", "plan", "reminder", "follow-up", "unsure"]);
@@ -395,6 +399,14 @@ const assistantIntakeForbiddenCapturePatterns = [
     pattern: /\b(?:lat(?:itude)?|lng|long(?:itude)?)\s*[:=]\s*-?\d+(?:\.\d+)?/i,
   },
 ];
+
+function isAssistantIntakeSyntheticCapture(typedCapture, metadata = {}) {
+  const reviewMode = String(metadata.reviewMode || "").trim().toLowerCase();
+  const source = String(metadata.source || "").trim().toLowerCase();
+  const hasSyntheticPrefix = /^\[(?:synthetic|demo)\]/i.test(typedCapture);
+
+  return reviewMode === "synthetic-demo" && source === "operator-test" && hasSyntheticPrefix;
+}
 
 function buildAssistantIntakeFallback(payload = {}) {
   return {
@@ -535,6 +547,10 @@ function validateAssistantIntakeRequestBody(body) {
     return { ok: false, reason: "invalid-live-call-request-flag" };
   }
 
+  if (body.operatorConfirmation !== undefined && typeof body.operatorConfirmation !== "string") {
+    return { ok: false, reason: "invalid-operator-confirmation" };
+  }
+
   const forbiddenKey = findForbiddenAssistantIntakeKey(body);
   if (forbiddenKey) {
     return forbiddenKey;
@@ -577,6 +593,8 @@ function validateAssistantIntakeRequestBody(body) {
     typedCapture,
     typedCaptureLength,
     liveCallRequested: body.liveCallRequested === true,
+    operatorConfirmed: body.operatorConfirmation === assistantIntakeOperatorConfirmationPhrase,
+    syntheticCaptureConfirmed: isAssistantIntakeSyntheticCapture(typedCapture, metadata || {}),
   };
 }
 
@@ -596,6 +614,34 @@ function rejectAssistantIntakeRequest(response, validation, status, message) {
 
 function isAssistantIntakeProviderGateEnabled() {
   return process.env[assistantIntakeProviderEnabledEnvName] === "true";
+}
+
+function isAssistantIntakeProviderKillSwitchActive() {
+  return process.env[assistantIntakeProviderKillSwitchEnvName] === "true";
+}
+
+function getAssistantIntakeProviderBlockReason(validation) {
+  if (!validation.liveCallRequested) {
+    return "live-call-not-requested";
+  }
+
+  if (isAssistantIntakeProviderKillSwitchActive()) {
+    return "operator-kill-switch-active";
+  }
+
+  if (!isAssistantIntakeProviderGateEnabled()) {
+    return "server-gate-disabled";
+  }
+
+  if (!validation.operatorConfirmed) {
+    return "operator-confirmation-missing";
+  }
+
+  if (!validation.syntheticCaptureConfirmed) {
+    return "synthetic-demo-capture-required";
+  }
+
+  return null;
 }
 
 function truncateAssistantField(value, maxLength) {
@@ -963,16 +1009,22 @@ exports.assistantIntakeSuggestion = onRequest(
     }
 
     const providerGateEnabled = isAssistantIntakeProviderGateEnabled();
+    const providerKillSwitchActive = isAssistantIntakeProviderKillSwitchActive();
+    const providerBlockReason = getAssistantIntakeProviderBlockReason(validation);
 
-    if (!validation.liveCallRequested || !providerGateEnabled) {
+    if (providerBlockReason) {
       logger.info("Assistant intake suggestion returned disabled fallback", {
         route: validation.route,
         promptId: validation.promptId,
         typedCaptureLength: validation.typedCaptureLength,
         liveCallRequested: validation.liveCallRequested,
         providerGateEnabled,
+        providerKillSwitchActive,
+        operatorConfirmed: validation.operatorConfirmed,
+        syntheticCaptureConfirmed: validation.syntheticCaptureConfirmed,
         providerState: "not-called",
         fallbackState: "local-disabled",
+        rejectionReason: providerBlockReason,
       });
 
       response.status(200).json(
@@ -983,7 +1035,7 @@ exports.assistantIntakeSuggestion = onRequest(
           sanitizerState: "accepted",
           route: validation.route,
           promptId: validation.promptId,
-          rejectionReason: validation.liveCallRequested ? "server-gate-disabled" : "live-call-not-requested",
+          rejectionReason: providerBlockReason,
           message:
             "The server gateway accepted this Inbox capture, but live AI is still disabled. Nothing was saved or sent.",
         })
@@ -996,6 +1048,9 @@ exports.assistantIntakeSuggestion = onRequest(
       promptId: validation.promptId,
       typedCaptureLength: validation.typedCaptureLength,
       providerGateEnabled,
+      providerKillSwitchActive,
+      operatorConfirmed: validation.operatorConfirmed,
+      syntheticCaptureConfirmed: validation.syntheticCaptureConfirmed,
       providerState: "called-by-server-executor",
     });
 
@@ -1023,10 +1078,10 @@ exports.assistantIntakeSuggestion = onRequest(
         buildAssistantIntakeProviderFallback(validation, {
           providerCallAttempted: Boolean(providerResult.providerCallAttempted),
           rejectionReason: providerResult.reason || "provider-fallback",
-          validationState:
-            providerResult.reason === "provider-output-hidden-action-claim" ? "rejected" : "not-run",
-          quarantineState:
-            providerResult.reason === "provider-output-hidden-action-claim" ? "quarantined" : "not-run",
+          validationState: String(providerResult.reason || "").startsWith("provider-output-") ? "rejected" : "not-run",
+          quarantineState: String(providerResult.reason || "").startsWith("provider-output-")
+            ? "quarantined"
+            : "not-run",
           message:
             "The provider path could not return a trusted suggestion. Local fallback stayed available and nothing was saved or sent.",
         })

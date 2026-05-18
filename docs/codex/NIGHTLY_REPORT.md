@@ -1,5 +1,24 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 33 Task 3 First Synthetic Provider Call Operator Switch
+
+- Task attempted: Create the final manual operator switch needed for exactly one synthetic `assistantIntakeSuggestion` provider test.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Functions check: Passed with `npm.cmd --prefix functions run lint`.
+- Files changed:
+  - `functions/index.js`
+  - `docs/codex/EASYLIFE_STAGE_33_FIRST_PROVIDER_CALL_OPERATOR_SWITCH.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Disabled default: provider execution is still blocked unless the server enable env, request flag, exact operator confirmation, and synthetic/demo input marker are all present.
+- Kill switch: `ASSISTANT_INTAKE_PROVIDER_KILL_SWITCH=true` blocks provider execution even if the enable gate and request confirmation are present.
+- Operator confirmation: provider execution requires `operatorConfirmation: "I_APPROVE_ONE_SYNTHETIC_ASSISTANT_INTAKE_PROVIDER_TEST"`.
+- Synthetic-only boundary: provider execution requires metadata `source: "operator-test"`, metadata `reviewMode: "synthetic-demo"`, and typed capture starting with `[synthetic]` or `[demo]`.
+- Route/prompt boundary: still limited to `/app/easylist/add?demo=1` and `intake-suggestion`.
+- Manual test guide: `docs/codex/EASYLIFE_STAGE_33_FIRST_PROVIDER_CALL_OPERATOR_SWITCH.md` records the exact future test steps and says not to run them in this task.
+- Provider-call proof: no provider call was made in this task.
+- Boundary preserved: no deploy, frontend key, provider SDK, dependency/package change, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, raw private text approval, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 33 Task 2 Assistant Intake Provider Output Quarantine
 
 - Task attempted: Validate and quarantine `assistantIntakeSuggestion` provider-style output before it can return to the frontend.
