@@ -1,5 +1,24 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Stage 33 Task 2 Assistant Intake Provider Output Quarantine
+
+- Task attempted: Validate and quarantine `assistantIntakeSuggestion` provider-style output before it can return to the frontend.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Functions check: Passed with `npm.cmd --prefix functions run lint`.
+- Files changed:
+  - `functions/index.js`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Quarantine boundary: provider output must include a known intent, confidence label, draft/preview state, destination label, typed-capture source, and explicit approval requirement.
+- Intent boundary: only `task`, `note`, `plan`, `reminder`, `follow-up`, and `unsure` are accepted.
+- Source/destination proof: missing or unsupported source/destination now falls back instead of being patched into a trusted suggestion.
+- Approval proof: output without `confirmation.required: true` is quarantined.
+- Hidden-write proof: output claiming saved/created/updated items is quarantined before return.
+- External-action proof: output claiming sent messages, scheduled reminders/notifications/calendar events, sync, geocoding, or device-location usage is quarantined.
+- Memory proof: output claiming real assistant memory or remembered state is quarantined.
+- Provider-call proof: no provider call was made during functions lint; build/tests are not expected to call OpenAI.
+- Boundary preserved: no deploy, frontend key, provider SDK, dependency/package change, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 33 Task 1 Assistant Intake Provider Executor Behind Disabled Gate
 
 - Task attempted: Add the OpenAI provider executor code path to `assistantIntakeSuggestion`, but keep it disabled by default.

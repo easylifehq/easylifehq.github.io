@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 33 Task 2 Assistant Intake Provider Output Quarantine
+
+- Task: Validate/quarantine `assistantIntakeSuggestion` provider-style output before it can return to the frontend.
+- Result: Provider-style output now must pass a strict server quarantine gate before normalization into a preview envelope.
+- Magic signal: provider-output-cannot-sneak-actions-through.
+- Intent evidence: only `task`, `note`, `plan`, `reminder`, `follow-up`, and `unsure` are accepted.
+- Source evidence: output must identify `assistant-intake-typed-capture` / `Typed capture`; missing or unsupported sources fall back.
+- Destination evidence: output must include a known destination label and match the expected intent destination, except conservative `unsure` review cases.
+- Approval evidence: output must include `confirmation.required: true`; missing approval language is quarantined.
+- Hidden-write evidence: saved/created/updated/autosaved claims quarantine to fallback.
+- External-action evidence: sent, scheduled, synced, geocoded, or device-location claims quarantine to fallback.
+- Real-memory evidence: remembered/real-memory claims quarantine to fallback.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; `npm.cmd --prefix functions run lint` passed.
+- Boundary evidence: no deploy, provider call during build/tests, frontend key, provider SDK, dependency/package change, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 33 Task 1 Assistant Intake Provider Executor Behind Disabled Gate
 
 - Task: Add OpenAI provider executor code path to `assistantIntakeSuggestion` while keeping it disabled by default.

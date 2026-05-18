@@ -161,6 +161,21 @@ const assistantIntakeSuggestionSchema = {
       enum: ["Inbox review", "Inbox task draft", "Notes context draft", "Plan preview", "Reminder preview", "Follow-up preview"],
       description: "Where the suggestion may be reviewed. This is not a saved destination.",
     },
+    sources: {
+      type: "array",
+      minItems: 1,
+      maxItems: 2,
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          sourceId: { type: "string" },
+          sourceLabel: { type: "string" },
+        },
+        required: ["sourceId", "sourceLabel"],
+      },
+      description: "The source must be the typed capture only.",
+    },
     title: {
       type: "string",
       description: "Short reviewable suggestion title. Do not claim anything was saved, sent, scheduled, synced, or remembered.",
@@ -190,8 +205,30 @@ const assistantIntakeSuggestionSchema = {
       items: { type: "string" },
       description: "Short warning labels only, such as 'Review before saving'.",
     },
+    confirmation: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        required: { type: "boolean" },
+        label: { type: "string" },
+        copy: { type: "string" },
+      },
+      required: ["required", "label", "copy"],
+      description: "Explicit approval requirement. Nothing is saved or sent.",
+    },
   },
-  required: ["intent", "confidence", "state", "destinationLabel", "title", "summary", "fields", "warnings"],
+  required: [
+    "intent",
+    "confidence",
+    "state",
+    "destinationLabel",
+    "sources",
+    "title",
+    "summary",
+    "fields",
+    "warnings",
+    "confirmation",
+  ],
 };
 
 function readOutputText(responseBody) {
@@ -314,6 +351,24 @@ const assistantIntakeAllowedDestinations = new Set([
   "Reminder preview",
   "Follow-up preview",
 ]);
+const assistantIntakeAllowedSourceIds = new Set(["assistant-intake-typed-capture"]);
+const assistantIntakeAllowedSourceLabels = new Set(["Typed capture"]);
+const assistantIntakeHiddenWriteClaimPatterns = [
+  /\b(?:i\s+)?saved\b/i,
+  /\b(?:created|added|filed|stored|wrote|updated)\s+(?:the\s+)?(?:task|note|context|draft|item|record)\b/i,
+  /\b(?:task|note|context|draft|item|record)\s+(?:was|is|has been)\s+(?:saved|created|added|stored|updated)\b/i,
+  /\b(?:autosaved|auto-saved|automatically saved|saved automatically)\b/i,
+];
+const assistantIntakeExternalActionClaimPatterns = [
+  /\b(?:sent|emailed|texted|messaged|called)\b/i,
+  /\b(?:scheduled|booked|created)\s+(?:a\s+)?(?:reminder|notification|calendar|event|meeting)\b/i,
+  /\b(?:synced|synchroni[sz]ed)\b/i,
+  /\b(?:geocoded|located|used device location|used your location)\b/i,
+];
+const assistantIntakeRealMemoryClaimPatterns = [
+  /\b(?:i\s+)?remembered\b/i,
+  /\b(?:real\s+memory|assistant\s+memory|memory\s+(?:was|is|has been)\s+created)\b/i,
+];
 const assistantIntakeForbiddenKeyPattern =
   /(secret|token|auth|session|cookie|password|api.?key|openai|vite|note|notes|contact|contacts|calendar|event|events|address|location|latitude|longitude|geocode|gmail|email|phone|message|firestore|database|billing|payment|ssn|medical)/i;
 const assistantIntakeForbiddenCapturePatterns = [
@@ -564,13 +619,98 @@ function destinationForAssistantIntent(intent) {
   }
 }
 
+function assistantIntakeTextMatchesAny(value, patterns) {
+  return patterns.some((pattern) => pattern.test(value));
+}
+
+function validateAssistantIntakeProviderClaims(parsed) {
+  const serialized = JSON.stringify(parsed || {})
+    .toLowerCase()
+    .replace(/nothing\s+(?:is\s+)?saved\s+or\s+sent/g, "safe boundary")
+    .replace(/nothing\s+(?:was\s+)?saved\s+or\s+sent/g, "safe boundary")
+    .replace(/not\s+saved/g, "safe boundary")
+    .replace(/not\s+sent/g, "safe boundary")
+    .replace(/not\s+scheduled/g, "safe boundary")
+    .replace(/not\s+synced/g, "safe boundary")
+    .replace(/not\s+remembered/g, "safe boundary");
+
+  if (assistantIntakeTextMatchesAny(serialized, assistantIntakeHiddenWriteClaimPatterns)) {
+    return { ok: false, reason: "provider-output-hidden-write-claim" };
+  }
+
+  if (assistantIntakeTextMatchesAny(serialized, assistantIntakeExternalActionClaimPatterns)) {
+    return { ok: false, reason: "provider-output-external-action-claim" };
+  }
+
+  if (assistantIntakeTextMatchesAny(serialized, assistantIntakeRealMemoryClaimPatterns)) {
+    return { ok: false, reason: "provider-output-real-memory-claim" };
+  }
+
+  return { ok: true };
+}
+
+function quarantineAssistantIntakeProviderOutput(parsed) {
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    return { ok: false, reason: "provider-output-invalid-shape" };
+  }
+
+  if (!assistantIntakeAllowedIntents.has(parsed.intent)) {
+    return { ok: false, reason: "provider-output-unsupported-intent" };
+  }
+
+  if (!assistantIntakeAllowedConfidence.has(parsed.confidence)) {
+    return { ok: false, reason: "provider-output-missing-confidence" };
+  }
+
+  if (!assistantIntakeAllowedStates.has(parsed.state)) {
+    return { ok: false, reason: "provider-output-missing-draft-state" };
+  }
+
+  if (!assistantIntakeAllowedDestinations.has(parsed.destinationLabel)) {
+    return { ok: false, reason: "provider-output-missing-destination" };
+  }
+
+  if (destinationForAssistantIntent(parsed.intent) !== parsed.destinationLabel && parsed.intent !== "unsure") {
+    return { ok: false, reason: "provider-output-destination-mismatch" };
+  }
+
+  if (!Array.isArray(parsed.sources) || !parsed.sources.length) {
+    return { ok: false, reason: "provider-output-missing-source" };
+  }
+
+  const hasTypedCaptureSource = parsed.sources.some(
+    (source) =>
+      source &&
+      assistantIntakeAllowedSourceIds.has(source.sourceId) &&
+      assistantIntakeAllowedSourceLabels.has(source.sourceLabel),
+  );
+
+  if (!hasTypedCaptureSource) {
+    return { ok: false, reason: "provider-output-unsupported-source" };
+  }
+
+  if (!parsed.confirmation || parsed.confirmation.required !== true) {
+    return { ok: false, reason: "provider-output-missing-approval-requirement" };
+  }
+
+  const claimValidation = validateAssistantIntakeProviderClaims(parsed);
+  if (!claimValidation.ok) {
+    return claimValidation;
+  }
+
+  return { ok: true };
+}
+
 function normalizeAssistantIntakeSuggestion(parsed, validation) {
-  const intent = assistantIntakeAllowedIntents.has(parsed?.intent) ? parsed.intent : "unsure";
-  const confidence = assistantIntakeAllowedConfidence.has(parsed?.confidence) ? parsed.confidence : "needs-review";
-  const state = assistantIntakeAllowedStates.has(parsed?.state) ? parsed.state : "needs-review";
-  const destinationLabel = assistantIntakeAllowedDestinations.has(parsed?.destinationLabel)
-    ? parsed.destinationLabel
-    : destinationForAssistantIntent(intent);
+  const quarantine = quarantineAssistantIntakeProviderOutput(parsed);
+  if (!quarantine.ok) {
+    return quarantine;
+  }
+
+  const intent = parsed.intent;
+  const confidence = parsed.confidence;
+  const state = parsed.state;
+  const destinationLabel = parsed.destinationLabel;
   const fields = Array.isArray(parsed?.fields)
     ? parsed.fields
         .map((field) => ({
@@ -597,12 +737,17 @@ function normalizeAssistantIntakeSuggestion(parsed, validation) {
     summary:
       truncateAssistantField(parsed?.summary, 220) ||
       "Review this suggestion before choosing any save path.",
-    sources: [
-      {
-        sourceId: "assistant-intake-typed-capture",
-        sourceLabel: "Typed capture",
-      },
-    ],
+    sources: parsed.sources
+      .map((source) => ({
+        sourceId: truncateAssistantField(source?.sourceId, 60),
+        sourceLabel: truncateAssistantField(source?.sourceLabel, 60),
+      }))
+      .filter(
+        (source) =>
+          assistantIntakeAllowedSourceIds.has(source.sourceId) &&
+          assistantIntakeAllowedSourceLabels.has(source.sourceLabel),
+      )
+      .slice(0, 2),
     fields: fields.length
       ? fields
       : [
@@ -614,33 +759,15 @@ function normalizeAssistantIntakeSuggestion(parsed, validation) {
         ],
     confirmation: {
       required: true,
-      label: "Review only",
-      copy: "Nothing is saved or sent.",
+      label: truncateAssistantField(parsed.confirmation?.label, 40) || "Review only",
+      copy: truncateAssistantField(parsed.confirmation?.copy, 120) || "Nothing is saved or sent.",
     },
     warnings,
   };
 
-  const serialized = JSON.stringify(normalized).toLowerCase();
-  const forbiddenOutputClaims = [
-    "saved automatically",
-    "i saved",
-    "sent email",
-    "sent text",
-    "scheduled",
-    "synced",
-    "remembered",
-    "real memory",
-    "calendar event",
-    "notification",
-    "geocoded",
-    "device location",
-  ];
-
-  if (forbiddenOutputClaims.some((claim) => serialized.includes(claim))) {
-    return {
-      ok: false,
-      reason: "provider-output-hidden-action-claim",
-    };
+  const normalizedClaimValidation = validateAssistantIntakeProviderClaims(normalized);
+  if (!normalizedClaimValidation.ok) {
+    return normalizedClaimValidation;
   }
 
   return {
