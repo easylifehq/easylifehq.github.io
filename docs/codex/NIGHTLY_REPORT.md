@@ -1,5 +1,24 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Week-Test Polish Task 3 Primary Navigation Simplification
+
+- Task attempted: Make navigation feel like a simple assistant workspace for phone testing.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local route inspection: Passed on `/app/hq?demo=1` at desktop and mobile widths.
+- Files changed:
+  - `app-vNext/src/components/navigation/AppHeader.tsx`
+  - `app-vNext/src/components/navigation/appProducts.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Primary nav model: Today, Inbox, Plan, Notes, People, and Settings are now the main assistant surfaces.
+- Demotion: Workout, Review, Follow-ups, Projects, and Progress remain reachable under a quieter `More` menu instead of reading like the primary product suite.
+- Mobile usability: small-screen nav grid now wraps into four columns so tap targets stay usable instead of squeezing every label into one row.
+- Route proof: desktop/mobile DOM checks show Today, Inbox, Plan, Notes, People, Settings, and More; they do not show `Apps`, `Pipeline`, `Statistics`, or the old `Menu` trigger.
+- Route behavior: unchanged; no routes were deleted.
+- Boundary preserved: no deploy, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Week-Test Polish Task 2 Today First-Screen Copy Cleanup
 
 - Task attempted: Make Today feel like the first screen of a private life assistant instead of an internal dashboard or proof page.

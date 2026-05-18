@@ -8,7 +8,7 @@ export function AppHeader() {
   const location = useLocation();
   const { isAppVisible } = useSettings();
   const visibleItems = appProductItems.filter((item) => !item.appId || isAppVisible(item.appId));
-  const primaryItems = visibleItems.filter((item) => ["Today", "Inbox", "Plan", "Notes"].includes(item.label));
+  const primaryItems = visibleItems.filter((item) => ["Today", "Inbox", "Plan", "Notes", "People", "Settings"].includes(item.label));
   const moreItems = visibleItems.filter((item) => !primaryItems.includes(item));
   const shellMoreItems = moreItems.map(({ group: _group, groupDescription: _groupDescription, ...item }) => item);
   const currentApp = useMemo(() => {
@@ -49,7 +49,9 @@ export function AppHeader() {
                   </Link>
                 );
               })}
-              <ProductsMenu items={shellMoreItems} label="Menu" panelLabel="Menu" panelClassName="app-more-panel" />
+              {shellMoreItems.length ? (
+                <ProductsMenu items={shellMoreItems} label="More" panelLabel="More" panelClassName="app-more-panel" />
+              ) : null}
             </nav>
           </div>
         </div>

@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Week-Test Polish Task 3 Primary Navigation Simplification
+
+- Task: Make navigation feel like a simple assistant workspace for phone testing.
+- Result: Primary navigation simplified; build and local route inspection passed.
+- Magic signal: primary-nav-matches-week-test.
+- Primary evidence: visible assistant surfaces are Today, Inbox, Plan, Notes, People, and Settings.
+- Demotion evidence: Workout, Review, Follow-ups, Projects, and Progress are behind `More`.
+- Menu evidence: old product-suite framing remains out of primary navigation; optional areas are extra workspaces, not the main model.
+- Mobile evidence: phone-width nav uses a four-column grid for usable tap targets.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; `/app/hq?demo=1` desktop/mobile checks showed Today, Inbox, Plan, Notes, People, Settings, and More without `Apps`, `Pipeline`, `Statistics`, or the old `Menu` trigger.
+- Route evidence: route behavior unchanged; no routes were deleted.
+- Boundary evidence: no deploy, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Week-Test Polish Task 2 Today First-Screen Copy Cleanup
 
 - Task: Make Today feel like the first screen of a private life assistant, not an internal dashboard or proof page.

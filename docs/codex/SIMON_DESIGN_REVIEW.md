@@ -1,6 +1,26 @@
 # Simon Design Review
 
 ## Verdict
+WEEK_TEST_NAV_SIMPLER
+
+## Week-Test Polish Task 3 Product Review - 2026-05-17
+
+Verdict: `WEEK_TEST_NAV_SIMPLER`.
+
+The header now matches the week-test mental model better: the main row is the assistant workspace, not a list of products. People and Settings are promoted because they are useful during phone testing, while the less central workspaces are tucked behind `More`.
+
+Product/design read:
+- Primary nav now centers Today, Inbox, Plan, Notes, People, and Settings.
+- Workout, Review, Follow-ups, Projects, and Progress are still reachable, but no longer compete with the primary path.
+- The optional menu is labeled `More`, which reads less like a product-suite launcher than `Apps`.
+- On narrow screens, the nav wraps into a four-column grid to preserve tap size.
+
+Design guard:
+Do not promote Pipeline, Statistics, Workout, Projects, or Progress back into the week-test primary navigation unless the user explicitly asks for them. Keep the first row about daily assistant use.
+
+---
+
+## Verdict
 WEEK_TEST_SHELL_NAMING_CLEANER
 
 ## Week-Test Polish Task 1 Product Review - 2026-05-17
