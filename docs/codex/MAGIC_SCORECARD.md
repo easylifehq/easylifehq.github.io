@@ -2,6 +2,22 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Stage 33 First Provider Call Readiness Proof Packet
+
+- Task: Decide whether EasyLife is ready to deploy and run exactly one synthetic `assistantIntakeSuggestion` provider test.
+- Result: `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY`.
+- Magic signal: one-synthetic-call-ready-no-broad-ai.
+- Proof packet: `docs/codex/EASYLIFE_STAGE_33_FIRST_PROVIDER_CALL_READINESS_PROOF_PACKET.md`.
+- Executor evidence: `runAssistantIntakeProviderExecutor` exists and is scoped to `assistantIntakeSuggestion`.
+- Disabled evidence: provider execution requires server enable gate, no active kill switch, request flag, exact operator confirmation, and synthetic/demo markers.
+- Quarantine evidence: unsafe provider output falls back before frontend return.
+- Operator evidence: manual operator switch docs exist and include exact future deploy/test steps.
+- No automatic call evidence: build/lint/import paths do not call the provider.
+- Frontend-key evidence: no frontend provider key is required; function URL env remains an endpoint only.
+- Legacy endpoint evidence: `analyzeTaskBrainDump` and `planProjectWithAi` remain parked outside this first assistant lane.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; `npm.cmd --prefix functions run lint` passed.
+- Boundary evidence: no deploy, provider call, frontend key, old endpoint expansion, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, raw private text test, or saved-object expansion was added.
+
 ## 2026-05-17 - Stage 33 Task 3 First Synthetic Provider Call Operator Switch
 
 - Task: Create the final manual operator switch for exactly one synthetic `assistantIntakeSuggestion` provider test.

@@ -1,6 +1,27 @@
 # Simon Design Review
 
 ## Verdict
+READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY
+
+## Stage 33 First Provider Call Product Proof - 2026-05-17
+
+Verdict: `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY`.
+
+This proof does not add visible UI and does not make a provider call. That is the right product move for this checkpoint: the next visible moment should be one bounded Inbox suggestion, not a broad assistant reveal.
+
+Product/design read:
+- The first provider test remains one route: `/app/easylist/add?demo=1`.
+- The first behavior remains one prompt: `intake-suggestion`.
+- The test input must be synthetic/demo only.
+- The output must remain suggestion-only, preview-only, and approval-first.
+- The operator switch prevents the app from looking or behaving like live AI is generally available.
+
+Design guard:
+When the one synthetic test runs, do not add a new dashboard or broad chat surface. If the result is shown later, keep it inside the existing Inbox assistant lane with source, provider state, validation/quarantine state, destination, and `nothing saved or sent`.
+
+---
+
+## Verdict
 READY_FOR_STAGE_33_FIRST_PROVIDER_CALL_IMPLEMENTATION
 
 ## Stage 32 Narrow Gateway Product Proof - 2026-05-17

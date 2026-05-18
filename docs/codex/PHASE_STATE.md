@@ -1,9 +1,9 @@
 # Phase State
 
-Current Phase: stage-33-first-provider-call-implementation-ready
+Current Phase: stage-33-one-synthetic-provider-test-ready
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Implement the first real server-side provider call only inside the narrow `assistantIntakeSuggestion` lane.
+Primary Action: Deploy and run exactly one synthetic `assistantIntakeSuggestion` provider test only when the operator chooses to proceed.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not deploy without a separate explicit request, do not add broad AI assistant behavior, do not use real user data by default, do not expose frontend API keys, do not commit secrets, do not expand old AI endpoints, do not add hidden writes, and do not add sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, or saved-object expansion.
 No More Features Lock: true
@@ -11,13 +11,15 @@ Complexity Budget: Stage 33 may implement exactly one server-side provider call 
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: STAGE_33_READY_FOR_FIRST_PROVIDER_CALL_IMPLEMENTATION
+Parking State: READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY
 Evidence Required: Stage 33 provider implementation proof must verify `assistantIntakeSuggestion` is the only new provider path, frontend provider keys remain absent, route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, response validation/fallback, metadata-only logging, no hidden writes, no external actions, build proof, functions lint, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 34 may begin only after Stage 33 proof shows the first provider call path is safe, bounded, useful, validated, fallback-ready, and still limited to Inbox typed-capture suggestion.
+Next Phase Criteria: Stage 34 may begin only after exactly one synthetic provider test is deployed, run, immediately gated off again, and proven safe, bounded, useful, validated, fallback-ready, and still limited to Inbox typed-capture suggestion.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 32 narrow gateway proof completed with `READY_FOR_STAGE_33_FIRST_PROVIDER_CALL_IMPLEMENTATION`.
+Updated At: 2026-05-17 - Stage 33 first provider call readiness proof completed with `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY`.
+
+Stage 33 readiness proof result: READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY. The proof packet exists at docs/codex/EASYLIFE_STAGE_33_FIRST_PROVIDER_CALL_READINESS_PROOF_PACKET.md. `assistantIntakeSuggestion` now has a gated provider executor, output quarantine, and manual operator switch. The provider path remains disabled by default and requires server enable gate, inactive kill switch, explicit request flag, exact operator confirmation, synthetic/demo metadata, and a `[synthetic]` or `[demo]` typed capture prefix. No deploy or provider call was made in the proof task. The next action is a human-run one-call deploy/test only, followed by immediate gate closure and proof recording.
 
 Stage 32 proof result: READY_FOR_STAGE_33_FIRST_PROVIDER_CALL_IMPLEMENTATION. The proof packet exists at docs/codex/EASYLIFE_STAGE_32_NARROW_GATEWAY_PROOF_PACKET.md. `assistantIntakeSuggestion` exists as a separate Firebase Function from `analyzeTaskBrainDump` and `planProjectWithAi`; accepts only POST, verified auth, route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, and bounded typed capture; returns disabled/fallback only; does not call OpenAI yet; and the frontend has only a URL endpoint variable, not a provider key. Build and functions lint passed. Stage 33 may implement the first server-side provider call in this narrow lane only.
 
