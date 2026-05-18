@@ -1,5 +1,24 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Week-Test Polish Task 4 Mobile Field-Test Polish Pass
+
+- Task attempted: Make the logged-in app less annoying on phone for a one-week field test.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local route inspection:
+  - `/app/hq?demo=1` inspected at `390x844` with Chrome headless screenshot.
+  - `/app/easylist/add?demo=1` inspected at `390x844` with Chrome headless DOM output; the route rendered Inbox content, gateway labels, quick rows, and `Nothing saved or sent`. The screenshot capture for this route stayed blank in headless, so DOM inspection was used for route proof.
+- Files changed:
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Today mobile fix: the primary nav now switches to a full-width four-column grid at phone width, so Today, Inbox, Plan, Notes, People, Settings, and More do not squeeze into a clipped row.
+- Today status fix: the local-mode assistant pill stacks under the heading on mobile instead of clipping on the right edge.
+- Today capture fix: the compact capture helper wraps safely on phone width.
+- Inbox mobile fix: assistant trust chips become horizontally scrollable on narrow screens, gateway source options use a two-column grid, and preview action buttons fit the card width.
+- Route behavior: unchanged.
+- Boundary preserved: no deploy, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Week-Test Polish Task 3 Primary Navigation Simplification
 
 - Task attempted: Make navigation feel like a simple assistant workspace for phone testing.

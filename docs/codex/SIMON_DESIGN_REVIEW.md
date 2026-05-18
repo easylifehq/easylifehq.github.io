@@ -1,6 +1,27 @@
 # Simon Design Review
 
 ## Verdict
+WEEK_TEST_MOBILE_POLISH_READY
+
+## Week-Test Polish Task 4 Product Review - 2026-05-17
+
+Verdict: `WEEK_TEST_MOBILE_POLISH_READY`.
+
+The phone field-test shell is less likely to annoy immediately. Today now opens with a wrapped primary nav, a readable local-mode pill, and a capture card that does not push text off the screen. Inbox remains dense because the assistant gateway proof lane carries a lot of state, but the worst mobile crowding is softened with scrollable state chips, two-column gateway source buttons, and full-width action controls.
+
+Product/design read:
+- Today no longer clips the primary navigation at phone width.
+- The local-mode pill is visible under the assistant heading instead of being cut off.
+- The Today capture helper wraps cleanly.
+- Inbox mobile DOM renders the assistant lane and quick rows; headless screenshot capture stayed blank in this environment, so the route proof used DOM inspection.
+- The Inbox assistant controls are still technical, but less cramped for a week-long field test.
+
+Design guard:
+Do not add new assistant proof labels above the fold before the field test. If more polish is needed next week, reduce the number of visible gateway/debug chips rather than adding another panel.
+
+---
+
+## Verdict
 WEEK_TEST_NAV_SIMPLER
 
 ## Week-Test Polish Task 3 Product Review - 2026-05-17

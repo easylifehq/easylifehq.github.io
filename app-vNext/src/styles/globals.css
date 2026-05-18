@@ -5783,6 +5783,44 @@ textarea::placeholder {
   .easylist-inbox-surface .task-composer-grid {
     grid-template-columns: 1fr;
   }
+
+  .assistant-trust-chip-row {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.1rem;
+    scrollbar-width: thin;
+  }
+
+  .assistant-trust-chip-row span {
+    flex: 0 0 auto;
+  }
+
+  .assistant-gateway-source-toggle {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .assistant-gateway-source-toggle button {
+    min-height: 44px;
+    padding: 0.42rem 0.44rem;
+  }
+
+  .assistant-suggestion-main {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .assistant-suggestion-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .assistant-suggestion-actions button {
+    min-width: 0;
+    width: 100%;
+    padding-inline: 0.38rem;
+  }
 }
 
 .easylist-edit-panel {
@@ -13312,14 +13350,30 @@ button.calendar-detail-card:disabled {
 
 @media (max-width: 520px) {
   .app-primary-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100%;
     gap: 0.1rem;
     padding: 0.1rem;
   }
 
-  .app-primary-nav a {
-    min-height: 32px;
-    padding: 0.36rem 0.44rem;
-    font-size: 0.72rem;
+  .app-primary-nav a,
+  .app-primary-nav .menu-trigger-button {
+    min-width: 0;
+    min-height: 38px;
+    padding: 0.34rem 0.2rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .app-primary-nav .products-menu {
+    display: flex;
+    min-width: 0;
+    margin-left: 0;
+  }
+
+  .app-primary-nav .menu-trigger-button {
+    width: 100%;
   }
 
   .app-primary-nav--today-start a:first-child::before {
@@ -13635,6 +13689,17 @@ button.calendar-detail-card:disabled {
     padding: 0.82rem;
   }
 
+  .app-theme-easyhq:not(.command-center-page) .hq-start-heading {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .assistant-availability-pill {
+    justify-self: start;
+    max-width: 100%;
+  }
+
   .app-theme-easyhq:not(.command-center-page) .hq-start-heading h1 {
     max-width: 12ch;
   }
@@ -13693,6 +13758,11 @@ button.calendar-detail-card:disabled {
   .app-theme-easyhq:not(.command-center-page) .hq-natural-capture strong,
   .app-theme-easyhq:not(.command-center-page) .hq-natural-capture small {
     grid-column: 1;
+    min-width: 0;
+    width: 100%;
+    max-width: 32ch;
+    overflow-wrap: anywhere;
+    white-space: normal;
   }
 
   .app-theme-easyhq:not(.command-center-page) .hq-natural-capture em {

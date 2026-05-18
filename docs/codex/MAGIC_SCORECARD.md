@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Week-Test Polish Task 4 Mobile Field-Test Polish Pass
+
+- Task: Make the logged-in app less annoying on phone for a one-week field test.
+- Result: Mobile field-test polish completed; build passed and local route checks were performed.
+- Magic signal: phone-shell-no-longer-clips-first-screen.
+- Today nav evidence: `/app/hq?demo=1` at `390x844` shows primary navigation wrapped into two rows without the old clipped `More`/right-edge squeeze.
+- Today pill evidence: local-mode status pill is visible under the heading.
+- Today capture evidence: capture helper text wraps inside the card.
+- Inbox evidence: `/app/easylist/add?demo=1` mobile DOM rendered Inbox, assistant gateway source controls, `Nothing saved or sent`, and quick rows. Headless screenshot capture for Inbox remained blank in this environment, so DOM output was used for inspection proof.
+- Inbox compacting evidence: mobile CSS now scrolls assistant trust chips, uses a two-column gateway source grid, and makes preview actions fit the card width.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no deploy, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Week-Test Polish Task 3 Primary Navigation Simplification
 
 - Task: Make navigation feel like a simple assistant workspace for phone testing.
