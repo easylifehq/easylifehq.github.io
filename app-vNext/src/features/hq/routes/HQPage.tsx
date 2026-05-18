@@ -83,7 +83,7 @@ function HQPageContent() {
         reason: overdueTasks.length
           ? "This is behind. Choose the next step in Inbox."
           : "This is due today. Review it before adding more.",
-        buttonLabel: "Review Inbox",
+        buttonLabel: "Open Inbox",
         to: "/app/easylist/add",
       };
     }
@@ -91,7 +91,7 @@ function HQPageContent() {
       return {
         label: quickWin.title || "Untitled task",
         reason: `${quickWin.estimatedLength || 20} minutes. Good for a small gap.`,
-        buttonLabel: "Review Inbox",
+        buttonLabel: "Open Inbox",
         to: "/app/easylist/add",
       };
     }
@@ -237,6 +237,12 @@ function HQPageContent() {
   ].filter((item): item is { label: string; title: string; detail: string; to: string } => Boolean(item)).slice(0, 3);
   const assistantRead = contextLead;
   const todayAiFallbackCopy = getAssistantAiFallbackCopy("today");
+  const lastAssistantPlace = lastAppRoute
+    ? {
+        ...lastAppRoute,
+        label: lastAppRoute.label === "EasyLife" ? "Today" : lastAppRoute.label,
+      }
+    : null;
 
   function openNaturalCapture() {
     window.dispatchEvent(new Event("easylife:open-capture"));
@@ -251,7 +257,7 @@ function HQPageContent() {
           <div className="hq-start-heading">
             <div>
               <p>Assistant read</p>
-              <h1 id="hq-title">What needs attention now?</h1>
+              <h1 id="hq-title">Start with what matters.</h1>
             </div>
             <span className="assistant-availability-pill">{assistantAiAvailability.badge}</span>
           </div>
@@ -272,18 +278,18 @@ function HQPageContent() {
             </div>
             <div className="task-composer-actions">
               <Link to={startHere.to} className="primary-button">
-                {startHere.buttonLabel.replace("Open ", "")}
+                {startHere.buttonLabel}
               </Link>
               <Link to="/app/easylist/add" className="button-secondary">
-                Capture
+                Capture thought
               </Link>
             </div>
           </div>
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
-            <span>Command</span>
+            <span>Capture</span>
             <strong>{assistantCommandHintRow}</strong>
             <small>{todayAiFallbackCopy}</small>
-            <em>Open</em>
+            <em>Quick add</em>
           </button>
           <details className="hq-context-stack">
             <summary>
@@ -291,11 +297,11 @@ function HQPageContent() {
               <strong>{contextLead}</strong>
             </summary>
             <div>
-              {lastAppRoute ? (
-                <Link to={lastAppRoute.path}>
-                  <span>Resume</span>
-                  <strong>{lastAppRoute.label}</strong>
-                  <p>Return to the last assistant surface you opened.</p>
+              {lastAssistantPlace ? (
+                <Link to={lastAssistantPlace.path}>
+                  <span>Continue</span>
+                  <strong>{lastAssistantPlace.label}</strong>
+                  <p>Return to where you left off.</p>
                 </Link>
               ) : null}
               {contextItems.map((item) => (

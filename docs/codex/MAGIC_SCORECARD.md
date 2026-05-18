@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-17 - Week-Test Polish Task 2 Today First-Screen Copy Cleanup
+
+- Task: Make Today feel like the first screen of a private life assistant, not an internal dashboard or proof page.
+- Result: Today first-screen copy cleanup completed; build and local route inspection passed.
+- Magic signal: today-first-screen-less-internal.
+- Headline evidence: Today now leads with `Start with what matters.`
+- Capture evidence: the compact action row says `Capture` / `Capture a loose thought` / `Quick add`.
+- Resume evidence: the context stack says `Continue`, and a vague `EasyLife` last-place label is normalized to `Today`.
+- CTA evidence: next-move buttons use `Open Inbox` and `Capture thought`.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; `/app/hq?demo=1` desktop/mobile checks showed the cleaned copy and did not show `Resume EasyLife`, `Command Center`, `EASYLIFEHQ`, or the old headline.
+- Boundary evidence: no deploy, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Week-Test Polish Task 1 Assistant Shell Naming Cleanup
 
 - Task: Make the logged-in app shell read as one EasyLife assistant, not EasyLifeHQ or a visible suite of Easy* apps.

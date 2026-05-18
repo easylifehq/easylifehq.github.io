@@ -1,6 +1,27 @@
 # Robin Copy Review
 
 ## Verdict
+WEEK_TEST_TODAY_COPY_CLEANER
+
+## Week-Test Polish Task 2 Today Copy Review - 2026-05-17
+
+Verdict: `WEEK_TEST_TODAY_COPY_CLEANER`.
+
+Today now reads more like a private assistant start screen and less like a product proof surface. The visible first-screen language keeps the same four-part structure: assistant read, next move, compact capture action, and small today strip.
+
+Copy proof:
+- The main headline is `Start with what matters.`
+- The capture affordance says `Capture` and `Capture a loose thought`, not `Command`.
+- The last-place affordance says `Continue`, not `Resume EasyLife`.
+- The next-move CTA says `Open Inbox`; the secondary action says `Capture thought`.
+- The page still keeps local/no-hidden-action boundaries, but the first viewport is not written like a policy notice.
+
+Copy guard:
+Do not reintroduce `Command Center`, `Resume EasyLife`, `EASYLIFEHQ`, or long proof-style safety paragraphs on Today's first screen. Keep the safety promise in compact local-state language.
+
+---
+
+## Verdict
 READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY
 
 ## Stage 33 First Provider Call Copy Proof - 2026-05-17

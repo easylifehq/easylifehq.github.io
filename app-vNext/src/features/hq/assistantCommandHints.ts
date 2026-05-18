@@ -8,7 +8,7 @@ export const assistantCommandHints: AssistantCommandIntent[] = [
   {
     id: "capture",
     label: "Capture",
-    example: "Drop one loose thought",
+    example: "Capture a loose thought",
   },
   {
     id: "plan",
@@ -32,4 +32,4 @@ export const assistantCommandHints: AssistantCommandIntent[] = [
   },
 ];
 
-export const assistantCommandHintRow = "Drop one loose thought";
+export const assistantCommandHintRow = "Capture a loose thought";

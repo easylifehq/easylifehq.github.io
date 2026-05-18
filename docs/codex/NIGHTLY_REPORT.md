@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-17 - Week-Test Polish Task 2 Today First-Screen Copy Cleanup
+
+- Task attempted: Make Today feel like the first screen of a private life assistant instead of an internal dashboard or proof page.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local route inspection: Passed on `/app/hq?demo=1` at desktop and mobile widths; `/app/hq` reached the normal auth/session gate in headless without exposing old first-screen copy.
+- Files changed:
+  - `app-vNext/src/features/hq/routes/HQPage.tsx`
+  - `app-vNext/src/features/hq/assistantCommandHints.ts`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/ROBIN_COPY_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- First-screen cleanup: hero copy now says `Start with what matters.` instead of the more dashboard-like `What needs attention now?`.
+- Action cleanup: the compact capture row now says `Capture` / `Capture a loose thought` / `Quick add` instead of `Command`.
+- Resume cleanup: the context stack now says `Continue` and normalizes a vague `EasyLife` last-place label to `Today`.
+- Button cleanup: primary next-move actions now say `Open Inbox`; secondary capture action says `Capture thought`.
+- Route proof: desktop/mobile DOM checks show `Start with what matters.`, `Capture a loose thought`, `Capture thought`, and `Continue`; they do not show `Resume EasyLife`, `Command Center`, `EASYLIFEHQ`, or the old `What needs attention now?` headline.
+- Boundary preserved: no deploy, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, or saved-object expansion was added.
+
 ## 2026-05-17 - Week-Test Polish Task 1 Assistant Shell Naming Cleanup
 
 - Task attempted: Make the logged-in app shell read as one EasyLife assistant instead of EasyLifeHQ or a suite of Easy* apps.
