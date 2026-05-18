@@ -1,5 +1,19 @@
 # Codex Nightly Report
 
+## 2026-05-18 - EasyLife One-Week Phone Field Test Packet
+
+- Task attempted: Create a simple guide for using EasyLife on a phone for one week and capturing what needs to improve.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `docs/codex/EASYLIFE_ONE_WEEK_PHONE_FIELD_TEST.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Field-test routes documented: `/app/hq`, `/app/easylist/add`, `/app/easycalendar/day`, `/app/easynotes`, `/app/easycontacts`, and `/app/settings`.
+- Review focus documented: annoying names, friction, missing capture paths, real AI-help moments, save confusion, phone layout issues, and old module sprawl.
+- Notes template: added a concise fill-in template for route, task intent, annoyance, expected behavior, save confusion, AI usefulness, screenshot, and severity.
+- Parked during test: live AI provider testing, broad chat, external actions, notification/calendar behavior, real memory claims, geocoding/device location, hidden writes, and automatic saves.
+- Boundary preserved: docs only; no deploy, app code, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, saved-object expansion, or new implementation tasks were added.
+
 ## 2026-05-17 - Week-Test Polish Task 4 Mobile Field-Test Polish Pass
 
 - Task attempted: Make the logged-in app less annoying on phone for a one-week field test.

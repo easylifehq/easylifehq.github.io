@@ -2,6 +2,19 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-18 - EasyLife One-Week Phone Field Test Packet
+
+- Task: Create a phone field-test guide for one week of real EasyLife use.
+- Result: Field-test packet created; build passed.
+- Magic signal: week-test-has-a-lightweight-feedback-loop.
+- Guide path: `docs/codex/EASYLIFE_ONE_WEEK_PHONE_FIELD_TEST.md`.
+- Route evidence: Today, Inbox, Plan, Notes, People, and Settings are the explicit test routes.
+- Review evidence: the guide asks for annoying names, friction, missing capture paths, AI-help moments, save confusion, phone layout issues, and module sprawl.
+- Template evidence: the notes block records route, attempted task, annoyance, expected behavior, save confusion, AI usefulness, screenshot, and severity.
+- Parked evidence: live AI provider testing is explicitly parked unless resumed after the week.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs only; no deploy, app code, backend, Firebase, AI provider code, dependency/package change, secret, auth, persistence, generated output, hidden write, external action, save, send, scheduling, sync, notification, calendar change, real memory, geocoding, device location, saved-object expansion, or new implementation tasks were added.
+
 ## 2026-05-17 - Week-Test Polish Task 4 Mobile Field-Test Polish Pass
 
 - Task: Make the logged-in app less annoying on phone for a one-week field test.
