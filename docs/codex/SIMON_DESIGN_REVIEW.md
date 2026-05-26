@@ -1,6 +1,29 @@
 # Simon Design Review
 
 ## Verdict
+WORKOUT_FIELD_TEST_REPAIR_READY
+
+## Workout Field-Test Repair Product Review - 2026-05-26
+
+Verdict: `WORKOUT_FIELD_TEST_REPAIR_READY`.
+
+The fixes target the exact phone-workout pain: the shell no longer reads as boxed tabs, Workout is reachable from a proper drawer group, and the active log now behaves more like a training surface than a long form.
+
+Product/design read:
+- The header uses a compact hamburger drawer with EasyLife branding instead of a boxed app-suite strip.
+- Workout drawer items are grouped as Dashboard, Log, and Routines.
+- Active workout mode reduces inactive exercises to tappable summary rows, lowering scroll fatigue.
+- Reps and weight fields are easier to overwrite because focus selects the field and zero is no longer forced visually.
+- Set delete and gold PR marking are visible in the set row.
+- A local next-lift helper gives a lightweight version of the requested “what should I do next?” flow without pretending to be live AI.
+- Unsaved workout draft recovery is local-device only; it is a meaningful field-test repair but not a substitute for committed session save.
+
+Design guard:
+Keep the workout screen compact. If next-lift intelligence expands later, it should stay in this small helper pattern instead of becoming another full assistant proof panel.
+
+---
+
+## Verdict
 WEEK_TEST_MOBILE_POLISH_READY
 
 ## Week-Test Polish Task 4 Product Review - 2026-05-17

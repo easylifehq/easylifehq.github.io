@@ -2,6 +2,22 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-26 - Workout Field-Test Repair Pass
+
+- Task: Repair first real phone-workout annoyances.
+- Result: Header drawer and active workout logging fixes completed; build passed.
+- Magic signal: workout-can-survive-phone-field-use-better.
+- Header evidence: `AppHeader` now uses a hamburger-style EasyLife drawer instead of boxed primary nav.
+- Menu evidence: Workout appears as a drawer group with Dashboard, Log, and Routines.
+- Draft evidence: active workout state is mirrored to local storage and restored on reload before final save.
+- Input evidence: reps and weight no longer force a visible `0`; focus selects the current value for faster entry.
+- Scroll evidence: inactive exercises collapse to exercise number, name, and set summary in active workout mode.
+- Control evidence: previous sets can be deleted, and the active exercise can be marked done to move to the next one.
+- PR evidence: weights above prior best show a gold `PR` chip.
+- Suggestion evidence: next-lift suggestions are local/non-AI, include `Read more`, and do not save anything automatically.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no deploy, backend, Firebase, AI provider code, dependency/package change, package file, secret, generated output, hidden write, external action, save/send/schedule/sync/notification/calendar/geocoding/device-location behavior, real memory, or saved-object expansion was added.
+
 ## 2026-05-18 - EasyLife AI Assistant Resume Marker
 
 - Task: Mark the AI assistant resume point before the one-week phone field test.

@@ -1,5 +1,29 @@
 # Codex Nightly Report
 
+## 2026-05-26 - Workout Field-Test Repair Pass
+
+- Task attempted: Fix the first real workout annoyances from phone use.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Files changed:
+  - `app-vNext/src/components/navigation/AppHeader.tsx`
+  - `app-vNext/src/components/navigation/ProductsMenu.tsx`
+  - `app-vNext/src/components/navigation/appProducts.ts`
+  - `app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Header repair: the app shell now uses a hamburger-style EasyLife drawer instead of boxed top navigation.
+- Navigation repair: Workout now opens as a grouped drawer area with Dashboard, Log, and Routines.
+- Workout logging repair: active workout drafts persist to local storage while training, so reloads/mode changes have a recovery path before final save.
+- Input repair: reps and weight fields select on focus and show empty placeholders instead of forcing a leading zero.
+- Flow repair: active workout mode now collapses inactive exercises into compact rows with exercise number, name, and logged set summary; the active exercise can be marked done to move on.
+- Set repair: logged sets can be deleted.
+- PR repair: sets above the previous best weight show a gold `PR` marker.
+- Next-lift helper: active workout mode now offers local, non-AI exercise suggestions with `Read more` guidance and optional add buttons.
+- Inspection note: build passed. Headless screenshots hit the auth/session gate for app routes in this environment, so verification relied on build and source inspection.
+- Boundary preserved: no deploy, backend, Firebase, AI provider code, dependency/package change, package file, secret, generated output, hidden write, external action, save/send/schedule/sync/notification/calendar/geocoding/device-location behavior, real memory, or saved-object expansion was added.
+
 ## 2026-05-18 - EasyLife AI Assistant Resume Marker
 
 - Task attempted: Make it easy to pick up the AI assistant work after the one-week phone field test.

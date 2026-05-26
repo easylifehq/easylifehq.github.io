@@ -287,10 +287,37 @@ a {
   padding: 0.18rem 0.3rem;
 }
 
+.app-menu-shell {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: min(100%, 24rem);
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.app-menu-shell .site-brand {
+  min-height: 42px;
+  padding: 0.1rem 0;
+}
+
 .site-brand-title {
   display: block;
   font-size: 1rem;
   color: var(--shell-heading-text);
+}
+
+.site-brand-current {
+  display: block;
+  margin-top: 0.04rem;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .site-mobile-cue {
@@ -502,6 +529,10 @@ a {
   position: relative;
 }
 
+.app-drawer-menu {
+  position: static;
+}
+
 .menu-trigger-button {
   min-height: 44px;
   display: inline-flex;
@@ -513,6 +544,18 @@ a {
   background: var(--ui-bg-tab-inactive, var(--shell-input-bg));
   color: var(--ui-text-secondary, var(--shell-page-text));
   font-weight: 700;
+}
+
+.app-drawer-menu .menu-trigger-button {
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, var(--shell-card-bg)) 82%, transparent);
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 1.12rem;
+  font-weight: 900;
 }
 
 .app-header-actions > .button-secondary {
@@ -542,9 +585,46 @@ a {
   transition: opacity var(--shell-motion-fast), transform var(--shell-motion-fast), visibility var(--shell-motion-fast);
 }
 
+.app-navigation-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: auto;
+  z-index: 100;
+  width: min(340px, calc(100vw - 2rem));
+  min-width: 0;
+  max-width: calc(100vw - 2rem);
+  height: var(--easy-viewport-height, 100dvh);
+  max-height: none;
+  padding: calc(0.95rem + env(safe-area-inset-top, 0px)) 0.85rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  border-radius: 0 18px 18px 0;
+  transform: translateX(-104%);
+}
+
 .menu-backdrop,
 .menu-panel-header {
   display: none;
+}
+
+.app-drawer-menu .menu-backdrop.open {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  display: block;
+  border: 0;
+  background: rgba(5, 12, 16, 0.38);
+}
+
+.app-navigation-drawer .menu-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.2rem 0.2rem 0.7rem;
+}
+
+.app-navigation-drawer .menu-panel-header strong {
+  font-size: 1.05rem;
 }
 
 .menu-panel.open {
@@ -555,6 +635,11 @@ a {
   visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+.app-navigation-drawer.open {
+  max-height: var(--easy-viewport-height, 100dvh);
+  transform: translateX(0);
 }
 
 .menu-link-card {
@@ -3160,7 +3245,7 @@ textarea::placeholder {
 }
 
 .task-row-grid-workout {
-  grid-template-columns: 80px 120px 140px minmax(180px, 1fr);
+  grid-template-columns: 72px 110px 120px minmax(180px, 1fr) minmax(92px, auto);
 }
 
 .task-row-grid-routine {
@@ -10245,6 +10330,15 @@ button.calendar-detail-card:disabled {
   max-width: 25rem;
 }
 
+.app-shell-vnext .app-menu-shell {
+  width: auto;
+  max-width: min(100%, 24rem);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .app-shell-vnext .capture-fab {
   min-height: 48px;
   padding: 0 1rem;
@@ -10643,6 +10737,52 @@ button.calendar-detail-card:disabled {
   border-radius: 8px;
 }
 
+.workout-exercise-card-collapsed {
+  padding: 0;
+  overflow: hidden;
+}
+
+.workout-collapsed-exercise {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(5.6rem, auto) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+  min-height: 58px;
+  padding: 0.75rem;
+  border: 0;
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 92%, transparent);
+  color: var(--ui-text-primary, var(--shell-page-text));
+  text-align: left;
+  cursor: pointer;
+}
+
+.workout-collapsed-exercise span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.workout-collapsed-exercise strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.workout-collapsed-exercise small {
+  justify-self: end;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.workout-collapsed-exercise:hover,
+.workout-collapsed-exercise:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ui-accent, var(--shell-accent)) 42%, transparent);
+  outline-offset: -2px;
+}
+
 .workout-mode-card .panel-header {
   margin-bottom: 0.55rem;
 }
@@ -10671,6 +10811,27 @@ button.calendar-detail-card:disabled {
   padding: 0.45rem;
 }
 
+.workout-set-actions {
+  align-items: end;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.workout-pr-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0.25rem 0.58rem;
+  border: 1px solid rgba(247, 184, 42, 0.75);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff2a8, #f7b82a 58%, #d78610);
+  box-shadow: 0 0 0 2px rgba(247, 184, 42, 0.16), 0 8px 18px rgba(215, 134, 16, 0.24);
+  color: #3a2500;
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
 .workout-history-strip {
   display: flex;
   flex-wrap: wrap;
@@ -10689,6 +10850,73 @@ button.calendar-detail-card:disabled {
   color: var(--ui-text-muted, var(--shell-muted-text));
   font-size: 0.83rem;
   font-weight: 700;
+}
+
+.workout-next-lift-card {
+  display: grid;
+  gap: 0.7rem;
+  margin-bottom: 0.85rem;
+}
+
+.workout-next-lift-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.workout-next-lift-header > div {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.workout-next-lift-header p,
+.workout-next-lift-option p {
+  margin: 0;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.workout-next-lift-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.workout-next-lift-option {
+  display: grid;
+  gap: 0.65rem;
+  align-content: space-between;
+  min-width: 0;
+  padding: 0.7rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 92%, transparent);
+}
+
+.workout-next-lift-option strong,
+.workout-next-lift-option span {
+  display: block;
+}
+
+.workout-next-lift-option span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.workout-next-lift-option details {
+  margin-top: 0.35rem;
+}
+
+.workout-next-lift-option summary {
+  cursor: pointer;
+  color: var(--ui-accent, var(--shell-accent));
+  font-weight: 850;
+}
+
+.workout-next-lift-option details p {
+  margin-top: 0.35rem;
 }
 
 .gym-suggestion strong {
@@ -11307,6 +11535,10 @@ button.calendar-detail-card:disabled {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .task-row-grid-workout .workout-set-actions {
+    grid-column: 1 / -1;
+  }
+
   .task-row-grid-routine {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -11367,6 +11599,14 @@ button.calendar-detail-card:disabled {
     flex-direction: column;
   }
 
+  .workout-next-lift-header {
+    display: grid;
+  }
+
+  .workout-next-lift-grid {
+    grid-template-columns: 1fr;
+  }
+
   .workout-session-strip,
   .workout-exercise-fields {
     grid-template-columns: 1fr;
@@ -11374,6 +11614,15 @@ button.calendar-detail-card:disabled {
 
   .workout-mode-card {
     padding: 0.7rem;
+  }
+
+  .workout-collapsed-exercise {
+    grid-template-columns: 1fr;
+    min-height: 64px;
+  }
+
+  .workout-collapsed-exercise small {
+    justify-self: start;
   }
 
   .toolbar-row .search-input {
@@ -12986,6 +13235,15 @@ button.calendar-detail-card:disabled {
 
   .task-row-grid-workout {
     grid-template-columns: 1fr;
+  }
+
+  .task-row-grid-workout .workout-set-actions {
+    grid-column: auto;
+    justify-content: stretch;
+  }
+
+.workout-set-actions .ghost-button {
+    width: 100%;
   }
 
   .app-theme-easyworkout .workout-set-row .field-stack {

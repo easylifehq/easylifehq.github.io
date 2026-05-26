@@ -17,6 +17,7 @@ type ProductsMenuProps = {
   className?: string;
   panelClassName?: string;
   showDescriptions?: boolean;
+  triggerAriaLabel?: string;
 };
 
 export function ProductsMenu({
@@ -26,6 +27,7 @@ export function ProductsMenu({
   className = "",
   panelClassName = "",
   showDescriptions = false,
+  triggerAriaLabel,
 }: ProductsMenuProps) {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -100,6 +102,7 @@ export function ProductsMenu({
       <button
         type="button"
         className="menu-trigger-button"
+        aria-label={triggerAriaLabel}
         aria-expanded={isOpen}
         onClick={() => setIsOpen((current) => !current)}
       >
