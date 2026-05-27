@@ -2,6 +2,21 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-27 - Stage 34 Real Push Notification Gate Plan
+
+- Task: Plan the real push-notification stage.
+- Result: Stage 34 plan created; build and functions lint passed.
+- Magic signal: local-reminders-are-now-separated-from-real-push.
+- Current-state evidence: existing notification code uses browser permission, local timers, local fired-reminder storage, and app-open scheduling.
+- Architecture evidence: Stage 34 chooses Firebase Cloud Messaging/Web Push using the existing Firebase stack.
+- Safety evidence: first live push is not approved; the first future lane is one synthetic/manual test only.
+- Token evidence: Stage 34 requires a user-owned token storage contract before any token writes.
+- Server evidence: Stage 34 requires a disabled-by-default server test-send scaffold before any deploy.
+- Mobile evidence: plan documents iPhone Home Screen web app constraints for push testing.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` contains exactly five Stage 34 push gate tasks.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; `npm.cmd --prefix functions run lint` passed.
+- Boundary evidence: no deploy, live push, token storage, Firebase config change, dependency/package change, generated output, secret, AI expansion, hidden write, automatic reminder job, email/text sending, calendar sync, real memory, geocoding, device location, external action, or saved-object expansion was added.
+
 ## 2026-05-26 - Workout Field-Test Repair Pass
 
 - Task: Repair first real phone-workout annoyances.

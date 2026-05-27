@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-27 - Stage 34 Real Push Notification Gate Plan
+
+- Task attempted: Create a real push-notification stage without sending live push yet.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Functions check: Passed with `npm.cmd --prefix functions run lint`.
+- Files changed:
+  - `docs/codex/EASYLIFE_STAGE_34_REAL_PUSH_NOTIFICATION_PLAN.md`
+  - `docs/codex/NEXT_5_TASKS.md`
+  - `docs/codex/PHASE_STATE.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+- Current-state finding: EasyLife currently has local browser timer notifications, not true server-backed push notifications.
+- Stage 34 direction: Firebase Cloud Messaging/Web Push, signed-in user token registration, user-owned token storage, disabled server test-send scaffold, kill switch, metadata-only logging, and one future synthetic/manual test.
+- Mobile reality documented: iPhone push testing requires Home Screen web app support on iOS/iPadOS 16.4 or later; normal Safari tab behavior is not equivalent.
+- NEXT_5_TASKS: refreshed to exactly five bounded Stage 34 push-notification tasks.
+- AI boundary: AI assistant work remains parked at `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY`.
+- Boundary preserved: docs only; no deploy, live push, token storage, Firebase config change, dependency/package change, generated output, secret, AI expansion, hidden write, automatic reminder job, email/text sending, calendar sync, real memory, geocoding, device location, external action, or saved-object expansion was added.
+
 ## 2026-05-26 - Workout Field-Test Repair Pass
 
 - Task attempted: Fix the first real workout annoyances from phone use.

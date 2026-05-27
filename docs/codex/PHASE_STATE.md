@@ -1,23 +1,27 @@
 # Phase State
 
-Current Phase: stage-33-one-synthetic-provider-test-ready
+Current Phase: stage-34-real-push-notification-gate
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Deploy and run exactly one synthetic `assistantIntakeSuggestion` provider test only when the operator chooses to proceed.
+Primary Action: Plan and prove a true push-notification lane without sending live push yet.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
-What Not To Build: Do not deploy without a separate explicit request, do not add broad AI assistant behavior, do not use real user data by default, do not expose frontend API keys, do not commit secrets, do not expand old AI endpoints, do not add hidden writes, and do not add sending, scheduling, syncing, notifications, calendar changes, real memory, geocoding, device location, external actions, or saved-object expansion.
+What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, external actions, or saved-object expansion.
 No More Features Lock: true
-Complexity Budget: Stage 33 may implement exactly one server-side provider call path for Inbox typed-capture suggestion only through `assistantIntakeSuggestion`. It must not broaden into chat, memory, sending, scheduling, sync, notifications, geocoding, device location, hidden writes, old endpoint expansion, or saved-object expansion.
+Complexity Budget: Stage 34 may plan and implement only the narrow real push-notification gate: capability audit, client token contract, token storage contract, disabled server test-send scaffold, and proof. It must not send live push, deploy, add automatic reminder scheduling, or broaden notifications beyond one synthetic/manual test lane.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY
-Evidence Required: Stage 33 provider implementation proof must verify `assistantIntakeSuggestion` is the only new provider path, frontend provider keys remain absent, route `/app/easylist/add?demo=1`, prompt `intake-suggestion`, response validation/fallback, metadata-only logging, no hidden writes, no external actions, build proof, functions lint, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
+Parking State: AI_ASSISTANT_READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY; PUSH_NOTIFICATIONS_STAGE_34_PACKET_READY
+Evidence Required: Stage 34 push proof must verify capability audit, client token contract, token storage contract, disabled server test-send scaffold, no live push, no frontend secrets, no raw private payload logging, no automatic reminders, build proof, functions lint, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 34 may begin only after exactly one synthetic provider test is deployed, run, immediately gated off again, and proven safe, bounded, useful, validated, fallback-ready, and still limited to Inbox typed-capture suggestion.
+Next Phase Criteria: Stage 35 push test may begin only after Stage 34 proof ends `READY_FOR_STAGE_35_ONE_SYNTHETIC_PUSH_TEST_DEPLOY` and the user explicitly approves a deploy/test prompt.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-17 - Stage 33 first provider call readiness proof completed with `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY`.
+Updated At: 2026-05-27 - Stage 34 real push notification gate packet created with `STAGE_34_REAL_PUSH_NOTIFICATION_GATE_READY`.
+
+Stage 34 push notification plan result: STAGE_34_REAL_PUSH_NOTIFICATION_GATE_READY. The plan exists at docs/codex/EASYLIFE_STAGE_34_REAL_PUSH_NOTIFICATION_PLAN.md. Current EasyLife notifications are local browser timers; Stage 34 prepares a true Firebase Cloud Messaging/Web Push lane with client capability/token contract, user-owned token storage contract, disabled server test-send scaffold, kill switch, metadata-only logging, and proof. No live push, deploy, token storage, or automatic reminder scheduling is approved by the plan.
+
+Prepared Stage 34 queue: docs/codex/NEXT_5_TASKS.md contains exactly five real push-notification gate tasks. AI assistant work remains parked at `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY`.
 
 Pause note: 2026-05-18 - one-week phone field test is the active user activity. AI assistant work is parked at `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY` and should resume from docs/codex/EASYLIFE_AI_ASSISTANT_RESUME_NOTE.md, not from a new broad assistant plan.
 
