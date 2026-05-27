@@ -28,7 +28,7 @@ export function AppHeader() {
         <div className="app-suite-control app-menu-shell" role="group" aria-label={`EasyLife assistant menu, current area ${currentApp}`}>
           <ProductsMenu
             items={visibleItems}
-            label="☰"
+            label="Menu"
             panelLabel="EasyLife"
             className="app-drawer-menu"
             panelClassName="app-navigation-drawer"

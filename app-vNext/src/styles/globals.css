@@ -554,8 +554,17 @@ a {
   border-radius: 999px;
   background: color-mix(in srgb, var(--ui-bg-card-elevated, var(--shell-card-bg)) 82%, transparent);
   color: var(--ui-text-primary, var(--shell-heading-text));
-  font-size: 1.12rem;
+  font-size: 0;
   font-weight: 900;
+}
+
+.app-drawer-menu .menu-trigger-button::before {
+  content: "";
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor;
 }
 
 .app-header-actions > .button-secondary {
@@ -599,6 +608,10 @@ a {
   padding: calc(0.95rem + env(safe-area-inset-top, 0px)) 0.85rem calc(1rem + env(safe-area-inset-bottom, 0px));
   border-radius: 0 18px 18px 0;
   transform: translateX(-104%);
+}
+
+.app-drawer-menu .app-navigation-drawer {
+  display: block;
 }
 
 .menu-backdrop,
@@ -11378,6 +11391,37 @@ button.calendar-detail-card:disabled {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .app-drawer-menu .app-navigation-drawer,
+  .app-header-actions .app-navigation-drawer {
+    position: fixed;
+    top: 0;
+    right: auto;
+    left: 0;
+    z-index: 910;
+    width: min(340px, calc(100vw - 2rem));
+    min-width: 0;
+    max-width: calc(100vw - 2rem);
+    height: var(--easy-viewport-height, 100dvh);
+    max-height: none;
+    overflow-y: auto;
+    padding: calc(0.95rem + env(safe-area-inset-top, 0px)) 0.85rem calc(1rem + env(safe-area-inset-bottom, 0px));
+    border-radius: 0 18px 18px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-104%);
+    pointer-events: none;
+  }
+
+  .app-drawer-menu .app-navigation-drawer.open,
+  .app-header-actions .app-navigation-drawer.open {
+    max-height: none;
+    padding: calc(0.95rem + env(safe-area-inset-top, 0px)) 0.85rem calc(1rem + env(safe-area-inset-bottom, 0px));
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
     pointer-events: auto;
   }
 

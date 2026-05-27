@@ -1,5 +1,27 @@
 # Codex Nightly Report
 
+## 2026-05-27 - EasyWorkout Field-Test Interrupt
+
+- Task attempted: Repair the highest-priority workout field-test annoyances before continuing push notifications or AI.
+- Build result: Passed with `npm.cmd run build` from `app-vNext`.
+- Local route inspection: Passed on `/app/easyworkout/log?workoutMode=1&demo=1`; the route rendered `Active workout`, collapsed inactive exercises, `Done, next exercise`, and the EasyLife drawer opened as a fixed left sliding panel.
+- Files changed:
+  - `app-vNext/src/components/navigation/AppHeader.tsx`
+  - `app-vNext/src/features/easyworkout/layouts/EasyWorkoutLayout.tsx`
+  - `app-vNext/src/features/easyworkout/routes/EasyWorkoutLogPage.tsx`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/EASYLIFE_EASYWORKOUT_FIELD_TEST_INTERRUPT.md`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/SIMON_DESIGN_REVIEW.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+- Queue note: Stage 34 push notifications and the Stage 33 AI provider-test lane remain parked; this is a field-test repair interrupt.
+- Sidebar repair: the app menu trigger is now text-safe in source and styled as a hamburger icon; mobile CSS preserves the left sliding drawer instead of overriding it into a dropdown.
+- Workout nav repair: the separate EasyWorkout page subnav was removed so Dashboard, Log, and Routines live in the main EasyLife drawer.
+- Data-loss repair: active workout drafts now store the active exercise ID and mode/view changes stop rebuilding exercise logs once there is active draft work.
+- Flow repair: focused workout mode has one user-facing name, `Active workout`; the done action advances to the next exercise and creates a new box when the current one is last.
+- Boundary preserved: no workout AI, backend, Firebase, provider call, dependency/package change, deploy config, generated output, secret, push notification behavior, hidden write, external action, calendar sync, real memory, geocoding, or device location was added.
+
 ## 2026-05-27 - Stage 34 Real Push Notification Gate Plan
 
 - Task attempted: Create a real push-notification stage without sending live push yet.

@@ -15,6 +15,7 @@ type StoredWorkoutDraft = {
   performedOn: string;
   durationMinutes: string;
   sessionNotes: string;
+  activeExerciseId?: string;
   exerciseLogs: WorkoutExerciseLogDraft[];
 };
 
@@ -32,6 +33,12 @@ const emptyExerciseLog = (setCount = 1): WorkoutExerciseLogDraft => ({
 const startingWorkoutLogs = (count: number, setCount: number) =>
   Array.from({ length: count }, () => emptyExerciseLog(setCount));
 const toNumberDraft = (value: string) => value === "" ? 0 : Number(value) || 0;
+const hasSetWork = (set: WorkoutSetDraft) => set.reps > 0 || set.weight > 0 || set.notes.trim();
+const hasExerciseWork = (exercise: WorkoutExerciseLogDraft) =>
+  exercise.exerciseName.trim() ||
+  exercise.muscleGroup.trim() ||
+  exercise.notes.trim() ||
+  exercise.sets.some(hasSetWork);
 
 function readStoredWorkoutDraft(): StoredWorkoutDraft | null {
   if (typeof window === "undefined") return null;
@@ -48,6 +55,7 @@ function readStoredWorkoutDraft(): StoredWorkoutDraft | null {
       performedOn: typeof parsed.performedOn === "string" && parsed.performedOn ? parsed.performedOn : new Date().toISOString().split("T")[0],
       durationMinutes: typeof parsed.durationMinutes === "string" ? parsed.durationMinutes : "",
       sessionNotes: typeof parsed.sessionNotes === "string" ? parsed.sessionNotes : "",
+      activeExerciseId: typeof parsed.activeExerciseId === "string" ? parsed.activeExerciseId : undefined,
       exerciseLogs: parsed.exerciseLogs.map((exercise) => ({
         localId: exercise.localId || createLocalId(),
         exerciseId: exercise.exerciseId || null,
@@ -132,7 +140,7 @@ export function EasyWorkoutLogPage() {
         ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
         : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
   );
-  const [activeExerciseId, setActiveExerciseId] = useState(restoredDraft?.exerciseLogs[0]?.localId ?? "");
+  const [activeExerciseId, setActiveExerciseId] = useState(restoredDraft?.activeExerciseId || restoredDraft?.exerciseLogs[0]?.localId || "");
   const [workoutPaste, setWorkoutPaste] = useState("");
   const [saveMessage, setSaveMessage] = useState(restoredDraft ? "Unsaved workout restored on this device." : "");
   const todayKey = new Date().toISOString().split("T")[0];
@@ -146,6 +154,15 @@ export function EasyWorkoutLogPage() {
   useEffect(() => {
     if (didUseRestoredDraftRef.current) {
       didUseRestoredDraftRef.current = false;
+      return;
+    }
+
+    const hasActiveDraftWork =
+      sessionNotes.trim() ||
+      durationMinutes ||
+      exerciseLogs.some(hasExerciseWork);
+
+    if (hasActiveDraftWork) {
       return;
     }
 
@@ -226,7 +243,7 @@ export function EasyWorkoutLogPage() {
       exerciseLogs.map((exercise) => exercise.exerciseName.trim().toLowerCase()).filter(Boolean)
     );
     const loggedGroups = exerciseLogs
-      .filter((exercise) => exercise.sets.some((set) => set.reps > 0 || set.weight > 0 || set.notes.trim()))
+      .filter((exercise) => exercise.sets.some(hasSetWork))
       .map((exercise) => exercise.muscleGroup || defaultWorkoutExercises.find((entry) => entry.name === exercise.exerciseName)?.muscleGroup || "")
       .filter(Boolean);
     const activeGroup =
@@ -237,7 +254,7 @@ export function EasyWorkoutLogPage() {
     const groupSetCounts = exerciseLogs.reduce<Record<string, number>>((accumulator, exercise) => {
       const group = exercise.muscleGroup || defaultWorkoutExercises.find((entry) => entry.name === exercise.exerciseName)?.muscleGroup || "";
       if (!group) return accumulator;
-      const setCount = exercise.sets.filter((set) => set.reps > 0 || set.weight > 0 || set.notes.trim()).length;
+      const setCount = exercise.sets.filter(hasSetWork).length;
       accumulator[group] = (accumulator[group] || 0) + setCount;
       return accumulator;
     }, {});
@@ -290,13 +307,7 @@ export function EasyWorkoutLogPage() {
       selectedRoutineId ||
       sessionNotes.trim() ||
       durationMinutes ||
-      exerciseLogs.some(
-        (exercise) =>
-          exercise.exerciseName.trim() ||
-          exercise.muscleGroup.trim() ||
-          exercise.notes.trim() ||
-          exercise.sets.some((set) => set.weight > 0 || set.notes.trim())
-      );
+      exerciseLogs.some(hasExerciseWork);
 
     if (!hasDraftWork) {
       window.localStorage.removeItem(WORKOUT_DRAFT_STORAGE_KEY);
@@ -308,11 +319,12 @@ export function EasyWorkoutLogPage() {
       performedOn,
       durationMinutes,
       sessionNotes,
+      activeExerciseId,
       exerciseLogs,
     };
 
     window.localStorage.setItem(WORKOUT_DRAFT_STORAGE_KEY, JSON.stringify(draft));
-  }, [durationMinutes, exerciseLogs, performedOn, selectedRoutineId, sessionNotes]);
+  }, [activeExerciseId, durationMinutes, exerciseLogs, performedOn, selectedRoutineId, sessionNotes]);
 
   function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogDraft>) {
     setExerciseLogs((current) =>
@@ -396,7 +408,7 @@ export function EasyWorkoutLogPage() {
           exercise.exerciseName.trim() ||
           exercise.muscleGroup.trim() ||
           exercise.notes.trim() ||
-          exercise.sets.some((set) => set.reps > 0 || set.weight > 0 || set.notes.trim())
+          exercise.sets.some(hasSetWork)
       );
 
       const nextLogs = filled.length ? filled : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)];
@@ -515,19 +527,15 @@ export function EasyWorkoutLogPage() {
       >
         <div className={`toolbar-row toolbar-row-compact deep-module-toolbar${isFocusedWorkoutMode ? " workout-focus-toolbar" : ""}`}>
           <div>
-            <strong>{isGymModeActive ? "Compact workout" : isFocusedWorkoutMode ? "Active workout" : "Full log"}</strong>
+            <strong>{isFocusedWorkoutMode ? "Active workout" : "Full log"}</strong>
             {!isFocusedWorkoutMode ? <p className="helper-copy">Log fast. Details stay tucked away.</p> : null}
           </div>
           <div className="pill-row">
-            {isGymModeActive ? (
-              <Link className="button-secondary compact-button" to="/app/easyworkout/log?workoutMode=1">
-                Active view
-              </Link>
-            ) : (
+            {!isFocusedWorkoutMode ? (
               <Link className="primary-button compact-button" to="/app/easyworkout/log?gymMode=1">
-                Compact view
+                Active workout
               </Link>
-            )}
+            ) : null}
             {isFocusedWorkoutMode ? (
               <Link className="ghost-button compact-button" to="/app/easyworkout/log">
                 Full log
@@ -662,8 +670,8 @@ export function EasyWorkoutLogPage() {
         <div className="task-list-vnext workout-exercise-list">
           {exerciseLogs.map((exercise, exerciseIndex) => {
             const previous = previousByExercise[exercise.exerciseName];
-            const loggedSetCount = exercise.sets.filter((set) => set.reps > 0 || set.weight > 0 || set.notes.trim()).length;
-            const lastLoggedSet = [...exercise.sets].reverse().find((set) => set.reps > 0 || set.weight > 0 || set.notes.trim());
+            const loggedSetCount = exercise.sets.filter(hasSetWork).length;
+            const lastLoggedSet = [...exercise.sets].reverse().find(hasSetWork);
             const isCollapsed = isFocusedWorkoutMode && activeExerciseId && activeExerciseId !== exercise.localId;
 
             if (isCollapsed) {
@@ -822,11 +830,18 @@ export function EasyWorkoutLogPage() {
                       type="button"
                       className="primary-button"
                       onClick={() => {
-                        const nextExercise = exerciseLogs[exerciseIndex + 1] || exerciseLogs[exerciseIndex - 1];
-                        setActiveExerciseId(nextExercise?.localId ?? exercise.localId);
+                        const nextExercise = exerciseLogs[exerciseIndex + 1];
+                        if (nextExercise) {
+                          setActiveExerciseId(nextExercise.localId);
+                          return;
+                        }
+
+                        const newExercise = emptyExerciseLog(settings.easyWorkout.defaultSetCount);
+                        setExerciseLogs((current) => [...current, newExercise]);
+                        setActiveExerciseId(newExercise.localId);
                       }}
                     >
-                      Done with exercise
+                      Done, next exercise
                     </button>
                   ) : null}
                 </div>

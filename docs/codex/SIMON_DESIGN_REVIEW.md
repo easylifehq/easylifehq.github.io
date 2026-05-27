@@ -1,6 +1,27 @@
 # Simon Design Review
 
 ## Verdict
+WORKOUT_FIELD_TEST_INTERRUPT_READY
+
+## EasyWorkout Field-Test Interrupt Review - 2026-05-27
+
+Verdict: `WORKOUT_FIELD_TEST_INTERRUPT_READY`.
+
+The user found the right next problem: Workout should be boringly reliable before workout AI gets smarter. The repair keeps the app in field-test mode rather than expanding the assistant.
+
+Product/design read:
+- The hamburger should behave as a left sliding side navigation drawer, not a boxed header dropdown.
+- Workout page-level nav should stay out of the page because the drawer owns Dashboard, Log, and Routines.
+- Active workout state should survive accidental route/view changes on the same device.
+- Workout mode should have one name: Active workout.
+- Workout AI is intentionally parked until logging is stable enough to trust during a real session.
+
+Design guard:
+Keep the workout screen compact and fast. Do not add a large AI panel or another navigation layer until the live workout logger stops being annoying.
+
+---
+
+## Verdict
 WORKOUT_FIELD_TEST_REPAIR_READY
 
 ## Workout Field-Test Repair Product Review - 2026-05-26

@@ -1,9 +1,9 @@
 # Phase State
 
-Current Phase: stage-34-real-push-notification-gate
+Current Phase: easyworkout-field-test-interrupt
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Plan and prove a true push-notification lane without sending live push yet.
+Primary Action: Fix live phone workout reliability before resuming push notifications or AI.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, external actions, or saved-object expansion.
 No More Features Lock: true
@@ -11,13 +11,17 @@ Complexity Budget: Stage 34 may plan and implement only the narrow real push-not
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: AI_ASSISTANT_READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY; PUSH_NOTIFICATIONS_STAGE_34_PACKET_READY
+Parking State: AI_ASSISTANT_READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY; PUSH_NOTIFICATIONS_STAGE_34_PACKET_READY; WORKOUT_AI_PARKED_UNTIL_LOGGER_RELIABLE
 Evidence Required: Stage 34 push proof must verify capability audit, client token contract, token storage contract, disabled server test-send scaffold, no live push, no frontend secrets, no raw private payload logging, no automatic reminders, build proof, functions lint, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
 Next Phase Criteria: Stage 35 push test may begin only after Stage 34 proof ends `READY_FOR_STAGE_35_ONE_SYNTHETIC_PUSH_TEST_DEPLOY` and the user explicitly approves a deploy/test prompt.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-27 - Stage 34 real push notification gate packet created with `STAGE_34_REAL_PUSH_NOTIFICATION_GATE_READY`.
+Updated At: 2026-05-27 - EasyWorkout field-test interrupt started from live phone workout notes.
+
+EasyWorkout interrupt source: docs/codex/EASYLIFE_EASYWORKOUT_FIELD_TEST_INTERRUPT.md. The interrupt supersedes Stage 34 only operationally, not historically: Stage 34 push tasks remain queued, AI remains parked at `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY`, and workout AI remains parked until the active workout logger is reliable enough for field use.
+
+EasyWorkout interrupt focus: real sliding side drawer, Workout navigation moved out of the page and into the drawer, active draft protection against mode/view resets, compact active workout flow, and no workout AI expansion.
 
 Stage 34 push notification plan result: STAGE_34_REAL_PUSH_NOTIFICATION_GATE_READY. The plan exists at docs/codex/EASYLIFE_STAGE_34_REAL_PUSH_NOTIFICATION_PLAN.md. Current EasyLife notifications are local browser timers; Stage 34 prepares a true Firebase Cloud Messaging/Web Push lane with client capability/token contract, user-owned token storage contract, disabled server test-send scaffold, kill switch, metadata-only logging, and proof. No live push, deploy, token storage, or automatic reminder scheduling is approved by the plan.
 

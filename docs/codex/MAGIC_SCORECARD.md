@@ -2,6 +2,20 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-27 - EasyWorkout Field-Test Interrupt
+
+- Task: Repair the next round of live workout field-test friction.
+- Result: Interrupt repair implemented; build passed.
+- Magic signal: active-workout-should-feel-harder-to-lose.
+- Queue evidence: Stage 34 push notifications remain queued, but the current field-test interrupt is higher priority for phone use.
+- AI evidence: workout AI remains parked; no model-backed exercise recommendation was added.
+- Sidebar evidence: the hamburger remains the single app navigation entry and is forced into a left sliding drawer at mobile width.
+- Workout nav evidence: Dashboard, Log, and Routines are drawer destinations; the per-page Workout subnav was removed.
+- Draft evidence: active draft persistence now includes active exercise identity and protects against mode/view changes rebuilding the exercise list.
+- Flow evidence: active workout mode no longer uses separate Gym/Workout naming, and the done action advances to the next lift or creates the next empty box.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; local route inspection confirmed the drawer opened as a fixed left panel and the workout route rendered active-workout controls.
+- Boundary evidence: no backend, Firebase, AI provider call, dependency/package change, deploy config, generated output, secret, push notification behavior, hidden write, external action, calendar sync, real memory, geocoding, or device location was added.
+
 ## 2026-05-27 - Stage 34 Real Push Notification Gate Plan
 
 - Task: Plan the real push-notification stage.
