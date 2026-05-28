@@ -344,16 +344,16 @@ export function EasyNotesLibraryPage() {
   return (
     <PageSection
       title="Notes"
-      description="Keep saved context close, then decide what should become a task, a plan, a pinned reference, or a review."
+      description="Write something down or open an existing note."
     >
         <div className="notes-command-strip" aria-label="Notes actions">
           <div className="notes-capture-group">
             <button type="button" className="notes-command-button notes-command-button-primary" onClick={() => void handleCreateNote()}>
               <span aria-hidden="true">+</span>
-              Keep context
+              New note
             </button>
             <span className="notes-library-status">
-              {notes.length ? "Review saved context below" : "Capture first, sort later"}
+              {notes.length ? "Open a note below" : "Start writing"}
             </span>
           </div>
           <div className="notes-secondary-actions">
@@ -375,11 +375,59 @@ export function EasyNotesLibraryPage() {
               aria-expanded={toolsOpen}
               aria-controls="notes-library-tools"
             >
-              Edit
+              Organize
             </button>
           </div>
         </div>
 
+        {lastOpenNote ? (
+          <Link to={`/app/easynotes/${lastOpenNote.id}`} className="notes-resume-row notes-resume-row-primary">
+            <span>Last note</span>
+            <strong>{lastOpenNote.title.trim() || "Untitled note"}</strong>
+          </Link>
+        ) : null}
+
+        <div className="notes-library-overview notes-library-overview-first">
+          <section className="group-block notes-review-block notes-review-block-simple">
+            <div className="group-heading">
+              <div>
+                <h3>Recent notes</h3>
+                <p className="note-card-meta">
+                  <span>Tap to edit</span>
+                  No extra workflow
+                </p>
+              </div>
+              <span>{recentNotes.length}</span>
+            </div>
+            <div className="notes-library-grid notes-library-grid-recent">
+              {recentNotes.map((note) => (
+                <article key={note.id} className="note-card-vnext note-card-selectable note-card-compact">
+                  <Link to={`/app/easynotes/${note.id}`} className="note-card-link">
+                    <div className="note-card-top">
+                      <div>
+                        <strong>{note.title.trim() || "Untitled note"}</strong>
+                        <p className="note-card-meta">
+                          <span>Updated</span>
+                          {formatDate(note.updatedAt || note.createdAt)}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="note-card-body">{note.bodyText.trim() || "No content yet."}</p>
+                  </Link>
+                </article>
+              ))}
+              {!isLoading && !recentNotes.length ? (
+                <div className="empty-card-vnext notes-empty-card notes-suite-empty-card">
+                  <strong>No notes yet</strong>
+                  <p className="helper-copy">Use New note. You can sort it later.</p>
+                </div>
+              ) : null}
+            </div>
+          </section>
+        </div>
+
+        <details className="advanced-disclosure notes-advanced-tools notes-assistant-tools">
+          <summary>More note tools</summary>
         <div className="settings-status-grid" aria-label="Assistant context bridge">
           {contextBridge.map((item) => (
             <article className="settings-status-card" key={item.label}>
@@ -589,6 +637,7 @@ export function EasyNotesLibraryPage() {
             </article>
           ) : null}
         </section>
+        </details>
 
         {searchOpen ? (
         <div className="notes-library-toolbar notes-search-toolbar">
@@ -608,14 +657,16 @@ export function EasyNotesLibraryPage() {
             {lastOpenNote ? <Link to={`/app/easynotes/${lastOpenNote.id}`} className="primary-button">Resume writing</Link> : null}
           </div>
         </div>
-        ) : lastOpenNote ? (
+        ) : null}
+
+        {false && lastOpenNote ? (
           <Link to={`/app/easynotes/${lastOpenNote.id}`} className="notes-resume-row">
             <span>Resume</span>
             <strong>{lastOpenNote.title.trim() || "Untitled note"}</strong>
           </Link>
         ) : null}
 
-        {!searchOpen ? (
+        {false && !searchOpen ? (
           <div className="notes-library-overview">
             <section className="group-block notes-review-block">
               <div className="group-heading">

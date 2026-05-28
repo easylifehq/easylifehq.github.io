@@ -112,7 +112,7 @@ export type UserShellSettings = {
 
 export const defaultShellSettings: UserShellSettings = {
   themeMode: "classic",
-  startupRoute: "/app/hq",
+  startupRoute: "last-used",
   visibleApps: [
     "easylist",
     "easynotes",

@@ -1,5 +1,23 @@
 # Codex Nightly Report
 
+## 2026-05-28 - Notes Capture Friction Repair
+
+- Task attempted: Make writing a simple note stop feeling like navigating a deep module.
+- Files changed:
+  - `app-vNext/src/features/easynotes/routes/EasyNotesLibraryPage.tsx`
+  - `app-vNext/src/features/easynotes/routes/EasyNotesEditorPage.tsx`
+  - `app-vNext/src/lib/mobile/appRouteMemory.ts`
+  - `app-vNext/src/lib/firestore/settings.ts`
+  - `app-vNext/src/styles/globals.css`
+  - `docs/codex/NIGHTLY_REPORT.md`
+  - `docs/codex/MAGIC_SCORECARD.md`
+  - `docs/codex/PHASE_STATE.md`
+- Notes repair: the Notes first screen now starts with `New note`, the last note, and recent notes.
+- Hide-complexity repair: context counters, assistant draft handoff, and organization tools are tucked behind closed disclosures instead of sitting above the actual notes.
+- Editor repair: opening a note focuses the writing textarea automatically.
+- Return repair: default startup is now `last-used` for new/default settings, and route memory labels use user-facing names like Notes, Inbox, Plan, and Workout.
+- Boundary preserved: no AI, backend, Firebase rules/config, dependency/package change, deploy config, generated output, secrets, hidden writes, external actions, push notifications, calendar sync, real memory, geocoding, or device location was added.
+
 ## 2026-05-27 - EasyWorkout Field-Test Interrupt
 
 - Task attempted: Repair the highest-priority workout field-test annoyances before continuing push notifications or AI.

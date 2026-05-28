@@ -12,14 +12,14 @@ type LastAppRoute = {
 };
 
 function getRouteLabel(path: string) {
-  if (path.startsWith("/app/easylist")) return "EasyList";
-  if (path.startsWith("/app/easycalendar")) return "EasyCalendar";
-  if (path.startsWith("/app/easynotes")) return "EasyNotes";
-  if (path.startsWith("/app/easyworkout")) return "EasyWorkout";
-  if (path.startsWith("/app/easyprojects")) return "EasyProjects";
-  if (path.startsWith("/app/easypipeline")) return "EasyPipeline";
-  if (path.startsWith("/app/easycontacts")) return "EasyContacts";
-  if (path.startsWith("/app/easystatistics")) return "EasyStatistics";
+  if (path.startsWith("/app/easylist")) return "Inbox";
+  if (path.startsWith("/app/easycalendar")) return "Plan";
+  if (path.startsWith("/app/easynotes")) return "Notes";
+  if (path.startsWith("/app/easyworkout")) return "Workout";
+  if (path.startsWith("/app/easyprojects")) return "Projects";
+  if (path.startsWith("/app/easypipeline")) return "Follow-ups";
+  if (path.startsWith("/app/easycontacts")) return "People";
+  if (path.startsWith("/app/easystatistics")) return "Progress";
   return "EasyLife";
 }
 

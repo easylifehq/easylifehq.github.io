@@ -1,9 +1,9 @@
 # Phase State
 
-Current Phase: easyworkout-field-test-interrupt
+Current Phase: notes-capture-friction-interrupt
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Fix live phone workout reliability before resuming push notifications or AI.
+Primary Action: Make simple note capture and app resume feel direct before resuming push notifications or AI.
 Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
 What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, external actions, or saved-object expansion.
 No More Features Lock: true
@@ -17,7 +17,9 @@ Done Signal: Stage 1-5 implementation tasks passed build and the five review rou
 Next Phase Criteria: Stage 35 push test may begin only after Stage 34 proof ends `READY_FOR_STAGE_35_ONE_SYNTHETIC_PUSH_TEST_DEPLOY` and the user explicitly approves a deploy/test prompt.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-27 - EasyWorkout field-test interrupt started from live phone workout notes.
+Updated At: 2026-05-28 - Notes capture friction interrupt started from live phone use.
+
+Notes capture interrupt: the user tried to write down today tasks and had to open the drawer, choose Notes, scroll past assistant/context machinery, and open a note. The fix path is write-first: New note, last note, and recent notes first; assistant/context tools hidden below; editor focuses the writing field; default startup falls back to last-used for new/default settings.
 
 EasyWorkout interrupt source: docs/codex/EASYLIFE_EASYWORKOUT_FIELD_TEST_INTERRUPT.md. The interrupt supersedes Stage 34 only operationally, not historically: Stage 34 push tasks remain queued, AI remains parked at `READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY`, and workout AI remains parked until the active workout logger is reliable enough for field use.
 

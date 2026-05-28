@@ -2332,6 +2332,29 @@ textarea::placeholder {
   margin: -0.35rem 0 0.65rem;
 }
 
+.notes-library-overview-first {
+  margin-top: 0.25rem;
+}
+
+.notes-review-block-simple {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.notes-resume-row-primary {
+  margin-bottom: 0.55rem;
+  background: color-mix(in srgb, var(--ui-bg-card-elevated, var(--shell-card-bg)) 86%, transparent);
+}
+
+.notes-assistant-tools {
+  margin: 0.4rem 0 0.9rem;
+}
+
+.notes-assistant-tools > summary {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
 .notes-capture-group,
 .notes-secondary-actions {
   display: flex;

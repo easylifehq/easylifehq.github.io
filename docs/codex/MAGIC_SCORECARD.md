@@ -2,6 +2,18 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-28 - Notes Capture Friction Repair
+
+- Task: Make basic note capture feel like Notes, not a module dashboard.
+- Result: Repair implemented; build passed.
+- Magic signal: write-first-notes.
+- First-screen evidence: Notes now presents `New note`, last note, and recent notes before assistant/context tooling.
+- Complexity evidence: note context counters, recall hints, and save-preview tooling are behind `More note tools`.
+- Writing evidence: note editor focuses the body field when a note opens.
+- Resume evidence: default startup falls back to last-used for new/default settings; route memory labels no longer say EasyNotes/EasyList/EasyWorkout.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed; local route inspection showed `New note`, last note, and recent notes before the extra tool disclosures.
+- Boundary evidence: no AI, backend, Firebase rules/config, dependency/package change, deploy config, generated output, secrets, hidden writes, external actions, push notifications, calendar sync, real memory, geocoding, or device location was added.
+
 ## 2026-05-27 - EasyWorkout Field-Test Interrupt
 
 - Task: Repair the next round of live workout field-test friction.

@@ -35,6 +35,7 @@ export function EasyNotesEditorPage() {
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const [actionsOpen, setActionsOpen] = useState(false);
   const saveTimeoutRef = useRef<number | null>(null);
+  const bodyTextareaRef = useRef<HTMLTextAreaElement | null>(null);
   const hydratedNoteIdRef = useRef<string | null>(null);
   const noteMetaRef = useRef({ tags: [] as string[], pinned: false });
   const lastSavedDraftRef = useRef({ noteId: "", title: "", bodyText: "", folderId: "" });
@@ -70,6 +71,11 @@ export function EasyNotesEditorPage() {
   useEffect(() => {
     if (!activeNoteId) return;
     window.localStorage.setItem(lastOpenNoteStorageKey, activeNoteId);
+  }, [activeNoteId]);
+
+  useEffect(() => {
+    if (!activeNoteId) return;
+    window.setTimeout(() => bodyTextareaRef.current?.focus(), 0);
   }, [activeNoteId]);
 
   useEffect(() => {
@@ -228,6 +234,7 @@ export function EasyNotesEditorPage() {
 
         <label className="notes-body-field">
           <textarea
+            ref={bodyTextareaRef}
             value={bodyText}
             onChange={(event) => {
               setBodyText(event.target.value);
