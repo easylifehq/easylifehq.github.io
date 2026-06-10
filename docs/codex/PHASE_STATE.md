@@ -1,11 +1,11 @@
 # Phase State
 
-Current Phase: notes-capture-friction-interrupt
+Current Phase: p4-supervised-capability-activation
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Make simple note capture and app resume feel direct before resuming push notifications or AI.
-Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
-What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, external actions, or saved-object expansion.
+Primary Action: Activate the first real capabilities safely: one narrow real AI/provider Inbox suggestion first, then one true push synthetic test lane.
+Showable Moment: EasyLife can ask for one review-first Inbox suggestion and later one synthetic push test without pretending to have broad AI, hidden automation, external sync, or automatic actions.
+What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, contact sync, account deletion backend, external actions, or saved-object expansion.
 No More Features Lock: true
 Complexity Budget: Stage 34 may plan and implement only the narrow real push-notification gate: capability audit, client token contract, token storage contract, disabled server test-send scaffold, and proof. It must not send live push, deploy, add automatic reminder scheduling, or broaden notifications beyond one synthetic/manual test lane.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
@@ -17,7 +17,9 @@ Done Signal: Stage 1-5 implementation tasks passed build and the five review rou
 Next Phase Criteria: Stage 35 push test may begin only after Stage 34 proof ends `READY_FOR_STAGE_35_ONE_SYNTHETIC_PUSH_TEST_DEPLOY` and the user explicitly approves a deploy/test prompt.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-28 - Notes capture friction interrupt started from live phone use.
+Updated At: 2026-05-31 - P3.5 solo demo hardening is complete and Spencer approved moving into real capabilities. P4 supervised capability activation is queued in docs/codex/NEXT_5_TASKS.md and docs/codex/EASYLIFE_P4_SUPERVISED_CAPABILITY_QUEUE.md. Capability order is strict: first one narrow real AI/provider Inbox typed-capture suggestion gate, then one true push synthetic test gate. Deploy, env/secrets, package/dependency, DNS, billing, Firebase rules/auth policy, broad functions expansion, token storage, live push sends, real private payload provider calls, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden writes, automatic scheduling, and external actions remain locked unless Spencer separately approves that exact gate.
+
+Audit packet interrupt: the active source is `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip`. Treat demo readiness, route safety, naming consistency, capture trust, Settings/trust copy, and input reliability as the current priority. Do not touch Firebase/auth/rules/functions/billing/DNS/secrets/env files, and do not assume live AI, true push notifications, calendar sync, geocoding, email/text sending, or hidden writes.
 
 Notes capture interrupt: the user tried to write down today tasks and had to open the drawer, choose Notes, scroll past assistant/context machinery, and open a note. The fix path is write-first: New note, last note, and recent notes first; assistant/context tools hidden below; editor focuses the writing field; default startup falls back to last-used for new/default settings.
 

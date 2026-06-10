@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { LoadingState } from "@/components/feedback/LoadingState";
 import { PageSection } from "@/components/ui/PageSection";
 import { TaskDrawer } from "@/features/easylist/components/TaskDrawer";
 import { useEasyList } from "@/features/easylist/EasyListContext";
@@ -21,17 +20,14 @@ export function EasyListDeletedPage() {
     .filter((task) => task.deletedAt)
     .sort((a, b) => (b.deletedAt?.getTime() || 0) - (a.deletedAt?.getTime() || 0));
 
-  if (isLoading) {
-    return <LoadingState label="Loading deleted tasks..." />;
-  }
-
   return (
     <>
       <PageSection
         eyebrow="Soft delete"
         title="Deleted tasks"
-        description="Tasks you delete from EasyList land here first, so accidental cleanup is recoverable."
+        description="Tasks you delete from Inbox land here first, so accidental cleanup is recoverable."
       >
+        {isLoading ? <p className="helper-copy" role="status">Loading deleted tasks...</p> : null}
         <div className="task-list-vnext">
           {deletedTasks.length ? (
             deletedTasks.map((task) => (

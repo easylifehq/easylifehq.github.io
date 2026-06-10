@@ -1697,6 +1697,7 @@ a {
   justify-items: center;
   gap: 0.45rem;
   text-align: center;
+  min-height: 8.1rem;
 }
 
 .loading-card strong,
@@ -1707,6 +1708,18 @@ a {
 .loading-card small {
   color: var(--ui-text-muted, var(--shell-muted-text));
   font-size: 0.86rem;
+}
+
+.loading-slow-hint {
+  display: grid;
+  justify-items: center;
+  gap: 0.58rem;
+  width: 100%;
+  margin-top: 0.25rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 76%, transparent);
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.84rem;
 }
 
 .loading-orbit {
@@ -3016,6 +3029,17 @@ textarea::placeholder {
   justify-self: center;
 }
 
+.notes-title-field > span,
+.notes-body-field > span {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .notes-format-bar {
   display: flex;
   flex-wrap: wrap;
@@ -3073,6 +3097,34 @@ textarea::placeholder {
   color: var(--ui-text-muted, #7b6f66);
   font-size: 0.92rem;
   font-weight: 700;
+}
+
+.notes-save-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ui-border-subtle, var(--shell-card-border)) 72%, transparent);
+  background: color-mix(in srgb, var(--ui-bg-card, white) 82%, transparent);
+  white-space: nowrap;
+}
+
+.notes-save-status-saving {
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
+.notes-save-status-saved,
+.notes-save-status-saved-recent {
+  color: var(--shell-success, #2f8f5b);
+  border-color: color-mix(in srgb, var(--shell-success, #2f8f5b) 32%, transparent);
+  background: color-mix(in srgb, var(--shell-success, #2f8f5b) 10%, var(--ui-bg-card, white));
+}
+
+.notes-save-status-failed {
+  color: var(--shell-danger, #b45345);
+  border-color: color-mix(in srgb, var(--shell-danger, #b45345) 32%, transparent);
+  background: color-mix(in srgb, var(--shell-danger, #b45345) 10%, var(--ui-bg-card, white));
 }
 
 .notes-delete-button {
@@ -3274,6 +3326,87 @@ textarea::placeholder {
 .task-row-actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.task-row-details {
+  grid-column: 2 / 7;
+  align-self: stretch;
+  padding: 0.15rem 0;
+}
+
+.task-row-details summary {
+  cursor: pointer;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.9rem;
+  font-weight: 850;
+}
+
+.task-row-details-grid {
+  display: grid;
+  grid-template-columns: 116px 126px 96px 140px minmax(180px, 1fr);
+  gap: 0.55rem;
+  margin-top: 0.55rem;
+}
+
+.task-row-details .field-stack span {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.task-save-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.72rem;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--shell-success, #2f8f5b) 32%, transparent);
+  background: color-mix(in srgb, var(--shell-success, #2f8f5b) 10%, var(--ui-bg-card, white));
+}
+
+.task-save-banner span,
+.task-save-banner p {
+  margin: 0;
+  color: var(--ui-text-secondary, var(--shell-muted-text));
+  font-size: 0.84rem;
+  font-weight: 750;
+}
+
+.task-save-banner strong {
+  display: block;
+  margin: 0.12rem 0;
+  color: var(--ui-text-primary, var(--shell-page-text));
+}
+
+@media (max-width: 1180px) {
+  .task-row-details {
+    grid-column: 1 / -1;
+  }
+
+  .task-row-details-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .task-save-banner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 560px) {
+  .task-row-details-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .app-shell-vnext:has(.task-composer) .capture-fab {
@@ -5241,6 +5374,51 @@ textarea::placeholder {
   font-weight: 760;
 }
 
+.assistant-provider-request-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.62rem;
+  align-items: center;
+  padding: 0.62rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, #1f6f8f 34%, var(--ui-border-subtle, var(--shell-card-border)));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #1f6f8f 9%, transparent), transparent 58%),
+    color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 70%, transparent);
+}
+
+.assistant-provider-request-panel span {
+  display: block;
+  color: var(--ui-text-muted, var(--shell-muted));
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.assistant-provider-request-panel strong {
+  display: block;
+  margin-top: 0.12rem;
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.88rem;
+  line-height: 1.25;
+}
+
+.assistant-provider-request-panel p {
+  margin: 0.18rem 0 0;
+  color: var(--ui-text-secondary, var(--shell-muted));
+  font-size: 0.76rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.assistant-provider-request-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.42rem;
+}
+
 .assistant-mock-confirmation {
   display: grid;
   gap: 0.16rem;
@@ -5886,6 +6064,18 @@ textarea::placeholder {
     grid-template-columns: 1fr;
   }
 
+  .assistant-provider-request-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .assistant-provider-request-actions {
+    justify-content: stretch;
+  }
+
+  .assistant-provider-request-actions button {
+    flex: 1 1 10rem;
+  }
+
   .easylist-inbox-command {
     display: grid;
   }
@@ -6350,8 +6540,17 @@ textarea::placeholder {
 }
 
 .error-copy {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.62rem 0.78rem;
+  border: 1px solid color-mix(in srgb, #a13d34 28%, var(--ui-border-subtle, var(--shell-card-border)) 72%);
+  border-radius: var(--shell-control-radius);
+  background: color-mix(in srgb, #fff2f1 78%, var(--ui-bg-card-elevated, #ffffff) 22%);
   color: #a13d34;
   margin: 0 0 1rem;
+  font-size: 0.9rem;
+  font-weight: 760;
+  line-height: 1.35;
 }
 
 .drawer-backdrop-vnext {
@@ -8879,6 +9078,45 @@ button.calendar-detail-card:disabled {
   font-weight: 780;
 }
 
+.contacts-followup-strip,
+.contact-context-label-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.38rem;
+  margin-top: 0.65rem;
+}
+
+.contacts-followup-strip > span,
+.contact-context-label-row span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.24rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: color-mix(in srgb, var(--ui-bg-card, var(--shell-input-bg)) 82%, transparent);
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.contacts-followup-strip button {
+  min-height: 32px;
+  padding: 0.32rem 0.58rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--app-accent, var(--shell-accent)) 24%, var(--ui-border-subtle, var(--shell-card-border)));
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 8%, var(--ui-bg-card, var(--shell-input-bg)));
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-size: 0.78rem;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.contacts-followup-strip button:hover,
+.contacts-followup-strip button:focus-visible {
+  border-color: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 46%, var(--ui-border-subtle, var(--shell-card-border)));
+}
+
 .contacts-place-assistant-hint {
   display: grid;
   gap: 0.22rem;
@@ -9693,6 +9931,30 @@ button.calendar-detail-card:disabled {
   flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
+}
+
+.settings-policy-placeholders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+}
+
+.settings-policy-placeholders span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 8px;
+  background: var(--ui-bg-card, var(--shell-input-bg));
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.84rem;
+  font-weight: 850;
+}
+
+.settings-defaults-card {
+  margin-bottom: 1rem;
 }
 
 .settings-install-hero {
@@ -10851,6 +11113,28 @@ button.calendar-detail-card:disabled {
   align-items: end;
   justify-content: flex-end;
   gap: 0.4rem;
+}
+
+.workout-delete-button {
+  min-height: 40px;
+}
+
+.workout-exercise-actions {
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.workout-exercise-main-actions,
+.workout-exercise-delete-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.workout-exercise-delete-actions {
+  margin-left: auto;
+  padding-left: 0.7rem;
+  border-left: 1px solid var(--ui-border-subtle, var(--shell-card-border));
 }
 
 .workout-pr-chip {
@@ -13309,7 +13593,7 @@ button.calendar-detail-card:disabled {
     justify-content: stretch;
   }
 
-.workout-set-actions .ghost-button {
+.workout-set-actions .workout-delete-button {
     width: 100%;
   }
 
@@ -13343,6 +13627,16 @@ button.calendar-detail-card:disabled {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.55rem;
+  }
+
+  .app-theme-easyworkout .workout-exercise-main-actions,
+  .app-theme-easyworkout .workout-exercise-delete-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    margin-left: 0;
+    padding-left: 0;
+    border-left: 0;
   }
 
   .app-theme-easyworkout .workout-exercise-actions button,
@@ -13402,6 +13696,76 @@ button.calendar-detail-card:disabled {
 }
 
 @media (max-width: 760px) {
+  .app-theme .primary-button,
+  .app-theme .button-primary,
+  .app-theme .button-secondary,
+  .app-theme .ghost-button,
+  .app-theme .danger-button,
+  .app-theme .toggle-button,
+  .app-theme .compact-button {
+    min-height: 48px;
+    white-space: normal;
+  }
+
+  .app-theme .task-composer-grid,
+  .app-theme .calendar-composer-grid,
+  .app-theme .calendar-form-card,
+  .app-theme .drawer-link-card {
+    grid-template-columns: 1fr;
+  }
+
+  .app-theme .toolbar-row,
+  .app-theme .toolbar-row-compact {
+    align-items: stretch;
+  }
+
+  .app-theme .toolbar-row > a,
+  .app-theme .toolbar-row > button,
+  .app-theme .toolbar-row-compact > a,
+  .app-theme .toolbar-row-compact > button,
+  .app-theme .toolbar-row .pill-row,
+  .app-theme .toolbar-row-compact .pill-row,
+  .app-theme .drawer-actions-right > *,
+  .app-theme .task-composer-actions > * {
+    flex: 1 1 100%;
+  }
+
+  .app-theme .drawer-actions-vnext,
+  .app-theme .calendar-plan-actions,
+  .app-theme-easylist .easylist-inbox-surface .task-composer-actions,
+  .app-theme-easyworkout .workout-log-actions {
+    position: sticky;
+    bottom: calc(0.55rem + env(safe-area-inset-bottom, 0px));
+    z-index: 25;
+    padding: 0.55rem;
+    border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 94%, transparent);
+    box-shadow: 0 14px 34px rgba(42, 31, 22, 0.14);
+    backdrop-filter: blur(14px);
+  }
+
+  .app-theme .drawer-actions-vnext button,
+  .app-theme .drawer-actions-vnext a,
+  .app-theme .calendar-plan-actions button,
+  .app-theme .calendar-plan-actions a,
+  .app-theme-easylist .easylist-inbox-surface .task-composer-actions button,
+  .app-theme-easylist .easylist-inbox-surface .task-composer-actions a,
+  .app-theme-easyworkout .workout-log-actions button,
+  .app-theme-easyworkout .workout-log-actions a {
+    width: 100%;
+  }
+
+  .app-theme .helper-copy[role="status"] {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 0.7rem;
+    border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--ui-bg-card, var(--shell-card-bg)) 86%, transparent);
+  }
+
   .email-triage-hero,
   .email-integration-grid,
   .email-approval-lanes,
@@ -13978,6 +14342,81 @@ button.calendar-detail-card:disabled {
   border-color: rgba(10, 28, 32, 0.1);
 }
 
+.app-theme-easyhq:not(.command-center-page) .hq-demo-path {
+  position: relative;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  overflow: hidden;
+  border-block: 1px solid var(--hq-line);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--app-accent, #24766f) 4%, transparent), transparent);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-demo-path::before {
+  content: "";
+  position: absolute;
+  top: 2.58rem;
+  right: 1.05rem;
+  left: 1.05rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--app-accent, #24766f) 18%, var(--hq-line) 82%);
+  pointer-events: none;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-demo-step {
+  position: relative;
+  z-index: 1;
+  grid-template-columns: 1fr;
+  gap: 0.72rem;
+  min-height: 10.5rem;
+  padding: clamp(0.9rem, 1.4vw, 1.12rem);
+  border-width: 0 0 0 1px;
+  border-color: var(--hq-line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-demo-step:first-child {
+  border-left: 0;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-demo-step:hover,
+.app-theme-easyhq:not(.command-center-page) .hq-demo-step:focus-visible {
+  border-color: color-mix(in srgb, var(--app-accent, #24766f) 26%, var(--hq-line) 74%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--app-accent, #24766f) 7%, transparent), transparent 68%),
+    color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 54%, transparent);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-demo-step > span {
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 1px solid color-mix(in srgb, var(--app-accent, #24766f) 30%, var(--hq-line) 70%);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--app-accent, #24766f) 12%, transparent), transparent 52%),
+    color-mix(in srgb, var(--ui-bg-card-elevated, #ffffff) 86%, transparent);
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--ui-bg-section, #ffffff) 72%, transparent);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-demo-step small {
+  color: color-mix(in srgb, var(--app-accent, #24766f) 58%, var(--ui-text-muted, var(--shell-muted-text)) 42%);
+  letter-spacing: 0;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-demo-step strong {
+  display: block;
+  color: var(--ui-text-primary, var(--shell-heading-text));
+  font-size: 0.98rem;
+  line-height: 1.18;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-demo-step p {
+  margin-top: 0.34rem;
+  color: var(--ui-text-secondary, var(--shell-page-text));
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .task-card-vnext.completed,
   .app-shell-vnext.shell-theme-gamer .task-card-vnext.completed,
@@ -14097,6 +14536,30 @@ button.calendar-detail-card:disabled {
   .app-theme-easyhq:not(.command-center-page) .hq-quick-actions,
   .app-theme-easyhq:not(.command-center-page) .assistant-system-grid {
     grid-template-columns: 1fr;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-demo-path {
+    grid-template-columns: 1fr;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-demo-path::before {
+    top: 1rem;
+    bottom: 1rem;
+    right: auto;
+    left: 1.88rem;
+    width: 1px;
+    height: auto;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-demo-step {
+    grid-template-columns: auto minmax(0, 1fr);
+    min-height: 0;
+    border-width: 1px 0 0;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-demo-step:first-child {
+    border-top: 0;
+    border-left: 0;
   }
 
   .app-theme-easyhq:not(.command-center-page) > .panel-section .panel-header {

@@ -5,42 +5,42 @@ import type { AiBrief, AiCommand, AiSuggestion } from "./aiContracts";
 const mockCommands: AiCommand[] = [
   {
     title: "Plan Day",
-    source: "EasyList + EasyCalendar",
+    source: "Inbox + Plan",
     status: "Sandbox",
     response: "Builds a clean day plan from today's tasks, calendar blocks, and focus windows.",
     preview: "9:00 focus, 1:30 errands, 3:00 client prep",
   },
   {
     title: "Clean Up Tasks",
-    source: "EasyList",
+    source: "Inbox",
     status: "Draft only",
     response: "Clusters a household task list into clearer categories without saving changes.",
     preview: "Work, Home, Follow-up, Someday",
   },
   {
     title: "Summarize Notes",
-    source: "EasyNotes",
+    source: "Notes",
     status: "Meeting notes",
     response: "Turns meeting notes into decisions, open questions, and next actions.",
     preview: "3 decisions, 2 questions, 1 next action",
   },
   {
     title: "Prep Calendar",
-    source: "EasyCalendar",
+    source: "Plan",
     status: "Preview",
     response: "Reviews a daily schedule and suggests prep notes before busy blocks.",
     preview: "Standup notes, travel buffer, agenda reminder",
   },
   {
     title: "Workout Coach",
-    source: "EasyWorkout",
+    source: "Workout",
     status: "Coach preview",
     response: "Drafts a balanced workout suggestion from a recent routine and recovery notes.",
     preview: "Push strength, mobility finisher, lighter volume",
   },
   {
     title: "Project Focus",
-    source: "EasyProjects + EasyList",
+    source: "Projects + Inbox",
     status: "Focus mode",
     response: "Chooses one home project outcome and the next three tasks that support it.",
     preview: "Ship review flow, unblock copy, prep next plan",
@@ -160,9 +160,9 @@ export function AiCommandCenter() {
           <h3 id="ai-daily-brief-title">{mockDailyBrief.dateLabel}</h3>
           <p>{mockDailyBrief.headline}</p>
           <ul className="ai-lab-context-strip" aria-label="EasyLife context used by this brief">
-            <li>EasyList tasks</li>
-            <li>EasyNotes notes</li>
-            <li>EasyCalendar events</li>
+            <li>Inbox tasks</li>
+            <li>Notes</li>
+            <li>Plan events</li>
           </ul>
         </div>
 

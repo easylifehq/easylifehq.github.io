@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ContactDraft, ContactRecord } from "@/lib/firestore/contacts";
+import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 
 type ContactDrawerProps = {
   contact: ContactRecord | null;
@@ -51,6 +52,13 @@ export function ContactDrawer({ contact, isOpen, onClose, onSave, onArchive }: C
     [contact]
   );
   const [draft, setDraft] = useState<ContactDraft>(initialDraft);
+  const drawerRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useFocusTrap(isOpen, drawerRef, {
+    initialFocusRef: closeButtonRef,
+    onEscape: onClose,
+  });
 
   useEffect(() => {
     setDraft(initialDraft);
@@ -72,13 +80,21 @@ export function ContactDrawer({ contact, isOpen, onClose, onSave, onArchive }: C
         onClick={onClose}
         aria-hidden={!isOpen}
       />
-      <aside className={`task-drawer-vnext${isOpen ? " open" : ""}`} aria-hidden={!isOpen}>
+      <aside
+        ref={drawerRef}
+        className={`task-drawer-vnext${isOpen ? " open" : ""}`}
+        aria-hidden={!isOpen}
+        aria-modal={isOpen ? "true" : undefined}
+        aria-label="Edit person"
+        role="dialog"
+        tabIndex={-1}
+      >
         <div className="drawer-header-vnext">
           <div>
-            <p className="eyebrow">EasyContacts</p>
+            <p className="eyebrow">People</p>
             <h2>{currentContact.fullName || "Edit contact"}</h2>
           </div>
-          <button type="button" className="button-secondary" onClick={onClose} aria-label="Close contact editor">
+          <button ref={closeButtonRef} type="button" className="button-secondary" onClick={onClose} aria-label="Close contact editor">
             Close
           </button>
         </div>
@@ -114,14 +130,14 @@ export function ContactDrawer({ contact, isOpen, onClose, onSave, onArchive }: C
           </div>
           <div className="task-composer-grid">
             <label className="field-stack">
-              <span>Company</span>
+              <span>Organization</span>
               <input
                 value={draft.company}
                 onChange={(event) => setDraft((current) => ({ ...current, company: event.target.value }))}
               />
             </label>
             <label className="field-stack">
-              <span>Role</span>
+              <span>Role or connection</span>
               <input
                 value={draft.role}
                 onChange={(event) => setDraft((current) => ({ ...current, role: event.target.value }))}
@@ -144,6 +160,10 @@ export function ContactDrawer({ contact, isOpen, onClose, onSave, onArchive }: C
               />
             </label>
           </div>
+          <p className="helper-copy">
+            Email and phone are saved manual labels only. EasyLife does not sync contacts, autocomplete recipients, or
+            contact anyone from this editor.
+          </p>
           <div className="task-composer-grid">
             <label className="field-stack">
               <span>Last contacted</span>

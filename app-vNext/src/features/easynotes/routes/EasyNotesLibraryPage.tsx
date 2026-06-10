@@ -86,6 +86,7 @@ export function EasyNotesLibraryPage() {
   const [showNoteHandoff, setShowNoteHandoff] = useState(false);
   const [noteHandoffPreview, setNoteHandoffPreview] = useState<AssistantNoteHandoffPreview | null>(null);
   const [noteSaveConfirmation, setNoteSaveConfirmation] = useState<AssistantNoteSaveConfirmation | null>(null);
+  const [isCreatingBlankNote, setIsCreatingBlankNote] = useState(false);
   const [lastOpenNoteId] = useState(() => window.localStorage.getItem(lastOpenNoteStorageKey) || "");
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -186,9 +187,15 @@ export function EasyNotesLibraryPage() {
   );
 
   async function handleCreateNote() {
-    const noteId = await addNote();
-    if (noteId) {
-      navigate(`/app/easynotes/${noteId}`);
+    if (isCreatingBlankNote) return;
+    setIsCreatingBlankNote(true);
+    try {
+      const noteId = await addNote();
+      if (noteId) {
+        navigate(`/app/easynotes/${noteId}`);
+      }
+    } finally {
+      setIsCreatingBlankNote(false);
     }
   }
 
@@ -348,9 +355,14 @@ export function EasyNotesLibraryPage() {
     >
         <div className="notes-command-strip" aria-label="Notes actions">
           <div className="notes-capture-group">
-            <button type="button" className="notes-command-button notes-command-button-primary" onClick={() => void handleCreateNote()}>
+            <button
+              type="button"
+              className="notes-command-button notes-command-button-primary"
+              onClick={() => void handleCreateNote()}
+              disabled={isCreatingBlankNote}
+            >
               <span aria-hidden="true">+</span>
-              New note
+              {isCreatingBlankNote ? "Opening..." : "New note"}
             </button>
             <span className="notes-library-status">
               {notes.length ? "Open a note below" : "Start writing"}
@@ -379,6 +391,20 @@ export function EasyNotesLibraryPage() {
             </button>
           </div>
         </div>
+
+        <section className="notes-context-recall-hint" aria-label="Notes recovery and export boundary">
+          <div>
+            <span>Recovery and export</span>
+            <strong>Local draft backup, manual export</strong>
+            <p>
+              Notes editor recovery uses this browser while autosave catches up. Export remains a manual Settings
+              download, and notes are not sent, synced, or exported automatically.
+            </p>
+          </div>
+          <Link to="/app/settings/data" className="button-secondary compact-button">
+            Data export
+          </Link>
+        </section>
 
         {lastOpenNote ? (
           <Link to={`/app/easynotes/${lastOpenNote.id}`} className="notes-resume-row notes-resume-row-primary">

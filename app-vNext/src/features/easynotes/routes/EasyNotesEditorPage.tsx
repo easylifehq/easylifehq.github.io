@@ -4,6 +4,15 @@ import { useEasyNotes } from "@/features/easynotes/EasyNotesContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 
 const lastOpenNoteStorageKey = "easynotes:lastOpenNoteId";
+const NOTE_EDITOR_DRAFT_PREFIX = "easylife.easynotes.editorDraft.";
+type NoteSaveStatus = "idle" | "saving" | "saved" | "saved-recent" | "failed";
+type StoredNoteEditorDraft = {
+  noteId: string;
+  title: string;
+  bodyText: string;
+  folderId: string;
+  savedAt: number;
+};
 
 function extractActionSuggestions(value: string) {
   return value
@@ -17,6 +26,50 @@ function extractActionSuggestions(value: string) {
     .slice(0, 8);
 }
 
+function getNoteEditorDraftKey(noteId: string) {
+  return `${NOTE_EDITOR_DRAFT_PREFIX}${noteId}`;
+}
+
+function readNoteEditorDraft(noteId: string): StoredNoteEditorDraft | null {
+  if (typeof window === "undefined" || !noteId) return null;
+
+  try {
+    const rawValue = window.localStorage.getItem(getNoteEditorDraftKey(noteId));
+    if (!rawValue) return null;
+    const parsed = JSON.parse(rawValue) as Partial<StoredNoteEditorDraft>;
+
+    if (parsed.noteId !== noteId) return null;
+
+    return {
+      noteId,
+      title: typeof parsed.title === "string" ? parsed.title : "",
+      bodyText: typeof parsed.bodyText === "string" ? parsed.bodyText : "",
+      folderId: typeof parsed.folderId === "string" ? parsed.folderId : "",
+      savedAt: typeof parsed.savedAt === "number" ? parsed.savedAt : 0,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function writeNoteEditorDraft(draft: Omit<StoredNoteEditorDraft, "savedAt">) {
+  if (typeof window === "undefined" || !draft.noteId) return;
+
+  window.localStorage.setItem(
+    getNoteEditorDraftKey(draft.noteId),
+    JSON.stringify({
+      ...draft,
+      savedAt: Date.now(),
+    })
+  );
+}
+
+function clearNoteEditorDraft(noteId: string) {
+  if (typeof window === "undefined" || !noteId) return;
+
+  window.localStorage.removeItem(getNoteEditorDraftKey(noteId));
+}
+
 export function EasyNotesEditorPage() {
   const navigate = useNavigate();
   const { noteId = "" } = useParams();
@@ -27,14 +80,16 @@ export function EasyNotesEditorPage() {
   const [title, setTitle] = useState("");
   const [bodyText, setBodyText] = useState("");
   const [folderId, setFolderId] = useState("");
-  const [saveMessage, setSaveMessage] = useState("");
+  const [saveStatus, setSaveStatus] = useState<NoteSaveStatus>("idle");
   const [isDeleting, setIsDeleting] = useState(false);
   const [processorMessage, setProcessorMessage] = useState("");
+  const [restoredDraftMessage, setRestoredDraftMessage] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isCreatingTasks, setIsCreatingTasks] = useState(false);
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const [actionsOpen, setActionsOpen] = useState(false);
   const saveTimeoutRef = useRef<number | null>(null);
+  const saveRequestRef = useRef(0);
   const bodyTextareaRef = useRef<HTMLTextAreaElement | null>(null);
   const hydratedNoteIdRef = useRef<string | null>(null);
   const noteMetaRef = useRef({ tags: [] as string[], pinned: false });
@@ -52,11 +107,21 @@ export function EasyNotesEditorPage() {
 
     if (hydratedNoteIdRef.current === note.id) return;
 
-    setTitle(note.title);
-    setBodyText(note.bodyText);
-    setFolderId(note.folderId);
-    setSaveMessage("");
+    const localDraft = readNoteEditorDraft(note.id);
+    const shouldRestoreLocalDraft = Boolean(
+      localDraft &&
+      (localDraft.title !== note.title ||
+        localDraft.bodyText !== note.bodyText ||
+        localDraft.folderId !== note.folderId)
+    );
+    const restoredLocalDraft = shouldRestoreLocalDraft ? localDraft : null;
+
+    setTitle(restoredLocalDraft ? restoredLocalDraft.title : note.title);
+    setBodyText(restoredLocalDraft ? restoredLocalDraft.bodyText : note.bodyText);
+    setFolderId(restoredLocalDraft ? restoredLocalDraft.folderId : note.folderId);
+    setSaveStatus(note.title.trim() || note.bodyText.trim() ? "saved" : "idle");
     setProcessorMessage("");
+    setRestoredDraftMessage(shouldRestoreLocalDraft ? "Restored unsaved note draft from this browser." : "");
     setSuggestions([]);
     setActionsOpen(false);
     hydratedNoteIdRef.current = note.id;
@@ -87,12 +152,24 @@ export function EasyNotesEditorPage() {
       lastSavedDraftRef.current.bodyText === bodyText &&
       lastSavedDraftRef.current.folderId === folderId
     ) {
+      clearNoteEditorDraft(activeNoteId);
       return;
     }
+
+    writeNoteEditorDraft({
+      noteId: activeNoteId,
+      title,
+      bodyText,
+      folderId,
+    });
 
     if (saveTimeoutRef.current) {
       window.clearTimeout(saveTimeoutRef.current);
     }
+
+    setSaveStatus("saving");
+    const saveRequestId = saveRequestRef.current + 1;
+    saveRequestRef.current = saveRequestId;
 
     saveTimeoutRef.current = window.setTimeout(() => {
       void saveNote(activeNoteId, {
@@ -108,7 +185,15 @@ export function EasyNotesEditorPage() {
           bodyText,
           folderId,
         };
-        setSaveMessage("");
+        clearNoteEditorDraft(activeNoteId);
+        if (saveRequestRef.current === saveRequestId) {
+          setSaveStatus("saved-recent");
+          setRestoredDraftMessage("");
+        }
+      }).catch(() => {
+        if (saveRequestRef.current === saveRequestId) {
+          setSaveStatus("failed");
+        }
       });
     }, 700);
 
@@ -123,7 +208,7 @@ export function EasyNotesEditorPage() {
     return (
       <section className="panel-section">
         <div className="panel-header">
-          <p className="eyebrow">EasyNotes</p>
+          <p className="eyebrow">Notes</p>
           <h2>Note not found</h2>
           <p>This note may have been deleted or hasn&apos;t synced yet.</p>
         </div>
@@ -140,6 +225,17 @@ export function EasyNotesEditorPage() {
     await deleteNote(note.id);
     navigate("/app/easynotes");
   }
+
+  const saveLabel =
+    saveStatus === "saving"
+      ? "Saving..."
+      : saveStatus === "saved"
+        ? "Saved"
+        : saveStatus === "saved-recent"
+          ? "Saved just now"
+          : saveStatus === "failed"
+            ? "Save failed"
+            : "Start writing";
 
   function handleProcessNote() {
     const nextSuggestions = extractActionSuggestions(bodyText);
@@ -180,7 +276,7 @@ export function EasyNotesEditorPage() {
     setSuggestions([]);
     setProcessorMessage(
       count
-        ? `${count} task${count === 1 ? "" : "s"} sent to EasyList.`
+        ? `${count} task${count === 1 ? "" : "s"} added to Inbox.`
         : "Write each task on its own line, then try again."
     );
   }
@@ -196,7 +292,7 @@ export function EasyNotesEditorPage() {
     setSuggestions([]);
     setProcessorMessage(
       result
-        ? `Created an EasyProject with ${result.taskCount} linked task${
+        ? `Created a project with ${result.taskCount} linked task${
             result.taskCount === 1 ? "" : "s"
           }.`
         : "Write a project outline with one action per line, then try again."
@@ -210,7 +306,9 @@ export function EasyNotesEditorPage() {
           Back
         </Link>
         <div className="notes-editor-status notes-editor-tools">
-          {saveMessage ? <span>{saveMessage}</span> : null}
+          <span className={`notes-save-status notes-save-status-${saveStatus}`} role="status" aria-live="polite">
+            {saveLabel}
+          </span>
           <button
             type="button"
             className={`button-secondary compact-button notes-review-action-button${actionsOpen ? " active" : ""}`}
@@ -224,15 +322,23 @@ export function EasyNotesEditorPage() {
 
       <div className="notes-editor-page notes-editor-page-immersive">
         <label className="notes-title-field">
+          <span>Title optional</span>
           <input
             type="text"
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             placeholder="Untitled note"
+            aria-label="Note title, optional"
           />
         </label>
 
         <label className="notes-body-field">
+          <span>Write first</span>
+          {restoredDraftMessage ? <div className="calendar-info-card">{restoredDraftMessage}</div> : null}
+          <div className="calendar-info-card" aria-label="Note recovery and export boundary">
+            Browser recovery is on while autosave catches up. EasyLife keeps a temporary browser-only note draft,
+            clears it after a successful save, and does not send, sync, export, or use AI from this editor.
+          </div>
           <textarea
             ref={bodyTextareaRef}
             value={bodyText}
@@ -242,6 +348,7 @@ export function EasyNotesEditorPage() {
               setProcessorMessage("");
             }}
             placeholder="Start writing..."
+            aria-label="Note body"
             rows={Math.max(28, bodyText.split(/\r?\n/).length + 4)}
           />
         </label>
@@ -251,7 +358,7 @@ export function EasyNotesEditorPage() {
             <div className="notes-action-panel-heading">
               <strong>Turn note into follow-ups</strong>
               <p className="helper-copy">
-                Review what should become tasks. Nothing is added to EasyList until you approve.
+                Review what should become tasks. Nothing is added to Inbox until you approve.
               </p>
               {processorMessage ? <p className="helper-copy">{processorMessage}</p> : null}
             </div>
@@ -274,7 +381,7 @@ export function EasyNotesEditorPage() {
                 onClick={() => void handleCreateTasksFromNote()}
                 disabled={isCreatingTasks || !bodyText.trim()}
               >
-                {isCreatingTasks ? "Adding..." : "Add follow-ups to EasyList"}
+                {isCreatingTasks ? "Adding..." : "Add follow-ups to Inbox"}
               </button>
               <button
                 type="button"
@@ -318,7 +425,7 @@ export function EasyNotesEditorPage() {
               {suggestions.map((suggestion) => (
                 <article key={suggestion} className="mini-panel-vnext processor-suggestion">
                   <strong>{suggestion}</strong>
-                  <span className="helper-copy">Ready for EasyList</span>
+                  <span className="helper-copy">Ready for Inbox</span>
                 </article>
               ))}
             </div>

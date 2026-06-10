@@ -1,4 +1,3 @@
-import { LoadingState } from "@/components/feedback/LoadingState";
 import { assistantAiAvailability, getAssistantAiFallbackCopy } from "@/features/assistant/aiAvailability";
 import { runMockGateway, type MockGatewayForcedFallbackReason } from "@/features/assistant/gateway/mockGateway";
 import { createMockGatewayTypedCaptureRequest } from "@/features/assistant/gateway/mockGatewayRequest";
@@ -92,7 +91,7 @@ const GATEWAY_PREVIEW_SOURCE_OPTIONS: Array<{
   { value: "local-rules", label: "Local rules", description: "Deterministic draft" },
   { value: "mock-gateway", label: "Mock gateway", description: "No provider" },
   { value: "server-adapter-mock", label: "Server adapter mock", description: "No live AI" },
-  { value: "live-provider-dry-run", label: "First live call gate", description: "Disabled unless approved" },
+  { value: "live-provider-dry-run", label: "Provider test gate", description: "Disabled unless separately approved" },
 ];
 const GATEWAY_RESULT_CLARITY: Record<
   GatewayPreviewSource,
@@ -118,7 +117,7 @@ const GATEWAY_RESULT_CLARITY: Record<
     next: "Use local rules or keep the capture for review.",
   },
   "live-provider-dry-run": {
-    mode: "First live call gate",
+    mode: "Provider test gate",
     result: "Disabled until approval, sanitizer, secret boundary, and quarantine all pass.",
     next: "Use synthetic/private-test capture only. Nothing saved or sent.",
   },
@@ -286,6 +285,7 @@ export function EasyListInboxPage() {
     useState<FirstLiveProviderCallResponse | null>(null);
   const [assistantIntakeClientResult, setAssistantIntakeClientResult] =
     useState<AssistantIntakeSuggestionClientResult | null>(null);
+  const [providerRequestCaptureId, setProviderRequestCaptureId] = useState<string | null>(null);
   const listNames = useMemo(
     () => Array.from(new Set(["Main", ...tasks.map((task) => task.listName || "Main")])).sort(),
     [tasks]
@@ -382,6 +382,9 @@ export function EasyListInboxPage() {
     () => sanitizeProviderDryRunRequest(liveDryRunRequest),
     [liveDryRunRequest]
   );
+  const providerSuggestionRequested =
+    gatewayPreviewSource === "live-provider-dry-run" &&
+    providerRequestCaptureId === assistantSuggestion.id;
 
   useEffect(() => {
     let cancelled = false;
@@ -421,7 +424,7 @@ export function EasyListInboxPage() {
   useEffect(() => {
     let cancelled = false;
 
-    if (gatewayPreviewSource !== "live-provider-dry-run") {
+    if (!providerSuggestionRequested) {
       setAssistantIntakeClientResult(null);
       return () => {
         cancelled = true;
@@ -451,9 +454,10 @@ export function EasyListInboxPage() {
         metadata: {
           source: "inbox-assistant-lane",
           captureId: assistantSuggestion.id,
-          clientVersion: "stage-32-task-4",
+          clientVersion: "p4-03-disabled-contract",
           reviewMode: isDemoReviewMode ? "demo" : "private-alpha",
         },
+        liveCallRequested: false,
       });
 
       if (!cancelled) {
@@ -466,7 +470,7 @@ export function EasyListInboxPage() {
     return () => {
       cancelled = true;
     };
-  }, [assistantCaptureText, assistantSuggestion.id, gatewayPreviewSource, isDemoReviewMode]);
+  }, [assistantCaptureText, assistantSuggestion.id, isDemoReviewMode, providerSuggestionRequested]);
 
   const liveDryRunResultIsStale = isServerGatewayLiveDryRunResponseStale(
     liveDryRunResult,
@@ -537,9 +541,11 @@ export function EasyListInboxPage() {
   const activeGatewayTopline =
     gatewayPreviewSource === "live-provider-dry-run"
       ? [
-          "First live call gate",
+          "Provider test gate",
           liveDryRunResultIsStale
             ? "Stale cleared"
+            : !providerSuggestionRequested
+              ? "Request needed"
             : assistantIntakeClientResult?.callState === "request-sent"
               ? "Function fallback received"
             : duplicateGuardActive
@@ -560,15 +566,21 @@ export function EasyListInboxPage() {
           result: "Possible duplicate held for review.",
           next: "Check the existing task before saving anything new.",
         }
+      : gatewayPreviewSource === "live-provider-dry-run" && !providerSuggestionRequested
+        ? {
+            mode: "Provider test gate",
+            result: "No server request has been made for this capture.",
+            next: "Choose Request gated suggestion to ask for one disabled, review-only fallback.",
+          }
       : liveDryRunResultIsStale
         ? {
-            mode: "First live call gate",
+            mode: "Provider test gate",
             result: "Previous result cleared after capture changed.",
             next: "Current capture will use local fallback until validation finishes.",
           }
         : gatewayPreviewSource === "live-provider-dry-run" && liveDryRunFallbackGuidance
         ? {
-            mode: "First live call gate",
+            mode: "Provider test gate",
             result:
               assistantIntakeServerResponse?.message ||
               firstLiveCallResult?.fallback?.copy ||
@@ -615,10 +627,6 @@ export function EasyListInboxPage() {
     ],
     [activeLaneItems]
   );
-
-  if (isLoading && !isDemoReviewMode) {
-    return <LoadingState label="Opening Inbox..." />;
-  }
 
   function clearTaskSaveConfirmation() {
     setTaskSaveConfirmation(null);
@@ -721,6 +729,7 @@ export function EasyListInboxPage() {
           <p className="page-section-description">
             Draft first. Tasks save here after final confirmation. Notes save in Notes. Plans, reminders, and follow-ups stay preview-only.
           </p>
+          {isLoading && !isDemoReviewMode ? <p className="helper-copy" role="status">Opening Inbox...</p> : null}
         </header>
 
         <div className="easylist-inbox-command" aria-label="Next inbox review action">
@@ -779,6 +788,7 @@ export function EasyListInboxPage() {
                   setTaskHandoffPreview(null);
                   setShowReviewHandoff(false);
                   setReviewHandoffPreview(null);
+                  setProviderRequestCaptureId(null);
                   clearTaskSaveConfirmation();
                 }}
                 placeholder="Paste one messy thought to classify locally"
@@ -789,7 +799,7 @@ export function EasyListInboxPage() {
                 ...INBOX_TRUST_LABELS,
                 "Mock gateway",
                 "Server adapter mock",
-                "First live call gate",
+                "Provider test gated",
                 ASSISTANT_INTAKE_SUGGESTION_ENDPOINT ? "Function endpoint configured" : "Function endpoint missing",
                 "No provider",
                 assistantAiAvailability.badge,
@@ -850,6 +860,44 @@ export function EasyListInboxPage() {
                 </button>
               ))}
             </div>
+            {gatewayPreviewSource === "live-provider-dry-run" ? (
+              <div className="assistant-provider-request-panel" aria-label="Gated provider suggestion request">
+                <div>
+                  <span>{providerSuggestionRequested ? "Request held for review" : "Request required"}</span>
+                  <strong>
+                    {providerSuggestionRequested
+                      ? "One review request is active for this capture."
+                      : "Ask for one gated suggestion when you are ready."}
+                  </strong>
+                  <p>
+                    The app still sends liveCallRequested: false. Nothing saves, sends, schedules, syncs, remembers, or contacts anyone.
+                  </p>
+                </div>
+                <div className="assistant-provider-request-actions">
+                  <button
+                    type="button"
+                    className="primary-button compact-button"
+                    onClick={() => {
+                      setGatewayPreviewSource("live-provider-dry-run");
+                      setProviderRequestCaptureId(assistantSuggestion.id);
+                      setAssistantIntakeClientResult(null);
+                    }}
+                  >
+                    Request gated suggestion
+                  </button>
+                  <button
+                    type="button"
+                    className="button-secondary compact-button"
+                    onClick={() => {
+                      setProviderRequestCaptureId(null);
+                      setAssistantIntakeClientResult(null);
+                    }}
+                  >
+                    Clear request
+                  </button>
+                </div>
+              </div>
+            ) : null}
             <div className="assistant-suggestion-topline">
               {activeGatewayTopline.map((label) => (
                 <span key={label}>{label}</span>
@@ -1026,7 +1074,7 @@ export function EasyListInboxPage() {
                   <h3>
                     {firstLiveCallApprovedTestState
                       ? "Approved test lane visible"
-                      : "First live call remains disabled"}
+                      : "Provider test remains disabled"}
                   </h3>
                   <strong>
                     {firstLiveCallResult?.fallback?.copy ||

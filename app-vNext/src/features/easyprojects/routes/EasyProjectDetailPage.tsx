@@ -99,7 +99,7 @@ export function EasyProjectDetailPage() {
       task: {
         title,
         notes: String(form.get("notes") || "").trim(),
-        category: project?.title || "EasyProjects",
+        category: project?.title || "Projects",
         estimatedLength: form.get("estimatedLength") ? Number(form.get("estimatedLength")) : null,
         priorityTier,
         priorityLabel: getPriorityMeta(priorityTier).label,

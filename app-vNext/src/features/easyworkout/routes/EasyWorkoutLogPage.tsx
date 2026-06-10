@@ -18,6 +18,12 @@ type StoredWorkoutDraft = {
   activeExerciseId?: string;
   exerciseLogs: WorkoutExerciseLogDraft[];
 };
+type DeletedSetUndo = {
+  exerciseLocalId: string;
+  exerciseName: string;
+  set: WorkoutSetDraft;
+  setIndex: number;
+};
 
 const WORKOUT_DRAFT_STORAGE_KEY = "easylife.easyworkout.activeDraft.v1";
 const createLocalId = () => crypto.randomUUID();
@@ -32,7 +38,23 @@ const emptyExerciseLog = (setCount = 1): WorkoutExerciseLogDraft => ({
 });
 const startingWorkoutLogs = (count: number, setCount: number) =>
   Array.from({ length: count }, () => emptyExerciseLog(setCount));
-const toNumberDraft = (value: string) => value === "" ? 0 : Number(value) || 0;
+const sanitizeWholeNumberInput = (value: string) => value.replace(/\D/g, "");
+const sanitizeDecimalInput = (value: string) => {
+  const cleaned = value.replace(/[^\d.]/g, "");
+  const [whole = "", ...decimalParts] = cleaned.split(".");
+  const decimals = decimalParts.join("");
+  return decimalParts.length ? `${whole}.${decimals}` : whole;
+};
+const toWholeNumberDraft = (value: string) => {
+  if (!value) return 0;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : 0;
+};
+const toDecimalDraft = (value: string) => {
+  if (!value) return 0;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+};
 const hasSetWork = (set: WorkoutSetDraft) => set.reps > 0 || set.weight > 0 || set.notes.trim();
 const hasExerciseWork = (exercise: WorkoutExerciseLogDraft) =>
   exercise.exerciseName.trim() ||
@@ -143,6 +165,7 @@ export function EasyWorkoutLogPage() {
   const [activeExerciseId, setActiveExerciseId] = useState(restoredDraft?.activeExerciseId || restoredDraft?.exerciseLogs[0]?.localId || "");
   const [workoutPaste, setWorkoutPaste] = useState("");
   const [saveMessage, setSaveMessage] = useState(restoredDraft ? "Unsaved workout restored on this device." : "");
+  const [deletedSetUndo, setDeletedSetUndo] = useState<DeletedSetUndo | null>(null);
   const todayKey = new Date().toISOString().split("T")[0];
   const todayLoggedCount = sessions.filter((session) => session.performedOn === todayKey).length;
 
@@ -335,6 +358,7 @@ export function EasyWorkoutLogPage() {
   }
 
   function updateSet(exerciseIndex: number, setIndex: number, next: Partial<WorkoutSetDraft>) {
+    setDeletedSetUndo(null);
     setExerciseLogs((current) =>
       current.map((exercise, currentExerciseIndex) =>
         currentExerciseIndex === exerciseIndex
@@ -349,7 +373,24 @@ export function EasyWorkoutLogPage() {
     );
   }
 
+  function selectNumericInput(input: HTMLInputElement) {
+    window.requestAnimationFrame(() => input.select());
+  }
+
   function deleteSet(exerciseIndex: number, setIndex: number) {
+    const exercise = exerciseLogs[exerciseIndex];
+    const removedSet = exercise?.sets[setIndex];
+
+    if (exercise && removedSet) {
+      setDeletedSetUndo({
+        exerciseLocalId: exercise.localId,
+        exerciseName: exercise.exerciseName || `Exercise ${exerciseIndex + 1}`,
+        set: removedSet,
+        setIndex,
+      });
+      setSaveMessage("Set removed. Undo is available before you save.");
+    }
+
     setExerciseLogs((current) =>
       current.map((exercise, currentExerciseIndex) =>
         currentExerciseIndex === exerciseIndex
@@ -362,6 +403,30 @@ export function EasyWorkoutLogPage() {
           : exercise
       )
     );
+  }
+
+  function undoDeletedSet() {
+    if (!deletedSetUndo) return;
+
+    setExerciseLogs((current) =>
+      current.map((exercise) => {
+        if (exercise.localId !== deletedSetUndo.exerciseLocalId) return exercise;
+
+        const restoredSets = [...exercise.sets];
+        const insertIndex = Math.min(deletedSetUndo.setIndex, restoredSets.length);
+
+        if (restoredSets.length === 1 && !hasSetWork(restoredSets[0])) {
+          restoredSets.splice(0, 1, deletedSetUndo.set);
+        } else {
+          restoredSets.splice(insertIndex, 0, deletedSetUndo.set);
+        }
+
+        return { ...exercise, sets: restoredSets };
+      })
+    );
+    setActiveExerciseId(deletedSetUndo.exerciseLocalId);
+    setSaveMessage("Set restored. Nothing is saved until you save the workout.");
+    setDeletedSetUndo(null);
   }
 
   function fillFromLastTime(exerciseIndex: number) {
@@ -610,7 +675,14 @@ export function EasyWorkoutLogPage() {
           {!isFocusedWorkoutMode ? (
           <label className="field-stack">
             <span>Duration (minutes)</span>
-            <input type="number" min="0" value={durationMinutes} onChange={(event) => setDurationMinutes(event.target.value)} placeholder="75" />
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={durationMinutes}
+              onChange={(event) => setDurationMinutes(sanitizeWholeNumberInput(event.target.value))}
+              placeholder="75"
+            />
           </label>
           ) : null}
           <label className={`field-stack${isFocusedWorkoutMode ? "" : " field-stack-wide"}`}>
@@ -746,6 +818,11 @@ export function EasyWorkoutLogPage() {
                   </label>
                 </div>
 
+                <p className="helper-copy">
+                  Tap a reps or weight field once, type the full number, then move on. Remove set has a local undo before
+                  you save the workout.
+                </p>
+
                 <div className="task-list-vnext">
                   {exercise.sets.map((set, setIndex) => (
                     <div key={set.localId} className={`task-row-card workout-set-row${isFocusedWorkoutMode ? " gym-set-row" : ""}`}>
@@ -757,26 +834,39 @@ export function EasyWorkoutLogPage() {
                         <label className="field-stack task-row-field">
                           <span>Reps</span>
                           <input
-                            type="number"
-                            min="0"
+                            type="text"
                             inputMode="numeric"
+                            pattern="[0-9]*"
+                            enterKeyHint="next"
+                            autoComplete="off"
                             value={set.reps || ""}
                             placeholder="8"
-                            onFocus={(event) => event.currentTarget.select()}
-                            onChange={(event) => updateSet(exerciseIndex, setIndex, { reps: toNumberDraft(event.target.value) })}
+                            onFocus={(event) => selectNumericInput(event.currentTarget)}
+                            onClick={(event) => selectNumericInput(event.currentTarget)}
+                            onMouseUp={(event) => event.preventDefault()}
+                            onChange={(event) => {
+                              const nextValue = sanitizeWholeNumberInput(event.target.value);
+                              updateSet(exerciseIndex, setIndex, { reps: toWholeNumberDraft(nextValue) });
+                            }}
                           />
                         </label>
                         <label className="field-stack task-row-field">
                           <span>Weight</span>
                           <input
-                            type="number"
-                            min="0"
-                            step="0.5"
+                            type="text"
                             inputMode="decimal"
+                            pattern="[0-9]*[.]?[0-9]*"
+                            enterKeyHint="next"
+                            autoComplete="off"
                             value={set.weight || ""}
                             placeholder="135"
-                            onFocus={(event) => event.currentTarget.select()}
-                            onChange={(event) => updateSet(exerciseIndex, setIndex, { weight: toNumberDraft(event.target.value) })}
+                            onFocus={(event) => selectNumericInput(event.currentTarget)}
+                            onClick={(event) => selectNumericInput(event.currentTarget)}
+                            onMouseUp={(event) => event.preventDefault()}
+                            onChange={(event) => {
+                              const nextValue = sanitizeDecimalInput(event.target.value);
+                              updateSet(exerciseIndex, setIndex, { weight: toDecimalDraft(nextValue) });
+                            }}
                           />
                         </label>
                         <label className="field-stack task-row-field">
@@ -785,8 +875,13 @@ export function EasyWorkoutLogPage() {
                         </label>
                         <div className="task-row-actions workout-set-actions">
                           {previous && set.weight > previous.bestWeight ? <span className="workout-pr-chip">PR</span> : null}
-                          <button type="button" className="ghost-button compact-button" onClick={() => deleteSet(exerciseIndex, setIndex)}>
-                            Delete
+                          <button
+                            type="button"
+                            className="danger-button compact-button workout-delete-button"
+                            onClick={() => deleteSet(exerciseIndex, setIndex)}
+                            aria-label={`Remove set ${setIndex + 1}`}
+                          >
+                            Remove set
                           </button>
                         </div>
                       </div>
@@ -795,55 +890,59 @@ export function EasyWorkoutLogPage() {
                 </div>
 
                 <div className="task-composer-actions workout-exercise-actions">
-                  <button type="button" className="button-secondary" onClick={() => updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, emptySet()] })}>
-                    Add set
-                  </button>
-                  {isFocusedWorkoutMode && exercise.sets.length ? (
-                    <button
-                      type="button"
-                      className="button-secondary"
-                      onClick={() => {
-                        const previousSet = exercise.sets[exercise.sets.length - 1];
-                        updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, { ...previousSet, localId: createLocalId() }] });
-                      }}
-                    >
-                      Copy previous set
+                  <div className="workout-exercise-main-actions">
+                    <button type="button" className="button-secondary" onClick={() => updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, emptySet()] })}>
+                      Add set
                     </button>
-                  ) : null}
-                  <button
-                    type="button"
-                    className="ghost-button"
-                    onClick={() =>
-                      setExerciseLogs((current) => {
-                        const nextLogs = current.length === 1
-                          ? [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
-                          : current.filter((_, index) => index !== exerciseIndex);
-                        setActiveExerciseId(nextLogs[Math.min(exerciseIndex, nextLogs.length - 1)]?.localId ?? "");
-                        return nextLogs;
-                      })
-                    }
-                  >
-                    Remove exercise
-                  </button>
-                  {isFocusedWorkoutMode ? (
-                    <button
-                      type="button"
-                      className="primary-button"
-                      onClick={() => {
-                        const nextExercise = exerciseLogs[exerciseIndex + 1];
-                        if (nextExercise) {
-                          setActiveExerciseId(nextExercise.localId);
-                          return;
-                        }
+                    {isFocusedWorkoutMode && exercise.sets.length ? (
+                      <button
+                        type="button"
+                        className="button-secondary"
+                        onClick={() => {
+                          const previousSet = exercise.sets[exercise.sets.length - 1];
+                          updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, { ...previousSet, localId: createLocalId() }] });
+                        }}
+                      >
+                        Copy previous set
+                      </button>
+                    ) : null}
+                    {isFocusedWorkoutMode ? (
+                      <button
+                        type="button"
+                        className="primary-button"
+                        onClick={() => {
+                          const nextExercise = exerciseLogs[exerciseIndex + 1];
+                          if (nextExercise) {
+                            setActiveExerciseId(nextExercise.localId);
+                            return;
+                          }
 
-                        const newExercise = emptyExerciseLog(settings.easyWorkout.defaultSetCount);
-                        setExerciseLogs((current) => [...current, newExercise]);
-                        setActiveExerciseId(newExercise.localId);
-                      }}
+                          const newExercise = emptyExerciseLog(settings.easyWorkout.defaultSetCount);
+                          setExerciseLogs((current) => [...current, newExercise]);
+                          setActiveExerciseId(newExercise.localId);
+                        }}
+                      >
+                        Done, next exercise
+                      </button>
+                    ) : null}
+                  </div>
+                  <div className="workout-exercise-delete-actions" aria-label="Exercise delete actions">
+                    <button
+                      type="button"
+                      className="danger-button workout-delete-button"
+                      onClick={() =>
+                        setExerciseLogs((current) => {
+                          const nextLogs = current.length === 1
+                            ? [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
+                            : current.filter((_, index) => index !== exerciseIndex);
+                          setActiveExerciseId(nextLogs[Math.min(exerciseIndex, nextLogs.length - 1)]?.localId ?? "");
+                          return nextLogs;
+                        })
+                      }
                     >
-                      Done, next exercise
+                      Delete exercise
                     </button>
-                  ) : null}
+                  </div>
                 </div>
               </article>
             );
@@ -856,6 +955,17 @@ export function EasyWorkoutLogPage() {
           </button>
           <button type="submit" className="primary-button">Save workout</button>
         </div>
+        {deletedSetUndo ? (
+          <div className="calendar-plan-undo-card">
+            <div>
+              <strong>Set removed.</strong>
+              <p>{deletedSetUndo.exerciseName} set {deletedSetUndo.setIndex + 1} can be restored before saving.</p>
+            </div>
+            <button type="button" className="ghost-button compact-button" onClick={undoDeletedSet}>
+              Undo remove
+            </button>
+          </div>
+        ) : null}
         {saveMessage ? <div className="calendar-info-card">{saveMessage}</div> : null}
       </form>
     </PageSection>

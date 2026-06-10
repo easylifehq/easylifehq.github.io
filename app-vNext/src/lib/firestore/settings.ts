@@ -160,7 +160,7 @@ export const defaultShellSettings: UserShellSettings = {
   assistant: {
     enabled: false,
     allowDataReview: false,
-    allowCrossAppSuggestions: true,
+    allowCrossAppSuggestions: false,
     allowDraftCreation: false,
     requireReviewBeforeSave: true,
     fallbackMode: "explain",

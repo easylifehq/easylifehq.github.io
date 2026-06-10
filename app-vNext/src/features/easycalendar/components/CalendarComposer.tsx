@@ -320,10 +320,10 @@ export function CalendarComposer() {
         </div>
 
         <div className="calendar-item-section">
-          <strong>{eventItemKind === "deadline" ? "EasyList deadline" : "Prep task"}</strong>
+          <strong>{eventItemKind === "deadline" ? "Inbox deadline" : "Prep task"}</strong>
           <p className="helper-copy">
             {eventItemKind === "deadline"
-              ? "Optionally mirror this due marker as an EasyList deadline."
+              ? "Optionally mirror this due marker as an Inbox deadline."
               : "Optionally create one linked task for preparation or follow-up."}
           </p>
         </div>
@@ -336,7 +336,7 @@ export function CalendarComposer() {
               onChange={(event) => setCreatePrepTask(event.target.checked)}
             />
             <span>
-              Also create a linked EasyList {eventItemKind === "deadline" ? "deadline" : "task"} for this.
+              Also create a linked Inbox {eventItemKind === "deadline" ? "deadline" : "task"} for this.
             </span>
           </label>
 
@@ -385,8 +385,8 @@ export function CalendarComposer() {
       <form className="calendar-form-card" onSubmit={handleTaskBlockSubmit}>
         <div className="panel-header">
           <p className="eyebrow">Linked task block</p>
-          <h2>Schedule from EasyList</h2>
-          <p>Pick an active task and place it on the calendar as flexible work time.</p>
+          <h2>Schedule from Inbox</h2>
+          <p>Pick an active task and place it on Plan as flexible work time.</p>
         </div>
 
         <div className="task-composer-grid">
@@ -485,8 +485,8 @@ export function CalendarComposer() {
         ) : (
           <p className="helper-copy">
             {activeTasks.length
-              ? "Choose an active EasyList task to schedule it."
-              : "No open EasyList tasks yet."}
+              ? "Choose an active Inbox task to schedule it."
+              : "No open Inbox tasks yet."}
           </p>
         )}
 

@@ -50,7 +50,7 @@ export function EasyProjectsHomePage() {
     setPlannerMessage("");
 
     if (!settings.assistant.enabled || !settings.assistant.allowDraftCreation) {
-      setPlannerMessage("Turn on Assistant and draft creation in Settings before using AI project planning.");
+      setPlannerMessage("Turn on Assistant and draft creation in Settings before using the gated project draft planner.");
       setIsPlanning(false);
       return;
     }
@@ -70,10 +70,10 @@ export function EasyProjectsHomePage() {
     } catch (nextError) {
       setPlannerMessage(
         settings.assistant.fallbackMode === "quiet"
-          ? "AI project planning is unavailable."
+          ? "Gated project drafting is unavailable."
           : nextError instanceof Error
             ? nextError.message
-            : "AI project planning is unavailable. You can still create the project manually below."
+            : "Gated project drafting is unavailable. You can still create the project manually below."
       );
     } finally {
       setIsPlanning(false);
@@ -92,7 +92,7 @@ export function EasyProjectsHomePage() {
       }
 
       const projectId = await addProject({
-        title: plannerTitle.trim() || "AI planned project",
+        title: plannerTitle.trim() || "Draft planned project",
         description: [plannerDescription.trim(), aiPlan.summary.trim()].filter(Boolean).join("\n\n"),
         targetDate: plannerTargetDate,
         status: "active",
@@ -260,11 +260,11 @@ export function EasyProjectsHomePage() {
 
         {isProjectPlannerEnabled ? (
           <details className="advanced-disclosure">
-            <summary>AI project planner</summary>
+            <summary>Gated project draft planner</summary>
             <PageSection
               eyebrow="Experimental"
-              title="Draft from a rough idea"
-              description="Describe the outcome and EasyProjects can draft sections, due dates, and linked tasks for review."
+              title="Review a project draft"
+              description="Describe the outcome and Projects can request a gated draft for review. Nothing is created until you approve it."
             >
               <form className="project-ai-planner" onSubmit={handlePlanProject}>
                 <div className="task-composer-grid">
@@ -301,7 +301,7 @@ export function EasyProjectsHomePage() {
                     className="primary-button"
                     disabled={isPlanning || (!plannerTitle.trim() && !plannerDescription.trim())}
                   >
-                    {isPlanning ? "Planning..." : "Generate plan"}
+                    {isPlanning ? "Preparing draft..." : "Request draft"}
                   </button>
                   {aiPlan ? (
                     <button type="button" className="button-secondary" onClick={() => setAiPlan(null)}>
@@ -326,7 +326,7 @@ export function EasyProjectsHomePage() {
                       onClick={() => void handleCreateAiPlan()}
                       disabled={isCreatingPlan}
                     >
-                      {isCreatingPlan ? "Creating..." : "Create project plan"}
+                      {isCreatingPlan ? "Creating..." : "Confirm and create project"}
                     </button>
                   </div>
 

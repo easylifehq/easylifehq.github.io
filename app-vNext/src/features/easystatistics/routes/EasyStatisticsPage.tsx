@@ -274,18 +274,18 @@ export function EasyStatisticsPage() {
   ];
   const tabs = [
     { id: "overview", label: "Overview" },
-    { id: "workout", label: "EasyWorkout" },
-    { id: "list", label: "EasyList" },
-    { id: "pipeline", label: "EasyPipeline" },
-    { id: "projects", label: "EasyProjects" },
-    { id: "notes", label: "EasyNotes" },
+    { id: "workout", label: "Workout" },
+    { id: "list", label: "Inbox" },
+    { id: "pipeline", label: "Follow-ups" },
+    { id: "projects", label: "Projects" },
+    { id: "notes", label: "Notes" },
   ] as const;
 
   return (
     <main className="page-wrap app-theme app-theme-easystatistics">
       {(error || statsError) ? <p className="error-copy">{error || statsError}</p> : null}
 
-      <PageSection eyebrow="EasyStatistics" title="Progress hub" description={weeklyRead}>
+      <PageSection eyebrow="Progress" title="Progress hub" description={weeklyRead}>
         <div className="statistics-hero-strip">
           <article>
             <span>Life score</span>
@@ -347,7 +347,7 @@ export function EasyStatisticsPage() {
 
       {activeTab === "overview" ? (
         <div className="statistics-app-grid">
-          <PageSection eyebrow="EasyList" title="Tasks">
+          <PageSection eyebrow="Inbox" title="Tasks">
             {isLoading ? <p className="helper-copy">Loading task stats...</p> : null}
             <div className="statistics-progress-list">
               <div><span>Completed</span><strong>{stats.completedTasks.length}</strong></div>
@@ -355,64 +355,64 @@ export function EasyStatisticsPage() {
               <div><span>Created this month</span><strong>{stats.tasksCreatedThisMonth.length}</strong></div>
               <div><span>Completion rate</span><strong>{stats.completionRate}%</strong></div>
             </div>
-            <Link to="/app/easylist/dashboard" className="button-secondary compact-button">Open EasyList</Link>
+            <Link to="/app/easylist/dashboard" className="button-secondary compact-button">Open Inbox</Link>
           </PageSection>
 
-          <PageSection eyebrow="EasyCalendar" title="Time">
+          <PageSection eyebrow="Plan" title="Time">
             <div className="statistics-progress-list">
               <div><span>Planned work</span><strong>{formatHours(stats.plannedMinutes)}</strong></div>
               <div><span>Task blocks</span><strong>{stats.plannedBlocksThisWeek.length}</strong></div>
               <div><span>Fixed events</span><strong>{stats.eventsThisWeek.length}</strong></div>
               <div><span>Due this week</span><strong>{stats.dueThisWeek.length}</strong></div>
             </div>
-            <Link to="/app/easycalendar/week" className="button-secondary compact-button">Open EasyCalendar</Link>
+            <Link to="/app/easycalendar/week" className="button-secondary compact-button">Open Plan</Link>
           </PageSection>
 
-          <PageSection eyebrow="EasyWorkout" title="Training">
+          <PageSection eyebrow="Workout" title="Training">
             <div className="statistics-progress-list">
               <div><span>Sessions this week</span><strong>{stats.workoutsThisWeek.length}</strong></div>
               <div><span>Top muscle</span><strong>{stats.topMuscleGroup?.name || "No signal yet"}</strong></div>
               <div><span>Groups active</span><strong>{stats.muscleGroupsThisWeek}</strong></div>
               <div><span>All-time volume</span><strong>{stats.allTimeWorkoutVolume.toLocaleString()}</strong></div>
             </div>
-            <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open EasyWorkout</Link>
+            <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open Workout</Link>
           </PageSection>
 
-          <PageSection eyebrow="EasyPipeline" title="Applications">
+          <PageSection eyebrow="Follow-ups" title="Applications">
             <div className="statistics-progress-list">
               <div><span>Total tracked</span><strong>{applications.length}</strong></div>
               <div><span>Created this month</span><strong>{stats.applicationsCreatedThisMonth.length}</strong></div>
               <div><span>Responses</span><strong>{stats.responseCount}</strong></div>
               <div><span>Offers</span><strong>{stats.offerCount}</strong></div>
             </div>
-            <Link to="/app/easypipeline/dashboard" className="button-secondary compact-button">Open EasyPipeline</Link>
+            <Link to="/app/easypipeline/dashboard" className="button-secondary compact-button">Open Follow-ups</Link>
           </PageSection>
 
-          <PageSection eyebrow="EasyProjects" title="Projects">
+          <PageSection eyebrow="Projects" title="Projects">
             <div className="statistics-progress-list">
               <div><span>Active</span><strong>{stats.activeProjects.length}</strong></div>
               <div><span>Completed</span><strong>{stats.completedProjects.length}</strong></div>
               <div><span>Linked tasks</span><strong>{stats.linkedProjectTasks.length}</strong></div>
               <div><span>Project tasks done</span><strong>{stats.completedProjectTasks}</strong></div>
             </div>
-            <Link to="/app/easyprojects" className="button-secondary compact-button">Open EasyProjects</Link>
+            <Link to="/app/easyprojects" className="button-secondary compact-button">Open Projects</Link>
           </PageSection>
 
-          <PageSection eyebrow="EasyNotes" title="Notes">
+          <PageSection eyebrow="Notes" title="Notes">
             <div className="statistics-progress-list">
               <div><span>Live notes</span><strong>{stats.liveNotes.length}</strong></div>
               <div><span>Created this month</span><strong>{stats.notesCreatedThisMonth.length}</strong></div>
               <div><span>Pinned</span><strong>{stats.pinnedNotes}</strong></div>
               <div><span>Words captured</span><strong>{stats.wordCount.toLocaleString()}</strong></div>
             </div>
-            <Link to="/app/easynotes" className="button-secondary compact-button">Open EasyNotes</Link>
+            <Link to="/app/easynotes" className="button-secondary compact-button">Open Notes</Link>
           </PageSection>
         </div>
       ) : null}
 
       {activeTab === "workout" ? (
         <div className="statistics-tab-panel">
-          <PageSection eyebrow="EasyWorkout" title="Training progress" description="The deeper read on your lifting rhythm, coverage, and momentum.">
+          <PageSection eyebrow="Workout" title="Training progress" description="The deeper read on your lifting rhythm, coverage, and momentum.">
             <div className="statistics-hero-strip">
               <article>
                 <span>Sessions this week</span>
@@ -511,14 +511,14 @@ export function EasyStatisticsPage() {
                 </div>
               </PageSection>
             </div>
-            <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open EasyWorkout</Link>
+            <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open Workout</Link>
           </PageSection>
         </div>
       ) : null}
 
       {activeTab === "list" ? (
         <div className="statistics-tab-panel">
-          <PageSection eyebrow="EasyList" title="Task progress" description="What is getting captured, cleared, and still needs attention.">
+          <PageSection eyebrow="Inbox" title="Task progress" description="What is getting captured, cleared, and still needs attention.">
             {isLoading ? <p className="helper-copy">Loading task stats...</p> : null}
             <div className="statistics-subgrid">
               <article className="statistics-insight-card">
@@ -555,14 +555,14 @@ export function EasyStatisticsPage() {
                 </div>
               </PageSection>
             </div>
-            <Link to="/app/easylist/dashboard" className="button-secondary compact-button">Open EasyList</Link>
+            <Link to="/app/easylist/dashboard" className="button-secondary compact-button">Open Inbox</Link>
           </PageSection>
         </div>
       ) : null}
 
       {activeTab === "pipeline" ? (
         <div className="statistics-tab-panel">
-          <PageSection eyebrow="EasyPipeline" title="Career progress" description="Applications, responses, and how the search is moving.">
+          <PageSection eyebrow="Follow-ups" title="Career progress" description="Applications, responses, and how the search is moving.">
             <div className="statistics-subgrid">
               <article className="statistics-insight-card">
                 <span>Active roles</span>
@@ -586,14 +586,14 @@ export function EasyStatisticsPage() {
               <div><span>Follow-ups due</span><strong>{stats.followUpsDue}</strong></div>
               <div><span>Offers</span><strong>{stats.offerCount}</strong></div>
             </div>
-            <Link to="/app/easypipeline/dashboard" className="button-secondary compact-button">Open EasyPipeline</Link>
+            <Link to="/app/easypipeline/dashboard" className="button-secondary compact-button">Open Follow-ups</Link>
           </PageSection>
         </div>
       ) : null}
 
       {activeTab === "projects" ? (
         <div className="statistics-tab-panel">
-          <PageSection eyebrow="EasyProjects" title="Project movement" description="A quick read on what is active, linked, and actually getting finished.">
+          <PageSection eyebrow="Projects" title="Project movement" description="A quick read on what is active, linked, and actually getting finished.">
             <div className="statistics-subgrid">
               <article className="statistics-insight-card">
                 <span>Active</span>
@@ -617,14 +617,14 @@ export function EasyStatisticsPage() {
               <div><span>Linked tasks</span><strong>{stats.linkedProjectTasks.length}</strong></div>
               <div><span>Tasks done</span><strong>{stats.completedProjectTasks}</strong></div>
             </div>
-            <Link to="/app/easyprojects" className="button-secondary compact-button">Open EasyProjects</Link>
+            <Link to="/app/easyprojects" className="button-secondary compact-button">Open Projects</Link>
           </PageSection>
         </div>
       ) : null}
 
       {activeTab === "notes" ? (
         <div className="statistics-tab-panel">
-          <PageSection eyebrow="EasyNotes" title="Writing progress" description="A lighter read on how much writing and capture is happening over time.">
+          <PageSection eyebrow="Notes" title="Writing progress" description="A lighter read on how much writing and capture is happening over time.">
             <div className="statistics-subgrid">
               <article className="statistics-insight-card">
                 <span>Live notes</span>
@@ -648,7 +648,7 @@ export function EasyStatisticsPage() {
               <div><span>Pinned</span><strong>{stats.pinnedNotes}</strong></div>
               <div><span>Words captured</span><strong>{stats.wordCount.toLocaleString()}</strong></div>
             </div>
-            <Link to="/app/easynotes" className="button-secondary compact-button">Open EasyNotes</Link>
+            <Link to="/app/easynotes" className="button-secondary compact-button">Open Notes</Link>
           </PageSection>
         </div>
       ) : null}

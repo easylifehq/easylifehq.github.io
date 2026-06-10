@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { LoadingState } from "@/components/feedback/LoadingState";
 import { PageSection } from "@/components/ui/PageSection";
 import { TaskCard } from "@/features/easylist/components/TaskCard";
 import { TaskDrawer } from "@/features/easylist/components/TaskDrawer";
@@ -192,17 +191,14 @@ export function EasyListDashboardPage() {
     });
   }
 
-  if (isLoading) {
-    return <LoadingState label="Loading EasyList..." />;
-  }
-
   return (
     <>
       <PageSection
-        eyebrow="EasyList"
-        title="Tasks"
+        eyebrow="Inbox"
+        title="Task review"
         description="Open the next task. Use controls when you need to search, switch lists, or edit in bulk."
       >
+        {isLoading ? <p className="helper-copy" role="status">Loading Inbox...</p> : null}
         <section className="easylist-action-queue" aria-label="Task action queue">
           <div className="easylist-action-main">
             <span>Next up</span>
@@ -368,7 +364,7 @@ export function EasyListDashboardPage() {
               ))
             ) : (
               <div className="empty-card-vnext easylist-suite-empty-card">
-                <span>EasyList workspace</span>
+                <span>Inbox review</span>
                 <strong>
                   {activeView === "focus"
                     ? "Your focus queue is clear"
@@ -380,7 +376,7 @@ export function EasyListDashboardPage() {
                   {activeView === "focus"
                     ? "Next: capture one task on Add, review Upcoming, or pick a list when you are ready to keep moving."
                     : activeView === "upcoming"
-                      ? "Next: add due dates to planned work so EasyCalendar and the rest of the suite can surface what is coming."
+                      ? "Next: add due dates to planned work so Plan can surface what is coming."
                       : "Next: add a task from the Add page or choose another list to keep this workspace connected."}
                 </p>
               </div>

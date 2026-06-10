@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 
 export type ProductsMenuItem = {
   href: string;
@@ -31,6 +32,9 @@ export function ProductsMenu({
 }: ProductsMenuProps) {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const hasGroups = items.some((item) => item.group);
   const shouldShowDescriptions = showDescriptions;
   const groupedItems = items.reduce<Array<{ label: string; description?: string; items: ProductsMenuItem[] }>>(
@@ -63,6 +67,20 @@ export function ProductsMenu({
 
     return location.pathname === appRoot || location.pathname.startsWith(`${appRoot}/`);
   }
+
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  const toggleMenu = useCallback(() => {
+    setIsOpen((current) => !current);
+  }, []);
+
+  useFocusTrap(isOpen, panelRef, {
+    initialFocusRef: closeButtonRef,
+    returnFocusRef: triggerRef,
+    onEscape: closeMenu,
+  });
 
   useEffect(() => {
     setIsOpen(false);
@@ -104,7 +122,8 @@ export function ProductsMenu({
         className="menu-trigger-button"
         aria-label={triggerAriaLabel}
         aria-expanded={isOpen}
-        onClick={() => setIsOpen((current) => !current)}
+        ref={triggerRef}
+        onClick={toggleMenu}
       >
         {label}
       </button>
@@ -113,13 +132,20 @@ export function ProductsMenu({
         type="button"
         className={`menu-backdrop${isOpen ? " open" : ""}`}
         aria-label="Close menu"
-        onClick={() => setIsOpen(false)}
+        onClick={closeMenu}
       />
 
-      <div className={`menu-panel${isOpen ? " open" : ""}${panelClassName ? ` ${panelClassName}` : ""}`}>
+      <div
+        ref={panelRef}
+        className={`menu-panel${isOpen ? " open" : ""}${panelClassName ? ` ${panelClassName}` : ""}`}
+        role="dialog"
+        aria-modal={isOpen ? "true" : undefined}
+        aria-label={panelLabel ?? label}
+        tabIndex={-1}
+      >
         <div className="menu-panel-header">
           <strong>{panelLabel ?? label}</strong>
-          <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)}>
+          <button ref={closeButtonRef} type="button" className="ghost-button compact-button" onClick={closeMenu}>
             Close
           </button>
         </div>
@@ -139,7 +165,7 @@ export function ProductsMenu({
                   key={item.href}
                   href={item.href}
                   className="menu-link-card"
-                  onClick={() => setIsOpen(false)}
+                  onClick={closeMenu}
                 >
                   <strong>{item.label}</strong>
                   {shouldShowDescriptions ? <span className="menu-link-description">{item.description}</span> : null}
@@ -150,7 +176,7 @@ export function ProductsMenu({
                   to={item.href}
                   className={`menu-link-card${isCurrent ? " active" : ""}`}
                   aria-current={isCurrent ? "page" : undefined}
-                  onClick={() => setIsOpen(false)}
+                  onClick={closeMenu}
                 >
                   <span className="menu-link-title">
                     <strong>{item.label}</strong>

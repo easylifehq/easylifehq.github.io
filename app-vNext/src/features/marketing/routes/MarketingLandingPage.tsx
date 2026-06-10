@@ -78,7 +78,7 @@ const assistantAreas = [
 const demoSteps = [
   {
     title: "Open from the home screen",
-    description: "Launch into HQ, last-used, or the startup page you picked in Settings.",
+    description: "Launch into Today, last-used, or the startup page you picked in Settings.",
   },
   {
     title: "Capture a real life item",

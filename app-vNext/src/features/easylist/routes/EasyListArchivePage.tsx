@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { LoadingState } from "@/components/feedback/LoadingState";
 import { PageSection } from "@/components/ui/PageSection";
 import { TaskCard } from "@/features/easylist/components/TaskCard";
 import { TaskDrawer } from "@/features/easylist/components/TaskDrawer";
@@ -11,10 +10,6 @@ export function EasyListArchivePage() {
   const { tasks, isLoading, saveTask, markComplete, markActive, deleteTask } = useEasyList();
   const [selectedTask, setSelectedTask] = useState<TaskRecord | null>(null);
 
-  if (isLoading) {
-    return <LoadingState label="Loading archive..." />;
-  }
-
   const completedTasks = tasks.filter((task) => task.completed && !task.deletedAt);
   const groupedWeeks = groupCompletedTasksByWeek(completedTasks);
 
@@ -25,6 +20,7 @@ export function EasyListArchivePage() {
         title="Archive"
         description="Completed tasks grouped by week so you can see what got handled and when."
       >
+        {isLoading ? <p className="helper-copy" role="status">Loading archive...</p> : null}
         <div className="stats-grid">
           <article className="stat-card-vnext">
             <span>Completed tasks</span>

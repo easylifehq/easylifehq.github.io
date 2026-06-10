@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import type { PriorityTier, TaskDraft, TaskItemKind } from "@/lib/firestore/tasks";
 import { getPriorityMeta, normalizePriorityTier, PRIORITY_TIERS } from "@/features/easylist/lib/taskUtils";
 import { auth } from "@/lib/firebase/client";
@@ -44,6 +45,7 @@ const EMPTY_ROW = (priorityTier = 5): TaskRowDraft => ({
 });
 
 const BRAIN_DUMP_DRAFT_KEY = "easylife.easylist.brainDumpDraft";
+const INBOX_ROWS_DRAFT_KEY = "easylife.inbox.quickRowsDraft";
 
 export function buildTaskDraft(row: TaskRowDraft, listName = "Main"): TaskDraft | null {
   if (!row.title.trim()) {
@@ -359,18 +361,73 @@ function buildAnalysisMessage(parsedRows: TaskRowDraft[], source: "ai" | "local"
   }; check the Due column before saving.`;
 }
 
+function isRowDirty(row: TaskRowDraft) {
+  return Boolean(
+    row.title.trim() ||
+      row.category.trim() ||
+      row.dueDate ||
+      row.estimatedLength ||
+      row.notes.trim() ||
+      row.itemKind !== "task"
+  );
+}
+
+function restoreInboxRowsDraft(defaultPriorityTier: PriorityTier) {
+  try {
+    const rawValue = window.localStorage.getItem(INBOX_ROWS_DRAFT_KEY);
+    if (!rawValue) return null;
+
+    const parsed = JSON.parse(rawValue) as Partial<TaskRowDraft>[];
+    if (!Array.isArray(parsed) || !parsed.length) return null;
+
+    const rows = parsed
+      .map((row) => ({
+        ...EMPTY_ROW(defaultPriorityTier),
+        id: typeof row.id === "string" ? row.id : crypto.randomUUID(),
+        itemKind: row.itemKind === "deadline" ? "deadline" as const : "task" as const,
+        title: typeof row.title === "string" ? row.title : "",
+        category: typeof row.category === "string" ? row.category : "",
+        dueDate: typeof row.dueDate === "string" ? row.dueDate : "",
+        estimatedLength: typeof row.estimatedLength === "string" ? row.estimatedLength : "",
+        priorityTier: normalizePriorityTier(row.priorityTier || defaultPriorityTier),
+        notes: typeof row.notes === "string" ? row.notes : "",
+      }))
+      .slice(0, 20);
+
+    return rows.some(isRowDirty) ? rows : null;
+  } catch {
+    return null;
+  }
+}
+
+function persistInboxRowsDraft(rows: TaskRowDraft[]) {
+  if (rows.some(isRowDirty)) {
+    window.localStorage.setItem(INBOX_ROWS_DRAFT_KEY, JSON.stringify(rows));
+    return;
+  }
+
+  window.localStorage.removeItem(INBOX_ROWS_DRAFT_KEY);
+}
+
 export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true }: TaskComposerProps) {
   const { settings } = useSettings();
   const firstTaskInputRef = useRef<HTMLInputElement | null>(null);
-  const makeEmptyRow = () => EMPTY_ROW(settings.easyList.defaultPriorityTier);
+  const rowsHydratedRef = useRef(false);
+  const defaultPriorityTier = normalizePriorityTier(settings.easyList.defaultPriorityTier);
+  const makeEmptyRow = () => EMPTY_ROW(defaultPriorityTier);
   const makeStarterRows = () =>
     Array.from({ length: settings.easyList.quickAddRows }, () => makeEmptyRow());
-  const [rows, setRows] = useState<TaskRowDraft[]>(makeStarterRows);
+  const restoredInboxRowsDraft = !showBrainDump ? restoreInboxRowsDraft(defaultPriorityTier) : null;
+  const [rows, setRows] = useState<TaskRowDraft[]>(() => restoredInboxRowsDraft || makeStarterRows());
+  const [restoredDraftMessage, setRestoredDraftMessage] = useState(
+    restoredInboxRowsDraft ? "Restored unsaved Inbox draft from this browser." : ""
+  );
   const [brainDump, setBrainDump] = useState("");
   const [mergeMode, setMergeMode] = useState<"replace" | "append">("replace");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisMessage, setAnalysisMessage] = useState("");
+  const [saveMessage, setSaveMessage] = useState("");
   const [createCalendarSuggestions, setCreateCalendarSuggestions] = useState(false);
   const readyCount = useMemo(
     () => rows.filter((row) => row.title.trim()).length,
@@ -395,6 +452,10 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
   }, []);
 
   useEffect(() => {
+    rowsHydratedRef.current = true;
+  }, []);
+
+  useEffect(() => {
     if (!showBrainDump) return;
 
     if (brainDump.trim()) {
@@ -405,30 +466,73 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
     window.localStorage.removeItem(BRAIN_DUMP_DRAFT_KEY);
   }, [brainDump, showBrainDump]);
 
+  useEffect(() => {
+    if (showBrainDump || !rowsHydratedRef.current) return;
+
+    persistInboxRowsDraft(rows);
+  }, [rows, showBrainDump]);
+
+  useEffect(() => {
+    if (showBrainDump) return;
+
+    function warnBeforeLeaving(event: BeforeUnloadEvent) {
+      if (!rows.some(isRowDirty)) return;
+      event.preventDefault();
+      event.returnValue = "";
+    }
+
+    window.addEventListener("beforeunload", warnBeforeLeaving);
+    return () => window.removeEventListener("beforeunload", warnBeforeLeaving);
+  }, [rows, showBrainDump]);
+
   function updateRow(rowId: string, field: keyof TaskRowDraft, value: string | number) {
-    setRows((current) =>
-      current.map((row) =>
+    setSaveMessage("");
+    setRestoredDraftMessage("");
+    setRows((current) => {
+      const nextRows = current.map((row) =>
         row.id === rowId
           ? {
               ...row,
               [field]: value,
             }
           : row
-      )
-    );
+      );
+      if (!showBrainDump) {
+        persistInboxRowsDraft(nextRows);
+      }
+      return nextRows;
+    });
   }
 
   function addBlankRow() {
-    setRows((current) => [...current, makeEmptyRow()]);
+    setSaveMessage("");
+    setRestoredDraftMessage("");
+    setRows((current) => {
+      const nextRows = [...current, makeEmptyRow()];
+      if (!showBrainDump) {
+        persistInboxRowsDraft(nextRows);
+      }
+      return nextRows;
+    });
   }
 
   function removeRow(rowId: string) {
+    setSaveMessage("");
+    setRestoredDraftMessage("");
     setRows((current) => {
       if (current.length === 1) {
-        return [makeEmptyRow()];
+        const nextRows = [makeEmptyRow()];
+        if (!showBrainDump) {
+          persistInboxRowsDraft(nextRows);
+        }
+        return nextRows;
       }
 
-      return current.filter((row) => row.id !== rowId);
+      const nextRows = current.filter((row) => row.id !== rowId);
+      if (!showBrainDump) {
+        persistInboxRowsDraft(nextRows);
+      }
+      return nextRows;
     });
   }
 
@@ -523,7 +627,10 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
       setRows(makeStarterRows());
       setBrainDump("");
       setCreateCalendarSuggestions(false);
+      setSaveMessage(drafts.length === 1 ? "Task saved to Inbox" : `${drafts.length} tasks added to Inbox`);
+      setRestoredDraftMessage("");
       window.localStorage.removeItem(BRAIN_DUMP_DRAFT_KEY);
+      window.localStorage.removeItem(INBOX_ROWS_DRAFT_KEY);
     } finally {
       setIsSubmitting(false);
     }
@@ -531,6 +638,7 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
 
   return (
     <form className="task-composer" onSubmit={handleSubmit}>
+      {restoredDraftMessage ? <div className="calendar-info-card">{restoredDraftMessage}</div> : null}
       {showBrainDump ? (
         <details className="brain-dump-card">
           <summary>Brain dump with AI</summary>
@@ -586,6 +694,18 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
       ) : null}
 
       <div className="task-rows-shell">
+        {saveMessage ? (
+          <div className="task-save-banner" role="status" aria-live="polite">
+            <div>
+              <span>Saved</span>
+              <strong>{saveMessage}</strong>
+              <p>The saved item is now available in Inbox review.</p>
+            </div>
+            <Link to="/app/inbox" className="button-secondary compact-button">
+              View Inbox
+            </Link>
+          </div>
+        ) : null}
         <div className="task-rows-heading">
           <div>
             <strong>Quick rows</strong>
@@ -595,11 +715,11 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
         </div>
         <div className="task-row-grid task-row-grid-header" aria-hidden="true">
           <span>Task</span>
-          <span>Kind</span>
-          <span>Due</span>
-          <span>Minutes</span>
-          <span>Priority</span>
-          <span>Notes</span>
+          <span>Details</span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
           <span>Actions</span>
         </div>
 
@@ -616,63 +736,68 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
               />
             </label>
 
-            <label className="field-stack task-row-field">
-              <span>Kind</span>
-              <select
-                value={row.itemKind}
-                onChange={(event) => updateRow(row.id, "itemKind", event.target.value)}
-              >
-                <option value="task">Task</option>
-                <option value="deadline">Deadline</option>
-              </select>
-            </label>
+            <details className="task-row-details">
+              <summary>Add details</summary>
+              <div className="task-row-details-grid">
+                <label className="field-stack task-row-field">
+                  <span>Kind</span>
+                  <select
+                    value={row.itemKind}
+                    onChange={(event) => updateRow(row.id, "itemKind", event.target.value)}
+                  >
+                    <option value="task">Task</option>
+                    <option value="deadline">Deadline</option>
+                  </select>
+                </label>
 
-            <label className="field-stack task-row-field">
-              <span>{row.itemKind === "deadline" ? "Due by" : "Due"}</span>
-              <input
-                type="date"
-                value={row.dueDate}
-                onChange={(event) => updateRow(row.id, "dueDate", event.target.value)}
-              />
-            </label>
+                <label className="field-stack task-row-field">
+                  <span>{row.itemKind === "deadline" ? "Due by" : "Due"}</span>
+                  <input
+                    type="date"
+                    value={row.dueDate}
+                    onChange={(event) => updateRow(row.id, "dueDate", event.target.value)}
+                  />
+                </label>
 
-            <label className="field-stack task-row-field">
-              <span>Minutes</span>
-              <input
-                type="number"
-                min="0"
-                step="5"
-                value={row.estimatedLength}
-                onChange={(event) => updateRow(row.id, "estimatedLength", event.target.value)}
-                placeholder="30"
-              />
-            </label>
+                <label className="field-stack task-row-field">
+                  <span>Minutes</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="5"
+                    value={row.estimatedLength}
+                    onChange={(event) => updateRow(row.id, "estimatedLength", event.target.value)}
+                    placeholder="30"
+                  />
+                </label>
 
-            <label className="field-stack task-row-field">
-              <span>Priority</span>
-              <select
-                value={row.priorityTier}
-                onChange={(event) =>
-                  updateRow(row.id, "priorityTier", Number(event.target.value))
-                }
-              >
-                {PRIORITY_TIERS.map((tier) => (
-                  <option key={tier} value={tier}>
-                    {tier}. {getPriorityMeta(tier).label}
-                  </option>
-                ))}
-              </select>
-            </label>
+                <label className="field-stack task-row-field">
+                  <span>Priority</span>
+                  <select
+                    value={row.priorityTier}
+                    onChange={(event) =>
+                      updateRow(row.id, "priorityTier", Number(event.target.value))
+                    }
+                  >
+                    {PRIORITY_TIERS.map((tier) => (
+                      <option key={tier} value={tier}>
+                        {tier}. {getPriorityMeta(tier).label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-            <label className="field-stack task-row-field">
-              <span>Notes</span>
-              <input
-                type="text"
-                value={row.notes}
-                onChange={(event) => updateRow(row.id, "notes", event.target.value)}
-                placeholder="Optional context"
-              />
-            </label>
+                <label className="field-stack task-row-field task-row-notes-field">
+                  <span>Notes</span>
+                  <input
+                    type="text"
+                    value={row.notes}
+                    onChange={(event) => updateRow(row.id, "notes", event.target.value)}
+                    placeholder="Optional context"
+                  />
+                </label>
+              </div>
+            </details>
 
             <div className="task-row-actions">
               <button
@@ -696,7 +821,7 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
               onChange={(event) => setCreateCalendarSuggestions(event.target.checked)}
             />
             <span>
-              Create suggested EasyCalendar blocks for {suggestedDueDateCount} task
+              Create suggested Plan blocks for {suggestedDueDateCount} task
               {suggestedDueDateCount === 1 ? "" : "s"} with due dates.
             </span>
           </label>

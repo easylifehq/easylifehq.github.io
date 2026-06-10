@@ -76,7 +76,7 @@ export function EasyNotesTrashPage() {
   }
 
   return (
-    <PageSection eyebrow="EasyNotes" title="Recently deleted">
+    <PageSection eyebrow="Notes" title="Recently deleted">
       <div className="notes-library-toolbar">
         <label className="field-stack notes-search-field">
           <span>Search deleted notes</span>

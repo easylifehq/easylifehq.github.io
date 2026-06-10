@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { PlanningState } from "@/lib/firestore/calendarTaskBlocks";
 import type { TaskDraft, TaskRecord } from "@/lib/firestore/tasks";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
@@ -21,6 +21,7 @@ import {
   PRIORITY_TIERS,
   taskToDraft,
 } from "@/features/easylist/lib/taskUtils";
+import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 
 type TaskDrawerProps = {
   task: TaskRecord | null;
@@ -92,7 +93,7 @@ function getRoutingSuggestion(task: TaskRecord): RoutingSuggestion | null {
       confidence: includesAny(searchableText, ["interview", "application", "resume", "company", "recruiter"])
         ? "strong"
         : "light",
-      label: "Send to EasyPipeline?",
+      label: "Send to Follow-ups?",
       reason: "This reads like an application, interview, or follow-up item.",
     };
   }
@@ -103,7 +104,7 @@ function getRoutingSuggestion(task: TaskRecord): RoutingSuggestion | null {
       confidence: task.priorityTier <= 3 || Boolean(task.estimatedLength && task.estimatedLength >= 120)
         ? "strong"
         : "light",
-      label: "Send to EasyProjects?",
+      label: "Send to Projects?",
       reason: "This looks like it may need steps, context, or a longer work session.",
     };
   }
@@ -123,6 +124,13 @@ export function TaskDrawer({
   const { scheduleTask } = useEasyCalendar();
   const [draft, setDraft] = useState<TaskDraft>(getEmptyTaskDraft());
   const [isSaving, setIsSaving] = useState(false);
+  const drawerRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useFocusTrap(isOpen, drawerRef, {
+    initialFocusRef: closeButtonRef,
+    onEscape: onClose,
+  });
   const [scheduleDate, setScheduleDate] = useState("");
   const [scheduleTime, setScheduleTime] = useState("09:00");
   const [scheduleDuration, setScheduleDuration] = useState("30");
@@ -212,7 +220,7 @@ export function TaskDrawer({
     const minutesPerPart = Math.max(5, Math.ceil(totalMinutes / partCount / 5) * 5);
 
     if (!startAt) {
-      setScheduleMessage("Pick a day and time before sending this to EasyCalendar.");
+      setScheduleMessage("Pick a day and time before sending this to Plan.");
       return;
     }
 
@@ -230,7 +238,7 @@ export function TaskDrawer({
       }
       setScheduleMessage(
         partCount === 1
-          ? "Sent to EasyCalendar."
+          ? "Sent to Plan."
           : `Split into ${partCount} calendar blocks.`
       );
     } finally {
@@ -249,7 +257,7 @@ export function TaskDrawer({
           ? await createProject(user.uid, {
               title: currentTask.title || "Untitled project",
               description: [
-                "Created from EasyList.",
+                "Created from Inbox.",
                 currentTask.notes ? `Source task notes: ${currentTask.notes}` : "",
               ].filter(Boolean).join("\n\n"),
               targetDate: currentTask.dueDate ? toDateInputValue(currentTask.dueDate) : "",
@@ -270,12 +278,12 @@ export function TaskDrawer({
         sectionId,
         taskId: currentTask.id,
         order: matchingSections.length + 1,
-        parentLabel: "Routed from EasyList",
+        parentLabel: "Routed from Inbox",
       });
       setRoutingMessage(
         targetProjectId === "__new"
-          ? "Created an EasyProject and linked the original task."
-          : "Linked the original task to the selected EasyProject."
+          ? "Created a Project and linked the original task."
+          : "Linked the original task to the selected Project."
       );
     } finally {
       setIsRouting(false);
@@ -299,14 +307,14 @@ export function TaskDrawer({
         location: "",
         link: "",
         notes: [
-          "Created from EasyList task.",
+          "Created from Inbox task.",
           currentTask.notes,
           `Source task id: ${currentTask.id}`,
         ].filter(Boolean).join("\n\n"),
         contactName: "",
         contactEmail: "",
       });
-      setRoutingMessage("Sent to EasyPipeline as a follow-up item.");
+      setRoutingMessage("Sent to Follow-ups.");
     } finally {
       setIsRouting(false);
     }
@@ -315,13 +323,21 @@ export function TaskDrawer({
   return (
     <>
       <div className={`drawer-backdrop-vnext${isOpen ? " open" : ""}`} onClick={onClose} />
-      <aside className={`task-drawer-vnext${isOpen ? " open" : ""}`} aria-hidden={!isOpen}>
+      <aside
+        ref={drawerRef}
+        className={`task-drawer-vnext${isOpen ? " open" : ""}`}
+        aria-hidden={!isOpen}
+        aria-modal={isOpen ? "true" : undefined}
+        aria-label="Edit task"
+        role="dialog"
+        tabIndex={-1}
+      >
         <div className="drawer-header-vnext">
           <div>
             <p className="eyebrow">Task details</p>
             <h2>Edit task</h2>
           </div>
-          <button type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close task details">
+          <button ref={closeButtonRef} type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close task details">
             Close
           </button>
         </div>
@@ -424,7 +440,7 @@ export function TaskDrawer({
           </label>
 
           <label className="field-stack">
-            <span>Linked EasyNote</span>
+            <span>Linked note</span>
             <select
               value={draft.linkedNoteId || ""}
               onChange={(event) =>
@@ -475,10 +491,10 @@ export function TaskDrawer({
         </form>
 
         <details className="drawer-link-card">
-          <summary>Plan on EasyCalendar</summary>
+          <summary>Plan it</summary>
           <p className="helper-copy">
             Choose when you want to work on it. This creates a flexible linked
-            task block in EasyCalendar.
+            task block in Plan.
           </p>
 
           <div className="task-composer-grid">
@@ -555,7 +571,7 @@ export function TaskDrawer({
               onClick={() => void handleSchedule()}
               disabled={isScheduling || currentTask.completed}
             >
-              {isScheduling ? "Sending..." : "Send to EasyCalendar"}
+              {isScheduling ? "Sending..." : "Send to Plan"}
             </button>
           </div>
         </details>
@@ -587,15 +603,15 @@ export function TaskDrawer({
                 {isRouting
                   ? "Sending..."
                   : routingSuggestion.destination === "project"
-                    ? "Send to EasyProjects"
-                    : "Send to EasyPipeline"}
+                    ? "Send to Projects"
+                    : "Send to Follow-ups"}
               </button>
             </div>
           ) : (
             <div className="routing-suggestion calm">
               <div>
                 <span>No loud signal</span>
-                <h3>Keep it in EasyList for now.</h3>
+                <h3>Keep it in Inbox for now.</h3>
                 <p>You can still route it manually if this turns into something bigger.</p>
               </div>
             </div>
@@ -647,7 +663,7 @@ export function TaskDrawer({
               onClick={() => void handleSendToProject()}
               disabled={isRouting}
             >
-              Send to EasyProjects
+              Send to Projects
             </button>
             <button
               type="button"
@@ -655,7 +671,7 @@ export function TaskDrawer({
               onClick={() => void handleSendToPipeline()}
               disabled={isRouting}
             >
-              Send to EasyPipeline
+              Send to Follow-ups
             </button>
           </div>
           {routingMessage ? <p className="helper-copy">{routingMessage}</p> : null}

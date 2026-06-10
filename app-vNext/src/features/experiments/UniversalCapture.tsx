@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -13,6 +13,7 @@ import { createProject, type ProjectDraft, type ProjectStatus } from "@/lib/fire
 import { createTask, subscribeToTasks, type TaskRecord } from "@/lib/firestore/tasks";
 import { addSetToDailyWorkoutSession } from "@/lib/firestore/workoutSessions";
 import { auth } from "@/lib/firebase/client";
+import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 import { useSettings } from "@/features/settings/SettingsContext";
 import type { VisibleAppId } from "@/lib/firestore/settings";
 
@@ -324,6 +325,9 @@ export function UniversalCapture() {
   const [details, setDetails] = useState<QuickAddDetails>(defaultDetails);
   const [tasks, setTasks] = useState<TaskRecord[]>([]);
   const [openTarget, setOpenTarget] = useState<{ to: string; label: string } | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const modalRef = useRef<HTMLElement | null>(null);
+  const textInputRef = useRef<HTMLTextAreaElement | null>(null);
   const suggestion = useMemo(() => detectCaptureType(text), [text]);
   const brainDumpEntries = useMemo(() => parseBrainDumpEntries(text), [text]);
   const isEasyListCapture = location.pathname.startsWith("/app/easylist");
@@ -430,6 +434,10 @@ export function UniversalCapture() {
     );
   }, [details, mode, text]);
 
+  const closeCapture = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
   function openCapture() {
     const appId = captureModeAppMap[screenAction.mode];
     setMode(!appId || isAppVisible(appId) ? screenAction.mode : captureModes[0]?.[0] ?? "task");
@@ -437,6 +445,12 @@ export function UniversalCapture() {
     setOpenTarget(null);
     setIsOpen(true);
   }
+
+  useFocusTrap(isOpen, modalRef, {
+    initialFocusRef: textInputRef,
+    returnFocusRef: triggerRef,
+    onEscape: closeCapture,
+  });
 
   function resetFields(nextMessage: string, options: { keepOpenTarget?: boolean } = {}) {
     setText("");
@@ -730,14 +744,19 @@ export function UniversalCapture() {
 
   return (
     <>
-      <button type="button" className="capture-fab" onClick={openCapture} aria-label="Quick capture">
+      <button ref={triggerRef} type="button" className="capture-fab" onClick={openCapture} aria-label="Quick capture">
         Capture
       </button>
 
-      <div className={`capture-backdrop${isOpen ? " open" : ""}`} onClick={() => setIsOpen(false)} />
+      <div className={`capture-backdrop${isOpen ? " open" : ""}`} onClick={closeCapture} />
       <section
+        ref={modalRef}
         className={`capture-modal${isEasyListCapture ? " easylist-capture-modal" : ""}${isOpen ? " open" : ""}`}
         aria-hidden={!isOpen}
+        aria-labelledby="quick-capture-title"
+        aria-modal={isOpen ? "true" : undefined}
+        role="dialog"
+        tabIndex={-1}
         onKeyDown={(event) => {
           if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
             event.preventDefault();
@@ -748,11 +767,11 @@ export function UniversalCapture() {
         <div className="capture-header">
           <div>
             <p className="eyebrow">{screenAction.hint}</p>
-            <h2>Quick capture</h2>
+            <h2 id="quick-capture-title">Quick capture</h2>
           </div>
           <div className="capture-header-actions">
             <span className="command-hint">Ctrl K</span>
-            <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)} aria-label="Close quick capture">
+            <button type="button" className="ghost-button compact-button" onClick={closeCapture} aria-label="Close quick capture">
               Close
             </button>
           </div>
@@ -763,6 +782,8 @@ export function UniversalCapture() {
             <button
               key={value}
               type="button"
+              role="tab"
+              aria-selected={mode === value}
               className={`capture-mode-button${mode === value ? " active" : ""}`}
               onClick={() => {
                 setMode(value as CaptureMode);
@@ -777,6 +798,7 @@ export function UniversalCapture() {
         <label className="field-stack">
           <span>{mode === "application" ? "Role" : mode === "contact" ? "Name" : mode === "event" ? "Event" : mode === "brainDump" ? "Brain dump" : mode === "project" ? "Project" : mode === "workout" ? "Exercise and set" : "Task"}</span>
           <textarea
+            ref={textInputRef}
             value={text}
             onChange={(event) => {
               const nextValue = event.target.value;
@@ -994,7 +1016,7 @@ export function UniversalCapture() {
               Save as note
             </button>
           )}
-          <Link className="ghost-button" to={screenAction.to} onClick={() => setIsOpen(false)}>
+          <Link className="ghost-button" to={screenAction.to} onClick={closeCapture}>
             {screenAction.label}
           </Link>
         </div>
@@ -1002,7 +1024,7 @@ export function UniversalCapture() {
           <div className="calendar-info-card capture-success-card">
             <span>{message}</span>
             {openTarget ? (
-              <Link className="button-secondary compact-button" to={openTarget.to} onClick={() => setIsOpen(false)}>
+              <Link className="button-secondary compact-button" to={openTarget.to} onClick={closeCapture}>
                 {openTarget.label}
               </Link>
             ) : null}

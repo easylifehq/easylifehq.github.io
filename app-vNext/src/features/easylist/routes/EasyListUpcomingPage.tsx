@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { LoadingState } from "@/components/feedback/LoadingState";
 import { PageSection } from "@/components/ui/PageSection";
 import { TaskCard } from "@/features/easylist/components/TaskCard";
 import { TaskDrawer } from "@/features/easylist/components/TaskDrawer";
@@ -16,10 +15,6 @@ import type { TaskRecord } from "@/lib/firestore/tasks";
 export function EasyListUpcomingPage() {
   const { tasks, isLoading, saveTask, markComplete, markActive, deleteTask } = useEasyList();
   const [selectedTask, setSelectedTask] = useState<TaskRecord | null>(null);
-
-  if (isLoading) {
-    return <LoadingState label="Loading upcoming tasks..." />;
-  }
 
   const activeTasks = sortActiveTasks(tasks.filter((task) => !task.completed));
   const today = startOfDay(new Date());
@@ -53,6 +48,7 @@ export function EasyListUpcomingPage() {
         title="Upcoming"
         description="A cleaner forward-looking view of what is due soon, what is later, and what still needs a real date."
       >
+        {isLoading ? <p className="helper-copy" role="status">Loading upcoming tasks...</p> : null}
         <div className="stacked-sections">
           {groups.map((group) => (
             <section key={group.title} className="group-block">

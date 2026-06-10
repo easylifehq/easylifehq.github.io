@@ -151,10 +151,10 @@ export type FirstLiveProviderServerResponseEnvelope = {
 };
 
 export type AssistantIntakeSuggestionClientMetadata = {
-  source?: "inbox-assistant-lane";
+  source?: "inbox-assistant-lane" | "operator-test";
   captureId?: string;
   clientVersion?: string;
-  reviewMode?: "demo" | "private-alpha";
+  reviewMode?: "demo" | "private-alpha" | "synthetic-demo";
 };
 
 export type AssistantIntakeSuggestionClientRequest = {
@@ -164,6 +164,8 @@ export type AssistantIntakeSuggestionClientRequest = {
   promptId: typeof liveAiAllowedPromptId;
   typedCapture: string;
   metadata?: AssistantIntakeSuggestionClientMetadata;
+  liveCallRequested?: boolean;
+  operatorConfirmation?: string;
   fetcher?: typeof fetch;
 };
 
@@ -252,13 +254,29 @@ export function isFirstLiveProviderServerResponseEnvelope(
     return false;
   }
 
+  const providerWasNotCalled =
+    value.providerState === "not-called" &&
+    value.providerCallAttempted === false &&
+    value.status !== "provider-output" &&
+    value.fallbackState === "local-disabled";
+  const providerPreviewIsTrusted =
+    value.status === "provider-output" &&
+    value.providerState === "called-by-server-executor" &&
+    value.providerCallAttempted === true &&
+    value.requestValidationState === "accepted" &&
+    value.sanitizerState === "accepted" &&
+    value.fallbackState === "none" &&
+    value.outputState === "preview" &&
+    (value.validationState === "accepted" || value.validationState === "downgraded") &&
+    (value.quarantineState === "accepted" || value.quarantineState === "downgraded") &&
+    isRecord(value.suggestion);
+
   return (
     value.version === "stage-32-assistant-intake-response-v1" &&
     value.source === "assistantIntakeSuggestion" &&
     value.route === liveAiAllowedRoutePath &&
     value.promptId === liveAiAllowedPromptId &&
-    value.providerState === "not-called" &&
-    value.providerCallAttempted === false &&
+    (providerWasNotCalled || providerPreviewIsTrusted) &&
     value.nothingSavedOrSent === true &&
     value.requiresApproval === true &&
     value.hiddenWrites === false &&
@@ -333,6 +351,10 @@ export async function requestAssistantIntakeSuggestion(
         promptId: request.promptId,
         typedCapture: request.typedCapture,
         metadata: request.metadata,
+        liveCallRequested: request.liveCallRequested === true,
+        ...(request.operatorConfirmation
+          ? { operatorConfirmation: request.operatorConfirmation }
+          : {}),
       }),
     });
     const payload = await serverResponse.json().catch(() => null);

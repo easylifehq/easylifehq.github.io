@@ -9,7 +9,7 @@ export function EasyNotesLayout() {
   return (
     <EasyNotesProvider>
       <main className="page-wrap page-wrap-notes app-theme app-theme-easynotes">
-        {showLibraryChrome ? <AppWorkspaceHeader appLabel="EasyNotes" links={[]} /> : null}
+        {showLibraryChrome ? <AppWorkspaceHeader appLabel="Notes" links={[]} /> : null}
         <Outlet />
       </main>
     </EasyNotesProvider>

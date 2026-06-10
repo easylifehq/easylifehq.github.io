@@ -230,7 +230,7 @@ export function EasyWorkoutDashboardPage() {
       return {
         label: "Start here",
         title: "Log the first workout",
-        body: "Start a live session so EasyWorkout can build your recent history, records, and coverage.",
+        body: "Start a live session so Workout can build your recent history, records, and coverage.",
         actionLabel: "Start workout",
         to: "/app/easyworkout/log?workoutMode=1",
       };
@@ -282,7 +282,7 @@ export function EasyWorkoutDashboardPage() {
   return (
     <>
       <PageSection
-        eyebrow="EasyWorkout"
+        eyebrow="Workout"
         title="Training dashboard"
         description="Start a session, check today's lift context, and keep the rest out of the way."
       >
@@ -397,7 +397,7 @@ export function EasyWorkoutDashboardPage() {
             {isLoading ? <p className="helper-copy">Loading workouts...</p> : null}
             {!isLoading && recentSessions.length === 0 ? (
               <div className="empty-card-vnext workout-empty-state">
-                <span>EasyWorkout history</span>
+                <span>Workout history</span>
                 <strong>No workouts logged yet</strong>
                 <p>Start a session when you are ready. Your latest workouts will collect here for quick review.</p>
                 <Link className="primary-button compact-button" to="/app/easyworkout/log?workoutMode=1">

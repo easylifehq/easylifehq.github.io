@@ -3,6 +3,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -129,6 +130,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   const [folders, setFolders] = useState<NoteFolderRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const pendingBlankNoteRef = useRef<Promise<string | null> | null>(null);
 
   useEffect(() => {
     if (isVisualQaMode()) {
@@ -181,29 +183,46 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
 
   async function addNoteForUser() {
     if (!user) return null;
-    const noteId = await createNote(user.uid);
-    const optimisticNote: NoteRecord = {
-      id: noteId,
-      title: "",
-      tags: [],
-      folderId: "",
-      pinned: false,
-      bodyHtml: "",
-      bodyText: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    };
+    const emptyNote = sortNotes(notes).find(isEmptyUntitledNote);
+    if (emptyNote) return emptyNote.id;
+    if (pendingBlankNoteRef.current) return pendingBlankNoteRef.current;
 
-    setNotes((current) => {
-      if (current.some((note) => note.id === noteId)) {
-        return current;
-      }
+    pendingBlankNoteRef.current = (async () => {
+      const noteId = await createNote(user.uid);
+      const optimisticNote: NoteRecord = {
+        id: noteId,
+        title: "",
+        tags: [],
+        folderId: "",
+        pinned: false,
+        bodyHtml: "",
+        bodyText: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      };
 
-      return sortNotes([optimisticNote, ...current]);
-    });
+      setNotes((current) => {
+        if (current.some((note) => note.id === noteId)) {
+          return current;
+        }
 
-    return noteId;
+        const currentEmptyNote = sortNotes(current).find(isEmptyUntitledNote);
+        if (currentEmptyNote) {
+          return current;
+        }
+
+        return sortNotes([optimisticNote, ...current]);
+      });
+
+      return noteId;
+    })();
+
+    try {
+      return await pendingBlankNoteRef.current;
+    } finally {
+      pendingBlankNoteRef.current = null;
+    }
   }
 
   async function createNoteFromDraftForUser(draft: NoteDraft) {
@@ -323,8 +342,8 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
 
     const drafts: TaskDraft[] = lines.map((line) => ({
       title: line,
-      notes: `Drafted from EasyNotes: ${payload.noteTitle || "Untitled note"}`,
-      category: "EasyNotes",
+      notes: `Drafted from Notes: ${payload.noteTitle || "Untitled note"}`,
+      category: "Notes",
       estimatedLength: null,
       priorityTier: 5,
       priorityLabel: "Important",
@@ -342,11 +361,11 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
     const lines = normalizeLinesToTasks(payload.text);
     if (!lines.length) return null;
 
-    const projectTitle = payload.noteTitle.trim() || "Project from EasyNotes";
+    const projectTitle = payload.noteTitle.trim() || "Project from Notes";
     const projectId = await createProject(user.uid, {
       title: projectTitle,
       description: [
-        "Created from EasyNotes.",
+        "Created from Notes.",
         payload.text.trim() ? `Source note outline:\n${payload.text.trim()}` : "",
       ].filter(Boolean).join("\n\n"),
       targetDate: "",
@@ -362,8 +381,8 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       lines.map(async (line, index) => {
         const taskId = await createTask(user.uid, {
           title: line,
-          notes: `Created from EasyNotes project group: ${projectTitle}`,
-          category: "EasyNotes",
+          notes: `Created from Notes project group: ${projectTitle}`,
+          category: "Notes",
           estimatedLength: null,
           priorityTier: 5,
           priorityLabel: "Important",
@@ -376,7 +395,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
           sectionId,
           taskId,
           order: index + 1,
-          parentLabel: "Created from EasyNotes",
+          parentLabel: "Created from Notes",
         });
       })
     );

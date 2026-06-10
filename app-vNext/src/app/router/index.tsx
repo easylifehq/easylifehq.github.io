@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ComponentType } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AuthenticatedLayout } from "@/app/layouts/AuthenticatedLayout";
 import { MarketingLayout } from "@/app/layouts/MarketingLayout";
 import { LoadingState } from "@/components/feedback/LoadingState";
@@ -194,7 +194,7 @@ function StartupRedirect() {
   const location = useLocation();
 
   if (isLoading) {
-    return <LoadingState label="Opening your workspace..." />;
+    return <LoadingState label="Opening your workspace..." detail="Loading your startup preference before choosing the first screen." />;
   }
 
   const target =
@@ -216,7 +216,7 @@ function PublicHomeRoute() {
   const { settings, isLoading: isSettingsLoading } = useSettings();
 
   if (isAuthLoading || (user && isSettingsLoading)) {
-    return <LoadingState label="Opening EasyLife..." />;
+    return <LoadingState label="Opening EasyLife..." detail="Checking sign-in and startup preferences before opening the app." />;
   }
 
   if (user) {
@@ -258,9 +258,87 @@ function PreserveSearchRedirect({ to }: { to: string }) {
   );
 }
 
+function SafeAppNotFoundPage() {
+  const location = useLocation();
+
+  return (
+    <main className="page-wrap app-theme">
+      <section className="panel-section">
+        <p className="eyebrow">Route safety</p>
+        <h1>This page is not part of the demo path.</h1>
+        <p>
+          EasyLife could not find <strong>{location.pathname}</strong>. Nothing was changed or
+          saved.
+        </p>
+        <div className="hero-actions">
+          <Link className="button-primary" to={{ pathname: "/app/hq", search: location.search }}>
+            Return to Today
+          </Link>
+          <Link className="button-secondary" to={{ pathname: "/app/easylist/add", search: location.search }}>
+            Open Inbox
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function PlanRouteLandingPage() {
+  const location = useLocation();
+
+  return (
+    <main className="page-wrap app-theme app-theme-easycalendar">
+      <section className="panel-section">
+        <p className="eyebrow">Plan</p>
+        <h1>Open today's Plan.</h1>
+        <p>
+          The reliable Plan surface is the day view. Nothing is scheduled automatically here;
+          you choose what moves from Inbox into the day.
+        </p>
+        <div className="hero-actions">
+          <Link className="button-primary" to={{ pathname: "/app/easycalendar/day", search: location.search }}>
+            Open Plan day
+          </Link>
+          <Link className="button-secondary" to={{ pathname: "/app/hq", search: location.search }}>
+            Return to Today
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function WorkoutRouteLandingPage() {
+  const location = useLocation();
+
+  return (
+    <main className="page-wrap app-theme app-theme-easyworkout">
+      <section className="panel-section">
+        <p className="eyebrow">Workout</p>
+        <h1>Start from the Workout dashboard.</h1>
+        <p>
+          The dashboard is the safe entry point for logging, routines, and recent sessions.
+          No workout AI or hidden changes run from this route.
+        </p>
+        <div className="hero-actions">
+          <Link className="button-primary" to={{ pathname: "/app/easyworkout/dashboard", search: location.search }}>
+            Open Workout dashboard
+          </Link>
+          <Link className="button-secondary" to={{ pathname: "/app/easyworkout/log", search: location.search }}>
+            Open Log
+          </Link>
+          <Link className="ghost-button" to={{ pathname: "/app/hq", search: location.search }}>
+            Return to Today
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 export function AppRouter() {
   return (
-    <Suspense fallback={<LoadingState label="Loading EasyLife..." />}>
+    <Suspense fallback={<LoadingState label="Loading EasyLife..." detail="Preparing the next screen." />}>
       <Routes>
         <Route element={<MarketingLayout />}>
           <Route path="/" element={<PublicHomeRoute />} />
@@ -281,6 +359,12 @@ export function AppRouter() {
           <Route path="/app" element={<AuthenticatedLayout />}>
             <Route index element={<StartupRedirect />} />
             <Route path="hq" element={<HQPage />} />
+            <Route path="today" element={<PreserveSearchRedirect to="/app/hq" />} />
+            <Route path="inbox" element={<PreserveSearchRedirect to="/app/easylist/add" />} />
+            <Route path="notes" element={<PreserveSearchRedirect to="/app/easynotes" />} />
+            <Route path="plan" element={<PlanRouteLandingPage />} />
+            <Route path="people" element={<PreserveSearchRedirect to="/app/easycontacts" />} />
+            <Route path="workout" element={<WorkoutRouteLandingPage />} />
             <Route path="command" element={<CommandCenterPage />} />
             <Route path="easylist" element={<EasyListLayout />}>
               <Route index element={<PreserveSearchRedirect to="/app/easylist/dashboard" />} />
@@ -327,6 +411,7 @@ export function AppRouter() {
             </Route>
             <Route path="easystatistics" element={<EasyStatisticsPage />} />
             <Route path="settings" element={<SettingsPage />} />
+            <Route path="*" element={<SafeAppNotFoundPage />} />
           </Route>
         </Route>
       </Routes>

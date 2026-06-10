@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import type {
   CalendarEventRecord,
   CalendarEventType,
@@ -6,7 +6,10 @@ import type {
 } from "@/lib/firestore/calendarEvents";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import {
+  addMinutes,
   combineDateAndTime,
+  getDurationMinutes,
+  normalizeTimeInput,
   toDateInputValue,
   toTimeInputValue,
 } from "@/features/easycalendar/lib/calendarUtils";
@@ -19,6 +22,7 @@ import {
   getWeekdayCodeForDateInput,
   getWeekdayCodesFromRule,
 } from "@/features/easycalendar/lib/recurrence";
+import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 
 const EVENT_TYPES: CalendarEventType[] = [
   "class",
@@ -51,14 +55,36 @@ export function CalendarEventDrawer({
   const [recurrenceRule, setRecurrenceRule] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const drawerRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const repeatSelectValue = getRepeatSelectValue(recurrenceRule);
   const selectedRepeatWeekdays = getWeekdayCodesFromRule(recurrenceRule);
 
+  useFocusTrap(isOpen, drawerRef, {
+    initialFocusRef: closeButtonRef,
+    onEscape: onClose,
+  });
+
   function applyDuration(minutes: number) {
-    const startAt = combineDateAndTime(eventDate, startTime);
+    const safeStartTime = normalizeTimeInput(startTime);
+    const startAt = combineDateAndTime(eventDate, safeStartTime);
     if (!startAt) return;
-    const nextEnd = new Date(startAt.getTime() + minutes * 60000);
+    const nextEnd = addMinutes(startAt, minutes);
+    setStartTime(safeStartTime);
     setEndTime(toTimeInputValue(nextEnd) || endTime);
+  }
+
+  function handleStartTimeBlur() {
+    const safeStartTime = normalizeTimeInput(startTime);
+    const startAt = combineDateAndTime(eventDate, safeStartTime);
+    const endAt = combineDateAndTime(eventDate, endTime);
+    const durationMinutes = Math.max(15, getDurationMinutes(startAt, endAt) || 60);
+    const nextEndAt = addMinutes(startAt, durationMinutes);
+
+    setStartTime(safeStartTime);
+    if (!endAt || !startAt || endAt <= startAt) {
+      setEndTime(toTimeInputValue(nextEndAt) || "10:00");
+    }
   }
 
   useEffect(() => {
@@ -103,8 +129,10 @@ export function CalendarEventDrawer({
   async function handleSave(submitEvent: FormEvent<HTMLFormElement>) {
     submitEvent.preventDefault();
 
-    const startAt = combineDateAndTime(eventDate, startTime);
-    const endAt = combineDateAndTime(eventDate, endTime);
+    const safeStartTime = normalizeTimeInput(startTime);
+    const safeEndTime = normalizeTimeInput(endTime, "10:00");
+    const startAt = combineDateAndTime(eventDate, safeStartTime);
+    const endAt = combineDateAndTime(eventDate, safeEndTime);
 
     if (!title.trim()) {
       setStatusMessage("Add a title before saving.");
@@ -116,6 +144,8 @@ export function CalendarEventDrawer({
       return;
     }
 
+    setStartTime(safeStartTime);
+    setEndTime(safeEndTime);
     setIsSaving(true);
     try {
       await saveEvent(currentEvent.id, {
@@ -150,14 +180,22 @@ export function CalendarEventDrawer({
   return (
     <>
       <div className={`drawer-backdrop-vnext${isOpen ? " open" : ""}`} onClick={onClose} />
-      <aside className={`task-drawer-vnext${isOpen ? " open" : ""}`} aria-hidden={!isOpen}>
+      <aside
+        ref={drawerRef}
+        className={`task-drawer-vnext${isOpen ? " open" : ""}`}
+        aria-hidden={!isOpen}
+        aria-modal={isOpen ? "true" : undefined}
+        aria-label="Edit calendar item"
+        role="dialog"
+        tabIndex={-1}
+      >
         <div className="drawer-header-vnext">
           <div>
-            <p className="eyebrow">EasyCalendar</p>
-            <h2>Edit calendar item</h2>
+            <p className="eyebrow">Plan</p>
+            <h2>Edit Plan item</h2>
             <p className="helper-copy">{itemKind === "deadline" ? "Quick deadline details." : "Fast event editing."}</p>
           </div>
-          <button type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close event editor">
+          <button ref={closeButtonRef} type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close event editor">
             Close
           </button>
         </div>
@@ -190,13 +228,13 @@ export function CalendarEventDrawer({
 
             <label className="field-stack">
               <span>{itemKind === "deadline" ? "Due time" : "Start time"}</span>
-              <input type="time" value={startTime} onChange={(changeEvent) => setStartTime(changeEvent.target.value)} />
+              <input type="time" step="900" value={startTime} onChange={(changeEvent) => setStartTime(changeEvent.target.value)} onBlur={handleStartTimeBlur} />
             </label>
 
             {itemKind === "event" ? (
             <label className="field-stack">
               <span>End time</span>
-              <input type="time" value={endTime} onChange={(changeEvent) => setEndTime(changeEvent.target.value)} />
+              <input type="time" step="900" value={endTime} onChange={(changeEvent) => setEndTime(changeEvent.target.value)} onBlur={() => setEndTime((current) => normalizeTimeInput(current, "10:00"))} />
             </label>
             ) : null}
 
@@ -262,6 +300,7 @@ export function CalendarEventDrawer({
             <div className="calendar-drawer-quick-actions">
               <span className="helper-copy">Quick duration</span>
               <div className="pill-row">
+                <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(15)}>15m</button>
                 <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(30)}>30m</button>
                 <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(60)}>1h</button>
                 <button type="button" className="ghost-button compact-button" onClick={() => applyDuration(90)}>90m</button>
