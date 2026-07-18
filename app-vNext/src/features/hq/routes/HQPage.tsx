@@ -355,43 +355,6 @@ function HQPageContent() {
         </article>
       </section>
 
-      <PageSection eyebrow="Demo path" title="The calm assistant loop">
-        <div className="hq-demo-path" aria-label="EasyLife first-run demo path">
-          <Link to="/app/easynotes/new" className="hq-demo-step">
-            <span>1</span>
-            <div>
-              <small>Write first</small>
-              <strong>Start in Notes</strong>
-              <p>Capture the rough thought before organizing it. Notes shows save and browser-recovery feedback.</p>
-            </div>
-          </Link>
-          <Link to="/app/easylist/add" className="hq-demo-step">
-            <span>2</span>
-            <div>
-              <small>Clarify</small>
-              <strong>Add the next task to Inbox</strong>
-              <p>Save one concrete next step, see confirmation, then choose what belongs in Today.</p>
-            </div>
-          </Link>
-          <Link to="/app/easycalendar/day" className="hq-demo-step">
-            <span>3</span>
-            <div>
-              <small>Plan lightly</small>
-              <strong>Give the day a shape</strong>
-              <p>Use Plan after review. Nothing moves into the day unless you decide it should.</p>
-            </div>
-          </Link>
-          <Link to="/app/settings/privacy" className="hq-demo-step">
-            <span>4</span>
-            <div>
-              <small>Trust check</small>
-              <strong>End at Settings</strong>
-              <p>Confirm what is real today: local review-first helpers, no live AI, no sending, and no external sync.</p>
-            </div>
-          </Link>
-        </div>
-      </PageSection>
-
       {unplannedInboxTasks.length ? (
         <PageSection eyebrow="Inbox to review" title={`${unplannedInboxTasks.length} unplanned item${unplannedInboxTasks.length === 1 ? "" : "s"}`}>
           <div className="assistant-attention-list">
@@ -450,6 +413,43 @@ function HQPageContent() {
               <p>Use Inbox or Plan to give the open day a little structure.</p>
             </article>
           )}
+        </div>
+      </PageSection>
+
+      <PageSection eyebrow="Demo path" title="The calm assistant loop">
+        <div className="hq-demo-path" aria-label="EasyLife first-run demo path">
+          <Link to="/app/easynotes/new" className="hq-demo-step">
+            <span>1</span>
+            <div>
+              <small>Write first</small>
+              <strong>Start in Notes</strong>
+              <p>Capture the rough thought before organizing it. Notes shows save and browser-recovery feedback.</p>
+            </div>
+          </Link>
+          <Link to="/app/easylist/add" className="hq-demo-step">
+            <span>2</span>
+            <div>
+              <small>Clarify</small>
+              <strong>Add the next task to Inbox</strong>
+              <p>Save one concrete next step, see confirmation, then choose what belongs in Today.</p>
+            </div>
+          </Link>
+          <Link to="/app/easycalendar/day" className="hq-demo-step">
+            <span>3</span>
+            <div>
+              <small>Plan lightly</small>
+              <strong>Give the day a shape</strong>
+              <p>Use Plan after review. Nothing moves into the day unless you decide it should.</p>
+            </div>
+          </Link>
+          <Link to="/app/settings/privacy" className="hq-demo-step">
+            <span>4</span>
+            <div>
+              <small>Trust check</small>
+              <strong>End at Settings</strong>
+              <p>Confirm what is real today: local review-first helpers, no live AI, no sending, and no external sync.</p>
+            </div>
+          </Link>
         </div>
       </PageSection>
     </main>

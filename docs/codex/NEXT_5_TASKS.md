@@ -1,6 +1,6 @@
-# EasyLife P4.5 Checkpoint and P4.6 Accessibility Hardening
+# EasyLife P4.5/P4.6 Checkpoint and P4.7 Daily Usefulness Refinement
 
-Current lane: P4.6 Accessibility Hardening. P4.5 is the accepted remote checkpoint at `83d85688`; the daily-use loop remains Today -> immediate capture -> later review or organization -> action or planning -> reliable return. P5 live AI and true push are paused behind separate explicit EasyLife HQ approval. This queue does not authorize deploys, external actions, backend policy changes, dependency changes, data migrations, or any parked capability.
+Current lane: P4.7 Daily Usefulness Refinement. P4.5 and P4.6-01 are the accepted remote checkpoint at `b6396686`; the daily-use loop remains Today -> immediate capture -> later review or organization -> action or planning -> reliable return. P5 live AI and true push are paused behind separate explicit EasyLife HQ approval. This queue does not authorize deploys, external actions, backend policy changes, dependency changes, data migrations, or any parked capability.
 
 ## 1. P4.5-01 - Repair Today action collision
 
@@ -54,7 +54,7 @@ Status: Complete. The shared drawer now opens with a Daily group ordered Today, 
 
 Recommended order: 1 -> 2 -> 3 -> 4 -> 5. All five original P4.5 implementation tasks are complete.
 
-Remote checkpoint: `83d85688` contains P4.5-01 through P4.5-05, P4.5-R1, and P4.5-R2 on `codex/product-EasyLife-20260504-231503`.
+Remote checkpoint: `b6396686` contains P4.5-01 through P4.5-05, P4.5-R1, P4.5-R2, and P4.6-01 on `codex/product-EasyLife-20260504-231503`.
 
 ## Integrated gate repair status
 
@@ -73,4 +73,11 @@ The integrated P4.5 local/demo gate is VERIFIED after the five implementation sl
 - **Regression evidence:** Today Capture and the global Capture trigger retained raw-textarea initial focus and actual-invoker return. Contact, application, calendar quick-add, calendar event, and calendar task-block drawers retained initial focus and Escape return. The standalone task drawer had no demo task fixture to open; its unchanged integration was checked from source against the same verified shared contract.
 - **Verification limits:** Evidence is autonomous browser and source verification, not a physical keyboard, screen reader, authenticated production, physical device, or installed/PWA test.
 
-Next action: EasyLife HQ review of the local P4.6-01 commit and a separate remote-backup decision. Live AI and true push remain unapproved, and no P5 implementation work is authorized.
+## P4.7 daily-usefulness refinement
+
+- **P4.7-01 - Make Today more decisive: Complete locally.** Today previously placed the unchanged four-card Demo path immediately after the dominant Start here card, ahead of the existing data-driven Inbox, People follow-up, and Review sections. The Demo path now follows those actionable daily sections. Start here selection, summary data, Capture, section contents, routes, and destinations are unchanged.
+- **Desktop and mobile evidence:** At 1440x1000 the Inbox review moved from below the Demo path at `y=971` to directly below Start here at `y=722`, while the Demo path moved to `y=1432`. At 390x844 Inbox moved from `y=1497` to `y=884`, removing about 600 pixels of tutorial detour. Both widths retained one primary action, one current Today destination, the existing heading order, and zero horizontal overflow.
+- **Integrated evidence:** The continuous Today -> raw Capture open/Escape -> dominant Inbox destination -> Back -> Inbox -> Notes -> fixture note -> Back -> Plan -> Today sequence passed without a route reload workaround. Capture focused its raw Inbox textarea and restored Today’s visible trigger. The stable demo fixture survived after the query disappeared; the sequence produced no Firestore request or write and no console error.
+- **Verification limits:** This is autonomous local/demo evidence, not authenticated production persistence, physical-phone, physical-keyboard, real screen-reader, or installed/PWA validation.
+
+Next action: EasyLife HQ review of the local P4.7-01 commit and a separate remote-backup decision. Live AI and true push remain unapproved, and no P5 implementation work is authorized.
