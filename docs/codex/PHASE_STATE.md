@@ -3,7 +3,7 @@
 Current Phase: p4-5-field-use-repair
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Complete P4.5-R2 by correcting Inbox closed-disclosure descendant visibility and focusability, then rerun the complete integrated field-use matrix.
+Primary Action: Present the completed P4.5 local/demo checkpoint for EasyLife HQ review and a separate remote-backup push decision.
 Showable Moment: The shared navigation opens with Today, Inbox, Notes, and Plan first, while supporting Life, Career, Workout, and Utilities destinations remain directly reachable.
 What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, contact sync, account deletion backend, external actions, or saved-object expansion.
 No More Features Lock: true
@@ -13,11 +13,14 @@ Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-t
 Phase Model Policy: judgment-heavy
 Parking State: P5_LIVE_AI_AND_TRUE_PUSH_PAUSED_BEHIND_EXPLICIT_APPROVAL; WORKOUT_AI_PARKED_UNTIL_LOGGER_RELIABLE
 Evidence Required: P4.5 requires clean preflight proof, baseline and final production builds, source-backed friction findings, desktop/mobile inspection where available, one coherent behavior change, and final git diff checks.
-Done Signal: P4.5-01 through P4.5-05 and P4.5-R1 passed build and bounded desktop/mobile checks; the integrated gate remains blocked pending P4.5-R2 and a complete rerun.
+Done Signal: P4.5-01 through P4.5-05, P4.5-R1, and P4.5-R2 are complete; the two-attempt desktop and mobile local/demo integrated gate passed without a P4.5 regression.
+Verification Limits: This checkpoint is not human field validation or authenticated production proof. Authenticated Firestore writes and visibility restoration, real provider behavior, true push, a physical phone keyboard, and installed/PWA behavior remain unverified.
+Known Accessibility Weakness: Mobile drawer opening can leave initial focus on the visible invoker. The behavior predates P4.5; Escape, route activation, focus return, scrolling, and route reachability remain intact. Physical-keyboard validation remains outstanding.
+Next Gate: EasyLife HQ checkpoint review and remote-backup push review. P5 remains paused.
 Next Phase Criteria: P5 live AI or true push remains paused and may begin only after separate explicit EasyLife HQ approval for the exact capability, implementation, deploy, and test boundary.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-07-18 - P4.5-01 through P4.5-05 remain complete. P4.5-R1 is complete: explicit local/demo entry now establishes a stable AuthContext-owned in-memory review mode, natural navigation no longer sends `local-preview` into Firestore, and the prior `ca9`/`b815` assertion did not reproduce in two desktop runs, the mobile sequence, or the extended provider sweep. P4.5 remains active and the integrated gate remains blocked pending P4.5-R2 Inbox closed-disclosure repair plus a complete matrix rerun. The mobile drawer initial-focus weakness remains a later nonblocking accessibility item. P5 live AI and true push remain paused behind explicit approval.
+Updated At: 2026-07-18 - P4.5-01 through P4.5-05, P4.5-R1, and P4.5-R2 are complete. The scoped Inbox closed-state repair removed advanced descendants from closed layout while preserving all 23 controls when expanded. Two fresh desktop attempts and the 390x844 mobile sequence passed the integrated local/demo matrix with no remote Firestore Listen/Write, `local-preview`, provider call, assertion, hidden write, retained smoke draft, or horizontal overflow. This is not human field validation or authenticated production proof. The pre-existing mobile drawer initial-focus weakness remains nonblocking and awaits physical-keyboard validation. P4.5 stays the checkpoint phase; next is HQ checkpoint and remote-backup review. P5 live AI and true push remain paused behind explicit approval.
 
 Audit packet interrupt: the active source is `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip`. Treat demo readiness, route safety, naming consistency, capture trust, Settings/trust copy, and input reliability as the current priority. Do not touch Firebase/auth/rules/functions/billing/DNS/secrets/env files, and do not assume live AI, true push notifications, calendar sync, geocoding, email/text sending, or hidden writes.
 

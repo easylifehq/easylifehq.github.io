@@ -3870,6 +3870,10 @@ textarea::placeholder {
   margin-top: 0.9rem;
 }
 
+.easylist-capability-disclosure:not([open]) > :not(summary) {
+  display: none;
+}
+
 .deep-module-toolbar {
   padding: 0.75rem;
   border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
