@@ -100,6 +100,33 @@ export function ProductsMenu({
   });
 
   useEffect(() => {
+    if (!isOpen) return;
+
+    const activePanel = panelRef.current;
+    if (!activePanel) return;
+
+    const focusCloseButton = () => {
+      const closeButton = closeButtonRef.current;
+      if (!closeButton || activePanel.contains(document.activeElement)) return;
+      closeButton.focus();
+    };
+
+    const handleTransitionEnd = (event: TransitionEvent) => {
+      if (event.target === activePanel && event.propertyName === "transform") {
+        focusCloseButton();
+      }
+    };
+
+    const focusFrame = window.requestAnimationFrame(focusCloseButton);
+    activePanel.addEventListener("transitionend", handleTransitionEnd);
+
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      activePanel.removeEventListener("transitionend", handleTransitionEnd);
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
     setIsOpen(false);
   }, [location.pathname, location.hash]);
 

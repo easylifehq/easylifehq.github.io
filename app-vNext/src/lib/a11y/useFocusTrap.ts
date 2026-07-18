@@ -35,8 +35,18 @@ export function useFocusTrap(
     const activeContainer = container;
 
     const previousActiveElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const focusTarget = initialFocusRef?.current || getFocusableElements(activeContainer)[0] || activeContainer;
-    window.setTimeout(() => focusTarget.focus(), 0);
+    function getFocusTarget() {
+      const initialFocusTarget = initialFocusRef?.current;
+      if (initialFocusTarget && activeContainer.contains(initialFocusTarget)) return initialFocusTarget;
+      return getFocusableElements(activeContainer)[0] || activeContainer;
+    }
+
+    const focusTimer = window.setTimeout(() => getFocusTarget().focus(), 0);
+
+    function handleFocusIn(event: FocusEvent) {
+      if (!(event.target instanceof Node) || activeContainer.contains(event.target)) return;
+      getFocusTarget().focus();
+    }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -58,6 +68,12 @@ export function useFocusTrap(
       const lastElement = focusableElements[focusableElements.length - 1];
       const activeElement = document.activeElement;
 
+      if (!activeContainer.contains(activeElement)) {
+        event.preventDefault();
+        (event.shiftKey ? lastElement : firstElement).focus();
+        return;
+      }
+
       if (event.shiftKey && activeElement === firstElement) {
         event.preventDefault();
         lastElement.focus();
@@ -70,9 +86,12 @@ export function useFocusTrap(
       }
     }
 
+    document.addEventListener("focusin", handleFocusIn);
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      window.clearTimeout(focusTimer);
+      document.removeEventListener("focusin", handleFocusIn);
       document.removeEventListener("keydown", handleKeyDown);
       const returnTarget = returnFocusRef?.current || previousActiveElement;
       if (returnTarget && document.contains(returnTarget)) {

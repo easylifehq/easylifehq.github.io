@@ -1,10 +1,10 @@
-# EasyLife P4.5 Field Use Repair Queue
+# EasyLife P4.5 Checkpoint and P4.6 Accessibility Hardening
 
-Current lane: P4.5 Field Use Repair. The daily-use loop is Today -> immediate capture -> later review or organization -> action or planning -> reliable return. P5 live AI and true push are paused behind separate explicit EasyLife HQ approval. This queue does not authorize deploys, external actions, backend policy changes, dependency changes, data migrations, or any parked capability.
+Current lane: P4.6 Accessibility Hardening. P4.5 is the accepted remote checkpoint at `83d85688`; the daily-use loop remains Today -> immediate capture -> later review or organization -> action or planning -> reliable return. P5 live AI and true push are paused behind separate explicit EasyLife HQ approval. This queue does not authorize deploys, external actions, backend policy changes, dependency changes, data migrations, or any parked capability.
 
 ## 1. P4.5-01 - Repair Today action collision
 
-Status: Complete. Committed locally in `d005103c`; not pushed or deployed.
+Status: Complete. Included in accepted remote checkpoint `83d85688`; not deployed.
 
 - **User problem:** Today renders a general EasyLife overview and the data-driven Start here action in the same CSS grid area, so their copy and controls overlap at desktop and mobile widths and obscure what to do next.
 - **Intended behavioral outcome:** Today shows one readable, data-driven Start here action followed by the separate immediate Capture control.
@@ -54,6 +54,8 @@ Status: Complete. The shared drawer now opens with a Daily group ordered Today, 
 
 Recommended order: 1 -> 2 -> 3 -> 4 -> 5. All five original P4.5 implementation tasks are complete.
 
+Remote checkpoint: `83d85688` contains P4.5-01 through P4.5-05, P4.5-R1, and P4.5-R2 on `codex/product-EasyLife-20260504-231503`.
+
 ## Integrated gate repair status
 
 The integrated P4.5 local/demo gate is VERIFIED after the five implementation slices and two bounded gate repairs.
@@ -61,7 +63,14 @@ The integrated P4.5 local/demo gate is VERIFIED after the five implementation sl
 - **P4.5-R1 - Stabilize local/demo navigation: Complete.** AuthContext now owns one in-memory review-mode flag initialized only from the explicit local `demo=1` or `visualQa=1` entry. Route-scoped providers consume that stable flag, retain existing fixtures or settle into their existing empty state, and block Firestore subscriptions and writes for the synthetic `local-preview` user. Two fresh desktop runs, the mobile route sequence, Back/Forward, and People/Projects/Progress checks produced no Firestore Listen requests, `ca9`, `b815`, access errors, or horizontal overflow after the query disappeared. A fresh non-demo load remained signed out with no fixtures.
 - **P4.5-R2 - Correct Inbox closed-disclosure descendant visibility and focusability: Complete.** A scoped closed-state rule now prevents every nonsummary child of `.easylist-capability-disclosure` from rendering while the native disclosure is closed. Desktop and mobile checks found zero rendered advanced-control rectangles when closed; reopening restored all 23 existing controls, and collapse/reopen retained local form state without invoking an operation.
 - **Final integrated local/demo gate: VERIFIED.** Two fresh desktop attempts completed Today, raw-first Capture draft recovery and cleanup, Inbox, Notes library/editor, Plan, People, Projects, Job applications, all three Workout routes, Review, Progress, Settings, three Back operations, three Forward operations, and a natural return to Today. The mobile sequence completed at 390x844. Runtime inspection found no remote Firestore Listen/Write, `local-preview`, provider call, assertion, unhandled exception, horizontal overflow, hidden save, or retained smoke draft.
-- **Drawer classification: Pre-existing nonblocking accessibility weakness.** Opening the mobile drawer can leave initial focus on the visible invoker. The focus-trap and return-focus source is unchanged from `4f787a9d`; Escape closes and returns focus, route activation closes, all 13 links remain present and reachable, the drawer scrolls, and prior R1 keyboard evidence remains valid. This browser session's synthetic Tab injection did not advance native focus reliably, so it is not treated as physical-keyboard proof.
+- **Previous drawer classification: Addressed by P4.6-01.** The pre-existing initial-focus weakness recorded at the P4.5 checkpoint is retained here as historical evidence; the bounded P4.6 repair is recorded below.
 - **Verification limits:** This is local/demo automation, not human field validation or authenticated production proof. Authenticated Firestore writes, authenticated visibility restoration, real provider behavior, true push, a physical phone keyboard, and installed/PWA behavior remain unverified.
 
-Next action: EasyLife HQ checkpoint review and a separate remote-backup push decision for the seven local P4.5 commits. Live AI and true push remain unapproved, and no P5 implementation work is authorized.
+## P4.6 accessibility hardening
+
+- **P4.6-01 - Repair navigation drawer focus: Complete.** The shared focus trap now redirects focus that leaves an active container, handles Tab from an outside active element, and cancels pending initial focus during cleanup. The navigation drawer adds a cancellable first-frame and transform-transition completion check that focuses its existing Close button only when focus is still outside. While the drawer is open, the sticky header suspends its blur so the existing fixed backdrop covers the viewport and can close the drawer on mobile.
+- **Desktop and mobile evidence:** Two fresh runs at 1440x1000 and two at 390x844 settled on the existing Close button; Shift+Tab from Close wrapped to Settings, Tab from Settings wrapped to Close, attempted background focus was redirected, and Escape, Close, and backdrop restored the visible Menu invoker. Route activation closed the drawer and allowed the destination's existing initial focus. The drawer retained one dialog, one navigation landmark, one current route, all 13 destinations, vertical scrolling to Settings, and no horizontal overflow.
+- **Regression evidence:** Today Capture and the global Capture trigger retained raw-textarea initial focus and actual-invoker return. Contact, application, calendar quick-add, calendar event, and calendar task-block drawers retained initial focus and Escape return. The standalone task drawer had no demo task fixture to open; its unchanged integration was checked from source against the same verified shared contract.
+- **Verification limits:** Evidence is autonomous browser and source verification, not a physical keyboard, screen reader, authenticated production, physical device, or installed/PWA test.
+
+Next action: EasyLife HQ review of the local P4.6-01 commit and a separate remote-backup decision. Live AI and true push remain unapproved, and no P5 implementation work is authorized.

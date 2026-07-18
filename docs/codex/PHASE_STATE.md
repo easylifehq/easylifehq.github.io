@@ -1,26 +1,26 @@
 # Phase State
 
-Current Phase: p4-5-field-use-repair
+Current Phase: p4-6-accessibility-hardening
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Present the completed P4.5 local/demo checkpoint for EasyLife HQ review and a separate remote-backup push decision.
-Showable Moment: The shared navigation opens with Today, Inbox, Notes, and Plan first, while supporting Life, Career, Workout, and Utilities destinations remain directly reachable.
+Primary Action: Present the completed local P4.6-01 accessibility commit for EasyLife HQ review and a separate remote-backup decision.
+Showable Moment: The shared navigation opens with focus on Close, contains keyboard focus through all 13 destinations, and restores the visible Menu invoker after Escape, Close, or backdrop dismissal.
 What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, contact sync, account deletion backend, external actions, or saved-object expansion.
 No More Features Lock: true
-Complexity Budget: P4.5 may implement exactly one small, reversible, user-visible repair per approved loop; no new route, service, dependency, migration, backend policy, or live capability.
+Complexity Budget: P4.6 may implement exactly one small, reversible accessibility repair per approved loop; no new route, service, dependency, migration, backend policy, or live capability.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
 Parking State: P5_LIVE_AI_AND_TRUE_PUSH_PAUSED_BEHIND_EXPLICIT_APPROVAL; WORKOUT_AI_PARKED_UNTIL_LOGGER_RELIABLE
-Evidence Required: P4.5 requires clean preflight proof, baseline and final production builds, source-backed friction findings, desktop/mobile inspection where available, one coherent behavior change, and final git diff checks.
-Done Signal: P4.5-01 through P4.5-05, P4.5-R1, and P4.5-R2 are complete; the two-attempt desktop and mobile local/demo integrated gate passed without a P4.5 regression.
+Evidence Required: P4.6 requires clean preflight proof, baseline and final production builds, source-backed root cause, desktop/mobile focus and closure checks, shared-consumer regression review, the integrated local/demo sequence, and final git diff checks.
+Done Signal: P4.5 remains the accepted remote checkpoint at `83d85688`; P4.6-01 is complete locally after desktop/mobile focus containment, restoration, shared-consumer, and integrated local/demo verification.
 Verification Limits: This checkpoint is not human field validation or authenticated production proof. Authenticated Firestore writes and visibility restoration, real provider behavior, true push, a physical phone keyboard, and installed/PWA behavior remain unverified.
-Known Accessibility Weakness: Mobile drawer opening can leave initial focus on the visible invoker. The behavior predates P4.5; Escape, route activation, focus return, scrolling, and route reachability remain intact. Physical-keyboard validation remains outstanding.
-Next Gate: EasyLife HQ checkpoint review and remote-backup push review. P5 remains paused.
+Known Accessibility Weakness: P4.6-01 addresses the recorded drawer initial-focus weakness under autonomous browser and source verification. Physical-keyboard, screen-reader, physical-device, and installed/PWA validation remain outstanding.
+Next Gate: EasyLife HQ review of the local P4.6-01 commit and a separate remote-backup decision. P5 remains paused.
 Next Phase Criteria: P5 live AI or true push remains paused and may begin only after separate explicit EasyLife HQ approval for the exact capability, implementation, deploy, and test boundary.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-07-18 - P4.5-01 through P4.5-05, P4.5-R1, and P4.5-R2 are complete. The scoped Inbox closed-state repair removed advanced descendants from closed layout while preserving all 23 controls when expanded. Two fresh desktop attempts and the 390x844 mobile sequence passed the integrated local/demo matrix with no remote Firestore Listen/Write, `local-preview`, provider call, assertion, hidden write, retained smoke draft, or horizontal overflow. This is not human field validation or authenticated production proof. The pre-existing mobile drawer initial-focus weakness remains nonblocking and awaits physical-keyboard validation. P4.5 stays the checkpoint phase; next is HQ checkpoint and remote-backup review. P5 live AI and true push remain paused behind explicit approval.
+Updated At: 2026-07-18 - P4.5 remains the accepted remote checkpoint at `83d85688`. P4.6-01 now moves focus to the open drawer, contains and wraps focus, restores the visible invoker for Escape, Close, and backdrop dismissal, and preserves destination focus on route activation. Desktop and mobile browser checks, fixture-backed shared focus-trap consumers, the integrated local/demo route sequence, and the production build passed with no remote Firestore request or console error. This is autonomous browser/source evidence, not human physical-device, physical-keyboard, screen-reader, authenticated production, or installed/PWA proof. P5 live AI and true push remain paused behind explicit approval.
 
 Audit packet interrupt: the active source is `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip`. Treat demo readiness, route safety, naming consistency, capture trust, Settings/trust copy, and input reliability as the current priority. Do not touch Firebase/auth/rules/functions/billing/DNS/secrets/env files, and do not assume live AI, true push notifications, calendar sync, geocoding, email/text sending, or hidden writes.
 

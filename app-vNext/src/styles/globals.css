@@ -533,6 +533,11 @@ a {
   position: static;
 }
 
+.app-header:has(.app-navigation-drawer.open) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
 .menu-trigger-button {
   min-height: 44px;
   display: inline-flex;
