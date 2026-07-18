@@ -17,6 +17,7 @@ import { auth } from "@/lib/firebase/client";
 type AuthContextValue = {
   user: User | null;
   isLoading: boolean;
+  isDemoMode: boolean;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -30,9 +31,10 @@ function isDevReviewMode() {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDemoMode] = useState(isDevReviewMode);
 
   useEffect(() => {
-    if (isDevReviewMode()) {
+    if (isDemoMode) {
       setUser({ uid: "local-preview", email: "preview@easylife.local" } as User);
       setIsLoading(false);
       return;
@@ -57,14 +59,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isActive = false;
       unsubscribe?.();
     };
-  }, []);
+  }, [isDemoMode]);
 
   const value = useMemo(
     () => ({
       user,
       isLoading,
+      isDemoMode,
     }),
-    [user, isLoading]
+    [user, isLoading, isDemoMode]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

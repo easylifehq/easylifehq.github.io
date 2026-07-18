@@ -76,14 +76,8 @@ type EasyProjectsContextValue = {
 
 const EasyProjectsContext = createContext<EasyProjectsContextValue | undefined>(undefined);
 
-function isVisualQaMode() {
-  if (!import.meta.env.DEV) return false;
-  const params = new URLSearchParams(window.location.search);
-  return params.get("visualQa") === "1" || params.get("demo") === "1";
-}
-
 export function EasyProjectsProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [sections, setSections] = useState<ProjectSectionRecord[]>([]);
   const [links, setLinks] = useState<ProjectTaskLinkRecord[]>([]);
@@ -95,7 +89,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
   const [tasksLoading, setTasksLoading] = useState(true);
 
   useEffect(() => {
-    if (isVisualQaMode()) {
+    if (isDemoMode) {
       setProjects([
         {
           id: "visual-project",
@@ -268,7 +262,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
       unsubscribeLinks();
       unsubscribeTasks();
     };
-  }, [user]);
+  }, [isDemoMode, user]);
 
   const value = useMemo(
     () => ({
@@ -279,15 +273,15 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
       isLoading: projectsLoading || sectionsLoading || linksLoading || tasksLoading,
       error,
       addProject: async (draft: ProjectDraft) => {
-        if (!user) return null;
+        if (!user || isDemoMode) return null;
         return createProject(user.uid, draft);
       },
       saveProject: async (projectId: string, draft: ProjectDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await updateProject(user.uid, projectId, draft);
       },
       deleteProject: async (projectId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await Promise.all(
           links
             .filter((link) => link.projectId === projectId)
@@ -301,15 +295,15 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         await removeProject(user.uid, projectId);
       },
       addSection: async (draft: ProjectSectionDraft) => {
-        if (!user) return null;
+        if (!user || isDemoMode) return null;
         return createProjectSection(user.uid, draft);
       },
       saveSection: async (sectionId: string, draft: ProjectSectionDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await updateProjectSection(user.uid, sectionId, draft);
       },
       deleteSection: async (sectionId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await Promise.all(
           links
             .filter((link) => link.sectionId === sectionId)
@@ -318,7 +312,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         await removeProjectSection(user.uid, sectionId);
       },
       addProjectTask: async (payload: { task: TaskDraft; link: Omit<ProjectTaskLinkDraft, "taskId"> }) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         const taskId = await createTask(user.uid, payload.task);
         await createProjectTaskLink(user.uid, {
           ...payload.link,
@@ -326,15 +320,15 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         });
       },
       saveProjectTaskLink: async (linkId: string, draft: ProjectTaskLinkDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await updateProjectTaskLink(user.uid, linkId, draft);
       },
       deleteProjectTaskLink: async (linkId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await removeProjectTaskLink(user.uid, linkId);
       },
       completeProjectTask: async (taskId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         const task = tasks.find((entry) => entry.id === taskId);
         await completeTask(user.uid, taskId);
         if (task?.linkedCalendarBlockIds.length) {
@@ -342,7 +336,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         }
       },
       reopenProjectTask: async (taskId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         const task = tasks.find((entry) => entry.id === taskId);
         await reopenTask(user.uid, taskId);
         if (task?.linkedCalendarBlockIds.length) {
@@ -355,7 +349,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
         endAt: Date;
         planningState?: PlanningState;
       }) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         const blockId = await createCalendarTaskBlock(user.uid, {
           taskId: payload.task.id,
           titleSnapshot: payload.task.title || "Untitled task",
@@ -379,6 +373,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
       sectionsLoading,
       tasks,
       tasksLoading,
+      isDemoMode,
       user,
     ]
   );

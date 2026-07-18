@@ -88,12 +88,6 @@ function isEmptyUntitledNote(note: NoteRecord) {
   return !note.title.trim() && !note.bodyText.trim() && note.tags.length === 0 && !note.folderId;
 }
 
-function isVisualQaMode() {
-  if (!import.meta.env.DEV) return false;
-  const params = new URLSearchParams(window.location.search);
-  return params.get("visualQa") === "1" || params.get("demo") === "1";
-}
-
 const visualQaNotes: NoteRecord[] = [
   {
     id: "visual-note-brief",
@@ -124,7 +118,7 @@ const visualQaNotes: NoteRecord[] = [
 ];
 
 export function EasyNotesProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [notes, setNotes] = useState<NoteRecord[]>([]);
   const [deletedNotes, setDeletedNotes] = useState<NoteRecord[]>([]);
   const [folders, setFolders] = useState<NoteFolderRecord[]>([]);
@@ -133,7 +127,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   const pendingBlankNoteRef = useRef<Promise<string | null> | null>(null);
 
   useEffect(() => {
-    if (isVisualQaMode()) {
+    if (isDemoMode) {
       setNotes(visualQaNotes);
       setDeletedNotes([]);
       setFolders([]);
@@ -179,10 +173,10 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       unsubscribeNotes();
       unsubscribeFolders();
     };
-  }, [user]);
+  }, [isDemoMode, user]);
 
   async function addNoteForUser() {
-    if (!user) return null;
+    if (!user || isDemoMode) return null;
     const emptyNote = sortNotes(notes).find(isEmptyUntitledNote);
     if (emptyNote) return emptyNote.id;
     if (pendingBlankNoteRef.current) return pendingBlankNoteRef.current;
@@ -226,7 +220,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function createNoteFromDraftForUser(draft: NoteDraft) {
-    if (!user) return null;
+    if (!user || isDemoMode) return null;
 
     const noteId = await addNoteForUser();
     if (!noteId) return null;
@@ -236,7 +230,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function addFolderForUser(name: string) {
-    if (!user) return null;
+    if (!user || isDemoMode) return null;
     const trimmedName = name.trim();
     if (!trimmedName) return null;
 
@@ -253,7 +247,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function renameFolderForUser(folderId: string, name: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     const trimmedName = name.trim();
     if (!trimmedName) return;
 
@@ -264,7 +258,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function deleteFolderForUser(folderId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await Promise.all([
       deleteNoteFolder(user.uid, folderId),
       moveNotesToFolder(user.uid, notes.filter((note) => note.folderId === folderId).map((note) => note.id), ""),
@@ -276,24 +270,24 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function saveNoteForUser(noteId: string, draft: NoteDraft) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await updateNote(user.uid, noteId, draft);
   }
 
   async function deleteNoteForUser(noteId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await softDeleteNote(user.uid, noteId);
     setNotes((current) => current.filter((note) => note.id !== noteId));
   }
 
   async function deleteNotesForUser(noteIds: string[]) {
-    if (!user || !noteIds.length) return;
+    if (!user || isDemoMode || !noteIds.length) return;
     await softDeleteNotes(user.uid, noteIds);
     setNotes((current) => current.filter((note) => !noteIds.includes(note.id)));
   }
 
   async function moveNotesToFolderForUser(noteIds: string[], folderId: string) {
-    if (!user || !noteIds.length) return;
+    if (!user || isDemoMode || !noteIds.length) return;
     await moveNotesToFolder(user.uid, noteIds, folderId);
     setNotes((current) =>
       sortNotes(current.map((note) => (noteIds.includes(note.id) ? { ...note, folderId } : note)))
@@ -301,7 +295,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function cleanUpEmptyNotesForUser() {
-    if (!user) return 0;
+    if (!user || isDemoMode) return 0;
     const emptyNoteIds = notes.filter(isEmptyUntitledNote).map((note) => note.id);
     if (!emptyNoteIds.length) return 0;
 
@@ -311,31 +305,31 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function restoreNoteForUser(noteId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await restoreNote(user.uid, noteId);
     setDeletedNotes((current) => current.filter((note) => note.id !== noteId));
   }
 
   async function restoreNotesForUser(noteIds: string[]) {
-    if (!user || !noteIds.length) return;
+    if (!user || isDemoMode || !noteIds.length) return;
     await restoreNotes(user.uid, noteIds);
     setDeletedNotes((current) => current.filter((note) => !noteIds.includes(note.id)));
   }
 
   async function permanentlyDeleteNoteForUser(noteId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await removeNote(user.uid, noteId);
     setDeletedNotes((current) => current.filter((note) => note.id !== noteId));
   }
 
   async function permanentlyDeleteNotesForUser(noteIds: string[]) {
-    if (!user || !noteIds.length) return;
+    if (!user || isDemoMode || !noteIds.length) return;
     await removeNotes(user.uid, noteIds);
     setDeletedNotes((current) => current.filter((note) => !noteIds.includes(note.id)));
   }
 
   async function createTaskDraftsFromNote(payload: { noteTitle: string; text: string }) {
-    if (!user) return 0;
+    if (!user || isDemoMode) return 0;
 
     const lines = normalizeLinesToTasks(payload.text);
     if (!lines.length) return 0;
@@ -356,7 +350,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function createProjectFromNote(payload: { noteTitle: string; text: string }) {
-    if (!user) return null;
+    if (!user || isDemoMode) return null;
 
     const lines = normalizeLinesToTasks(payload.text);
     if (!lines.length) return null;
@@ -427,7 +421,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       createTaskDraftsFromText: createTaskDraftsFromNote,
       createProjectFromText: createProjectFromNote,
     }),
-    [notes, deletedNotes, folders, isLoading, error]
+    [notes, deletedNotes, folders, isLoading, error, isDemoMode]
   );
 
   return <EasyNotesContext.Provider value={value}>{children}</EasyNotesContext.Provider>;

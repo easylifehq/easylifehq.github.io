@@ -52,4 +52,14 @@ Status: Complete. The shared drawer now opens with a Daily group ordered Today, 
 - **Acceptance criteria:** Daily and supporting destinations are distinct on desktop and mobile; the job pipeline is not mistaken for personal follow-ups; all three Workout routes are directly reachable and uniquely named; Settings is secondary; each destination has one correct active state; route and query behavior is unchanged.
 - **Verification method:** Before/after route-and-ID inventory; baseline and final production builds; direct desktop/mobile smoke for all 13 destinations; Back/Forward and drawer-close checks; accessibility/overflow inspection; `git diff --check`.
 
-Recommended order: 1 -> 2 -> 3 -> 4 -> 5. All five P4.5 implementation tasks are complete. The next gate is integrated P4.5 field-use verification, regression review, and an EasyLife HQ checkpoint decision. Live AI and true push remain unapproved.
+Recommended order: 1 -> 2 -> 3 -> 4 -> 5. All five original P4.5 implementation tasks are complete.
+
+## Integrated gate repair status
+
+The integrated P4.5 gate remains blocked. Its first natural-navigation run exposed two pre-existing review-path defects after the five implementation slices completed.
+
+- **P4.5-R1 - Stabilize local/demo navigation: Complete.** AuthContext now owns one in-memory review-mode flag initialized only from the explicit local `demo=1` or `visualQa=1` entry. Route-scoped providers consume that stable flag, retain existing fixtures or settle into their existing empty state, and block Firestore subscriptions and writes for the synthetic `local-preview` user. Two fresh desktop runs, the mobile route sequence, Back/Forward, and People/Projects/Progress checks produced no Firestore Listen requests, `ca9`, `b815`, access errors, or horizontal overflow after the query disappeared. A fresh non-demo load remained signed out with no fixtures.
+- **Next bounded task only: P4.5-R2 - Correct Inbox closed-disclosure descendant visibility and focusability.** When Advanced capability checks is closed, its descendants must not lay out or remain keyboard focusable; preserve all capability controls and safety boundaries when expanded.
+- **Later nonblocking accessibility item:** Re-evaluate the mobile drawer's initial focus after the integrated gate passes; this R1 slice deliberately left drawer focus code unchanged.
+
+The integrated gate is incomplete until P4.5-R2 passes and the full matrix is rerun. Live AI and true push remain unapproved.

@@ -68,7 +68,7 @@ export const defaultWorkoutExercises: Array<Pick<WorkoutExerciseDraft, "name" | 
 ];
 
 export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [exercises, setExercises] = useState<WorkoutExerciseRecord[]>([]);
   const [routines, setRoutines] = useState<WorkoutRoutineRecord[]>([]);
   const [sessions, setSessions] = useState<WorkoutSessionRecord[]>([]);
@@ -78,10 +78,11 @@ export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
   const [sessionsLoading, setSessionsLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || isDemoMode) {
       setExercises([]);
       setRoutines([]);
       setSessions([]);
+      setError("");
       setExercisesLoading(false);
       setRoutinesLoading(false);
       setSessionsLoading(false);
@@ -136,7 +137,7 @@ export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
       unsubscribeRoutines();
       unsubscribeSessions();
     };
-  }, [user]);
+  }, [isDemoMode, user]);
 
   const value = useMemo(
     () => ({
@@ -146,39 +147,39 @@ export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
       isLoading: exercisesLoading || routinesLoading || sessionsLoading,
       error,
       addExercise: async (draft: WorkoutExerciseDraft) => {
-        if (!user) return null;
+        if (!user || isDemoMode) return null;
         return createWorkoutExercise(user.uid, draft);
       },
       saveExercise: async (exerciseId: string, draft: WorkoutExerciseDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await updateWorkoutExercise(user.uid, exerciseId, draft);
       },
       deleteExercise: async (exerciseId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await removeWorkoutExercise(user.uid, exerciseId);
       },
       addRoutine: async (draft: WorkoutRoutineDraft) => {
-        if (!user) return null;
+        if (!user || isDemoMode) return null;
         return createWorkoutRoutine(user.uid, draft);
       },
       saveRoutine: async (routineId: string, draft: WorkoutRoutineDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await updateWorkoutRoutine(user.uid, routineId, draft);
       },
       deleteRoutine: async (routineId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await removeWorkoutRoutine(user.uid, routineId);
       },
       addSession: async (draft: WorkoutSessionDraft) => {
-        if (!user) return null;
+        if (!user || isDemoMode) return null;
         return createWorkoutSession(user.uid, draft);
       },
       saveSession: async (sessionId: string, draft: WorkoutSessionDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await updateWorkoutSession(user.uid, sessionId, draft);
       },
       deleteSession: async (sessionId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await removeWorkoutSession(user.uid, sessionId);
       },
     }),
@@ -190,6 +191,7 @@ export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
       routinesLoading,
       sessions,
       sessionsLoading,
+      isDemoMode,
       user,
     ]
   );

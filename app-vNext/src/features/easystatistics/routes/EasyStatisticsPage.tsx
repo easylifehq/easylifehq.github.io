@@ -91,7 +91,7 @@ function getWordCount(notes: NoteRecord[]) {
 }
 
 export function EasyStatisticsPage() {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const { tasks, events, taskBlocks, isLoading, error } = useEasyCalendar();
   const [workoutSessions, setWorkoutSessions] = useState<WorkoutSessionRecord[]>([]);
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
@@ -107,12 +107,13 @@ export function EasyStatisticsPage() {
   const monthStart = startOfMonth(today);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || isDemoMode) {
       setWorkoutSessions([]);
       setApplications([]);
       setProjects([]);
       setProjectLinks([]);
       setNotes([]);
+      setStatsError("");
       return;
     }
 
@@ -137,7 +138,7 @@ export function EasyStatisticsPage() {
       unsubscribeProjectLinks();
       unsubscribeNotes();
     };
-  }, [user]);
+  }, [isDemoMode, user]);
 
   const stats = useMemo(() => {
     const activeTasks = tasks.filter((task) => !task.completed && !task.deletedAt);

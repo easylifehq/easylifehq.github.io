@@ -589,7 +589,7 @@ function getStringField(record: unknown, field: string) {
 export function SettingsPage() {
   const [searchParams] = useSearchParams();
   const [activeSection, setActiveSection] = useState<SettingsSectionId>("customize");
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [dataCollections, setDataCollections] = useState<DataCollections>(emptyDataCollections);
   const [dataError, setDataError] = useState("");
   const [dataMessage, setDataMessage] = useState("");
@@ -683,7 +683,7 @@ export function SettingsPage() {
   }, [searchParams]);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || isDemoMode) {
       setDataCollections(emptyDataCollections);
       setDataError("");
       return;
@@ -718,7 +718,7 @@ export function SettingsPage() {
     return () => {
       unsubscribers.forEach((unsubscribe) => unsubscribe());
     };
-  }, [user]);
+  }, [isDemoMode, user]);
 
   function handleExportAll() {
     downloadJson(`easylife-export-${new Date().toISOString().slice(0, 10)}.json`, dataExport);

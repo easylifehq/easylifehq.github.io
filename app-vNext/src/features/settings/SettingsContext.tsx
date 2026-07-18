@@ -50,12 +50,8 @@ const demoVisibleApps: VisibleAppId[] = [
   "easystatistics",
 ];
 
-function getVisualQaSettings(): UserShellSettings | null {
-  if (!import.meta.env.DEV) return null;
-
+function getVisualQaSettings(): UserShellSettings {
   const params = new URLSearchParams(window.location.search);
-  if (params.get("visualQa") !== "1" && params.get("demo") !== "1") return null;
-
   const theme = params.get("theme");
   const themeMode: ThemeMode =
     theme === "candy" ||
@@ -100,16 +96,16 @@ type SettingsContextValue = {
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [settings, setSettings] = useState<UserShellSettings>(defaultShellSettings);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const visualQaSettings = getVisualQaSettings();
-    if (visualQaSettings) {
-      setSettings(visualQaSettings);
+    if (isDemoMode) {
+      setSettings(getVisualQaSettings());
       setIsLoading(false);
+      setError("");
       return;
     }
 
@@ -134,11 +130,11 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     );
 
     return unsubscribe;
-  }, [user]);
+  }, [isDemoMode, user]);
 
   async function persist(nextSettings: UserShellSettings) {
     setSettings(nextSettings);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await saveShellSettings(user.uid, nextSettings);
   }
 
