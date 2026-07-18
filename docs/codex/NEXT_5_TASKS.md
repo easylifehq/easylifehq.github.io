@@ -1,6 +1,6 @@
 # EasyLife P4.5/P4.6 Checkpoint and P4.7 Daily Usefulness Refinement
 
-Current lane: P4.7 Daily Usefulness Refinement. P4.5 and P4.6-01 are the accepted remote checkpoint at `b6396686`; the daily-use loop remains Today -> immediate capture -> later review or organization -> action or planning -> reliable return. P5 live AI and true push are paused behind separate explicit EasyLife HQ approval. This queue does not authorize deploys, external actions, backend policy changes, dependency changes, data migrations, or any parked capability.
+Current lane: P4.7 Daily Usefulness Refinement. P4.5, P4.6-01, and P4.7-01 are the accepted remote checkpoint at `afba7e79`; the daily-use loop remains Today -> immediate capture -> later review or organization -> action or planning -> reliable return. P5 live AI and true push are paused behind separate explicit EasyLife HQ approval. This queue does not authorize deploys, external actions, backend policy changes, dependency changes, data migrations, or any parked capability.
 
 ## 1. P4.5-01 - Repair Today action collision
 
@@ -54,7 +54,7 @@ Status: Complete. The shared drawer now opens with a Daily group ordered Today, 
 
 Recommended order: 1 -> 2 -> 3 -> 4 -> 5. All five original P4.5 implementation tasks are complete.
 
-Remote checkpoint: `b6396686` contains P4.5-01 through P4.5-05, P4.5-R1, P4.5-R2, and P4.6-01 on `codex/product-EasyLife-20260504-231503`.
+Remote checkpoint: `afba7e79` contains P4.5-01 through P4.5-05, P4.5-R1, P4.5-R2, P4.6-01, and P4.7-01 on `codex/product-EasyLife-20260504-231503`.
 
 ## Integrated gate repair status
 
@@ -75,9 +75,12 @@ The integrated P4.5 local/demo gate is VERIFIED after the five implementation sl
 
 ## P4.7 daily-usefulness refinement
 
-- **P4.7-01 - Make Today more decisive: Complete locally.** Today previously placed the unchanged four-card Demo path immediately after the dominant Start here card, ahead of the existing data-driven Inbox, People follow-up, and Review sections. The Demo path now follows those actionable daily sections. Start here selection, summary data, Capture, section contents, routes, and destinations are unchanged.
+- **P4.7-01 - Make Today more decisive: Complete.** Included in accepted remote checkpoint `afba7e79`; not deployed. Today previously placed the unchanged four-card Demo path immediately after the dominant Start here card, ahead of the existing data-driven Inbox, People follow-up, and Review sections. The Demo path now follows those actionable daily sections. Start here selection, summary data, Capture, section contents, routes, and destinations are unchanged.
 - **Desktop and mobile evidence:** At 1440x1000 the Inbox review moved from below the Demo path at `y=971` to directly below Start here at `y=722`, while the Demo path moved to `y=1432`. At 390x844 Inbox moved from `y=1497` to `y=884`, removing about 600 pixels of tutorial detour. Both widths retained one primary action, one current Today destination, the existing heading order, and zero horizontal overflow.
 - **Integrated evidence:** The continuous Today -> raw Capture open/Escape -> dominant Inbox destination -> Back -> Inbox -> Notes -> fixture note -> Back -> Plan -> Today sequence passed without a route reload workaround. Capture focused its raw Inbox textarea and restored Today’s visible trigger. The stable demo fixture survived after the query disappeared; the sequence produced no Firestore request or write and no console error.
 - **Verification limits:** This is autonomous local/demo evidence, not authenticated production persistence, physical-phone, physical-keyboard, real screen-reader, or installed/PWA validation.
 
-Next action: EasyLife HQ review of the local P4.7-01 commit and a separate remote-backup decision. Live AI and true push remain unapproved, and no P5 implementation work is authorized.
+- **P4.7-02 - Deduplicate Today Review from Start here: Complete locally.** Today selected the overdue demo task `preview-task-2` as the dominant Start here action while independently rendering that same task again as Review's Recover row. Due-today and quick-win task branches had the same source-level duplication path. Today now assigns typed presentation identities such as `task:<id>`, `event:<id>`, and a derived `window:<key>`, then excludes only identities matching Start here before applying Review's existing three-row limit. Start here selection, Today counts, ordering, destinations, fixtures, and stored entities are unchanged; an empty Review now truthfully says that no *other* loose end needs a decision.
+- **P4.7-02 evidence:** At 1440x1000 and 390x844, Start here remained `task:preview-task-2`; Review retained `task:preview-task-1` and `event:preview-event-1`, with no repeated title, overlap, or horizontal overflow. The fresh continuous Today -> Capture/Escape -> Start-here Inbox -> Back -> drawer Inbox -> drawer Notes -> fixture note -> Back -> drawer Plan -> header Today sequence passed without a route reload workaround. Capture restored focus to its visible Today trigger; the run produced no Firestore request, network failure, or console error. Authenticated persistence, physical-device, physical-keyboard, real screen-reader, and installed/PWA validation remain unavailable.
+
+Next action: EasyLife HQ review of the local P4.7-02 commit and a separate remote-backup decision. Live AI and true push remain unapproved, and no P5 implementation work is authorized.

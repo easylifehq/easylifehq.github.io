@@ -23,6 +23,14 @@ type TodayContextItem = {
   to: string;
 };
 
+type TodayItemKind = "task" | "event" | "block" | "window";
+type TodayItemIdentity = `${TodayItemKind}:${string}`;
+type TodayReviewItem = TodayContextItem & { identity: TodayItemIdentity };
+
+function getTodayItemIdentity(kind: TodayItemKind, id: string): TodayItemIdentity {
+  return `${kind}:${id}`;
+}
+
 function isSameDate(left: Date | null, right: Date) {
   return Boolean(left && startOfDay(left).getTime() === startOfDay(right).getTime());
 }
@@ -118,6 +126,7 @@ function HQPageContent() {
 
     if (firstDueTask) {
       return {
+        identity: getTodayItemIdentity("task", firstDueTask.id),
         label: firstDueTask.title || "Untitled task",
         reason: overdueTasks.length
           ? "This is behind. Choose the next step in Inbox."
@@ -128,6 +137,7 @@ function HQPageContent() {
     }
     if (quickWin) {
       return {
+        identity: getTodayItemIdentity("task", quickWin.id),
         label: quickWin.title || "Untitled task",
         reason: `${quickWin.estimatedLength || 20} minutes. Good for a small gap.`,
         buttonLabel: "Open Inbox",
@@ -136,6 +146,12 @@ function HQPageContent() {
     }
     if (openWindows.length >= 3) {
       return {
+        identity: firstOpenWindow
+          ? getTodayItemIdentity(
+              "window",
+              `${firstOpenWindow.startAt.getTime()}-${firstOpenWindow.endAt.getTime()}`
+            )
+          : null,
         label: firstOpenWindow
           ? `Plan the ${formatTimeLabel(firstOpenWindow.startAt)} open window`
           : "Plan open time",
@@ -145,6 +161,7 @@ function HQPageContent() {
       };
     }
     return {
+      identity: null,
       label: "Keep the next note close",
       reason: "Everything looks calm. Review context in Notes.",
       buttonLabel: "Open Notes",
@@ -241,6 +258,7 @@ function HQPageContent() {
   const attentionItems = [
     overdueTasks[0]
       ? {
+          identity: getTodayItemIdentity("task", overdueTasks[0].id),
           label: "Recover",
           title: overdueTasks[0].title,
           detail: "This is behind. Handle, reschedule, or intentionally release it.",
@@ -249,6 +267,7 @@ function HQPageContent() {
       : null,
     dueTodayTasks[0]
       ? {
+          identity: getTodayItemIdentity("task", dueTodayTasks[0].id),
           label: "Due today",
           title: dueTodayTasks[0].title,
           detail: `${dueTodayTasks.length} due item${dueTodayTasks.length === 1 ? "" : "s"} still need a decision.`,
@@ -257,6 +276,7 @@ function HQPageContent() {
       : null,
     nextEvents[0]
       ? {
+          identity: getTodayItemIdentity("event", nextEvents[0].id),
           label: "Next in Plan",
           title: nextEvents[0].title || "Untitled event",
           detail: nextEvents[0].allDay
@@ -267,13 +287,17 @@ function HQPageContent() {
       : null,
     quickWin
       ? {
+          identity: getTodayItemIdentity("task", quickWin.id),
           label: "Tiny win",
           title: quickWin.title,
           detail: `${quickWin.estimatedLength || 20} minutes. Good for a small gap.`,
           to: "/app/easylist/dashboard",
         }
       : null,
-  ].filter((item): item is { label: string; title: string; detail: string; to: string } => Boolean(item)).slice(0, 3);
+  ]
+    .filter((item): item is TodayReviewItem => Boolean(item))
+    .filter((item) => item.identity !== startHere.identity)
+    .slice(0, 3);
   const assistantRead = contextLead;
   const todayAiFallbackCopy = getAssistantAiFallbackCopy("today");
   const lastAssistantPlace = lastAppRoute
@@ -400,7 +424,7 @@ function HQPageContent() {
         <div className="assistant-attention-list">
           {attentionItems.length ? (
             attentionItems.map((item) => (
-              <Link className="assistant-attention-item" to={item.to} key={`${item.label}-${item.title}`}>
+              <Link className="assistant-attention-item" to={item.to} key={item.identity}>
                 <span>{item.label}</span>
                 <strong>{item.title}</strong>
                 <p>{item.detail}</p>
@@ -409,8 +433,8 @@ function HQPageContent() {
           ) : (
             <article className="assistant-attention-item">
               <span>Clear</span>
-              <strong>No loose end is demanding the first move.</strong>
-              <p>Use Inbox or Plan to give the open day a little structure.</p>
+              <strong>No other loose end needs a decision right now.</strong>
+              <p>Start here still holds the next move.</p>
             </article>
           )}
         </div>
