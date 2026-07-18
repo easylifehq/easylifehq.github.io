@@ -667,6 +667,11 @@ a {
   transition: background var(--shell-motion-fast), border-color var(--shell-motion-fast), color var(--shell-motion-fast), transform var(--shell-motion-fast);
 }
 
+.menu-link-groups {
+  display: grid;
+  gap: 0.18rem;
+}
+
 .menu-link-group {
   display: grid;
   gap: 0.12rem;

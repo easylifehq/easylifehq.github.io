@@ -11,6 +11,17 @@ export type ProductsMenuItem = {
   isRoute?: boolean;
 };
 
+function getItemPathname(item: ProductsMenuItem) {
+  return item.href.split(/[?#]/, 1)[0];
+}
+
+function getItemRouteRoot(item: ProductsMenuItem) {
+  const pathname = getItemPathname(item);
+  return pathname.startsWith("/app/")
+    ? pathname.split("/").slice(0, 3).join("/")
+    : pathname;
+}
+
 type ProductsMenuProps = {
   items: ProductsMenuItem[];
   label?: string;
@@ -59,11 +70,17 @@ export function ProductsMenu({
 
   function isCurrentItem(item: ProductsMenuItem) {
     if (item.isRoute === false) return false;
-    if (location.pathname === item.href) return true;
+    const itemPathname = getItemPathname(item);
+    if (location.pathname === itemPathname) return true;
 
-    const appRoot = item.href.startsWith("/app/")
-      ? item.href.split("/").slice(0, 3).join("/")
-      : item.href;
+    const appRoot = getItemRouteRoot(item);
+    const sharesAppRoot = items.some(
+      (candidate) => candidate !== item && candidate.isRoute !== false && getItemRouteRoot(candidate) === appRoot
+    );
+
+    if (sharesAppRoot) {
+      return location.pathname.startsWith(`${itemPathname}/`);
+    }
 
     return location.pathname === appRoot || location.pathname.startsWith(`${appRoot}/`);
   }
@@ -149,8 +166,14 @@ export function ProductsMenu({
             Close
           </button>
         </div>
+        <nav className="menu-link-groups" aria-label={`${panelLabel ?? label} destinations`}>
         {(hasGroups ? groupedItems : [{ label: "", items }]).map((group) => (
-          <div key={group.label || "all"} className={hasGroups ? "menu-link-group" : undefined}>
+          <div
+            key={group.label || "all"}
+            className={hasGroups ? "menu-link-group" : undefined}
+            role={hasGroups ? "group" : undefined}
+            aria-label={hasGroups ? group.label : undefined}
+          >
             {group.label ? (
               <div className="menu-link-group-header">
                 <strong>{group.label}</strong>
@@ -187,6 +210,7 @@ export function ProductsMenu({
             })}
           </div>
         ))}
+        </nav>
       </div>
     </div>
   );

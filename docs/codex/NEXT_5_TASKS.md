@@ -44,12 +44,12 @@ Status: Complete. Notes now keeps New note, Last note, and Recent notes ahead of
 
 ## 5. P4.5-05 - Clarify the navigation hierarchy without removing routes
 
-Status: Next.
+Status: Complete. The shared drawer now opens with a Daily group ordered Today, Inbox, Notes, and Plan; supporting routes are grouped as Life, Career, Workout, and Utilities. The job pipeline is labelled Job applications, Workout routes have distinct purpose labels, Settings is last in Utilities, and only the matching Workout route receives `aria-current`. All 13 route/ID pairs are unchanged; production build and desktop/mobile route checks passed without horizontal overflow.
 
 - **User problem:** The demo menu places Today, Inbox, Plan, Notes, People, and Settings together as core; exposes three Workout destinations; and labels a job-application pipeline as Follow-ups while People and Inbox also contain follow-up concepts. Users must infer which destination owns a task.
-- **Intended behavioral outcome:** Today, Capture, Notes, Plan, and Inbox read as the daily path; People, Workout, Projects, job pipeline, Progress, Review, and Settings read as secondary or contextual.
-- **Scope boundary:** Change menu grouping, labels, and descriptions only. Preserve every route, visibility setting, deep link, workspace sub-navigation, and capability. Do not add a top-level route.
-- **Acceptance criteria:** Core and secondary destinations are visually distinct on desktop and mobile; the job pipeline is not mistaken for all personal follow-ups; Workout remains reachable without three equal top-level choices; route and query behavior is unchanged.
-- **Verification method:** Source route/menu sweep; desktop/mobile menu screenshots; keyboard navigation check; direct-route smoke for every moved item; production build.
+- **Intended behavioral outcome:** Today, Inbox, Notes, and Plan read as the daily path; People, Projects, job applications, Workout, Review, Progress, and Settings read as supporting or contextual destinations.
+- **Scope boundary:** Change shared navigation grouping, ordering, display labels, concise descriptions, semantics, and route-current matching only. Preserve every route, stable ID, visibility key, deep link, page, workspace link, and capability. Do not add a top-level route.
+- **Acceptance criteria:** Daily and supporting destinations are distinct on desktop and mobile; the job pipeline is not mistaken for personal follow-ups; all three Workout routes are directly reachable and uniquely named; Settings is secondary; each destination has one correct active state; route and query behavior is unchanged.
+- **Verification method:** Before/after route-and-ID inventory; baseline and final production builds; direct desktop/mobile smoke for all 13 destinations; Back/Forward and drawer-close checks; accessibility/overflow inspection; `git diff --check`.
 
-Recommended order: 1 -> 2 -> 3 -> 4 -> 5. Tasks 1 through 4 are complete. Task 5 is next and can use the repaired Today, Inbox, Capture, and Notes paths as evidence for a hierarchy-only navigation change without removing routes or capabilities.
+Recommended order: 1 -> 2 -> 3 -> 4 -> 5. All five P4.5 implementation tasks are complete. The next gate is integrated P4.5 field-use verification, regression review, and an EasyLife HQ checkpoint decision. Live AI and true push remain unapproved.

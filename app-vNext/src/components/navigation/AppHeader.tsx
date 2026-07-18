@@ -13,7 +13,7 @@ export function AppHeader() {
     if (pathname.startsWith("/app/easylist")) return "Inbox";
     if (pathname.startsWith("/app/easycalendar")) return "Plan";
     if (pathname.startsWith("/app/easynotes")) return "Notes";
-    if (pathname.startsWith("/app/easypipeline")) return "Follow-ups";
+    if (pathname.startsWith("/app/easypipeline")) return "Job applications";
     if (pathname.startsWith("/app/easycontacts")) return "People";
     if (pathname.startsWith("/app/easyprojects")) return "Projects";
     if (pathname.startsWith("/app/easyworkout")) return "Workout";

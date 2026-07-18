@@ -3,8 +3,8 @@
 Current Phase: p4-5-field-use-repair
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Reduce daily-use friction in the Today -> capture -> review -> plan -> return loop through one bounded repair at a time.
-Showable Moment: Notes opens on New note, Last note, and Recent notes, while recovery/export explanation remains available through deliberate disclosure without interrupting writing.
+Primary Action: Run integrated field-use verification and regression review across the completed P4.5 repair queue before an EasyLife HQ checkpoint decision.
+Showable Moment: The shared navigation opens with Today, Inbox, Notes, and Plan first, while supporting Life, Career, Workout, and Utilities destinations remain directly reachable.
 What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, contact sync, account deletion backend, external actions, or saved-object expansion.
 No More Features Lock: true
 Complexity Budget: P4.5 may implement exactly one small, reversible, user-visible repair per approved loop; no new route, service, dependency, migration, backend policy, or live capability.
@@ -13,11 +13,11 @@ Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-t
 Phase Model Policy: judgment-heavy
 Parking State: P5_LIVE_AI_AND_TRUE_PUSH_PAUSED_BEHIND_EXPLICIT_APPROVAL; WORKOUT_AI_PARKED_UNTIL_LOGGER_RELIABLE
 Evidence Required: P4.5 requires clean preflight proof, baseline and final production builds, source-backed friction findings, desktop/mobile inspection where available, one coherent behavior change, and final git diff checks.
-Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
+Done Signal: P4.5-01 through P4.5-05 passed build and their bounded desktop/mobile checks; the implementation queue is complete and awaiting integrated verification.
 Next Phase Criteria: P5 live AI or true push remains paused and may begin only after separate explicit EasyLife HQ approval for the exact capability, implementation, deploy, and test boundary.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-07-17 - P4.5-01 Today action collision, P4.5-02 Inbox capability-control hierarchy, P4.5-03 raw-first persistent Capture, and P4.5-04 Notes write-first hierarchy are complete. P4.5 remains active; P4.5-05 navigation hierarchy clarification is next. P5 live AI and true push remain paused behind explicit approval.
+Updated At: 2026-07-17 - P4.5-01 Today action collision, P4.5-02 Inbox capability-control hierarchy, P4.5-03 raw-first persistent Capture, P4.5-04 Notes write-first hierarchy, and P4.5-05 navigation hierarchy clarification are complete. The five-task P4.5 implementation queue is complete; P4.5 remains active for integrated field-use verification, regression review, and an EasyLife HQ checkpoint. P5 live AI and true push remain paused behind explicit approval.
 
 Audit packet interrupt: the active source is `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip`. Treat demo readiness, route safety, naming consistency, capture trust, Settings/trust copy, and input reliability as the current priority. Do not touch Firebase/auth/rules/functions/billing/DNS/secrets/env files, and do not assume live AI, true push notifications, calendar sync, geocoding, email/text sending, or hidden writes.
 
