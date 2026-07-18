@@ -31,6 +31,14 @@ function getTodayItemIdentity(kind: TodayItemKind, id: string): TodayItemIdentit
   return `${kind}:${id}`;
 }
 
+function getFirstDistinctTodayItem<T extends { id: string }>(
+  items: T[],
+  kind: TodayItemKind,
+  excludedIdentities: ReadonlySet<TodayItemIdentity>
+) {
+  return items.find((item) => !excludedIdentities.has(getTodayItemIdentity(kind, item.id))) || null;
+}
+
 function isSameDate(left: Date | null, right: Date) {
   return Boolean(left && startOfDay(left).getTime() === startOfDay(right).getTime());
 }
@@ -114,7 +122,8 @@ function HQPageContent() {
     contacts.find((contact) => getContactPlaceLabel(contact)) ||
     null;
   const contactPlace = placeContact ? getContactPlaceLabel(placeContact) : "";
-  const quickWin = sortActiveTasks(tasks.filter((task) => !task.completed && (task.estimatedLength || 999) <= 20))[0] || null;
+  const quickWins = sortActiveTasks(tasks.filter((task) => !task.completed && (task.estimatedLength || 999) <= 20));
+  const quickWin = quickWins[0] || null;
   const todaySummary = [
     { label: "Due", value: `${overdueTasks.length + dueTodayTasks.length}` },
     { label: "Plan", value: `${todayEvents.length}` },
@@ -255,48 +264,62 @@ function HQPageContent() {
     contactName: placeContact?.fullName || undefined,
     contactPlace: contactPlace || undefined,
   });
+  const reviewIdentities = new Set<TodayItemIdentity>(startHere.identity ? [startHere.identity] : []);
+  const overdueReviewTask = getFirstDistinctTodayItem(overdueTasks, "task", reviewIdentities);
+  if (overdueReviewTask) {
+    reviewIdentities.add(getTodayItemIdentity("task", overdueReviewTask.id));
+  }
+  const dueTodayReviewTask = getFirstDistinctTodayItem(dueTodayTasks, "task", reviewIdentities);
+  if (dueTodayReviewTask) {
+    reviewIdentities.add(getTodayItemIdentity("task", dueTodayReviewTask.id));
+  }
+  const nextReviewEvent = getFirstDistinctTodayItem(nextEvents, "event", reviewIdentities);
+  if (nextReviewEvent) {
+    reviewIdentities.add(getTodayItemIdentity("event", nextReviewEvent.id));
+  }
+  const quickWinReviewTask = getFirstDistinctTodayItem(quickWins, "task", reviewIdentities);
+
   const attentionItems = [
-    overdueTasks[0]
+    overdueReviewTask
       ? {
-          identity: getTodayItemIdentity("task", overdueTasks[0].id),
+          identity: getTodayItemIdentity("task", overdueReviewTask.id),
           label: "Recover",
-          title: overdueTasks[0].title,
+          title: overdueReviewTask.title,
           detail: "This is behind. Handle, reschedule, or intentionally release it.",
           to: "/app/easylist/dashboard",
         }
       : null,
-    dueTodayTasks[0]
+    dueTodayReviewTask
       ? {
-          identity: getTodayItemIdentity("task", dueTodayTasks[0].id),
+          identity: getTodayItemIdentity("task", dueTodayReviewTask.id),
           label: "Due today",
-          title: dueTodayTasks[0].title,
+          title: dueTodayReviewTask.title,
           detail: `${dueTodayTasks.length} due item${dueTodayTasks.length === 1 ? "" : "s"} still need a decision.`,
           to: "/app/easylist/dashboard",
         }
       : null,
-    nextEvents[0]
+    nextReviewEvent
       ? {
-          identity: getTodayItemIdentity("event", nextEvents[0].id),
+          identity: getTodayItemIdentity("event", nextReviewEvent.id),
           label: "Next in Plan",
-          title: nextEvents[0].title || "Untitled event",
-          detail: nextEvents[0].allDay
+          title: nextReviewEvent.title || "Untitled event",
+          detail: nextReviewEvent.allDay
             ? "All day"
-            : `${formatTimeLabel(nextEvents[0].startAt)} - ${formatTimeLabel(nextEvents[0].endAt)}`,
+            : `${formatTimeLabel(nextReviewEvent.startAt)} - ${formatTimeLabel(nextReviewEvent.endAt)}`,
           to: "/app/easycalendar/day",
         }
       : null,
-    quickWin
+    quickWinReviewTask
       ? {
-          identity: getTodayItemIdentity("task", quickWin.id),
+          identity: getTodayItemIdentity("task", quickWinReviewTask.id),
           label: "Tiny win",
-          title: quickWin.title,
-          detail: `${quickWin.estimatedLength || 20} minutes. Good for a small gap.`,
+          title: quickWinReviewTask.title,
+          detail: `${quickWinReviewTask.estimatedLength || 20} minutes. Good for a small gap.`,
           to: "/app/easylist/dashboard",
         }
       : null,
   ]
     .filter((item): item is TodayReviewItem => Boolean(item))
-    .filter((item) => item.identity !== startHere.identity)
     .slice(0, 3);
   const assistantRead = contextLead;
   const todayAiFallbackCopy = getAssistantAiFallbackCopy("today");
