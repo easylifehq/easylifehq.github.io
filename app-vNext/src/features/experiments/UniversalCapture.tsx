@@ -17,7 +17,7 @@ import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 import { useSettings } from "@/features/settings/SettingsContext";
 import type { VisibleAppId } from "@/lib/firestore/settings";
 
-type CaptureMode = "task" | "brainDump" | "note" | "event" | "application" | "contact" | "project" | "workout";
+type CaptureMode = "raw" | "task" | "brainDump" | "note" | "event" | "application" | "contact" | "project" | "workout";
 
 const captureModeAppMap: Partial<Record<CaptureMode, VisibleAppId>> = {
   task: "easylist",
@@ -319,17 +319,21 @@ export function UniversalCapture() {
   const location = useLocation();
   const { isAppVisible } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState<CaptureMode>("task");
+  const [mode, setMode] = useState<CaptureMode>("raw");
   const [text, setText] = useState("");
   const [message, setMessage] = useState("");
+  const [saveError, setSaveError] = useState("");
+  const [isSavingRaw, setIsSavingRaw] = useState(false);
+  const [structuredOptionsOpen, setStructuredOptionsOpen] = useState(false);
   const [details, setDetails] = useState<QuickAddDetails>(defaultDetails);
   const [tasks, setTasks] = useState<TaskRecord[]>([]);
   const [openTarget, setOpenTarget] = useState<{ to: string; label: string } | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
   const modalRef = useRef<HTMLElement | null>(null);
   const textInputRef = useRef<HTMLTextAreaElement | null>(null);
-  const suggestion = useMemo(() => detectCaptureType(text), [text]);
-  const brainDumpEntries = useMemo(() => parseBrainDumpEntries(text), [text]);
+  const suggestion = useMemo(() => mode === "raw" ? "task" : detectCaptureType(text), [mode, text]);
+  const brainDumpEntries = useMemo(() => mode === "brainDump" ? parseBrainDumpEntries(text) : [], [mode, text]);
   const isEasyListCapture = location.pathname.startsWith("/app/easylist");
   const brainDumpSummary = useMemo(() => {
     const counts: Record<BrainDumpEntry["kind"], number> = { task: 0, event: 0, deadline: 0 };
@@ -439,16 +443,24 @@ export function UniversalCapture() {
   }, []);
 
   function openCapture() {
-    const appId = captureModeAppMap[screenAction.mode];
-    setMode(!appId || isAppVisible(appId) ? screenAction.mode : captureModes[0]?.[0] ?? "task");
+    const activeElement = document.activeElement;
+    returnFocusRef.current =
+      activeElement instanceof HTMLElement &&
+      activeElement !== document.body &&
+      activeElement !== document.documentElement
+        ? activeElement
+        : triggerRef.current;
+    setStructuredOptionsOpen(false);
+    setMode("raw");
     setMessage("");
+    setSaveError("");
     setOpenTarget(null);
     setIsOpen(true);
   }
 
   useFocusTrap(isOpen, modalRef, {
     initialFocusRef: textInputRef,
-    returnFocusRef: triggerRef,
+    returnFocusRef,
     onEscape: closeCapture,
   });
 
@@ -459,6 +471,38 @@ export function UniversalCapture() {
     window.localStorage.removeItem(QUICK_ADD_DRAFT_KEY);
     if (!options.keepOpenTarget) {
       setOpenTarget(null);
+    }
+  }
+
+  async function saveRawToInbox() {
+    const user = auth.currentUser;
+    const rawText = text.trim();
+    if (!rawText || isSavingRaw) return;
+    if (!user) {
+      setSaveError("Sign in to save this capture. Your draft is still here.");
+      return;
+    }
+
+    setIsSavingRaw(true);
+    setSaveError("");
+    try {
+      await createTask(user.uid, {
+        title: rawText,
+        notes: rawText,
+        category: "Inbox",
+        estimatedLength: null,
+        priorityTier: 3,
+        priorityLabel: priorityLabel(3),
+        dueDate: null,
+        recurring: false,
+      });
+      setOpenTarget({ to: "/app/easylist/dashboard", label: "Review Inbox" });
+      resetFields("Saved to Inbox. Organize it when you are ready.", { keepOpenTarget: true });
+      window.setTimeout(() => textInputRef.current?.focus(), 0);
+    } catch {
+      setSaveError("Could not save to Inbox. Your draft is still here.");
+    } finally {
+      setIsSavingRaw(false);
     }
   }
 
@@ -618,8 +662,14 @@ export function UniversalCapture() {
   }
 
   async function saveContextItem(options: { addAnother?: boolean } = {}) {
+    if (!text.trim()) return;
+    if (mode === "raw") {
+      await saveRawToInbox();
+      return;
+    }
+
     const user = auth.currentUser;
-    if (!user || !text.trim()) return;
+    if (!user) return;
     const title = text.trim();
 
     if (mode === "task") {
@@ -766,7 +816,7 @@ export function UniversalCapture() {
       >
         <div className="capture-header">
           <div>
-            <p className="eyebrow">{screenAction.hint}</p>
+            <p className="eyebrow">{mode === "raw" ? "Inbox" : screenAction.hint}</p>
             <h2 id="quick-capture-title">Quick capture</h2>
           </div>
           <div className="capture-header-actions">
@@ -777,26 +827,8 @@ export function UniversalCapture() {
           </div>
         </div>
 
-        <div className="capture-mode-row" role="tablist" aria-label="Quick capture type">
-          {captureModes.map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              role="tab"
-              aria-selected={mode === value}
-              className={`capture-mode-button${mode === value ? " active" : ""}`}
-              onClick={() => {
-                setMode(value as CaptureMode);
-                setMessage("");
-              }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
         <label className="field-stack">
-          <span>{mode === "application" ? "Role" : mode === "contact" ? "Name" : mode === "event" ? "Event" : mode === "brainDump" ? "Brain dump" : mode === "project" ? "Project" : mode === "workout" ? "Exercise and set" : "Task"}</span>
+          <span>{mode === "raw" ? "Capture for Inbox" : mode === "application" ? "Role" : mode === "contact" ? "Name" : mode === "event" ? "Event" : mode === "brainDump" ? "Brain dump" : mode === "project" ? "Project" : mode === "workout" ? "Exercise and set" : "Task"}</span>
           <textarea
             ref={textInputRef}
             value={text}
@@ -810,11 +842,58 @@ export function UniversalCapture() {
                 }
               }
               setMessage("");
+              setSaveError("");
             }}
-            placeholder={mode === "workout" ? "Bench press 135 x 8" : mode === "brainDump" ? "Examples: submit FAFSA by Friday; meeting with Alex tomorrow at 2pm; buy groceries this weekend." : "Type anything..."}
+            placeholder={mode === "raw" ? "Write anything you want to organize later." : mode === "workout" ? "Bench press 135 x 8" : mode === "brainDump" ? "Examples: submit FAFSA by Friday; meeting with Alex tomorrow at 2pm; buy groceries this weekend." : "Type anything..."}
             rows={5}
           />
         </label>
+
+        {mode === "raw" ? (
+          <div className="task-composer-actions capture-raw-actions">
+            <button
+              type="button"
+              className="primary-button"
+              onClick={() => void saveRawToInbox()}
+              disabled={!text.trim() || isSavingRaw}
+            >
+              {isSavingRaw ? "Saving to Inbox..." : "Save to Inbox"}
+            </button>
+          </div>
+        ) : null}
+
+        <details
+          className="advanced-disclosure capture-structured-options"
+          open={structuredOptionsOpen}
+          onToggle={(event) => {
+            const isOpen = event.currentTarget.open;
+            setStructuredOptionsOpen(isOpen);
+            if (!isOpen) {
+              setMode("raw");
+            }
+          }}
+        >
+          <summary>More capture options</summary>
+          {structuredOptionsOpen ? (
+            <>
+          <div className="capture-mode-row" role="tablist" aria-label="Structured capture type">
+            {captureModes.map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                role="tab"
+                aria-selected={mode === value}
+                className={`capture-mode-button${mode === value ? " active" : ""}`}
+                onClick={() => {
+                  setMode(value as CaptureMode);
+                  setMessage("");
+                  setSaveError("");
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
         {mode === "task" ? (
           <div className="capture-detail-grid capture-detail-grid-four">
@@ -993,33 +1072,41 @@ export function UniversalCapture() {
               "Add one clear item per line, or separate ideas with semicolons."
             )}
           </div>
-        ) : text.trim() ? (
+        ) : mode !== "raw" && text.trim() ? (
           <div className="capture-suggestion">
             This looks like a <strong>{suggestion}</strong>.
           </div>
         ) : null}
 
-        <div className="task-composer-actions">
-          <button
-            type="button"
-            className="primary-button"
-            onClick={() => void saveContextItem()}
-            disabled={!text.trim() || (mode === "brainDump" && brainDumpEntries.length === 0)}
-          >
-            {mode === "workout" ? "Add set" : mode === "brainDump" ? "Add brain dump" : `Save ${mode}`}
-          </button>
-          <button type="button" className="button-secondary" onClick={() => void saveContextItem({ addAnother: true })} disabled={!text.trim() || (mode === "brainDump" && brainDumpEntries.length === 0)}>
-            {mode === "workout" ? "Add set and another" : "Save and add another"}
-          </button>
-          {mode === "brainDump" ? null : (
-            <button type="button" className="button-secondary" onClick={() => void saveAsNote()} disabled={!text.trim()}>
-              Save as note
+        {mode === "raw" ? (
+          <p className="helper-copy">Choose a structured type only when you already know where this belongs.</p>
+        ) : (
+          <div className="task-composer-actions">
+            <button
+              type="button"
+              className="primary-button"
+              onClick={() => void saveContextItem()}
+              disabled={!text.trim() || (mode === "brainDump" && brainDumpEntries.length === 0)}
+            >
+              {mode === "workout" ? "Add set" : mode === "brainDump" ? "Add brain dump" : `Save ${mode}`}
             </button>
-          )}
-          <Link className="ghost-button" to={screenAction.to} onClick={closeCapture}>
-            {screenAction.label}
-          </Link>
-        </div>
+            <button type="button" className="button-secondary" onClick={() => void saveContextItem({ addAnother: true })} disabled={!text.trim() || (mode === "brainDump" && brainDumpEntries.length === 0)}>
+              {mode === "workout" ? "Add set and another" : "Save and add another"}
+            </button>
+            {mode === "brainDump" ? null : (
+              <button type="button" className="button-secondary" onClick={() => void saveAsNote()} disabled={!text.trim()}>
+                Save as note
+              </button>
+            )}
+            <Link className="ghost-button" to={screenAction.to} onClick={closeCapture}>
+              {screenAction.label}
+            </Link>
+          </div>
+        )}
+            </>
+          ) : null}
+        </details>
+        {saveError ? <p className="error-copy" role="alert">{saveError}</p> : null}
         {message ? (
           <div className="calendar-info-card capture-success-card">
             <span>{message}</span>

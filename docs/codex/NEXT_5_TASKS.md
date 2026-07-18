@@ -24,7 +24,7 @@ Status: Complete. The existing quick-row composer now precedes review context, w
 
 ## 3. P4.5-03 - Make persistent Capture raw-first
 
-Status: Next.
+Status: Complete. Universal Capture now opens in a focused raw Inbox mode with one explicit `Save to Inbox` action; the existing eight structured types render only inside one native disclosure, raw drafts survive close/reopen and mode switching, failed saves retain text, and focus returns to the actual Today or global trigger. Production build and desktop/mobile browser checks passed.
 
 - **User problem:** The global Capture control is persistent on most core surfaces, but its modal presents up to eight equal capture types and can frame the raw thought as a task, event, contact, project, or workout set before the user has decided what it is.
 - **Intended behavioral outcome:** Opening Capture presents one obvious raw Inbox landing action first, with classification and alternate destinations available only when requested.
@@ -34,7 +34,7 @@ Status: Next.
 
 ## 4. P4.5-04 - Keep Notes write-first above trust proof
 
-Status: Pending.
+Status: Next.
 
 - **User problem:** Notes already has New note, Last note, and Recent notes, but recovery/export explanations appear before resuming recent work and the editor places a long implementation-boundary card before the writing field.
 - **Intended behavioral outcome:** New note, last note, recent notes, and the writing area dominate; recovery/export detail remains discoverable without interrupting ordinary writing.
@@ -52,4 +52,4 @@ Status: Pending.
 - **Acceptance criteria:** Core and secondary destinations are visually distinct on desktop and mobile; the job pipeline is not mistaken for all personal follow-ups; Workout remains reachable without three equal top-level choices; route and query behavior is unchanged.
 - **Verification method:** Source route/menu sweep; desktop/mobile menu screenshots; keyboard navigation check; direct-route smoke for every moved item; production build.
 
-Recommended order: 1 -> 2 -> 3 -> 4 -> 5. Tasks 1 and 2 are complete. Task 3 is next and can now make the persistent Capture action land raw content in the product-first Inbox without exposing capability-test machinery. Task 4 is independent after that capture path is stable. Task 5 should use field evidence from Tasks 1-4 so hierarchy changes reflect actual use rather than assumptions.
+Recommended order: 1 -> 2 -> 3 -> 4 -> 5. Tasks 1 through 3 are complete. Task 4 is next and can now simplify Notes without changing the repaired Today -> Capture -> Inbox path. Task 5 should use field evidence from Tasks 1-4 so hierarchy changes reflect actual use rather than assumptions.
