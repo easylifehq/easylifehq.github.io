@@ -4,7 +4,7 @@ Current lane: P4.5 Field Use Repair. The daily-use loop is Today -> immediate ca
 
 ## 1. P4.5-01 - Repair Today action collision
 
-Status: Complete in the current working tree; not committed or deployed.
+Status: Complete. Committed locally in `d005103c`; not pushed or deployed.
 
 - **User problem:** Today renders a general EasyLife overview and the data-driven Start here action in the same CSS grid area, so their copy and controls overlap at desktop and mobile widths and obscure what to do next.
 - **Intended behavioral outcome:** Today shows one readable, data-driven Start here action followed by the separate immediate Capture control.
@@ -14,7 +14,7 @@ Status: Complete in the current working tree; not committed or deployed.
 
 ## 2. P4.5-02 - Put Inbox product behavior ahead of capability machinery
 
-Status: Pending.
+Status: Complete. The existing quick-row composer now precedes review context, while the unchanged capability-test surface sits behind one native disclosure collapsed by default; production build and desktop/mobile browser checks passed with no horizontal overflow.
 
 - **User problem:** `/app/easylist/add` contains roughly a full screen and a half of mock gateway, provider-gate, quarantine, preview, and approval machinery around the daily capture/review path. Autofocus currently jumps to raw quick rows, but scrolling upward exposes a technical lab instead of a calm Inbox.
 - **Intended behavioral outcome:** Inbox first explains and supports capture/review; advanced suggestion and provider-test proof remains available only after deliberate disclosure.
@@ -24,7 +24,7 @@ Status: Pending.
 
 ## 3. P4.5-03 - Make persistent Capture raw-first
 
-Status: Pending.
+Status: Next.
 
 - **User problem:** The global Capture control is persistent on most core surfaces, but its modal presents up to eight equal capture types and can frame the raw thought as a task, event, contact, project, or workout set before the user has decided what it is.
 - **Intended behavioral outcome:** Opening Capture presents one obvious raw Inbox landing action first, with classification and alternate destinations available only when requested.
@@ -52,4 +52,4 @@ Status: Pending.
 - **Acceptance criteria:** Core and secondary destinations are visually distinct on desktop and mobile; the job pipeline is not mistaken for all personal follow-ups; Workout remains reachable without three equal top-level choices; route and query behavior is unchanged.
 - **Verification method:** Source route/menu sweep; desktop/mobile menu screenshots; keyboard navigation check; direct-route smoke for every moved item; production build.
 
-Recommended order: 1 -> 2 -> 3 -> 4 -> 5. Task 1 restores a readable first screen. Task 2 separates normal Inbox use from parked capability proof before Task 3 makes Inbox the raw-capture destination. Task 4 is independent after the core capture/review path is stable. Task 5 should use field evidence from Tasks 1-4 so hierarchy changes reflect actual use rather than assumptions.
+Recommended order: 1 -> 2 -> 3 -> 4 -> 5. Tasks 1 and 2 are complete. Task 3 is next and can now make the persistent Capture action land raw content in the product-first Inbox without exposing capability-test machinery. Task 4 is independent after that capture path is stable. Task 5 should use field evidence from Tasks 1-4 so hierarchy changes reflect actual use rather than assumptions.

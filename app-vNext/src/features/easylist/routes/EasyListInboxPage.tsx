@@ -732,6 +732,8 @@ export function EasyListInboxPage() {
           {isLoading && !isDemoReviewMode ? <p className="helper-copy" role="status">Opening Inbox...</p> : null}
         </header>
 
+        <TaskComposer onSubmit={addTask} listName={selectedListName} showBrainDump={false} />
+
         <div className="easylist-inbox-command" aria-label="Next inbox review action">
           <div>
             <span>Next review</span>
@@ -773,7 +775,12 @@ export function EasyListInboxPage() {
           <p>Keep scope quiet. Review one lane at a time.</p>
         </div>
 
-        <section className="assistant-intent-preview" aria-labelledby="assistant-intent-preview-title">
+        <details className="advanced-disclosure easylist-capability-disclosure">
+          <summary>Advanced capability checks</summary>
+          <p className="helper-copy">
+            Optional preview and provider-test controls. No live capability is enabled here.
+          </p>
+          <section className="assistant-intent-preview" aria-labelledby="assistant-intent-preview-title">
           <div className="assistant-intent-input">
             <label className="field-stack">
               <span>Assistant intake preview</span>
@@ -1615,9 +1622,8 @@ export function EasyListInboxPage() {
               </p>
             </article>
           ) : null}
-        </section>
-
-        <TaskComposer onSubmit={addTask} listName={selectedListName} showBrainDump={false} />
+          </section>
+        </details>
       </section>
 
       {error ? <p className="error-copy">{error}</p> : null}

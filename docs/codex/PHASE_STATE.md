@@ -4,7 +4,7 @@ Current Phase: p4-5-field-use-repair
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
 Primary Action: Reduce daily-use friction in the Today -> capture -> review -> plan -> return loop through one bounded repair at a time.
-Showable Moment: Today presents one readable, data-driven start action with a separate immediate Capture control instead of overlapping competing action blocks.
+Showable Moment: Today presents one readable start action, and Inbox opens with ordinary quick capture before a collapsed advanced capability-check surface.
 What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, contact sync, account deletion backend, external actions, or saved-object expansion.
 No More Features Lock: true
 Complexity Budget: P4.5 may implement exactly one small, reversible, user-visible repair per approved loop; no new route, service, dependency, migration, backend policy, or live capability.
@@ -17,7 +17,7 @@ Done Signal: Stage 1-5 implementation tasks passed build and the five review rou
 Next Phase Criteria: P5 live AI or true push remains paused and may begin only after separate explicit EasyLife HQ approval for the exact capability, implementation, deploy, and test boundary.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-07-17 - EasyLife HQ selected P4.5 Field Use Repair, superseding direct progression to live AI or true push. This loop repairs one evidenced Today orientation collision; P5 capabilities remain paused behind explicit approval.
+Updated At: 2026-07-17 - P4.5-01 Today action collision and P4.5-02 Inbox capability-control hierarchy are complete. P4.5 remains active; P4.5-03 raw-first persistent Capture is next. P5 live AI and true push remain paused behind explicit approval.
 
 Audit packet interrupt: the active source is `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip`. Treat demo readiness, route safety, naming consistency, capture trust, Settings/trust copy, and input reliability as the current priority. Do not touch Firebase/auth/rules/functions/billing/DNS/secrets/env files, and do not assume live AI, true push notifications, calendar sync, geocoding, email/text sending, or hidden writes.
 
