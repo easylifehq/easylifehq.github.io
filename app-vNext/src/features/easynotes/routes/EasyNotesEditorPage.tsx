@@ -335,10 +335,6 @@ export function EasyNotesEditorPage() {
         <label className="notes-body-field">
           <span>Write first</span>
           {restoredDraftMessage ? <div className="calendar-info-card">{restoredDraftMessage}</div> : null}
-          <div className="calendar-info-card" aria-label="Note recovery and export boundary">
-            Browser recovery is on while autosave catches up. EasyLife keeps a temporary browser-only note draft,
-            clears it after a successful save, and does not send, sync, export, or use AI from this editor.
-          </div>
           <textarea
             ref={bodyTextareaRef}
             value={bodyText}
@@ -352,6 +348,14 @@ export function EasyNotesEditorPage() {
             rows={Math.max(28, bodyText.split(/\r?\n/).length + 4)}
           />
         </label>
+
+        <details className="advanced-disclosure notes-editor-recovery-details">
+          <summary>Recovery details</summary>
+          <div className="calendar-info-card" aria-label="Note recovery and export boundary">
+            Browser recovery is on while autosave catches up. EasyLife keeps a temporary browser-only note draft,
+            clears it after a successful save, and does not send, sync, export, or use AI from this editor.
+          </div>
+        </details>
 
         {actionsOpen ? (
           <aside className="advanced-disclosure notes-editor-action-panel">

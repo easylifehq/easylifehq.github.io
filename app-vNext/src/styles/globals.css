@@ -2368,6 +2368,15 @@ textarea::placeholder {
   color: var(--ui-text-muted, var(--shell-muted-text));
 }
 
+.notes-recovery-tools {
+  margin: 0 0 0.9rem;
+}
+
+.notes-recovery-tools:not([open]) > :not(summary),
+.notes-editor-recovery-details:not([open]) > :not(summary) {
+  display: none;
+}
+
 .notes-capture-group,
 .notes-secondary-actions {
   display: flex;
@@ -3140,6 +3149,11 @@ textarea::placeholder {
 .notes-editor-action-panel {
   display: grid;
   gap: 0.85rem;
+}
+
+.notes-editor-recovery-details {
+  width: min(780px, 100%);
+  justify-self: center;
 }
 
 .notes-review-action-button {

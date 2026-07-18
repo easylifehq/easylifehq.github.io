@@ -34,7 +34,7 @@ Status: Complete. Universal Capture now opens in a focused raw Inbox mode with o
 
 ## 4. P4.5-04 - Keep Notes write-first above trust proof
 
-Status: Next.
+Status: Complete. Notes now keeps New note, Last note, and Recent notes ahead of a collapsed native Recovery and export disclosure; the editor keeps its title, body, save status, and active restored-draft notice ahead of collapsed Recovery details. Active library errors remain near the primary actions, and production build plus desktop/mobile browser checks passed without horizontal overflow.
 
 - **User problem:** Notes already has New note, Last note, and Recent notes, but recovery/export explanations appear before resuming recent work and the editor places a long implementation-boundary card before the writing field.
 - **Intended behavioral outcome:** New note, last note, recent notes, and the writing area dominate; recovery/export detail remains discoverable without interrupting ordinary writing.
@@ -44,7 +44,7 @@ Status: Next.
 
 ## 5. P4.5-05 - Clarify the navigation hierarchy without removing routes
 
-Status: Pending.
+Status: Next.
 
 - **User problem:** The demo menu places Today, Inbox, Plan, Notes, People, and Settings together as core; exposes three Workout destinations; and labels a job-application pipeline as Follow-ups while People and Inbox also contain follow-up concepts. Users must infer which destination owns a task.
 - **Intended behavioral outcome:** Today, Capture, Notes, Plan, and Inbox read as the daily path; People, Workout, Projects, job pipeline, Progress, Review, and Settings read as secondary or contextual.
@@ -52,4 +52,4 @@ Status: Pending.
 - **Acceptance criteria:** Core and secondary destinations are visually distinct on desktop and mobile; the job pipeline is not mistaken for all personal follow-ups; Workout remains reachable without three equal top-level choices; route and query behavior is unchanged.
 - **Verification method:** Source route/menu sweep; desktop/mobile menu screenshots; keyboard navigation check; direct-route smoke for every moved item; production build.
 
-Recommended order: 1 -> 2 -> 3 -> 4 -> 5. Tasks 1 through 3 are complete. Task 4 is next and can now simplify Notes without changing the repaired Today -> Capture -> Inbox path. Task 5 should use field evidence from Tasks 1-4 so hierarchy changes reflect actual use rather than assumptions.
+Recommended order: 1 -> 2 -> 3 -> 4 -> 5. Tasks 1 through 4 are complete. Task 5 is next and can use the repaired Today, Inbox, Capture, and Notes paths as evidence for a hierarchy-only navigation change without removing routes or capabilities.
