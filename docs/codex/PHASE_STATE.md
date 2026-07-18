@@ -1,23 +1,23 @@
 # Phase State
 
-Current Phase: p4-supervised-capability-activation
+Current Phase: p4-5-field-use-repair
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Activate the first real capabilities safely: one narrow real AI/provider Inbox suggestion first, then one true push synthetic test lane.
-Showable Moment: EasyLife can ask for one review-first Inbox suggestion and later one synthetic push test without pretending to have broad AI, hidden automation, external sync, or automatic actions.
+Primary Action: Reduce daily-use friction in the Today -> capture -> review -> plan -> return loop through one bounded repair at a time.
+Showable Moment: Today presents one readable, data-driven start action with a separate immediate Capture control instead of overlapping competing action blocks.
 What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, contact sync, account deletion backend, external actions, or saved-object expansion.
 No More Features Lock: true
-Complexity Budget: Stage 34 may plan and implement only the narrow real push-notification gate: capability audit, client token contract, token storage contract, disabled server test-send scaffold, and proof. It must not send live push, deploy, add automatic reminder scheduling, or broaden notifications beyond one synthetic/manual test lane.
+Complexity Budget: P4.5 may implement exactly one small, reversible, user-visible repair per approved loop; no new route, service, dependency, migration, backend policy, or live capability.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: AI_ASSISTANT_READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY; PUSH_NOTIFICATIONS_STAGE_34_PACKET_READY; WORKOUT_AI_PARKED_UNTIL_LOGGER_RELIABLE
-Evidence Required: Stage 34 push proof must verify capability audit, client token contract, token storage contract, disabled server test-send scaffold, no live push, no frontend secrets, no raw private payload logging, no automatic reminders, build proof, functions lint, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
+Parking State: P5_LIVE_AI_AND_TRUE_PUSH_PAUSED_BEHIND_EXPLICIT_APPROVAL; WORKOUT_AI_PARKED_UNTIL_LOGGER_RELIABLE
+Evidence Required: P4.5 requires clean preflight proof, baseline and final production builds, source-backed friction findings, desktop/mobile inspection where available, one coherent behavior change, and final git diff checks.
 Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 35 push test may begin only after Stage 34 proof ends `READY_FOR_STAGE_35_ONE_SYNTHETIC_PUSH_TEST_DEPLOY` and the user explicitly approves a deploy/test prompt.
+Next Phase Criteria: P5 live AI or true push remains paused and may begin only after separate explicit EasyLife HQ approval for the exact capability, implementation, deploy, and test boundary.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-31 - P3.5 solo demo hardening is complete and Spencer approved moving into real capabilities. P4 supervised capability activation is queued in docs/codex/NEXT_5_TASKS.md and docs/codex/EASYLIFE_P4_SUPERVISED_CAPABILITY_QUEUE.md. Capability order is strict: first one narrow real AI/provider Inbox typed-capture suggestion gate, then one true push synthetic test gate. Deploy, env/secrets, package/dependency, DNS, billing, Firebase rules/auth policy, broad functions expansion, token storage, live push sends, real private payload provider calls, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden writes, automatic scheduling, and external actions remain locked unless Spencer separately approves that exact gate.
+Updated At: 2026-07-17 - EasyLife HQ selected P4.5 Field Use Repair, superseding direct progression to live AI or true push. This loop repairs one evidenced Today orientation collision; P5 capabilities remain paused behind explicit approval.
 
 Audit packet interrupt: the active source is `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip`. Treat demo readiness, route safety, naming consistency, capture trust, Settings/trust copy, and input reliability as the current priority. Do not touch Firebase/auth/rules/functions/billing/DNS/secrets/env files, and do not assume live AI, true push notifications, calendar sync, geocoding, email/text sending, or hidden writes.
 

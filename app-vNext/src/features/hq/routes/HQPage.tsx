@@ -300,27 +300,6 @@ function HQPageContent() {
             </div>
             <span className="assistant-availability-pill">{assistantAiAvailability.badge}</span>
           </div>
-          <div className="assistant-next-inline" aria-label="EasyLife overview">
-            <div>
-              <span>EasyLife</span>
-              <h2>EasyLife is your calm assistant for tasks, notes, and planning.</h2>
-              <p>Capture something, review what matters, then plan the day.</p>
-            </div>
-            <div className="task-composer-actions">
-              <Link to="/app/easylist/add" className="primary-button">
-                Add task
-              </Link>
-              <Link to="/app/easylist/dashboard" className="button-secondary">
-                Review Inbox
-              </Link>
-              <Link to="/app/easynotes/new" className="button-secondary">
-                Start note
-              </Link>
-              <Link to="/app/easynotes" className="button-secondary">
-                Open Notes
-              </Link>
-            </div>
-          </div>
           <strong>{assistantRead}</strong>
           <div className="hq-today-summary" aria-label="Today summary">
             {todaySummary.map((item) => (
