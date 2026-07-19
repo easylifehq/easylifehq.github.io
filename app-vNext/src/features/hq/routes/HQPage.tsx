@@ -26,6 +26,49 @@ type TodayContextItem = {
 type TodayItemKind = "task" | "event" | "block" | "window";
 type TodayItemIdentity = `${TodayItemKind}:${string}`;
 type TodayReviewItem = TodayContextItem & { identity: TodayItemIdentity };
+type TodayDataReadiness = "loading" | "partial" | "ready" | "unavailable";
+
+type TodayDataState = {
+  readiness: TodayDataReadiness;
+  isUpdating: boolean;
+  failureMessages: Array<{ area: "notes" | "people" | "plan"; message: string }>;
+};
+
+function getTodayDataState({
+  dailyDataLoading,
+  dailyDataError,
+  hasDailyData,
+  notesLoading,
+  notesError,
+  peopleLoading,
+  peopleError,
+}: {
+  dailyDataLoading: boolean;
+  dailyDataError: boolean;
+  hasDailyData: boolean;
+  notesLoading: boolean;
+  notesError: boolean;
+  peopleLoading: boolean;
+  peopleError: boolean;
+}): TodayDataState {
+  const failureMessages = [
+    dailyDataError ? { area: "plan" as const, message: "Part of your plan could not be loaded." } : null,
+    notesError ? { area: "notes" as const, message: "Notes could not be loaded." } : null,
+    peopleError ? { area: "people" as const, message: "People follow-ups could not be loaded." } : null,
+  ].filter((item): item is TodayDataState["failureMessages"][number] => Boolean(item));
+  const isUpdating = dailyDataLoading || notesLoading || peopleLoading;
+
+  if (dailyDataLoading && !hasDailyData) {
+    return { readiness: "loading", isUpdating, failureMessages };
+  }
+  if (dailyDataError && !hasDailyData) {
+    return { readiness: "unavailable", isUpdating, failureMessages };
+  }
+  if (isUpdating || failureMessages.length) {
+    return { readiness: "partial", isUpdating, failureMessages };
+  }
+  return { readiness: "ready", isUpdating, failureMessages };
+}
 
 function getTodayItemIdentity(kind: TodayItemKind, id: string): TodayItemIdentity {
   return `${kind}:${id}`;
@@ -66,11 +109,28 @@ function getContactPlaceLabel(contact: { currentCity?: string; region?: string; 
 }
 
 function HQPageContent() {
-  const { events, taskBlocks, tasks, error } = useEasyCalendar();
-  const { notes } = useEasyNotes();
-  const { contacts } = useEasyContacts();
+  const {
+    events,
+    taskBlocks,
+    tasks,
+    isDailyDataLoading,
+    error: calendarError,
+  } = useEasyCalendar();
+  const { notes, isLoading: notesLoading, error: notesError } = useEasyNotes();
+  const { contacts, isLoading: peopleLoading, error: peopleError } = useEasyContacts();
   const lastAppRoute = useLastAppRoute();
   const today = startOfDay(new Date());
+  const hasDailyData = Boolean(events.length || taskBlocks.length || tasks.length);
+  const todayDataInputs = {
+    dailyDataLoading: isDailyDataLoading,
+    dailyDataError: Boolean(calendarError),
+    hasDailyData,
+    notesLoading,
+    notesError: Boolean(notesError),
+    peopleLoading,
+    peopleError: Boolean(peopleError),
+  };
+  const todayDataState = getTodayDataState(todayDataInputs);
 
   const todayEvents = events
     .filter((event) => event.startAt && startOfDay(event.startAt).getTime() === today.getTime())
@@ -323,6 +383,18 @@ function HQPageContent() {
     .slice(0, 3);
   const assistantRead = contextLead;
   const todayAiFallbackCopy = getAssistantAiFallbackCopy("today");
+  const canShowDailyContent = todayDataState.readiness === "ready" || todayDataState.readiness === "partial";
+  const canShowCalmFallback =
+    !todayDataInputs.dailyDataLoading &&
+    !todayDataInputs.dailyDataError &&
+    !todayDataInputs.notesLoading &&
+    !todayDataInputs.notesError &&
+    !todayDataInputs.peopleLoading &&
+    !todayDataInputs.peopleError;
+  const canShowStartHere = Boolean(startHere.identity) || canShowCalmFallback;
+  const canShowSummary = !todayDataInputs.dailyDataLoading && !todayDataInputs.dailyDataError;
+  const canShowReview =
+    attentionItems.length > 0 || (!todayDataInputs.dailyDataLoading && !todayDataInputs.dailyDataError);
   const lastAssistantPlace = lastAppRoute
     ? {
         ...lastAppRoute,
@@ -335,11 +407,12 @@ function HQPageContent() {
   }
 
   return (
-    <main className="page-wrap app-theme app-theme-easyhq">
-      {error ? <p className="error-copy">{error}</p> : null}
-
+    <main
+      className="page-wrap app-theme app-theme-easyhq"
+      data-today-readiness={todayDataState.readiness}
+    >
       <section className="assistant-home" aria-labelledby="hq-title">
-        <article className="hq-start-card">
+        <article className="hq-start-card" aria-busy={todayDataState.isUpdating || undefined}>
           <div className="hq-start-heading">
             <div>
               <p>Today</p>
@@ -347,37 +420,83 @@ function HQPageContent() {
             </div>
             <span className="assistant-availability-pill">{assistantAiAvailability.badge}</span>
           </div>
-          <strong>{assistantRead}</strong>
-          <div className="hq-today-summary" aria-label="Today summary">
-            {todaySummary.map((item) => (
-              <span key={item.label}>
-                <b>{item.value}</b>
-                {item.label}
-              </span>
-            ))}
-          </div>
-          <div className="assistant-next-inline" aria-labelledby="assistant-next-title">
-            <div>
-              <span>Start here</span>
-              <h2 id="assistant-next-title">{startHere.label}</h2>
-              <p>{startHere.reason}</p>
+          {todayDataState.readiness === "partial" && todayDataState.isUpdating ? (
+            <div className="hq-status-strip" role="status" aria-live="polite">
+              <article>
+                <span>Updating</span>
+                <strong>Checking today…</strong>
+                <p>Available actions stay visible while the rest catches up.</p>
+              </article>
             </div>
-            <div className="task-composer-actions">
-              <Link to={startHere.to} className="primary-button">
-                {startHere.buttonLabel}
-              </Link>
-              <Link to="/app/easylist/add" className="button-secondary">
-                Capture thought
-              </Link>
+          ) : null}
+          {todayDataState.failureMessages.length ? (
+            <div className="hq-status-strip" role="alert" aria-label="Today data notice">
+              {todayDataState.failureMessages.map((failure) => (
+                <article key={failure.area}>
+                  <span>{failure.area}</span>
+                  <strong>{failure.message}</strong>
+                </article>
+              ))}
             </div>
-          </div>
+          ) : null}
+          {canShowDailyContent ? <strong>{assistantRead}</strong> : null}
+          {canShowDailyContent && canShowSummary ? (
+            <div className="hq-today-summary" aria-label="Today summary">
+              {todaySummary.map((item) => (
+                <span key={item.label}>
+                  <b>{item.value}</b>
+                  {item.label}
+                </span>
+              ))}
+            </div>
+          ) : null}
+          {canShowDailyContent && canShowStartHere ? (
+            <div className="assistant-next-inline" aria-labelledby="assistant-next-title">
+              <div>
+                <span>Start here</span>
+                <h2 id="assistant-next-title">{startHere.label}</h2>
+                <p>{startHere.reason}</p>
+              </div>
+              <div className="task-composer-actions">
+                <Link to={startHere.to} className="primary-button">
+                  {startHere.buttonLabel}
+                </Link>
+                <Link to="/app/easylist/add" className="button-secondary">
+                  Capture thought
+                </Link>
+              </div>
+            </div>
+          ) : !canShowDailyContent ? (
+            <div
+              className="assistant-next-inline"
+              role={todayDataState.readiness === "loading" ? "status" : undefined}
+              aria-live={todayDataState.readiness === "loading" ? "polite" : undefined}
+            >
+              <div>
+                <span>Today</span>
+                <h2 id="assistant-next-title">
+                  {todayDataState.readiness === "unavailable" ? "Today’s plan is unavailable." : "Checking today…"}
+                </h2>
+                <p>
+                  {todayDataState.readiness === "unavailable"
+                    ? "Capture still works while the rest of Today stays unchanged."
+                    : "Your saved plan is still loading."}
+                </p>
+              </div>
+              {todayDataState.readiness === "unavailable" ? (
+                <Link to="/app/easycalendar/day" className="button-secondary">
+                  Open Plan
+                </Link>
+              ) : null}
+            </div>
+          ) : null}
           <button type="button" className="hq-natural-capture" onClick={openNaturalCapture}>
             <span>Capture</span>
             <strong>{assistantCommandHintRow}</strong>
             <small>{todayAiFallbackCopy}</small>
             <em>Quick add</em>
           </button>
-          <details className="hq-context-stack">
+          {canShowDailyContent ? <details className="hq-context-stack">
             <summary>
               <span>Context</span>
               <strong>{contextLead}</strong>
@@ -398,11 +517,11 @@ function HQPageContent() {
                 </Link>
               ))}
             </div>
-          </details>
+          </details> : null}
         </article>
       </section>
 
-      {unplannedInboxTasks.length ? (
+      {canShowDailyContent && unplannedInboxTasks.length ? (
         <PageSection eyebrow="Inbox to review" title={`${unplannedInboxTasks.length} unplanned item${unplannedInboxTasks.length === 1 ? "" : "s"}`}>
           <div className="assistant-attention-list">
             {recentUnplannedInboxTasks.map((task) => (
@@ -443,7 +562,7 @@ function HQPageContent() {
         </PageSection>
       ) : null}
 
-      <PageSection eyebrow="Review" title="Only what needs a decision">
+      {canShowDailyContent && canShowReview ? <PageSection eyebrow="Review" title="Only what needs a decision">
         <div className="assistant-attention-list">
           {attentionItems.length ? (
             attentionItems.map((item) => (
@@ -461,7 +580,7 @@ function HQPageContent() {
             </article>
           )}
         </div>
-      </PageSection>
+      </PageSection> : null}
 
       <PageSection eyebrow="Demo path" title="The calm assistant loop">
         <div className="hq-demo-path" aria-label="EasyLife first-run demo path">

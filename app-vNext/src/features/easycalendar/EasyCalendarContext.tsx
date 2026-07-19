@@ -51,6 +51,7 @@ type EasyCalendarContextValue = {
   taskBlocks: CalendarTaskBlockRecord[];
   tasks: TaskRecord[];
   isLoading: boolean;
+  isDailyDataLoading: boolean;
   error: string;
   addEvent: (draft: CalendarEventDraft) => Promise<string | null>;
   addTask: (draft: TaskDraft) => Promise<string | null>;
@@ -356,6 +357,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       taskBlocks,
       tasks,
       isLoading: categoriesLoading || eventsLoading || taskBlocksLoading || tasksLoading,
+      isDailyDataLoading: eventsLoading || taskBlocksLoading || tasksLoading,
       error,
       addEvent: async (draft: CalendarEventDraft) => {
         if (!user || isDemoMode) return null;
