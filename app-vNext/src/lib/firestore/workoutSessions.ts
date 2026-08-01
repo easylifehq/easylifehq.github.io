@@ -7,6 +7,7 @@ import {
   onSnapshot,
   query,
   serverTimestamp,
+  setDoc,
   where,
   updateDoc,
   type DocumentData,
@@ -19,18 +20,29 @@ export type WorkoutSetRecord = {
   reps: number;
   weight: number;
   notes: string;
+  setType?: "warmup" | "standard" | "drop" | "failure";
+  completed?: boolean;
+  deleted?: boolean;
+  rir?: number | null;
+  durationSeconds?: number;
+  distanceMeters?: number;
 };
 
 export type WorkoutExerciseLogRecord = {
   exerciseId: string | null;
   exerciseName: string;
   muscleGroup: string;
+  primaryMuscles?: string[];
+  secondaryMuscles?: string[];
+  exerciseType?: "weighted" | "bodyweight" | "assisted" | "duration" | "distance";
   notes: string;
   sets: WorkoutSetRecord[];
 };
 
 export type WorkoutSessionRecord = {
   id: string;
+  clientDraftId?: string;
+  schemaVersion?: number;
   routineId: string | null;
   routineName: string;
   performedOn: string;
@@ -62,6 +74,8 @@ function normalizeSession(snapshot: QueryDocumentSnapshot<DocumentData>) {
 
   return {
     id: snapshot.id,
+    clientDraftId: typeof data.clientDraftId === "string" ? data.clientDraftId : undefined,
+    schemaVersion: typeof data.schemaVersion === "number" ? data.schemaVersion : undefined,
     routineId: data.routineId || null,
     routineName: data.routineName || "",
     performedOn: data.performedOn || "",
@@ -100,6 +114,17 @@ export function subscribeToWorkoutSessions(
 }
 
 export async function createWorkoutSession(userId: string, draft: WorkoutSessionDraft) {
+  if (draft.clientDraftId) {
+    const safeDraftId = draft.clientDraftId.replace(/[^a-zA-Z0-9_-]/g, "-").slice(0, 180);
+    const reference = doc(getWorkoutSessionsCollection(userId), safeDraftId);
+    await setDoc(reference, {
+      ...draft,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    return reference.id;
+  }
+
   const reference = await addDoc(getWorkoutSessionsCollection(userId), {
     ...draft,
     createdAt: serverTimestamp(),

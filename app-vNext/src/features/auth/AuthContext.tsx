@@ -23,7 +23,8 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 function isDevReviewMode() {
-  if (!import.meta.env.DEV) return false;
+  const isLoopback = ["localhost", "127.0.0.1", "[::1]", "::1"].includes(window.location.hostname);
+  if (!import.meta.env.DEV && !isLoopback) return false;
   const params = new URLSearchParams(window.location.search);
   return params.get("visualQa") === "1" || params.get("demo") === "1";
 }

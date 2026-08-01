@@ -70,6 +70,112 @@
   --easy-viewport-height: 100dvh;
   --easy-keyboard-inset: 0px;
 }
+
+/* Weekend workout intelligence: truthful persistence and accessible analytics. */
+.workout-save-status,
+.demo-data-banner,
+.workout-rule-receipt {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.9rem;
+  border: 1px solid var(--border-soft, rgba(120, 130, 150, 0.28));
+  border-radius: 14px;
+  padding: 0.75rem 0.9rem;
+  background: var(--surface-soft, rgba(120, 130, 150, 0.08));
+}
+
+.workout-save-status strong,
+.demo-data-banner strong {
+  color: var(--text-strong, inherit);
+}
+
+.workout-save-status span,
+.demo-data-banner span,
+.workout-rule-receipt span {
+  color: var(--text-muted, inherit);
+  font-size: 0.88rem;
+}
+
+.workout-save-status.status-sync-failed-draft-retained {
+  border-color: rgba(194, 88, 58, 0.55);
+  background: rgba(194, 88, 58, 0.1);
+}
+
+.workout-save-status.status-synced {
+  border-color: rgba(44, 143, 92, 0.5);
+  background: rgba(44, 143, 92, 0.1);
+}
+
+.demo-data-banner {
+  margin-bottom: 1rem;
+  border-style: dashed;
+}
+
+.workout-insights-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.workout-exercise-detail,
+.workout-chart-alternative {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.workout-chart-alternative {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid var(--border-soft, rgba(120, 130, 150, 0.25));
+  border-radius: 14px;
+}
+
+.workout-chart-alternative table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+}
+
+.workout-chart-alternative th,
+.workout-chart-alternative td {
+  padding: 0.65rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-soft, rgba(120, 130, 150, 0.2));
+}
+
+.workout-exercise-search {
+  max-width: 34rem;
+  margin-bottom: 1rem;
+}
+
+.workout-set-row input,
+.workout-set-row select,
+.workout-set-row button,
+.statistics-tab-strip button {
+  min-height: 44px;
+}
+
+@media (max-width: 520px) {
+  .workout-save-status,
+  .demo-data-banner,
+  .workout-rule-receipt {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .workout-chart-alternative {
+    padding: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workout-save-status,
+  .workout-insights-stack * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 *,
 *::before,
 *::after {

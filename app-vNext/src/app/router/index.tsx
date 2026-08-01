@@ -135,6 +135,14 @@ const EasyWorkoutLogPage = lazyNamed(
   () => import("@/features/easyworkout/routes/EasyWorkoutLogPage"),
   "EasyWorkoutLogPage"
 );
+const WorkoutExerciseInsightPage = lazyNamed(
+  () => import("@/features/easyworkout/routes/WorkoutExerciseInsightPage"),
+  "WorkoutExerciseInsightPage"
+);
+const WorkoutSessionReviewPage = lazyNamed(
+  () => import("@/features/easyworkout/routes/WorkoutSessionReviewPage"),
+  "WorkoutSessionReviewPage"
+);
 const EasyStatisticsPage = lazyNamed(
   () => import("@/features/easystatistics/routes/EasyStatisticsPage"),
   "EasyStatisticsPage"
@@ -202,9 +210,11 @@ function StartupRedirect() {
       ? getLastAppRoute()?.path || "/app/hq"
       : settings.startupRoute;
 
+  const [pathname, rememberedSearch = ""] = target.split("?");
+
   return (
     <Navigate
-      to={{ pathname: target, search: location.search, hash: location.hash }}
+      to={{ pathname, search: location.search || (rememberedSearch ? `?${rememberedSearch}` : ""), hash: location.hash }}
       replace
     />
   );
@@ -225,9 +235,10 @@ function PublicHomeRoute() {
         ? getLastAppRoute()?.path || "/app/hq"
         : settings.startupRoute;
 
+    const [pathname, rememberedSearch = ""] = target.split("?");
     return (
       <Navigate
-        to={{ pathname: target, search: location.search, hash: location.hash }}
+        to={{ pathname, search: location.search || (rememberedSearch ? `?${rememberedSearch}` : ""), hash: location.hash }}
         replace
       />
     );
@@ -408,6 +419,8 @@ export function AppRouter() {
               <Route path="dashboard" element={<EasyWorkoutDashboardPage />} />
               <Route path="routines" element={<EasyWorkoutRoutinesPage />} />
               <Route path="log" element={<EasyWorkoutLogPage />} />
+              <Route path="exercise/:exerciseId" element={<WorkoutExerciseInsightPage />} />
+              <Route path="session/:sessionId" element={<WorkoutSessionReviewPage />} />
             </Route>
             <Route path="easystatistics" element={<EasyStatisticsPage />} />
             <Route path="settings" element={<SettingsPage />} />

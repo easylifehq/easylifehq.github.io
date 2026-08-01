@@ -1306,6 +1306,16 @@ export function SettingsPage() {
                   onChange={(event) => void updateEasyWorkoutSettings({ defaultSetCount: Number(event.target.value) })}
                 />
               </label>
+              <label className="field-stack">
+                <span>Workout weight unit</span>
+                <select
+                  value={settings.easyWorkout.weightUnit}
+                  onChange={(event) => void updateEasyWorkoutSettings({ weightUnit: event.target.value as "lb" | "kg" })}
+                >
+                  <option value="lb">Pounds (lb)</option>
+                  <option value="kg">Kilograms (kg)</option>
+                </select>
+              </label>
               <label className="settings-inline-check">
                 <input
                   type="checkbox"

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useAuth } from "@/features/auth/AuthContext";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
@@ -9,6 +9,8 @@ import { subscribeToNotes, type NoteRecord } from "@/lib/firestore/notes";
 import { subscribeToProjects, type ProjectRecord } from "@/lib/firestore/projects";
 import { subscribeToProjectTaskLinks, type ProjectTaskLinkRecord } from "@/lib/firestore/projectTaskLinks";
 import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
+import { WorkoutInsightsPanel } from "@/features/easyworkout/components/WorkoutInsightsPanel";
+import { workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
 
 function startOfWeek(date: Date) {
   const next = startOfDay(date);
@@ -91,6 +93,7 @@ function getWordCount(notes: NoteRecord[]) {
 }
 
 export function EasyStatisticsPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user, isDemoMode } = useAuth();
   const { tasks, events, taskBlocks, isLoading, error } = useEasyCalendar();
   const [workoutSessions, setWorkoutSessions] = useState<WorkoutSessionRecord[]>([]);
@@ -101,14 +104,14 @@ export function EasyStatisticsPage() {
   const [statsError, setStatsError] = useState("");
   const [activeTab, setActiveTab] = useState<
     "overview" | "workout" | "list" | "pipeline" | "projects" | "notes"
-  >("overview");
+  >(searchParams.get("tab") === "workout" ? "workout" : "overview");
   const today = startOfDay(new Date());
   const weekStart = startOfWeek(today);
   const monthStart = startOfMonth(today);
 
   useEffect(() => {
     if (!user || isDemoMode) {
-      setWorkoutSessions([]);
+      setWorkoutSessions(isDemoMode ? workoutDemoSessions : []);
       setApplications([]);
       setProjects([]);
       setProjectLinks([]);
@@ -286,7 +289,7 @@ export function EasyStatisticsPage() {
     <main className="page-wrap app-theme app-theme-easystatistics">
       {(error || statsError) ? <p className="error-copy">{error || statsError}</p> : null}
 
-      <PageSection eyebrow="Progress" title="Progress hub" description={weeklyRead}>
+      <PageSection headingLevel={1} eyebrow="Progress" title="Progress hub" description={weeklyRead}>
         <div className="statistics-hero-strip">
           <article>
             <span>Life score</span>
@@ -339,7 +342,10 @@ export function EasyStatisticsPage() {
             role="tab"
             aria-selected={activeTab === tab.id}
             className={activeTab === tab.id ? "active" : undefined}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => {
+              setActiveTab(tab.id);
+              setSearchParams(tab.id === "overview" ? {} : { tab: tab.id }, { replace: true });
+            }}
           >
             {tab.label}
           </button>
@@ -411,7 +417,9 @@ export function EasyStatisticsPage() {
         </div>
       ) : null}
 
-      {activeTab === "workout" ? (
+      {activeTab === "workout" ? <WorkoutInsightsPanel sessions={workoutSessions} isLoading={isLoading} error={statsError} /> : null}
+
+      {false && activeTab === "workout" ? (
         <div className="statistics-tab-panel">
           <PageSection eyebrow="Workout" title="Training progress" description="The deeper read on your lifting rhythm, coverage, and momentum.">
             <div className="statistics-hero-strip">

@@ -32,6 +32,11 @@ import {
   type WorkoutSessionRecord,
 } from "@/lib/firestore/workoutSessions";
 import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
+import {
+  workoutDemoExercises,
+  workoutDemoRoutines,
+  workoutDemoSessions,
+} from "@/features/easyworkout/demo/workoutDemoFixtures";
 
 type EasyWorkoutContextValue = {
   exercises: WorkoutExerciseRecord[];
@@ -51,6 +56,26 @@ type EasyWorkoutContextValue = {
 };
 
 const EasyWorkoutContext = createContext<EasyWorkoutContextValue | undefined>(undefined);
+const demoAddedSessionsStorageKey = "easyworkout:demo-added-sessions:v1";
+
+function readDemoAddedSessions(): WorkoutSessionRecord[] {
+  try {
+    const parsed = JSON.parse(window.sessionStorage.getItem(demoAddedSessionsStorageKey) || "[]") as WorkoutSessionRecord[];
+    return parsed
+      .filter((session) => typeof session?.id === "string" && session.id.startsWith("demo-saved-"))
+      .map((session) => ({
+        ...session,
+        createdAt: session.createdAt ? new Date(session.createdAt) : null,
+        updatedAt: session.updatedAt ? new Date(session.updatedAt) : null,
+      }));
+  } catch {
+    return [];
+  }
+}
+
+function writeDemoAddedSessions(sessions: WorkoutSessionRecord[]) {
+  window.sessionStorage.setItem(demoAddedSessionsStorageKey, JSON.stringify(sessions.filter((session) => session.id.startsWith("demo-saved-"))));
+}
 
 export const defaultWorkoutExercises: Array<Pick<WorkoutExerciseDraft, "name" | "muscleGroup">> = [
   { name: "Bench Press", muscleGroup: "Chest" },
@@ -78,10 +103,21 @@ export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
   const [sessionsLoading, setSessionsLoading] = useState(true);
 
   useEffect(() => {
-    if (!user || isDemoMode) {
+    if (!user) {
       setExercises([]);
       setRoutines([]);
       setSessions([]);
+      setError("");
+      setExercisesLoading(false);
+      setRoutinesLoading(false);
+      setSessionsLoading(false);
+      return;
+    }
+
+    if (isDemoMode) {
+      setExercises(workoutDemoExercises);
+      setRoutines(workoutDemoRoutines);
+      setSessions([...readDemoAddedSessions(), ...workoutDemoSessions]);
       setError("");
       setExercisesLoading(false);
       setRoutinesLoading(false);
@@ -171,7 +207,19 @@ export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
         await removeWorkoutRoutine(user.uid, routineId);
       },
       addSession: async (draft: WorkoutSessionDraft) => {
-        if (!user || isDemoMode) return null;
+        if (!user) return null;
+        if (isDemoMode) {
+          const sessionId = `demo-saved-${draft.clientDraftId || crypto.randomUUID()}`;
+          setSessions((current) => {
+            if (current.some((session) => session.id === sessionId || (draft.clientDraftId && session.clientDraftId === draft.clientDraftId))) {
+              return current;
+            }
+            const next = [{ ...draft, id: sessionId, createdAt: new Date(), updatedAt: new Date() }, ...current];
+            writeDemoAddedSessions(next);
+            return next;
+          });
+          return sessionId;
+        }
         return createWorkoutSession(user.uid, draft);
       },
       saveSession: async (sessionId: string, draft: WorkoutSessionDraft) => {
@@ -179,7 +227,15 @@ export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
         await updateWorkoutSession(user.uid, sessionId, draft);
       },
       deleteSession: async (sessionId: string) => {
-        if (!user || isDemoMode) return;
+        if (!user) return;
+        if (isDemoMode) {
+          setSessions((current) => {
+            const next = current.filter((session) => session.id !== sessionId);
+            writeDemoAddedSessions(next);
+            return next;
+          });
+          return;
+        }
         await removeWorkoutSession(user.uid, sessionId);
       },
     }),
