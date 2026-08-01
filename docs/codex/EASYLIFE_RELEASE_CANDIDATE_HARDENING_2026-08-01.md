@@ -4,7 +4,7 @@
 
 `YELLOW_EASYLIFE_RELEASE_CANDIDATE_WITH_LIMITATIONS`
 
-The audited application code is suitable for merge after review. Production deployment should wait for the new CI jobs to pass on GitHub and for the existing physical-phone checklist to be completed on at least one iPhone and one Android device. No real user data, production deployment, merge, or history rewrite was used during this audit.
+The audited application code is suitable for merge after review. The newly added GitHub CI jobs passed on the pushed branch. Production deployment should still wait for the existing physical-phone checklist to be completed on at least one iPhone and one Android device. No real user data, production deployment, merge, or history rewrite was used during this audit.
 
 ## Independently verified Git boundary
 
@@ -47,14 +47,14 @@ None found.
 
 1. The repository had no GitHub Actions workflow. `.github/workflows/release-candidate.yml` now performs clean app tests/build on Node 24, Functions syntax validation on Node 20, and critical production-advisory gates.
 2. The existing large-history deterministic invariant remains green; coverage was expanded for owner isolation, invalid dates, Sunday weeks, duplicate exercise blocks, mixed units, service-worker behavior, Firestore identity validation, and demo-link isolation.
-3. Residual dependency advisories, physical-phone coverage, authenticated Firestore-emulator behavior, and Node 20 Functions execution remain explicit limitations below.
+3. Residual dependency advisories, physical-phone coverage, and authenticated Firestore-emulator behavior remain explicit limitations below.
 
 ## Fix and regression-test inventory
 
 - Tests increased from 19 to 30.
 - Added or expanded coverage for draft migration and owner isolation, blank drafts, rapid and failed saves, idempotent identity validation, complete working-set validity, Epley confidence, lb/kg round trips and mixed-unit workload, equal matched periods, Sunday weeks, invalid dates, zero prior denominators, deleted/warm-up invariants, stable exercise IDs, duplicate blocks, muscle deduplication, malformed and large histories, the 14-week demo fixture, demo route isolation, and service-worker cache policy.
 - Firestore persistence now uses a transaction and validated deterministic ID; client-side save retries still share a single in-flight operation.
-- Release CI was added but has not yet run on GitHub at receipt-writing time.
+- Release CI was added and passed on GitHub: run `30714852981`, with both the Node 24 web job and Node 20 Functions job green.
 
 ## Dependency-advisory classification
 
@@ -86,6 +86,7 @@ Notable safely patched active transitive packages include `protobufjs` 7.6.5, pa
 - `app-vNext npm audit --omit=dev --audit-level=critical`: **exit 0**; 2 known production moderate nodes remain.
 - `functions npm audit --omit=dev --audit-level=critical`: **exit 0**; the known UUID chain remains moderate.
 - `git diff --check`: **passed** before the implementation commit.
+- Pushed GitHub Actions run [`30714852981`](https://github.com/easylifehq/easylifehq.github.io/actions/runs/30714852981): **passed**. Web clean install/tests/build/audit gate and Functions Node 20 clean install/lint/audit gate were both green. GitHub emitted only its platform annotation that the JavaScript runtime used internally by `actions/checkout@v4` and `actions/setup-node@v4` is being forced from Node 20 to Node 24; the configured Functions command runtime remained Node 20.
 
 ### Final browser route matrix
 
@@ -130,15 +131,14 @@ The demo ran only against `demo=1`; the banner explicitly reported no Firebase w
 ## Remaining limitations
 
 - No physical phone was available. iOS Safari and Android Chrome installation, keyboard behavior, background/foreground draft recovery, airplane-mode relaunch, safe-area layout, and service-worker update behavior remain to be checked with `docs/codex/WORKOUT_PHONE_FIELD_TEST.md`.
-- Functions syntax passed locally on Node 24 and is configured to run in CI on its declared Node 20. Node 20 runtime execution was not locally available in this shell.
+- Functions syntax passed locally on Node 24 and passed the pushed CI job on its declared Node 20.
 - Firestore rules and client ownership paths were read and the pure identity/auth boundaries were regression-tested, but no authenticated Firebase Emulator Suite end-to-end test was configured. No real user data was used, as required.
 - The residual moderate production advisory chains and development-only Vite advisory remain documented above. They are likely unreachable in the audited release paths but should be re-triaged during the React Router 7/Vite 8/Firebase major-upgrade work.
-- The new GitHub Actions workflow cannot be considered proven until it runs after push.
 
 ## Merge and deployment readiness
 
-- **Merge:** ready for review, provided the GitHub Actions workflow passes and reviewers accept the explicitly documented residual-advisory reachability assessment.
-- **Production deployment:** yellow, not fully green. Complete the physical-phone checklist and confirm the Node 20 CI job before deploying.
+- **Merge:** ready for review; GitHub CI is green. Reviewers should explicitly accept the documented residual-advisory reachability assessment.
+- **Production deployment:** yellow, not fully green. Complete the physical-phone checklist before deploying.
 - **Rollback boundary:** the hardening implementation is one commit on top of the exact supplied upgrade SHA, followed only by this receipt commit.
 
 ## Exact next commands
@@ -160,9 +160,10 @@ npm.cmd ci
 npm.cmd run lint
 
 Set-Location ..
-git push -u origin codex/easylife-release-candidate-hardening-20260801
+gh run view 30714852981
+git status --short
 ```
 
-After the pushed CI checks pass, run `docs/codex/WORKOUT_PHONE_FIELD_TEST.md` on iPhone and Android, attach the physical evidence, review the remaining advisory classification, and merge through the normal pull-request process. Do not deploy the archived `old-site/easypipeline/functions` package.
+The pushed CI checks passed. Next, run `docs/codex/WORKOUT_PHONE_FIELD_TEST.md` on iPhone and Android, attach the physical evidence, review the remaining advisory classification, and merge through the normal pull-request process. Do not deploy the archived `old-site/easypipeline/functions` package.
 
 `YELLOW_EASYLIFE_RELEASE_CANDIDATE_WITH_LIMITATIONS`
