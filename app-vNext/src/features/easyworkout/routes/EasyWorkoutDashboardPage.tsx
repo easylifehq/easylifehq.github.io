@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
 import { deriveWorkoutStatistics } from "@/features/easyworkout/domain/workoutStatistics";
-import { WORKOUT_DRAFT_STORAGE_KEY, recoverWorkoutDraft } from "@/features/easyworkout/domain/workoutDraftLifecycle";
+import { getWorkoutDraftStorageKey, recoverWorkoutDraft } from "@/features/easyworkout/domain/workoutDraftLifecycle";
 import { useAuth } from "@/features/auth/AuthContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { workoutDemoMetadata } from "@/features/easyworkout/demo/workoutDemoFixtures";
@@ -15,19 +15,22 @@ const localDateKey = () => {
 
 export function EasyWorkoutDashboardPage() {
   const { sessions, routines, isLoading, error } = useEasyWorkout();
-  const { isDemoMode } = useAuth();
+  const { isDemoMode, user } = useAuth();
   const { settings } = useSettings();
   const stats = useMemo(() => deriveWorkoutStatistics(sessions, { nowDateKey: localDateKey(), periodDays: 28, displayUnit: settings.easyWorkout.weightUnit }), [sessions, settings.easyWorkout.weightUnit]);
   const restoredDraft = useMemo(() => {
     try {
-      const raw = window.localStorage.getItem(WORKOUT_DRAFT_STORAGE_KEY);
-      return raw ? recoverWorkoutDraft(JSON.parse(raw), { today: localDateKey(), nowIso: new Date().toISOString(), createId: () => crypto.randomUUID() }).draft : null;
+      if (!user) return null;
+      const raw = window.localStorage.getItem(getWorkoutDraftStorageKey(user.uid));
+      return raw ? recoverWorkoutDraft(JSON.parse(raw), { today: localDateKey(), nowIso: new Date().toISOString(), ownerId: user.uid, defaultWeightUnit: settings.easyWorkout.weightUnit, createId: () => crypto.randomUUID() }).draft : null;
     } catch {
       return null;
     }
-  }, []);
+  }, [settings.easyWorkout.weightUnit, user]);
   const recentSessions = sessions.slice(0, 5);
-  const startTarget = routines[0] ? `/app/easyworkout/log?routineId=${routines[0].id}&workoutMode=1` : "/app/easyworkout/log?workoutMode=1";
+  const demoParam = isDemoMode ? "&demo=1" : "";
+  const demoSearch = isDemoMode ? "?demo=1" : "";
+  const startTarget = routines[0] ? `/app/easyworkout/log?routineId=${routines[0].id}&workoutMode=1${demoParam}` : `/app/easyworkout/log?workoutMode=1${demoParam}`;
 
   return (
     <>
@@ -35,11 +38,11 @@ export function EasyWorkoutDashboardPage() {
         {isDemoMode ? <div className="demo-data-banner" role="note"><strong>Demo data</strong><span>{workoutDemoMetadata.fixtureVersion}. Synthetic and Firebase-write-free.</span></div> : null}
         {error ? <p className="error-copy">Workout data is partially unavailable: {error}</p> : null}
         <div className="deep-module-hero">
-          <Link className="primary-button deep-module-primary-action" to={restoredDraft ? "/app/easyworkout/log?workoutMode=1" : startTarget}>
+          <Link className="primary-button deep-module-primary-action" to={restoredDraft ? `/app/easyworkout/log?workoutMode=1${demoParam}` : startTarget}>
             <strong>{restoredDraft ? "Resume workout" : "Start workout"}</strong>
           </Link>
-          <Link className="button-secondary deep-module-secondary-action" to="/app/easyworkout/routines">Routines</Link>
-          <Link className="ghost-button deep-module-secondary-action" to="/app/easystatistics?tab=workout">Workout progress</Link>
+          <Link className="button-secondary deep-module-secondary-action" to={`/app/easyworkout/routines${demoSearch}`}>Routines</Link>
+          <Link className="ghost-button deep-module-secondary-action" to={`/app/easystatistics?tab=workout${demoParam}`}>Workout progress</Link>
         </div>
         {restoredDraft ? (
           <div className="workout-save-status status-saved-local" role="status">
@@ -48,7 +51,7 @@ export function EasyWorkoutDashboardPage() {
         ) : null}
         <div className="workout-next-move" aria-label="Recommended next workout action">
           <div><span>One next move · {stats.insight.ruleId}</span><strong>{stats.insight.title}</strong><p>{stats.insight.explanation}</p><small>Confidence: {stats.insight.confidence}. Recovery is unknown unless you log readiness or effort.</small></div>
-          {stats.insight.sourceWorkoutIds[0] ? <Link className="button-secondary compact-button" to={`/app/easyworkout/session/${encodeURIComponent(stats.insight.sourceWorkoutIds[0])}`}>Review evidence</Link> : <Link className="button-secondary compact-button" to={startTarget}>Start</Link>}
+          {stats.insight.sourceWorkoutIds[0] ? <Link className="button-secondary compact-button" to={`/app/easyworkout/session/${encodeURIComponent(stats.insight.sourceWorkoutIds[0])}${demoSearch}`}>Review evidence</Link> : <Link className="button-secondary compact-button" to={startTarget}>Start</Link>}
         </div>
       </PageSection>
 
@@ -59,7 +62,7 @@ export function EasyWorkoutDashboardPage() {
           {recentSessions.map((session) => (
             <article className="task-card-vnext" key={session.id}>
               <div className="task-card-copy"><div className="task-card-title-row"><h3>{session.routineName || "Workout"}</h3><span className="priority-pill-vnext">{session.performedOn}</span></div><p>{session.exercises.length} exercises · {session.durationMinutes || 0} minutes</p></div>
-              <div className="task-card-actions"><Link className="button-secondary compact-button" to={`/app/easyworkout/session/${encodeURIComponent(session.id)}`}>Review</Link></div>
+              <div className="task-card-actions"><Link className="button-secondary compact-button" to={`/app/easyworkout/session/${encodeURIComponent(session.id)}${demoSearch}`}>Review</Link></div>
             </article>
           ))}
         </div>

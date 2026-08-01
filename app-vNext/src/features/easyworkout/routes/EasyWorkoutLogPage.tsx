@@ -2,13 +2,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { defaultWorkoutExercises, useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
+import { useAuth } from "@/features/auth/AuthContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 import {
-  LEGACY_WORKOUT_DRAFT_STORAGE_KEY,
   WORKOUT_DRAFT_SCHEMA_VERSION,
-  WORKOUT_DRAFT_STORAGE_KEY,
   WorkoutSaveCoordinator,
   canClearMatchingWorkoutDraft,
+  getWorkoutDraftStorageKey,
   hasWorkoutDraftWork,
   recoverWorkoutDraft,
   workoutDraftStatusCopy,
@@ -17,6 +17,7 @@ import {
   type WorkoutExerciseLogDraft,
   type WorkoutSetDraft,
 } from "@/features/easyworkout/domain/workoutDraftLifecycle";
+import { convertWeight, isValidLocalDateKey, isValidWorkingSet } from "@/features/easyworkout/domain/workoutStatistics";
 type DeletedSetUndo = {
   exerciseLocalId: string;
   exerciseName: string;
@@ -70,13 +71,13 @@ const hasExerciseWork = (exercise: WorkoutExerciseLogDraft) =>
   (exercise.exerciseType !== "weighted" && exercise.sets.some((set) => set.reps > 0 || (set.durationSeconds || 0) > 0 || (set.distanceMeters || 0) > 0)) ||
   exercise.sets.some(hasSetWork);
 
-function readStoredWorkoutDraft() {
+function readStoredWorkoutDraft(storageKey: string, ownerId: string, defaultWeightUnit: "lb" | "kg") {
   if (typeof window === "undefined") return null;
 
   try {
-    const raw = window.localStorage.getItem(WORKOUT_DRAFT_STORAGE_KEY) || window.localStorage.getItem(LEGACY_WORKOUT_DRAFT_STORAGE_KEY);
+    const raw = window.localStorage.getItem(storageKey);
     if (!raw) return null;
-    return recoverWorkoutDraft(JSON.parse(raw), { today: localDateKey(), nowIso: new Date().toISOString(), createId: createLocalId });
+    return recoverWorkoutDraft(JSON.parse(raw), { today: localDateKey(), nowIso: new Date().toISOString(), ownerId, defaultWeightUnit, createId: createLocalId });
   } catch {
     return { draft: null, message: "The saved workout draft was unreadable. Start a new workout; no remote data was changed.", migrated: false };
   }
@@ -128,7 +129,14 @@ export function EasyWorkoutLogPage() {
   const firstExerciseInputRef = useRef<HTMLInputElement | null>(null);
   const saveCoordinatorRef = useRef(new WorkoutSaveCoordinator<string | null>());
   const skipDraftFlushRef = useRef(false);
-  const restoredDraftRecovery = useMemo(() => readStoredWorkoutDraft(), []);
+  const { settings } = useSettings();
+  const { user, isDemoMode } = useAuth();
+  const ownerId = user?.uid || "unavailable";
+  const draftStorageKey = useMemo(() => getWorkoutDraftStorageKey(ownerId), [ownerId]);
+  const restoredDraftRecovery = useMemo(
+    () => readStoredWorkoutDraft(draftStorageKey, ownerId, settings.easyWorkout.weightUnit),
+    [draftStorageKey, ownerId, settings.easyWorkout.weightUnit]
+  );
   const restoredDraft = restoredDraftRecovery?.draft || null;
   const didUseRestoredDraftRef = useRef(Boolean(restoredDraft));
   const navigate = useNavigate();
@@ -136,7 +144,6 @@ export function EasyWorkoutLogPage() {
   const routineId = searchParams.get("routineId");
   const gymMode = searchParams.get("gymMode") === "1";
   const workoutMode = searchParams.get("workoutMode") === "1" || searchParams.get("start") === "1";
-  const { settings } = useSettings();
   const { routines, exercises, sessions, addSession, error } = useEasyWorkout();
   const [draftId] = useState(restoredDraft?.draftId || createLocalId());
   const [startedAt] = useState(restoredDraft?.startedAt || new Date().toISOString());
@@ -144,6 +151,7 @@ export function EasyWorkoutLogPage() {
   const [selectedRoutineId, setSelectedRoutineId] = useState(restoredDraft?.selectedRoutineId ?? routineId ?? "");
   const [performedOn, setPerformedOn] = useState(restoredDraft?.performedOn ?? localDateKey());
   const [durationMinutes, setDurationMinutes] = useState(restoredDraft?.durationMinutes ?? "");
+  const [draftWeightUnit] = useState<"lb" | "kg">(restoredDraft?.weightUnit ?? settings.easyWorkout.weightUnit);
   const [sessionNotes, setSessionNotes] = useState(restoredDraft?.sessionNotes ?? "");
   const [exerciseLogs, setExerciseLogs] = useState<WorkoutExerciseLogDraft[]>(
     restoredDraft?.exerciseLogs.length
@@ -229,14 +237,18 @@ export function EasyWorkoutLogPage() {
         const key = exercise.exerciseName.trim();
         if (!key) return;
 
-        const bestSetWeight = exercise.sets.reduce((best, set) => Math.max(best, set.weight), 0);
-        const bestSet = exercise.sets.find((set) => set.weight === bestSetWeight) || exercise.sets[0];
-        const exerciseVolume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
+        const kind = exercise.exerciseType || "weighted";
+        const validSets = exercise.sets.filter((set) => isValidWorkingSet(set, kind));
+        const sourceUnit = session.weightUnit || "lb";
+        const bestSetSourceWeight = validSets.reduce((best, set) => Math.max(best, set.weight), 0);
+        const bestSet = validSets.find((set) => set.weight === bestSetSourceWeight);
+        const bestSetWeight = convertWeight(bestSetSourceWeight, sourceUnit, draftWeightUnit);
+        const exerciseVolume = convertWeight(validSets.reduce((sum, set) => sum + set.reps * set.weight, 0), sourceUnit, draftWeightUnit);
         const current = accumulator[key];
 
         if (!current) {
           accumulator[key] = {
-            lastWeight: bestSet?.weight || 0,
+            lastWeight: convertWeight(bestSet?.weight || 0, sourceUnit, draftWeightUnit),
             lastReps: bestSet?.reps || 0,
             performedOn: session.performedOn,
             bestWeight: bestSetWeight,
@@ -258,7 +270,7 @@ export function EasyWorkoutLogPage() {
     });
 
     return accumulator;
-  }, [sessions]);
+  }, [draftWeightUnit, sessions]);
 
   const nextExerciseSuggestions = useMemo<WorkoutExerciseSuggestion[]>(() => {
     const currentNames = new Set(
@@ -308,7 +320,7 @@ export function EasyWorkoutLogPage() {
             : "Good general slot if you need one more lift.",
           detail: exerciseSuggestionDetails[exercise.name] || `Use this when ${exercise.muscleGroup || "this area"} still needs controlled volume.`,
           target: previous?.lastWeight
-            ? `Try ${previous.lastWeight} lbs x ${previous.lastReps || 8}, then adjust by feel.`
+            ? `Try ${previous.lastWeight.toFixed(1)} ${draftWeightUnit} x ${previous.lastReps || 8}, then adjust by feel.`
             : "Start with a clean warm-up weight and log what moved well.",
         };
       });
@@ -345,6 +357,8 @@ export function EasyWorkoutLogPage() {
     if (typeof window === "undefined") return;
     const draft: StoredWorkoutDraft = {
       schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
+      ownerId,
+      weightUnit: draftWeightUnit,
       draftId,
       selectedRoutineId,
       routineOriginId: restoredDraft?.routineOriginId || selectedRoutineId || null,
@@ -358,16 +372,14 @@ export function EasyWorkoutLogPage() {
       updatedAt: new Date().toISOString(),
     };
     if (!hasWorkoutDraftWork(draft)) {
-      window.localStorage.removeItem(WORKOUT_DRAFT_STORAGE_KEY);
-      window.localStorage.removeItem(LEGACY_WORKOUT_DRAFT_STORAGE_KEY);
+      window.localStorage.removeItem(draftStorageKey);
       return;
     }
     setDraftStatus("saving-local");
     const saveTimer = window.setTimeout(() => {
       if (skipDraftFlushRef.current) return;
       try {
-        window.localStorage.setItem(WORKOUT_DRAFT_STORAGE_KEY, JSON.stringify(draft));
-        window.localStorage.removeItem(LEGACY_WORKOUT_DRAFT_STORAGE_KEY);
+        window.localStorage.setItem(draftStorageKey, JSON.stringify(draft));
         setDraftStatus("saved-local");
       } catch {
         setDraftStatus("sync-failed-draft-retained");
@@ -378,12 +390,12 @@ export function EasyWorkoutLogPage() {
       window.clearTimeout(saveTimer);
       if (skipDraftFlushRef.current) return;
       try {
-        window.localStorage.setItem(WORKOUT_DRAFT_STORAGE_KEY, JSON.stringify({ ...draft, updatedAt: new Date().toISOString() }));
+        window.localStorage.setItem(draftStorageKey, JSON.stringify({ ...draft, updatedAt: new Date().toISOString() }));
       } catch {
         // The visible status from the mounted page already explains local storage failures.
       }
     };
-  }, [activeExerciseId, draftId, durationMinutes, elapsedSeconds, exerciseLogs, performedOn, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
+  }, [activeExerciseId, draftId, draftStorageKey, draftWeightUnit, durationMinutes, elapsedSeconds, exerciseLogs, ownerId, performedOn, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
 
   function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogDraft>) {
     setExerciseLogs((current) =>
@@ -593,13 +605,18 @@ export function EasyWorkoutLogPage() {
         exerciseType: exercise.exerciseType,
         notes: exercise.notes,
         sets: exercise.sets
-          .filter((set) => !set.deleted && set.completed && (set.reps > 0 || set.weight > 0 || (set.durationSeconds || 0) > 0 || (set.distanceMeters || 0) > 0))
+          .filter((set) => isValidWorkingSet(set, exercise.exerciseType))
           .map(({ localId: _localId, ...set }) => set),
       }))
       .filter((exercise) => exercise.sets.length);
 
     if (!cleanedExercises.length) {
-      setSaveMessage("Add at least one exercise with one logged set first.");
+      setSaveMessage("Add at least one exercise with a complete working set first. Weighted sets need reps and a positive load.");
+      return;
+    }
+
+    if (!isValidLocalDateKey(performedOn)) {
+      setSaveMessage("Choose a valid local workout date before saving.");
       return;
     }
 
@@ -619,13 +636,15 @@ export function EasyWorkoutLogPage() {
         routineId: selectedRoutine?.id || null,
         routineName: selectedRoutine?.name || "Workout",
         performedOn,
+        weightUnit: draftWeightUnit,
         durationMinutes: durationMinutes ? Number(durationMinutes) : Math.max(1, Math.round(elapsedSeconds / 60)),
         notes: sessionNotes.trim(),
         exercises: cleanedExercises,
       }));
       if (!sessionId) throw new Error("Workout persistence did not confirm a session id.");
 
-      const rawStored = window.localStorage.getItem(WORKOUT_DRAFT_STORAGE_KEY);
+      skipDraftFlushRef.current = true;
+      const rawStored = window.localStorage.getItem(draftStorageKey);
       let storedDraftId: string | null = null;
       try {
         storedDraftId = rawStored ? String((JSON.parse(rawStored) as { draftId?: string }).draftId || "") : null;
@@ -633,13 +652,11 @@ export function EasyWorkoutLogPage() {
         storedDraftId = null;
       }
       if (canClearMatchingWorkoutDraft(storedDraftId, draftId)) {
-        skipDraftFlushRef.current = true;
-        window.localStorage.removeItem(WORKOUT_DRAFT_STORAGE_KEY);
-        window.localStorage.removeItem(LEGACY_WORKOUT_DRAFT_STORAGE_KEY);
+        window.localStorage.removeItem(draftStorageKey);
       }
       setDraftStatus("synced");
       setSaveMessage("Workout saved.");
-      navigate(`/app/easyworkout/session/${encodeURIComponent(sessionId)}`);
+      navigate({ pathname: `/app/easyworkout/session/${encodeURIComponent(sessionId)}`, search: isDemoMode ? "?demo=1" : "" });
     } catch {
       setDraftStatus("sync-failed-draft-retained");
       setSaveMessage("Couldn't sync—draft retained. Retry when the connection is ready.");
@@ -823,7 +840,7 @@ export function EasyWorkoutLogPage() {
                     <strong>{exercise.exerciseName || "Empty lift"}</strong>
                     <small>
                       {loggedSetCount ? `${loggedSetCount} set${loggedSetCount === 1 ? "" : "s"}` : "No sets yet"}
-                      {lastLoggedSet ? ` - ${lastLoggedSet.weight || 0} lbs x ${lastLoggedSet.reps || 0}` : ""}
+                      {lastLoggedSet ? ` - ${lastLoggedSet.weight || 0} ${draftWeightUnit} x ${lastLoggedSet.reps || 0}` : ""}
                     </small>
                   </button>
                 </article>
@@ -837,13 +854,13 @@ export function EasyWorkoutLogPage() {
                   {!isFocusedWorkoutMode ? <h2>{exercise.exerciseName || "Lift"}</h2> : null}
                   {!isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper ? <p>
                     {previous
-                      ? `Last time: ${previous.lastWeight} lbs x ${previous.lastReps} on ${previous.performedOn}`
+                      ? `Last time: ${previous.lastWeight.toFixed(1)} ${draftWeightUnit} x ${previous.lastReps} on ${previous.performedOn}`
                       : "No logged history yet for this exercise."}
                   </p> : null}
                 </div>
                 {isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper && previous ? (
                   <div className="calendar-info-card gym-suggestion">
-                    <strong>{previous.lastWeight} lbs x {previous.lastReps} last time</strong>
+                    <strong>{previous.lastWeight.toFixed(1)} {draftWeightUnit} x {previous.lastReps} last time</strong>
                     <button type="button" className="primary-button compact-button" onClick={() => fillFromLastTime(exerciseIndex)}>
                       Fill first set
                     </button>
@@ -852,8 +869,8 @@ export function EasyWorkoutLogPage() {
                 {previous ? (
                   <div className="workout-history-strip">
                     <span>{previous.sessionCount} session{previous.sessionCount === 1 ? "" : "s"}</span>
-                    <span>{previous.bestWeight} lbs best</span>
-                    <span>{previous.bestVolume.toLocaleString()} volume</span>
+                    <span>{previous.bestWeight.toFixed(1)} {draftWeightUnit} best</span>
+                    <span>{previous.bestVolume.toLocaleString()} {draftWeightUnit}·reps</span>
                   </div>
                 ) : null}
 
@@ -920,7 +937,7 @@ export function EasyWorkoutLogPage() {
                           />
                         </label>
                         <label className="field-stack task-row-field">
-                          <span>Weight</span>
+                          <span>Weight ({draftWeightUnit})</span>
                           <input
                             type="text"
                             inputMode="decimal"

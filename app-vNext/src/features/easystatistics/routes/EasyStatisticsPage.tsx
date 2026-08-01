@@ -27,61 +27,6 @@ function isOnOrAfterDateKey(dateKey: string, threshold: Date) {
   return new Date(`${dateKey}T00:00:00`) >= threshold;
 }
 
-function getWorkoutVolume(session: WorkoutSessionRecord) {
-  return session.exercises.reduce(
-    (sessionTotal, exercise) =>
-      sessionTotal + exercise.sets.reduce((setTotal, set) => setTotal + set.reps * set.weight, 0),
-    0
-  );
-}
-
-function getEstimatedMax(weight: number, reps: number) {
-  if (weight <= 0 || reps <= 0) return 0;
-  if (reps === 1) return weight;
-  return Math.round(weight * (36 / Math.max(37 - reps, 1)));
-}
-
-function summarizeMuscleGroups(sessions: WorkoutSessionRecord[], weekStart: Date) {
-  const weekKey = weekStart.toISOString().split("T")[0];
-  const summary = new Map<
-    string,
-    {
-      name: string;
-      setCount: number;
-      totalVolume: number;
-      weeklyVolume: number;
-      frequency: number;
-      lastPerformedOn: string;
-    }
-  >();
-
-  sessions.forEach((session) => {
-    session.exercises.forEach((exercise) => {
-      const name = exercise.muscleGroup || "Other";
-      const current = summary.get(name);
-      const setCount = exercise.sets.length;
-      const volume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
-      const isThisWeek = !!session.performedOn && session.performedOn >= weekKey;
-
-      summary.set(name, {
-        name,
-        setCount: (current?.setCount || 0) + setCount,
-        totalVolume: (current?.totalVolume || 0) + volume,
-        weeklyVolume: (current?.weeklyVolume || 0) + (isThisWeek ? volume : 0),
-        frequency: (current?.frequency || 0) + 1,
-        lastPerformedOn:
-          !current?.lastPerformedOn || current.lastPerformedOn < session.performedOn
-            ? session.performedOn
-            : current.lastPerformedOn,
-      });
-    });
-  });
-
-  return [...summary.values()].sort(
-    (left, right) => right.weeklyVolume - left.weeklyVolume || right.frequency - left.frequency
-  );
-}
-
 function formatHours(minutes: number) {
   if (minutes < 60) return `${minutes} min`;
   const hours = minutes / 60;
@@ -108,6 +53,13 @@ export function EasyStatisticsPage() {
   const today = startOfDay(new Date());
   const weekStart = startOfWeek(today);
   const monthStart = startOfMonth(today);
+
+  useEffect(() => {
+    const requestedTab = searchParams.get("tab");
+    setActiveTab(["workout", "list", "pipeline", "projects", "notes"].includes(requestedTab || "")
+      ? requestedTab as "workout" | "list" | "pipeline" | "projects" | "notes"
+      : "overview");
+  }, [searchParams]);
 
   useEffect(() => {
     if (!user || isDemoMode) {
@@ -159,36 +111,6 @@ export function EasyStatisticsPage() {
     }, 0);
     const workoutsThisWeek = workoutSessions.filter((session) => isOnOrAfterDateKey(session.performedOn, weekStart));
     const workoutsThisMonth = workoutSessions.filter((session) => isOnOrAfterDateKey(session.performedOn, monthStart));
-    const workoutVolume = workoutsThisWeek.reduce((sum, session) => sum + getWorkoutVolume(session), 0);
-    const allTimeWorkoutVolume = workoutSessions.reduce((sum, session) => sum + getWorkoutVolume(session), 0);
-    const exerciseCount = workoutsThisWeek.reduce((sum, session) => sum + session.exercises.length, 0);
-    const exerciseVolume = new Map<string, number>();
-    const exerciseStrength = new Map<string, { estimatedMax: number; weight: number; reps: number }>();
-    const muscleGroups = summarizeMuscleGroups(workoutSessions, weekStart);
-
-    workoutSessions.forEach((session) => {
-      session.exercises.forEach((exercise) => {
-        const volume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
-        const exerciseName = exercise.exerciseName || "Untitled exercise";
-        exerciseVolume.set(exerciseName, (exerciseVolume.get(exerciseName) || 0) + volume);
-        exercise.sets.forEach((set) => {
-          const nextEstimatedMax = getEstimatedMax(set.weight, set.reps);
-          const current = exerciseStrength.get(exerciseName);
-          if (!current || nextEstimatedMax > current.estimatedMax) {
-            exerciseStrength.set(exerciseName, {
-              estimatedMax: nextEstimatedMax,
-              weight: set.weight,
-              reps: set.reps,
-            });
-          }
-        });
-      });
-    });
-
-    const topExercise = [...exerciseVolume.entries()].sort((left, right) => right[1] - left[1])[0] || null;
-    const prHighlights = [...exerciseStrength.entries()]
-      .sort((left, right) => right[1].estimatedMax - left[1].estimatedMax)
-      .slice(0, 3);
     const completionRate = Math.round((completedTasks.length / Math.max(completedTasks.length + activeTasks.length, 1)) * 100);
     const nextTask = [...activeTasks]
       .filter((task) => task.dueDate)
@@ -209,12 +131,6 @@ export function EasyStatisticsPage() {
     const notesCreatedThisMonth = liveNotes.filter((note) => note.createdAt && note.createdAt >= monthStart);
     const wordCount = getWordCount(liveNotes);
     const pinnedNotes = liveNotes.filter((note) => note.pinned).length;
-    const topMuscleGroup = muscleGroups[0] || null;
-    const muscleGroupsThisWeek = muscleGroups.filter((group) => group.weeklyVolume > 0).length;
-    const muscleRecoveryCandidate = [...muscleGroups]
-      .filter((group) => group.weeklyVolume === 0)
-      .sort((left, right) => left.lastPerformedOn.localeCompare(right.lastPerformedOn))[0] || null;
-    const consistencyScore = Math.min(100, Math.round((workoutsThisWeek.length / 4) * 100));
 
     return {
       activeTasks,
@@ -229,16 +145,7 @@ export function EasyStatisticsPage() {
       plannedMinutes,
       workoutsThisWeek,
       workoutsThisMonth,
-      workoutVolume,
-      allTimeWorkoutVolume,
-      exerciseCount,
-      topExercise,
-      prHighlights,
-      muscleGroups,
-      topMuscleGroup,
-      muscleGroupsThisWeek,
-      muscleRecoveryCandidate,
-      consistencyScore,
+      workoutSessionCount: workoutSessions.length,
       completionRate,
       nextTask,
       activeApplications,
@@ -272,7 +179,7 @@ export function EasyStatisticsPage() {
     stats.completedProjectTasks;
   const milestones = [
     `${tasks.length} task${tasks.length === 1 ? "" : "s"} created`,
-    `${stats.allTimeWorkoutVolume.toLocaleString()} total workout volume`,
+    `${stats.workoutSessionCount} workout session${stats.workoutSessionCount === 1 ? "" : "s"} logged`,
     `${applications.length} application${applications.length === 1 ? "" : "s"} tracked`,
     `${stats.wordCount.toLocaleString()} note word${stats.wordCount === 1 ? "" : "s"}`,
   ];
@@ -304,8 +211,8 @@ export function EasyStatisticsPage() {
             <strong>{formatHours(stats.plannedMinutes)}</strong>
           </article>
           <article>
-            <span>Workout volume</span>
-            <strong>{stats.workoutVolume.toLocaleString()}</strong>
+            <span>Workouts this week</span>
+            <strong>{stats.workoutsThisWeek.length}</strong>
           </article>
         </div>
       </PageSection>
@@ -324,7 +231,7 @@ export function EasyStatisticsPage() {
         <article className="statistics-insight-card">
           <span>Training pulse</span>
           <strong>{stats.workoutsThisMonth.length} this month</strong>
-          <p>{stats.topExercise ? `${stats.topExercise[0]} leads with ${stats.topExercise[1].toLocaleString()} volume.` : "Log a workout to unlock exercise highlights."}</p>
+          <p>{stats.workoutSessionCount ? `${stats.workoutSessionCount} total sessions logged. Open Workout for unit-aware records and matched periods.` : "Log a workout to unlock exercise highlights."}</p>
         </article>
       </div>
 
@@ -344,7 +251,10 @@ export function EasyStatisticsPage() {
             className={activeTab === tab.id ? "active" : undefined}
             onClick={() => {
               setActiveTab(tab.id);
-              setSearchParams(tab.id === "overview" ? {} : { tab: tab.id }, { replace: true });
+              const nextParams = new URLSearchParams(searchParams);
+              if (tab.id === "overview") nextParams.delete("tab");
+              else nextParams.set("tab", tab.id);
+              setSearchParams(nextParams, { replace: true });
             }}
           >
             {tab.label}
@@ -378,9 +288,9 @@ export function EasyStatisticsPage() {
           <PageSection eyebrow="Workout" title="Training">
             <div className="statistics-progress-list">
               <div><span>Sessions this week</span><strong>{stats.workoutsThisWeek.length}</strong></div>
-              <div><span>Top muscle</span><strong>{stats.topMuscleGroup?.name || "No signal yet"}</strong></div>
-              <div><span>Groups active</span><strong>{stats.muscleGroupsThisWeek}</strong></div>
-              <div><span>All-time volume</span><strong>{stats.allTimeWorkoutVolume.toLocaleString()}</strong></div>
+              <div><span>Sessions this month</span><strong>{stats.workoutsThisMonth.length}</strong></div>
+              <div><span>Total sessions</span><strong>{stats.workoutSessionCount}</strong></div>
+              <div><span>Detailed metrics</span><strong>Workout tab</strong></div>
             </div>
             <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open Workout</Link>
           </PageSection>
@@ -419,7 +329,7 @@ export function EasyStatisticsPage() {
 
       {activeTab === "workout" ? <WorkoutInsightsPanel sessions={workoutSessions} isLoading={isLoading} error={statsError} /> : null}
 
-      {false && activeTab === "workout" ? (
+      {/* Retained only as historical markup; the canonical, unit-aware WorkoutInsightsPanel above is the sole rendered workout statistics surface.
         <div className="statistics-tab-panel">
           <PageSection eyebrow="Workout" title="Training progress" description="The deeper read on your lifting rhythm, coverage, and momentum.">
             <div className="statistics-hero-strip">
@@ -567,7 +477,7 @@ export function EasyStatisticsPage() {
             <Link to="/app/easylist/dashboard" className="button-secondary compact-button">Open Inbox</Link>
           </PageSection>
         </div>
-      ) : null}
+      */}
 
       {activeTab === "pipeline" ? (
         <div className="statistics-tab-panel">

@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { WorkoutSaveCoordinator, canClearMatchingWorkoutDraft, recoverWorkoutDraft } from "../src/features/easyworkout/domain/workoutDraftLifecycle.ts";
+import { WorkoutSaveCoordinator, canClearMatchingWorkoutDraft, getWorkoutDraftStorageKey, hasWorkoutDraftWork, recoverWorkoutDraft } from "../src/features/easyworkout/domain/workoutDraftLifecycle.ts";
+import { workoutSessionDocumentId } from "../src/lib/firestore/workoutSessionIdentity.ts";
 
-const options = { today: "2026-08-01", nowIso: "2026-08-01T12:00:00.000Z", createId: (() => { let id = 0; return () => `id-${++id}`; })() };
+const options = { today: "2026-08-01", nowIso: "2026-08-01T12:00:00.000Z", ownerId: "user-a", defaultWeightUnit: "lb", createId: (() => { let id = 0; return () => `generated-id-${++id}`; })() };
 const legacy = { selectedRoutineId: "routine-a", performedOn: "2026-07-31", durationMinutes: "52", sessionNotes: "Exact note", activeExerciseId: "exercise-local", exerciseLogs: [{ localId: "exercise-local", exerciseId: "bench", exerciseName: "Bench Press", muscleGroup: "Chest", notes: "Paused", sets: [{ localId: "set-local", reps: 5, weight: 185, notes: "clean" }] }] };
 
 test("legacy draft migrates without losing routine, active exercise, notes, duration, or sets", () => {
@@ -20,6 +21,24 @@ test("malformed and old drafts fail safely with readable recovery", () => {
   assert.equal(recoverWorkoutDraft("bad", options).draft, null);
   assert.match(recoverWorkoutDraft("bad", options).message, /unreadable/i);
   assert.equal(recoverWorkoutDraft({ exerciseLogs: [] }, options).draft, null);
+});
+
+test("draft storage and recovery are isolated by authenticated owner", () => {
+  assert.notEqual(getWorkoutDraftStorageKey("user-a"), getWorkoutDraftStorageKey("user-b"));
+  const owned = { ...legacy, ownerId: "user-b" };
+  const result = recoverWorkoutDraft(owned, options);
+  assert.equal(result.draft, null);
+  assert.match(result.message, /different account/i);
+});
+
+test("default blank weighted boxes are not persisted as active work", () => {
+  assert.equal(hasWorkoutDraftWork({ selectedRoutineId: "", durationMinutes: "", sessionNotes: "", exerciseLogs: [{ localId: "exercise", exerciseId: null, exerciseName: "", muscleGroup: "", primaryMuscles: [], secondaryMuscles: [], exerciseType: "weighted", notes: "", sets: [{ localId: "set", reps: 8, weight: 0, notes: "", setType: "standard", completed: true, deleted: false, rir: null }] }] }), false);
+});
+
+test("Firestore idempotency accepts only collision-safe draft identities", () => {
+  assert.equal(workoutSessionDocumentId("550e8400-e29b-41d4-a716-446655440000"), "550e8400-e29b-41d4-a716-446655440000");
+  assert.throws(() => workoutSessionDocumentId("../shared"), /identity is invalid/i);
+  assert.throws(() => workoutSessionDocumentId("short"), /identity is invalid/i);
 });
 
 test("only the matching confirmed draft can be cleared", () => {

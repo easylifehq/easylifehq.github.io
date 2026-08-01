@@ -5,6 +5,7 @@ import {
   deriveWorkoutStatistics,
   estimateOneRepMax,
   isValidWorkingSet,
+  isValidLocalDateKey,
   shiftDateKey,
   weightedSetVolume,
 } from "../src/features/easyworkout/domain/workoutStatistics.ts";
@@ -50,6 +51,15 @@ test("unit conversion round trips within tolerance", () => {
   assert.ok(Math.abs(convertWeight(kg, "kg", "lb") - 225) < 1e-8);
 });
 
+test("mixed stored units convert values and workload before display", () => {
+  const stats = deriveWorkoutStatistics([
+    session("lb", "2026-08-01", [{ reps: 5, weight: 220.46226218 }], { weightUnit: "lb" }),
+    session("kg", "2026-07-31", [{ reps: 5, weight: 100 }], { weightUnit: "kg" }),
+  ], { nowDateKey: "2026-08-01", displayUnit: "kg" });
+  assert.ok(Math.abs(stats.pulse.workload.current - 1000) < 1e-6);
+  assert.ok(stats.exerciseSummaries[0].observations.every((item) => Math.abs(item.sourceWeight - 100) < 1e-6));
+});
+
 test("matched periods use equal inclusive calendar windows", () => {
   const stats = deriveWorkoutStatistics([
     session("current", "2026-08-01", [{ reps: 5, weight: 100 }]),
@@ -58,6 +68,22 @@ test("matched periods use equal inclusive calendar windows", () => {
   assert.deepEqual(stats.period, { days: 7, currentStart: "2026-07-26", currentEnd: "2026-08-01", previousStart: "2026-07-19", previousEnd: "2026-07-25" });
   assert.equal(stats.pulse.sessions.delta, 0);
   assert.equal(stats.pulse.sessions.percentDelta, 0);
+});
+
+test("weekly consistency uses Sunday-start calendar weeks including partial edges", () => {
+  const stats = deriveWorkoutStatistics([
+    session("first", "2026-07-09", [{ reps: 5, weight: 100 }]),
+    session("last", "2026-08-05", [{ reps: 5, weight: 100 }]),
+  ], { nowDateKey: "2026-08-05", periodDays: 28 });
+  assert.deepEqual(stats.weeklyConsistency.map((week) => week.weekStart), ["2026-07-05", "2026-07-12", "2026-07-19", "2026-07-26", "2026-08-02"]);
+  assert.deepEqual(stats.weeklyConsistency.map((week) => week.sessions), [1, 0, 0, 0, 1]);
+});
+
+test("invalid calendar dates are excluded instead of rolling into a window", () => {
+  assert.equal(isValidLocalDateKey("2026-02-29"), false);
+  assert.equal(isValidLocalDateKey("2024-02-29"), true);
+  const stats = deriveWorkoutStatistics([session("invalid", "2026-02-31", [{ reps: 5, weight: 100 }])], { nowDateKey: "2026-03-01" });
+  assert.equal(stats.pulse.sessions.current, 0);
 });
 
 test("zero prior denominator suppresses percentages", () => {
@@ -93,6 +119,28 @@ test("four comparable plateau exposures are not overconfident", () => {
   const summary = deriveWorkoutStatistics(sessions, { nowDateKey: "2026-08-01", periodDays: 28 }).exerciseSummaries[0];
   assert.equal(summary.trend, "plateau");
   assert.equal(summary.trendConfidence, "low");
+});
+
+test("duplicate exercise blocks in one workout produce one trend observation", () => {
+  const duplicate = session("one", "2026-08-01", [{ reps: 5, weight: 100 }], {
+    exercises: [
+      { exerciseId: "bench", exerciseName: "Bench Press", exerciseType: "weighted", sets: [{ reps: 5, weight: 100 }] },
+      { exerciseId: "bench", exerciseName: "Bench Press", exerciseType: "weighted", sets: [{ reps: 3, weight: 110 }] },
+    ],
+  });
+  const summary = deriveWorkoutStatistics([duplicate], { nowDateKey: "2026-08-01" }).exerciseSummaries[0];
+  assert.equal(summary.sessionCount, 1);
+  assert.equal(summary.observations.length, 1);
+  assert.equal(summary.trendConfidence, "insufficient");
+});
+
+test("a muscle listed as both primary and secondary is counted once", () => {
+  const duplicateMapping = session("one", "2026-08-01", [{ reps: 5, weight: 100 }], {
+    exercises: [{ exerciseId: "bench", exerciseName: "Bench Press", primaryMuscles: ["Chest", "Chest"], secondaryMuscles: ["chest", "Triceps", "Triceps"], exerciseType: "weighted", sets: [{ reps: 5, weight: 100 }] }],
+  });
+  const exposure = deriveWorkoutStatistics([duplicateMapping], { nowDateKey: "2026-08-01" }).muscleExposure;
+  assert.equal(exposure.find((item) => item.muscle === "Chest")?.estimatedExposure, 1);
+  assert.equal(exposure.find((item) => item.muscle === "Triceps")?.estimatedExposure, 0.5);
 });
 
 test("empty and malformed histories never emit NaN or infinity", () => {

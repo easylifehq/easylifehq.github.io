@@ -1,8 +1,9 @@
 import { Link, useParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
-import { deriveWorkoutStatistics, isValidWorkingSet, weightedSetVolume } from "@/features/easyworkout/domain/workoutStatistics";
+import { convertWeight, deriveWorkoutStatistics, isValidWorkingSet, weightedSetVolume } from "@/features/easyworkout/domain/workoutStatistics";
 import { useSettings } from "@/features/settings/SettingsContext";
+import { useAuth } from "@/features/auth/AuthContext";
 
 const today = () => {
   const date = new Date();
@@ -13,6 +14,9 @@ export function WorkoutSessionReviewPage() {
   const { sessionId = "" } = useParams();
   const { sessions } = useEasyWorkout();
   const { settings } = useSettings();
+  const { isDemoMode } = useAuth();
+  const demoSearch = isDemoMode ? "&demo=1" : "";
+  const demoOnlySearch = isDemoMode ? "?demo=1" : "";
   const session = sessions.find((item) => item.id === decodeURIComponent(sessionId));
   if (!session) return <PageSection headingLevel={1} eyebrow="Workout review" title="Workout not found" description="The source session is unavailable in this data state."><Link className="button-secondary" to="/app/easyworkout/dashboard">Workout dashboard</Link></PageSection>;
 
@@ -22,12 +26,16 @@ export function WorkoutSessionReviewPage() {
   const muscles = new Set<string>();
   session.exercises.forEach((exercise) => {
     const kind = exercise.exerciseType || "weighted";
+    let exerciseWorkingSets = 0;
     exercise.sets.forEach((set) => {
       if (!isValidWorkingSet(set, kind)) return;
       workingSets += 1;
-      workload += weightedSetVolume(set, kind);
+      exerciseWorkingSets += 1;
+      workload += convertWeight(weightedSetVolume(set, kind), session.weightUnit || "lb", settings.easyWorkout.weightUnit);
     });
-    (exercise.primaryMuscles?.length ? exercise.primaryMuscles : exercise.muscleGroup ? [exercise.muscleGroup] : []).forEach((muscle) => muscles.add(muscle));
+    if (exerciseWorkingSets) {
+      (exercise.primaryMuscles?.length ? exercise.primaryMuscles : exercise.muscleGroup ? [exercise.muscleGroup] : []).forEach((muscle) => muscles.add(muscle));
+    }
   });
   const records = stats.exerciseSummaries.flatMap((summary) => summary.records.map((record) => ({ summary, record }))).filter(({ record }) => record.sourceWorkoutId === session.id);
   const comparable = stats.exerciseSummaries.find((summary) => session.exercises.some((exercise) => (exercise.exerciseId && exercise.exerciseId === summary.exerciseId) || exercise.exerciseName === summary.exerciseName));
@@ -47,7 +55,7 @@ export function WorkoutSessionReviewPage() {
       <div className="statistics-app-grid">
         {records.length ? records.map(({ summary, record }) => <article className="statistics-insight-card" key={`${summary.exerciseKey}-${record.type}-${record.label}`}><span>{summary.exerciseName}</span><strong>{record.label}</strong><p>{record.value.toFixed(record.unit === "reps" ? 0 : 1)} {record.unit} · exact source is this workout</p></article>) : <p className="empty-card-vnext">No new all-history record in this session. Comparable workload still counts toward the trend.</p>}
       </div>
-      <div className="task-composer-actions"><Link className="primary-button" to="/app/easystatistics?tab=workout">Open Workout progress</Link><Link className="button-secondary" to="/app/easyworkout/dashboard">Workout dashboard</Link></div>
+      <div className="task-composer-actions"><Link className="primary-button" to={`/app/easystatistics?tab=workout${demoSearch}`}>Open Workout progress</Link><Link className="button-secondary" to={`/app/easyworkout/dashboard${demoOnlySearch}`}>Workout dashboard</Link></div>
     </PageSection>
   );
 }

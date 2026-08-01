@@ -25,6 +25,8 @@ type WorkoutInsightsPanelProps = {
 
 export function WorkoutInsightsPanel({ sessions, isLoading = false, error = "" }: WorkoutInsightsPanelProps) {
   const { isDemoMode } = useAuth();
+  const demoSearch = isDemoMode ? "&demo=1" : "";
+  const demoOnlySearch = isDemoMode ? "?demo=1" : "";
   const { settings } = useSettings();
   const [periodDays, setPeriodDays] = useState<7 | 28 | 90>(28);
   const [exerciseQuery, setExerciseQuery] = useState("");
@@ -58,7 +60,7 @@ export function WorkoutInsightsPanel({ sessions, isLoading = false, error = "" }
           <div className="empty-card-vnext">
             <strong>Not enough data yet</strong>
             <p>Log one workout to start a pulse. Four comparable exercise exposures unlock a cautious trend.</p>
-            <Link className="primary-button compact-button" to="/app/easyworkout/log?workoutMode=1">Start workout</Link>
+            <Link className="primary-button compact-button" to={`/app/easyworkout/log?workoutMode=1${demoSearch}`}>Start workout</Link>
           </div>
         ) : (
           <div className="statistics-hero-strip" aria-label="Training pulse summary">
@@ -76,7 +78,7 @@ export function WorkoutInsightsPanel({ sessions, isLoading = false, error = "" }
           <span>Confidence: {stats.insight.confidence}</span>
           <span>Formula: {stats.formulaVersion}</span>
         </div>
-        {stats.insight.sourceWorkoutIds[0] ? <Link className="button-secondary compact-button" to={`/app/easyworkout/session/${encodeURIComponent(stats.insight.sourceWorkoutIds[0])}`}>Open source workout</Link> : null}
+        {stats.insight.sourceWorkoutIds[0] ? <Link className="button-secondary compact-button" to={`/app/easyworkout/session/${encodeURIComponent(stats.insight.sourceWorkoutIds[0])}${demoOnlySearch}`}>Open source workout</Link> : null}
       </PageSection>
 
       <div className="dashboard-grid">
@@ -106,13 +108,13 @@ export function WorkoutInsightsPanel({ sessions, isLoading = false, error = "" }
           <div className="workout-exercise-detail">
             <div className="statistics-insight-grid">
               <article className="statistics-insight-card"><span>Trend</span><strong>{selectedExercise.trend}</strong><p>{selectedExercise.sessionCount} comparable sessions · {selectedExercise.trendConfidence} confidence</p></article>
-              {selectedExercise.records.slice(0, 5).map((record) => <article className="statistics-insight-card" key={`${record.type}-${record.label}`}><span>{record.label}</span><strong>{record.value.toFixed(record.unit === "reps" ? 0 : 1)} {record.unit}</strong><p>{record.performedOn} · <Link to={`/app/easyworkout/session/${encodeURIComponent(record.sourceWorkoutId)}`}>source</Link></p></article>)}
+              {selectedExercise.records.slice(0, 5).map((record) => <article className="statistics-insight-card" key={`${record.type}-${record.label}`}><span>{record.label}</span><strong>{record.value.toFixed(record.unit === "reps" ? 0 : 1)} {record.unit}</strong><p>{record.performedOn} · <Link to={`/app/easyworkout/session/${encodeURIComponent(record.sourceWorkoutId)}${demoOnlySearch}`}>source</Link></p></article>)}
             </div>
             <div className="workout-chart-alternative" aria-label={`${selectedExercise.exerciseName} estimated one-repetition maximum history`}>
               <h3>{selectedExercise.exerciseName} estimated 1RM history</h3>
-              <ol>{selectedExercise.observations.slice(-10).map((point) => <li key={`${point.sessionId}-${point.performedOn}`}><Link to={`/app/easyworkout/session/${encodeURIComponent(point.sessionId)}`}>{point.performedOn}</Link>: {point.estimatedOneRepMax.toFixed(1)} {settings.easyWorkout.weightUnit}, {point.confidence} confidence from {point.sourceWeight} × {point.sourceReps}</li>)}</ol>
+              <ol>{selectedExercise.observations.slice(-10).map((point) => <li key={`${point.sessionId}-${point.performedOn}`}><Link to={`/app/easyworkout/session/${encodeURIComponent(point.sessionId)}${demoOnlySearch}`}>{point.performedOn}</Link>: {point.estimatedOneRepMax.toFixed(1)} {settings.easyWorkout.weightUnit}, {point.confidence} confidence from {point.sourceWeight.toFixed(1)} {settings.easyWorkout.weightUnit} × {point.sourceReps}</li>)}</ol>
             </div>
-            <Link className="button-secondary compact-button" to={`/app/easyworkout/exercise/${encodeURIComponent(selectedExercise.exerciseId || selectedExercise.exerciseName)}`}>Open full exercise detail</Link>
+            <Link className="button-secondary compact-button" to={`/app/easyworkout/exercise/${encodeURIComponent(selectedExercise.exerciseId || selectedExercise.exerciseName)}${demoOnlySearch}`}>Open full exercise detail</Link>
           </div>
         ) : <p className="empty-card-vnext">Log another comparable session to unlock exercise detail.</p>}
       </PageSection>

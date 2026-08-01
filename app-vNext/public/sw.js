@@ -33,7 +33,15 @@ self.addEventListener("fetch", (event) => {
 
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match("/"))
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse.ok) {
+            const responseCopy = networkResponse.clone();
+            event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put("/", responseCopy)));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match("/"))
     );
     return;
   }
@@ -45,8 +53,10 @@ self.addEventListener("fetch", (event) => {
       }
 
       return fetch(event.request).then((networkResponse) => {
-        const responseCopy = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseCopy));
+        if (networkResponse.ok) {
+          const responseCopy = networkResponse.clone();
+          event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseCopy)));
+        }
         return networkResponse;
       });
     })

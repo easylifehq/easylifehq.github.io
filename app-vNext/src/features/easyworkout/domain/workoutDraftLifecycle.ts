@@ -1,6 +1,10 @@
-export const WORKOUT_DRAFT_SCHEMA_VERSION = 2 as const;
-export const WORKOUT_DRAFT_STORAGE_KEY = "easylife.easyworkout.activeDraft.v2";
-export const LEGACY_WORKOUT_DRAFT_STORAGE_KEY = "easylife.easyworkout.activeDraft.v1";
+export const WORKOUT_DRAFT_SCHEMA_VERSION = 3 as const;
+export const UNSCOPED_WORKOUT_DRAFT_STORAGE_KEY = "easylife.easyworkout.activeDraft.v2";
+export const UNSCOPED_LEGACY_WORKOUT_DRAFT_STORAGE_KEY = "easylife.easyworkout.activeDraft.v1";
+
+export function getWorkoutDraftStorageKey(ownerId: string) {
+  return `easylife.easyworkout.activeDraft.v3:${encodeURIComponent(ownerId)}`;
+}
 
 export type WorkoutDraftLifecycleStatus =
   | "saving-local"
@@ -47,6 +51,8 @@ export type WorkoutExerciseLogDraft = {
 
 export type StoredWorkoutDraft = {
   schemaVersion: typeof WORKOUT_DRAFT_SCHEMA_VERSION;
+  ownerId: string;
+  weightUnit: "lb" | "kg";
   draftId: string;
   selectedRoutineId: string;
   routineOriginId: string | null;
@@ -118,7 +124,7 @@ function normalizeExercise(value: unknown, createId: () => string): WorkoutExerc
 
 export function recoverWorkoutDraft(
   value: unknown,
-  options: { today: string; nowIso: string; createId: () => string }
+  options: { today: string; nowIso: string; ownerId: string; defaultWeightUnit?: "lb" | "kg"; createId: () => string }
 ): WorkoutDraftRecovery {
   if (!isRecord(value)) {
     return { draft: null, message: "The saved workout draft was unreadable and was left aside safely.", migrated: false };
@@ -129,12 +135,18 @@ export function recoverWorkoutDraft(
   if (!exerciseLogs.length) {
     return { draft: null, message: "The saved workout draft did not contain a recoverable exercise.", migrated: false };
   }
+  if (typeof value.ownerId === "string" && value.ownerId !== options.ownerId) {
+    return { draft: null, message: "This workout draft belongs to a different account and was not opened.", migrated: false };
+  }
   const migrated = value.schemaVersion !== WORKOUT_DRAFT_SCHEMA_VERSION;
   const selectedRoutineId = text(value.selectedRoutineId);
+  const recoveredDraftId = text(value.draftId);
   return {
     draft: {
       schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
-      draftId: text(value.draftId) || options.createId(),
+      ownerId: options.ownerId,
+      weightUnit: value.weightUnit === "kg" || value.weightUnit === "lb" ? value.weightUnit : options.defaultWeightUnit || "lb",
+      draftId: /^[a-zA-Z0-9_-]{8,180}$/.test(recoveredDraftId) ? recoveredDraftId : options.createId(),
       selectedRoutineId,
       routineOriginId: typeof value.routineOriginId === "string" ? value.routineOriginId : selectedRoutineId || null,
       performedOn: text(value.performedOn) || options.today,
@@ -156,7 +168,14 @@ export function hasWorkoutDraftWork(draft: Pick<StoredWorkoutDraft, "selectedRou
     draft.selectedRoutineId || draft.durationMinutes || draft.sessionNotes.trim() ||
       draft.exerciseLogs.some((exercise) =>
         exercise.exerciseName.trim() || exercise.notes.trim() ||
-        exercise.sets.some((set) => !set.deleted && (set.reps > 0 || set.weight > 0 || set.notes.trim() || (set.rir ?? 0) > 0)))
+        exercise.sets.some((set) => !set.deleted && (
+          set.weight > 0 ||
+          set.notes.trim() ||
+          (set.rir ?? 0) > 0 ||
+          (set.durationSeconds ?? 0) > 0 ||
+          (set.distanceMeters ?? 0) > 0 ||
+          (exercise.exerciseType !== "weighted" && set.reps > 0)
+        )))
   );
 }
 

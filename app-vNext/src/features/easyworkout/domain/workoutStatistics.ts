@@ -30,6 +30,7 @@ export type AnalyticsExercise = {
 export type AnalyticsSession = {
   id: string;
   performedOn: string;
+  weightUnit?: WorkoutDisplayUnit;
   durationMinutes?: number | null;
   exercises?: AnalyticsExercise[];
 };
@@ -118,6 +119,12 @@ export function convertWeight(value: number, from: WorkoutDisplayUnit, to: Worko
 function dateKey(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
+export function isValidLocalDateKey(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const [year, month, day] = value.split("-").map(Number);
+  const date = new Date(year, month - 1, day, 12);
+  return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+}
 export function shiftDateKey(value: string, days: number) {
   const [year, month, day] = value.split("-").map(Number);
   const date = new Date(year, month - 1, day, 12);
@@ -160,26 +167,40 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
     const entries = group.entries.sort((a, b) => a.session.performedOn.localeCompare(b.session.performedOn));
     const observations: ExerciseObservation[] = [];
     const candidates: Array<{ type: ExerciseRecord["type"]; label: string; value: number; unit: string; sessionId: string; performedOn: string }> = [];
+    const entriesBySession = new Map<string, { session: AnalyticsSession; exercises: AnalyticsExercise[] }>();
     entries.forEach(({ session, exercise }) => {
-      const kind = getExerciseType(exercise);
-      const sets = validSets(exercise);
-      const weighted = kind === "weighted" ? sets : [];
+      const current = entriesBySession.get(session.id) || { session, exercises: [] };
+      current.exercises.push(exercise);
+      entriesBySession.set(session.id, current);
+    });
+    entriesBySession.forEach(({ session, exercises }) => {
+      const sourceUnit = session.weightUnit || "lb";
+      const weighted = exercises.flatMap((exercise) => getExerciseType(exercise) === "weighted" ? validSets(exercise) : []);
       const estimated = weighted.map((set) => ({ set, result: estimateOneRepMax(set.weight || 0, set.reps || 0) }))
         .filter((entry): entry is { set: AnalyticsSet; result: NonNullable<ReturnType<typeof estimateOneRepMax>> } => Boolean(entry.result))
         .sort((a, b) => b.result.value - a.result.value)[0];
-      const sessionVolume = weighted.reduce((sum, set) => sum + weightedSetVolume(set, kind), 0);
-      if (estimated) observations.push({ sessionId: session.id, performedOn: session.performedOn, estimatedOneRepMax: estimated.result.value, confidence: estimated.result.confidence, sourceReps: estimated.set.reps || 0, sourceWeight: estimated.set.weight || 0, sessionVolume });
+      const sessionVolume = convertWeight(weighted.reduce((sum, set) => sum + weightedSetVolume(set, "weighted"), 0), sourceUnit, unit);
+      if (estimated) observations.push({
+        sessionId: session.id,
+        performedOn: session.performedOn,
+        estimatedOneRepMax: convertWeight(estimated.result.value, sourceUnit, unit),
+        confidence: estimated.result.confidence,
+        sourceReps: estimated.set.reps || 0,
+        sourceWeight: convertWeight(estimated.set.weight || 0, sourceUnit, unit),
+        sessionVolume,
+      });
       weighted.forEach((set) => {
-        const weight = set.weight || 0;
+        const rawWeight = set.weight || 0;
+        const weight = convertWeight(rawWeight, sourceUnit, unit);
         const reps = set.reps || 0;
-        const e1rm = estimateOneRepMax(weight, reps);
+        const e1rm = estimateOneRepMax(rawWeight, reps);
         candidates.push(
           { type: "heaviest-weight", label: "Heaviest weight", value: weight, unit, sessionId: session.id, performedOn: session.performedOn },
           { type: "most-reps", label: "Most reps", value: reps, unit: "reps", sessionId: session.id, performedOn: session.performedOn },
           { type: "set-volume", label: "Best set workload", value: weight * reps, unit: `${unit}·reps`, sessionId: session.id, performedOn: session.performedOn },
           { type: "rep-record", label: `Best ${reps}-rep load`, value: weight, unit, sessionId: session.id, performedOn: session.performedOn }
         );
-        if (e1rm) candidates.push({ type: "estimated-1rm", label: "Best estimated 1RM", value: e1rm.value, unit, sessionId: session.id, performedOn: session.performedOn });
+        if (e1rm) candidates.push({ type: "estimated-1rm", label: "Best estimated 1RM", value: convertWeight(e1rm.value, sourceUnit, unit), unit, sessionId: session.id, performedOn: session.performedOn });
       });
       if (sessionVolume > 0) candidates.push({ type: "session-volume", label: "Best session workload", value: sessionVolume, unit: `${unit}·reps`, sessionId: session.id, performedOn: session.performedOn });
     });
@@ -201,7 +222,8 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
 }
 
 export function deriveWorkoutStatistics(sessionsInput: AnalyticsSession[], options: { nowDateKey: string; periodDays?: number; displayUnit?: WorkoutDisplayUnit; draftStatus?: string }): WorkoutStatistics {
-  const sessions = sessionsInput.filter((session) => /^\d{4}-\d{2}-\d{2}$/.test(session.performedOn) && session.performedOn <= options.nowDateKey);
+  const displayUnit = options.displayUnit || "lb";
+  const sessions = sessionsInput.filter((session) => isValidLocalDateKey(session.performedOn) && session.performedOn <= options.nowDateKey);
   const days = Math.max(1, Math.floor(options.periodDays || 28));
   const currentStart = shiftDateKey(options.nowDateKey, -(days - 1));
   const previousEnd = shiftDateKey(currentStart, -1);
@@ -215,7 +237,8 @@ export function deriveWorkoutStatistics(sessionsInput: AnalyticsSession[], optio
       (session.exercises || []).forEach((exercise) => {
         const sets = validSets(exercise);
         workingSets += sets.length;
-        workload += sets.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise)), 0);
+        const sourceWorkload = sets.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise)), 0);
+        workload += convertWeight(sourceWorkload, session.weightUnit || "lb", displayUnit);
       });
     });
     return { sessions: windowSessions.length, durationMinutes, workingSets, workload };
@@ -226,8 +249,9 @@ export function deriveWorkoutStatistics(sessionsInput: AnalyticsSession[], optio
   currentSessions.forEach((session) => (session.exercises || []).forEach((exercise) => {
     const count = validSets(exercise).length;
     if (!count) return;
-    const primary = exercise.primaryMuscles?.filter(Boolean).length ? exercise.primaryMuscles.filter(Boolean) : exercise.muscleGroup ? [exercise.muscleGroup] : [];
-    const secondary = exercise.secondaryMuscles?.filter(Boolean) || [];
+    const primary = [...new Set((exercise.primaryMuscles?.filter(Boolean).length ? exercise.primaryMuscles : exercise.muscleGroup ? [exercise.muscleGroup] : []).map((muscle) => muscle.trim()).filter(Boolean))];
+    const primaryKeys = new Set(primary.map((muscle) => muscle.toLowerCase()));
+    const secondary = [...new Set((exercise.secondaryMuscles || []).map((muscle) => muscle.trim()).filter((muscle) => muscle && !primaryKeys.has(muscle.toLowerCase())))];
     if (!primary.length && !secondary.length) unmappedWorkingSets += count;
     primary.forEach((muscle) => {
       const value = muscleMap.get(muscle) || { directSets: 0, secondarySets: 0, sessions: new Set<string>() };
@@ -238,9 +262,17 @@ export function deriveWorkoutStatistics(sessionsInput: AnalyticsSession[], optio
       value.secondarySets += count; value.sessions.add(session.id); muscleMap.set(muscle, value);
     });
   }));
-  const weekStarts = Array.from({ length: Math.ceil(days / 7) }, (_, index) => shiftDateKey(options.nowDateKey, -(index * 7 + 6))).reverse();
+  const sundayStart = (value: string) => {
+    const [year, month, day] = value.split("-").map(Number);
+    const date = new Date(year, month - 1, day, 12);
+    return shiftDateKey(value, -date.getDay());
+  };
+  const weekStarts: string[] = [];
+  for (let weekStart = sundayStart(currentStart); weekStart <= options.nowDateKey; weekStart = shiftDateKey(weekStart, 7)) {
+    weekStarts.push(weekStart);
+  }
   const weeklyConsistency = weekStarts.map((weekStart) => ({ weekStart, sessions: currentSessions.filter((session) => session.performedOn >= weekStart && session.performedOn <= shiftDateKey(weekStart, 6)).length }));
-  const exerciseSummaries = buildExerciseSummaries(sessions, options.displayUnit || "lb");
+  const exerciseSummaries = buildExerciseSummaries(sessions, displayUnit);
   const exactRecord = exerciseSummaries.flatMap((summary) => summary.records.map((record) => ({ summary, record }))).sort((a, b) => b.record.performedOn.localeCompare(a.record.performedOn))[0];
   const improving = exerciseSummaries.find((summary) => summary.trend === "improving");
   const insight = options.draftStatus === "sync-failed-draft-retained"

@@ -6,8 +6,8 @@ import {
   getDocs,
   onSnapshot,
   query,
+  runTransaction,
   serverTimestamp,
-  setDoc,
   where,
   updateDoc,
   type DocumentData,
@@ -15,6 +15,7 @@ import {
   type QuerySnapshot,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
+import { workoutSessionDocumentId } from "./workoutSessionIdentity";
 
 export type WorkoutSetRecord = {
   reps: number;
@@ -46,6 +47,7 @@ export type WorkoutSessionRecord = {
   routineId: string | null;
   routineName: string;
   performedOn: string;
+  weightUnit?: "lb" | "kg";
   durationMinutes: number | null;
   notes: string;
   exercises: WorkoutExerciseLogRecord[];
@@ -79,6 +81,7 @@ function normalizeSession(snapshot: QueryDocumentSnapshot<DocumentData>) {
     routineId: data.routineId || null,
     routineName: data.routineName || "",
     performedOn: data.performedOn || "",
+    weightUnit: data.weightUnit === "kg" ? "kg" : "lb",
     durationMinutes: typeof data.durationMinutes === "number" ? data.durationMinutes : null,
     notes: data.notes || "",
     exercises: Array.isArray(data.exercises) ? data.exercises : [],
@@ -115,12 +118,15 @@ export function subscribeToWorkoutSessions(
 
 export async function createWorkoutSession(userId: string, draft: WorkoutSessionDraft) {
   if (draft.clientDraftId) {
-    const safeDraftId = draft.clientDraftId.replace(/[^a-zA-Z0-9_-]/g, "-").slice(0, 180);
-    const reference = doc(getWorkoutSessionsCollection(userId), safeDraftId);
-    await setDoc(reference, {
-      ...draft,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
+    const reference = doc(getWorkoutSessionsCollection(userId), workoutSessionDocumentId(draft.clientDraftId));
+    await runTransaction(db, async (transaction) => {
+      const existing = await transaction.get(reference);
+      if (existing.exists()) return;
+      transaction.set(reference, {
+        ...draft,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
     });
     return reference.id;
   }
