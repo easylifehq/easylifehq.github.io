@@ -73,6 +73,8 @@ The first three items were chosen because they form one coherent review-to-actio
 - `app-vNext npm test`: **39/39 passed, 0 failed**.
 - `app-vNext npm run build`: **passed, 197 modules transformed**.
 - `functions npm run lint`: **passed** (`node --check index.js`).
+- `app-vNext npm audit --omit=dev --audit-level=critical`: **exit 0**; the 2 inherited production-moderate React Router nodes remain.
+- `functions npm audit --omit=dev --audit-level=critical`: **exit 0**; the 8 inherited production-moderate UUID-chain nodes remain.
 - `git diff --check`: **passed** before commit.
 - Browser route inventory: **57/57 desktop at 1440×900** and **57/57 phone at 390×844**; **114/114 total viewport-route checks passed**.
 - Per-route criteria: at least one `main`, more than 20 characters of body content, no `.error-copy` or alert, and no document-width overflow.
