@@ -127,6 +127,7 @@ const groupPairs: Record<string, string[]> = {
 export function EasyWorkoutLogPage() {
   const firstExerciseInputRef = useRef<HTMLInputElement | null>(null);
   const saveCoordinatorRef = useRef(new WorkoutSaveCoordinator<string | null>());
+  const skipDraftFlushRef = useRef(false);
   const restoredDraftRecovery = useMemo(() => readStoredWorkoutDraft(), []);
   const restoredDraft = restoredDraftRecovery?.draft || null;
   const didUseRestoredDraftRef = useRef(Boolean(restoredDraft));
@@ -363,6 +364,7 @@ export function EasyWorkoutLogPage() {
     }
     setDraftStatus("saving-local");
     const saveTimer = window.setTimeout(() => {
+      if (skipDraftFlushRef.current) return;
       try {
         window.localStorage.setItem(WORKOUT_DRAFT_STORAGE_KEY, JSON.stringify(draft));
         window.localStorage.removeItem(LEGACY_WORKOUT_DRAFT_STORAGE_KEY);
@@ -374,6 +376,7 @@ export function EasyWorkoutLogPage() {
     }, 250);
     return () => {
       window.clearTimeout(saveTimer);
+      if (skipDraftFlushRef.current) return;
       try {
         window.localStorage.setItem(WORKOUT_DRAFT_STORAGE_KEY, JSON.stringify({ ...draft, updatedAt: new Date().toISOString() }));
       } catch {
@@ -630,6 +633,7 @@ export function EasyWorkoutLogPage() {
         storedDraftId = null;
       }
       if (canClearMatchingWorkoutDraft(storedDraftId, draftId)) {
+        skipDraftFlushRef.current = true;
         window.localStorage.removeItem(WORKOUT_DRAFT_STORAGE_KEY);
         window.localStorage.removeItem(LEGACY_WORKOUT_DRAFT_STORAGE_KEY);
       }
