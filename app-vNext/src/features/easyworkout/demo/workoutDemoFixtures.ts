@@ -59,7 +59,7 @@ export const workoutDemoRoutines: WorkoutRoutineRecord[] = [
     name: "Upper — steady progress",
     notes: "Synthetic demo routine",
     dayLabel: "Upper",
-    exercises: [routineExercise("bench"), routineExercise("row"), routineExercise("press"), routineExercise("curl")],
+    exercises: [routineExercise("bench", 3, "5"), routineExercise("row"), routineExercise("press"), routineExercise("curl")],
     createdAt: new Date("2026-04-20T12:00:00Z"),
     updatedAt: new Date("2026-08-01T12:00:00Z"),
   },

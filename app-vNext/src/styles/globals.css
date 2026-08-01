@@ -14770,3 +14770,66 @@ button.calendar-detail-card:disabled {
     font-size: 1.08rem;
   }
 }
+/* Product wave 2: calm weekly review, guided workout, and history tools. */
+.weekly-review-grid > .panel-section,
+.guided-workout-list .task-card-vnext,
+.workout-history-results .task-card-vnext {
+  min-width: 0;
+}
+
+.workout-guidance-select {
+  max-width: 32rem;
+  margin-bottom: 1rem;
+}
+
+.workout-history-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: 0.85rem;
+  align-items: end;
+}
+
+.workout-history-check > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+}
+
+.workout-history-check input {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.workout-export-actions {
+  margin-top: 1rem;
+}
+
+.guided-workout-action {
+  display: grid;
+  justify-items: end;
+  gap: 0.5rem;
+  max-width: 24rem;
+  text-align: right;
+}
+
+.guided-workout-list,
+.workout-history-results {
+  margin-top: 1rem;
+}
+
+@media (max-width: 640px) {
+  .workout-history-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .workout-export-actions > * {
+    width: 100%;
+  }
+
+  .guided-workout-action {
+    justify-items: stretch;
+    max-width: none;
+    text-align: left;
+  }
+}

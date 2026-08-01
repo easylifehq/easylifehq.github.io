@@ -11,6 +11,14 @@ import { subscribeToProjectTaskLinks, type ProjectTaskLinkRecord } from "@/lib/f
 import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
 import { WorkoutInsightsPanel } from "@/features/easyworkout/components/WorkoutInsightsPanel";
 import { workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
+import { WeeklyReviewPanel } from "@/features/easystatistics/components/WeeklyReviewPanel";
+import { deriveWeeklyReview } from "@/features/easystatistics/domain/weeklyReview";
+import {
+  weeklyReviewDemoApplications,
+  weeklyReviewDemoNotes,
+  weeklyReviewDemoProjectLinks,
+  weeklyReviewDemoProjects,
+} from "@/features/easystatistics/demo/weeklyReviewDemoFixtures";
 
 function startOfWeek(date: Date) {
   const next = startOfDay(date);
@@ -37,6 +45,10 @@ function getWordCount(notes: NoteRecord[]) {
   return notes.reduce((sum, note) => sum + note.bodyText.trim().split(/\s+/).filter(Boolean).length, 0);
 }
 
+function localDateKey(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
 export function EasyStatisticsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, isDemoMode } = useAuth();
@@ -48,26 +60,28 @@ export function EasyStatisticsPage() {
   const [notes, setNotes] = useState<NoteRecord[]>([]);
   const [statsError, setStatsError] = useState("");
   const [activeTab, setActiveTab] = useState<
-    "overview" | "workout" | "list" | "pipeline" | "projects" | "notes"
-  >(searchParams.get("tab") === "workout" ? "workout" : "overview");
+    "overview" | "week" | "workout" | "list" | "pipeline" | "projects" | "notes"
+  >(["week", "workout", "list", "pipeline", "projects", "notes"].includes(searchParams.get("tab") || "")
+    ? searchParams.get("tab") as "week" | "workout" | "list" | "pipeline" | "projects" | "notes"
+    : "overview");
   const today = startOfDay(new Date());
   const weekStart = startOfWeek(today);
   const monthStart = startOfMonth(today);
 
   useEffect(() => {
     const requestedTab = searchParams.get("tab");
-    setActiveTab(["workout", "list", "pipeline", "projects", "notes"].includes(requestedTab || "")
-      ? requestedTab as "workout" | "list" | "pipeline" | "projects" | "notes"
+    setActiveTab(["week", "workout", "list", "pipeline", "projects", "notes"].includes(requestedTab || "")
+      ? requestedTab as "week" | "workout" | "list" | "pipeline" | "projects" | "notes"
       : "overview");
   }, [searchParams]);
 
   useEffect(() => {
     if (!user || isDemoMode) {
       setWorkoutSessions(isDemoMode ? workoutDemoSessions : []);
-      setApplications([]);
-      setProjects([]);
-      setProjectLinks([]);
-      setNotes([]);
+      setApplications(isDemoMode ? weeklyReviewDemoApplications : []);
+      setProjects(isDemoMode ? weeklyReviewDemoProjects : []);
+      setProjectLinks(isDemoMode ? weeklyReviewDemoProjectLinks : []);
+      setNotes(isDemoMode ? weeklyReviewDemoNotes : []);
       setStatsError("");
       return;
     }
@@ -171,6 +185,16 @@ export function EasyStatisticsPage() {
       : stats.completedThisWeek.length > 0
         ? `${stats.completedThisWeek.length} task${stats.completedThisWeek.length === 1 ? "" : "s"} finished this week. Keep the rhythm.`
         : "No completed items this week. Choose one task to finish today.";
+  const weeklyReview = useMemo(() => deriveWeeklyReview({
+    nowDateKey: localDateKey(today),
+    tasks,
+    events,
+    taskBlocks,
+    projects,
+    projectLinks,
+    applications,
+    workouts: workoutSessions,
+  }), [applications, events, projectLinks, projects, taskBlocks, tasks, today, workoutSessions]);
   const lifeScore =
     stats.completedThisWeek.length +
     stats.workoutsThisWeek.length * 2 +
@@ -185,6 +209,7 @@ export function EasyStatisticsPage() {
   ];
   const tabs = [
     { id: "overview", label: "Overview" },
+    { id: "week", label: "My week" },
     { id: "workout", label: "Workout" },
     { id: "list", label: "Inbox" },
     { id: "pipeline", label: "Follow-ups" },
@@ -326,6 +351,8 @@ export function EasyStatisticsPage() {
           </PageSection>
         </div>
       ) : null}
+
+      {activeTab === "week" ? <WeeklyReviewPanel review={weeklyReview} isDemoMode={isDemoMode} isLoading={isLoading} error={statsError} /> : null}
 
       {activeTab === "workout" ? <WorkoutInsightsPanel sessions={workoutSessions} isLoading={isLoading} error={statsError} /> : null}
 

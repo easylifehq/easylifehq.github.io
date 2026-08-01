@@ -15,6 +15,7 @@ import {
 } from "@/features/easycalendar/lib/calendarUtils";
 import { sortActiveTasks } from "@/features/easylist/lib/taskUtils";
 import { useLastAppRoute } from "@/lib/mobile/appRouteMemory";
+import { useAuth } from "@/features/auth/AuthContext";
 
 type TodayContextItem = {
   label: string;
@@ -109,6 +110,7 @@ function getContactPlaceLabel(contact: { currentCity?: string; region?: string; 
 }
 
 function HQPageContent() {
+  const { isDemoMode } = useAuth();
   const {
     events,
     taskBlocks,
@@ -395,6 +397,7 @@ function HQPageContent() {
   const canShowSummary = !todayDataInputs.dailyDataLoading && !todayDataInputs.dailyDataError;
   const canShowReview =
     attentionItems.length > 0 || (!todayDataInputs.dailyDataLoading && !todayDataInputs.dailyDataError);
+  const weeklyReviewTo = `/app/easystatistics?tab=week${isDemoMode ? "&demo=1" : ""}`;
   const lastAssistantPlace = lastAppRoute
     ? {
         ...lastAppRoute,
@@ -580,6 +583,7 @@ function HQPageContent() {
             </article>
           )}
         </div>
+        <Link className="button-secondary compact-button" to={weeklyReviewTo}>Review my week</Link>
       </PageSection> : null}
 
       <PageSection eyebrow="Demo path" title="The calm assistant loop">
