@@ -41,6 +41,7 @@ import {
   removeLinkedCalendarBlock,
   reopenTask,
   subscribeToTasks,
+  updateTask,
   type TaskDraft,
   type TaskRecord,
 } from "@/lib/firestore/tasks";
@@ -69,6 +70,7 @@ type EasyCalendarContextValue = {
   ) => Promise<string | null>;
   completeTaskFromCalendar: (taskId: string) => Promise<void>;
   reopenTaskFromCalendar: (taskId: string) => Promise<void>;
+  assignTaskToToday: (taskId: string) => Promise<void>;
 };
 
 const EasyCalendarContext = createContext<EasyCalendarContextValue | undefined>(
@@ -79,6 +81,11 @@ function todayAt(hours: number, minutes = 0) {
   const date = new Date();
   date.setHours(hours, minutes, 0, 0);
   return date;
+}
+
+function localDateInput(date: Date | null) {
+  if (!date) return null;
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
 function getPreviewTasks(): TaskRecord[] {
@@ -439,6 +446,25 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         if (matchingTask?.linkedCalendarBlockIds.length) {
           await markCalendarTaskBlocksActive(user.uid, matchingTask.linkedCalendarBlockIds);
         }
+      },
+      assignTaskToToday: async (taskId: string) => {
+        if (!user || isDemoMode) return;
+        const task = tasks.find((candidate) => candidate.id === taskId);
+        if (!task) throw new Error("The selected task is no longer available.");
+        await updateTask(user.uid, taskId, {
+          itemKind: task.itemKind,
+          title: task.title,
+          notes: task.notes,
+          listName: "Today",
+          category: task.category,
+          estimatedLength: task.estimatedLength,
+          priorityTier: task.priorityTier,
+          priorityLabel: task.priorityLabel,
+          dueDate: localDateInput(task.dueDate),
+          linkedCalendarEventId: task.linkedCalendarEventId,
+          linkedNoteId: task.linkedNoteId,
+          recurring: task.recurring,
+        });
       },
     }),
     [

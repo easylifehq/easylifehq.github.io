@@ -14777,6 +14777,311 @@ button.calendar-detail-card:disabled {
   min-width: 0;
 }
 
+/* Core loop wave 3: global finding, focused review, and safe portability. */
+.app-search-command {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-left: auto;
+  min-height: 38px;
+  padding: 0.42rem 0.65rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 999px;
+  background: var(--ui-bg-card, var(--shell-card-bg));
+  color: var(--ui-text-primary, var(--shell-page-text));
+  font-weight: 750;
+}
+
+.app-search-command kbd,
+.core-palette-search kbd {
+  padding: 0.15rem 0.38rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: 6px;
+  background: var(--ui-bg-subtle, var(--shell-accent-soft));
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font: inherit;
+  font-size: 0.72rem;
+}
+
+.core-palette-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: start center;
+  padding: max(8vh, 1rem) 1rem 1rem;
+  background: rgba(13, 17, 20, 0.5);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.core-palette {
+  width: min(44rem, 100%);
+  max-height: min(78vh, 46rem);
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  border: 1px solid var(--ui-border-strong, var(--shell-card-border));
+  border-radius: 18px;
+  background: var(--ui-bg-card, var(--shell-card-bg));
+  color: var(--ui-text-primary, var(--shell-page-text));
+  box-shadow: 0 28px 90px rgba(7, 18, 22, 0.28);
+}
+
+.core-palette-heading,
+.core-palette-search,
+.core-palette-hint,
+.focused-review-header,
+.focused-review-progress,
+.focused-review-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.core-palette-heading {
+  padding: 1rem 1rem 0.55rem;
+}
+
+.core-palette-heading span,
+.core-palette-results h3,
+.focused-review-progress span {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.core-palette-heading h2 {
+  margin: 0.18rem 0 0;
+  font-size: clamp(1.12rem, 3vw, 1.45rem);
+}
+
+.core-palette-search {
+  margin: 0.35rem 1rem 0.7rem;
+  padding: 0 0.72rem;
+  border: 1px solid var(--ui-border-strong, var(--shell-card-border));
+  border-radius: 12px;
+  background: var(--ui-bg-subtle, color-mix(in srgb, var(--shell-card-bg) 90%, var(--shell-accent-soft)));
+}
+
+.core-palette-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.core-palette-state {
+  margin: 0 1rem 0.6rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  background: var(--ui-bg-subtle, var(--shell-accent-soft));
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.core-palette-results {
+  min-height: 8rem;
+  overflow-y: auto;
+  padding: 0 0.6rem 0.5rem;
+  overscroll-behavior: contain;
+}
+
+.core-palette-results section + section {
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+}
+
+.core-palette-results h3 {
+  margin: 0.25rem 0.45rem;
+}
+
+.core-palette-option {
+  width: 100%;
+  display: grid;
+  gap: 0.16rem;
+  padding: 0.62rem 0.72rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.core-palette-option span {
+  overflow: hidden;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.86rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.core-palette-option.active,
+.core-palette-option:hover {
+  background: var(--ui-bg-tab-active, var(--shell-accent-soft));
+}
+
+.core-palette-option mark {
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--app-accent, var(--shell-accent)) 24%, transparent);
+  color: inherit;
+}
+
+.core-palette-hint {
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0.58rem 1rem calc(0.58rem + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-size: 0.75rem;
+}
+
+.focused-review-entry,
+.focused-review {
+  margin-top: 1rem;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  border-radius: var(--shell-panel-radius);
+  background: var(--ui-bg-card, var(--shell-card-bg));
+  box-shadow: var(--shell-card-shadow);
+}
+
+.focused-review-entry {
+  padding: 0.9rem 1rem;
+}
+
+.focused-review-entry > div {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.focused-review-entry span,
+.focused-review-header p,
+.focused-review-card p,
+.focused-review-card small,
+.focused-review-clear p {
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.focused-review {
+  padding: clamp(1rem, 3vw, 1.5rem);
+}
+
+.focused-review-header {
+  align-items: flex-start;
+}
+
+.focused-review-header h2 {
+  margin: 0.25rem 0 0.35rem;
+}
+
+.focused-review-header p {
+  max-width: 54rem;
+  margin: 0;
+}
+
+.focused-review-progress {
+  margin: 1rem 0;
+  padding: 0.72rem 0.85rem;
+  border-radius: 10px;
+  background: var(--ui-bg-subtle, var(--shell-accent-soft));
+}
+
+.focused-review-offline {
+  padding: 0.72rem 0.85rem;
+  border-left: 4px solid #b27616;
+  background: color-mix(in srgb, #d89a2b 12%, transparent);
+}
+
+.focused-review-card {
+  display: grid;
+  gap: 0.55rem;
+  padding: clamp(1rem, 4vw, 1.6rem);
+  border: 1px solid var(--ui-border-strong, var(--shell-card-border));
+  border-radius: 15px;
+  background: var(--ui-bg-subtle, color-mix(in srgb, var(--shell-card-bg) 92%, var(--shell-accent-soft)));
+}
+
+.focused-review-card h3,
+.focused-review-card p {
+  margin: 0;
+}
+
+.focused-review-kind {
+  width: fit-content;
+  padding: 0.25rem 0.48rem;
+  border-radius: 999px;
+  background: var(--ui-bg-tab-active, var(--shell-accent-soft));
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.focused-review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+}
+
+.focused-review-clear {
+  padding: 1.5rem;
+  border: 1px dashed var(--ui-border-strong, var(--shell-card-border));
+  border-radius: 15px;
+  text-align: center;
+}
+
+.settings-data-card .ghost-button {
+  width: 100%;
+  margin-top: 0.35rem;
+}
+
+@media (max-width: 640px) {
+  .app-search-command span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .app-search-command {
+    min-width: 44px;
+    justify-content: center;
+    padding-inline: 0.45rem;
+  }
+
+  .core-palette-backdrop {
+    place-items: end center;
+    padding: 0;
+  }
+
+  .core-palette {
+    width: 100%;
+    max-height: calc(92dvh - env(safe-area-inset-top, 0px));
+    border-radius: 18px 18px 0 0;
+  }
+
+  .core-palette-heading,
+  .focused-review-header,
+  .focused-review-entry,
+  .focused-review-progress {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .focused-review-actions > * {
+    width: 100%;
+  }
+}
+
 .workout-guidance-select {
   max-width: 32rem;
   margin-bottom: 1rem;

@@ -5,7 +5,7 @@ import { WEEKLY_REVIEW_DEMO_VERSION } from "../demo/weeklyReviewDemoFixtures";
 
 const withDemo = (to: string, isDemoMode: boolean) => !isDemoMode ? to : `${to}${to.includes("?") ? "&" : "?"}demo=1`;
 
-export function WeeklyReviewPanel({ review, isDemoMode, isLoading = false, error = "" }: { review: WeeklyReview; isDemoMode: boolean; isLoading?: boolean; error?: string }) {
+export function WeeklyReviewPanel({ review, isDemoMode, isLoading = false, error = "", focusedReviewTo }: { review: WeeklyReview; isDemoMode: boolean; isLoading?: boolean; error?: string; focusedReviewTo?: string }) {
   const lead = review.sections.find((section) => section.id === review.leadSectionId)!;
   return (
     <div className="workout-insights-stack" id="weekly-review">
@@ -18,6 +18,12 @@ export function WeeklyReviewPanel({ review, isDemoMode, isLoading = false, error
           <Link className="primary-button compact-button" to={withDemo(lead.actionTo, isDemoMode)}>{lead.actionLabel}</Link>
         </div>
       </PageSection>
+      {focusedReviewTo ? (
+        <div className="focused-review-entry">
+          <div><strong>Prefer one decision at a time?</strong><span>The focused queue is optional and preserves your place in this browser.</span></div>
+          <Link className="button-secondary compact-button" to={withDemo(focusedReviewTo, isDemoMode)}>Start focused review</Link>
+        </div>
+      ) : null}
       <div className="statistics-app-grid weekly-review-grid">
         {review.sections.filter((section) => section.id !== review.leadSectionId).map((section) => (
           <PageSection key={section.id} eyebrow={section.eyebrow} title={section.title} description={section.summary}>

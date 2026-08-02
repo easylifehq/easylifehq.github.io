@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { TaskCard } from "@/features/easylist/components/TaskCard";
 import { TaskDrawer } from "@/features/easylist/components/TaskDrawer";
@@ -13,6 +13,7 @@ function toDateInputValue(date: Date) {
 }
 export function EasyListDashboardPage() {
   const { tasks, isLoading, error, saveTask, markComplete, markActive, deleteTask } = useEasyList();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { isExperimentalFeatureEnabled } = useSettings();
   const [search, setSearch] = useState("");
   const [activeView, setActiveView] = useState<"focus" | "upcoming" | "lists">("focus");
@@ -99,6 +100,13 @@ export function EasyListDashboardPage() {
     );
   }, [visibleTasks, activeListName]);
   const nextQueueTask = focusTasks[0] ?? upcomingTasks[0] ?? activeTasks[0] ?? allOpenTasks[0] ?? null;
+  const taskParam = searchParams.get("task");
+
+  useEffect(() => {
+    if (!taskParam) return;
+    const matchingTask = tasks.find((task) => task.id === taskParam && !task.deletedAt);
+    if (matchingTask) setSelectedTask(matchingTask);
+  }, [taskParam, tasks]);
 
   useEffect(() => {
     return () => {
@@ -425,7 +433,13 @@ export function EasyListDashboardPage() {
       <TaskDrawer
         task={selectedTask}
         isOpen={Boolean(selectedTask)}
-        onClose={() => setSelectedTask(null)}
+        onClose={() => {
+          setSelectedTask(null);
+          if (!taskParam) return;
+          const nextParams = new URLSearchParams(searchParams);
+          nextParams.delete("task");
+          setSearchParams(nextParams, { replace: true });
+        }}
         onSave={saveTask}
         onDelete={deleteTask}
         onComplete={requestComplete}

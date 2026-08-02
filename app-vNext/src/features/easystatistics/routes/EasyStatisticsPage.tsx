@@ -12,6 +12,7 @@ import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/fir
 import { WorkoutInsightsPanel } from "@/features/easyworkout/components/WorkoutInsightsPanel";
 import { workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
 import { WeeklyReviewPanel } from "@/features/easystatistics/components/WeeklyReviewPanel";
+import { FocusedReviewQueue } from "@/features/coreloop/components/FocusedReviewQueue";
 import { deriveWeeklyReview } from "@/features/easystatistics/domain/weeklyReview";
 import {
   weeklyReviewDemoApplications,
@@ -65,6 +66,7 @@ export function EasyStatisticsPage() {
     ? searchParams.get("tab") as "week" | "workout" | "list" | "pipeline" | "projects" | "notes"
     : "overview");
   const today = startOfDay(new Date());
+  const isFocusedReview = activeTab === "week" && searchParams.get("reviewMode") === "focus";
   const weekStart = startOfWeek(today);
   const monthStart = startOfMonth(today);
 
@@ -352,7 +354,26 @@ export function EasyStatisticsPage() {
         </div>
       ) : null}
 
-      {activeTab === "week" ? <WeeklyReviewPanel review={weeklyReview} isDemoMode={isDemoMode} isLoading={isLoading} error={statsError} /> : null}
+      {activeTab === "week" ? (
+        isFocusedReview ? (
+          <FocusedReviewQueue
+            projects={projects}
+            projectLinks={projectLinks}
+            applications={applications}
+            workouts={workoutSessions}
+            userKey={user?.uid || "demo"}
+            isDemoMode={isDemoMode}
+          />
+        ) : (
+          <WeeklyReviewPanel
+            review={weeklyReview}
+            isDemoMode={isDemoMode}
+            isLoading={isLoading}
+            error={statsError}
+            focusedReviewTo="/app/easystatistics?tab=week&reviewMode=focus"
+          />
+        )
+      ) : null}
 
       {activeTab === "workout" ? <WorkoutInsightsPanel sessions={workoutSessions} isLoading={isLoading} error={statsError} /> : null}
 

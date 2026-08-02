@@ -6,6 +6,9 @@ import { collection, doc, getDoc, getDocs, setDoc, setLogLevel, updateDoc } from
 import { deriveWeeklyReview } from "../src/features/easystatistics/domain/weeklyReview.ts";
 import { deriveGuidedWorkoutPlan, getGuidedWorkoutAction } from "../src/features/easyworkout/domain/guidedWorkoutPlan.ts";
 import { createWorkoutExportPayload, filterWorkoutHistory, getWorkoutPrSessionIds, serializeWorkoutCsv } from "../src/features/easyworkout/domain/workoutHistoryTools.ts";
+import { searchCoreLoopDocuments } from "../src/features/coreloop/domain/globalSearch.ts";
+import { deriveFocusedReviewQueue } from "../src/features/coreloop/domain/focusedReviewQueue.ts";
+import { buildAccountExport, emptyAccountDataCollections, serializeAccountExport } from "../src/features/coreloop/domain/accountExport.ts";
 
 const projectId = "demo-easylife-wave2";
 const ownerId = "closure-owner";
@@ -103,14 +106,52 @@ test("draft handoff remains local while Firestore rules enforce owner-only sessi
   await assertFails(setDoc(doc(anonymousDb, ownerPath("workoutSessions", "anonymous")), { performedOn: "2026-08-01" }));
 });
 
+test("authenticated owner records drive Wave 3 search, focused review, and safe whole-account export", async () => {
+  const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
+  await Promise.all([
+    setDoc(doc(ownerDb, ownerPath("notes", "search-note")), { title: "Cedar workflow", bodyText: "Interview proof", tags: ["career"], deletedAt: null }),
+    setDoc(doc(ownerDb, ownerPath("contacts", "search-person")), { fullName: "Jordan Lee", company: "Cedar Labs", role: "Recruiter", archived: false }),
+    setDoc(doc(ownerDb, ownerPath("tasks", "review-capture")), { title: "Sort the capture", notes: "", listName: "Inbox", priorityTier: 5, completed: false, deletedAt: null, linkedCalendarBlockIds: [] }),
+    setDoc(doc(ownerDb, ownerPath("projects", "review-project")), { title: "Release packet", description: "", targetDate: "2026-08-07", status: "active" }),
+    setDoc(doc(ownerDb, ownerPath("applications", "review-application")), { company: "Cedar", title: "Operations", status: "follow_up", priority: "high", nextFollowUp: "2026-08-02" }),
+    setDoc(doc(ownerDb, ownerPath("workoutSessions", "review-workout")), { routineName: "Upper", performedOn: "2026-08-01", durationMinutes: 45, exercises: [] }),
+  ]);
+  const [notes, contacts, tasks, projects, applications, workouts] = await Promise.all([
+    records(ownerDb, "notes"), records(ownerDb, "contacts"), records(ownerDb, "tasks"), records(ownerDb, "projects"), records(ownerDb, "applications"), records(ownerDb, "workoutSessions"),
+  ]);
+  const searchResults = searchCoreLoopDocuments([
+    ...notes.map((note) => ({ id: `note:${note.id}`, group: "Notes", title: note.title, detail: note.bodyText, searchText: note.tags.join(" "), to: `/app/easynotes/${note.id}` })),
+    ...contacts.map((contact) => ({ id: `contact:${contact.id}`, group: "People", title: contact.fullName, detail: contact.company, searchText: contact.role, to: `/app/easycontacts?contact=${contact.id}` })),
+  ], "cedar");
+  assert.deepEqual(new Set(searchResults.map((result) => result.group)), new Set(["Notes", "People"]));
+
+  const queue = deriveFocusedReviewQueue({
+    nowDateKey: "2026-08-02",
+    tasks: tasks.map((task) => ({ itemKind: "task", category: "", estimatedLength: null, priorityLabel: "", dueDate: null, linkedCalendarEventId: null, linkedNoteId: null, recurring: false, completedAt: null, createdAt: null, updatedAt: null, ...task })),
+    projects: projects.map((project) => ({ createdAt: null, updatedAt: null, ...project })),
+    projectLinks: [],
+    applications: applications.map((application) => ({ offerResponse: "", dateApplied: "", location: "", link: "", notes: "", contactName: "", contactEmail: "", createdAt: null, updatedAt: null, ...application })),
+    workouts: workouts.map((workout) => ({ routineId: null, notes: "", createdAt: null, updatedAt: null, ...workout })),
+  });
+  assert.deepEqual(queue.slice(0, 4).map((item) => item.kind), ["capture", "project", "application", "workout"]);
+
+  const payload = buildAccountExport({ collections: { ...emptyAccountDataCollections, tasks, notes, projects, pipelineApplications: applications, contacts, workoutSessions: workouts }, settings: { easyWorkout: { weightUnit: "lb" }, apiKey: "blocked" }, exportedAt: "2026-08-02T00:00:00.000Z", timeZone: "America/Denver", weightUnit: "lb", appVersion: "test" });
+  const serialized = serializeAccountExport(payload);
+  assert.match(serialized, /easylife-account-export-v1/);
+  assert.doesNotMatch(serialized, /blocked/);
+  await assertFails(getDocs(collection(rulesEnvironment.authenticatedContext(otherId).firestore(), "users", ownerId, "notes")));
+});
+
 test("all product-wave collections deny cross-owner and top-level access", async () => {
   const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
   const otherDb = rulesEnvironment.authenticatedContext(otherId).firestore();
-  const collectionNames = ["tasks", "calendarEvents", "calendarTaskBlocks", "projects", "projectTaskLinks", "applications", "notes", "workoutRoutines", "workoutSessions"];
+  const collectionNames = ["tasks", "calendarEvents", "calendarTaskBlocks", "categories", "projects", "projectSections", "projectTaskLinks", "applications", "generatedDrafts", "notes", "noteFolders", "contacts", "workoutExercises", "workoutRoutines", "workoutSessions"];
   for (const collectionName of collectionNames) {
     await assertSucceeds(setDoc(doc(ownerDb, ownerPath(collectionName, "boundary")), { marker: collectionName }));
     await assertFails(getDoc(doc(otherDb, ownerPath(collectionName, "boundary"))));
     await assertFails(setDoc(doc(otherDb, ownerPath(collectionName, "boundary")), { marker: "cross-account" }));
   }
+  await assertSucceeds(setDoc(doc(ownerDb, "users", ownerId, "appPreferences", "shell"), { themeMode: "classic" }));
+  await assertFails(getDoc(doc(otherDb, "users", ownerId, "appPreferences", "shell")));
   await assertFails(setDoc(doc(ownerDb, "public", "escape"), { marker: "outside-user-tree" }));
 });

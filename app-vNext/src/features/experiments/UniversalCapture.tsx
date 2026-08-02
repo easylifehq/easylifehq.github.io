@@ -15,6 +15,7 @@ import { addSetToDailyWorkoutSession } from "@/lib/firestore/workoutSessions";
 import { auth } from "@/lib/firebase/client";
 import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 import { useSettings } from "@/features/settings/SettingsContext";
+import { isCaptureShortcut } from "@/features/coreloop/domain/globalSearch";
 import type { VisibleAppId } from "@/lib/firestore/settings";
 
 type CaptureMode = "raw" | "task" | "brainDump" | "note" | "event" | "application" | "contact" | "project" | "workout";
@@ -520,7 +521,7 @@ export function UniversalCapture() {
         target?.isContentEditable;
 
       if (isTyping) return;
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+      if (isCaptureShortcut(event)) {
         event.preventDefault();
         openCapture();
       }
@@ -820,7 +821,7 @@ export function UniversalCapture() {
             <h2 id="quick-capture-title">Quick capture</h2>
           </div>
           <div className="capture-header-actions">
-            <span className="command-hint">Ctrl K</span>
+            <span className="command-hint">Ctrl Shift K</span>
             <button type="button" className="ghost-button compact-button" onClick={closeCapture} aria-label="Close quick capture">
               Close
             </button>

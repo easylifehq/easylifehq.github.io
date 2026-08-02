@@ -2,6 +2,8 @@ import { Outlet, useLocation } from "react-router-dom";
 import { AppHeader } from "@/components/navigation/AppHeader";
 import { SiteFooter } from "@/components/navigation/SiteFooter";
 import { EasyCalendarProvider } from "@/features/easycalendar/EasyCalendarContext";
+import { CoreLoopSearchProvider } from "@/features/coreloop/CoreLoopSearchContext";
+import { GlobalCommandPalette } from "@/features/coreloop/components/GlobalCommandPalette";
 import { UniversalCapture } from "@/features/experiments/UniversalCapture";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { useRememberAppRoute } from "@/lib/mobile/appRouteMemory";
@@ -31,15 +33,18 @@ export function AuthenticatedLayout() {
 
   return (
     <EasyCalendarProvider>
-      <div className={`app-shell-vnext app-shell-header shell-theme-${settings.themeMode}${experimentalClasses ? ` ${experimentalClasses}` : ""}`}>
-        {isDistractionFreeRoute ? null : <AppHeader />}
-        <div className="app-content app-content-shell">
-          <Outlet />
-          <SiteFooter />
+      <CoreLoopSearchProvider>
+        <div className={`app-shell-vnext app-shell-header shell-theme-${settings.themeMode}${experimentalClasses ? ` ${experimentalClasses}` : ""}`}>
+          {isDistractionFreeRoute ? null : <AppHeader />}
+          <div className="app-content app-content-shell">
+            <Outlet />
+            <SiteFooter />
+          </div>
+          <NotificationScheduler />
+          <GlobalCommandPalette />
+          <UniversalCapture />
         </div>
-        <NotificationScheduler />
-        <UniversalCapture />
-      </div>
+      </CoreLoopSearchProvider>
     </EasyCalendarProvider>
   );
 }

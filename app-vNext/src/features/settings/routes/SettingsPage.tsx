@@ -1,7 +1,16 @@
 import { PageSection } from "@/components/ui/PageSection";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { APP_VERSION } from "@/config/appVersion";
+import {
+  accountExportGroups as dataExportGroups,
+  buildAccountExport,
+  emptyAccountDataCollections as emptyDataCollections,
+  serializeAccountExport,
+  serializeDomainCsv,
+  type AccountDataCollections as DataCollections,
+} from "@/features/coreloop/domain/accountExport";
+import { coreLoopDemoExportCollections } from "@/features/coreloop/demo/coreLoopDemoFixtures";
 import { useAuth } from "@/features/auth/AuthContext";
 import { AiCommandCenter } from "@/features/experiments/AiCommandCenter";
 import { useSettings } from "@/features/settings/SettingsContext";
@@ -486,82 +495,8 @@ const assistantBoundaries: Array<{
   },
 ];
 
-type DataCollections = {
-  tasks: unknown[];
-  notes: unknown[];
-  noteFolders: unknown[];
-  calendarEvents: unknown[];
-  calendarTaskBlocks: unknown[];
-  calendarCategories: unknown[];
-  workoutExercises: unknown[];
-  workoutRoutines: unknown[];
-  workoutSessions: unknown[];
-  projects: unknown[];
-  projectSections: unknown[];
-  projectTaskLinks: unknown[];
-  pipelineApplications: unknown[];
-  pipelineDrafts: unknown[];
-  contacts: unknown[];
-};
-
-const emptyDataCollections: DataCollections = {
-  tasks: [],
-  notes: [],
-  noteFolders: [],
-  calendarEvents: [],
-  calendarTaskBlocks: [],
-  calendarCategories: [],
-  workoutExercises: [],
-  workoutRoutines: [],
-  workoutSessions: [],
-  projects: [],
-  projectSections: [],
-  projectTaskLinks: [],
-  pipelineApplications: [],
-  pipelineDrafts: [],
-  contacts: [],
-};
-
-const dataExportGroups: Array<{ key: keyof DataCollections; label: string; app: string }> = [
-  { key: "tasks", label: "Tasks", app: "Inbox" },
-  { key: "notes", label: "Notes", app: "Notes" },
-  { key: "noteFolders", label: "Folders", app: "Notes" },
-  { key: "calendarEvents", label: "Events", app: "Plan" },
-  { key: "calendarTaskBlocks", label: "Task blocks", app: "Plan" },
-  { key: "calendarCategories", label: "Categories", app: "Plan" },
-  { key: "workoutExercises", label: "Exercises", app: "Workout" },
-  { key: "workoutRoutines", label: "Routines", app: "Workout" },
-  { key: "workoutSessions", label: "Sessions", app: "Workout" },
-  { key: "projects", label: "Projects", app: "Projects" },
-  { key: "projectSections", label: "Sections", app: "Projects" },
-  { key: "projectTaskLinks", label: "Task links", app: "Projects" },
-  { key: "pipelineApplications", label: "Applications", app: "Follow-ups" },
-  { key: "pipelineDrafts", label: "Email drafts", app: "Follow-ups" },
-  { key: "contacts", label: "Contacts", app: "People" },
-];
-
-function serializeForExport(value: unknown): unknown {
-  if (value instanceof Date) {
-    return value.toISOString();
-  }
-
-  if (Array.isArray(value)) {
-    return value.map((entry) => serializeForExport(entry));
-  }
-
-  if (value && typeof value === "object") {
-    return Object.fromEntries(
-      Object.entries(value).map(([key, entry]) => [key, serializeForExport(entry)])
-    );
-  }
-
-  return value;
-}
-
-function downloadJson(filename: string, payload: unknown) {
-  const blob = new Blob([JSON.stringify(serializeForExport(payload), null, 2)], {
-    type: "application/json",
-  });
+function downloadFile(filename: string, contents: string, type: string) {
+  const blob = new Blob([contents], { type });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -592,6 +527,8 @@ export function SettingsPage() {
   const { user, isDemoMode } = useAuth();
   const [dataCollections, setDataCollections] = useState<DataCollections>(emptyDataCollections);
   const [dataError, setDataError] = useState("");
+  const [dataPendingCount, setDataPendingCount] = useState(0);
+  const settledDataSourcesRef = useRef(new Set<keyof DataCollections>());
   const [dataMessage, setDataMessage] = useState("");
   const [installMessage, setInstallMessage] = useState("");
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermissionState>(() =>
@@ -627,23 +564,11 @@ export function SettingsPage() {
   const activeTheme = themeOptions.find((theme) => theme.value === settings.themeMode) || themeOptions[0];
   const activeSectionConfig =
     settingsSections.find((section) => section.id === activeSection) || settingsSections[0];
-  const dataExport = useMemo(
-    () => ({
-      exportedAt: new Date().toISOString(),
-      appVersion: APP_VERSION,
-      user: {
-        uid: user?.uid || "",
-        email: user?.email || "",
-      },
-      settings,
-      collections: dataCollections,
-    }),
-    [dataCollections, settings, user]
-  );
   const dataTotals = useMemo(
     () => dataExportGroups.reduce((sum, group) => sum + dataCollections[group.key].length, 0),
     [dataCollections]
   );
+  const dataExportReady = dataPendingCount === 0 && !dataError;
   const linkedTaskCount = useMemo(
     () => dataCollections.tasks.filter((task) => getTaskLinkedBlockIds(task).length > 0).length,
     [dataCollections.tasks]
@@ -683,46 +608,87 @@ export function SettingsPage() {
   }, [searchParams]);
 
   useEffect(() => {
-    if (!user || isDemoMode) {
-      setDataCollections(emptyDataCollections);
+    if (isDemoMode) {
+      setDataCollections(coreLoopDemoExportCollections);
       setDataError("");
+      setDataPendingCount(0);
+      settledDataSourcesRef.current.clear();
       return;
     }
 
-    const handleError = (nextError: Error) => setDataError(nextError.message);
+    if (!user) {
+      setDataCollections(emptyDataCollections);
+      setDataError("");
+      setDataPendingCount(0);
+      settledDataSourcesRef.current.clear();
+      return;
+    }
+
+    let active = true;
+    settledDataSourcesRef.current = new Set();
+    setDataCollections(emptyDataCollections);
+    setDataError("");
+    setDataPendingCount(dataExportGroups.length);
+
+    const settleSource = (key: keyof DataCollections) => {
+      if (!active || settledDataSourcesRef.current.has(key)) return;
+      settledDataSourcesRef.current.add(key);
+      setDataPendingCount((current) => Math.max(0, current - 1));
+    };
+    const handleError = (key: keyof DataCollections) => (nextError: Error) => {
+      settleSource(key);
+      setDataError(`Could not load ${key}: ${nextError.message}. Export is paused to avoid an incomplete file.`);
+    };
     const setCollection =
       <T,>(key: keyof DataCollections) =>
       (records: T[]) => {
+        if (!active) return;
         setDataCollections((current) => ({ ...current, [key]: records }));
-        setDataError("");
+        settleSource(key);
       };
 
     const unsubscribers = [
-      subscribeToTasks(user.uid, setCollection("tasks"), handleError),
-      subscribeToNotes(user.uid, setCollection("notes"), handleError),
-      subscribeToNoteFolders(user.uid, setCollection("noteFolders"), handleError),
-      subscribeToCalendarEvents(user.uid, setCollection("calendarEvents"), handleError),
-      subscribeToCalendarTaskBlocks(user.uid, setCollection("calendarTaskBlocks"), handleError),
-      subscribeToCategories(user.uid, setCollection("calendarCategories"), handleError),
-      subscribeToWorkoutExercises(user.uid, setCollection("workoutExercises"), handleError),
-      subscribeToWorkoutRoutines(user.uid, setCollection("workoutRoutines"), handleError),
-      subscribeToWorkoutSessions(user.uid, setCollection("workoutSessions"), handleError),
-      subscribeToProjects(user.uid, setCollection("projects"), handleError),
-      subscribeToProjectSections(user.uid, setCollection("projectSections"), handleError),
-      subscribeToProjectTaskLinks(user.uid, setCollection("projectTaskLinks"), handleError),
-      subscribeToApplications(user.uid, setCollection("pipelineApplications"), handleError),
-      subscribeToGeneratedDrafts(user.uid, setCollection("pipelineDrafts"), handleError),
-      subscribeToContacts(user.uid, setCollection("contacts"), handleError),
+      subscribeToTasks(user.uid, setCollection("tasks"), handleError("tasks")),
+      subscribeToNotes(user.uid, setCollection("notes"), handleError("notes")),
+      subscribeToNoteFolders(user.uid, setCollection("noteFolders"), handleError("noteFolders")),
+      subscribeToCalendarEvents(user.uid, setCollection("calendarEvents"), handleError("calendarEvents")),
+      subscribeToCalendarTaskBlocks(user.uid, setCollection("calendarTaskBlocks"), handleError("calendarTaskBlocks")),
+      subscribeToCategories(user.uid, setCollection("calendarCategories"), handleError("calendarCategories")),
+      subscribeToWorkoutExercises(user.uid, setCollection("workoutExercises"), handleError("workoutExercises")),
+      subscribeToWorkoutRoutines(user.uid, setCollection("workoutRoutines"), handleError("workoutRoutines")),
+      subscribeToWorkoutSessions(user.uid, setCollection("workoutSessions"), handleError("workoutSessions")),
+      subscribeToProjects(user.uid, setCollection("projects"), handleError("projects")),
+      subscribeToProjectSections(user.uid, setCollection("projectSections"), handleError("projectSections")),
+      subscribeToProjectTaskLinks(user.uid, setCollection("projectTaskLinks"), handleError("projectTaskLinks")),
+      subscribeToApplications(user.uid, setCollection("pipelineApplications"), handleError("pipelineApplications")),
+      subscribeToGeneratedDrafts(user.uid, setCollection("pipelineDrafts"), handleError("pipelineDrafts")),
+      subscribeToContacts(user.uid, setCollection("contacts"), handleError("contacts")),
     ];
 
     return () => {
+      active = false;
       unsubscribers.forEach((unsubscribe) => unsubscribe());
     };
   }, [isDemoMode, user]);
 
   function handleExportAll() {
-    downloadJson(`easylife-export-${new Date().toISOString().slice(0, 10)}.json`, dataExport);
-    setDataMessage("Export downloaded.");
+    const exportedAt = new Date().toISOString();
+    const payload = buildAccountExport({
+      collections: dataCollections,
+      settings,
+      exportedAt,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+      weightUnit: settings.easyWorkout.weightUnit,
+      appVersion: APP_VERSION,
+    });
+    downloadFile(`easylife-account-${exportedAt.slice(0, 10)}.json`, serializeAccountExport(payload), "application/json;charset=utf-8");
+    setDataMessage(`Versioned JSON export downloaded with ${dataTotals} records and a domain manifest.`);
+  }
+
+  function handleExportCsv(key: keyof DataCollections, label: string) {
+    const date = new Date().toISOString().slice(0, 10);
+    downloadFile(`easylife-${key}-${date}.csv`, serializeDomainCsv(key, dataCollections[key]), "text/csv;charset=utf-8");
+    setDataMessage(`${label} CSV downloaded with spreadsheet-formula protection.`);
   }
 
   function handleCopySummary() {
@@ -1424,10 +1390,18 @@ export function SettingsPage() {
         <PageSection
           eyebrow="Review"
           title="Data export and health"
-          description="Download a portable JSON snapshot, review saved record counts, and use this as the first step before any future deletion request."
+          description="Download a versioned whole-account JSON snapshot or practical per-domain CSV files. Exports include a manifest, time zone, units, and formula version without account credentials or Firebase configuration."
         >
           <div id="data" className="settings-anchor" />
+          {isDemoMode ? <div className="demo-data-banner" role="note"><strong>Demo export</strong><span>Synthetic records only. No Firebase reads or writes.</span></div> : null}
           {dataError ? <p className="error-copy">{dataError}</p> : null}
+          <p className="settings-data-readiness" role="status">
+            {dataPendingCount > 0
+              ? `Loading ${dataPendingCount} remaining data source${dataPendingCount === 1 ? "" : "s"} before export.`
+              : dataError
+                ? "Export paused. Retry after the data source is available so the file cannot be mistaken for a complete account snapshot."
+                : "All supported data sources are ready for export."}
+          </p>
           {dataMessage ? <div className="calendar-info-card">{dataMessage}</div> : null}
 
           <div className="settings-data-hero">
@@ -1449,10 +1423,10 @@ export function SettingsPage() {
           </div>
 
           <div className="settings-data-actions">
-            <button type="button" className="primary-button" onClick={handleExportAll}>
-              Download full export
+            <button type="button" className="primary-button" onClick={handleExportAll} disabled={!dataExportReady}>
+              Download account JSON
             </button>
-            <button type="button" className="button-secondary" onClick={handleCopySummary}>
+            <button type="button" className="button-secondary" onClick={handleCopySummary} disabled={!dataExportReady}>
               Copy data summary
             </button>
             <button type="button" className="button-secondary" onClick={() => setActiveSection("account")}>
@@ -1466,6 +1440,11 @@ export function SettingsPage() {
                 <span>{group.app}</span>
                 <strong>{dataCollections[group.key].length}</strong>
                 <p>{group.label}</p>
+                {group.csv ? (
+                  <button type="button" className="ghost-button compact-button" disabled={!dataExportReady} onClick={() => handleExportCsv(group.key, group.label)}>
+                    Download CSV
+                  </button>
+                ) : null}
               </article>
             ))}
           </div>
@@ -1478,6 +1457,14 @@ export function SettingsPage() {
               </span>
               <strong>{orphanCalendarBlockCount} orphan block{orphanCalendarBlockCount === 1 ? "" : "s"}</strong>
               <p>These are flexible calendar blocks pointing at tasks that are no longer in the current task list.</p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Portability contract</span>
+                <span className="settings-state-pill">v1</span>
+              </span>
+              <strong>Manifested and intentionally scoped</strong>
+              <p>The JSON names every included and unsupported domain. CSV cells beginning with =, +, -, or @ are neutralized before download.</p>
             </article>
             <article className="settings-review-card">
               <span className="settings-card-topline">

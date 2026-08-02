@@ -47,6 +47,8 @@ import {
   type PlanningState,
 } from "@/lib/firestore/calendarTaskBlocks";
 import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
+import { coreLoopDemoProjects } from "@/features/coreloop/demo/coreLoopDemoFixtures";
+import { weeklyReviewDemoProjectLinks } from "@/features/easystatistics/demo/weeklyReviewDemoFixtures";
 
 type EasyProjectsContextValue = {
   projects: ProjectRecord[];
@@ -90,17 +92,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (isDemoMode) {
-      setProjects([
-        {
-          id: "visual-project",
-          title: "Weekly planning review",
-          description: "A seeded QA project for checking detail and timeline layouts without Firestore data.",
-          targetDate: "2026-04-18",
-          status: "active",
-          createdAt: new Date("2026-04-12T09:00:00"),
-          updatedAt: new Date("2026-04-12T11:00:00"),
-        },
-      ]);
+      setProjects(coreLoopDemoProjects);
       setSections([
         {
           id: "visual-section-1",
@@ -140,6 +132,7 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
           createdAt: new Date("2026-04-12T09:20:00"),
           updatedAt: new Date("2026-04-12T09:20:00"),
         },
+        ...weeklyReviewDemoProjectLinks,
       ]);
       setTasks([
         {
