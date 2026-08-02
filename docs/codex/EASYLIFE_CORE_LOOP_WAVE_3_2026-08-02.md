@@ -100,8 +100,10 @@ Inspected screenshots:
 - No physical phone was available. iOS Safari/Android Chrome installed-PWA behavior, virtual keyboard resizing, safe areas, background/foreground persistence, storage pressure, and airplane-mode relaunch still require real-device field testing.
 - GitHub-hosted PR CI and reviewer acceptance have not run on this new branch.
 
-**PR readiness:** ready to open after the pushed branch is confirmed.  
-**Merge readiness:** conditional on green hosted CI, review, advisory acceptance, and real-device results appropriate to release policy.  
+**PR readiness:** ready to open after the pushed branch is confirmed.
+
+**Merge readiness:** conditional on green hosted CI, review, advisory acceptance, and real-device results appropriate to release policy.
+
 **Deployment readiness:** blocked pending explicit production authorization, physical iPhone/Android field testing, and the inherited advisory disposition; no deployment was attempted.
 
 ## Exact next commands
