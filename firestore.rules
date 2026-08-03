@@ -32,6 +32,27 @@ service cloud.firestore {
           && goal.exerciseName is string && goal.exerciseName.size() > 0 && goal.exerciseName.size() <= 200));
     }
 
+    function isSupportedUserCollection(collectionId) {
+      return collectionId in ['tasks', 'calendarEvents', 'calendarTaskBlocks', 'categories', 'projects', 'projectSections', 'projectTaskLinks', 'applications', 'generatedDrafts', 'notes', 'noteFolders', 'contacts', 'workoutExercises', 'workoutRoutines', 'workoutSessions', 'appPreferences'];
+    }
+
+    function validWorkoutSession() {
+      let session = request.resource.data;
+      return session.keys().hasAll(['routineName', 'performedOn', 'exercises'])
+        && session.keys().hasOnly(['clientDraftId', 'schemaVersion', 'routineId', 'routineName', 'performedOn', 'weightUnit', 'durationMinutes', 'notes', 'exercises', 'createdAt', 'updatedAt'])
+        && session.routineName is string && session.routineName.size() > 0 && session.routineName.size() <= 300
+        && session.performedOn is string && session.performedOn.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && session.exercises is list && session.exercises.size() <= 80
+        && (!('clientDraftId' in session) || (session.clientDraftId is string && session.clientDraftId.matches('^[A-Za-z0-9_-]{8,180}$')))
+        && (!('schemaVersion' in session) || session.schemaVersion == 3)
+        && (!('routineId' in session) || session.routineId == null || (session.routineId is string && session.routineId.size() <= 200))
+        && (!('weightUnit' in session) || session.weightUnit in ['lb', 'kg'])
+        && (!('durationMinutes' in session) || session.durationMinutes == null || (session.durationMinutes is number && session.durationMinutes >= 0 && session.durationMinutes <= 1440))
+        && (!('notes' in session) || (session.notes is string && session.notes.size() <= 20000))
+        && (!('createdAt' in session) || session.createdAt == null || session.createdAt is timestamp)
+        && (!('updatedAt' in session) || session.updatedAt == null || session.updatedAt is timestamp);
+    }
+
     match /users/{userId} {
       allow read, create, update, delete: if isOwner(userId);
 
@@ -46,8 +67,20 @@ service cloud.firestore {
         allow delete: if false;
       }
 
-      match /{collectionId}/{document=**} {
-        allow read, create, update, delete: if collectionId != 'workoutGoals' && isOwner(userId);
+      match /workoutSessions/{sessionId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validWorkoutSession();
+        allow update: if isOwner(userId) && validWorkoutSession()
+          && resource.data.get('clientDraftId', null) == request.resource.data.get('clientDraftId', null)
+          && resource.data.get('createdAt', null) == request.resource.data.get('createdAt', null);
+        allow delete: if isOwner(userId);
+      }
+
+      match /{collectionId}/{documentId} {
+        allow read, create, update, delete: if isSupportedUserCollection(collectionId)
+          && collectionId != 'workoutGoals'
+          && collectionId != 'workoutSessions'
+          && isOwner(userId);
       }
 
       match /{document=**} {

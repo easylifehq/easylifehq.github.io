@@ -1,0 +1,102 @@
+{
+  "completeness": "complete",
+  "deferred": [],
+  "documentType": "codex-security.coverage",
+  "excludePaths": [],
+  "explicitExclusions": [],
+  "includePaths": [
+    "."
+  ],
+  "inventoryStrategy": "repository",
+  "mode": "repository",
+  "openQuestions": [
+    {
+      "followUpPrompt": "Review custom-claim provisioning and removal before enabling any provider-backed Function.",
+      "question": "Are production AI-access and operator custom claims provisioned through a documented least-privilege process?"
+    }
+  ],
+  "scanId": "cb89466f-f22e-47cb-a919-a01f645d3c38",
+  "schemaVersion": "1.0",
+  "surfaces": [
+    {
+      "disposition": "reported",
+      "id": "surface_firestore",
+      "label": "Firestore rules and per-user data model",
+      "notes": "Owner isolation held, but an unbounded recursive wildcard accepted unsupported paths.",
+      "receiptRefs": [],
+      "riskArea": "Authorization, schema validation, resource abuse"
+    },
+    {
+      "disposition": "reported",
+      "id": "surface_functions_paid",
+      "label": "Cost-bearing Firebase Functions",
+      "notes": "Project planning and task analysis relied on ordinary authentication only.",
+      "receiptRefs": [],
+      "riskArea": "Capability authorization and quota abuse"
+    },
+    {
+      "disposition": "reported",
+      "id": "surface_assistant_operator",
+      "label": "Assistant provider operator boundary",
+      "notes": "The default-off operator gate used a public client-supplied acknowledgement.",
+      "receiptRefs": [],
+      "riskArea": "Function-level authorization"
+    },
+    {
+      "disposition": "reported",
+      "id": "surface_demo",
+      "label": "Demo and emulator isolation",
+      "notes": "Project planning could reuse a persisted production Auth singleton from demo mode.",
+      "receiptRefs": [],
+      "riskArea": "Environment isolation"
+    },
+    {
+      "disposition": "reported",
+      "id": "surface_exports",
+      "label": "Workout CSV and whole-account export",
+      "notes": "Workout CSV lacked formula neutralization; the JSON denylist omitted common credential names.",
+      "receiptRefs": [],
+      "riskArea": "Formula injection and secret exclusion"
+    },
+    {
+      "disposition": "no_issue_found",
+      "id": "surface_query_pwa",
+      "label": "Query parameters, PWA cache, and deep routes",
+      "notes": "No attacker-controlled Firebase endpoint redirect or code-execution path survived review; operational stale-root deployment remains a release concern.",
+      "receiptRefs": [],
+      "riskArea": "Redirect trust, stale cache, route integrity"
+    },
+    {
+      "disposition": "rejected",
+      "id": "surface_automation",
+      "label": "Overnight local automation",
+      "notes": "TASK_QUEUE.md is trusted merged developer configuration and repository writers already possess code-execution-equivalent privilege.",
+      "receiptRefs": [],
+      "riskArea": "Prompt injection"
+    },
+    {
+      "disposition": "not_applicable",
+      "id": "surface_archive_sri",
+      "label": "Archived third-party CDN dependency",
+      "notes": "The page is outside the approved runtime and requires CDN compromise; deployment must continue to exclude old-site.",
+      "receiptRefs": [],
+      "riskArea": "Supply-chain integrity"
+    },
+    {
+      "disposition": "rejected",
+      "id": "surface_archive_xss",
+      "label": "Archived EasyNotes and EasyList HTML sinks",
+      "notes": "Firestore ownership confines writers to the same account, leaving self-XSS in a non-runtime archive rather than a victim boundary.",
+      "receiptRefs": [],
+      "riskArea": "Stored XSS"
+    },
+    {
+      "disposition": "no_issue_found",
+      "id": "surface_secrets",
+      "label": "Source, fixtures, bundles, and environment handling",
+      "notes": "No private key or production credential was found; public Firebase client configuration is not a secret.",
+      "receiptRefs": [],
+      "riskArea": "Exposed credentials and production configuration"
+    }
+  ]
+}

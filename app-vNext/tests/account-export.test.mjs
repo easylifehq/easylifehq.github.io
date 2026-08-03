@@ -6,7 +6,7 @@ test("whole-account export is versioned, deterministic, manifested, and secret-f
   const collections = {
     ...emptyAccountDataCollections,
     tasks: [{ id: "b", title: "Second", clientDraftId: "hidden", projectId: "relationship-project", apiKey: "nope" }, { id: "a", title: "First", createdAt: new Date("2026-08-01T12:00:00Z") }],
-    contacts: [{ id: "person", fullName: "Maya", email: "maya@example.com", accessToken: "nope" }],
+    contacts: [{ id: "person", fullName: "Maya", email: "maya@example.com", accessToken: "nope", token: "nope", idToken: "nope", authorization: "nope", bearerToken: "nope", clientSecret: "nope", session: "nope", cookie: "nope", privateKey: "nope", serviceAccount: "nope" }],
   };
   const input = { collections, settings: { easyWorkout: { weightUnit: "lb" }, storageBucket: "nope" }, exportedAt: "2026-08-02T00:00:00.000Z", timeZone: "America/Denver", weightUnit: "lb", appVersion: "4.37.1" };
   const first = serializeAccountExport(buildAccountExport(input));

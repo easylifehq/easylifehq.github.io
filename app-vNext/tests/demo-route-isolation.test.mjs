@@ -14,3 +14,11 @@ test("every workout statistics source link preserves demo isolation", async () =
     assert.match(link, /\$\{demoOnlySearch\}/, `demo query missing from ${link}`);
   }
 });
+
+test("project planner demo mode returns before the production request helper", async () => {
+  const source = await readFile(new URL("../src/features/easyprojects/routes/EasyProjectsHomePage.tsx", import.meta.url), "utf8");
+  const handler = source.slice(source.indexOf("async function handlePlanProject"), source.indexOf("async function handleCreateAiPlan"));
+  assert.ok(handler.indexOf("if (isDemoMode)") >= 0);
+  assert.ok(handler.indexOf("if (isDemoMode)") < handler.indexOf("requestProjectPlan"));
+  assert.match(handler, /No production function or Firebase write ran/);
+});

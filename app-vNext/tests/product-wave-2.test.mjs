@@ -93,3 +93,12 @@ test("JSON and CSV exports preserve versions, stored units, timestamps, and esca
   assert.match(csv, /"steady, controlled"/);
   assert.match(csv, /"say ""go"""/);
 });
+
+test("workout CSV neutralizes spreadsheet formulas in user-authored fields", () => {
+  const payload = createWorkoutExportPayload({ routines: [], sessions: [{ id: "formula", routineId: null, routineName: "=2+2", performedOn: "2026-08-01", weightUnit: "lb", durationMinutes: 30, notes: " @SUM(A1:A2)", createdAt: null, updatedAt: null, exercises: [{ exerciseId: null, exerciseName: "+cmd", exerciseType: "weighted", sets: [{ reps: 5, weight: 100, notes: "-1+1" }] }] }], exportedAt: "2026-08-02T00:00:00Z", displayUnit: "lb" });
+  const csv = serializeWorkoutCsv(payload);
+  assert.match(csv, /"'=2\+2"/);
+  assert.match(csv, /"'\+cmd"/);
+  assert.match(csv, /"'-1\+1"/);
+  assert.match(csv, /"' @SUM\(A1:A2\)"/);
+});

@@ -333,6 +333,7 @@ const assistantIntakeMaxTypedCaptureLength = 2000;
 const assistantIntakeResponseVersion = "stage-32-assistant-intake-response-v1";
 const assistantIntakeProviderEnabledEnvName = "ASSISTANT_INTAKE_PROVIDER_ENABLED";
 const assistantIntakeProviderKillSwitchEnvName = "ASSISTANT_INTAKE_PROVIDER_KILL_SWITCH";
+const assistantIntakeOperatorClaimName = "easylifeOperator";
 const assistantIntakeOperatorConfirmationPhrase =
   "I_APPROVE_ONE_SYNTHETIC_ASSISTANT_INTAKE_PROVIDER_TEST";
 const assistantIntakeAllowedBodyKeys = new Set([
@@ -620,7 +621,7 @@ function isAssistantIntakeProviderKillSwitchActive() {
   return process.env[assistantIntakeProviderKillSwitchEnvName] === "true";
 }
 
-function getAssistantIntakeProviderBlockReason(validation) {
+function getAssistantIntakeProviderBlockReason(validation, verifiedUser) {
   if (!validation.liveCallRequested) {
     return "live-call-not-requested";
   }
@@ -631,6 +632,10 @@ function getAssistantIntakeProviderBlockReason(validation) {
 
   if (!isAssistantIntakeProviderGateEnabled()) {
     return "server-gate-disabled";
+  }
+
+  if (verifiedUser?.[assistantIntakeOperatorClaimName] !== true) {
+    return "operator-authorization-required";
   }
 
   if (!validation.operatorConfirmed) {
@@ -953,6 +958,14 @@ async function verifySignedInRequest(request, response, actionName) {
   }
 }
 
+function hasAiProviderAccess(verifiedUser) {
+  return verifiedUser?.easylifeAiAccess === true || verifiedUser?.easylifeOperator === true;
+}
+
+function rejectMissingAiProviderAccess(response) {
+  response.status(403).json({ error: "This preview is not enabled for this account." });
+}
+
 exports.assistantIntakeSuggestion = onRequest(
   {
     cors: allowedCorsOrigins,
@@ -1010,7 +1023,7 @@ exports.assistantIntakeSuggestion = onRequest(
 
     const providerGateEnabled = isAssistantIntakeProviderGateEnabled();
     const providerKillSwitchActive = isAssistantIntakeProviderKillSwitchActive();
-    const providerBlockReason = getAssistantIntakeProviderBlockReason(validation);
+    const providerBlockReason = getAssistantIntakeProviderBlockReason(validation, verifiedUser);
 
     if (providerBlockReason) {
       logger.info("Assistant intake suggestion returned disabled fallback", {
@@ -1177,19 +1190,10 @@ exports.analyzeTaskBrainDump = onRequest(
       return;
     }
 
-    const authHeader = request.get("authorization") || "";
-    const token = authHeader.startsWith("Bearer ") ? authHeader.slice("Bearer ".length) : "";
-
-    if (!token) {
-      response.status(401).json({ error: "Sign in before using AI task analysis." });
-      return;
-    }
-
-    try {
-      await admin.auth().verifyIdToken(token);
-    } catch (error) {
-      logger.warn("Rejected unauthenticated task analysis request", error);
-      response.status(401).json({ error: "Your session could not be verified." });
+    const verifiedUser = await verifySignedInRequest(request, response, "AI task analysis");
+    if (!verifiedUser) return;
+    if (!hasAiProviderAccess(verifiedUser)) {
+      rejectMissingAiProviderAccess(response);
       return;
     }
 
@@ -1456,19 +1460,10 @@ exports.planProjectWithAi = onRequest(
       return;
     }
 
-    const authHeader = request.get("authorization") || "";
-    const token = authHeader.startsWith("Bearer ") ? authHeader.slice("Bearer ".length) : "";
-
-    if (!token) {
-      response.status(401).json({ error: "Sign in before using AI project planning." });
-      return;
-    }
-
-    try {
-      await admin.auth().verifyIdToken(token);
-    } catch (error) {
-      logger.warn("Rejected unauthenticated project planning request", error);
-      response.status(401).json({ error: "Your session could not be verified." });
+    const verifiedUser = await verifySignedInRequest(request, response, "AI project planning");
+    if (!verifiedUser) return;
+    if (!hasAiProviderAccess(verifiedUser)) {
+      rejectMissingAiProviderAccess(response);
       return;
     }
 

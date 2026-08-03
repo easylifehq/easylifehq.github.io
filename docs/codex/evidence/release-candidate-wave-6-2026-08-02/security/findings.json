@@ -1,0 +1,494 @@
+{
+  "documentType": "codex-security.findings",
+  "findings": [
+    {
+      "attackPath": {
+        "dataflow": "public signup -> owner-authenticated request -> recursive wildcard -> arbitrary nested storage",
+        "reachability": "Any public account can trigger the path; cross-account access is not required."
+      },
+      "confidence": {
+        "level": "high",
+        "rationale": "Static rules analysis and authenticated Emulator probes directly confirmed owner writes to unsupported nested paths."
+      },
+      "extensions": {
+        "candidateId": "candidate-b27ba948ae339a7c"
+      },
+      "findingId": "csf_0ce198fde54e43760e8655b3",
+      "fingerprints": {
+        "algorithm": "codex-security/v1",
+        "primary": "codex-security/v1:sha256:48108c74e0e5c3d8c49d88717392772210298899dcc9259dbed733c1e286e302"
+      },
+      "identity": {
+        "anchor": "firestore-user-wildcard",
+        "instance": "user-wildcard"
+      },
+      "locations": [
+        {
+          "endLine": 50,
+          "path": "firestore.rules",
+          "role": "root_control",
+          "startLine": 49
+        },
+        {
+          "endLine": 175,
+          "path": "app-vNext/tests/firebase-emulator.integration.mjs",
+          "role": "evidence",
+          "startLine": 167
+        }
+      ],
+      "occurrenceId": "occ_09e1fa10dd50dbb7cf1d7804",
+      "preventiveControls": [
+        "Review Firestore collection inventory whenever adapters add a domain."
+      ],
+      "provenance": {
+        "source": "local_plugin"
+      },
+      "remediation": "Replace the recursive wildcard with an explicit supported-collection allowlist, keep it one document deep, and add bounded schema validation for high-risk records.",
+      "remediationTests": [
+        "Reject unsupported collection names and nested descendants.",
+        "Preserve reads of supported pre-Wave records."
+      ],
+      "rootCause": {
+        "summary": "The recursive wildcard treats user ownership as sufficient authorization for every unknown collection and descendant instead of limiting the supported data model."
+      },
+      "ruleId": "firestore.authorization.unbounded-owner-wildcard",
+      "severity": {
+        "changeConditions": "Lower if account creation becomes invite-only and independent per-user quotas are enforced.",
+        "level": "medium",
+        "rationale": "Public signup makes unsupported storage and subscribed-shape corruption deterministic; owner isolation limits confidentiality impact."
+      },
+      "summary": "A public account can write arbitrary top-level and nested collections under its own user namespace because the recursive wildcard enforces ownership but no collection allowlist, depth bound, or schema validation.",
+      "taxonomy": {
+        "category": "Improper input validation / resource abuse",
+        "cwe": [
+          "CWE-20",
+          "CWE-400"
+        ]
+      },
+      "title": "Owner wildcard permits unsupported Firestore schemas and nested storage",
+      "validation": {
+        "evidence": "The owner account could write arbitrary unsupported and nested documents; a second user remained denied.",
+        "method": "Static rules analysis plus authenticated Emulator probes.",
+        "remainingUncertainty": "Production billing limits were not observable.",
+        "rubric": "Public account reaches the write rule; schema and depth are unbounded."
+      }
+    },
+    {
+      "attackPath": {
+        "dataflow": "public signup -> Firebase ID token -> planProjectWithAi -> OpenAI API",
+        "reachability": "Every public account satisfies the only identity check."
+      },
+      "confidence": {
+        "level": "high",
+        "rationale": "A direct static trace shows authentication followed by the paid provider sink with no authorization claim."
+      },
+      "extensions": {
+        "candidateId": "candidate-b39613f0450ff6ef"
+      },
+      "findingId": "csf_62033d6ff944fc91419bf18a",
+      "fingerprints": {
+        "algorithm": "codex-security/v1",
+        "primary": "codex-security/v1:sha256:2fbc35b1ef716779c25cb631faf5b07e0e2bbbdc6c90c4bc0c20fb4c179db147"
+      },
+      "identity": {
+        "anchor": "project-planning-provider-call",
+        "instance": "project-planning"
+      },
+      "locations": [
+        {
+          "endLine": 48,
+          "path": "app-vNext/src/features/auth/routes/LoginPage.tsx",
+          "role": "source",
+          "startLine": 38
+        },
+        {
+          "endLine": 1554,
+          "path": "functions/index.js",
+          "role": "sink",
+          "startLine": 1441
+        }
+      ],
+      "occurrenceId": "occ_e78f62090eb72093b42b1e05",
+      "preventiveControls": [
+        "Separate authentication and capability authorization for all cost-bearing Functions."
+      ],
+      "provenance": {
+        "source": "local_plugin"
+      },
+      "remediation": "Require a server-issued AI-access or operator custom claim before reading the provider secret or invoking the provider; add authorization regression tests.",
+      "remediationTests": [
+        "Reject ordinary authenticated accounts.",
+        "Allow an account with the explicit server-issued claim."
+      ],
+      "rootCause": {
+        "summary": "Authentication is treated as authorization for a cost-bearing provider capability even though accounts are publicly creatable."
+      },
+      "ruleId": "functions.authorization.project-planner-entitlement",
+      "severity": {
+        "changeConditions": "Lower with a server-issued access claim plus per-UID quota or App Check.",
+        "level": "medium",
+        "rationale": "Low-skill authenticated abuse can consume paid quota and affect availability, while input limits and provider quotas cap individual requests."
+      },
+      "summary": "The project-planning Function accepts any valid Firebase ID token from the public signup flow before making a paid OpenAI request; no entitlement, operator claim, App Check, or per-UID quota is enforced.",
+      "taxonomy": {
+        "category": "Missing authorization / uncontrolled resource consumption",
+        "cwe": [
+          "CWE-862",
+          "CWE-770"
+        ]
+      },
+      "title": "Public accounts can invoke paid project-planning provider work",
+      "validation": {
+        "evidence": "verifyIdToken is followed by validation and provider invocation without an authorization decision.",
+        "method": "Static authentication-to-provider trace.",
+        "remainingUncertainty": "Production quota and billing-alert configuration were unavailable.",
+        "rubric": "Public signup; paid sink; no role, entitlement, App Check, or per-UID quota."
+      }
+    },
+    {
+      "attackPath": {
+        "dataflow": "public signup -> Firebase ID token -> analyzeTaskBrainDump -> OpenAI API",
+        "reachability": "Every public account satisfies the only identity check."
+      },
+      "confidence": {
+        "level": "high",
+        "rationale": "A direct static trace shows authentication followed by the paid provider sink with no authorization claim."
+      },
+      "extensions": {
+        "candidateId": "candidate-6e8ad111af08237a"
+      },
+      "findingId": "csf_711f41c7189bb78d9a5b4de9",
+      "fingerprints": {
+        "algorithm": "codex-security/v1",
+        "primary": "codex-security/v1:sha256:e41d35a9ce1fd86113287b8c4774607b44533ec03f4d801f748f60599ad0d683"
+      },
+      "identity": {
+        "anchor": "task-analysis-provider-call",
+        "instance": "task-analysis"
+      },
+      "locations": [
+        {
+          "endLine": 48,
+          "path": "app-vNext/src/features/auth/routes/LoginPage.tsx",
+          "role": "source",
+          "startLine": 38
+        },
+        {
+          "endLine": 1269,
+          "path": "functions/index.js",
+          "role": "sink",
+          "startLine": 1162
+        }
+      ],
+      "occurrenceId": "occ_01bef485c8adc06491b15f8c",
+      "preventiveControls": [
+        "Separate authentication and capability authorization for all cost-bearing Functions."
+      ],
+      "provenance": {
+        "source": "local_plugin"
+      },
+      "remediation": "Require a server-issued AI-access or operator custom claim before reading the provider secret or invoking the provider; add authorization regression tests.",
+      "remediationTests": [
+        "Reject ordinary authenticated accounts.",
+        "Allow an account with the explicit server-issued claim."
+      ],
+      "rootCause": {
+        "summary": "Authentication is treated as authorization for a cost-bearing provider capability even though accounts are publicly creatable."
+      },
+      "ruleId": "functions.authorization.task-analysis-entitlement",
+      "severity": {
+        "changeConditions": "Lower with a server-issued access claim plus per-UID quota or App Check.",
+        "level": "medium",
+        "rationale": "Low-skill authenticated abuse can consume paid quota and affect availability, while input limits and provider quotas cap individual requests."
+      },
+      "summary": "The task-analysis Function accepts any valid Firebase ID token from the public signup flow before making a paid OpenAI request; no entitlement, operator claim, App Check, or per-UID quota is enforced.",
+      "taxonomy": {
+        "category": "Missing authorization / uncontrolled resource consumption",
+        "cwe": [
+          "CWE-862",
+          "CWE-770"
+        ]
+      },
+      "title": "Public accounts can invoke paid task-analysis provider work",
+      "validation": {
+        "evidence": "verifyIdToken is followed by validation and provider invocation without an authorization decision.",
+        "method": "Static authentication-to-provider trace.",
+        "remainingUncertainty": "Production quota and billing-alert configuration were unavailable.",
+        "rubric": "Public signup; paid sink; no role, entitlement, App Check, or per-UID quota."
+      }
+    },
+    {
+      "attackPath": {
+        "dataflow": "workout text -> csvCell -> CSV download -> spreadsheet evaluation",
+        "reachability": "Any signed-in user can save workout text and export it."
+      },
+      "confidence": {
+        "level": "high",
+        "rationale": "Direct exporter invocation preserved every tested formula prefix."
+      },
+      "extensions": {
+        "candidateId": "candidate-f265103ce4f3f1f8"
+      },
+      "findingId": "csf_a8e25f24e23230d2b3c776e4",
+      "fingerprints": {
+        "algorithm": "codex-security/v1",
+        "primary": "codex-security/v1:sha256:4f21ec7709e15cc8dc06d54075e2445a83a1b1bc754c30e3a96883cf59e62b6c"
+      },
+      "identity": {
+        "anchor": "workout-history-csv-cell",
+        "instance": "workout-csv"
+      },
+      "locations": [
+        {
+          "endLine": 52,
+          "path": "app-vNext/src/features/easyworkout/domain/workoutHistoryTools.ts",
+          "role": "sink",
+          "startLine": 43
+        }
+      ],
+      "occurrenceId": "occ_b9ea6a4eed1da6fc8b92b51c",
+      "preventiveControls": [
+        "Use one shared spreadsheet-safe string encoder for future exports."
+      ],
+      "provenance": {
+        "source": "local_plugin"
+      },
+      "remediation": "Prefix dangerous string cells with an apostrophe after normalizing leading whitespace, and add regression coverage for every supported text column.",
+      "remediationTests": [
+        "Neutralize formula prefixes, including after whitespace.",
+        "Preserve correct CSV escaping."
+      ],
+      "rootCause": {
+        "summary": "CSV quoting protects structure but does not neutralize spreadsheet interpretation of leading =, +, -, or @ after whitespace."
+      },
+      "ruleId": "export.csv.formula-injection",
+      "severity": {
+        "changeConditions": "Higher if third-party workout imports are later exported by a different operator.",
+        "level": "low",
+        "rationale": "The consequence is meaningful but requires an explicit user export and downstream spreadsheet open, normally by the same account."
+      },
+      "summary": "User-authored routine, exercise, and note text is quoted but formula prefixes remain executable when the downloaded CSV is opened in a spreadsheet.",
+      "taxonomy": {
+        "category": "CSV formula injection",
+        "cwe": [
+          "CWE-1236"
+        ]
+      },
+      "title": "Workout CSV export does not neutralize spreadsheet formulas",
+      "validation": {
+        "evidence": "The generated CSV preserved =,+,-,@ prefixes.",
+        "method": "Direct dynamic exporter invocation.",
+        "remainingUncertainty": "Execution depends on the downstream spreadsheet.",
+        "rubric": "Attacker-influenced text reaches a spreadsheet cell without neutralization."
+      }
+    },
+    {
+      "attackPath": {
+        "dataflow": "demo action -> global auth.currentUser -> ID token -> production Function",
+        "reachability": "Requires retained production authentication on localhost."
+      },
+      "confidence": {
+        "level": "high",
+        "rationale": "The source trace directly connects the demo action, persisted auth singleton, and production network sink without a demo guard."
+      },
+      "extensions": {
+        "candidateId": "candidate-eaca427c51ee94a0"
+      },
+      "findingId": "csf_bbc04eb9d387749d84e96cbb",
+      "fingerprints": {
+        "algorithm": "codex-security/v1",
+        "primary": "codex-security/v1:sha256:32bd35fbf2b5c83392be2ec0676162a1bfbd4ed4f400d790d80117834b71a1e7"
+      },
+      "identity": {
+        "anchor": "demo-project-planner-production-call",
+        "instance": "demo-project-planner"
+      },
+      "locations": [
+        {
+          "endLine": 37,
+          "path": "app-vNext/src/features/easyprojects/routes/EasyProjectsHomePage.tsx",
+          "role": "entrypoint",
+          "startLine": 31
+        },
+        {
+          "endLine": 98,
+          "path": "app-vNext/src/features/easyprojects/lib/projectAiPlanner.ts",
+          "role": "sink",
+          "startLine": 73
+        }
+      ],
+      "occurrenceId": "occ_d4b3c8c78c75d57b798945d0",
+      "preventiveControls": [
+        "Pass explicit environment-scoped clients instead of reading global auth in domain helpers."
+      ],
+      "provenance": {
+        "source": "local_plugin"
+      },
+      "remediation": "Return before invoking the planner helper whenever demo mode is active, and lock source ordering with a regression test.",
+      "remediationTests": [
+        "Assert the demo early return precedes requestProjectPlan.",
+        "Assert demo fixtures make no Firebase writes."
+      ],
+      "rootCause": {
+        "summary": "The route trusts synthetic context identity while its helper bypasses that context and consumes global Firebase authentication."
+      },
+      "ruleId": "demo.isolation.production-project-planner",
+      "severity": {
+        "changeConditions": "Higher if production authentication is intentionally shared with demo sessions.",
+        "level": "low",
+        "rationale": "A persisted production login on loopback plus an explicit planner action is required, but the path violates the promised zero-production-call demo boundary."
+      },
+      "summary": "Demo context supplies a synthetic user, but the planner helper independently reads the persisted Firebase Auth singleton and targets a hard-coded production Function URL.",
+      "taxonomy": {
+        "category": "Environment isolation failure",
+        "cwe": [
+          "CWE-669"
+        ]
+      },
+      "title": "Demo project planning can cross into the production Function",
+      "validation": {
+        "evidence": "The production request could occur before any demo-mode early return.",
+        "method": "Static cross-context control-flow trace.",
+        "remainingUncertainty": "No production request was executed.",
+        "rubric": "Demo promise is synthetic; persisted production auth remains reachable."
+      }
+    },
+    {
+      "attackPath": {
+        "dataflow": "legacy user record -> recursive sanitizer -> downloaded JSON",
+        "reachability": "Requires a credential-like field already stored and an explicit export."
+      },
+      "confidence": {
+        "level": "high",
+        "rationale": "Dynamic export tests emitted multiple credential-shaped fields unchanged."
+      },
+      "extensions": {
+        "candidateId": "candidate-8a835a302feb0f1a"
+      },
+      "findingId": "csf_d487182a4e7a0171f2b26924",
+      "fingerprints": {
+        "algorithm": "codex-security/v1",
+        "primary": "codex-security/v1:sha256:9ecfccc61397cf97742f63d5c57e163be62a043d5973f13beccda7d7dbc317b1"
+      },
+      "identity": {
+        "anchor": "whole-account-export-sanitizer",
+        "instance": "account-export"
+      },
+      "locations": [
+        {
+          "endLine": 59,
+          "path": "app-vNext/src/features/coreloop/domain/accountExport.ts",
+          "role": "root_control",
+          "startLine": 48
+        }
+      ],
+      "occurrenceId": "occ_e840160afef1028f905419e8",
+      "preventiveControls": [
+        "Prefer explicit per-domain export projections over generic object traversal."
+      ],
+      "provenance": {
+        "source": "local_plugin"
+      },
+      "remediation": "Expand the case-insensitive denylist and add nested-object regression fixtures for every excluded credential family.",
+      "remediationTests": [
+        "Strip common token, session, cookie, private-key, and service-account names recursively."
+      ],
+      "rootCause": {
+        "summary": "The recursive sanitizer uses a narrow exact-key denylist that does not cover common credential and session names tolerated in legacy record shapes."
+      },
+      "ruleId": "export.json.credential-field-denylist",
+      "severity": {
+        "changeConditions": "Higher if integrations begin persisting opaque credential-bearing objects.",
+        "level": "low",
+        "rationale": "Potential secret inclusion matters, but normal adapters do not write these fields and the export is explicitly user initiated."
+      },
+      "summary": "The recursive export sanitizer promises credential exclusion but omits common field names such as token, idToken, authorization, clientSecret, session, cookie, privateKey, and serviceAccount.",
+      "taxonomy": {
+        "category": "Sensitive data exposure",
+        "cwe": [
+          "CWE-200"
+        ]
+      },
+      "title": "Whole-account export can include common credential-shaped fields",
+      "validation": {
+        "evidence": "token, idToken, authorization, clientSecret, session, and cookie survived export.",
+        "method": "Direct export invocation with credential-shaped fields.",
+        "remainingUncertainty": "Production records were intentionally not inspected.",
+        "rubric": "Tolerated records may carry legacy fields and the manifest promises exclusion."
+      }
+    },
+    {
+      "attackPath": {
+        "dataflow": "authenticated account -> public acknowledgement fields -> provider operation",
+        "reachability": "Config-dependent and reachable by any account after enablement."
+      },
+      "confidence": {
+        "level": "high",
+        "rationale": "All gate inputs except ordinary Firebase authentication are client controlled or publicly documented."
+      },
+      "extensions": {
+        "candidateId": "candidate-e2a0ecd082f66d7f"
+      },
+      "findingId": "csf_fddd46e8e55cf28f84691dfa",
+      "fingerprints": {
+        "algorithm": "codex-security/v1",
+        "primary": "codex-security/v1:sha256:665d4222ceab9cbab74bcaf54fffaa441ee661934ee15e73b6fae4709284efae"
+      },
+      "identity": {
+        "anchor": "assistant-provider-operator-gate",
+        "instance": "assistant-operator"
+      },
+      "locations": [
+        {
+          "endLine": 337,
+          "path": "functions/index.js",
+          "role": "root_control",
+          "startLine": 334
+        },
+        {
+          "endLine": 1060,
+          "path": "functions/index.js",
+          "role": "entrypoint",
+          "startLine": 956
+        }
+      ],
+      "occurrenceId": "occ_5d686363ef0001e0d7659af6",
+      "preventiveControls": [
+        "Document custom-claim provisioning and removal in deployment operations."
+      ],
+      "provenance": {
+        "source": "local_plugin"
+      },
+      "remediation": "Require an explicit operator custom claim in addition to the environment switch and acknowledgement.",
+      "remediationTests": [
+        "Reject an ordinary authenticated account.",
+        "Allow an account with the operator custom claim."
+      ],
+      "rootCause": {
+        "summary": "A static acknowledgement phrase is treated as operator authorization instead of requiring a server-issued identity attribute."
+      },
+      "ruleId": "functions.authorization.assistant-operator-claim",
+      "severity": {
+        "changeConditions": "Higher if provider enablement is broad or the response gains sensitive capabilities.",
+        "level": "low",
+        "rationale": "The path is deterministic when enabled, but the feature is disabled by default and initially synthetic, reducing practical likelihood."
+      },
+      "summary": "When the environment switch is enabled, any authenticated account can reproduce every client-supplied operator acknowledgement because no server-issued claim or UID policy distinguishes an operator.",
+      "taxonomy": {
+        "category": "Missing function-level authorization",
+        "cwe": [
+          "CWE-862"
+        ]
+      },
+      "title": "Assistant provider operator gate is a public static phrase",
+      "validation": {
+        "evidence": "Any authenticated account can reproduce the documented fields when enablement is true.",
+        "method": "Static authorization and request reproducibility analysis.",
+        "remainingUncertainty": "Production enablement was not observable.",
+        "rubric": "Sensitive provider operation; public phrase; no server-issued operator identity."
+      }
+    }
+  ],
+  "scanId": "cb89466f-f22e-47cb-a919-a01f645d3c38",
+  "schemaVersion": "1.0"
+}

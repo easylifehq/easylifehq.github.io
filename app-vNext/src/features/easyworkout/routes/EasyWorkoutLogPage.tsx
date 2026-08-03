@@ -10,7 +10,9 @@ import {
   canClearMatchingWorkoutDraft,
   getWorkoutDraftStorageKey,
   hasWorkoutDraftWork,
-  recoverWorkoutDraft,
+  recoverWorkoutDraftFromStorage,
+  resolveWorkoutDurationMinutes,
+  serializeWorkoutDraftForStorage,
   workoutDraftStatusCopy,
   type StoredWorkoutDraft,
   type WorkoutDraftLifecycleStatus,
@@ -77,7 +79,7 @@ function readStoredWorkoutDraft(storageKey: string, ownerId: string, defaultWeig
   try {
     const raw = window.localStorage.getItem(storageKey);
     if (!raw) return null;
-    return recoverWorkoutDraft(JSON.parse(raw), { today: localDateKey(), nowIso: new Date().toISOString(), ownerId, defaultWeightUnit, createId: createLocalId });
+    return recoverWorkoutDraftFromStorage(raw, { today: localDateKey(), nowIso: new Date().toISOString(), ownerId, defaultWeightUnit, createId: createLocalId });
   } catch {
     return { draft: null, message: "The saved workout draft was unreadable. Start a new workout; no remote data was changed.", migrated: false };
   }
@@ -129,6 +131,8 @@ export function EasyWorkoutLogPage() {
   const firstExerciseInputRef = useRef<HTMLInputElement | null>(null);
   const saveCoordinatorRef = useRef(new WorkoutSaveCoordinator<string | null>());
   const skipDraftFlushRef = useRef(false);
+  const latestDraftRef = useRef<StoredWorkoutDraft | null>(null);
+  const elapsedTickRef = useRef(Date.now());
   const { settings } = useSettings();
   const { user, isDemoMode } = useAuth();
   const ownerId = user?.uid || "unavailable";
@@ -165,9 +169,27 @@ export function EasyWorkoutLogPage() {
   const [saveMessage, setSaveMessage] = useState(restoredDraftRecovery?.message || "");
   const [draftStatus, setDraftStatus] = useState<WorkoutDraftLifecycleStatus>("saved-local");
   const [isSaving, setIsSaving] = useState(false);
+  const [externalDraftConflict, setExternalDraftConflict] = useState(false);
   const [deletedSetUndo, setDeletedSetUndo] = useState<DeletedSetUndo | null>(null);
   const todayKey = localDateKey();
   const todayLoggedCount = sessions.filter((session) => session.performedOn === todayKey).length;
+
+  latestDraftRef.current = {
+    schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
+    ownerId,
+    weightUnit: draftWeightUnit,
+    draftId,
+    selectedRoutineId,
+    routineOriginId: restoredDraft?.routineOriginId || selectedRoutineId || null,
+    performedOn,
+    startedAt,
+    elapsedSeconds,
+    durationMinutes,
+    sessionNotes,
+    activeExerciseId,
+    exerciseLogs,
+    updatedAt: new Date().toISOString(),
+  };
 
   const selectedRoutine = useMemo(
     () => routines.find((routine) => routine.id === selectedRoutineId) || null,
@@ -337,12 +359,56 @@ export function EasyWorkoutLogPage() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const updateElapsed = () => {
-      const started = new Date(startedAt).getTime();
-      if (Number.isFinite(started)) setElapsedSeconds((current) => Math.max(current, Math.floor((Date.now() - started) / 1000)));
+    const handleExternalDraftChange = (event: StorageEvent) => {
+      if (event.storageArea !== window.localStorage || event.key !== draftStorageKey) return;
+      skipDraftFlushRef.current = true;
+      setExternalDraftConflict(true);
+      setDraftStatus("sync-failed-draft-retained");
+      setSaveMessage("This workout changed in another tab. Reload before editing or saving so one tab does not overwrite the other.");
     };
-    const timer = window.setInterval(updateElapsed, 30000);
-    const handleVisibility = () => updateElapsed();
+    window.addEventListener("storage", handleExternalDraftChange);
+    return () => window.removeEventListener("storage", handleExternalDraftChange);
+  }, [draftStorageKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const persistLatestDraft = () => {
+      if (skipDraftFlushRef.current || externalDraftConflict) return;
+      const draft = latestDraftRef.current;
+      if (!draft || !hasWorkoutDraftWork(draft)) return;
+      try {
+        const serialized = serializeWorkoutDraftForStorage({ ...draft, updatedAt: new Date().toISOString() });
+        if (serialized) window.localStorage.setItem(draftStorageKey, serialized);
+      } catch {
+        // The mounted page already exposes a recovery warning when local storage is unavailable.
+      }
+    };
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") persistLatestDraft();
+    };
+    window.addEventListener("pagehide", persistLatestDraft);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      window.removeEventListener("pagehide", persistLatestDraft);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [draftStorageKey, externalDraftConflict]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const updateElapsed = () => {
+      const now = Date.now();
+      const previousTick = elapsedTickRef.current;
+      elapsedTickRef.current = now;
+      if (document.visibilityState !== "visible") return;
+      const activeSeconds = Math.max(0, Math.min(30, Math.floor((now - previousTick) / 1000)));
+      if (activeSeconds) setElapsedSeconds((current) => current + activeSeconds);
+    };
+    const timer = window.setInterval(updateElapsed, 1000);
+    const handleVisibility = () => {
+      if (document.visibilityState === "hidden") updateElapsed();
+      else elapsedTickRef.current = Date.now();
+    };
     window.addEventListener("pagehide", handleVisibility);
     document.addEventListener("visibilitychange", handleVisibility);
     return () => {
@@ -355,31 +421,24 @@ export function EasyWorkoutLogPage() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const draft: StoredWorkoutDraft = {
-      schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
-      ownerId,
-      weightUnit: draftWeightUnit,
-      draftId,
-      selectedRoutineId,
-      routineOriginId: restoredDraft?.routineOriginId || selectedRoutineId || null,
-      performedOn,
-      startedAt,
-      elapsedSeconds,
-      durationMinutes,
-      sessionNotes,
-      activeExerciseId,
-      exerciseLogs,
-      updatedAt: new Date().toISOString(),
-    };
+    const draft = latestDraftRef.current;
+    if (!draft) return;
     if (!hasWorkoutDraftWork(draft)) {
       window.localStorage.removeItem(draftStorageKey);
+      return;
+    }
+    if (externalDraftConflict) return;
+    const serialized = serializeWorkoutDraftForStorage(draft);
+    if (!serialized) {
+      setDraftStatus("sync-failed-draft-retained");
+      setSaveMessage("This draft is too large to retain safely on this device. Remove extra sets or long notes before leaving.");
       return;
     }
     setDraftStatus("saving-local");
     const saveTimer = window.setTimeout(() => {
       if (skipDraftFlushRef.current) return;
       try {
-        window.localStorage.setItem(draftStorageKey, JSON.stringify(draft));
+        window.localStorage.setItem(draftStorageKey, serialized);
         setDraftStatus("saved-local");
       } catch {
         setDraftStatus("sync-failed-draft-retained");
@@ -390,12 +449,13 @@ export function EasyWorkoutLogPage() {
       window.clearTimeout(saveTimer);
       if (skipDraftFlushRef.current) return;
       try {
-        window.localStorage.setItem(draftStorageKey, JSON.stringify({ ...draft, updatedAt: new Date().toISOString() }));
+        const finalSerialized = serializeWorkoutDraftForStorage({ ...draft, updatedAt: new Date().toISOString() });
+        if (finalSerialized) window.localStorage.setItem(draftStorageKey, finalSerialized);
       } catch {
         // The visible status from the mounted page already explains local storage failures.
       }
     };
-  }, [activeExerciseId, draftId, draftStorageKey, draftWeightUnit, durationMinutes, elapsedSeconds, exerciseLogs, ownerId, performedOn, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
+  }, [activeExerciseId, draftId, draftStorageKey, draftWeightUnit, durationMinutes, elapsedSeconds, exerciseLogs, externalDraftConflict, ownerId, performedOn, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
 
   function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogDraft>) {
     setExerciseLogs((current) =>
@@ -594,6 +654,11 @@ export function EasyWorkoutLogPage() {
 
   async function handleSaveSession(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (externalDraftConflict) {
+      setDraftStatus("sync-failed-draft-retained");
+      setSaveMessage("This workout changed in another tab. Reload before saving so one tab does not overwrite the other.");
+      return;
+    }
     const cleanedExercises = exerciseLogs
       .filter((exercise) => exercise.exerciseName.trim())
       .map((exercise) => ({
@@ -626,6 +691,13 @@ export function EasyWorkoutLogPage() {
       return;
     }
 
+    const resolvedDurationMinutes = resolveWorkoutDurationMinutes(durationMinutes, elapsedSeconds);
+    if (resolvedDurationMinutes == null) {
+      setDraftStatus("sync-failed-draft-retained");
+      setSaveMessage("This draft has been open too long to infer a truthful duration. Open Full log and enter the session duration before saving.");
+      return;
+    }
+
     setIsSaving(true);
     setDraftStatus("syncing");
     setSaveMessage("Syncing workout. The local draft stays until confirmation.");
@@ -637,7 +709,7 @@ export function EasyWorkoutLogPage() {
         routineName: selectedRoutine?.name || "Workout",
         performedOn,
         weightUnit: draftWeightUnit,
-        durationMinutes: durationMinutes ? Number(durationMinutes) : Math.max(1, Math.round(elapsedSeconds / 60)),
+        durationMinutes: resolvedDurationMinutes,
         notes: sessionNotes.trim(),
         exercises: cleanedExercises,
       }));
