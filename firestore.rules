@@ -10,11 +10,48 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
+    function validWorkoutGoal(userId) {
+      let goal = request.resource.data;
+      return goal.keys().hasOnly(['ownerId', 'schemaVersion', 'formulaVersion', 'goalType', 'status', 'target', 'sourceUnit', 'exerciseId', 'exerciseName', 'createdAt', 'updatedAt', 'archivedAt'])
+        && goal.ownerId == userId
+        && goal.schemaVersion == 'easyworkout-goal-v1'
+        && goal.status in ['active', 'paused', 'archived']
+        && goal.target is number && goal.target > 0
+        && goal.createdAt is timestamp && goal.updatedAt is timestamp
+        && ((goal.status == 'archived' && goal.archivedAt is timestamp) || (goal.status != 'archived' && goal.archivedAt == null))
+        && ((goal.goalType == 'weekly-workouts'
+          && goal.formulaVersion == 'completed-workout-week-v1'
+          && goal.sourceUnit == 'count'
+          && goal.target is int && goal.target <= 14
+          && goal.exerciseId == null && goal.exerciseName == '')
+        || (goal.goalType == 'exercise-e1rm'
+          && goal.formulaVersion == 'epley-v1'
+          && goal.sourceUnit in ['lb', 'kg']
+          && goal.target <= 5000
+          && goal.exerciseId is string && goal.exerciseId.size() > 0 && goal.exerciseId.size() <= 200
+          && goal.exerciseName is string && goal.exerciseName.size() > 0 && goal.exerciseName.size() <= 200));
+    }
+
     match /users/{userId} {
       allow read, create, update, delete: if isOwner(userId);
 
+      match /workoutGoals/{goalId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validWorkoutGoal(userId);
+        allow update: if isOwner(userId) && validWorkoutGoal(userId)
+          && resource.data.ownerId == request.resource.data.ownerId
+          && resource.data.goalType == request.resource.data.goalType
+          && resource.data.formulaVersion == request.resource.data.formulaVersion
+          && resource.data.createdAt == request.resource.data.createdAt;
+        allow delete: if false;
+      }
+
+      match /{collectionId}/{document=**} {
+        allow read, create, update, delete: if collectionId != 'workoutGoals' && isOwner(userId);
+      }
+
       match /{document=**} {
-        allow read, create, update, delete: if isOwner(userId);
+        allow read, create, update, delete: if false;
       }
     }
 

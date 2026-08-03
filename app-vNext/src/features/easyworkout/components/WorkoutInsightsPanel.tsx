@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
-import { deriveWorkoutStatistics, type AnalyticsSession, type PeriodMetric } from "@/features/easyworkout/domain/workoutStatistics";
+import { deriveRoutineComparisons, deriveWorkoutStatistics, ROUTINE_COMPARISON_FORMULA_VERSION, type AnalyticsSession, type PeriodMetric } from "@/features/easyworkout/domain/workoutStatistics";
+import { WorkoutGoalsPanel } from "./WorkoutGoalsPanel";
+import type { WorkoutGoal, WorkoutGoalDraft, WorkoutGoalStatus } from "../domain/workoutGoals";
 import { workoutDemoMetadata } from "@/features/easyworkout/demo/workoutDemoFixtures";
 import { useAuth } from "@/features/auth/AuthContext";
 import { useSettings } from "@/features/settings/SettingsContext";
@@ -19,16 +21,23 @@ function comparisonCopy(metric: PeriodMetric, suffix = "") {
 
 type WorkoutInsightsPanelProps = {
   sessions: AnalyticsSession[];
+  routines: Array<{ id: string; name: string }>;
+  exercises: Array<{ id: string; name: string; exerciseType?: string }>;
+  goals: WorkoutGoal[];
+  onCreateGoal: (draft: WorkoutGoalDraft) => Promise<void>;
+  onEditGoal: (goal: WorkoutGoal, draft: WorkoutGoalDraft) => Promise<void>;
+  onGoalStatus: (goal: WorkoutGoal, status: WorkoutGoalStatus) => Promise<void>;
   isLoading?: boolean;
   error?: string;
 };
 
-export function WorkoutInsightsPanel({ sessions, isLoading = false, error = "" }: WorkoutInsightsPanelProps) {
+export function WorkoutInsightsPanel({ sessions, routines, exercises, goals, onCreateGoal, onEditGoal, onGoalStatus, isLoading = false, error = "" }: WorkoutInsightsPanelProps) {
   const { isDemoMode } = useAuth();
   const demoSearch = isDemoMode ? "&demo=1" : "";
   const demoOnlySearch = isDemoMode ? "?demo=1" : "";
   const { settings } = useSettings();
-  const [periodDays, setPeriodDays] = useState<7 | 28 | 90>(28);
+  const [periodDays, setPeriodDays] = useState<7 | 28 | 84>(28);
+  const [routineId, setRoutineId] = useState("all");
   const [exerciseQuery, setExerciseQuery] = useState("");
   const stats = useMemo(
     () => deriveWorkoutStatistics(sessions, { nowDateKey: localDateKey(), periodDays, displayUnit: settings.easyWorkout.weightUnit }),
@@ -37,6 +46,13 @@ export function WorkoutInsightsPanel({ sessions, isLoading = false, error = "" }
   const selectedExercise = stats.exerciseSummaries.find((summary) =>
     summary.exerciseName.toLowerCase().includes(exerciseQuery.trim().toLowerCase())
   ) || stats.exerciseSummaries[0];
+  const routineComparisons = useMemo(() => deriveRoutineComparisons(sessions, { nowDateKey: localDateKey(), periodDays, displayUnit: settings.easyWorkout.weightUnit, routineId }), [periodDays, routineId, sessions, settings.easyWorkout.weightUnit]);
+  const routineOptions = useMemo(() => {
+    const options = new Map(routines.map((routine) => [routine.id, routine.name]));
+    sessions.forEach((session) => { const id = session.routineId || "unassigned"; if (!options.has(id)) options.set(id, session.routineName || "Unassigned workouts"); });
+    return [...options.entries()].map(([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name));
+  }, [routines, sessions]);
+  const metricPair = (value: number | null, suffix = "") => value === null ? "No duration data" : `${value.toLocaleString(undefined, { maximumFractionDigits: 1 })}${suffix}`;
 
   return (
     <div className="workout-insights-stack" id="workout-progress">
@@ -49,7 +65,7 @@ export function WorkoutInsightsPanel({ sessions, isLoading = false, error = "" }
       {error ? <p className="error-copy">Workout insight data is partially unavailable: {error}</p> : null}
       <PageSection eyebrow="Workout" title="Training pulse" description={`${periodDays}-day window compared with the immediately preceding ${periodDays} days. Sample: ${stats.pulse.currentSampleSize} current / ${stats.pulse.previousSampleSize} prior sessions.`}>
         <div className="statistics-tab-strip" role="group" aria-label="Workout insight period">
-          {([7, 28, 90] as const).map((days) => (
+          {([7, 28, 84] as const).map((days) => (
             <button key={days} type="button" className={periodDays === days ? "active" : undefined} aria-pressed={periodDays === days} onClick={() => setPeriodDays(days)}>
               {days} days
             </button>
@@ -71,6 +87,14 @@ export function WorkoutInsightsPanel({ sessions, isLoading = false, error = "" }
           </div>
         )}
       </PageSection>
+
+      <PageSection eyebrow="Routine comparison" title="Current versus preceding matched period" description={`Every window uses local inclusive date boundaries. Weighted workload is normalized to ${settings.easyWorkout.weightUnit}; bodyweight and non-weighted sets count as working sets but add no weighted workload.`}>
+        <label className="field-stack workout-routine-filter"><span>Routine</span><select value={routineId} onChange={(event) => setRoutineId(event.target.value)}><option value="all">All routines</option>{routineOptions.map((routine) => <option key={routine.id} value={routine.id}>{routine.name}</option>)}</select></label>
+        {!routineComparisons.length ? <div className="empty-card-vnext"><strong>No matched routine data</strong><p>Complete a routine in either matched period to compare it. Percent changes appear only when both periods have samples and the prior value is above zero.</p></div> : <div className="table-scroll" tabIndex={0} aria-label="Routine comparison table"><table className="workout-comparison-table"><caption>Current {periodDays} days compared with the immediately preceding {periodDays} days</caption><thead><tr><th scope="col">Routine and sample</th><th scope="col">Sessions</th><th scope="col">Working sets</th><th scope="col">Normalized volume</th><th scope="col">Average duration</th><th scope="col">PR sessions</th></tr></thead><tbody>{routineComparisons.map((routine) => <tr key={routine.routineId}><th scope="row">{routine.routineName}<small>{routine.currentSessionCount} current / {routine.previousSessionCount} prior sessions</small></th><td>{routine.currentSessionCount} / {routine.previousSessionCount}</td><td>{metricPair(routine.completedWorkingSets.current)} / {metricPair(routine.completedWorkingSets.previous)}</td><td>{metricPair(routine.normalizedVolume.current, ` ${settings.easyWorkout.weightUnit}·reps`)} / {metricPair(routine.normalizedVolume.previous, ` ${settings.easyWorkout.weightUnit}·reps`)}</td><td>{metricPair(routine.averageDurationMinutes.current, " min")} / {metricPair(routine.averageDurationMinutes.previous, " min")}<small>{routine.averageDurationMinutes.currentSamples} / {routine.averageDurationMinutes.previousSamples} duration samples</small></td><td>{metricPair(routine.prCount.current)} / {metricPair(routine.prCount.previous)}</td></tr>)}</tbody></table></div>}
+        <p className="helper-copy">Formula {ROUTINE_COMPARISON_FORMULA_VERSION}. Cell order is current / prior. Missing durations are excluded, not treated as zero. Deleted, incomplete, and warm-up sets are excluded.</p>
+      </PageSection>
+
+      <WorkoutGoalsPanel goals={goals} sessions={sessions} exercises={exercises} displayUnit={settings.easyWorkout.weightUnit} isDemoMode={isDemoMode} onCreate={onCreateGoal} onEdit={onEditGoal} onStatus={onGoalStatus} />
 
       <PageSection eyebrow="One next move" title={stats.insight.title} description={stats.insight.explanation}>
         <div className="workout-rule-receipt">

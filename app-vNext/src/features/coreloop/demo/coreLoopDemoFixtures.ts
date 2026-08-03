@@ -5,6 +5,7 @@ import type { ProjectRecord } from "@/lib/firestore/projects";
 import type { AccountDataCollections } from "../domain/accountExport";
 import { weeklyReviewDemoApplications, weeklyReviewDemoNotes, weeklyReviewDemoProjectLinks, weeklyReviewDemoProjects } from "@/features/easystatistics/demo/weeklyReviewDemoFixtures";
 import { workoutDemoExercises, workoutDemoRoutines, workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
+import { workoutGoalDemoFixtures } from "@/features/easyworkout/demo/workoutGoalDemoFixtures";
 
 export const CORE_LOOP_DEMO_VERSION = "core-loop-wave-3-v1";
 
@@ -43,6 +44,7 @@ export const coreLoopDemoExportCollections: AccountDataCollections = {
   workoutExercises: workoutDemoExercises,
   workoutRoutines: workoutDemoRoutines,
   workoutSessions: workoutDemoSessions,
+  workoutGoals: workoutGoalDemoFixtures,
   projects: coreLoopDemoProjects,
   projectSections: [{ id: "visual-section-1", projectId: "visual-project", title: "Next actions", order: 1 }],
   projectTaskLinks: weeklyReviewDemoProjectLinks,

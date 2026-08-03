@@ -28,6 +28,7 @@ import { subscribeToTasks } from "@/lib/firestore/tasks";
 import { subscribeToWorkoutExercises } from "@/lib/firestore/workoutExercises";
 import { subscribeToWorkoutRoutines } from "@/lib/firestore/workoutRoutines";
 import { subscribeToWorkoutSessions } from "@/lib/firestore/workoutSessions";
+import { subscribeToWorkoutGoals } from "@/lib/firestore/workoutGoals";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 import {
   getNotificationPermission,
@@ -657,6 +658,7 @@ export function SettingsPage() {
       subscribeToWorkoutExercises(user.uid, setCollection("workoutExercises"), handleError("workoutExercises")),
       subscribeToWorkoutRoutines(user.uid, setCollection("workoutRoutines"), handleError("workoutRoutines")),
       subscribeToWorkoutSessions(user.uid, setCollection("workoutSessions"), handleError("workoutSessions")),
+      subscribeToWorkoutGoals(user.uid, setCollection("workoutGoals"), handleError("workoutGoals")),
       subscribeToProjects(user.uid, setCollection("projects"), handleError("projects")),
       subscribeToProjectSections(user.uid, setCollection("projectSections"), handleError("projectSections")),
       subscribeToProjectTaskLinks(user.uid, setCollection("projectTaskLinks"), handleError("projectTaskLinks")),

@@ -1,4 +1,4 @@
-export const ACCOUNT_EXPORT_SCHEMA_VERSION = "easylife-account-export-v1";
+export const ACCOUNT_EXPORT_SCHEMA_VERSION = "easylife-account-export-v2";
 export const ACCOUNT_EXPORT_FORMULA_VERSION = "easylife-portability-v1";
 
 export type AccountDataCollections = {
@@ -11,6 +11,7 @@ export type AccountDataCollections = {
   workoutExercises: unknown[];
   workoutRoutines: unknown[];
   workoutSessions: unknown[];
+  workoutGoals: unknown[];
   projects: unknown[];
   projectSections: unknown[];
   projectTaskLinks: unknown[];
@@ -21,7 +22,7 @@ export type AccountDataCollections = {
 
 export const emptyAccountDataCollections: AccountDataCollections = {
   tasks: [], notes: [], noteFolders: [], calendarEvents: [], calendarTaskBlocks: [], calendarCategories: [],
-  workoutExercises: [], workoutRoutines: [], workoutSessions: [], projects: [], projectSections: [],
+  workoutExercises: [], workoutRoutines: [], workoutSessions: [], workoutGoals: [], projects: [], projectSections: [],
   projectTaskLinks: [], pipelineApplications: [], pipelineDrafts: [], contacts: [],
 };
 
@@ -35,6 +36,7 @@ export const accountExportGroups: Array<{ key: keyof AccountDataCollections; lab
   { key: "workoutExercises", label: "Exercises", app: "Workout", csv: false },
   { key: "workoutRoutines", label: "Routines", app: "Workout", csv: false },
   { key: "workoutSessions", label: "Sessions", app: "Workout", csv: true },
+  { key: "workoutGoals", label: "Goals", app: "Workout", csv: true },
   { key: "projects", label: "Projects", app: "Projects", csv: true },
   { key: "projectSections", label: "Sections", app: "Projects", csv: false },
   { key: "projectTaskLinks", label: "Task links", app: "Projects", csv: false },
@@ -43,7 +45,7 @@ export const accountExportGroups: Array<{ key: keyof AccountDataCollections; lab
   { key: "contacts", label: "Contacts", app: "People", csv: true },
 ];
 
-const forbiddenKeys = /^(uid|clientDraftId|apiKey|authDomain|storageBucket|messagingSenderId|appId|measurementId|password|passwordHash|accessToken|refreshToken|credential|secret)$/i;
+const forbiddenKeys = /^(uid|ownerId|clientDraftId|apiKey|authDomain|storageBucket|messagingSenderId|appId|measurementId|password|passwordHash|accessToken|refreshToken|credential|secret)$/i;
 
 function cleanForExport(value: unknown): unknown {
   if (value instanceof Date) return value.toISOString();
@@ -83,6 +85,7 @@ export function buildAccountExport(input: {
     exportedAt: input.exportedAt,
     metadata: { appVersion: input.appVersion, timeZone: input.timeZone, weightUnit: input.weightUnit },
     manifest: {
+      compatibleWith: ["easylife-account-export-v1"],
       included: accountExportGroups.map((group) => ({ domain: group.key, label: `${group.app} — ${group.label}`, recordCount: input.collections[group.key].length })),
       unsupported: [
         "Authentication credentials and session tokens",
@@ -116,6 +119,7 @@ const csvColumns: Partial<Record<keyof AccountDataCollections, string[]>> = {
   calendarEvents: ["id", "title", "description", "startAt", "endAt", "allDay", "eventType", "linkedTaskId"],
   calendarTaskBlocks: ["id", "taskId", "titleSnapshot", "startAt", "endAt", "planningState", "completed"],
   workoutSessions: ["id", "routineId", "routineName", "performedOn", "weightUnit", "durationMinutes", "notes", "exercises", "createdAt", "updatedAt"],
+  workoutGoals: ["id", "schemaVersion", "formulaVersion", "goalType", "status", "target", "sourceUnit", "exerciseId", "exerciseName", "createdAt", "updatedAt", "archivedAt"],
   projects: ["id", "title", "description", "targetDate", "status", "createdAt", "updatedAt"],
   pipelineApplications: ["id", "company", "title", "status", "priority", "dateApplied", "nextFollowUp", "location", "link", "notes", "contactName", "contactEmail"],
   contacts: ["id", "fullName", "relationship", "company", "role", "email", "phone", "status", "lastContactedAt", "nextFollowUpAt", "notes"],

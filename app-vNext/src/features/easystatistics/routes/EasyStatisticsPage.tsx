@@ -9,8 +9,14 @@ import { subscribeToNotes, type NoteRecord } from "@/lib/firestore/notes";
 import { subscribeToProjects, type ProjectRecord } from "@/lib/firestore/projects";
 import { subscribeToProjectTaskLinks, type ProjectTaskLinkRecord } from "@/lib/firestore/projectTaskLinks";
 import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
+import { subscribeToWorkoutRoutines, type WorkoutRoutineRecord } from "@/lib/firestore/workoutRoutines";
+import { subscribeToWorkoutExercises, type WorkoutExerciseRecord } from "@/lib/firestore/workoutExercises";
+import { createWorkoutGoal, editWorkoutGoal, setWorkoutGoalStatus, subscribeToWorkoutGoals } from "@/lib/firestore/workoutGoals";
+import type { WorkoutGoal, WorkoutGoalDraft, WorkoutGoalStatus } from "@/features/easyworkout/domain/workoutGoals";
+import { deriveWorkoutGoalProgress } from "@/features/easyworkout/domain/workoutGoals";
 import { WorkoutInsightsPanel } from "@/features/easyworkout/components/WorkoutInsightsPanel";
-import { workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
+import { workoutDemoExercises, workoutDemoRoutines, workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
+import { workoutGoalDemoFixtures } from "@/features/easyworkout/demo/workoutGoalDemoFixtures";
 import { WeeklyReviewPanel } from "@/features/easystatistics/components/WeeklyReviewPanel";
 import { FocusedReviewQueue } from "@/features/coreloop/components/FocusedReviewQueue";
 import { deriveWeeklyReview } from "@/features/easystatistics/domain/weeklyReview";
@@ -55,6 +61,9 @@ export function EasyStatisticsPage() {
   const { user, isDemoMode } = useAuth();
   const { tasks, events, taskBlocks, isLoading, error } = useEasyCalendar();
   const [workoutSessions, setWorkoutSessions] = useState<WorkoutSessionRecord[]>([]);
+  const [workoutRoutines, setWorkoutRoutines] = useState<WorkoutRoutineRecord[]>([]);
+  const [workoutExercises, setWorkoutExercises] = useState<WorkoutExerciseRecord[]>([]);
+  const [workoutGoals, setWorkoutGoals] = useState<WorkoutGoal[]>([]);
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [projectLinks, setProjectLinks] = useState<ProjectTaskLinkRecord[]>([]);
@@ -80,6 +89,9 @@ export function EasyStatisticsPage() {
   useEffect(() => {
     if (!user || isDemoMode) {
       setWorkoutSessions(isDemoMode ? workoutDemoSessions : []);
+      setWorkoutRoutines(isDemoMode ? workoutDemoRoutines : []);
+      setWorkoutExercises(isDemoMode ? workoutDemoExercises : []);
+      setWorkoutGoals(isDemoMode ? workoutGoalDemoFixtures : []);
       setApplications(isDemoMode ? weeklyReviewDemoApplications : []);
       setProjects(isDemoMode ? weeklyReviewDemoProjects : []);
       setProjectLinks(isDemoMode ? weeklyReviewDemoProjectLinks : []);
@@ -97,6 +109,9 @@ export function EasyStatisticsPage() {
       },
       handleError
     );
+    const unsubscribeRoutines = subscribeToWorkoutRoutines(user.uid, setWorkoutRoutines, handleError);
+    const unsubscribeExercises = subscribeToWorkoutExercises(user.uid, setWorkoutExercises, handleError);
+    const unsubscribeGoals = subscribeToWorkoutGoals(user.uid, setWorkoutGoals, handleError);
     const unsubscribeApplications = subscribeToApplications(user.uid, setApplications, handleError);
     const unsubscribeProjects = subscribeToProjects(user.uid, setProjects, handleError);
     const unsubscribeProjectLinks = subscribeToProjectTaskLinks(user.uid, setProjectLinks, handleError);
@@ -104,12 +119,36 @@ export function EasyStatisticsPage() {
 
     return () => {
       unsubscribeWorkouts();
+      unsubscribeRoutines();
+      unsubscribeExercises();
+      unsubscribeGoals();
       unsubscribeApplications();
       unsubscribeProjects();
       unsubscribeProjectLinks();
       unsubscribeNotes();
     };
   }, [isDemoMode, user]);
+
+  async function handleCreateGoal(draft: WorkoutGoalDraft) {
+    if (isDemoMode) {
+      const now = new Date();
+      const id = draft.goalType === "weekly-workouts" ? "weekly-completed-workouts" : `exercise-e1rm-${draft.exerciseId}`;
+      setWorkoutGoals((current) => current.some((goal) => goal.id === id) ? current : [...current, { ...draft, id, ownerId: "demo", schemaVersion: "easyworkout-goal-v1", formulaVersion: draft.goalType === "weekly-workouts" ? "completed-workout-week-v1" : "epley-v1", status: "active", createdAt: now, updatedAt: now, archivedAt: null }]);
+      return;
+    }
+    if (!user) throw new Error("Sign in to save a goal.");
+    await createWorkoutGoal(user.uid, draft);
+  }
+  async function handleEditGoal(goal: WorkoutGoal, draft: WorkoutGoalDraft) {
+    if (isDemoMode) { setWorkoutGoals((current) => current.map((item) => item.id === goal.id ? { ...item, ...draft, updatedAt: new Date() } : item)); return; }
+    if (!user) throw new Error("Sign in to edit a goal.");
+    await editWorkoutGoal(user.uid, goal.id, draft);
+  }
+  async function handleGoalStatus(goal: WorkoutGoal, status: WorkoutGoalStatus) {
+    if (isDemoMode) { setWorkoutGoals((current) => current.map((item) => item.id === goal.id ? { ...item, status, archivedAt: status === "archived" ? new Date() : null, updatedAt: new Date() } : item)); return; }
+    if (!user) throw new Error("Sign in to update a goal.");
+    await setWorkoutGoalStatus(user.uid, goal.id, status);
+  }
 
   const stats = useMemo(() => {
     const activeTasks = tasks.filter((task) => !task.completed && !task.deletedAt);
@@ -196,7 +235,8 @@ export function EasyStatisticsPage() {
     projectLinks,
     applications,
     workouts: workoutSessions,
-  }), [applications, events, projectLinks, projects, taskBlocks, tasks, today, workoutSessions]);
+    workoutGoalProgress: (() => { const active = deriveWorkoutGoalProgress(workoutGoals.filter((goal) => goal.status === "active"), workoutSessions, { nowDateKey: localDateKey(today) })[0]; return active ? `${active.current.toFixed(active.unit === "workouts" ? 0 : 1)} of ${active.target.toFixed(active.unit === "workouts" ? 0 : 1)} ${active.unit} toward ${active.goal.goalType === "weekly-workouts" ? "this local week’s Sunday-start target" : `${active.goal.exerciseName} estimated 1RM`}.` : undefined; })(),
+  }), [applications, events, projectLinks, projects, taskBlocks, tasks, today, workoutGoals, workoutSessions]);
   const lifeScore =
     stats.completedThisWeek.length +
     stats.workoutsThisWeek.length * 2 +
@@ -375,7 +415,7 @@ export function EasyStatisticsPage() {
         )
       ) : null}
 
-      {activeTab === "workout" ? <WorkoutInsightsPanel sessions={workoutSessions} isLoading={isLoading} error={statsError} /> : null}
+      {activeTab === "workout" ? <WorkoutInsightsPanel sessions={workoutSessions} routines={workoutRoutines} exercises={workoutExercises} goals={workoutGoals} onCreateGoal={handleCreateGoal} onEditGoal={handleEditGoal} onGoalStatus={handleGoalStatus} isLoading={isLoading} error={statsError} /> : null}
 
       {/* Retained only as historical markup; the canonical, unit-aware WorkoutInsightsPanel above is the sole rendered workout statistics surface.
         <div className="statistics-tab-panel">
