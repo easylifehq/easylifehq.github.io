@@ -23,8 +23,8 @@ export const marketingProductItems: ProductsMenuItem[] = [
   },
   {
     href: "/easypipeline",
-    label: "Follow-ups",
-    description: "Track longer loops clearly.",
+    label: "Job applications",
+    description: "Track applications and job follow-ups.",
   },
   {
     href: "/easyprojects",

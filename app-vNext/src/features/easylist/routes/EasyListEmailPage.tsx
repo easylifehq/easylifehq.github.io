@@ -315,15 +315,15 @@ export function EasyListEmailPage() {
       <PageSection
         eyebrow="Email triage"
         title="Approve inbox suggestions before anything changes"
-        description="Review email examples as Task, Deadline, Event, and Follow-up suggestions. Nothing is sent or archived until you approve it."
+        description="Review email examples as Task, Deadline, Event, and Follow-up suggestions. EasyLife is not connected to send, text, archive, or create outside drafts."
       >
         <div className="email-triage-hero">
           <div>
             <span className="settings-state-pill">Inbox review</span>
             <h2>One queue, four decisions.</h2>
             <p>
-              Each card names the suggestion type, source, and next safe step. Send and archive actions still need a
-              separate approval.
+              Each card names the suggestion type, source, and next safe step. Real send, text, archive, or outside
+              draft actions are not live in this demo.
             </p>
           </div>
           <div className="email-triage-actions">
@@ -375,7 +375,8 @@ export function EasyListEmailPage() {
           />
           <div className="task-composer-actions">
             <span className="helper-copy">
-              Paste emails here to review possible tasks, events, and replies. EasyLife will not send or archive anything.
+              Paste emails here to review possible tasks, events, and replies. EasyLife will not send, text, archive,
+              or create a mail draft.
             </span>
             <button className="primary-button" type="button" onClick={handleImportEmails} disabled={!importText.trim()}>
               Import to review
@@ -443,8 +444,8 @@ export function EasyListEmailPage() {
         <PageSection eyebrow="Reply draft" title="Draft awaiting approval">
           <div className="email-draft-panel">
             <div className="email-draft-approval">
-              <strong>Approval required before send</strong>
-              <p>Review this text first. Nothing is sent from EasyLife, and no mail draft is created here.</p>
+              <strong>Review-only draft</strong>
+              <p>Confirm the recipient and wording yourself. Nothing is sent from EasyLife, and no mail or text draft is created here.</p>
             </div>
             <div>
               <span>To</span>
@@ -456,8 +457,25 @@ export function EasyListEmailPage() {
             </div>
             <textarea readOnly value={selectedDraft.replyDraft || ""} rows={7} aria-label="Prepared reply draft" />
             <p className="helper-copy">
-              Prepared for review only. Copy or rewrite it yourself when you are ready to send.
+              Prepared for review only. Copy or rewrite it yourself in your own mail or messages app when you are ready.
             </p>
+            <div className="email-integration-grid" aria-label="Draft delivery safety">
+              <article>
+                <span>Recipient</span>
+                <strong>Confirm outside EasyLife</strong>
+                <p>EasyLife does not verify, autocomplete, or contact recipients.</p>
+              </article>
+              <article>
+                <span>Delivery</span>
+                <strong>Not connected</strong>
+                <p>No email provider, SMS provider, archive action, or outside draft is called.</p>
+              </article>
+              <article>
+                <span>Record</span>
+                <strong>Local review only</strong>
+                <p>The current queue state is only a review status, not a sent-message audit log.</p>
+              </article>
+            </div>
           </div>
         </PageSection>
       ) : null}
@@ -476,8 +494,8 @@ export function EasyListEmailPage() {
           </article>
           <article>
             <span>3</span>
-            <strong>Confirm before send or archive</strong>
-            <p>Require a second clear approval before any real send or archive action exists.</p>
+            <strong>Confirm before any external action</strong>
+            <p>Future sending needs recipient confirmation, a visible audit trail, rollback notes, and a second approval.</p>
           </article>
         </div>
       </PageSection>

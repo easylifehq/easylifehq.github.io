@@ -14,6 +14,8 @@ export function EasyNotesNewPage() {
 
     void addNote().then((noteId) => {
       navigate(noteId ? `/app/easynotes/${noteId}` : "/app/easynotes", { replace: true });
+    }).catch(() => {
+      navigate("/app/easynotes", { replace: true });
     });
   }, [addNote, navigate]);
 

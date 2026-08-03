@@ -37,7 +37,7 @@ export function EasyProjectsTimelinePage() {
     const startAt = new Date(`${date}T${time}:00`);
     const endAt = new Date(startAt.getTime() + Number(durationMinutes || 60) * 60000);
     await scheduleProjectTask({ task, startAt, endAt, planningState: "scheduled" });
-    setMessage(`Scheduled ${task.title} into EasyCalendar.`);
+    setMessage(`Scheduled ${task.title} into Plan.`);
     setDate("");
   }
 
@@ -77,7 +77,7 @@ export function EasyProjectsTimelinePage() {
       <PageSection
         eyebrow="Calendar prep"
         title="Schedule a project task"
-        description="Use the same task-block system that EasyCalendar already understands."
+        description="Use the same task-block system that Plan already understands."
       >
         <form className="task-composer" onSubmit={handleSchedule}>
           <div className="task-composer-grid">
@@ -109,7 +109,7 @@ export function EasyProjectsTimelinePage() {
             <Link to={`/app/easyprojects/${project.id}`} className="button-secondary">
               Back to project
             </Link>
-            <button type="submit" className="primary-button">Send to EasyCalendar</button>
+            <button type="submit" className="primary-button">Send to Plan</button>
           </div>
         </form>
         {message ? <div className="calendar-info-card">{message}</div> : null}

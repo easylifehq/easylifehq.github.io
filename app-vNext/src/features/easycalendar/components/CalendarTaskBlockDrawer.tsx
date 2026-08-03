@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CalendarTaskBlockRecord, PlanningState } from "@/lib/firestore/calendarTaskBlocks";
 import type { TaskRecord } from "@/lib/firestore/tasks";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
+import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 import {
   addMinutes,
   combineDateAndTime,
   getDurationMinutes,
+  normalizeDurationMinutes,
+  normalizeTimeInput,
   toDateInputValue,
   toTimeInputValue,
 } from "@/features/easycalendar/lib/calendarUtils";
@@ -15,6 +18,7 @@ type CalendarTaskBlockDrawerProps = {
   task: TaskRecord | null;
   isOpen: boolean;
   onClose: () => void;
+  onDeleted?: (block: CalendarTaskBlockRecord, task: TaskRecord) => void;
 };
 
 export function CalendarTaskBlockDrawer({
@@ -22,6 +26,7 @@ export function CalendarTaskBlockDrawer({
   task,
   isOpen,
   onClose,
+  onDeleted,
 }: CalendarTaskBlockDrawerProps) {
   const {
     saveTaskBlock,
@@ -35,9 +40,16 @@ export function CalendarTaskBlockDrawer({
   const [planningState, setPlanningState] = useState<PlanningState>("scheduled");
   const [statusMessage, setStatusMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const drawerRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useFocusTrap(isOpen, drawerRef, {
+    initialFocusRef: closeButtonRef,
+    onEscape: onClose,
+  });
 
   function applyDuration(minutes: number) {
-    setScheduleDuration(String(minutes));
+    setScheduleDuration(String(normalizeDurationMinutes(minutes)));
   }
 
   useEffect(() => {
@@ -55,14 +67,19 @@ export function CalendarTaskBlockDrawer({
   const currentTask = task;
 
   async function handleSave() {
-    const startAt = combineDateAndTime(scheduleDate, scheduleTime);
-    const endAt = addMinutes(startAt, Math.max(5, Number(scheduleDuration) || 30));
+    const safeTime = normalizeTimeInput(scheduleTime);
+    const safeDuration = normalizeDurationMinutes(scheduleDuration);
+    const startAt = combineDateAndTime(scheduleDate, safeTime);
+    const endAt = addMinutes(startAt, safeDuration);
+    const restoreScrollY = window.scrollY;
 
     if (!startAt || !endAt) {
       setStatusMessage("Pick a valid day and time before saving.");
       return;
     }
 
+    setScheduleTime(safeTime);
+    setScheduleDuration(String(safeDuration));
     setIsSaving(true);
     try {
       await saveTaskBlock(currentBlock.id, {
@@ -76,6 +93,7 @@ export function CalendarTaskBlockDrawer({
         userAdjusted: true,
       });
       setStatusMessage("Task block updated.");
+      window.requestAnimationFrame(() => window.scrollTo({ top: restoreScrollY }));
     } finally {
       setIsSaving(false);
     }
@@ -84,7 +102,8 @@ export function CalendarTaskBlockDrawer({
   async function handleDelete() {
     setIsSaving(true);
     try {
-      await deleteTaskBlock(currentBlock.id);
+      await deleteTaskBlock(currentBlock.id, currentTask.id);
+      onDeleted?.(currentBlock, currentTask);
       onClose();
     } finally {
       setIsSaving(false);
@@ -109,14 +128,22 @@ export function CalendarTaskBlockDrawer({
   return (
     <>
       <div className={`drawer-backdrop-vnext${isOpen ? " open" : ""}`} onClick={onClose} />
-      <aside className={`task-drawer-vnext${isOpen ? " open" : ""}`} aria-hidden={!isOpen}>
+      <aside
+        ref={drawerRef}
+        className={`task-drawer-vnext${isOpen ? " open" : ""}`}
+        aria-hidden={!isOpen}
+        aria-modal={isOpen ? "true" : undefined}
+        aria-label="Manage task block"
+        role="dialog"
+        tabIndex={-1}
+      >
         <div className="drawer-header-vnext">
           <div>
-            <p className="eyebrow">EasyCalendar</p>
+            <p className="eyebrow">Plan</p>
             <h2>Manage task block</h2>
             <p className="helper-copy">Move it, resize it, or finish it fast.</p>
           </div>
-          <button type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close task block editor">
+          <button ref={closeButtonRef} type="button" className="ghost-button compact-button" onClick={onClose} aria-label="Close task block editor">
             Close
           </button>
         </div>
@@ -147,21 +174,30 @@ export function CalendarTaskBlockDrawer({
             <label className="field-stack">
               <span>Start time</span>
               <input
-                type="time"
+                type="text"
+                inputMode="numeric"
+                placeholder="7:30 or 730"
+                step="900"
                 value={scheduleTime}
                 onChange={(event) => setScheduleTime(event.target.value)}
+                onBlur={() => setScheduleTime((current) => normalizeTimeInput(current))}
               />
+              <small className="helper-copy">
+                Type 7:30 or 730. Plan rounds to 15-minute increments and keeps this block inside the selected day.
+              </small>
             </label>
 
             <label className="field-stack">
               <span>Duration (minutes)</span>
               <input
                 type="number"
-                min="5"
-                step="5"
+                min="15"
+                step="15"
                 value={scheduleDuration}
                 onChange={(event) => setScheduleDuration(event.target.value)}
+                onBlur={() => setScheduleDuration((current) => String(normalizeDurationMinutes(current)))}
               />
+              <small className="helper-copy">Use 15-minute steps. Longer blocks are capped at 12 hours for this demo.</small>
             </label>
 
             <label className="field-stack">
@@ -190,7 +226,7 @@ export function CalendarTaskBlockDrawer({
           <div className="drawer-link-footer">
             <p className="helper-copy">
               {currentTask.category || "No category"}
-              {currentTask.completed ? " | Completed in EasyList" : " | Still active in EasyList"}
+              {currentTask.completed ? " | Completed in Inbox" : " | Still active in Inbox"}
             </p>
             {statusMessage ? <p className="helper-copy">{statusMessage}</p> : null}
           </div>

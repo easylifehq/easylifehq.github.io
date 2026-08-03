@@ -12,7 +12,7 @@ export function EasyPipelineLayout() {
   return (
     <EasyPipelineProvider>
       <main className="page-wrap app-theme app-theme-easypipeline">
-        <AppWorkspaceHeader appLabel="EasyPipeline" links={links} />
+        <AppWorkspaceHeader appLabel="Job applications" links={links} />
 
         <Outlet />
       </main>

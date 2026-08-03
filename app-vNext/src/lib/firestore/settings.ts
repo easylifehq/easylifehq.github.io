@@ -61,6 +61,7 @@ export type EasyWorkoutSettings = {
   focusedExerciseCount: number;
   defaultSetCount: number;
   showLastTimeHelper: boolean;
+  weightUnit: "lb" | "kg";
 };
 
 export type EasyCalendarSettings = {
@@ -136,6 +137,7 @@ export const defaultShellSettings: UserShellSettings = {
     focusedExerciseCount: 6,
     defaultSetCount: 3,
     showLastTimeHelper: true,
+    weightUnit: "lb",
   },
   easyCalendar: {
     defaultView: "day",
@@ -160,7 +162,7 @@ export const defaultShellSettings: UserShellSettings = {
   assistant: {
     enabled: false,
     allowDataReview: false,
-    allowCrossAppSuggestions: true,
+    allowCrossAppSuggestions: false,
     allowDraftCreation: false,
     requireReviewBeforeSave: true,
     fallbackMode: "explain",
@@ -329,6 +331,11 @@ export function normalizeShellSettings(data: DocumentData | undefined): UserShel
       showLastTimeHelper: normalizeBoolean(
         easyWorkoutData.showLastTimeHelper,
         defaultShellSettings.easyWorkout.showLastTimeHelper
+      ),
+      weightUnit: normalizeStringUnion(
+        easyWorkoutData.weightUnit,
+        ["lb", "kg"],
+        defaultShellSettings.easyWorkout.weightUnit
       ),
     },
     easyCalendar: {

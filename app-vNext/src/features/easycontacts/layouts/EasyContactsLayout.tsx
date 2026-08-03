@@ -6,7 +6,7 @@ export function EasyContactsLayout() {
   return (
     <EasyContactsProvider>
       <main className="page-wrap app-theme app-theme-easycontacts">
-        <AppWorkspaceHeader appLabel="EasyContacts" links={[]} />
+        <AppWorkspaceHeader appLabel="People" links={[]} />
         <Outlet />
       </main>
     </EasyContactsProvider>

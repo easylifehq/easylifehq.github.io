@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ApplicationDraft, ApplicationRecord } from "@/lib/firestore/applications";
+import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 
 type ApplicationDrawerProps = {
   application: ApplicationRecord | null;
@@ -54,6 +55,13 @@ export function ApplicationDrawer({
   );
   const [draft, setDraft] = useState<ApplicationDraft>(initialDraft);
   const [isSaving, setIsSaving] = useState(false);
+  const drawerRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useFocusTrap(isOpen, drawerRef, {
+    initialFocusRef: closeButtonRef,
+    onEscape: onClose,
+  });
 
   useEffect(() => {
     setDraft(initialDraft);
@@ -84,13 +92,21 @@ export function ApplicationDrawer({
         onClick={onClose}
         aria-hidden={!isOpen}
       />
-      <aside className={`task-drawer-vnext${isOpen ? " open" : ""}`} aria-hidden={!isOpen}>
+      <aside
+        ref={drawerRef}
+        className={`task-drawer-vnext${isOpen ? " open" : ""}`}
+        aria-hidden={!isOpen}
+        aria-modal={isOpen ? "true" : undefined}
+        aria-label="Edit follow-up"
+        role="dialog"
+        tabIndex={-1}
+      >
         <div className="drawer-header-vnext">
           <div>
-            <p className="eyebrow">EasyPipeline</p>
+            <p className="eyebrow">Follow-ups</p>
             <h2>{currentApplication.title || "Edit application"}</h2>
           </div>
-          <button type="button" className="button-secondary" onClick={onClose} aria-label="Close pipeline item editor">
+          <button ref={closeButtonRef} type="button" className="button-secondary" onClick={onClose} aria-label="Close follow-up editor">
             Close
           </button>
         </div>

@@ -12,6 +12,12 @@ type LastAppRoute = {
 };
 
 function getRouteLabel(path: string) {
+  if (path.startsWith("/app/hq") || path.startsWith("/app/today")) return "Today";
+  if (path.startsWith("/app/inbox")) return "Inbox";
+  if (path.startsWith("/app/notes")) return "Notes";
+  if (path.startsWith("/app/plan")) return "Plan";
+  if (path.startsWith("/app/people")) return "People";
+  if (path.startsWith("/app/workout")) return "Workout";
   if (path.startsWith("/app/easylist")) return "Inbox";
   if (path.startsWith("/app/easycalendar")) return "Plan";
   if (path.startsWith("/app/easynotes")) return "Notes";
@@ -20,7 +26,7 @@ function getRouteLabel(path: string) {
   if (path.startsWith("/app/easypipeline")) return "Follow-ups";
   if (path.startsWith("/app/easycontacts")) return "People";
   if (path.startsWith("/app/easystatistics")) return "Progress";
-  return "EasyLife";
+  return "Today";
 }
 
 export function getLastAppRoute(): LastAppRoute | null {

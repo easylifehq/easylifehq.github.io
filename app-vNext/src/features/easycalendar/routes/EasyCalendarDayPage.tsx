@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { buildLocalDraftFromSuggestion, buildPlanHandoffPreview } from "@/features/assistant/localDraftBuilder";
@@ -10,6 +10,7 @@ import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 import type { CalendarEventType } from "@/lib/firestore/calendarEvents";
 import type { CalendarTaskBlockRecord } from "@/lib/firestore/calendarTaskBlocks";
+import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 import {
   addMinutes,
   buildHourlySlots,
@@ -24,6 +25,7 @@ import {
   getItemsForDay,
   getOpenTimeWindowsForDay,
   getScheduledMinutesForDay,
+  normalizeTimeInput,
   isSameDay,
   startOfDay,
   startOfWeek,
@@ -57,6 +59,12 @@ type AppliedPlanUndo = {
   replacedBlocks: CalendarTaskBlockRecord[];
 };
 
+type DeletedBlockUndo = {
+  block: CalendarTaskBlockRecord;
+  taskId: string;
+  taskTitle: string;
+};
+
 type DayModeId = "light" | "normal" | "push" | "recovery";
 
 export function EasyCalendarDayPage() {
@@ -82,10 +90,13 @@ export function EasyCalendarDayPage() {
   const [planMessage, setPlanMessage] = useState("");
   const [planPreview, setPlanPreview] = useState<PlanPreview | null>(null);
   const [appliedPlanUndo, setAppliedPlanUndo] = useState<AppliedPlanUndo | null>(null);
+  const [deletedBlockUndo, setDeletedBlockUndo] = useState<DeletedBlockUndo | null>(null);
   const [isPlanning, setIsPlanning] = useState(false);
   const [isUndoingPlan, setIsUndoingPlan] = useState(false);
   const [showPlanHandoff, setShowPlanHandoff] = useState(false);
   const [planHandoffPreview, setPlanHandoffPreview] = useState<AssistantPlanHandoffPreview | null>(null);
+  const quickCreatePanelRef = useRef<HTMLElement | null>(null);
+  const quickCreateCloseRef = useRef<HTMLButtonElement | null>(null);
   const selectedDate = useMemo(() => {
     const dateParam = searchParams.get("date");
     if (!dateParam) return startOfDay(new Date());
@@ -97,6 +108,7 @@ export function EasyCalendarDayPage() {
   useEffect(() => {
     setPlanPreview(null);
     setAppliedPlanUndo(null);
+    setDeletedBlockUndo(null);
     setPlanMessage("");
     setShowPlanHandoff(false);
     setPlanHandoffPreview(null);
@@ -201,6 +213,11 @@ export function EasyCalendarDayPage() {
         : null,
     [selectedBlock, tasks]
   );
+
+  useFocusTrap(Boolean(quickEvent), quickCreatePanelRef, {
+    initialFocusRef: quickCreateCloseRef,
+    onEscape: () => setQuickEvent(null),
+  });
 
   function openDate(date: Date) {
     navigate(`/app/easycalendar/day?date=${toDateInputValue(date)}`);
@@ -324,12 +341,36 @@ export function EasyCalendarDayPage() {
     }
   }
 
+  async function handleUndoDeletedBlock() {
+    if (!deletedBlockUndo) return;
+
+    const task = tasks.find((candidate) => candidate.id === deletedBlockUndo.taskId);
+    if (!task) {
+      setPlanMessage("That task is not available to restore anymore.");
+      setDeletedBlockUndo(null);
+      return;
+    }
+
+    const restoreScrollY = window.scrollY;
+    const restoredBlockId = await scheduleTask(task, {
+      startAt: deletedBlockUndo.block.startAt,
+      endAt: deletedBlockUndo.block.endAt,
+      planningState: deletedBlockUndo.block.planningState,
+      userAdjusted: deletedBlockUndo.block.userAdjusted,
+    });
+
+    setDeletedBlockUndo(null);
+    setPlanMessage(restoredBlockId ? "Removed block restored." : "Could not restore that block.");
+    window.requestAnimationFrame(() => window.scrollTo({ top: restoreScrollY }));
+  }
+
   function openQuickEvent(slotStart: Date) {
-    const slotEnd = addMinutes(slotStart, settings.easyCalendar.defaultTaskBlockMinutes) || addMinutes(slotStart, 30) || slotStart;
+    const safeMinutes = Math.max(15, settings.easyCalendar.defaultTaskBlockMinutes || 30);
+    const slotEnd = addMinutes(slotStart, safeMinutes) || addMinutes(slotStart, 30) || slotStart;
     setQuickEvent({
       mode: "event",
       date: toDateInputValue(slotStart),
-      startTime: toTimeInputValue(slotStart),
+      startTime: normalizeTimeInput(toTimeInputValue(slotStart)),
       endTime: toTimeInputValue(slotEnd),
       title: "",
       eventType: "appointment",
@@ -342,8 +383,10 @@ export function EasyCalendarDayPage() {
     event.preventDefault();
     if (!quickEvent) return;
 
-    const startAt = combineDateAndTime(quickEvent.date, quickEvent.startTime);
-    const endAt = combineDateAndTime(quickEvent.date, quickEvent.endTime);
+    const safeStartTime = normalizeTimeInput(quickEvent.startTime);
+    const safeEndTime = normalizeTimeInput(quickEvent.endTime, "10:00");
+    const startAt = combineDateAndTime(quickEvent.date, safeStartTime);
+    const endAt = combineDateAndTime(quickEvent.date, safeEndTime);
 
     if (quickEvent.mode === "task-block" && !quickEvent.selectedTaskId) {
       setQuickEventMessage("Choose a task first.");
@@ -365,6 +408,7 @@ export function EasyCalendarDayPage() {
       return;
     }
 
+    setQuickEvent((current) => current ? { ...current, startTime: safeStartTime, endTime: safeEndTime } : current);
     setIsSavingQuickEvent(true);
     try {
       if (quickEvent.mode === "task-block") {
@@ -647,6 +691,18 @@ export function EasyCalendarDayPage() {
 
         {planMessage ? <div className="calendar-info-card">{planMessage}</div> : null}
 
+        {deletedBlockUndo ? (
+          <div className="calendar-plan-undo-card">
+            <div>
+              <strong>Block removed.</strong>
+              <p>{deletedBlockUndo.taskTitle || "This task block"} can be restored while you stay on this day.</p>
+            </div>
+            <button type="button" className="ghost-button compact-button" onClick={() => void handleUndoDeletedBlock()}>
+              Undo remove
+            </button>
+          </div>
+        ) : null}
+
         {appliedPlanUndo ? (
           <div className="calendar-plan-undo-card">
             <div>
@@ -793,6 +849,14 @@ export function EasyCalendarDayPage() {
         task={selectedTask}
         isOpen={Boolean(selectedBlock)}
         onClose={() => setSelectedBlockId(null)}
+        onDeleted={(block, task) => {
+          setDeletedBlockUndo({
+            block,
+            taskId: task.id,
+            taskTitle: task.title || block.titleSnapshot,
+          });
+          setPlanMessage("");
+        }}
       />
       <CalendarEventDrawer
         event={selectedEvent}
@@ -803,6 +867,7 @@ export function EasyCalendarDayPage() {
       {quickEvent ? (
         <div className="drawer-backdrop open" role="presentation" onClick={() => setQuickEvent(null)}>
           <aside
+            ref={quickCreatePanelRef}
             className="drawer-panel-vnext calendar-quick-create-panel"
             role="dialog"
             aria-modal="true"
@@ -820,7 +885,7 @@ export function EasyCalendarDayPage() {
                       : "New fixed time"}
                 </h2>
               </div>
-              <button type="button" className="ghost-button compact-button" onClick={() => setQuickEvent(null)}>
+              <button ref={quickCreateCloseRef} type="button" className="ghost-button compact-button" onClick={() => setQuickEvent(null)}>
                 Close
               </button>
             </div>
@@ -890,8 +955,10 @@ export function EasyCalendarDayPage() {
                   <span>{quickEvent.mode === "deadline" ? "Due time" : "Start"}</span>
                   <input
                     type="time"
+                    step="900"
                     value={quickEvent.startTime}
                     onChange={(event) => setQuickEvent((current) => current ? { ...current, startTime: event.target.value } : current)}
+                    onBlur={() => setQuickEvent((current) => current ? { ...current, startTime: normalizeTimeInput(current.startTime) } : current)}
                   />
                 </label>
                 {quickEvent.mode !== "deadline" ? (
@@ -899,8 +966,10 @@ export function EasyCalendarDayPage() {
                     <span>End</span>
                     <input
                       type="time"
+                      step="900"
                       value={quickEvent.endTime}
                       onChange={(event) => setQuickEvent((current) => current ? { ...current, endTime: event.target.value } : current)}
+                      onBlur={() => setQuickEvent((current) => current ? { ...current, endTime: normalizeTimeInput(current.endTime, "10:00") } : current)}
                     />
                   </label>
                 ) : null}

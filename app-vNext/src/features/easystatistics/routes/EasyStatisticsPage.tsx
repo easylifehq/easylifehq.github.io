@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useAuth } from "@/features/auth/AuthContext";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
@@ -9,6 +9,17 @@ import { subscribeToNotes, type NoteRecord } from "@/lib/firestore/notes";
 import { subscribeToProjects, type ProjectRecord } from "@/lib/firestore/projects";
 import { subscribeToProjectTaskLinks, type ProjectTaskLinkRecord } from "@/lib/firestore/projectTaskLinks";
 import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
+import { WorkoutInsightsPanel } from "@/features/easyworkout/components/WorkoutInsightsPanel";
+import { workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
+import { WeeklyReviewPanel } from "@/features/easystatistics/components/WeeklyReviewPanel";
+import { FocusedReviewQueue } from "@/features/coreloop/components/FocusedReviewQueue";
+import { deriveWeeklyReview } from "@/features/easystatistics/domain/weeklyReview";
+import {
+  weeklyReviewDemoApplications,
+  weeklyReviewDemoNotes,
+  weeklyReviewDemoProjectLinks,
+  weeklyReviewDemoProjects,
+} from "@/features/easystatistics/demo/weeklyReviewDemoFixtures";
 
 function startOfWeek(date: Date) {
   const next = startOfDay(date);
@@ -25,61 +36,6 @@ function isOnOrAfterDateKey(dateKey: string, threshold: Date) {
   return new Date(`${dateKey}T00:00:00`) >= threshold;
 }
 
-function getWorkoutVolume(session: WorkoutSessionRecord) {
-  return session.exercises.reduce(
-    (sessionTotal, exercise) =>
-      sessionTotal + exercise.sets.reduce((setTotal, set) => setTotal + set.reps * set.weight, 0),
-    0
-  );
-}
-
-function getEstimatedMax(weight: number, reps: number) {
-  if (weight <= 0 || reps <= 0) return 0;
-  if (reps === 1) return weight;
-  return Math.round(weight * (36 / Math.max(37 - reps, 1)));
-}
-
-function summarizeMuscleGroups(sessions: WorkoutSessionRecord[], weekStart: Date) {
-  const weekKey = weekStart.toISOString().split("T")[0];
-  const summary = new Map<
-    string,
-    {
-      name: string;
-      setCount: number;
-      totalVolume: number;
-      weeklyVolume: number;
-      frequency: number;
-      lastPerformedOn: string;
-    }
-  >();
-
-  sessions.forEach((session) => {
-    session.exercises.forEach((exercise) => {
-      const name = exercise.muscleGroup || "Other";
-      const current = summary.get(name);
-      const setCount = exercise.sets.length;
-      const volume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
-      const isThisWeek = !!session.performedOn && session.performedOn >= weekKey;
-
-      summary.set(name, {
-        name,
-        setCount: (current?.setCount || 0) + setCount,
-        totalVolume: (current?.totalVolume || 0) + volume,
-        weeklyVolume: (current?.weeklyVolume || 0) + (isThisWeek ? volume : 0),
-        frequency: (current?.frequency || 0) + 1,
-        lastPerformedOn:
-          !current?.lastPerformedOn || current.lastPerformedOn < session.performedOn
-            ? session.performedOn
-            : current.lastPerformedOn,
-      });
-    });
-  });
-
-  return [...summary.values()].sort(
-    (left, right) => right.weeklyVolume - left.weeklyVolume || right.frequency - left.frequency
-  );
-}
-
 function formatHours(minutes: number) {
   if (minutes < 60) return `${minutes} min`;
   const hours = minutes / 60;
@@ -90,8 +46,13 @@ function getWordCount(notes: NoteRecord[]) {
   return notes.reduce((sum, note) => sum + note.bodyText.trim().split(/\s+/).filter(Boolean).length, 0);
 }
 
+function localDateKey(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
 export function EasyStatisticsPage() {
-  const { user } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { user, isDemoMode } = useAuth();
   const { tasks, events, taskBlocks, isLoading, error } = useEasyCalendar();
   const [workoutSessions, setWorkoutSessions] = useState<WorkoutSessionRecord[]>([]);
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
@@ -100,19 +61,30 @@ export function EasyStatisticsPage() {
   const [notes, setNotes] = useState<NoteRecord[]>([]);
   const [statsError, setStatsError] = useState("");
   const [activeTab, setActiveTab] = useState<
-    "overview" | "workout" | "list" | "pipeline" | "projects" | "notes"
-  >("overview");
+    "overview" | "week" | "workout" | "list" | "pipeline" | "projects" | "notes"
+  >(["week", "workout", "list", "pipeline", "projects", "notes"].includes(searchParams.get("tab") || "")
+    ? searchParams.get("tab") as "week" | "workout" | "list" | "pipeline" | "projects" | "notes"
+    : "overview");
   const today = startOfDay(new Date());
+  const isFocusedReview = activeTab === "week" && searchParams.get("reviewMode") === "focus";
   const weekStart = startOfWeek(today);
   const monthStart = startOfMonth(today);
 
   useEffect(() => {
-    if (!user) {
-      setWorkoutSessions([]);
-      setApplications([]);
-      setProjects([]);
-      setProjectLinks([]);
-      setNotes([]);
+    const requestedTab = searchParams.get("tab");
+    setActiveTab(["week", "workout", "list", "pipeline", "projects", "notes"].includes(requestedTab || "")
+      ? requestedTab as "week" | "workout" | "list" | "pipeline" | "projects" | "notes"
+      : "overview");
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!user || isDemoMode) {
+      setWorkoutSessions(isDemoMode ? workoutDemoSessions : []);
+      setApplications(isDemoMode ? weeklyReviewDemoApplications : []);
+      setProjects(isDemoMode ? weeklyReviewDemoProjects : []);
+      setProjectLinks(isDemoMode ? weeklyReviewDemoProjectLinks : []);
+      setNotes(isDemoMode ? weeklyReviewDemoNotes : []);
+      setStatsError("");
       return;
     }
 
@@ -137,7 +109,7 @@ export function EasyStatisticsPage() {
       unsubscribeProjectLinks();
       unsubscribeNotes();
     };
-  }, [user]);
+  }, [isDemoMode, user]);
 
   const stats = useMemo(() => {
     const activeTasks = tasks.filter((task) => !task.completed && !task.deletedAt);
@@ -155,36 +127,6 @@ export function EasyStatisticsPage() {
     }, 0);
     const workoutsThisWeek = workoutSessions.filter((session) => isOnOrAfterDateKey(session.performedOn, weekStart));
     const workoutsThisMonth = workoutSessions.filter((session) => isOnOrAfterDateKey(session.performedOn, monthStart));
-    const workoutVolume = workoutsThisWeek.reduce((sum, session) => sum + getWorkoutVolume(session), 0);
-    const allTimeWorkoutVolume = workoutSessions.reduce((sum, session) => sum + getWorkoutVolume(session), 0);
-    const exerciseCount = workoutsThisWeek.reduce((sum, session) => sum + session.exercises.length, 0);
-    const exerciseVolume = new Map<string, number>();
-    const exerciseStrength = new Map<string, { estimatedMax: number; weight: number; reps: number }>();
-    const muscleGroups = summarizeMuscleGroups(workoutSessions, weekStart);
-
-    workoutSessions.forEach((session) => {
-      session.exercises.forEach((exercise) => {
-        const volume = exercise.sets.reduce((sum, set) => sum + set.reps * set.weight, 0);
-        const exerciseName = exercise.exerciseName || "Untitled exercise";
-        exerciseVolume.set(exerciseName, (exerciseVolume.get(exerciseName) || 0) + volume);
-        exercise.sets.forEach((set) => {
-          const nextEstimatedMax = getEstimatedMax(set.weight, set.reps);
-          const current = exerciseStrength.get(exerciseName);
-          if (!current || nextEstimatedMax > current.estimatedMax) {
-            exerciseStrength.set(exerciseName, {
-              estimatedMax: nextEstimatedMax,
-              weight: set.weight,
-              reps: set.reps,
-            });
-          }
-        });
-      });
-    });
-
-    const topExercise = [...exerciseVolume.entries()].sort((left, right) => right[1] - left[1])[0] || null;
-    const prHighlights = [...exerciseStrength.entries()]
-      .sort((left, right) => right[1].estimatedMax - left[1].estimatedMax)
-      .slice(0, 3);
     const completionRate = Math.round((completedTasks.length / Math.max(completedTasks.length + activeTasks.length, 1)) * 100);
     const nextTask = [...activeTasks]
       .filter((task) => task.dueDate)
@@ -205,12 +147,6 @@ export function EasyStatisticsPage() {
     const notesCreatedThisMonth = liveNotes.filter((note) => note.createdAt && note.createdAt >= monthStart);
     const wordCount = getWordCount(liveNotes);
     const pinnedNotes = liveNotes.filter((note) => note.pinned).length;
-    const topMuscleGroup = muscleGroups[0] || null;
-    const muscleGroupsThisWeek = muscleGroups.filter((group) => group.weeklyVolume > 0).length;
-    const muscleRecoveryCandidate = [...muscleGroups]
-      .filter((group) => group.weeklyVolume === 0)
-      .sort((left, right) => left.lastPerformedOn.localeCompare(right.lastPerformedOn))[0] || null;
-    const consistencyScore = Math.min(100, Math.round((workoutsThisWeek.length / 4) * 100));
 
     return {
       activeTasks,
@@ -225,16 +161,7 @@ export function EasyStatisticsPage() {
       plannedMinutes,
       workoutsThisWeek,
       workoutsThisMonth,
-      workoutVolume,
-      allTimeWorkoutVolume,
-      exerciseCount,
-      topExercise,
-      prHighlights,
-      muscleGroups,
-      topMuscleGroup,
-      muscleGroupsThisWeek,
-      muscleRecoveryCandidate,
-      consistencyScore,
+      workoutSessionCount: workoutSessions.length,
       completionRate,
       nextTask,
       activeApplications,
@@ -260,6 +187,16 @@ export function EasyStatisticsPage() {
       : stats.completedThisWeek.length > 0
         ? `${stats.completedThisWeek.length} task${stats.completedThisWeek.length === 1 ? "" : "s"} finished this week. Keep the rhythm.`
         : "No completed items this week. Choose one task to finish today.";
+  const weeklyReview = useMemo(() => deriveWeeklyReview({
+    nowDateKey: localDateKey(today),
+    tasks,
+    events,
+    taskBlocks,
+    projects,
+    projectLinks,
+    applications,
+    workouts: workoutSessions,
+  }), [applications, events, projectLinks, projects, taskBlocks, tasks, today, workoutSessions]);
   const lifeScore =
     stats.completedThisWeek.length +
     stats.workoutsThisWeek.length * 2 +
@@ -268,24 +205,25 @@ export function EasyStatisticsPage() {
     stats.completedProjectTasks;
   const milestones = [
     `${tasks.length} task${tasks.length === 1 ? "" : "s"} created`,
-    `${stats.allTimeWorkoutVolume.toLocaleString()} total workout volume`,
+    `${stats.workoutSessionCount} workout session${stats.workoutSessionCount === 1 ? "" : "s"} logged`,
     `${applications.length} application${applications.length === 1 ? "" : "s"} tracked`,
     `${stats.wordCount.toLocaleString()} note word${stats.wordCount === 1 ? "" : "s"}`,
   ];
   const tabs = [
     { id: "overview", label: "Overview" },
-    { id: "workout", label: "EasyWorkout" },
-    { id: "list", label: "EasyList" },
-    { id: "pipeline", label: "EasyPipeline" },
-    { id: "projects", label: "EasyProjects" },
-    { id: "notes", label: "EasyNotes" },
+    { id: "week", label: "My week" },
+    { id: "workout", label: "Workout" },
+    { id: "list", label: "Inbox" },
+    { id: "pipeline", label: "Follow-ups" },
+    { id: "projects", label: "Projects" },
+    { id: "notes", label: "Notes" },
   ] as const;
 
   return (
     <main className="page-wrap app-theme app-theme-easystatistics">
       {(error || statsError) ? <p className="error-copy">{error || statsError}</p> : null}
 
-      <PageSection eyebrow="EasyStatistics" title="Progress hub" description={weeklyRead}>
+      <PageSection headingLevel={1} eyebrow="Progress" title="Progress hub" description={weeklyRead}>
         <div className="statistics-hero-strip">
           <article>
             <span>Life score</span>
@@ -300,8 +238,8 @@ export function EasyStatisticsPage() {
             <strong>{formatHours(stats.plannedMinutes)}</strong>
           </article>
           <article>
-            <span>Workout volume</span>
-            <strong>{stats.workoutVolume.toLocaleString()}</strong>
+            <span>Workouts this week</span>
+            <strong>{stats.workoutsThisWeek.length}</strong>
           </article>
         </div>
       </PageSection>
@@ -320,7 +258,7 @@ export function EasyStatisticsPage() {
         <article className="statistics-insight-card">
           <span>Training pulse</span>
           <strong>{stats.workoutsThisMonth.length} this month</strong>
-          <p>{stats.topExercise ? `${stats.topExercise[0]} leads with ${stats.topExercise[1].toLocaleString()} volume.` : "Log a workout to unlock exercise highlights."}</p>
+          <p>{stats.workoutSessionCount ? `${stats.workoutSessionCount} total sessions logged. Open Workout for unit-aware records and matched periods.` : "Log a workout to unlock exercise highlights."}</p>
         </article>
       </div>
 
@@ -338,7 +276,13 @@ export function EasyStatisticsPage() {
             role="tab"
             aria-selected={activeTab === tab.id}
             className={activeTab === tab.id ? "active" : undefined}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => {
+              setActiveTab(tab.id);
+              const nextParams = new URLSearchParams(searchParams);
+              if (tab.id === "overview") nextParams.delete("tab");
+              else nextParams.set("tab", tab.id);
+              setSearchParams(nextParams, { replace: true });
+            }}
           >
             {tab.label}
           </button>
@@ -347,7 +291,7 @@ export function EasyStatisticsPage() {
 
       {activeTab === "overview" ? (
         <div className="statistics-app-grid">
-          <PageSection eyebrow="EasyList" title="Tasks">
+          <PageSection eyebrow="Inbox" title="Tasks">
             {isLoading ? <p className="helper-copy">Loading task stats...</p> : null}
             <div className="statistics-progress-list">
               <div><span>Completed</span><strong>{stats.completedTasks.length}</strong></div>
@@ -355,64 +299,87 @@ export function EasyStatisticsPage() {
               <div><span>Created this month</span><strong>{stats.tasksCreatedThisMonth.length}</strong></div>
               <div><span>Completion rate</span><strong>{stats.completionRate}%</strong></div>
             </div>
-            <Link to="/app/easylist/dashboard" className="button-secondary compact-button">Open EasyList</Link>
+            <Link to="/app/easylist/dashboard" className="button-secondary compact-button">Open Inbox</Link>
           </PageSection>
 
-          <PageSection eyebrow="EasyCalendar" title="Time">
+          <PageSection eyebrow="Plan" title="Time">
             <div className="statistics-progress-list">
               <div><span>Planned work</span><strong>{formatHours(stats.plannedMinutes)}</strong></div>
               <div><span>Task blocks</span><strong>{stats.plannedBlocksThisWeek.length}</strong></div>
               <div><span>Fixed events</span><strong>{stats.eventsThisWeek.length}</strong></div>
               <div><span>Due this week</span><strong>{stats.dueThisWeek.length}</strong></div>
             </div>
-            <Link to="/app/easycalendar/week" className="button-secondary compact-button">Open EasyCalendar</Link>
+            <Link to="/app/easycalendar/week" className="button-secondary compact-button">Open Plan</Link>
           </PageSection>
 
-          <PageSection eyebrow="EasyWorkout" title="Training">
+          <PageSection eyebrow="Workout" title="Training">
             <div className="statistics-progress-list">
               <div><span>Sessions this week</span><strong>{stats.workoutsThisWeek.length}</strong></div>
-              <div><span>Top muscle</span><strong>{stats.topMuscleGroup?.name || "No signal yet"}</strong></div>
-              <div><span>Groups active</span><strong>{stats.muscleGroupsThisWeek}</strong></div>
-              <div><span>All-time volume</span><strong>{stats.allTimeWorkoutVolume.toLocaleString()}</strong></div>
+              <div><span>Sessions this month</span><strong>{stats.workoutsThisMonth.length}</strong></div>
+              <div><span>Total sessions</span><strong>{stats.workoutSessionCount}</strong></div>
+              <div><span>Detailed metrics</span><strong>Workout tab</strong></div>
             </div>
-            <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open EasyWorkout</Link>
+            <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open Workout</Link>
           </PageSection>
 
-          <PageSection eyebrow="EasyPipeline" title="Applications">
+          <PageSection eyebrow="Follow-ups" title="Applications">
             <div className="statistics-progress-list">
               <div><span>Total tracked</span><strong>{applications.length}</strong></div>
               <div><span>Created this month</span><strong>{stats.applicationsCreatedThisMonth.length}</strong></div>
               <div><span>Responses</span><strong>{stats.responseCount}</strong></div>
               <div><span>Offers</span><strong>{stats.offerCount}</strong></div>
             </div>
-            <Link to="/app/easypipeline/dashboard" className="button-secondary compact-button">Open EasyPipeline</Link>
+            <Link to="/app/easypipeline/dashboard" className="button-secondary compact-button">Open Follow-ups</Link>
           </PageSection>
 
-          <PageSection eyebrow="EasyProjects" title="Projects">
+          <PageSection eyebrow="Projects" title="Projects">
             <div className="statistics-progress-list">
               <div><span>Active</span><strong>{stats.activeProjects.length}</strong></div>
               <div><span>Completed</span><strong>{stats.completedProjects.length}</strong></div>
               <div><span>Linked tasks</span><strong>{stats.linkedProjectTasks.length}</strong></div>
               <div><span>Project tasks done</span><strong>{stats.completedProjectTasks}</strong></div>
             </div>
-            <Link to="/app/easyprojects" className="button-secondary compact-button">Open EasyProjects</Link>
+            <Link to="/app/easyprojects" className="button-secondary compact-button">Open Projects</Link>
           </PageSection>
 
-          <PageSection eyebrow="EasyNotes" title="Notes">
+          <PageSection eyebrow="Notes" title="Notes">
             <div className="statistics-progress-list">
               <div><span>Live notes</span><strong>{stats.liveNotes.length}</strong></div>
               <div><span>Created this month</span><strong>{stats.notesCreatedThisMonth.length}</strong></div>
               <div><span>Pinned</span><strong>{stats.pinnedNotes}</strong></div>
               <div><span>Words captured</span><strong>{stats.wordCount.toLocaleString()}</strong></div>
             </div>
-            <Link to="/app/easynotes" className="button-secondary compact-button">Open EasyNotes</Link>
+            <Link to="/app/easynotes" className="button-secondary compact-button">Open Notes</Link>
           </PageSection>
         </div>
       ) : null}
 
-      {activeTab === "workout" ? (
+      {activeTab === "week" ? (
+        isFocusedReview ? (
+          <FocusedReviewQueue
+            projects={projects}
+            projectLinks={projectLinks}
+            applications={applications}
+            workouts={workoutSessions}
+            userKey={user?.uid || "demo"}
+            isDemoMode={isDemoMode}
+          />
+        ) : (
+          <WeeklyReviewPanel
+            review={weeklyReview}
+            isDemoMode={isDemoMode}
+            isLoading={isLoading}
+            error={statsError}
+            focusedReviewTo="/app/easystatistics?tab=week&reviewMode=focus"
+          />
+        )
+      ) : null}
+
+      {activeTab === "workout" ? <WorkoutInsightsPanel sessions={workoutSessions} isLoading={isLoading} error={statsError} /> : null}
+
+      {/* Retained only as historical markup; the canonical, unit-aware WorkoutInsightsPanel above is the sole rendered workout statistics surface.
         <div className="statistics-tab-panel">
-          <PageSection eyebrow="EasyWorkout" title="Training progress" description="The deeper read on your lifting rhythm, coverage, and momentum.">
+          <PageSection eyebrow="Workout" title="Training progress" description="The deeper read on your lifting rhythm, coverage, and momentum.">
             <div className="statistics-hero-strip">
               <article>
                 <span>Sessions this week</span>
@@ -511,14 +478,14 @@ export function EasyStatisticsPage() {
                 </div>
               </PageSection>
             </div>
-            <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open EasyWorkout</Link>
+            <Link to="/app/easyworkout/dashboard" className="button-secondary compact-button">Open Workout</Link>
           </PageSection>
         </div>
       ) : null}
 
       {activeTab === "list" ? (
         <div className="statistics-tab-panel">
-          <PageSection eyebrow="EasyList" title="Task progress" description="What is getting captured, cleared, and still needs attention.">
+          <PageSection eyebrow="Inbox" title="Task progress" description="What is getting captured, cleared, and still needs attention.">
             {isLoading ? <p className="helper-copy">Loading task stats...</p> : null}
             <div className="statistics-subgrid">
               <article className="statistics-insight-card">
@@ -555,14 +522,14 @@ export function EasyStatisticsPage() {
                 </div>
               </PageSection>
             </div>
-            <Link to="/app/easylist/dashboard" className="button-secondary compact-button">Open EasyList</Link>
+            <Link to="/app/easylist/dashboard" className="button-secondary compact-button">Open Inbox</Link>
           </PageSection>
         </div>
-      ) : null}
+      */}
 
       {activeTab === "pipeline" ? (
         <div className="statistics-tab-panel">
-          <PageSection eyebrow="EasyPipeline" title="Career progress" description="Applications, responses, and how the search is moving.">
+          <PageSection eyebrow="Follow-ups" title="Career progress" description="Applications, responses, and how the search is moving.">
             <div className="statistics-subgrid">
               <article className="statistics-insight-card">
                 <span>Active roles</span>
@@ -586,14 +553,14 @@ export function EasyStatisticsPage() {
               <div><span>Follow-ups due</span><strong>{stats.followUpsDue}</strong></div>
               <div><span>Offers</span><strong>{stats.offerCount}</strong></div>
             </div>
-            <Link to="/app/easypipeline/dashboard" className="button-secondary compact-button">Open EasyPipeline</Link>
+            <Link to="/app/easypipeline/dashboard" className="button-secondary compact-button">Open Follow-ups</Link>
           </PageSection>
         </div>
       ) : null}
 
       {activeTab === "projects" ? (
         <div className="statistics-tab-panel">
-          <PageSection eyebrow="EasyProjects" title="Project movement" description="A quick read on what is active, linked, and actually getting finished.">
+          <PageSection eyebrow="Projects" title="Project movement" description="A quick read on what is active, linked, and actually getting finished.">
             <div className="statistics-subgrid">
               <article className="statistics-insight-card">
                 <span>Active</span>
@@ -617,14 +584,14 @@ export function EasyStatisticsPage() {
               <div><span>Linked tasks</span><strong>{stats.linkedProjectTasks.length}</strong></div>
               <div><span>Tasks done</span><strong>{stats.completedProjectTasks}</strong></div>
             </div>
-            <Link to="/app/easyprojects" className="button-secondary compact-button">Open EasyProjects</Link>
+            <Link to="/app/easyprojects" className="button-secondary compact-button">Open Projects</Link>
           </PageSection>
         </div>
       ) : null}
 
       {activeTab === "notes" ? (
         <div className="statistics-tab-panel">
-          <PageSection eyebrow="EasyNotes" title="Writing progress" description="A lighter read on how much writing and capture is happening over time.">
+          <PageSection eyebrow="Notes" title="Writing progress" description="A lighter read on how much writing and capture is happening over time.">
             <div className="statistics-subgrid">
               <article className="statistics-insight-card">
                 <span>Live notes</span>
@@ -648,7 +615,7 @@ export function EasyStatisticsPage() {
               <div><span>Pinned</span><strong>{stats.pinnedNotes}</strong></div>
               <div><span>Words captured</span><strong>{stats.wordCount.toLocaleString()}</strong></div>
             </div>
-            <Link to="/app/easynotes" className="button-secondary compact-button">Open EasyNotes</Link>
+            <Link to="/app/easynotes" className="button-secondary compact-button">Open Notes</Link>
           </PageSection>
         </div>
       ) : null}

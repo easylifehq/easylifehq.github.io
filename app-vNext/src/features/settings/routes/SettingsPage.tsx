@@ -1,7 +1,16 @@
 import { PageSection } from "@/components/ui/PageSection";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { APP_VERSION } from "@/config/appVersion";
+import {
+  accountExportGroups as dataExportGroups,
+  buildAccountExport,
+  emptyAccountDataCollections as emptyDataCollections,
+  serializeAccountExport,
+  serializeDomainCsv,
+  type AccountDataCollections as DataCollections,
+} from "@/features/coreloop/domain/accountExport";
+import { coreLoopDemoExportCollections } from "@/features/coreloop/demo/coreLoopDemoFixtures";
 import { useAuth } from "@/features/auth/AuthContext";
 import { AiCommandCenter } from "@/features/experiments/AiCommandCenter";
 import { useSettings } from "@/features/settings/SettingsContext";
@@ -137,7 +146,7 @@ const appVisibilityOptions: Array<{
   {
     id: "easycontacts",
     label: "People",
-    description: "Optional people and place context.",
+    description: "Optional people and manual place labels. No live location, maps, or geocoding.",
     home: "Optional",
   },
   {
@@ -169,7 +178,7 @@ const experimentalFeatureOptions: Array<{
   id: ExperimentalFeatureId;
   label: string;
   description: string;
-  category: "HQ" | "Capture" | "Planning" | "Projects" | "Notes" | "Workout";
+  category: "Today" | "Inbox" | "Plan" | "Projects" | "Notes" | "Workout";
   status: "Active" | "Partial" | "Coming soon";
   showsUp: string;
   recommendation: string;
@@ -178,7 +187,7 @@ const experimentalFeatureOptions: Array<{
     id: "dailyReview",
     label: "Daily Review",
     description: "Adds a compact read on today's load, wins, open time, and follow-ups.",
-    category: "HQ",
+    category: "Today",
     status: "Active",
     showsUp: "Today",
     recommendation: "Keep if you like Today showing a planning pulse.",
@@ -187,16 +196,16 @@ const experimentalFeatureOptions: Array<{
     id: "startHere",
     label: "Next Step",
     description: "Suggests the next surface to open based on tasks, follow-ups, calendar room, and workouts.",
-    category: "HQ",
+    category: "Today",
     status: "Active",
     showsUp: "Today",
     recommendation: "Keep if you want Today to suggest where to begin.",
   },
   {
     id: "inboxCapture",
-    label: "Inbox Capture",
+    label: "Inbox capture",
     description: "Planned global capture button for saving messy thoughts before choosing where they belong.",
-    category: "Capture",
+    category: "Inbox",
     status: "Coming soon",
     showsUp: "No active surface yet",
     recommendation: "Leave off until the global capture button is built.",
@@ -205,7 +214,7 @@ const experimentalFeatureOptions: Array<{
     id: "smartTaskEntry",
     label: "Smart Task Entry",
     description: "Legacy switch for task parsing work that is now mostly part of the standard Add Tasks flow.",
-    category: "Planning",
+    category: "Plan",
     status: "Partial",
     showsUp: "Inbox capture",
     recommendation: "Can be retired soon unless we wire a specific smart-entry behavior to it.",
@@ -214,19 +223,19 @@ const experimentalFeatureOptions: Array<{
     id: "overdueTriage",
     label: "Overdue Triage",
     description: "Adds a recovery-oriented cleanup panel for overdue tasks instead of only flagging them.",
-    category: "Planning",
+    category: "Plan",
     status: "Active",
     showsUp: "Inbox review",
     recommendation: "Keep if you want the overdue cleanup panel.",
   },
   {
     id: "projectPlanner",
-    label: "Project Planner",
-    description: "Drafts project sections, due dates, and linked task suggestions from a rough goal.",
+    label: "Gated Project Planner",
+    description: "Review-first project draft lane. Provider-backed planning remains gated and must be approved before use.",
     category: "Projects",
     status: "Active",
     showsUp: "More / Projects",
-    recommendation: "Requires Assistant and draft creation to be on.",
+    recommendation: "Leave off unless you are intentionally testing the approved project draft gate.",
   },
   {
     id: "notesFocusEditor",
@@ -250,7 +259,7 @@ const experimentalFeatureOptions: Array<{
     id: "mobileAppSheet",
     label: "Mobile More Sheet",
     description: "Uses a more intentional mobile More menu with backdrop and sheet behavior.",
-    category: "Capture",
+    category: "Inbox",
     status: "Active",
     showsUp: "Mobile header",
     recommendation: "Keep for a better phone More menu.",
@@ -266,10 +275,11 @@ const experimentalFeatureOptions: Array<{
   },
 ];
 
-const experimentGroups = ["HQ", "Capture", "Planning", "Projects", "Notes", "Workout"] as const;
+const experimentGroups = ["Today", "Inbox", "Plan", "Projects", "Notes", "Workout"] as const;
 
 type SettingsSectionId =
   | "customize"
+  | "trust"
   | "apps"
   | "calendar"
   | "page-settings"
@@ -293,6 +303,13 @@ const settingsSections: Array<{
     label: "Control Panel",
     eyebrow: "Assistant Controls",
     description: "Tune the theme, opening screen, and first assistant path.",
+    group: "basics",
+  },
+  {
+    id: "trust",
+    label: "Trust & Privacy",
+    eyebrow: "Boundaries",
+    description: "What EasyLife can do now, what stays manual, and where your export lives.",
     group: "basics",
   },
   {
@@ -339,9 +356,9 @@ const settingsSections: Array<{
   },
   {
     id: "notifications",
-    label: "Notifications",
-    eyebrow: "Reminders",
-    description: "Control reminder permission, categories, quiet hours, and test alerts.",
+    label: "Browser Reminders",
+    eyebrow: "Local Reminders",
+    description: "Control browser reminder permission, categories, quiet hours, and test alerts.",
     group: "basics",
   },
   {
@@ -377,7 +394,7 @@ const startupRouteOptions: Array<{ value: StartupRoute; label: string; descripti
   { value: "/app/hq", label: "Today", description: "Start with the assistant's daily read." },
   { value: "last-used", label: "Last used screen", description: "Resume where you left off." },
   { value: "/app/easylist/dashboard", label: "Inbox review", description: "Open straight to captured items." },
-  { value: "/app/easylist/add", label: "Capture", description: "Start in fast inbox mode." },
+  { value: "/app/easylist/add", label: "Inbox capture", description: "Start in fast inbox mode." },
   { value: "/app/easycalendar/day", label: "Plan", description: "Start with today hour by hour." },
   { value: "/app/easynotes", label: "Notes", description: "Open saved context." },
   { value: "/app/easynotes/new", label: "Blank note", description: "Start writing immediately." },
@@ -391,8 +408,8 @@ const notesResumeOptions: Array<{ value: NotesResumeBehavior; label: string }> =
 
 const routingOptions: Array<{ value: RoutingDefault; label: string }> = [
   { value: "ask", label: "Ask me each time" },
-  { value: "projects", label: "Prefer EasyProjects" },
-  { value: "pipeline", label: "Prefer EasyPipeline" },
+  { value: "projects", label: "Prefer Projects" },
+  { value: "pipeline", label: "Prefer Follow-ups" },
   { value: "stay", label: "Keep in current app" },
 ];
 
@@ -424,7 +441,7 @@ const distributionChecklist: Array<{
     label: "Safety net",
     title: "Rollback plan",
     status: "Ready",
-    description: "Keep the previous stable release available in git so a bad deploy can be reverted quickly.",
+    description: "Keep the previous stable release available in git so a bad release can be reverted quickly.",
   },
   {
     label: "Support",
@@ -436,7 +453,7 @@ const distributionChecklist: Array<{
     label: "Native builds",
     title: "Capacitor iOS and Android projects",
     status: "Later",
-    description: "Add these when home-screen install is not enough for notifications, distribution, or store review.",
+    description: "Add these later if home-screen install is not enough for distribution or store review.",
   },
 ];
 
@@ -447,10 +464,10 @@ const assistantBoundaries: Array<{
   description: string;
 }> = [
   {
-    label: "Planning",
-    title: "Summaries and next-step suggestions",
+    label: "Local help",
+    title: "Drafts and suggestions only",
     status: "Allowed",
-    description: "The assistant can help organize work into readable plans when the feature is enabled.",
+    description: "Experimental helpers can prepare drafts and suggestions inside EasyLife when you turn them on.",
   },
   {
     label: "Creation",
@@ -462,13 +479,13 @@ const assistantBoundaries: Array<{
     label: "Automation",
     title: "No surprise changes",
     status: "Blocked",
-    description: "The assistant should not delete, archive, send, schedule, or notify without a clear user action.",
+    description: "The assistant does not send messages, edit external calendars, use live location, or make hidden changes for you.",
   },
   {
     label: "Data",
     title: "Scoped to your account",
     status: "Review",
-    description: "Assistant review should use only the current signed-in user's EasyLife data and visible context.",
+    description: "Assistant review uses selected visible EasyLife context only after you enable it; no background scanning or live AI provider is assumed here.",
   },
   {
     label: "Fallback",
@@ -478,82 +495,8 @@ const assistantBoundaries: Array<{
   },
 ];
 
-type DataCollections = {
-  tasks: unknown[];
-  notes: unknown[];
-  noteFolders: unknown[];
-  calendarEvents: unknown[];
-  calendarTaskBlocks: unknown[];
-  calendarCategories: unknown[];
-  workoutExercises: unknown[];
-  workoutRoutines: unknown[];
-  workoutSessions: unknown[];
-  projects: unknown[];
-  projectSections: unknown[];
-  projectTaskLinks: unknown[];
-  pipelineApplications: unknown[];
-  pipelineDrafts: unknown[];
-  contacts: unknown[];
-};
-
-const emptyDataCollections: DataCollections = {
-  tasks: [],
-  notes: [],
-  noteFolders: [],
-  calendarEvents: [],
-  calendarTaskBlocks: [],
-  calendarCategories: [],
-  workoutExercises: [],
-  workoutRoutines: [],
-  workoutSessions: [],
-  projects: [],
-  projectSections: [],
-  projectTaskLinks: [],
-  pipelineApplications: [],
-  pipelineDrafts: [],
-  contacts: [],
-};
-
-const dataExportGroups: Array<{ key: keyof DataCollections; label: string; app: string }> = [
-  { key: "tasks", label: "Tasks", app: "EasyList" },
-  { key: "notes", label: "Notes", app: "EasyNotes" },
-  { key: "noteFolders", label: "Folders", app: "EasyNotes" },
-  { key: "calendarEvents", label: "Events", app: "EasyCalendar" },
-  { key: "calendarTaskBlocks", label: "Task blocks", app: "EasyCalendar" },
-  { key: "calendarCategories", label: "Categories", app: "EasyCalendar" },
-  { key: "workoutExercises", label: "Exercises", app: "EasyWorkout" },
-  { key: "workoutRoutines", label: "Routines", app: "EasyWorkout" },
-  { key: "workoutSessions", label: "Sessions", app: "EasyWorkout" },
-  { key: "projects", label: "Projects", app: "EasyProjects" },
-  { key: "projectSections", label: "Sections", app: "EasyProjects" },
-  { key: "projectTaskLinks", label: "Task links", app: "EasyProjects" },
-  { key: "pipelineApplications", label: "Applications", app: "EasyPipeline" },
-  { key: "pipelineDrafts", label: "Email drafts", app: "EasyPipeline" },
-  { key: "contacts", label: "Contacts", app: "EasyContacts" },
-];
-
-function serializeForExport(value: unknown): unknown {
-  if (value instanceof Date) {
-    return value.toISOString();
-  }
-
-  if (Array.isArray(value)) {
-    return value.map((entry) => serializeForExport(entry));
-  }
-
-  if (value && typeof value === "object") {
-    return Object.fromEntries(
-      Object.entries(value).map(([key, entry]) => [key, serializeForExport(entry)])
-    );
-  }
-
-  return value;
-}
-
-function downloadJson(filename: string, payload: unknown) {
-  const blob = new Blob([JSON.stringify(serializeForExport(payload), null, 2)], {
-    type: "application/json",
-  });
+function downloadFile(filename: string, contents: string, type: string) {
+  const blob = new Blob([contents], { type });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -581,9 +524,11 @@ function getStringField(record: unknown, field: string) {
 export function SettingsPage() {
   const [searchParams] = useSearchParams();
   const [activeSection, setActiveSection] = useState<SettingsSectionId>("customize");
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [dataCollections, setDataCollections] = useState<DataCollections>(emptyDataCollections);
   const [dataError, setDataError] = useState("");
+  const [dataPendingCount, setDataPendingCount] = useState(0);
+  const settledDataSourcesRef = useRef(new Set<keyof DataCollections>());
   const [dataMessage, setDataMessage] = useState("");
   const [installMessage, setInstallMessage] = useState("");
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermissionState>(() =>
@@ -619,23 +564,11 @@ export function SettingsPage() {
   const activeTheme = themeOptions.find((theme) => theme.value === settings.themeMode) || themeOptions[0];
   const activeSectionConfig =
     settingsSections.find((section) => section.id === activeSection) || settingsSections[0];
-  const dataExport = useMemo(
-    () => ({
-      exportedAt: new Date().toISOString(),
-      appVersion: APP_VERSION,
-      user: {
-        uid: user?.uid || "",
-        email: user?.email || "",
-      },
-      settings,
-      collections: dataCollections,
-    }),
-    [dataCollections, settings, user]
-  );
   const dataTotals = useMemo(
     () => dataExportGroups.reduce((sum, group) => sum + dataCollections[group.key].length, 0),
     [dataCollections]
   );
+  const dataExportReady = dataPendingCount === 0 && !dataError;
   const linkedTaskCount = useMemo(
     () => dataCollections.tasks.filter((task) => getTaskLinkedBlockIds(task).length > 0).length,
     [dataCollections.tasks]
@@ -655,6 +588,17 @@ export function SettingsPage() {
     () => dataCollections.notes.filter((note) => Boolean(note && typeof note === "object" && "deletedAt" in note && note.deletedAt)).length,
     [dataCollections.notes]
   );
+  const notificationPermissionDenied = notificationPermission === "denied";
+  const notificationPermissionUnsupported = notificationPermission === "unsupported";
+  const truePushReadiness =
+    notificationPermission === "granted"
+      ? "Permission ready"
+      : notificationPermission === "denied"
+        ? "Blocked"
+        : notificationPermission === "unsupported"
+          ? "Unsupported"
+          : "Needs permission";
+  const canSendTestReminder = notificationPermission === "granted" && settings.notifications.enabled;
 
   useEffect(() => {
     const requestedSection = searchParams.get("section");
@@ -664,46 +608,87 @@ export function SettingsPage() {
   }, [searchParams]);
 
   useEffect(() => {
-    if (!user) {
-      setDataCollections(emptyDataCollections);
+    if (isDemoMode) {
+      setDataCollections(coreLoopDemoExportCollections);
       setDataError("");
+      setDataPendingCount(0);
+      settledDataSourcesRef.current.clear();
       return;
     }
 
-    const handleError = (nextError: Error) => setDataError(nextError.message);
+    if (!user) {
+      setDataCollections(emptyDataCollections);
+      setDataError("");
+      setDataPendingCount(0);
+      settledDataSourcesRef.current.clear();
+      return;
+    }
+
+    let active = true;
+    settledDataSourcesRef.current = new Set();
+    setDataCollections(emptyDataCollections);
+    setDataError("");
+    setDataPendingCount(dataExportGroups.length);
+
+    const settleSource = (key: keyof DataCollections) => {
+      if (!active || settledDataSourcesRef.current.has(key)) return;
+      settledDataSourcesRef.current.add(key);
+      setDataPendingCount((current) => Math.max(0, current - 1));
+    };
+    const handleError = (key: keyof DataCollections) => (nextError: Error) => {
+      settleSource(key);
+      setDataError(`Could not load ${key}: ${nextError.message}. Export is paused to avoid an incomplete file.`);
+    };
     const setCollection =
       <T,>(key: keyof DataCollections) =>
       (records: T[]) => {
+        if (!active) return;
         setDataCollections((current) => ({ ...current, [key]: records }));
-        setDataError("");
+        settleSource(key);
       };
 
     const unsubscribers = [
-      subscribeToTasks(user.uid, setCollection("tasks"), handleError),
-      subscribeToNotes(user.uid, setCollection("notes"), handleError),
-      subscribeToNoteFolders(user.uid, setCollection("noteFolders"), handleError),
-      subscribeToCalendarEvents(user.uid, setCollection("calendarEvents"), handleError),
-      subscribeToCalendarTaskBlocks(user.uid, setCollection("calendarTaskBlocks"), handleError),
-      subscribeToCategories(user.uid, setCollection("calendarCategories"), handleError),
-      subscribeToWorkoutExercises(user.uid, setCollection("workoutExercises"), handleError),
-      subscribeToWorkoutRoutines(user.uid, setCollection("workoutRoutines"), handleError),
-      subscribeToWorkoutSessions(user.uid, setCollection("workoutSessions"), handleError),
-      subscribeToProjects(user.uid, setCollection("projects"), handleError),
-      subscribeToProjectSections(user.uid, setCollection("projectSections"), handleError),
-      subscribeToProjectTaskLinks(user.uid, setCollection("projectTaskLinks"), handleError),
-      subscribeToApplications(user.uid, setCollection("pipelineApplications"), handleError),
-      subscribeToGeneratedDrafts(user.uid, setCollection("pipelineDrafts"), handleError),
-      subscribeToContacts(user.uid, setCollection("contacts"), handleError),
+      subscribeToTasks(user.uid, setCollection("tasks"), handleError("tasks")),
+      subscribeToNotes(user.uid, setCollection("notes"), handleError("notes")),
+      subscribeToNoteFolders(user.uid, setCollection("noteFolders"), handleError("noteFolders")),
+      subscribeToCalendarEvents(user.uid, setCollection("calendarEvents"), handleError("calendarEvents")),
+      subscribeToCalendarTaskBlocks(user.uid, setCollection("calendarTaskBlocks"), handleError("calendarTaskBlocks")),
+      subscribeToCategories(user.uid, setCollection("calendarCategories"), handleError("calendarCategories")),
+      subscribeToWorkoutExercises(user.uid, setCollection("workoutExercises"), handleError("workoutExercises")),
+      subscribeToWorkoutRoutines(user.uid, setCollection("workoutRoutines"), handleError("workoutRoutines")),
+      subscribeToWorkoutSessions(user.uid, setCollection("workoutSessions"), handleError("workoutSessions")),
+      subscribeToProjects(user.uid, setCollection("projects"), handleError("projects")),
+      subscribeToProjectSections(user.uid, setCollection("projectSections"), handleError("projectSections")),
+      subscribeToProjectTaskLinks(user.uid, setCollection("projectTaskLinks"), handleError("projectTaskLinks")),
+      subscribeToApplications(user.uid, setCollection("pipelineApplications"), handleError("pipelineApplications")),
+      subscribeToGeneratedDrafts(user.uid, setCollection("pipelineDrafts"), handleError("pipelineDrafts")),
+      subscribeToContacts(user.uid, setCollection("contacts"), handleError("contacts")),
     ];
 
     return () => {
+      active = false;
       unsubscribers.forEach((unsubscribe) => unsubscribe());
     };
-  }, [user]);
+  }, [isDemoMode, user]);
 
   function handleExportAll() {
-    downloadJson(`easylife-export-${new Date().toISOString().slice(0, 10)}.json`, dataExport);
-    setDataMessage("Export downloaded.");
+    const exportedAt = new Date().toISOString();
+    const payload = buildAccountExport({
+      collections: dataCollections,
+      settings,
+      exportedAt,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+      weightUnit: settings.easyWorkout.weightUnit,
+      appVersion: APP_VERSION,
+    });
+    downloadFile(`easylife-account-${exportedAt.slice(0, 10)}.json`, serializeAccountExport(payload), "application/json;charset=utf-8");
+    setDataMessage(`Versioned JSON export downloaded with ${dataTotals} records and a domain manifest.`);
+  }
+
+  function handleExportCsv(key: keyof DataCollections, label: string) {
+    const date = new Date().toISOString().slice(0, 10);
+    downloadFile(`easylife-${key}-${date}.csv`, serializeDomainCsv(key, dataCollections[key]), "text/csv;charset=utf-8");
+    setDataMessage(`${label} CSV downloaded with spreadsheet-formula protection.`);
   }
 
   function handleCopySummary() {
@@ -745,25 +730,30 @@ export function SettingsPage() {
 
     if (nextPermission === "granted") {
       await updateNotificationSettings({ enabled: true });
-      setNotificationMessage("Notifications are enabled. Use the category switches below to choose what can remind you.");
+      setNotificationMessage("Browser reminders are enabled here. Use the category switches below to choose what can remind you.");
       return;
     }
 
     if (nextPermission === "denied") {
       await updateNotificationSettings({ enabled: false });
-      setNotificationMessage("Notifications are blocked for this browser. Change the browser or iPhone site settings to allow them.");
+      setNotificationMessage("Browser reminders are blocked here. Change this site's browser or iPhone settings, then return to EasyLife.");
       return;
     }
 
-    setNotificationMessage("This browser does not support web notifications here.");
+    setNotificationMessage("This browser does not support local web reminders here.");
   }
 
   function handleSendTestNotification() {
+    if (!canSendTestReminder) {
+      setNotificationMessage("Allow browser reminders first, then send a local test reminder.");
+      return;
+    }
+
     const sent = sendTestNotification();
     setNotificationMessage(
       sent
-        ? "Test notification sent."
-        : "Allow notifications first, then try the test again."
+        ? "Local test reminder sent."
+        : "Allow browser reminders first, then try the test again."
     );
   }
 
@@ -789,8 +779,12 @@ export function SettingsPage() {
           <article className="settings-status-card">
             <span>Opens to</span>
             <strong>
-              {startupRouteOptions.find((option) => option.value === settings.startupRoute)?.label || "EasyHQ"}
+              {startupRouteOptions.find((option) => option.value === settings.startupRoute)?.label || "Today"}
             </strong>
+          </article>
+          <article className="settings-status-card">
+            <span>Trust mode</span>
+            <strong>Review first</strong>
           </article>
         </div>
       </section>
@@ -926,12 +920,146 @@ export function SettingsPage() {
         </PageSection>
         ) : null}
 
+        {activeSection === "trust" ? (
+        <PageSection
+          eyebrow="Boundaries"
+          title="Trust & Privacy"
+          description="EasyLife is an early web app for tasks, notes, planning, and follow-ups."
+        >
+          <div id="trust" className="settings-anchor" />
+          <div className="settings-review-grid">
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Experimental helpers</span>
+                <span className="settings-state-pill">Draft only</span>
+              </span>
+              <strong>No hidden actions</strong>
+              <p>
+                Experimental features create drafts and suggestions inside EasyLife. They do not send messages,
+                edit external calendars, use live location, or make hidden changes for you.
+              </p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Email and texts</span>
+                <span className="settings-state-pill">Not connected</span>
+              </span>
+              <strong>Drafts stay inside EasyLife</strong>
+              <p>
+                EasyLife can show review-only reply text, but it does not send email, send texts, create outside
+                drafts, archive mail, or contact anyone from this demo.
+              </p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Reminders</span>
+                <span className="settings-state-pill">Browser only</span>
+              </span>
+              <strong>Local reminders only</strong>
+              <p>
+                Reminders use this browser on this device. EasyLife is not running server-delivered push
+                delivery, and timing may depend on browser permission and whether EasyLife is open or installed.
+              </p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>People places</span>
+                <span className="settings-state-pill">Manual</span>
+              </span>
+              <strong>No live location</strong>
+              <p>People can use manual place labels. EasyLife is not using maps, geocoding, or device location.</p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Contacts</span>
+                <span className="settings-state-pill">Manual</span>
+              </span>
+              <strong>No contact import or sync</strong>
+              <p>
+                People is not reading your phone contacts, Google Contacts, Apple Contacts, Outlook, address book,
+                email, texts, calendar, or social accounts. Future import needs consent, preview, dedupe, field mapping,
+                and rollback.
+              </p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Export</span>
+                <span className="settings-state-pill">Export first</span>
+              </span>
+              <strong>Your data is inspectable</strong>
+              <p>
+                Use Data export to download a JSON snapshot before any account deletion request. EasyLife does not
+                have a self-serve delete button or backend deletion action in this demo.
+              </p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Draft recovery</span>
+                <span className="settings-state-pill">This browser</span>
+              </span>
+              <strong>Unsaved drafts are local to this browser</strong>
+              <p>
+                Inbox, Notes, and Workout can recover unsaved drafts on this device while you keep browser storage.
+                Private windows, clearing site data, or switching browsers can remove those unsaved drafts.
+              </p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Legal</span>
+                <span className="settings-state-pill">Draft copy</span>
+              </span>
+              <strong>Privacy Policy and Terms</strong>
+              <p>Draft policy labels are visible here until final hosted Privacy and Terms pages are approved.</p>
+              <div className="settings-policy-placeholders" aria-label="Legal placeholders">
+                <span>Privacy Policy draft</span>
+                <span>Terms draft</span>
+              </div>
+            </article>
+          </div>
+          <div className="settings-data-actions">
+            <button type="button" className="primary-button" onClick={() => setActiveSection("data")}>
+              Open export tools
+            </button>
+            <button type="button" className="button-secondary" onClick={() => setActiveSection("notifications")}>
+              Browser reminder settings
+            </button>
+            <button type="button" className="button-secondary" onClick={() => setActiveSection("assistant")}>
+              Assistant review controls
+            </button>
+          </div>
+        </PageSection>
+        ) : null}
+
         {activeSection === "calendar" ? (
         <PageSection
           eyebrow="Planning"
           title="Day setup"
         >
           <div id="calendar" className="settings-anchor" />
+          <div className="settings-review-grid">
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>External calendar sync</span>
+                <span className="settings-state-pill">Not live</span>
+              </span>
+              <strong>Plan stays inside EasyLife</strong>
+              <p>
+                EasyLife is not reading from or writing to Google Calendar, Apple Calendar, Outlook, or ICS feeds.
+                External calendar sync needs a separately approved consent and review flow.
+              </p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Future sync rule</span>
+                <span className="settings-state-pill">Review first</span>
+              </span>
+              <strong>No hidden calendar writes</strong>
+              <p>
+                A future sync must preview imported items, name the source of truth, show conflicts, and let you
+                approve or roll back changes before anything touches an outside calendar.
+              </p>
+            </article>
+          </div>
           <div className="settings-toggle-list">
             <label className="settings-toggle-row active">
               <div>
@@ -1028,7 +1156,7 @@ export function SettingsPage() {
               </p>
             </div>
             <div className="settings-command-tags" aria-label="Covered settings areas">
-              <span>Capture</span>
+              <span>Inbox</span>
               <span>Plan</span>
               <span>Route</span>
             </div>
@@ -1144,6 +1272,16 @@ export function SettingsPage() {
                   onChange={(event) => void updateEasyWorkoutSettings({ defaultSetCount: Number(event.target.value) })}
                 />
               </label>
+              <label className="field-stack">
+                <span>Workout weight unit</span>
+                <select
+                  value={settings.easyWorkout.weightUnit}
+                  onChange={(event) => void updateEasyWorkoutSettings({ weightUnit: event.target.value as "lb" | "kg" })}
+                >
+                  <option value="lb">Pounds (lb)</option>
+                  <option value="kg">Kilograms (kg)</option>
+                </select>
+              </label>
               <label className="settings-inline-check">
                 <input
                   type="checkbox"
@@ -1252,17 +1390,25 @@ export function SettingsPage() {
         <PageSection
           eyebrow="Review"
           title="Data export and health"
-          description="Download a portable JSON snapshot, scan what exists, and spot linked-data cleanup needs before anything disappears."
+          description="Download a versioned whole-account JSON snapshot or practical per-domain CSV files. Exports include a manifest, time zone, units, and formula version without account credentials or Firebase configuration."
         >
           <div id="data" className="settings-anchor" />
+          {isDemoMode ? <div className="demo-data-banner" role="note"><strong>Demo export</strong><span>Synthetic records only. No Firebase reads or writes.</span></div> : null}
           {dataError ? <p className="error-copy">{dataError}</p> : null}
+          <p className="settings-data-readiness" role="status">
+            {dataPendingCount > 0
+              ? `Loading ${dataPendingCount} remaining data source${dataPendingCount === 1 ? "" : "s"} before export.`
+              : dataError
+                ? "Export paused. Retry after the data source is available so the file cannot be mistaken for a complete account snapshot."
+                : "All supported data sources are ready for export."}
+          </p>
           {dataMessage ? <div className="calendar-info-card">{dataMessage}</div> : null}
 
           <div className="settings-data-hero">
             <article>
               <span>Total records</span>
               <strong>{dataTotals}</strong>
-              <p>Across tasks, notes, calendar, workouts, projects, pipeline, contacts, and settings.</p>
+              <p>Across Inbox, Notes, Plan, Workout, Projects, Follow-ups, People, and Settings.</p>
             </article>
             <article>
               <span>Linked tasks</span>
@@ -1277,11 +1423,14 @@ export function SettingsPage() {
           </div>
 
           <div className="settings-data-actions">
-            <button type="button" className="primary-button" onClick={handleExportAll}>
-              Download full export
+            <button type="button" className="primary-button" onClick={handleExportAll} disabled={!dataExportReady}>
+              Download account JSON
             </button>
-            <button type="button" className="button-secondary" onClick={handleCopySummary}>
+            <button type="button" className="button-secondary" onClick={handleCopySummary} disabled={!dataExportReady}>
               Copy data summary
+            </button>
+            <button type="button" className="button-secondary" onClick={() => setActiveSection("account")}>
+              Account deletion status
             </button>
           </div>
 
@@ -1291,6 +1440,11 @@ export function SettingsPage() {
                 <span>{group.app}</span>
                 <strong>{dataCollections[group.key].length}</strong>
                 <p>{group.label}</p>
+                {group.csv ? (
+                  <button type="button" className="ghost-button compact-button" disabled={!dataExportReady} onClick={() => handleExportCsv(group.key, group.label)}>
+                    Download CSV
+                  </button>
+                ) : null}
               </article>
             ))}
           </div>
@@ -1303,6 +1457,14 @@ export function SettingsPage() {
               </span>
               <strong>{orphanCalendarBlockCount} orphan block{orphanCalendarBlockCount === 1 ? "" : "s"}</strong>
               <p>These are flexible calendar blocks pointing at tasks that are no longer in the current task list.</p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Portability contract</span>
+                <span className="settings-state-pill">v1</span>
+              </span>
+              <strong>Manifested and intentionally scoped</strong>
+              <p>The JSON names every included and unsupported domain. CSV cells beginning with =, +, -, or @ are neutralized before download.</p>
             </article>
             <article className="settings-review-card">
               <span className="settings-card-topline">
@@ -1319,6 +1481,17 @@ export function SettingsPage() {
               </span>
               <strong>{softDeletedNoteCount} note{softDeletedNoteCount === 1 ? "" : "s"} in trash</strong>
               <p>Deleted notes remain reviewable from Notes trash before permanent removal.</p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Account deletion</span>
+                <span className="settings-state-pill">Not self-serve</span>
+              </span>
+              <strong>No deletion action runs here</strong>
+              <p>
+                This screen only exports and summarizes your data. Account deletion needs a separately approved
+                backend-safe flow with identity confirmation, export proof, rollback rules, and audit logging.
+              </p>
             </article>
           </div>
         </PageSection>
@@ -1485,32 +1658,103 @@ export function SettingsPage() {
 
         {activeSection === "notifications" ? (
         <PageSection
-          eyebrow="Reminders"
-          title="Notification scheduling"
-          description="Allow task, calendar, and daily planning reminders. Workout alerts only happen when the workout lives on the calendar."
+          eyebrow="Local reminders"
+          title="Browser reminders"
+          description="Allow local browser reminders for tasks, Plan blocks, and daily planning. Workout reminders only happen when the workout lives on Plan."
         >
           <div id="notifications" className="settings-anchor" />
           {notificationMessage ? <div className="calendar-info-card">{notificationMessage}</div> : null}
+          {notificationPermissionDenied ? (
+            <div className="calendar-info-card">
+              Browser reminders are denied for this site. Open browser or iPhone site settings, allow local browser reminders
+              for EasyLife, then come back and try again.
+            </div>
+          ) : null}
+          {notificationPermissionUnsupported ? (
+            <div className="calendar-info-card">
+              This browser does not support local web reminders here. EasyLife still works normally; use Today and Plan as
+              the source of truth until reminders are available on this device.
+            </div>
+          ) : null}
 
           <div className="settings-notification-hero">
             <article>
               <span>Permission</span>
               <strong>{notificationPermission}</strong>
-              <p>Browsers and iPhones require permission before EasyLife can send reminders.</p>
+              <p>Browsers and iPhones require permission before EasyLife can show local reminders.</p>
             </article>
             <article>
               <span>Reminder categories</span>
               <strong>{settings.notifications.enabled ? "Enabled" : "Paused"}</strong>
-              <p>EasyLife schedules local reminders while the app is open or installed, then avoids repeats.</p>
+              <p>EasyLife uses local browser reminders on this device. This is not server-delivered push.</p>
+            </article>
+          </div>
+
+          <div className="settings-review-grid">
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>True push</span>
+                <span className="settings-state-pill">Not live</span>
+              </span>
+              <strong>Server push is gated</strong>
+              <p>
+                EasyLife is not storing push tokens, sending server push, or scheduling automatic reminder jobs.
+                True push needs a separately approved test with one synthetic message and a kill switch.
+              </p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>First allowed test</span>
+                <span className="settings-state-pill">Manual only</span>
+              </span>
+              <strong>No real content in the first push</strong>
+              <p>
+                The future first test should say only that push is connected. It must not include task, note, Plan,
+                Workout, People, AI, or private reminder content.
+              </p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>Device registration</span>
+                <span className="settings-state-pill">Disabled</span>
+              </span>
+              <strong>No push token is requested or stored</strong>
+              <p>
+                This screen does not call Firebase Messaging, ask for a push token, save a device record, or expose
+                push credentials. A future token record needs separate approval and a visible remove-this-device path.
+              </p>
+            </article>
+            <article className="settings-review-card">
+              <span className="settings-card-topline">
+                <span>True push readiness</span>
+                <span className="settings-state-pill">{truePushReadiness}</span>
+              </span>
+              <strong>Permission stays user-initiated</strong>
+              <p>
+                Local browser reminder permission can only be requested from the button below. True push registration
+                remains locked until a later exact deploy/test approval.
+              </p>
             </article>
           </div>
 
           <div className="settings-data-actions">
             <button type="button" className="primary-button" onClick={() => void handleRequestNotifications()}>
-              Allow notifications
+              Allow browser reminders
             </button>
-            <button type="button" className="button-secondary" onClick={handleSendTestNotification}>
-              Send test notification
+            <button
+              type="button"
+              className="button-secondary"
+              onClick={handleSendTestNotification}
+              disabled={!canSendTestReminder}
+              title={canSendTestReminder ? "Send a local test reminder." : "Allow browser reminders before testing."}
+            >
+              Send test reminder
+            </button>
+            <button type="button" className="button-secondary" disabled title="Requires separate P4 token-registration approval.">
+              Register push device
+            </button>
+            <button type="button" className="button-secondary" disabled title="Requires the later one synthetic push test gate.">
+              Send synthetic push
             </button>
           </div>
 
@@ -1518,11 +1762,11 @@ export function SettingsPage() {
             <label className={`settings-toggle-row${settings.notifications.enabled ? " active" : ""}`}>
               <div>
                 <span className="settings-card-topline">
-                  <span>Master switch</span>
+                  <span>Reminder control</span>
                   <span className="settings-state-pill">{settings.notifications.enabled ? "On" : "Off"}</span>
                 </span>
-                <strong>Use EasyLife reminders</strong>
-                <p>Turns reminder categories on or off without changing your saved category choices.</p>
+                <strong>Use browser reminders</strong>
+                <p>Turns local reminder categories on or off without changing your saved category choices.</p>
               </div>
               <input
                 type="checkbox"
@@ -1536,8 +1780,8 @@ export function SettingsPage() {
                   <span>Inbox</span>
                   <span className="settings-state-pill">Tasks</span>
                 </span>
-                <strong>Task deadline reminders</strong>
-                <p>Remind you when unfinished tasks with due dates or deadlines are coming up.</p>
+                <strong>Task deadline browser reminders</strong>
+                <p>Show a local browser reminder when unfinished tasks with due dates or deadlines are coming up.</p>
               </div>
               <input
                 type="checkbox"
@@ -1551,8 +1795,8 @@ export function SettingsPage() {
                   <span>Plan</span>
                   <span className="settings-state-pill">Blocks</span>
                 </span>
-                <strong>Calendar work-block reminders</strong>
-                <p>Remind you about fixed events and scheduled work blocks, including workouts you put on the calendar.</p>
+                <strong>Plan block browser reminders</strong>
+                <p>Show local reminders for fixed events and scheduled work blocks, including workouts you put on Plan.</p>
               </div>
               <input
                 type="checkbox"
@@ -1566,8 +1810,8 @@ export function SettingsPage() {
                   <span>Planning</span>
                   <span className="settings-state-pill">Daily</span>
                 </span>
-                <strong>Daily planning reminder</strong>
-                <p>Use your calendar wake time as the daily planning reminder.</p>
+                <strong>Daily planning browser reminder</strong>
+                <p>Use your wake time as the local daily planning reminder.</p>
               </div>
               <input
                 type="checkbox"
@@ -1610,7 +1854,7 @@ export function SettingsPage() {
         <PageSection
           eyebrow="Assistant controls"
           title="Assistant foundation"
-          description="Assistant helpers stay helpful, review-first, reversible, and scoped to your account."
+          description="Assistant helpers are local, review-first controls for drafts and suggestions. No live AI provider is assumed here."
         >
           <div id="assistant" className="settings-anchor" />
           <div className="settings-notification-hero">
@@ -1619,26 +1863,50 @@ export function SettingsPage() {
               <strong>{settings.assistant.enabled ? "Enabled" : "Paused"}</strong>
               <p>
                 {settings.assistant.enabled
-                  ? "Assistant helpers can appear where you have enabled matching preview features."
+                  ? "Assistant helpers can appear only where you have enabled matching review-first surfaces."
                   : "Assistant helpers stay hidden or inactive until you turn the assistant on."}
               </p>
             </article>
             <article>
               <span>Review rule</span>
               <strong>{settings.assistant.requireReviewBeforeSave ? "Required" : "Not required"}</strong>
-              <p>Keep this on so assistant suggestions become drafts before anything enters your real data.</p>
+              <p>Keep this on so assistant suggestions remain drafts before anything changes in your workspace.</p>
             </article>
           </div>
+
+          <article className="settings-review-card settings-defaults-card">
+            <span className="settings-card-topline">
+              <span>New user defaults</span>
+              <span className="settings-state-pill">Off</span>
+            </span>
+            <strong>Helper features start disabled</strong>
+            <p>
+              New accounts start with assistant helpers, visible EasyLife review, cross-surface suggestions, draft
+              creation, and experimental switches off. Turn them on here only when you want review-first helper surfaces.
+            </p>
+          </article>
+
+          <article className="settings-review-card settings-defaults-card">
+            <span className="settings-card-topline">
+              <span>AI provider</span>
+              <span className="settings-state-pill">Not live</span>
+            </span>
+            <strong>Provider calls stay gated</strong>
+            <p>
+              EasyLife's first provider lane is limited to one future synthetic Inbox test after separate approval.
+              This Settings screen does not turn on live AI, store provider keys, run model calls, or save provider output.
+            </p>
+          </article>
 
           <div className="settings-toggle-list">
             <label className={`settings-toggle-row${settings.assistant.enabled ? " active" : ""}`}>
               <div>
                 <span className="settings-card-topline">
-                  <span>Master switch</span>
+                  <span>Assistant control</span>
                   <span className="settings-state-pill">{settings.assistant.enabled ? "On" : "Off"}</span>
                 </span>
                 <strong>Use EasyLife assistant helpers</strong>
-                <p>Turns assistant surfaces on or off without changing individual feature switches.</p>
+                <p>Turns assistant helper surfaces on or off without calling a live AI provider.</p>
               </div>
               <input
                 type="checkbox"
@@ -1653,8 +1921,8 @@ export function SettingsPage() {
                   <span>Context</span>
                   <span className="settings-state-pill">Private</span>
                 </span>
-                <strong>Allow current data review</strong>
-                <p>Allows assistant features to summarize selected EasyLife data from your account.</p>
+                <strong>Allow visible EasyLife review</strong>
+                <p>Allows enabled helper features to summarize selected visible EasyLife data only after you open a review surface. No background scanning.</p>
               </div>
               <input
                 type="checkbox"
@@ -1670,7 +1938,7 @@ export function SettingsPage() {
                   <span className="settings-state-pill">Suggestions</span>
                 </span>
                 <strong>Allow cross-surface suggestions</strong>
-                <p>Lets assistant helpers suggest moving a thought into Inbox, Plan, Projects, Follow-ups, or Notes.</p>
+                <p>Lets helper features suggest where a thought you typed could go. Nothing scans, moves, saves, sends, or syncs until you choose it.</p>
               </div>
               <input
                 type="checkbox"
@@ -1686,7 +1954,10 @@ export function SettingsPage() {
                   <span className="settings-state-pill">Review first</span>
                 </span>
                 <strong>Allow draft creation</strong>
-                <p>Allows assistant helpers to prepare draft tasks, project plans, or note actions for review.</p>
+                <p>
+                  Allows helper features to prepare draft tasks, project plans, notes, or reply text for your review.
+                  Drafts are not sent, synced, archived, or created in outside apps.
+                </p>
               </div>
               <input
                 type="checkbox"
@@ -1707,7 +1978,12 @@ export function SettingsPage() {
               <input
                 type="checkbox"
                 checked={settings.assistant.requireReviewBeforeSave}
-                onChange={(event) => void updateAssistantSettings({ requireReviewBeforeSave: event.target.checked })}
+                disabled={settings.assistant.requireReviewBeforeSave}
+                onChange={(event) => {
+                  if (event.target.checked) {
+                    void updateAssistantSettings({ requireReviewBeforeSave: true });
+                  }
+                }}
               />
             </label>
           </div>
@@ -1763,6 +2039,11 @@ export function SettingsPage() {
             <span>Easy to undo</span>
             <strong>Every lab has its own switch</strong>
             <p>Turn a feature off here and its UI disappears from the assistant.</p>
+          </article>
+          <article>
+            <span>Default state</span>
+            <strong>Every experiment starts off</strong>
+            <p>Saved settings or demo QA can enable switches later, but a new user starts with no experimental helpers on.</p>
           </article>
         </div>
 
@@ -1833,10 +2114,46 @@ export function SettingsPage() {
           </article>
           <article className="mini-panel-vnext">
             <span>Session</span>
-            <strong>Log out</strong>
+            <strong>Current browser</strong>
+            <p>This is the only sign-out control in Settings.</p>
             <button type="button" className="button-secondary compact-button" onClick={() => void auth.signOut()}>
               Log out
             </button>
+          </article>
+          <article className="mini-panel-vnext">
+            <span>Account deletion</span>
+            <strong>Not self-serve yet</strong>
+            <p>
+              Export first from Data. No delete button or backend deletion action runs here; full deletion needs a
+              separately approved backend-safe flow.
+            </p>
+            <button type="button" className="button-secondary compact-button" onClick={() => setActiveSection("data")}>
+              Open export tools
+            </button>
+          </article>
+        </div>
+        <div className="settings-review-grid">
+          <article className="settings-review-card">
+            <span className="settings-card-topline">
+              <span>Deletion gate</span>
+              <span className="settings-state-pill">Blocked</span>
+            </span>
+            <strong>Backend approval required</strong>
+            <p>
+              A real deletion flow would need identity re-check, export confirmation, exact collection scope,
+              recoverability rules, and proof that auth and stored records are removed together.
+            </p>
+          </article>
+          <article className="settings-review-card">
+            <span className="settings-card-topline">
+              <span>Current safe action</span>
+              <span className="settings-state-pill">Export</span>
+            </span>
+            <strong>Download before requesting deletion</strong>
+            <p>
+              The available path is review, download, and copy a data summary. EasyLife will not silently delete,
+              archive, or hide saved data from this screen.
+            </p>
           </article>
         </div>
       </PageSection>

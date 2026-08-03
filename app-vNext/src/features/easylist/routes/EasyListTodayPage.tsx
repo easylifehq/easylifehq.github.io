@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { LoadingState } from "@/components/feedback/LoadingState";
 import { PageSection } from "@/components/ui/PageSection";
 import { TaskCard } from "@/features/easylist/components/TaskCard";
 import { TaskDrawer } from "@/features/easylist/components/TaskDrawer";
@@ -15,10 +14,6 @@ export function EasyListTodayPage() {
   const { tasks, isLoading, saveTask, markComplete, markActive, deleteTask } = useEasyList();
   const [selectedTask, setSelectedTask] = useState<TaskRecord | null>(null);
 
-  if (isLoading) {
-    return <LoadingState label="Loading today's tasks..." />;
-  }
-
   const activeTasks = sortActiveTasks(tasks.filter((task) => !task.completed));
   const overdueTasks = activeTasks.filter(isOverdue);
   const dueTodayTasks = activeTasks.filter((task) => isDueToday(task) && !isOverdue(task));
@@ -31,6 +26,7 @@ export function EasyListTodayPage() {
         title="Today"
         description="Overdue tasks first, then due today, then active tasks without dates that are still sitting on today's board."
       >
+        {isLoading ? <p className="helper-copy" role="status">Loading today's tasks...</p> : null}
         <div className="stats-grid">
           <article className="stat-card-vnext">
             <span>Overdue</span>
@@ -60,7 +56,7 @@ export function EasyListTodayPage() {
           title="Due today"
           tasks={dueTodayTasks}
           emptyTitle="No dated tasks for today"
-          emptyDetail="Add a due date when something belongs here, then EasyList can keep today's work easy to scan."
+          emptyDetail="Add a due date when something belongs here, then Inbox can keep today's work easy to scan."
           onEdit={setSelectedTask}
           onComplete={markComplete}
         />

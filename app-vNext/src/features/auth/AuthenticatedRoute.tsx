@@ -7,7 +7,14 @@ export function AuthenticatedRoute() {
   const location = useLocation();
 
   if (isLoading) {
-    return <LoadingState label="Checking your account..." />;
+    return (
+      <LoadingState
+        label="Checking your account..."
+        detail="No data is changing while EasyLife checks your session."
+        delayedActionLabel="Open sign in"
+        delayedActionTo="/login"
+      />
+    );
   }
 
   if (!user) {

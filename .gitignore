@@ -13,3 +13,5 @@ app-vNext/dist/
 *.tsbuildinfo
 vite-dev.log
 vite-dev.err.log
+firebase-debug.log
+firestore-debug.log

@@ -6,6 +6,7 @@ import {
   getDocs,
   onSnapshot,
   query,
+  runTransaction,
   serverTimestamp,
   where,
   updateDoc,
@@ -14,26 +15,39 @@ import {
   type QuerySnapshot,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
+import { workoutSessionDocumentId } from "./workoutSessionIdentity";
 
 export type WorkoutSetRecord = {
   reps: number;
   weight: number;
   notes: string;
+  setType?: "warmup" | "standard" | "drop" | "failure";
+  completed?: boolean;
+  deleted?: boolean;
+  rir?: number | null;
+  durationSeconds?: number;
+  distanceMeters?: number;
 };
 
 export type WorkoutExerciseLogRecord = {
   exerciseId: string | null;
   exerciseName: string;
   muscleGroup: string;
+  primaryMuscles?: string[];
+  secondaryMuscles?: string[];
+  exerciseType?: "weighted" | "bodyweight" | "assisted" | "duration" | "distance";
   notes: string;
   sets: WorkoutSetRecord[];
 };
 
 export type WorkoutSessionRecord = {
   id: string;
+  clientDraftId?: string;
+  schemaVersion?: number;
   routineId: string | null;
   routineName: string;
   performedOn: string;
+  weightUnit?: "lb" | "kg";
   durationMinutes: number | null;
   notes: string;
   exercises: WorkoutExerciseLogRecord[];
@@ -62,9 +76,12 @@ function normalizeSession(snapshot: QueryDocumentSnapshot<DocumentData>) {
 
   return {
     id: snapshot.id,
+    clientDraftId: typeof data.clientDraftId === "string" ? data.clientDraftId : undefined,
+    schemaVersion: typeof data.schemaVersion === "number" ? data.schemaVersion : undefined,
     routineId: data.routineId || null,
     routineName: data.routineName || "",
     performedOn: data.performedOn || "",
+    weightUnit: data.weightUnit === "kg" ? "kg" : "lb",
     durationMinutes: typeof data.durationMinutes === "number" ? data.durationMinutes : null,
     notes: data.notes || "",
     exercises: Array.isArray(data.exercises) ? data.exercises : [],
@@ -100,6 +117,20 @@ export function subscribeToWorkoutSessions(
 }
 
 export async function createWorkoutSession(userId: string, draft: WorkoutSessionDraft) {
+  if (draft.clientDraftId) {
+    const reference = doc(getWorkoutSessionsCollection(userId), workoutSessionDocumentId(draft.clientDraftId));
+    await runTransaction(db, async (transaction) => {
+      const existing = await transaction.get(reference);
+      if (existing.exists()) return;
+      transaction.set(reference, {
+        ...draft,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+    });
+    return reference.id;
+  }
+
   const reference = await addDoc(getWorkoutSessionsCollection(userId), {
     ...draft,
     createdAt: serverTimestamp(),

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { ContactDrawer } from "@/features/easycontacts/components/ContactDrawer";
 import { useEasyContacts, type EasyContactRecord } from "@/features/easycontacts/EasyContactsContext";
@@ -9,6 +9,12 @@ function isFollowUpNeeded(value: string) {
   if (!value) return false;
   return value <= new Date().toISOString().split("T")[0];
 }
+
+function isUpcomingFollowUp(value: string) {
+  if (!value) return false;
+  return value > new Date().toISOString().split("T")[0];
+}
+
 const emptyDraft: ContactDraft = {
   fullName: "",
   relationship: "",
@@ -55,19 +61,23 @@ function getPlaceCueDetail(contact: EasyContactRecord) {
   return "Open the contact before a trip.";
 }
 
+function getContextLabels(contact: EasyContactRecord) {
+  return [contact.relationship, contact.company, contact.role, contact.source].filter(Boolean);
+}
+
 function PlaceMemoryBlock({ contact, compact = false }: { contact: EasyContactRecord; compact?: boolean }) {
-  const currentPlace = [contact.currentCity, contact.region].filter(Boolean).join(" · ");
+  const currentPlace = [contact.currentCity, contact.region].filter(Boolean).join(" - ");
   const lastKnownIsDifferent = contact.lastKnownPlace && contact.lastKnownPlace !== contact.currentCity;
   const currentPlaceSafe = currentPlace ? [contact.currentCity, contact.region].filter(Boolean).join(" - ") : "";
 
   return (
-    <span className={`contact-place-memory${compact ? " contact-place-memory-compact" : ""}`} aria-label="Place memory">
-      {!compact ? <span className="contact-place-memory-label">Place memory</span> : null}
+    <span className={`contact-place-memory${compact ? " contact-place-memory-compact" : ""}`} aria-label="Manual place labels">
+      {!compact ? <span className="contact-place-memory-label">Manual place labels</span> : null}
       <strong>{currentPlaceSafe || contact.lastKnownPlace || "No city or region saved"}</strong>
-      {contact.movedRecently && contact.lastKnownPlace ? <small>Moved recently from {contact.lastKnownPlace}</small> : null}
-      {!contact.movedRecently && lastKnownIsDifferent ? <small>Last known near {contact.lastKnownPlace}</small> : null}
+      {contact.movedRecently && contact.lastKnownPlace ? <small>Saved move note: formerly {contact.lastKnownPlace}</small> : null}
+      {!contact.movedRecently && lastKnownIsDifferent ? <small>Saved older place label: {contact.lastKnownPlace}</small> : null}
       {contact.visitNote ? <small>Visit note: {contact.visitNote}</small> : null}
-      {!compact ? <small>No exact address needed.</small> : null}
+      {!compact ? <small>Manual label only. No maps, geocoding, live location, or exact address.</small> : null}
     </span>
   );
 }
@@ -105,6 +115,18 @@ export function EasyContactsPage() {
   const dueContacts = useMemo(
     () => filteredContacts.filter((contact) => isFollowUpNeeded(contact.nextFollowUpAt)).slice(0, 6),
     [filteredContacts]
+  );
+  const upcomingFollowUps = useMemo(
+    () =>
+      filteredContacts
+        .filter((contact) => isUpcomingFollowUp(contact.nextFollowUpAt))
+        .sort((left, right) => left.nextFollowUpAt.localeCompare(right.nextFollowUpAt))
+        .slice(0, 4),
+    [filteredContacts]
+  );
+  const contextLabelCount = useMemo(
+    () => contacts.filter((contact) => getContextLabels(contact).length).length,
+    [contacts]
   );
   const placeMemoryCount = useMemo(
     () => contacts.filter((contact) => contact.currentCity || contact.region || contact.lastKnownPlace).length,
@@ -177,8 +199,15 @@ export function EasyContactsPage() {
 
   return (
     <>
-      <PageSection eyebrow="People + places" title="People memory" description="See who needs attention, where people are, and who might be near a place.">
+      <PageSection eyebrow="People" title="People to remember" description="Track follow-ups, how-you-know-them labels, and manual place labels for people you know. Saved labels only: no maps, geocoding, exact addresses, live location, calendar sync, email, texts, contact import, or contact sync.">
         {error ? <p className="error-copy">{error}</p> : null}
+
+        <div className="toolbar-row">
+          <Link className="button-secondary compact-button" to="/app/hq">
+            Return to Today
+          </Link>
+          <span className="helper-copy">People uses only saved labels you typed. Nothing is pulled from your location, maps, email, texts, calendar, contacts app, address book, or external accounts.</span>
+        </div>
 
         <div className="contacts-memory-overview" aria-label="People and place overview">
           <article className="contacts-memory-panel">
@@ -197,21 +226,52 @@ export function EasyContactsPage() {
                 </button>
               )) : <p className="helper-copy">No one is overdue. Keep the list quiet.</p>}
             </div>
+            {upcomingFollowUps.length ? (
+              <div className="contacts-followup-strip" aria-label="Upcoming follow-ups">
+                <span>Upcoming</span>
+                {upcomingFollowUps.slice(0, 2).map((contact) => (
+                  <button key={contact.id} type="button" onClick={() => setSelectedContact(contact)}>
+                    {contact.fullName || "Unnamed contact"} - {formatRelativeDate(contact.nextFollowUpAt)}
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </article>
 
           <article className="contacts-memory-panel">
             <div className="contacts-memory-panel-top">
               <div>
-                <p className="eyebrow">Where people are</p>
+                <p className="eyebrow">Manual place labels</p>
                 <h3>{placeMemoryCount} place labels</h3>
               </div>
               <span className="chip-pill">{movedRecentlyCount} moved</span>
             </div>
-            <p className="helper-copy">Current city, region, last known place, and visit notes. No exact addresses.</p>
+            <p className="helper-copy">City, region, last known place, and visit notes are labels you enter by hand. No maps, geocoding, live location, or exact addresses.</p>
             <div className="contacts-place-mini-list">
               {peopleByPlace.slice(0, 3).map((group) => (
                 <span key={group.place}>{group.place}: {group.contacts.length}</span>
               ))}
+            </div>
+          </article>
+
+          <article className="contacts-memory-panel">
+            <div className="contacts-memory-panel-top">
+              <div>
+                <p className="eyebrow">How-you-know-them labels</p>
+                <h3>{contextLabelCount} people labeled</h3>
+              </div>
+              <span className="chip-pill">Manual</span>
+            </div>
+            <p className="helper-copy">Relationship, organization, role, and source are labels you save by hand so People can stay understandable without pretending to know your history.</p>
+            <div className="contacts-place-mini-list">
+              {filteredContacts.slice(0, 3).map((contact) => {
+                const labels = getContextLabels(contact);
+                return (
+                  <span key={contact.id}>
+                    {contact.fullName || "Unnamed"}: {labels.slice(0, 2).join(", ") || "No context label"}
+                  </span>
+                );
+              })}
             </div>
           </article>
 
@@ -239,7 +299,7 @@ export function EasyContactsPage() {
               ))}
             </div>
             <div className="contacts-place-assistant-hint" aria-label="People and place cue for Today">
-              <span>Today cue</span>
+              <span>Saved place cue</span>
               <strong>{primaryPlaceMatch ? `${primaryPlaceMatch.fullName || "Someone"} near ${placeReviewAnchor}` : "No saved match yet"}</strong>
               <p>
                 {primaryPlaceMatch
@@ -247,7 +307,7 @@ export function EasyContactsPage() {
                   : `Add a city or region label later if someone should surface near ${placeReviewAnchor}.`}
               </p>
             </div>
-            <p className="helper-copy">Saved labels only. No maps, geocoding, exact addresses, or device location.</p>
+            <p className="helper-copy">Saved place labels only. No maps, geocoding, exact addresses, live location, calendar sync, email, or texts.</p>
             <div className="contacts-overview-list">
               {placeReviewMatches.length ? placeReviewMatches.map((contact) => (
                 <button key={contact.id} type="button" className="contacts-place-person" onClick={() => setSelectedContact(contact)}>
@@ -256,6 +316,21 @@ export function EasyContactsPage() {
                 </button>
               )) : <p className="helper-copy">No saved place label match yet.</p>}
             </div>
+          </article>
+
+          <article className="contacts-memory-panel contacts-memory-panel-wide">
+            <div className="contacts-memory-panel-top">
+              <div>
+                <p className="eyebrow">Import and sync</p>
+                <h3>Manual only today</h3>
+              </div>
+              <span className="chip-pill">Not connected</span>
+            </div>
+            <p className="helper-copy">
+              EasyLife is not reading your phone contacts, Google Contacts, Apple Contacts, Outlook, email, texts,
+              calendar, or social accounts. A future import would need consent, preview, dedupe, field mapping, and
+              rollback before anything is added.
+            </p>
           </article>
         </div>
 
@@ -270,15 +345,15 @@ export function EasyContactsPage() {
             />
           </label>
           <label className="field-stack">
-            <span>Context</span>
+            <span>Organization or group</span>
             <input
               value={draft.company}
               onChange={(event) => setDraft((current) => ({ ...current, company: event.target.value }))}
-              placeholder="Friend, gym, class, work"
+              placeholder="Gym, class, work, studio"
             />
           </label>
           <label className="field-stack">
-            <span>Relationship</span>
+            <span>How you know them</span>
             <input
               value={draft.relationship}
               onChange={(event) => setDraft((current) => ({ ...current, relationship: event.target.value }))}
@@ -302,14 +377,14 @@ export function EasyContactsPage() {
       <PageSection
         eyebrow="Places"
         title="People by place"
-        description="Review who you know near a city or region before a visit using saved place labels."
+        description="Review who you know near a city or region before a visit using saved manual labels only."
       >
         <div className="contacts-place-groups" aria-label="People grouped by place">
           {peopleByPlace.length ? peopleByPlace.map((group) => (
             <article key={group.place} className="contacts-place-group">
               <div className="contacts-place-group-top">
                 <div>
-                  <p className="eyebrow">{group.place === "Needs place update" ? "Place unknown" : "City or region"}</p>
+                  <p className="eyebrow">{group.place === "Needs place update" ? "Manual place label missing" : "Saved city or region"}</p>
                   <h3>{group.place}</h3>
                 </div>
                 <span className="chip-pill">{group.contacts.length}</span>
@@ -328,9 +403,12 @@ export function EasyContactsPage() {
         </div>
       </PageSection>
 
-      <PageSection eyebrow="People" title="People you know" description="Search, scan, and open anyone when you want the fuller memory card.">
+      <PageSection eyebrow="People" title="People you know" description="Search, scan, and open anyone when you want the fuller memory card. How-you-know-them and place labels are saved manually.">
         <div className="toolbar-row">
           <input className="search-input" aria-label="Search contacts" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search contacts" />
+          <Link className="ghost-button compact-button" to="/app/hq">
+            Today
+          </Link>
         </div>
 
         {isLoading ? <p className="helper-copy">Loading contacts...</p> : null}
@@ -342,8 +420,14 @@ export function EasyContactsPage() {
                 <strong>{contact.fullName || "Unnamed contact"}</strong>
                 <span className="chip-pill">{contact.status}</span>
               </div>
-              <p>{contact.company || "No company"}{contact.role ? ` | ${contact.role}` : ""}</p>
+              <p>{contact.company || "No organization label"}{contact.role ? ` | ${contact.role}` : ""}</p>
               <p>{contact.relationship || "No relationship label yet"}</p>
+              <div className="contact-context-label-row" aria-label="Manual context labels">
+                {getContextLabels(contact).slice(0, 3).map((label) => (
+                  <span key={label}>{label}</span>
+                ))}
+                {!getContextLabels(contact).length ? <span>No manual context labels yet</span> : null}
+              </div>
               <div className="contact-card-meta-row">
                 <small>{formatRelativeDate(contact.nextFollowUpAt)}</small>
                 <small>{contact.lastContactedAt ? `Last touch ${contact.lastContactedAt}` : "No contact logged yet"}</small>

@@ -7,6 +7,7 @@ export function SiteFooter() {
       <a href={feedbackDocUrl} target="_blank" rel="noopener noreferrer">
         Report a Bug / Suggest an Improvement
       </a>
+      <a href="/app/settings?section=trust">Privacy & Terms</a>
     </footer>
   );
 }

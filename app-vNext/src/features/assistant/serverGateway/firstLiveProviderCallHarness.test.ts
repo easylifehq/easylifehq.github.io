@@ -161,10 +161,28 @@ const acceptedServerFallbackEnvelope = {
   message: "The server gateway accepted this Inbox capture, but live AI is still disabled. Nothing was saved or sent.",
 } as const;
 
+const acceptedServerProviderEnvelope = {
+  ...acceptedServerFallbackEnvelope,
+  status: "provider-output",
+  providerState: "called-by-server-executor",
+  providerCallAttempted: true,
+  fallbackState: "none",
+  validationState: "accepted",
+  quarantineState: "accepted",
+  outputState: "preview",
+  suggestion: acceptedOutput(),
+  confidence: "medium",
+  message: "Trusted provider preview returned for review. Nothing was saved or sent.",
+} as const;
+
 export const firstLiveProviderServerResponseEnvelopeProof = [
   {
     name: "accepts Stage 32 server fallback envelope",
     passed: isFirstLiveProviderServerResponseEnvelope(acceptedServerFallbackEnvelope),
+  },
+  {
+    name: "accepts trusted provider-output envelope only as review preview",
+    passed: isFirstLiveProviderServerResponseEnvelope(acceptedServerProviderEnvelope),
   },
   {
     name: "normalizes malformed server envelope into fallback",
@@ -280,9 +298,18 @@ export async function assistantIntakeSuggestionClientRuntimeProof() {
       passed:
         acceptedServerEnvelope.callState === "request-sent" &&
         sentBody !== undefined &&
-        Object.keys(sentBody).sort().join(",") === "metadata,promptId,route,typedCapture" &&
+        Object.keys(sentBody).sort().join(",") === "liveCallRequested,metadata,promptId,route,typedCapture" &&
         sentBody?.route === liveAiAllowedRoutePath &&
-        sentBody?.promptId === "intake-suggestion",
+        sentBody?.promptId === "intake-suggestion" &&
+        sentBody?.liveCallRequested === false,
+    },
+    {
+      name: "client can represent later synthetic operator metadata without enabling it by default",
+      passed:
+        acceptedServerEnvelope.callState === "request-sent" &&
+        sentBody !== undefined &&
+        sentBody?.liveCallRequested === false &&
+        !("operatorConfirmation" in sentBody),
     },
     {
       name: "malformed server response normalizes into safe fallback",

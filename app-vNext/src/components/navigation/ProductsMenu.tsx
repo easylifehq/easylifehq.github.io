@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 
 export type ProductsMenuItem = {
   href: string;
@@ -9,6 +10,17 @@ export type ProductsMenuItem = {
   groupDescription?: string;
   isRoute?: boolean;
 };
+
+function getItemPathname(item: ProductsMenuItem) {
+  return item.href.split(/[?#]/, 1)[0];
+}
+
+function getItemRouteRoot(item: ProductsMenuItem) {
+  const pathname = getItemPathname(item);
+  return pathname.startsWith("/app/")
+    ? pathname.split("/").slice(0, 3).join("/")
+    : pathname;
+}
 
 type ProductsMenuProps = {
   items: ProductsMenuItem[];
@@ -31,6 +43,9 @@ export function ProductsMenu({
 }: ProductsMenuProps) {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const hasGroups = items.some((item) => item.group);
   const shouldShowDescriptions = showDescriptions;
   const groupedItems = items.reduce<Array<{ label: string; description?: string; items: ProductsMenuItem[] }>>(
@@ -55,14 +70,61 @@ export function ProductsMenu({
 
   function isCurrentItem(item: ProductsMenuItem) {
     if (item.isRoute === false) return false;
-    if (location.pathname === item.href) return true;
+    const itemPathname = getItemPathname(item);
+    if (location.pathname === itemPathname) return true;
 
-    const appRoot = item.href.startsWith("/app/")
-      ? item.href.split("/").slice(0, 3).join("/")
-      : item.href;
+    const appRoot = getItemRouteRoot(item);
+    const sharesAppRoot = items.some(
+      (candidate) => candidate !== item && candidate.isRoute !== false && getItemRouteRoot(candidate) === appRoot
+    );
+
+    if (sharesAppRoot) {
+      return location.pathname.startsWith(`${itemPathname}/`);
+    }
 
     return location.pathname === appRoot || location.pathname.startsWith(`${appRoot}/`);
   }
+
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  const toggleMenu = useCallback(() => {
+    setIsOpen((current) => !current);
+  }, []);
+
+  useFocusTrap(isOpen, panelRef, {
+    initialFocusRef: closeButtonRef,
+    returnFocusRef: triggerRef,
+    onEscape: closeMenu,
+  });
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const activePanel = panelRef.current;
+    if (!activePanel) return;
+
+    const focusCloseButton = () => {
+      const closeButton = closeButtonRef.current;
+      if (!closeButton || activePanel.contains(document.activeElement)) return;
+      closeButton.focus();
+    };
+
+    const handleTransitionEnd = (event: TransitionEvent) => {
+      if (event.target === activePanel && event.propertyName === "transform") {
+        focusCloseButton();
+      }
+    };
+
+    const focusFrame = window.requestAnimationFrame(focusCloseButton);
+    activePanel.addEventListener("transitionend", handleTransitionEnd);
+
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      activePanel.removeEventListener("transitionend", handleTransitionEnd);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     setIsOpen(false);
@@ -104,7 +166,8 @@ export function ProductsMenu({
         className="menu-trigger-button"
         aria-label={triggerAriaLabel}
         aria-expanded={isOpen}
-        onClick={() => setIsOpen((current) => !current)}
+        ref={triggerRef}
+        onClick={toggleMenu}
       >
         {label}
       </button>
@@ -113,18 +176,31 @@ export function ProductsMenu({
         type="button"
         className={`menu-backdrop${isOpen ? " open" : ""}`}
         aria-label="Close menu"
-        onClick={() => setIsOpen(false)}
+        onClick={closeMenu}
       />
 
-      <div className={`menu-panel${isOpen ? " open" : ""}${panelClassName ? ` ${panelClassName}` : ""}`}>
+      <div
+        ref={panelRef}
+        className={`menu-panel${isOpen ? " open" : ""}${panelClassName ? ` ${panelClassName}` : ""}`}
+        role="dialog"
+        aria-modal={isOpen ? "true" : undefined}
+        aria-label={panelLabel ?? label}
+        tabIndex={-1}
+      >
         <div className="menu-panel-header">
           <strong>{panelLabel ?? label}</strong>
-          <button type="button" className="ghost-button compact-button" onClick={() => setIsOpen(false)}>
+          <button ref={closeButtonRef} type="button" className="ghost-button compact-button" onClick={closeMenu}>
             Close
           </button>
         </div>
+        <nav className="menu-link-groups" aria-label={`${panelLabel ?? label} destinations`}>
         {(hasGroups ? groupedItems : [{ label: "", items }]).map((group) => (
-          <div key={group.label || "all"} className={hasGroups ? "menu-link-group" : undefined}>
+          <div
+            key={group.label || "all"}
+            className={hasGroups ? "menu-link-group" : undefined}
+            role={hasGroups ? "group" : undefined}
+            aria-label={hasGroups ? group.label : undefined}
+          >
             {group.label ? (
               <div className="menu-link-group-header">
                 <strong>{group.label}</strong>
@@ -139,7 +215,7 @@ export function ProductsMenu({
                   key={item.href}
                   href={item.href}
                   className="menu-link-card"
-                  onClick={() => setIsOpen(false)}
+                  onClick={closeMenu}
                 >
                   <strong>{item.label}</strong>
                   {shouldShowDescriptions ? <span className="menu-link-description">{item.description}</span> : null}
@@ -150,7 +226,7 @@ export function ProductsMenu({
                   to={item.href}
                   className={`menu-link-card${isCurrent ? " active" : ""}`}
                   aria-current={isCurrent ? "page" : undefined}
-                  onClick={() => setIsOpen(false)}
+                  onClick={closeMenu}
                 >
                   <span className="menu-link-title">
                     <strong>{item.label}</strong>
@@ -161,6 +237,7 @@ export function ProductsMenu({
             })}
           </div>
         ))}
+        </nav>
       </div>
     </div>
   );

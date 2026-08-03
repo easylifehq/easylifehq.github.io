@@ -41,6 +41,7 @@ import {
   removeLinkedCalendarBlock,
   reopenTask,
   subscribeToTasks,
+  updateTask,
   type TaskDraft,
   type TaskRecord,
 } from "@/lib/firestore/tasks";
@@ -51,6 +52,7 @@ type EasyCalendarContextValue = {
   taskBlocks: CalendarTaskBlockRecord[];
   tasks: TaskRecord[];
   isLoading: boolean;
+  isDailyDataLoading: boolean;
   error: string;
   addEvent: (draft: CalendarEventDraft) => Promise<string | null>;
   addTask: (draft: TaskDraft) => Promise<string | null>;
@@ -68,22 +70,22 @@ type EasyCalendarContextValue = {
   ) => Promise<string | null>;
   completeTaskFromCalendar: (taskId: string) => Promise<void>;
   reopenTaskFromCalendar: (taskId: string) => Promise<void>;
+  assignTaskToToday: (taskId: string) => Promise<void>;
 };
 
 const EasyCalendarContext = createContext<EasyCalendarContextValue | undefined>(
   undefined
 );
 
-function isVisualQaMode() {
-  if (!import.meta.env.DEV) return false;
-  const params = new URLSearchParams(window.location.search);
-  return params.get("visualQa") === "1" || params.get("demo") === "1";
-}
-
 function todayAt(hours: number, minutes = 0) {
   const date = new Date();
   date.setHours(hours, minutes, 0, 0);
   return date;
+}
+
+function localDateInput(date: Date | null) {
+  if (!date) return null;
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
 function getPreviewTasks(): TaskRecord[] {
@@ -253,7 +255,7 @@ function getPreviewTaskBlocks(): CalendarTaskBlockRecord[] {
 }
 
 export function EasyCalendarProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [categories, setCategories] = useState<CategoryRecord[]>([]);
   const [events, setEvents] = useState<CalendarEventRecord[]>([]);
   const [taskBlocks, setTaskBlocks] = useState<CalendarTaskBlockRecord[]>([]);
@@ -265,7 +267,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (isVisualQaMode()) {
+    if (isDemoMode) {
       setCategories([]);
       setEvents(getPreviewEvents());
       setTaskBlocks(getPreviewTaskBlocks());
@@ -353,7 +355,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       unsubscribeTaskBlocks();
       unsubscribeTasks();
     };
-  }, [user]);
+  }, [isDemoMode, user]);
 
   const value = useMemo(
     () => ({
@@ -362,33 +364,34 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       taskBlocks,
       tasks,
       isLoading: categoriesLoading || eventsLoading || taskBlocksLoading || tasksLoading,
+      isDailyDataLoading: eventsLoading || taskBlocksLoading || tasksLoading,
       error,
       addEvent: async (draft: CalendarEventDraft) => {
-        if (!user) return null;
+        if (!user || isDemoMode) return null;
         return createCalendarEvent(user.uid, draft);
       },
       addTask: async (draft: TaskDraft) => {
-        if (!user) return null;
+        if (!user || isDemoMode) return null;
         return createTask(user.uid, draft);
       },
       saveEvent: async (eventId: string, draft: CalendarEventDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await updateCalendarEvent(user.uid, eventId, draft);
       },
       deleteEvent: async (eventId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await removeCalendarEvent(user.uid, eventId);
       },
       addTaskBlock: async (draft: CalendarTaskBlockDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await createCalendarTaskBlock(user.uid, draft);
       },
       saveTaskBlock: async (blockId: string, draft: CalendarTaskBlockDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await updateCalendarTaskBlock(user.uid, blockId, draft);
       },
       deleteTaskBlock: async (blockId: string, taskId?: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         const matchingBlock = taskBlocks.find((taskBlock) => taskBlock.id === blockId);
         await removeCalendarTaskBlock(user.uid, blockId);
         const linkedTaskId = matchingBlock?.taskId || taskId;
@@ -397,22 +400,22 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         }
       },
       addCategory: async (draft: CategoryDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await createCategory(user.uid, draft);
       },
       saveCategory: async (categoryId: string, draft: CategoryDraft) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await updateCategory(user.uid, categoryId, draft);
       },
       deleteCategory: async (categoryId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         await removeCategory(user.uid, categoryId);
       },
       scheduleTask: async (
         task: TaskRecord,
         draft: Pick<CalendarTaskBlockDraft, "startAt" | "endAt" | "planningState" | "userAdjusted">
       ) => {
-        if (!user) return null;
+        if (!user || isDemoMode) return null;
 
         const blockId = await createCalendarTaskBlock(user.uid, {
           taskId: task.id,
@@ -429,7 +432,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         return blockId;
       },
       completeTaskFromCalendar: async (taskId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         const matchingTask = tasks.find((task) => task.id === taskId);
         await completeTask(user.uid, taskId);
         if (matchingTask?.linkedCalendarBlockIds.length) {
@@ -437,12 +440,31 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         }
       },
       reopenTaskFromCalendar: async (taskId: string) => {
-        if (!user) return;
+        if (!user || isDemoMode) return;
         const matchingTask = tasks.find((task) => task.id === taskId);
         await reopenTask(user.uid, taskId);
         if (matchingTask?.linkedCalendarBlockIds.length) {
           await markCalendarTaskBlocksActive(user.uid, matchingTask.linkedCalendarBlockIds);
         }
+      },
+      assignTaskToToday: async (taskId: string) => {
+        if (!user || isDemoMode) return;
+        const task = tasks.find((candidate) => candidate.id === taskId);
+        if (!task) throw new Error("The selected task is no longer available.");
+        await updateTask(user.uid, taskId, {
+          itemKind: task.itemKind,
+          title: task.title,
+          notes: task.notes,
+          listName: "Today",
+          category: task.category,
+          estimatedLength: task.estimatedLength,
+          priorityTier: task.priorityTier,
+          priorityLabel: task.priorityLabel,
+          dueDate: localDateInput(task.dueDate),
+          linkedCalendarEventId: task.linkedCalendarEventId,
+          linkedNoteId: task.linkedNoteId,
+          recurring: task.recurring,
+        });
       },
     }),
     [
@@ -455,6 +477,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       tasksLoading,
       taskBlocks,
       taskBlocksLoading,
+      isDemoMode,
       user,
     ]
   );

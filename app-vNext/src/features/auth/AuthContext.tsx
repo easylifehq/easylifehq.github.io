@@ -17,12 +17,14 @@ import { auth } from "@/lib/firebase/client";
 type AuthContextValue = {
   user: User | null;
   isLoading: boolean;
+  isDemoMode: boolean;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 function isDevReviewMode() {
-  if (!import.meta.env.DEV) return false;
+  const isLoopback = ["localhost", "127.0.0.1", "[::1]", "::1"].includes(window.location.hostname);
+  if (!import.meta.env.DEV && !isLoopback) return false;
   const params = new URLSearchParams(window.location.search);
   return params.get("visualQa") === "1" || params.get("demo") === "1";
 }
@@ -30,9 +32,10 @@ function isDevReviewMode() {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDemoMode] = useState(isDevReviewMode);
 
   useEffect(() => {
-    if (isDevReviewMode()) {
+    if (isDemoMode) {
       setUser({ uid: "local-preview", email: "preview@easylife.local" } as User);
       setIsLoading(false);
       return;
@@ -57,14 +60,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isActive = false;
       unsubscribe?.();
     };
-  }, []);
+  }, [isDemoMode]);
 
   const value = useMemo(
     () => ({
       user,
       isLoading,
+      isDemoMode,
     }),
-    [user, isLoading]
+    [user, isLoading, isDemoMode]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

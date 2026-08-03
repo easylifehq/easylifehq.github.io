@@ -36,12 +36,6 @@ export type EasyContactRecord = ContactRecord & {
 
 const EasyContactsContext = createContext<EasyContactsContextValue | undefined>(undefined);
 
-function isVisualQaMode() {
-  if (!import.meta.env.DEV) return false;
-  const params = new URLSearchParams(window.location.search);
-  return params.get("visualQa") === "1" || params.get("demo") === "1";
-}
-
 const visualQaContacts: EasyContactRecord[] = [
   {
     id: "visual-contact-maya",
@@ -94,13 +88,13 @@ const visualQaContacts: EasyContactRecord[] = [
 ];
 
 export function EasyContactsProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [contacts, setContacts] = useState<ContactRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (isVisualQaMode()) {
+    if (isDemoMode) {
       setContacts(visualQaContacts);
       setIsLoading(false);
       setError("");
@@ -128,20 +122,20 @@ export function EasyContactsProvider({ children }: { children: ReactNode }) {
     );
 
     return unsubscribe;
-  }, [user]);
+  }, [isDemoMode, user]);
 
   async function addContactForUser(draft: ContactDraft) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await createContact(user.uid, draft);
   }
 
   async function saveContactForUser(contactId: string, draft: ContactDraft) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await updateContact(user.uid, contactId, draft);
   }
 
   async function archiveContactForUser(contactId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await archiveContact(user.uid, contactId);
   }
 
@@ -154,7 +148,7 @@ export function EasyContactsProvider({ children }: { children: ReactNode }) {
       saveContact: saveContactForUser,
       archiveCurrentContact: archiveContactForUser,
     }),
-    [contacts, isLoading, error]
+    [contacts, isLoading, error, isDemoMode]
   );
 
   return <EasyContactsContext.Provider value={value}>{children}</EasyContactsContext.Provider>;

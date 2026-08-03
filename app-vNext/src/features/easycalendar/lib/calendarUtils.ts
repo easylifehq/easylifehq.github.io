@@ -129,6 +129,54 @@ export function getHourFromTimeInput(value: string, fallbackHour = 8) {
   return Number.isFinite(hours) && hours >= 0 && hours <= 23 ? hours : fallbackHour;
 }
 
+function parseTimeInput(value: string) {
+  const trimmedValue = value.trim();
+  const compactMatch = trimmedValue.match(/^(\d{1,4})$/);
+
+  if (compactMatch) {
+    const compactTime = compactMatch[1];
+    const hoursRaw = compactTime.length <= 2 ? compactTime : compactTime.slice(0, -2);
+    const minutesRaw = compactTime.length <= 2 ? "0" : compactTime.slice(-2);
+    const hours = Number(hoursRaw);
+    const minutes = Number(minutesRaw);
+
+    if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+
+    return { hours, minutes };
+  }
+
+  const [hoursRaw, minutesRaw = "0"] = trimmedValue.split(":");
+  const hours = Number(hoursRaw);
+  const minutes = Number(minutesRaw);
+
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+
+  return { hours, minutes };
+}
+
+export function normalizeTimeInput(value: string, fallback = "09:00", incrementMinutes = 15) {
+  const parsed = parseTimeInput(value) || parseTimeInput(fallback) || { hours: 9, minutes: 0 };
+  const safeIncrement = Math.max(1, incrementMinutes);
+  const totalMinutes = parsed.hours * 60 + parsed.minutes;
+  const rounded = Math.round(totalMinutes / safeIncrement) * safeIncrement;
+  const clamped = Math.min(23 * 60 + (60 - safeIncrement), Math.max(0, rounded));
+  const hours = Math.floor(clamped / 60);
+  const minutes = clamped % 60;
+
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+}
+
+export function normalizeDurationMinutes(value: string | number, fallback = 30, incrementMinutes = 15) {
+  const parsed = typeof value === "number" ? value : Number(value);
+  const safeValue = Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+  const safeIncrement = Math.max(1, incrementMinutes);
+  const rounded = Math.round(safeValue / safeIncrement) * safeIncrement;
+
+  return Math.min(12 * 60, Math.max(safeIncrement, rounded));
+}
+
 export function buildHourlySlots(date: Date, startHour = 8, count = 14) {
   return Array.from({ length: count }, (_, index) => {
     const startAt = new Date(date.getFullYear(), date.getMonth(), date.getDate(), startHour + index, 0, 0, 0);
@@ -161,11 +209,11 @@ export function combineDateAndTime(dateInput: string, timeInput: string) {
   if (!dateInput) return null;
 
   const [year, month, day] = dateInput.split("-").map(Number);
-  const [hours, minutes] = (timeInput || "09:00").split(":").map(Number);
+  const parsedTime = parseTimeInput(timeInput || "09:00");
 
-  if (!year || !month || !day) return null;
+  if (!year || !month || !day || !parsedTime) return null;
 
-  return new Date(year, month - 1, day, hours || 0, minutes || 0, 0, 0);
+  return new Date(year, month - 1, day, parsedTime.hours, parsedTime.minutes, 0, 0);
 }
 
 export function addMinutes(date: Date | null, minutes: number) {

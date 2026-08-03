@@ -2,6 +2,539 @@
 
 This file is appended by Codex Fleet after checkpoint-loop tasks.
 
+## 2026-05-31 - Audit Packet P3.5-03 Trust And Capability Copy Self-Audit
+
+- Task: Prove visible trust/capability copy while the external audit is deferred.
+- Result: P3.5-03 complete; one optional Projects copy repair was made and build passed.
+- Magic signal: trust-copy-holds.
+- Copy evidence: optional Projects planner now says gated/review-first draft wording instead of broad live-AI wording.
+- Sweep evidence: `docs/codex/EASYLIFE_P3_5_03_TRUST_CAPABILITY_COPY_SELF_AUDIT.md` records checks for live AI/provider calls, true push, calendar sync, geocoding/maps/location, email/text sending, contact import/sync, account deletion backend, token storage, hidden writes, external actions, and draft legal placeholders.
+- Watch evidence: legacy brain-dump AI copy remains only behind a currently disabled `showBrainDump` component path.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI/provider call, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P3.5-02 Route And Fallback Self-Audit
+
+- Task: Prove route safety while the external audit is deferred.
+- Result: P3.5-02 complete; route/fallback proof is recorded with no code change needed.
+- Magic signal: route-safety-still-holds.
+- Route evidence: `docs/codex/EASYLIFE_P3_5_02_ROUTE_FALLBACK_SELF_AUDIT.md` confirms canonical aliases, nested legacy redirects, Settings/privacy redirects, Plan/Workout safe landings, invalid app fallback, and query-string preservation.
+- Fallback evidence: invalid `/app/*` still says nothing changed or saved and offers Today/Inbox recovery.
+- Boundary evidence: docs/source-audit task only; no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: no build run because no app code changed.
+
+## 2026-05-31 - Audit Packet P3.5-01 Signed-In Manual QA Checklist
+
+- Task: Prepare the signed-in manual QA and demo script Spencer can run without an external auditor.
+- Result: P3.5-01 complete; checklist and screenshot plan are ready.
+- Magic signal: demo-qa-is-runnable.
+- Checklist evidence: `docs/codex/EASYLIFE_P3_5_01_SIGNED_IN_MANUAL_QA_CHECKLIST.md` covers Today, Notes, Inbox, Plan, People, Workout, Settings, mobile reachability, keyboard focus, and trust boundaries.
+- Screenshot evidence: checklist names the nine screenshots to capture for desktop and mobile proof.
+- Boundary evidence: docs-only proof task; no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: no build run because no app code changed.
+
+## 2026-05-31 - Audit Packet P3.5 Solo Hardening Queue
+
+- Task: Create useful no-external-audit work for Codex while Spencer is away.
+- Result: P3.5 queue and repeatable prompt are ready.
+- Magic signal: useful-while-away.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` now contains five P3.5 solo demo hardening tasks.
+- Prompt evidence: `docs/codex/EASYLIFE_P3_5_REPEATABLE_PROMPT.md` contains the repeatable prompt.
+- Boundary evidence: docs/queue update only; no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: no build run because no app code changed.
+
+## 2026-05-31 - Audit Packet P3-05 Final Demo Readiness Proof
+
+- Task: Prove final P3 demo readiness and prepare the external audit handoff.
+- Result: P3 queue is complete; build, route source sweep, trust-copy source sweep, mobile/keyboard source smoke, signed-out preview smoke, and audit prompt are recorded.
+- Magic signal: demo-ready-with-boundaries.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed.
+- Route evidence: safe canonical routes, demo aliases, Plan/Workout landing states, and invalid route fallback remain wired.
+- Trust evidence: no-live-AI, no sending, no external sync, browser-local draft, manual place-label, and gated-provider copy remains visible.
+- Smoke evidence: local preview served `/app/hq?demo=1`; desktop/mobile headless screenshots reached the signed-out auth/loading gate instead of a blank page.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: final proof packet at `docs/codex/EASYLIFE_P3_FINAL_DEMO_READINESS_PROOF.md`.
+
+## 2026-05-31 - Audit Packet P3-04 State And Speed Polish
+
+- Task: Improve loading/error state confidence and perceived speed.
+- Result: Shared loading states now explain what is happening, auth waits clarify no data is changing, lingering auth checks expose a safe sign-in action, and shared errors read as deliberate status cards; build passed.
+- Magic signal: waits-feel-safe.
+- Loading evidence: `LoadingState` accepts detail copy and delayed fallback action props.
+- Auth evidence: `AuthenticatedRoute` uses the delayed safe sign-in action for account-check waits.
+- Error evidence: `.error-copy` now has status-card styling.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P3-03 Visual Coherence Pass
+
+- Task: Make the Today demo path feel calmer, more premium, and less crowded.
+- Result: The demo path now reads as a compact responsive timeline; build passed.
+- Magic signal: demo-story-feels-intentional.
+- UI evidence: `app-vNext/src/styles/globals.css` adds Today-specific timeline styling for `.hq-demo-path` and `.hq-demo-step`.
+- Mobile evidence: the desktop four-step timeline collapses to a vertical path under the existing mobile breakpoint.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P3-02 Audit-Note Polish Pass
+
+- Task: Address the external audit's non-blocking P3 notes with narrow copy/helper polish.
+- Result: Settings, Plan, Workout, and People now explain edge cases and boundaries more clearly; build passed.
+- Magic signal: audit-notes-become-confidence.
+- Settings evidence: browser-local draft recovery, draft legal labels, and clearer reminder/assistant controls.
+- Plan evidence: 15-minute rounding, same-day behavior, and 12-hour cap helper copy.
+- Workout evidence: quick-entry guidance and remove-set undo-before-save copy.
+- People evidence: manual place-label wording replaces more context-like place memory wording.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P3-01 First-Run Demo Script Polish
+
+- Task: Make the first-run demo story obvious from Today.
+- Result: Today now shows the north-star Notes -> Inbox -> Plan -> Settings trust loop; build passed.
+- Magic signal: first-run-has-a-story.
+- UI evidence: `app-vNext/src/features/hq/routes/HQPage.tsx` adds a `Demo path` section titled `The calm assistant loop`.
+- Route evidence: the path links only to existing safe routes for Notes, Inbox, Plan, and Settings trust.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P2 External Audit Results And P3 Unlock
+
+- Task: Record the broad P0-P2 external audit result and unlock P3.
+- Result: `PASS_WITH_NON_BLOCKING_NOTES` recorded; P3 queue and repeatable prompt prepared; build passed.
+- Magic signal: polish-can-start-without-breaking-trust.
+- Audit evidence: `docs/codex/EASYLIFE_P2_EXTERNAL_AUDIT_RESULTS.md` records no P3-blocking reliability issues and no need for P2.5.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` now lists P3 tasks for first-run/demo script, audit-note polish, visual coherence, fallback/perceived-speed polish, and final demo readiness proof.
+- Prompt evidence: `docs/codex/EASYLIFE_P3_REPEATABLE_PROMPT.md` contains the repeatable P3 sprint prompt.
+- Boundary evidence: docs/queue-only task; no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P2 External Audit Gate
+
+- Task: Prepare one broad external audit covering P0, P1, P1.5, and P2.
+- Result: Broad audit gate and results ledger prepared; build passed.
+- Magic signal: outside-eyes-before-awesome-polish.
+- Gate evidence: `docs/codex/EASYLIFE_P2_EXTERNAL_AUDIT_GATE.md` includes the P0-P2 scope, capability boundaries, route checklist, audit prompt, verdict rules, and processing prompt.
+- Results evidence: `docs/codex/EASYLIFE_P2_EXTERNAL_AUDIT_RESULTS.md` is ready to record `PASS_TO_P3`, `PASS_WITH_NON_BLOCKING_NOTES`, or `BLOCK_P3`.
+- Handoff evidence: send the gate packet with `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip`.
+- Boundary evidence: docs/gate-only task; no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no package/dependency files were touched; no deploy, live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, token storage, automatic scheduling, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P2-07 Local Rich Capability Polish
+
+- Task: Add local Notes recovery/export clarity without adding external capability.
+- Result: Notes now makes browser recovery and manual export boundaries visible; build passed.
+- Magic signal: local-polish-feels-trustworthy.
+- Editor evidence: the writing view says temporary browser-only recovery clears after successful save and does not send, sync, export, or use AI.
+- Library evidence: the Notes library says export is a manual Settings download and links to Data export.
+- Gate evidence: `docs/codex/EASYLIFE_P2_LOCAL_RICH_CAPABILITY_POLISH.md` records the local-only scope and no-external-capability boundaries.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, hidden write, automatic scheduling, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P2-06 Contact Import/Sync Supervised Gate
+
+- Task: Create the contact import/sync supervised gate without implementing import or sync.
+- Result: People and Settings now make contact import/sync visibly not live; build passed.
+- Magic signal: people-stays-manual-until-consented.
+- People evidence: People says contact import/sync is not live, manual labels remain the current behavior, and nothing is pulled from contacts apps, address books, or external accounts.
+- Editor evidence: email and phone are manual labels only; the editor does not sync contacts, autocomplete recipients, or contact anyone.
+- Settings evidence: Trust & Privacy says People is not reading phone contacts, Google Contacts, Apple Contacts, Outlook, address book, email, texts, calendar, or social accounts; future import needs consent, preview, dedupe, field mapping, and rollback.
+- Gate evidence: `docs/codex/EASYLIFE_P2_CONTACT_IMPORT_SYNC_SUPERVISED_GATE.md` records explicit consent, source naming, preview, dedupe, field mapping, create/update/skip/merge choice, rollback, audit trail, kill switch, metadata-only logging, and no-silent-write rules.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no contact import, contact sync, provider SDK, OAuth, token storage, address-book permission, background job, server action, live AI, true push, calendar sync, geocoding/maps, email/text sending, account deletion backend, hidden write, automatic scheduling, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P2-05 Real AI/Provider Assistant Supervised Gate
+
+- Task: Create the real AI/provider assistant supervised gate without making a provider call.
+- Result: Settings and Inbox now make the provider lane visibly gated; build passed.
+- Magic signal: ai-stays-powerful-but-not-pretend-live.
+- UI evidence: Settings says provider calls stay gated, the first provider lane is limited to one future synthetic Inbox test after separate approval, and Settings does not turn on live AI, store provider keys, run model calls, or save provider output.
+- Inbox evidence: the old first-live-call surface now reads as a disabled provider test gate with local fallback and nothing saved or sent.
+- Gate evidence: `docs/codex/EASYLIFE_P2_REAL_AI_PROVIDER_SUPERVISED_GATE.md` reconciles Stage 30 through Stage 33 into one current P2 rule: server-only, synthetic/demo first, disabled by default, output quarantine, no frontend keys, no hidden writes, and no provider call unless separately approved.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no provider call, provider SDK, frontend provider key, token storage, secret/env work, broad chat, real memory, hidden read, hidden write, auto-save, external action, true push, calendar sync, geocoding, email/text sending, contact sync, or account deletion backend was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P2-04 Email/Text Sending Supervised Gate
+
+- Task: Create the email/text sending supervised gate without implementing sending.
+- Result: Settings and Email drafts now make sending visibly not connected; build passed.
+- Magic signal: drafts-do-not-pretend-to-send.
+- UI evidence: Trust & Privacy says EasyLife does not send email, send texts, create outside drafts, archive mail, or contact anyone from the demo.
+- Draft evidence: Email drafts require recipient and wording confirmation outside EasyLife, say delivery is not connected, and state no provider is called.
+- Gate evidence: `docs/codex/EASYLIFE_P2_EMAIL_TEXT_SENDING_SUPERVISED_GATE.md` records recipient confirmation, second approval, audit trail, rollback notes, kill switch, metadata-only logging, no-automatic-send rules, and explicit non-goals.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no email/SMS provider, OAuth, provider token storage, SMTP, sending API, outside draft creation, archive action, live AI, true push, calendar sync, geocoding, contact sync, account deletion backend, hidden write, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P2-03 External Calendar Sync Supervised Gate
+
+- Task: Create the external calendar sync supervised gate without implementing sync.
+- Result: Settings now makes external calendar sync visibly gated; build passed.
+- Magic signal: calendar-sync-stays-consented.
+- UI evidence: Day setup says Plan stays inside EasyLife, external calendar sync is not live, and EasyLife is not reading from or writing to Google Calendar, Apple Calendar, Outlook, or ICS feeds.
+- Gate evidence: `docs/codex/EASYLIFE_P2_EXTERNAL_CALENDAR_SYNC_SUPERVISED_GATE.md` records consent, scope, source-of-truth, conflict handling, rollback, manual review, no-hidden-write rules, and explicit non-goals.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no calendar sync, OAuth, provider SDK, external calendar read/write, background job, hidden write, live AI, true push, geocoding, email/text sending, contact sync, account deletion backend, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P2-02 True Push Notification Supervised Gate
+
+- Task: Create the true push notification supervised gate without live push.
+- Result: Settings now makes true push visibly gated; build passed.
+- Magic signal: push-stays-manual-until-proven.
+- UI evidence: Browser reminders says current behavior is local only, true push is not live, no push tokens are stored, no server push is sent, and no automatic reminder jobs are scheduled.
+- Gate evidence: `docs/codex/EASYLIFE_P2_TRUE_PUSH_NOTIFICATION_SUPERVISED_GATE.md` records the client token contract, token storage contract, disabled server-test-send scaffold, kill switch, rollback, and copy boundaries.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live push, token storage, server send, service worker push handling, automatic reminder job, live AI, calendar sync, geocoding, email/text sending, contact sync, account deletion backend, hidden write, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P2-01 Account Data Deletion Safety Gate
+
+- Task: Create account/data deletion safety proof without implementing deletion.
+- Result: Settings now makes deletion export-first, not self-serve, and backend-gated; build passed.
+- Magic signal: deletion-stays-boring-until-safe.
+- UI evidence: Trust & Privacy, Data, and Account all state that export is available and that no delete button or backend deletion action runs in the demo.
+- Gate evidence: `docs/codex/EASYLIFE_P2_ACCOUNT_DATA_DELETION_SAFETY_GATE.md` records the current safe user path, future approval requirements, explicit non-goals, and acceptance checks.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no account deletion backend, auth deletion, hidden writes, live AI, true push, calendar sync, geocoding, email/text sending, contact sync, or external action was added.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P2 Queue Loaded By Waiver
+
+- Task: Load the P2 supervised capability gate queue after Spencer waived the focused P1.5 re-audit.
+- Result: P2 queue prepared; broad external audit moved to after P2.
+- Magic signal: capability-work-stays-consented.
+- Waiver evidence: `docs/codex/NEXT_5_TASKS.md` and `docs/codex/PHASE_STATE.md` record that Spencer explicitly chose to skip the focused P1.5 external audit and audit the full P0-P2 result after P2.
+- Queue evidence: next tasks are account/data deletion safety, true push, calendar sync, email/text, real AI/provider, contact import/sync, local rich polish, and broad external audit.
+- Boundary evidence: P2 is supervised; no live AI, true push, sync, sending, account deletion backend, hidden writes, Firebase/auth/rules/functions/billing/DNS/secrets/env work, package/dependency work, deploy work, or generated output is approved by this queue alone.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+
+## 2026-05-31 - Audit Packet P1.5 External Audit Gate
+
+- Task: Prepare the focused external re-audit gate after P1.5 repairs.
+- Result: P1.5 external audit gate prepared; build passed.
+- Magic signal: repair-lane-ready-for-outside-eyes.
+- Gate evidence: `docs/codex/EASYLIFE_P1_5_EXTERNAL_AUDIT_GATE.md` contains the completed repair summary, auditor rules, repeatable prompt, verdict rules, and processing prompt.
+- Handoff evidence: send the gate document with `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip`.
+- Decision evidence: P2 supervised capability gates remain blocked until the focused audit returns `PASS_TO_P2` or `PASS_WITH_NON_BLOCKING_NOTES`, unless explicitly waived.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs/gate-only task; no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, external sync, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1.5-06 Mobile Keyboard Route Proof
+
+- Task: Prove mobile sticky actions, keyboard close/focus behavior, and route recovery.
+- Result: P1.5-06 Mobile/keyboard/route proof completed; build passed.
+- Magic signal: demo-path-has-guardrails.
+- Mobile evidence: sticky action groups use safe-area bottom spacing and full-width mobile actions across drawer, Plan, Inbox, and Workout action bars.
+- Keyboard evidence: close controls are native buttons, focus traps cover app menu, Quick Capture, drawers, and Plan quick-create, and Escape close behavior remains wired.
+- Route evidence: canonical aliases preserve query strings, Plan/Workout have safe landing states, invalid `/app/*` routes render route safety, and `/app/easycalendar/day` has inline loading copy.
+- Proof evidence: `docs/codex/EASYLIFE_P1_5_MOBILE_KEYBOARD_ROUTE_PROOF.md`.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no app behavior, Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was changed; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, external sync, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1.5-05 Settings Trust Re-Check
+
+- Task: Re-check Settings trust copy and repair remaining audit carryovers.
+- Result: P1.5-05 Settings trust re-check implemented; build passed.
+- Magic signal: settings-says-only-what-the-app-does.
+- Reminder evidence: Settings describes local browser reminders and explicitly says EasyLife is not running server-delivered push.
+- Assistant evidence: visible review copy says selected visible context only, no background scanning, no live AI provider assumed, and cross-surface suggestions do not scan, move, save, send, or sync until the user chooses.
+- Defaults evidence: new-user helper defaults remain described as off, and source proof found only one Settings sign-out action.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, external sync, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1.5-04 People Clarity And Follow-Up Visibility
+
+- Task: Repair People trust copy and surface People follow-ups in Today.
+- Result: P1.5-04 People clarity and follow-up visibility implemented; build passed.
+- Magic signal: people-memory-stays-honest.
+- People evidence: place labels are described as saved manual labels only, with no maps, geocoding, live location, exact address, calendar sync, email, or texts.
+- Label evidence: ambiguous People labels were tightened to how-you-know-them, organization, connection, and manual place-label language.
+- Today evidence: saved People follow-up dates now appear in a visible manual-only Today review panel that links back to People for user action.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, external sync, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1.5-03 Capture Durability Repair Proof
+
+- Task: Prove and repair capture durability for Inbox and Notes.
+- Result: P1.5-03 Capture durability repair proof implemented; build passed.
+- Magic signal: thoughts-survive-human-speed.
+- Inbox evidence: quick-row drafts persist locally, restore visibly, persist during edit/add/remove handlers, and still warn on refresh before save.
+- Notes evidence: blank-note creation is guarded at route, button, and provider levels, including `pendingBlankNoteRef` and empty-note reuse.
+- Editor evidence: per-note local browser draft backup/restore now covers the debounce window before Notes autosave completes, with a visible restore message and backup cleanup after save.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, external sync, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1.5-02 Workout Input/Delete Repair
+
+- Task: Repair Workout input/delete reliability from the P1 external audit.
+- Result: P1.5-02 Workout input/delete repair implemented; build passed.
+- Magic signal: gym-logging-survives-fast-thumbs.
+- Input evidence: reps and weight fields use numeric-friendly text entry, sanitized values, `enterKeyHint="next"`, autocomplete disabled, and frame-delayed select-on-focus/click.
+- Delete evidence: set removal is labelled `Remove set`, and exercise deletion is separated from the main Add/Copy/Done workout actions.
+- Recovery evidence: removed sets show a visible undo card and can be restored before saving without AI, external services, or hidden writes.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1.5-01 Plan Block Editor Repair
+
+- Task: Repair Plan block editor reliability from the P1 external audit.
+- Result: P1.5-01 Plan block editor repair implemented; build passed.
+- Magic signal: typed-time-stays-where-the-user-meant.
+- Time evidence: `normalizeTimeInput` now accepts compact typed values such as `730` and `845` and normalizes them to 15-minute local times.
+- Editor evidence: the task-block drawer uses a numeric-friendly typed start field with `7:30 or 730` helper copy and continues to prefill existing block date/time/duration/state.
+- Recovery evidence: deleting a block creates a visible undo card on the day page; restoring uses the existing task and saved block times without hidden writes, sync, AI, or external services.
+- Stability evidence: save/restore paths preserve the current day-page scroll position.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1 External Audit Results
+
+- Task: Convert the returned P1 audit into a safe next queue.
+- Result: Verdict recorded as `PASS_WITH_NON_BLOCKING_NOTES`; P1.5 repair queue created before broad P2 capability implementation.
+- Magic signal: pass-with-notes-becomes-better-product.
+- Report evidence: `docs/codex/EASYLIFE_P1_EXTERNAL_AUDIT_RESULTS.md` captures the report source, verdict, reliability carryovers, non-blocking notes, and decision.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` now includes P1.5 repair tasks for Plan, Workout, Capture durability, People, Settings, mobile/keyboard/route proof, and focused re-audit.
+- Phase evidence: `docs/codex/PHASE_STATE.md` now points to `audit-packet-demo-readiness-p1-5-repair-queue-ready`.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1 External Audit Gate
+
+- Task: Make the completed P1 reliability queue ready for external audit.
+- Result: P1 external audit gate prepared; build passed.
+- Magic signal: audit-can-say-go-or-block-cleanly.
+- Packet evidence: `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip` exists for the reviewer handoff.
+- Gate evidence: `docs/codex/EASYLIFE_P1_EXTERNAL_AUDIT_GATE.md` contains the completed P1 summary, explicit PASS_TO_P2 / PASS_WITH_NON_BLOCKING_NOTES / BLOCK_P2 gate rule, repeatable audit prompt, and post-audit Codex processing prompt.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` marks the external audit gate after P1 complete and keeps P2 gated behind the external verdict.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1-09 Keyboard Ergonomics
+
+- Task: Finish P1 keyboard ergonomics without adding new product behavior.
+- Result: P1-09 Keyboard ergonomics cleanup implemented; build passed.
+- Magic signal: keyboard-users-stay-oriented.
+- Modal evidence: Quick Capture now has dialog metadata, labelled heading, Escape close, focus containment, and trigger focus return.
+- Initial focus evidence: Quick Capture opens directly into the primary textarea.
+- Control evidence: Quick Capture mode controls keep native button activation and expose tab selection state.
+- Existing proof: app menu, task drawer, Plan drawers, Plan quick-create, People drawer, and Follow-ups drawer still use the shared focus trap and Escape handling.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1-08 Capture Draft Durability
+
+- Task: Make fast capture harder to lose or duplicate.
+- Result: P1-08 Capture draft durability and duplicate-note guard implemented; build passed.
+- Magic signal: quick-capture-survives-human-speed.
+- Inbox evidence: direct Inbox row edits, add-row, and remove-row now synchronously persist dirty rows to the local draft key.
+- Restore evidence: returning to direct Inbox after an unsaved draft shows a visible restored-draft banner.
+- Leave evidence: dirty direct-Inbox rows still register a `beforeunload` warning.
+- Notes evidence: provider-level `pendingBlankNoteRef` makes concurrent blank-note creation share one request, while the route and button guards remain in place.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1-07 Canonical Visible Labels
+
+- Task: Remove remaining prominent legacy suite labels from visible demo-facing copy.
+- Result: P1-07 Canonical visible-label sweep implemented; build passed.
+- Magic signal: one-assistant-language-holds-together.
+- Plan evidence: Plan composer and edit drawers now say Inbox/Plan instead of EasyList/EasyCalendar.
+- Follow-up evidence: Follow-ups layout and drawer now say Follow-ups instead of EasyPipeline.
+- Progress evidence: Statistics tabs, overview cards, and buttons now use Inbox, Plan, Workout, Follow-ups, Projects, Notes, and Progress.
+- Project evidence: Project planner/timeline copy now says Projects and Plan instead of EasyProjects/EasyCalendar.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed, and app-facing TSX scan found no remaining exact legacy suite labels or `HQ` matches.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1-06 Settings Trust Cleanup
+
+- Task: Make Settings trust language audit-ready without adding real capabilities.
+- Result: P1-06 Settings trust cleanup implemented; build passed.
+- Magic signal: settings-tells-the-truth-at-a-glance.
+- Reminder evidence: Trust & Privacy now says reminders are local browser/device behavior and does not promise server notification delivery.
+- Legal evidence: Privacy Policy and Terms placeholders are visible in Trust & Privacy for demo review.
+- Account evidence: Account identifies the single Settings sign-out control.
+- Default evidence: Assistant and experiments state that helper, cross-surface, draft, review, and experimental features start off for new users.
+- Source evidence: existing defaults remain `experimentalFeatures: []`, `allowCrossAppSuggestions: false`, and `allowDraftCreation: false`.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1-05 People Labels And Follow-Ups
+
+- Task: Make People labels and follow-ups clearer for demo review.
+- Result: P1-05 People place labels and follow-up surfacing implemented; build passed.
+- Magic signal: people-feels-manual-clear-and-useful.
+- Trust evidence: People says labels are saved manually and are not pulled from location, maps, email, texts, calendar, or external accounts.
+- Follow-up evidence: due and upcoming follow-ups are both visible from the top People overview.
+- Context evidence: relationship, company, role, and source are described as manual context labels and shown as compact contact labels.
+- Place evidence: place cue copy now says saved place labels only and blocks maps, geocoding, exact addresses, live location, calendar sync, email, and texts.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1-04 Mobile Layout And Sticky Actions
+
+- Task: Make core mobile screens easier to operate without losing primary actions.
+- Result: P1-04 Mobile layout and sticky actions implemented; build passed.
+- Magic signal: phone-demo-actions-stay-in-reach.
+- Layout evidence: mobile app grids for forms and drawer/form cards now collapse to one column more consistently.
+- Tap evidence: app controls have a larger phone tap minimum and can wrap labels instead of clipping.
+- Sticky evidence: drawer actions, Plan actions, Inbox composer actions, and Workout save actions stay reachable near the bottom on mobile.
+- Loading evidence: repeated EasyList route-level loading cards, including Inbox, were replaced by inline status text so the surface does not blank out during loading.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1-03 Workout Input Reliability
+
+- Task: Make Workout logging less fragile while training.
+- Result: P1-03 Workout input reliability implemented; build passed.
+- Magic signal: active-workout-entry-feels-harder-to-break.
+- Input evidence: Workout duration, reps, and weight now avoid browser spinner number fields and sanitize typed values into non-negative whole/decimal numbers.
+- Action evidence: set and exercise delete actions use danger styling and are separated from the Finish/Next workout flow.
+- Draft evidence: active workout draft persistence remains local-device only through `WORKOUT_DRAFT_STORAGE_KEY`; no hidden writes were added.
+- Route evidence: `/app/workout` still routes to the branded Workout landing state with dashboard/log actions.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1-02 Plan Time Input Reliability
+
+- Task: Make Plan time and duration editing less fragile.
+- Result: P1-02 Plan block editor and time input reliability implemented; build passed.
+- Magic signal: plan-times-snap-and-save-predictably.
+- Helper evidence: shared `normalizeTimeInput` and `normalizeDurationMinutes` helpers now guard Plan time and duration values.
+- Quick-create evidence: quick Plan start/end fields use 15-minute steps and normalize before save.
+- Task-block evidence: existing task blocks use normalized start time, 15-minute duration increments, and quick duration chips.
+- Event evidence: event edit start/end fields use 15-minute steps, normalize on blur/save, and repair invalid end times when the start changes.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1-01 Route Dead-End Cleanup
+
+- Task: Remove the P1 audit route dead ends for Plan, Workout, and People.
+- Result: P1-01 route dead-end cleanup implemented; build passed.
+- Magic signal: obvious-routes-no-longer-feel-dead.
+- Plan evidence: `/app/plan` shows a branded Plan landing state with an `Open Plan day` action and `Return to Today`.
+- Workout evidence: `/app/workout` shows a branded Workout landing state with dashboard/log actions, Today return, and no workout AI/hidden-change copy.
+- People evidence: People has a Today return path, clearer manual place-label framing, and no maps/geocoding/live-location/external-account pull copy.
+- Label evidence: visible People labels now use `People`, `Saved place cue`, and `How you know them` instead of the more confusing audit-called-out prototype language.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P1 Queue Loaded From External Report
+
+- Task: Convert the P0 external audit report into a P1-ready task queue.
+- Result: External report recorded and P1 queue loaded; build passed.
+- Magic signal: p1-starts-with-real-audit-friction.
+- Verdict evidence: `docs/codex/EASYLIFE_P0_EXTERNAL_AUDIT_RESULTS.md` records `PASS_WITH_NON_BLOCKING_NOTES`.
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` now includes audit carryover route cleanup, Plan reliability, Workout reliability, mobile/sticky actions, People context clarity, Settings trust cleanup, canonical label sweep, capture durability, keyboard ergonomics, and final external audit.
+- Audit evidence: final P1 item explicitly sends `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip` with `docs/codex/EASYLIFE_P1_EXTERNAL_AUDIT_GATE.md`.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs/queue-only task; no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P0 External Audit Results Ledger
+
+- Task: Make the external audit result easy to record and process without prematurely starting P1.
+- Result: P0 external audit results ledger created; build passed.
+- Magic signal: p1-stays-locked-until-the-verdict-exists.
+- Ledger evidence: `docs/codex/EASYLIFE_P0_EXTERNAL_AUDIT_RESULTS.md` captures verdict, demo blockers, non-blocking notes, P1 candidates, gate rules, and the Codex processing prompt.
+- Gate evidence: external signoff is still incomplete; P1 starts only after `PASS_TO_P1` or `PASS_WITH_NON_BLOCKING_NOTES`.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs/proof-only task; no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P0 External Audit Prep
+
+- Task: Prepare EasyLife for the external audit after P0 implementation.
+- Result: P0 external audit handoff created; build passed.
+- Magic signal: p0-ready-for-outside-review.
+- Packet evidence: `docs/codex/EASYLIFE_P0_EXTERNAL_AUDIT_GATE.md` contains the P0 change summary, safe demo path, route list, external audit prompt, return format, and gate rule.
+- Source evidence: route aliases, capture confirmations, Notes save state, Settings trust copy, Today review bridge, and keyboard focus/dialog behavior were source-checked.
+- Gate evidence: P1 remains blocked until the external audit returns no demo-blocking findings.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: docs/proof-only task; no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P0-07 Keyboard Navigation Blockers
+
+- Task: Make menu, drawers, and Plan quick-create usable from the keyboard.
+- Result: P0-07 keyboard navigation blockers implemented; build passed.
+- Magic signal: demo-can-be-driven-with-tab-enter-escape.
+- Menu evidence: the app menu trigger is a native button, opens the drawer with dialog semantics, traps focus while open, closes on Escape, and returns focus to the trigger.
+- Drawer evidence: task, Plan event, Plan task block, People, and Follow-ups drawers use dialog semantics and keep focus inside the active drawer until closed.
+- Plan evidence: the Add block quick-create panel now uses a close focus target, Escape close behavior, and keyboard-contained Tab navigation.
+- Semantics evidence: affected close/open controls remain native buttons and menu destinations remain links, preserving Enter/Space behavior.
+- Focus evidence: existing global `:focus-visible` and control-specific focus styles cover the edited interactive controls.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P0-06 Settings Trust Copy And Safe Controls
+
+- Task: Make Settings tell the truth about privacy, reminders, assistant helpers, and account controls.
+- Result: P0-06 Settings trust copy and safe controls implemented; build passed.
+- Magic signal: settings-says-what-easylife-can-and-cannot-do.
+- Trust evidence: Settings includes `Trust & Privacy` with early-web-app and no-hidden-action copy.
+- Reminder evidence: the reminder section is now `Browser reminders`, states reminders are local browser reminders, and disables test reminders until permission is granted and reminders are enabled.
+- Assistant evidence: no live-AI claim is made, cross-surface suggestions default off for new users, draft creation remains off, and review-before-save cannot be turned off once on.
+- Location evidence: People copy says manual place labels and no live location, maps, or geocoding.
+- Account evidence: Account has one obvious `Log out` button, a safe deletion placeholder, and the footer links to `Privacy & Terms` in Settings.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no live AI, true push, calendar sync, geocoding, email/text sending, account deletion backend, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P0-05 Notes Write-First Save Indicator
+
+- Task: Make Notes capture feel immediate and visibly saved.
+- Result: P0-05 Notes write-first and save indicator implemented; build passed.
+- Magic signal: notes-write-first-saves-visibly.
+- Focus evidence: the editor continues to focus the body writing area when a note opens.
+- Title evidence: the title input is visibly labeled `Title optional`, and the body is labeled `Write first`.
+- Save evidence: autosave exposes `Saving...`, `Saved`, `Saved just now`, and `Save failed` states through a status chip.
+- Duplicate evidence: the New note action disables while opening, and the context reuses one existing empty untitled note instead of creating more blanks.
+- Tooling evidence: follow-up/context tools stay behind the review action and are unavailable until note text exists.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no AI, true push, calendar sync, geocoding, email/text sending, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P0-04 Inbox Quick Add And Draft Safety
+
+- Task: Make direct Inbox capture feel simple, trustworthy, and hard to lose.
+- Result: P0-04 Inbox quick add and draft safety implemented; build passed.
+- Magic signal: capture-saves-with-confidence.
+- Input evidence: task text is the first field, and optional metadata is tucked behind `Add details`.
+- Guard evidence: empty submits remain disabled until at least one row has real task text.
+- Feedback evidence: successful saves show a `Saved` banner and `View Inbox` action.
+- Draft evidence: dirty direct-Inbox rows are stored locally, restored on return, cleared after save, and guarded by a browser leave warning.
+- Mobile evidence: the details grid and saved banner stack at small widths.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no AI, true push, calendar sync, geocoding, email/text sending, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P0-03 Today Home And Inbox Bridge
+
+- Task: Make Today explain EasyLife and expose unplanned Inbox items as reviewable.
+- Result: P0-03 Today bridge implemented; build passed.
+- Magic signal: today-explains-capture-review-plan.
+- Intro evidence: Today now says EasyLife is a calm assistant for tasks, notes, and planning, with a simple capture -> review -> plan loop.
+- CTA evidence: Today has direct links for Add task, Review Inbox, Start note, and Open Notes.
+- Inbox evidence: open tasks with no due date and no Plan block appear in an `Inbox to review` section with count and up to three recent items.
+- Trust evidence: the section says nothing is scheduled automatically and the user chooses what moves into Plan.
+- Jargon evidence: Today no longer displays `Local mode`; status now says `No live AI`.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no AI, true push, calendar sync, geocoding, email/text sending, auto-scheduling, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P0-02 Canonical Labels
+
+- Task: Make visible app language read as one EasyLife assistant instead of separate Easy* modules.
+- Result: P0-02 label cleanup implemented; build passed.
+- Magic signal: presenter-can-say-inbox-not-easylist.
+- Shell evidence: Inbox workspace subnav labels now say `Review` and `Email drafts`; route memory labels support Today, Inbox, Notes, Plan, People, and Workout aliases.
+- Core surface evidence: task review, deleted tasks, notes editor/trash, people drawer, task drawer routing, and task composer copy now use Inbox, Notes, Plan, People, Projects, and Follow-ups language.
+- Settings evidence: startup options, experiment groups, routing preference labels, and data export/source labels use canonical assistant vocabulary instead of Easy* product-family labels.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Scan evidence: remaining Easy* strings in the P0-scoped source scan are internal imports/types/hooks/component names/storage keys/CSS classes, not visible demo copy.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no AI, true push, calendar sync, geocoding, email/text sending, or hidden writes were added.
+
+## 2026-05-31 - Audit Packet P0 Route Safety
+
+- Task: Make demo routes safe before continuing feature or trust polish.
+- Result: P0-01 route aliases and invalid app-route fallback implemented; build passed.
+- Magic signal: direct-demo-routes-do-not-blank.
+- Alias evidence: `/app/today`, `/app/inbox`, `/app/notes`, `/app/plan`, `/app/people`, and `/app/workout` redirect to existing working surfaces.
+- Fallback evidence: unknown `/app/*` paths show a branded safe page that says nothing was changed or saved and offers return paths to Today and Inbox.
+- Query evidence: redirects preserve `?demo=1` and other search flags through the existing `PreserveSearchRedirect` helper.
+- Check evidence: `npm.cmd run build` from `app-vNext` passed.
+- Inspection limit: browser route sweep was not completed because Playwright/browser tooling was unavailable and adding dependencies is outside this guarded pass.
+- Boundary evidence: no Firebase/auth/rules/functions/billing/DNS/secrets/env/package/dependency/deploy/generated output was touched; no AI, true push, calendar sync, geocoding, email/text sending, or hidden writes were added.
+
 ## 2026-05-28 - Notes Capture Friction Repair
 
 - Task: Make basic note capture feel like Notes, not a module dashboard.
@@ -9635,3 +10168,313 @@ This file is appended by Codex Fleet after checkpoint-loop tasks.
 - Joey verdict: GREEN
 - Final verdict: READY_FOR_STAGE_25_PROVIDER_READINESS_GATE
 - Follow-up: Stage 25 provider readiness docs only; still no live AI.
+
+## P3.5-04 Mobile/Keyboard/Focus Self-Audit - 2026-05-31
+
+- Task: Mobile, keyboard, and focus self-audit packet.
+- Result: Passed
+- Magic signal: demo-interaction-proof
+- Active work pack: P3.5 Solo Demo Hardening
+- Task class: proof
+- Task risk: low
+- Changed files: docs only
+- Materiality signal: impact=stability, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- Build evidence: Not run; docs-only source self-audit with no code or CSS changes.
+- Source evidence: safe-area action reachability, mobile drawer/menu padding, sticky final actions, focus trap/Escape/return-focus behavior, shared loading status semantics, calmer inline error styling, and phone-width collapse rules were checked.
+- Manual watch item: phone QA should verify long-form bottom actions and decide later whether `.error-copy` should become a shared semantic live-region component.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P3.5-05 final no-external-audit handoff pack.
+
+## P3.5-05 Final No-External-Audit Handoff - 2026-05-31
+
+- Task: Final no-external-audit handoff pack.
+- Result: Passed
+- Magic signal: solo-demo-ready
+- Active work pack: P3.5 Solo Demo Hardening
+- Task class: proof
+- Task risk: low
+- Changed files: docs only
+- Materiality signal: impact=handoff, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- Build evidence: `npm.cmd run build` from `app-vNext` passed; TypeScript build and Vite production build completed successfully.
+- Handoff evidence: `docs/codex/EASYLIFE_P3_5_FINAL_NO_EXTERNAL_AUDIT_HANDOFF.md` includes completed P0-P3.5 summary, known limitations, manual QA and screenshots, later external audit prompt, and next-lane recommendations.
+- Boundary evidence: no new capabilities, no deploy, no live AI/provider call, no true push, no external sync/sending/geocoding/contact import/account deletion/hidden write/token storage/automatic scheduling/external action work.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Final verdict: P3_5_COMPLETE_READY_FOR_SOLO_DEMO_OR_LATER_EXTERNAL_AUDIT
+
+## P4 Supervised Capability Queue - 2026-05-31
+
+- Task: Queue P4 supervised capability activation.
+- Result: Passed
+- Magic signal: real-capability-with-rails
+- Active work pack: P4 Supervised Capability Activation
+- Task class: planning
+- Task risk: medium
+- Changed files: docs only
+- Materiality signal: impact=capability-planning, surface-files=0, docs-files=6, source-lines=none, css-only=False
+- Queue evidence: `docs/codex/NEXT_5_TASKS.md` now contains P4-00 through P4-11.
+- Prompt evidence: `docs/codex/EASYLIFE_P4_SUPERVISED_CAPABILITY_REPEATABLE_PROMPT.md` contains the repeatable P4 sprint prompt.
+- Order evidence: narrow real AI/provider Inbox suggestion is first; true push synthetic test is second.
+- Boundary evidence: no app code, server code, Firebase rules/auth/billing/DNS/secrets/env, package/dependency, deploy config, generated output, deploy, live provider call, live push, token storage, hidden write, automatic scheduling, external action, calendar sync, geocoding, email/text sending, contact sync, or account deletion backend was touched.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-00 phase unlock and gate posture.
+
+## P4-00 Phase Unlock And Gate Posture - 2026-05-31
+
+- Task: Phase unlock and gate posture.
+- Result: Passed
+- Magic signal: capability-gates-armed
+- Active work pack: P4 Supervised Capability Activation
+- Task class: proof
+- Task risk: medium
+- Changed files: docs only
+- Materiality signal: impact=capability-governance, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- Gate evidence: `docs/codex/EASYLIFE_P4_00_PHASE_UNLOCK_AND_GATE_POSTURE.md` confirms AI/provider first, AI checkpoint second, true push synthetic/manual test third, and final P4 handoff last.
+- Boundary evidence: no app code, server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, generated output, deploy, provider call, push send, token storage, hidden write, automatic scheduling, external action, calendar sync, geocoding/maps, email/text sending, contact sync, or account deletion backend was touched.
+- Build evidence: Not run; docs-only posture task with no app code changes.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-01 real AI/provider Inbox approval and boundary record.
+
+## P4-01 Real AI Inbox Approval And Boundary Record - 2026-05-31
+
+- Task: Real AI/provider Inbox approval and boundary record.
+- Result: Passed
+- Magic signal: first-ai-lane-bounded
+- Active work pack: P4 Supervised Capability Activation
+- Task class: proof
+- Task risk: medium
+- Changed files: docs only
+- Materiality signal: impact=capability-governance, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- Approval evidence: `docs/codex/EASYLIFE_P4_01_REAL_AI_INBOX_APPROVAL_BOUNDARY.md` approves only one disabled-by-default Inbox typed-capture suggestion lane, with synthetic/demo input first.
+- Boundary evidence: no app code, server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, generated output, deploy, provider call, provider key storage, hidden write, hidden read, automatic scheduling, external action, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, true push, or real private payload approval was added.
+- Build evidence: Not run; docs-only boundary task with no app code changes.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-02 real AI/provider server-call contract audit.
+
+## P4-02 Real AI Server-Call Contract Audit - 2026-05-31
+
+- Task: Real AI/provider server-call contract audit.
+- Result: Passed
+- Magic signal: server-call-contract-bounded
+- Active work pack: P4 Supervised Capability Activation
+- Task class: proof
+- Task risk: medium
+- Changed files: docs only
+- Materiality signal: impact=capability-contract, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- Audit evidence: `docs/codex/EASYLIFE_P4_02_REAL_AI_SERVER_CALL_CONTRACT_AUDIT.md` identifies `assistantIntakeSuggestion` as the minimum server lane and records the disabled gate, kill switch, operator confirmation, synthetic/demo capture requirement, local fallback, output quarantine, and metadata-only logging posture.
+- Frontend boundary evidence: audited frontend source uses `VITE_ASSISTANT_INTAKE_SUGGESTION_URL` as an endpoint URL only; no frontend provider key path was added or found in the audited lane.
+- Reconciliation evidence: P4-03 must resolve disabled/test-only request flags, synthetic metadata alignment, and provider-output client envelope trust before any later one-call deploy/test prompt.
+- Build evidence: Not run; docs-only source audit with no code changes.
+- Boundary evidence: no app code, server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, generated output, deploy, provider call, provider key storage, hidden write, hidden read, automatic scheduling, external action, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, true push, or real private payload approval was added.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-03 real AI/provider disabled-by-default implementation proof.
+
+## P4-03 Real AI Disabled-By-Default Implementation Proof - 2026-05-31
+
+- Task: Real AI/provider disabled-by-default implementation proof.
+- Result: Passed
+- Magic signal: ai-gate-still-off-but-ready
+- Active work pack: P4 Supervised Capability Activation
+- Task class: implementation-proof
+- Task risk: medium
+- Changed files: app code plus docs
+- Materiality signal: impact=capability-contract, surface-files=1, docs-files=4, source-lines=narrow, css-only=False
+- Disabled evidence: Inbox provider-gate client sends `liveCallRequested: false` by default and does not send `operatorConfirmation` without a later exact synthetic test approval.
+- Envelope evidence: provider-output is trusted only when server-called, accepted/quarantined, preview-only, approval-required, and no-action flags prove nothing saved/sent/scheduled/synced/remembered.
+- UI copy evidence: Inbox now says `Provider test remains disabled`.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed; TypeScript build and Vite production build completed successfully.
+- Boundary evidence: no server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, generated output, deploy, provider call, provider key storage, hidden write, hidden read, automatic scheduling, external action, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, true push, or real private payload approval was added.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-04 Inbox review-first AI suggestion UI.
+
+## P4-04 Inbox Review-First AI Suggestion UI - 2026-05-31
+
+- Task: Inbox review-first AI suggestion UI.
+- Result: Passed
+- Magic signal: one-request-one-review
+- Active work pack: P4 Supervised Capability Activation
+- Task class: implementation-proof
+- Task risk: medium
+- Changed files: app code plus docs
+- Materiality signal: impact=review-first-capability-ui, surface-files=2, docs-files=4, source-lines=narrow, css-only=False
+- Request evidence: provider-test selection no longer triggers the gateway by itself; `Request gated suggestion` is required for the current capture.
+- Disabled evidence: the request still sends `liveCallRequested: false` and omits operator confirmation by default.
+- Review evidence: visible copy says no server request has happened until requested, and the request panel says nothing saves, sends, schedules, syncs, remembers, or contacts anyone.
+- Recovery evidence: `Clear request` resets the request state and response; changing typed capture clears the request.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed; TypeScript build and Vite production build completed successfully.
+- Boundary evidence: no server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, generated output, deploy, provider call, provider key storage, hidden write, hidden read, automatic scheduling, external action, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, true push, or real private payload approval was added.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-05 one synthetic provider test readiness proof.
+
+## P4-05 One Synthetic Provider Test Readiness Proof - 2026-05-31
+
+- Task: One synthetic provider test readiness proof.
+- Result: Passed
+- Magic signal: one-call-prompt-boxed
+- Active work pack: P4 Supervised Capability Activation
+- Task class: proof
+- Task risk: medium
+- Changed files: docs only
+- Materiality signal: impact=capability-test-readiness, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- Readiness evidence: `docs/codex/EASYLIFE_P4_05_SYNTHETIC_PROVIDER_TEST_READINESS_PROOF.md` defines the one allowed lane as `assistantIntakeSuggestion` on `/app/easylist/add?demo=1` with prompt `intake-suggestion` and synthetic/demo typed capture only.
+- Prompt evidence: the human-run prompt allows exactly one provider-call attempt, deploys only `functions:assistantIntakeSuggestion`, requires immediate gate closure, and requires a follow-up result proof before any second call.
+- Boundary evidence: no app code, server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, generated output, deploy, provider call, provider key storage, hidden write, hidden read, automatic scheduling, external action, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, true push, or real private payload approval was added.
+- Build evidence: Not run; docs-only readiness packet with no app code changes.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-06 AI lane audit/checkpoint packet.
+
+## P4-06 AI Lane Audit Checkpoint - 2026-05-31
+
+- Task: AI lane audit/checkpoint packet.
+- Result: Passed
+- Magic signal: ai-box-closed-push-audit-unlocked
+- Active work pack: P4 Supervised Capability Activation
+- Task class: proof-checkpoint
+- Task risk: medium
+- Changed files: docs only
+- Materiality signal: impact=capability-checkpoint, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- AI verdict evidence: `docs/codex/EASYLIFE_P4_06_AI_LANE_AUDIT_CHECKPOINT.md` records `AI_LANE_READY_FOR_SEPARATELY_APPROVED_ONE_SYNTHETIC_PROVIDER_TEST`.
+- Push unlock evidence: the same checkpoint records `TRUE_PUSH_DISABLED_AUDIT_LANE_UNLOCKED`, limited to disabled audit/contract work only.
+- Source evidence: client source still sends `liveCallRequested: false` and omits operator confirmation by default; server source still requires explicit operator confirmation, server enable gate, inactive kill switch, synthetic metadata, and `[synthetic]` or `[demo]` typed capture before provider execution.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed; `npm.cmd --prefix functions run lint` passed with `node --check index.js`.
+- Boundary evidence: no app code, server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, tracked generated output, deploy, provider call, provider key storage, hidden write, hidden read, automatic scheduling, external action, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, true push send, push token storage, or real private payload approval was added.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-07 true push capability and permission audit.
+
+## P4-07 True Push Capability And Permission Audit - 2026-05-31
+
+- Task: True push capability and permission audit.
+- Result: Passed
+- Magic signal: push-audit-local-only
+- Active work pack: P4 Supervised Capability Activation
+- Task class: proof
+- Task risk: medium
+- Changed files: docs only
+- Materiality signal: impact=capability-audit, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- Current-state evidence: `docs/codex/EASYLIFE_P4_07_TRUE_PUSH_CAPABILITY_PERMISSION_AUDIT.md` records that current reminders use browser `Notification` plus in-app timers while the app is loaded.
+- Service-worker evidence: `/sw.js` is cache/fetch only and has no `push`, `notificationclick`, Firebase Messaging, or `showNotification` handling.
+- Token evidence: source sweep found no `firebase/messaging`, `getMessaging`, `getToken`, `admin.messaging`, `sendToDevice`, `sendEachForMulticast`, `webpush`, `pushManager`, VAPID, FCM token registration, service-worker push listener, or service-worker notification-click listener in app source/public assets/`functions/index.js`.
+- Copy evidence: Settings already says true push is not live, no push tokens are stored, no server push is sent, and no automatic reminder jobs are scheduled.
+- Build evidence: Not run; docs-only audit with no app code changes.
+- Boundary evidence: no app code, server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, tracked generated output, deploy, provider call, push send, push token storage, push credential storage, Firebase Messaging setup, service-worker push handler, automatic reminder job, hidden write, hidden read, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, or external action was added.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-08 true push client contract and consent UI.
+
+## P4-08 True Push Client Contract And Consent UI - 2026-05-31
+
+- Task: True push client contract and consent UI.
+- Result: Passed
+- Magic signal: push-visible-but-still-locked
+- Active work pack: P4 Supervised Capability Activation
+- Task class: implementation-proof
+- Task risk: medium
+- Changed files: app code plus docs
+- Materiality signal: impact=capability-consent-ui, surface-files=1, docs-files=4, source-lines=narrow, css-only=False
+- Consent evidence: Settings now distinguishes local browser reminder permission from true-push readiness and explains default, granted, denied, and unsupported states without implying server push is live.
+- Disabled evidence: `Register push device` and `Send synthetic push` are visible but disabled and have no action handlers.
+- Token evidence: Settings says no Firebase Messaging call happens here, no push token is requested or stored, no device record is saved, and a future token record requires separate approval plus a remove-this-device path.
+- Payload evidence: the first future push remains synthetic only and cannot include task, note, Plan, Workout, People, AI, or private reminder content.
+- Build evidence: `npm.cmd run build` from `app-vNext` passed; TypeScript build and Vite production build completed successfully.
+- Boundary evidence: no Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, tracked generated output, deploy, provider call, push send, push token storage, push credential storage, Firebase Messaging setup, service-worker push handler, server push function, automatic reminder job, hidden write, hidden read, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, or external action was added.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-09 true push disabled server-test-send scaffold proof.
+
+## P4-09 True Push Disabled Server Test-Send Scaffold Proof - 2026-05-31
+
+- Task: True push disabled server test-send scaffold proof.
+- Result: Passed
+- Magic signal: synthetic-push-server-lane-boxed
+- Active work pack: P4 Supervised Capability Activation
+- Task class: proof
+- Task risk: medium
+- Changed files: docs only
+- Materiality signal: impact=capability-server-contract, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- Contract evidence: `docs/codex/EASYLIFE_P4_09_TRUE_PUSH_DISABLED_SERVER_TEST_SEND_SCAFFOLD_PROOF.md` defines the future disabled `sendSyntheticPushTest` contract, exact synthetic-only payload, auth/user-owned-token gates, kill switch, rate limits, disabled response shape, metadata-only logging, and rollback rules.
+- Payload evidence: first push remains only `EasyLife push test` / `Push is connected. Nothing else was scheduled.` with no task, note, Plan, Workout, People, AI, email/text, calendar sync, auth/session, secret, or user-entered content.
+- Source evidence: `functions/index.js` sweep found no current true-push send implementation, Firebase Messaging send API, Web Push send API, token registration, push subscription handling, synthetic push send handler, or automatic reminder job.
+- Build evidence: Not run; docs-only disabled server contract/proof task with no app code changes.
+- Boundary evidence: no app code, server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, tracked generated output, deploy, provider call, push send, push token storage, push credential storage, Firebase Messaging setup, service-worker push handler, server push function, automatic reminder job, hidden write, hidden read, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, or external action was added.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-10 one synthetic push test readiness proof.
+
+## P4-10 One Synthetic Push Test Readiness Proof - 2026-05-31
+
+- Task: One synthetic push test readiness proof.
+- Result: Passed
+- Magic signal: one-push-prompt-boxed
+- Active work pack: P4 Supervised Capability Activation
+- Task class: proof
+- Task risk: medium
+- Changed files: docs only
+- Materiality signal: impact=capability-test-readiness, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- Readiness evidence: `docs/codex/EASYLIFE_P4_10_ONE_SYNTHETIC_PUSH_TEST_READINESS_PROOF.md` states the current repo is not live-push ready without separate approval because Firebase Messaging registration, token storage, service-worker push handling, and server send function code are intentionally absent.
+- Prompt evidence: the future human-run prompt is limited to one Spencer-owned test device, one synthetic payload, one send attempt, immediate gate closure, token redaction, metadata-only logs, and result proof before any second attempt.
+- Payload evidence: the only approved future notification remains `EasyLife push test` / `Push is connected. Nothing else was scheduled.` targeting Today.
+- Source evidence: `functions/index.js`, `app-vNext/public/sw.js`, and `app-vNext/src` sweep found no current true-push implementation hooks.
+- Build evidence: Not run; docs-only readiness packet with no app code changes.
+- Boundary evidence: no app code, server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, tracked generated output, deploy, provider call, push send, push token request/storage, push credential storage, Firebase Messaging setup, service-worker push handler, server push function, automatic reminder job, hidden write, hidden read, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, or external action was added.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: P4-11 final P4 capability handoff and audit prompt.
+
+## P4-11 Final P4 Capability Handoff And Audit Prompt - 2026-05-31
+
+- Task: Final P4 capability handoff and audit prompt.
+- Result: Passed
+- Magic signal: p4-ready-but-not-live
+- Active work pack: P4 Supervised Capability Activation
+- Task class: handoff
+- Task risk: medium
+- Changed files: docs only
+- Materiality signal: impact=capability-handoff, surface-files=0, docs-files=4, source-lines=none, css-only=False
+- AI evidence: final handoff records that the Inbox AI/provider lane is limited to one future separately approved synthetic `assistantIntakeSuggestion` test; P4 did not run a provider call or deploy.
+- Push evidence: final handoff records that true push remains not live and the future lane is limited to one separately approved synthetic implementation/deploy/test; P4 did not request/store tokens, add service-worker push handling, add server send, deploy, or send push.
+- Audit evidence: `docs/codex/EASYLIFE_P4_FINAL_CAPABILITY_HANDOFF_AND_AUDIT_PROMPT.md` includes a P4 external audit prompt covering AI lane, push lane, Settings/Inbox copy, source boundaries, stop conditions, and recommended next lane.
+- Rollback evidence: current P4 state needs no deploy rollback; future one-test gates must close server kill switches, remove/disable test token records where applicable, and write result proof before any second attempt.
+- Build evidence: Not run; docs-only final handoff with no app code changes.
+- Boundary evidence: no app code, server/function code, Firebase rules/auth policy/billing/DNS/secrets/env, package/dependency, deploy config, tracked generated output, deploy, provider call, push send, push token request/storage, push credential storage, Firebase Messaging setup, service-worker push handler, server push function, automatic reminder job, hidden write, hidden read, calendar sync, geocoding/maps, email/text sending, contact sync, account deletion backend, or external action was added.
+- Checkpoint verdict: GREEN
+- Simon verdict: GREEN
+- Robin verdict: GREEN
+- Joey verdict: GREEN
+- Follow-up: Run the external P4 audit or separately approve exactly one synthetic provider test or one synthetic push test.

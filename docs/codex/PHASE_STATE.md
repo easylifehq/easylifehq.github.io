@@ -1,23 +1,28 @@
 # Phase State
 
-Current Phase: notes-capture-friction-interrupt
+Current Phase: p4-7-daily-usefulness-refinement
 Audience: Spencer as the signed-in EasyLife user managing tasks, notes, calendar, workouts, and daily planning
 Product Promise: EasyLife becomes one clean AI personal assistant, not a visible bundle of separate mini-apps.
-Primary Action: Make simple note capture and app resume feel direct before resuming push notifications or AI.
-Showable Moment: EasyLife opens as one assistant path with Today, Inbox, Plan, Notes, and More instead of a visible app suite.
-What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, external actions, or saved-object expansion.
+Primary Action: Present the completed local P4.7-04 truthful Today loading-state commit for EasyLife HQ review and a separate remote-backup decision.
+Showable Moment: Today distinguishes unresolved, partially available, unavailable, and ready data without hiding Capture or replacing valid loaded actions.
+What Not To Build: Do not deploy without a separate explicit request, do not send live push notifications yet, do not add automatic reminder jobs, do not use real private payloads by default, do not expose server secrets, do not commit secrets, do not expand old AI endpoints, do not add broad AI assistant behavior, and do not add hidden writes, email/text sending, calendar sync, real memory, geocoding, device location, contact sync, account deletion backend, external actions, or saved-object expansion.
 No More Features Lock: true
-Complexity Budget: Stage 34 may plan and implement only the narrow real push-notification gate: capability audit, client token contract, token storage contract, disabled server test-send scaffold, and proof. It must not send live push, deploy, add automatic reminder scheduling, or broaden notifications beyond one synthetic/manual test lane.
+Complexity Budget: P4.7 may implement exactly one small, reversible daily-usefulness repair per approved loop; no new route, service, dependency, migration, backend policy, or live capability.
 Before/After Judgment: Each assistant brain task must make EasyLife more useful without pretending to have real AI, real memory, external sync, or hidden automation.
 Human Taste Note: keep the useful theme mood, but the real goal is sleek, high-tech, calm, powerful, Apple/Linear/Notion-inspired, and much less visually crowded.
 Phase Model Policy: judgment-heavy
-Parking State: AI_ASSISTANT_READY_FOR_ONE_SYNTHETIC_PROVIDER_TEST_DEPLOY; PUSH_NOTIFICATIONS_STAGE_34_PACKET_READY; WORKOUT_AI_PARKED_UNTIL_LOGGER_RELIABLE
-Evidence Required: Stage 34 push proof must verify capability audit, client token contract, token storage contract, disabled server test-send scaffold, no live push, no frontend secrets, no raw private payload logging, no automatic reminders, build proof, functions lint, MAGIC_SCORECARD, CHECKPOINT_REVIEW, SIMON_DESIGN_REVIEW, and ROBIN_COPY_REVIEW.
-Done Signal: Stage 1-5 implementation tasks passed build and the five review routes render reliably with `?demo=1`.
-Next Phase Criteria: Stage 35 push test may begin only after Stage 34 proof ends `READY_FOR_STAGE_35_ONE_SYNTHETIC_PUSH_TEST_DEPLOY` and the user explicitly approves a deploy/test prompt.
+Parking State: P5_LIVE_AI_AND_TRUE_PUSH_PAUSED_BEHIND_EXPLICIT_APPROVAL; WORKOUT_AI_PARKED_UNTIL_LOGGER_RELIABLE
+Evidence Required: P4.7 requires clean preflight proof, baseline and final production builds, source-backed Today hierarchy, identity, loading, and error-state evidence, desktop/mobile responsive checks, Capture focus/return regression proof, the integrated local/demo sequence, and final git diff checks.
+Done Signal: P4.5, P4.6-01, and P4.7-01 through P4.7-03 are the accepted remote checkpoint at `81c7dd84`; P4.7-04 is complete locally after distinguishing unresolved, partial, unavailable, and ready Today states while preserving the ready-state action hierarchy.
+Verification Limits: This checkpoint is not human field validation or authenticated production proof. Authenticated Firestore writes and visibility restoration, real provider behavior, true push, a physical phone keyboard, and installed/PWA behavior remain unverified.
+Known Accessibility Weakness: P4.6-01 addresses the recorded drawer initial-focus weakness under autonomous browser and source verification. Physical-keyboard, screen-reader, physical-device, and installed/PWA validation remain outstanding.
+Next Gate: EasyLife HQ review of the local P4.7-04 commit and a separate remote-backup decision. P5 remains paused.
+Next Phase Criteria: P5 live AI or true push remains paused and may begin only after separate explicit EasyLife HQ approval for the exact capability, implementation, deploy, and test boundary.
 Repair Trigger: build failure, route review regression, auth preview regression, or visual polish expanding into new feature work.
 Repair Return Phase: stage-15-trustworthy-saved-assistant-loop
-Updated At: 2026-05-28 - Notes capture friction interrupt started from live phone use.
+Updated At: 2026-07-18 - P4.5, P4.6-01, and P4.7-01 through P4.7-03 are the accepted remote checkpoint at `81c7dd84`. P4.7-04 derives Today readiness from existing Calendar/Plan, Notes, and People state, prevents a calm fallback while daily data is unresolved, preserves valid actions during partial loading, and presents concise nontechnical partial-failure notices without changing subscriptions, persistence, selection, counts, routes, fixtures, or stored data. Desktop/mobile loaded and scenario checks, raw Capture focus/return, the continuous integrated local/demo route sequence, and the production build passed with no external/Firestore request or console error during the successful smoke sequence. This is autonomous local/demo browser and source-state evidence, not human physical-device, physical-keyboard, screen-reader, authenticated production, or installed/PWA proof. P5 live AI and true push remain paused behind explicit approval.
+
+Audit packet interrupt: the active source is `C:\Users\codex-agent\Downloads\EasyLife_Codex_Audit_Research_Packet_20260530.zip`. Treat demo readiness, route safety, naming consistency, capture trust, Settings/trust copy, and input reliability as the current priority. Do not touch Firebase/auth/rules/functions/billing/DNS/secrets/env files, and do not assume live AI, true push notifications, calendar sync, geocoding, email/text sending, or hidden writes.
 
 Notes capture interrupt: the user tried to write down today tasks and had to open the drawer, choose Notes, scroll past assistant/context machinery, and open a note. The fix path is write-first: New note, last note, and recent notes first; assistant/context tools hidden below; editor focuses the writing field; default startup falls back to last-used for new/default settings.
 

@@ -40,15 +40,16 @@ type EasyListContextValue = {
 const EasyListContext = createContext<EasyListContextValue | undefined>(undefined);
 
 export function EasyListProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [tasks, setTasks] = useState<TaskRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!user) {
+    if (!user || isDemoMode) {
       setTasks([]);
       setIsLoading(false);
+      setError("");
       return;
     }
 
@@ -67,20 +68,20 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
     );
 
     return unsubscribe;
-  }, [user]);
+  }, [isDemoMode, user]);
 
   async function addTaskFromDraft(draft: TaskDraft) {
-    if (!user) return null;
+    if (!user || isDemoMode) return null;
     return createTask(user.uid, draft);
   }
 
   async function saveTaskFromDraft(taskId: string, draft: TaskDraft) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await updateTask(user.uid, taskId, draft);
   }
 
   async function markCompleteForUser(taskId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     const task = tasks.find((entry) => entry.id === taskId);
     await completeTask(user.uid, taskId);
     if (task?.linkedCalendarBlockIds.length) {
@@ -89,7 +90,7 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
   }
 
   async function markActiveForUser(taskId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     const task = tasks.find((entry) => entry.id === taskId);
     await reopenTask(user.uid, taskId);
     if (task?.linkedCalendarBlockIds.length) {
@@ -98,17 +99,17 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
   }
 
   async function deleteTaskForUser(taskId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await softDeleteTask(user.uid, taskId);
   }
 
   async function restoreDeletedTaskForUser(taskId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await restoreTask(user.uid, taskId);
   }
 
   async function removeTaskPermanentlyForUser(taskId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await removeTask(user.uid, taskId);
   }
 

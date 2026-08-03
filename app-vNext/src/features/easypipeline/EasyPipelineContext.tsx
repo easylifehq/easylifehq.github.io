@@ -33,12 +33,6 @@ type EasyPipelineContextValue = {
 
 const EasyPipelineContext = createContext<EasyPipelineContextValue | undefined>(undefined);
 
-function isVisualQaMode() {
-  if (!import.meta.env.DEV) return false;
-  const params = new URLSearchParams(window.location.search);
-  return params.get("visualQa") === "1" || params.get("demo") === "1";
-}
-
 const visualQaApplications: ApplicationRecord[] = [
   {
     id: "visual-app-cedar",
@@ -107,14 +101,14 @@ const visualQaDrafts: GeneratedDraftRecord[] = [
 ];
 
 export function EasyPipelineProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [drafts, setDrafts] = useState<GeneratedDraftRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (isVisualQaMode()) {
+    if (isDemoMode) {
       setApplications(visualQaApplications);
       setDrafts(visualQaDrafts);
       setIsLoading(false);
@@ -158,25 +152,25 @@ export function EasyPipelineProvider({ children }: { children: ReactNode }) {
       unsubscribeApps();
       unsubscribeDrafts();
     };
-  }, [user]);
+  }, [isDemoMode, user]);
 
   async function addApplicationForUser(draft: ApplicationDraft) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await createApplication(user.uid, draft);
   }
 
   async function saveApplicationForUser(applicationId: string, draft: ApplicationDraft) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await updateApplication(user.uid, applicationId, draft);
   }
 
   async function deleteApplicationForUser(applicationId: string) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await removeApplication(user.uid, applicationId);
   }
 
   async function saveEmailDraftForUser(draft: Omit<GeneratedDraftRecord, "id" | "createdAt">) {
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await saveGeneratedDraft(user.uid, draft);
   }
 
@@ -191,7 +185,7 @@ export function EasyPipelineProvider({ children }: { children: ReactNode }) {
       deleteApplication: deleteApplicationForUser,
       saveEmailDraft: saveEmailDraftForUser,
     }),
-    [applications, drafts, isLoading, error]
+    [applications, drafts, isLoading, error, isDemoMode]
   );
 
   return <EasyPipelineContext.Provider value={value}>{children}</EasyPipelineContext.Provider>;
