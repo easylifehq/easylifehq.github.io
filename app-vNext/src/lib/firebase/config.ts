@@ -1,9 +1,28 @@
-export const firebaseConfig = {
-  apiKey: "AIzaSyC1Pewjy3NhWJyx4stlY2JeWFXBS5-UFi0",
-  authDomain: "pipeline-2f422.firebaseapp.com",
-  projectId: "pipeline-2f422",
-  storageBucket: "pipeline-2f422.firebasestorage.app",
-  messagingSenderId: "421485108309",
-  appId: "1:421485108309:web:c26a9b1f0d0d3b591c88dc",
-  measurementId: "G-NCXE499NX1",
+import type { FirebaseOptions } from "firebase/app";
+
+const configuredValues = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
+
+const requiredValues = [
+  configuredValues.apiKey,
+  configuredValues.authDomain,
+  configuredValues.projectId,
+  configuredValues.storageBucket,
+  configuredValues.messagingSenderId,
+  configuredValues.appId,
+];
+
+export const firebaseConfig: FirebaseOptions | null = requiredValues.every(
+  (value) => typeof value === "string" && value.trim().length > 0
+)
+  ? configuredValues
+  : null;
+
+export const firebaseConfigured = firebaseConfig !== null;

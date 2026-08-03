@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { Navigate } from "react-router-dom";
-import { auth } from "@/lib/firebase/client";
+import { auth, firebaseConfigured } from "@/lib/firebase/client";
 import { useAuth } from "../AuthContext";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { getLastAppRoute } from "@/lib/mobile/appRouteMemory";
@@ -37,6 +37,10 @@ export function LoginPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!firebaseConfigured) {
+      setMessage("Sign-in is unavailable in this review build. Production Firebase configuration requires a separate approved deployment gate.");
+      return;
+    }
     setIsSubmitting(true);
     setMessage("");
 
@@ -54,6 +58,10 @@ export function LoginPage() {
   }
 
   async function handleReset() {
+    if (!firebaseConfigured) {
+      setMessage("Password reset is unavailable in this review build.");
+      return;
+    }
     if (!email.trim()) {
       setMessage("Enter your email first, then try reset.");
       return;
@@ -125,9 +133,14 @@ export function LoginPage() {
             />
           </label>
 
+          {!firebaseConfigured ? (
+            <p className="auth-message" role="status">
+              Sign-in is disabled in this publication candidate. No production Firebase configuration is bundled.
+            </p>
+          ) : null}
           {message ? <p className="auth-message">{message}</p> : null}
 
-          <button type="submit" className="primary-button" disabled={isSubmitting}>
+          <button type="submit" className="primary-button" disabled={isSubmitting || !firebaseConfigured}>
             {isSubmitting
               ? mode === "login"
                 ? "Logging in..."
@@ -138,7 +151,7 @@ export function LoginPage() {
           </button>
         </form>
 
-        <button type="button" className="text-button" onClick={() => void handleReset()}>
+        <button type="button" className="text-button" disabled={!firebaseConfigured} onClick={() => void handleReset()}>
           Forgot password?
         </button>
       </section>
