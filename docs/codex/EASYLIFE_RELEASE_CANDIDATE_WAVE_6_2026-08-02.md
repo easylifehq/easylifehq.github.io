@@ -19,6 +19,7 @@ Deployment is not approved or attempted. A physical iPhone/Android installed-PWA
 | Baseline checkpoint | `b71f25995b65ff4a2d80f6221a448aa923a60753` |
 | Security/data-boundary fix | `3d61d304a9a13de7f4b00d733c5a1ae2cf619ba0` |
 | Verified implementation end | `75526139798b8febd6de54abf6773491143fc26f` |
+| Receipt/evidence commit | `32bfabd6d6491a8eb59f3e4f230e736c0283ceaf` |
 
 The root `index.html` working-tree line-ending mismatch was present at entry. Its raw content hash matched the tracked blob. It was never staged, overwritten, normalized, or committed.
 
@@ -111,9 +112,9 @@ The archive has 26 advisories (2 critical, 7 high, 15 moderate, 2 low), but it i
 - `b71f2599` — checkpoint the verified Wave 6 baseline
 - `3d61d304` — harden release authorization and data boundaries
 - `75526139` — strengthen offline and workout recovery safety
-- Documentation/evidence commit follows this implementation SHA.
+- `32bfabd6` — document the audit, matrix, runbook, security artifacts, route evidence, and screenshots
 
-CI/PR readiness: source gates are green locally. The branch is ready to push and open as a draft PR. Hosted status and PR URL are recorded in the final handoff after remote operations.
+CI/PR readiness: draft PR [#4](https://github.com/easylifehq/easylifehq.github.io/pull/4) is open. Hosted Actions run [30790790602](https://github.com/easylifehq/easylifehq.github.io/actions/runs/30790790602) passed: Functions syntax/critical-advisory gate in 19 seconds and web tests/production build in 40 seconds. The final branch-tip SHA is reported in the handoff because a commit cannot truthfully contain its own SHA.
 
 Deployment readiness: **not authorized and not yet mechanically safe**. The source candidate is ready for approved artifact-promotion work only after hosted checks, review, physical-phone testing, and explicit deployment permission. Do not deploy `old-site/`; do not redeploy provider Functions until custom claims and the intended production enablement are confirmed.
 
@@ -123,9 +124,8 @@ Deployment readiness: **not authorized and not yet mechanically safe**. The sour
 git switch codex/easylife-release-candidate-wave-6-20260802
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-release.ps1
 git status --short
-git push -u origin codex/easylife-release-candidate-wave-6-20260802
-gh pr create --draft --base main --head codex/easylife-release-candidate-wave-6-20260802 --title "EasyLife release candidate Wave 6" --body-file docs/codex/EASYLIFE_RELEASE_CANDIDATE_WAVE_6_2026-08-02.md
-gh pr checks --watch
+gh pr view 4 --web
+gh pr checks 4
 ```
 
 After review, follow [EASYLIFE_DEPLOYMENT_RUNBOOK_2026-08-02.md](EASYLIFE_DEPLOYMENT_RUNBOOK_2026-08-02.md). No merge or deployment command is intentionally included before its explicit approval gates.

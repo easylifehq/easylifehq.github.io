@@ -14,6 +14,8 @@
 - Supplementary narrow-phone matrix: 10/10
 - Full browser trace: 425 events, 0 failed loads, 0 HTTP errors, 0 production Firebase/Functions requests, 0 console warnings/errors
 - Security review: complete inventory of 746 tracked files; seven validated findings fixed
+- Draft PR: `https://github.com/easylifehq/easylifehq.github.io/pull/4`
+- Hosted Actions run `30790790602`: Functions/advisory and web tests/build passed
 - Production data, deployment, DNS, billing, and secrets: not accessed or changed
 
 The generated route details are in `ROUTE_MATRIX.json`; canonical security artifacts are in `security/`; inspected screenshots are in `screenshots/`.
