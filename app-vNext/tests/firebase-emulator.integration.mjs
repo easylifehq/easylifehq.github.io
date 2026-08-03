@@ -106,6 +106,20 @@ test("draft handoff remains local while Firestore rules enforce owner-only sessi
   await assertFails(setDoc(doc(anonymousDb, ownerPath("workoutSessions", "anonymous")), { performedOn: "2026-08-01" }));
 });
 
+test("workout session rules accept legacy shapes but reject corrupt, oversized, and mutable identities", async () => {
+  const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
+  const legacyRef = doc(ownerDb, ownerPath("workoutSessions", "legacy-session"));
+  await assertSucceeds(setDoc(legacyRef, { routineName: "Legacy", performedOn: "2026-08-01", exercises: [] }));
+
+  const modernRef = doc(ownerDb, ownerPath("workoutSessions", "modern-session"));
+  await assertSucceeds(setDoc(modernRef, { clientDraftId: "draft-safe-123", schemaVersion: 3, routineId: null, routineName: "Upper", performedOn: "2026-08-01", weightUnit: "lb", durationMinutes: 45, notes: "bounded", exercises: [], createdAt: new Date("2026-08-02T12:00:00Z"), updatedAt: new Date("2026-08-02T12:00:00Z") }));
+  await assertFails(updateDoc(modernRef, { clientDraftId: "draft-other-456", updatedAt: new Date("2026-08-02T13:00:00Z") }));
+  await assertFails(updateDoc(modernRef, { createdAt: new Date("2026-08-03T12:00:00Z") }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("workoutSessions", "bad-date")), { routineName: "Upper", performedOn: "not-a-date", exercises: [] }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("workoutSessions", "bad-duration")), { routineName: "Upper", performedOn: "2026-08-01", durationMinutes: 1441, exercises: [] }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("workoutSessions", "bad-extra-field")), { routineName: "Upper", performedOn: "2026-08-01", exercises: [], accessToken: "must-not-be-stored" }));
+});
+
 test("authenticated owner records drive Wave 3 search, focused review, and safe whole-account export", async () => {
   const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
   await Promise.all([
@@ -167,7 +181,7 @@ test("workout goals enforce versioned ownership, lifecycle validation, and recov
 test("all product-wave collections deny cross-owner and top-level access", async () => {
   const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
   const otherDb = rulesEnvironment.authenticatedContext(otherId).firestore();
-  const collectionNames = ["tasks", "calendarEvents", "calendarTaskBlocks", "categories", "projects", "projectSections", "projectTaskLinks", "applications", "generatedDrafts", "notes", "noteFolders", "contacts", "workoutExercises", "workoutRoutines", "workoutSessions"];
+  const collectionNames = ["tasks", "calendarEvents", "calendarTaskBlocks", "categories", "projects", "projectSections", "projectTaskLinks", "applications", "generatedDrafts", "notes", "noteFolders", "contacts", "workoutExercises", "workoutRoutines"];
   for (const collectionName of collectionNames) {
     await assertSucceeds(setDoc(doc(ownerDb, ownerPath(collectionName, "boundary")), { marker: collectionName }));
     await assertFails(getDoc(doc(otherDb, ownerPath(collectionName, "boundary"))));
@@ -176,4 +190,6 @@ test("all product-wave collections deny cross-owner and top-level access", async
   await assertSucceeds(setDoc(doc(ownerDb, "users", ownerId, "appPreferences", "shell"), { themeMode: "classic" }));
   await assertFails(getDoc(doc(otherDb, "users", ownerId, "appPreferences", "shell")));
   await assertFails(setDoc(doc(ownerDb, "public", "escape"), { marker: "outside-user-tree" }));
+  await assertFails(setDoc(doc(ownerDb, "users", ownerId, "unknownCollection", "escape"), { marker: "unsupported" }));
+  await assertFails(setDoc(doc(ownerDb, "users", ownerId, "tasks", "task", "nested", "escape"), { marker: "nested" }));
 });

@@ -40,7 +40,11 @@ export function createWorkoutExportPayload(input: {
   };
 }
 
-const csvCell = (value: unknown) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+const csvCell = (value: unknown) => {
+  const serialized = String(value ?? "");
+  const safe = typeof value === "string" && /^\s*[=+\-@]/.test(serialized) ? `'${serialized}` : serialized;
+  return `"${safe.replace(/"/g, '""')}"`;
+};
 
 export function serializeWorkoutCsv(payload: ReturnType<typeof createWorkoutExportPayload>) {
   const header = ["exportVersion", "formulaVersion", "sessionId", "clientDraftId", "performedOn", "createdAt", "updatedAt", "routineId", "routineName", "durationMinutes", "storedWeightUnit", "exerciseId", "exerciseName", "exerciseType", "muscleGroup", "setNumber", "setType", "completed", "deleted", "reps", "weight", "durationSeconds", "distanceMeters", "rir", "setNotes", "sessionNotes"];

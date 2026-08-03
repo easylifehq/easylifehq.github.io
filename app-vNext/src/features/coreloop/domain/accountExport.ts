@@ -45,7 +45,7 @@ export const accountExportGroups: Array<{ key: keyof AccountDataCollections; lab
   { key: "contacts", label: "Contacts", app: "People", csv: true },
 ];
 
-const forbiddenKeys = /^(uid|ownerId|clientDraftId|apiKey|authDomain|storageBucket|messagingSenderId|appId|measurementId|password|passwordHash|accessToken|refreshToken|credential|secret)$/i;
+const forbiddenKeys = /^(uid|ownerId|clientDraftId|apiKey|authDomain|storageBucket|messagingSenderId|appId|measurementId|password|passwordHash|accessToken|refreshToken|idToken|token|authorization|bearerToken|clientSecret|credential|secret|session|sessionId|cookie|privateKey|serviceAccount)$/i;
 
 function cleanForExport(value: unknown): unknown {
   if (value instanceof Date) return value.toISOString();

@@ -139,6 +139,12 @@ export function EasyProjectsHomePage() {
     setIsPlanning(true);
     setPlannerMessage("");
 
+    if (isDemoMode) {
+      setPlannerMessage("Demo mode keeps project drafts synthetic. No production function or Firebase write ran.");
+      setIsPlanning(false);
+      return;
+    }
+
     if (!settings.assistant.enabled || !settings.assistant.allowDraftCreation) {
       setPlannerMessage("Turn on Assistant and draft creation in Settings before using the gated project draft planner.");
       setIsPlanning(false);
