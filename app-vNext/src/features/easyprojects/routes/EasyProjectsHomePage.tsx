@@ -1,6 +1,12 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
+import { useAuth } from "@/features/auth/AuthContext";
+import {
+  findExistingProjectHandoff,
+  getProjectHandoffChoices,
+  resolveReviewTaskHandoff,
+} from "@/features/coreloop/domain/reviewHandoffs";
 import { useEasyProjects } from "@/features/easyprojects/EasyProjectsContext";
 import { requestProjectPlan, type AiProjectPlan } from "@/features/easyprojects/lib/projectAiPlanner";
 import { getPriorityMeta } from "@/features/easylist/lib/taskUtils";
@@ -18,9 +24,12 @@ export function EasyProjectsHomePage() {
     deleteProject,
     addSection,
     addProjectTask,
+    connectExistingTask,
     error,
     isLoading,
   } = useEasyProjects();
+  const { isDemoMode } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { settings, isExperimentalFeatureEnabled } = useSettings();
   const isProjectPlannerEnabled =
     settings.assistant.enabled &&
@@ -41,6 +50,87 @@ export function EasyProjectsHomePage() {
   const [plannerMessage, setPlannerMessage] = useState("");
   const [isPlanning, setIsPlanning] = useState(false);
   const [isCreatingPlan, setIsCreatingPlan] = useState(false);
+  const [handoffProjectId, setHandoffProjectId] = useState("");
+  const [handoffSectionId, setHandoffSectionId] = useState("");
+  const [handoffMessage, setHandoffMessage] = useState("");
+  const [isConnectingTask, setIsConnectingTask] = useState(false);
+  const requestedConnectTaskId = searchParams.get("connectTask");
+  const taskHandoff = resolveReviewTaskHandoff(requestedConnectTaskId, tasks, isLoading);
+  const projectHandoffChoices = useMemo(
+    () => getProjectHandoffChoices(projects, sections),
+    [projects, sections],
+  );
+  const existingHandoff = taskHandoff.task
+    ? findExistingProjectHandoff(taskHandoff.task.id, links)
+    : null;
+  const selectedHandoffProject = projectHandoffChoices.find(
+    (choice) => choice.project.id === handoffProjectId,
+  ) || null;
+
+  useEffect(() => {
+    if (taskHandoff.state !== "ready" || existingHandoff || handoffProjectId) return;
+    const preferred = projectHandoffChoices.find((choice) => choice.sections.length) || projectHandoffChoices[0];
+    if (preferred) setHandoffProjectId(preferred.project.id);
+  }, [existingHandoff, handoffProjectId, projectHandoffChoices, taskHandoff.state]);
+
+  useEffect(() => {
+    if (!selectedHandoffProject?.sections.length) {
+      setHandoffSectionId("");
+      return;
+    }
+    if (!selectedHandoffProject.sections.some((section) => section.id === handoffSectionId)) {
+      setHandoffSectionId(selectedHandoffProject.sections[0].id);
+    }
+  }, [handoffSectionId, selectedHandoffProject]);
+
+  function closeTaskHandoff() {
+    const next = new URLSearchParams(searchParams);
+    next.delete("connectTask");
+    setSearchParams(next, { replace: true });
+    setHandoffProjectId("");
+    setHandoffSectionId("");
+  }
+
+  async function handleConnectExistingTask(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (taskHandoff.state !== "ready" || !selectedHandoffProject) return;
+    const section = selectedHandoffProject.sections.find((candidate) => candidate.id === handoffSectionId);
+    if (!section) {
+      setHandoffMessage("Choose a project section before connecting this task.");
+      return;
+    }
+
+    setIsConnectingTask(true);
+    setHandoffMessage("");
+    try {
+      if (isDemoMode) {
+        setHandoffMessage(`Demo preview: “${taskHandoff.task.title}” would connect to ${selectedHandoffProject.project.title} / ${section.title}. No Firebase write ran.`);
+        closeTaskHandoff();
+        return;
+      }
+
+      const nextOrder = links
+        .filter((link) => link.sectionId === section.id)
+        .reduce((highest, link) => Math.max(highest, link.order), 0) + 1;
+      const linkId = await connectExistingTask({
+        projectId: selectedHandoffProject.project.id,
+        sectionId: section.id,
+        taskId: taskHandoff.task.id,
+        order: nextOrder,
+        parentLabel: section.title,
+      });
+      setHandoffMessage(
+        linkId
+          ? `Connected “${taskHandoff.task.title}” to ${selectedHandoffProject.project.title}.`
+          : "Could not connect that task yet.",
+      );
+      if (linkId) closeTaskHandoff();
+    } catch (nextError) {
+      setHandoffMessage(nextError instanceof Error ? nextError.message : "Could not connect that task yet.");
+    } finally {
+      setIsConnectingTask(false);
+    }
+  }
 
   async function handlePlanProject(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -192,6 +282,76 @@ export function EasyProjectsHomePage() {
   return (
     <>
       {error ? <p className="error-copy">{error}</p> : null}
+      {handoffMessage ? <div className="calendar-info-card" role="status">{handoffMessage}</div> : null}
+
+      {requestedConnectTaskId ? (
+        <PageSection
+          eyebrow="Review handoff"
+          title={taskHandoff.task ? `Connect “${taskHandoff.task.title}”` : "Connect task to a project"}
+          description="Choose the project and section that own this next action. Nothing moves until you confirm."
+        >
+          {taskHandoff.state === "loading" ? <p className="helper-copy" role="status">Loading the review task and projects...</p> : null}
+          {taskHandoff.state === "missing" ? (
+            <div className="empty-card-vnext">
+              <strong>That review task is no longer available.</strong>
+              <p>It may have been removed in another tab. Return to Review for the current queue.</p>
+              <button type="button" className="button-secondary compact-button" onClick={closeTaskHandoff}>Close handoff</button>
+            </div>
+          ) : null}
+          {taskHandoff.state === "completed" ? (
+            <div className="empty-card-vnext">
+              <strong>This task is already complete.</strong>
+              <p>Completed work is not connected as a new project action.</p>
+              <button type="button" className="button-secondary compact-button" onClick={closeTaskHandoff}>Close handoff</button>
+            </div>
+          ) : null}
+          {taskHandoff.state === "ready" && existingHandoff ? (
+            <div className="calendar-info-card">
+              <strong>Already connected.</strong>
+              <p>This task already belongs to a project, so EasyLife will not create a duplicate link.</p>
+              <div className="task-composer-actions">
+                <Link className="primary-button compact-button" to={`/app/easyprojects/${existingHandoff.projectId}${isDemoMode ? "?demo=1" : ""}`}>Open project</Link>
+                <button type="button" className="ghost-button compact-button" onClick={closeTaskHandoff}>Close</button>
+              </div>
+            </div>
+          ) : null}
+          {taskHandoff.state === "ready" && !existingHandoff ? (
+            <form className="review-project-handoff" onSubmit={(event) => void handleConnectExistingTask(event)}>
+              {projectHandoffChoices.length ? (
+                <div className="task-composer-grid">
+                  <label className="field-stack">
+                    <span>Project</span>
+                    <select value={handoffProjectId} onChange={(event) => setHandoffProjectId(event.target.value)}>
+                      {projectHandoffChoices.map((choice) => (
+                        <option key={choice.project.id} value={choice.project.id}>{choice.project.title}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="field-stack">
+                    <span>Section</span>
+                    <select value={handoffSectionId} onChange={(event) => setHandoffSectionId(event.target.value)} disabled={!selectedHandoffProject?.sections.length}>
+                      {selectedHandoffProject?.sections.length
+                        ? selectedHandoffProject.sections.map((section) => <option key={section.id} value={section.id}>{section.title}</option>)
+                        : <option value="">Add a section in this project first</option>}
+                    </select>
+                  </label>
+                </div>
+              ) : (
+                <div className="empty-card-vnext">
+                  <strong>No active project is ready yet.</strong>
+                  <p>Create a project below, add a section, then return to Review to connect this task.</p>
+                </div>
+              )}
+              <div className="task-composer-actions">
+                <button type="button" className="ghost-button" onClick={closeTaskHandoff}>Cancel</button>
+                <button type="submit" className="primary-button" disabled={isConnectingTask || !handoffSectionId}>
+                  {isConnectingTask ? "Connecting..." : "Connect task"}
+                </button>
+              </div>
+            </form>
+          ) : null}
+        </PageSection>
+      ) : null}
 
       <div className="dashboard-grid">
         <PageSection

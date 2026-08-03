@@ -64,6 +64,7 @@ type EasyProjectsContextValue = {
   saveSection: (sectionId: string, draft: ProjectSectionDraft) => Promise<void>;
   deleteSection: (sectionId: string) => Promise<void>;
   addProjectTask: (payload: { task: TaskDraft; link: Omit<ProjectTaskLinkDraft, "taskId"> }) => Promise<void>;
+  connectExistingTask: (draft: ProjectTaskLinkDraft) => Promise<string | null>;
   saveProjectTaskLink: (linkId: string, draft: ProjectTaskLinkDraft) => Promise<void>;
   deleteProjectTaskLink: (linkId: string) => Promise<void>;
   completeProjectTask: (taskId: string) => Promise<void>;
@@ -176,6 +177,48 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
           linkedCalendarBlockIds: [],
           createdAt: new Date("2026-04-12T09:25:00"),
           updatedAt: new Date("2026-04-12T09:25:00"),
+        },
+        {
+          id: "preview-task-2",
+          itemKind: "task",
+          title: "Reply to Maya about Friday plans",
+          notes: "Waiting on a simple yes/no before the day gets noisy.",
+          listName: "Follow-ups",
+          category: "Personal",
+          estimatedLength: 8,
+          priorityTier: 3,
+          priorityLabel: "Soon",
+          dueDate: new Date("2026-08-01T12:00:00"),
+          linkedCalendarEventId: null,
+          linkedNoteId: null,
+          recurring: false,
+          completed: false,
+          completedAt: null,
+          deletedAt: null,
+          linkedCalendarBlockIds: [],
+          createdAt: new Date("2026-07-31T09:00:00"),
+          updatedAt: new Date("2026-08-01T09:00:00"),
+        },
+        {
+          id: "preview-task-3",
+          itemKind: "task",
+          title: "Collect three notes for the assistant revamp",
+          notes: "Pull the useful bits from scattered thoughts into one note.",
+          listName: "Projects",
+          category: "EasyLife",
+          estimatedLength: 20,
+          priorityTier: 4,
+          priorityLabel: "Focus",
+          dueDate: new Date("2026-08-02T12:00:00"),
+          linkedCalendarEventId: null,
+          linkedNoteId: null,
+          recurring: false,
+          completed: false,
+          completedAt: null,
+          deletedAt: null,
+          linkedCalendarBlockIds: [],
+          createdAt: new Date("2026-07-31T09:30:00"),
+          updatedAt: new Date("2026-08-01T09:30:00"),
         },
       ]);
       setProjectsLoading(false);
@@ -311,6 +354,12 @@ export function EasyProjectsProvider({ children }: { children: ReactNode }) {
           ...payload.link,
           taskId,
         });
+      },
+      connectExistingTask: async (draft: ProjectTaskLinkDraft) => {
+        if (!user || isDemoMode) return null;
+        const existing = links.find((link) => link.taskId === draft.taskId);
+        if (existing) return existing.id;
+        return createProjectTaskLink(user.uid, draft);
       },
       saveProjectTaskLink: async (linkId: string, draft: ProjectTaskLinkDraft) => {
         if (!user || isDemoMode) return;
