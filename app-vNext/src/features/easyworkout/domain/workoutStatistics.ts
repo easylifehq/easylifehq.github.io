@@ -1,6 +1,7 @@
 export const WORKOUT_STATISTICS_FORMULA_VERSION = "easyworkout-stats-v1";
 export const E1RM_FORMULA_VERSION = "epley-v1";
 export const SECONDARY_MUSCLE_EXPOSURE_COEFFICIENT = 0.5;
+export const ROUTINE_COMPARISON_FORMULA_VERSION = "easyworkout-routine-comparison-v1";
 
 export type WorkoutDisplayUnit = "lb" | "kg";
 export type WorkoutExerciseType = "weighted" | "bodyweight" | "assisted" | "duration" | "distance";
@@ -29,10 +30,23 @@ export type AnalyticsExercise = {
 };
 export type AnalyticsSession = {
   id: string;
+  routineId?: string | null;
+  routineName?: string;
   performedOn: string;
   weightUnit?: WorkoutDisplayUnit;
   durationMinutes?: number | null;
   exercises?: AnalyticsExercise[];
+};
+export type RoutineComparisonMetric = { current: number | null; previous: number | null; percentDelta: number | null; currentSamples: number; previousSamples: number };
+export type RoutineComparison = {
+  routineId: string;
+  routineName: string;
+  currentSessionCount: number;
+  previousSessionCount: number;
+  completedWorkingSets: RoutineComparisonMetric;
+  normalizedVolume: RoutineComparisonMetric;
+  averageDurationMinutes: RoutineComparisonMetric;
+  prCount: RoutineComparisonMetric;
 };
 export type ExerciseObservation = {
   sessionId: string;
@@ -114,6 +128,56 @@ export function convertWeight(value: number, from: WorkoutDisplayUnit, to: Worko
   if (!finite(value)) return 0;
   if (from === to) return value;
   return from === "lb" ? value / 2.2046226218 : value * 2.2046226218;
+}
+
+export function deriveRoutineComparisons(sessionsInput: AnalyticsSession[], options: { nowDateKey: string; periodDays: number; displayUnit: WorkoutDisplayUnit; routineId?: string }): RoutineComparison[] {
+  const days = Math.max(1, Math.floor(options.periodDays));
+  const currentStart = shiftDateKey(options.nowDateKey, -(days - 1));
+  const previousEnd = shiftDateKey(currentStart, -1);
+  const previousStart = shiftDateKey(previousEnd, -(days - 1));
+  const sessions = sessionsInput.filter((session) => isValidLocalDateKey(session.performedOn) && session.performedOn <= options.nowDateKey);
+  const prSessionIds = new Set<string>();
+  const bestE1rm = new Map<string, number>();
+  [...sessions].sort((a, b) => a.performedOn.localeCompare(b.performedOn) || a.id.localeCompare(b.id)).forEach((session) => {
+    let newRecord = false;
+    (session.exercises || []).forEach((exercise) => {
+      if (getExerciseType(exercise) !== "weighted") return;
+      const key = exerciseKey(exercise);
+      validSets(exercise).forEach((set) => {
+        const estimate = estimateOneRepMax(set.weight || 0, set.reps || 0);
+        if (!estimate) return;
+        const value = convertWeight(estimate.value, session.weightUnit || "lb", options.displayUnit);
+        if (value > (bestE1rm.get(key) || 0)) { bestE1rm.set(key, value); newRecord = true; }
+      });
+    });
+    if (newRecord) prSessionIds.add(session.id);
+  });
+  const groups = new Map<string, { name: string; sessions: AnalyticsSession[] }>();
+  sessions.forEach((session) => {
+    const id = session.routineId || "unassigned";
+    if (options.routineId && options.routineId !== "all" && id !== options.routineId) return;
+    const current = groups.get(id) || { name: session.routineName || "Unassigned workouts", sessions: [] };
+    current.sessions.push(session); groups.set(id, current);
+  });
+  const percent = (current: number | null, previous: number | null, currentSamples: number, previousSamples: number) => previous !== null && previous > 0 && current !== null && currentSamples > 0 && previousSamples > 0 ? ((current - previous) / previous) * 100 : null;
+  return [...groups.entries()].map(([routineId, group]) => {
+    const summarize = (start: string, end: string) => {
+      const windowSessions = group.sessions.filter((session) => session.performedOn >= start && session.performedOn <= end);
+      let sets = 0, volume = 0;
+      const durations: number[] = [];
+      windowSessions.forEach((session) => {
+        if (typeof session.durationMinutes === "number" && Number.isFinite(session.durationMinutes) && session.durationMinutes >= 0) durations.push(session.durationMinutes);
+        (session.exercises || []).forEach((exercise) => {
+          const valid = validSets(exercise); sets += valid.length;
+          volume += convertWeight(valid.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise)), 0), session.weightUnit || "lb", options.displayUnit);
+        });
+      });
+      return { sessions: windowSessions.length, sets, volume, duration: durations.length ? durations.reduce((sum, value) => sum + value, 0) / durations.length : null, durationSamples: durations.length, prs: windowSessions.filter((session) => prSessionIds.has(session.id)).length };
+    };
+    const current = summarize(currentStart, options.nowDateKey), previous = summarize(previousStart, previousEnd);
+    const make = (a: number | null, b: number | null, aSamples: number, bSamples: number): RoutineComparisonMetric => ({ current: a, previous: b, percentDelta: percent(a, b, aSamples, bSamples), currentSamples: aSamples, previousSamples: bSamples });
+    return { routineId, routineName: group.name, currentSessionCount: current.sessions, previousSessionCount: previous.sessions, completedWorkingSets: make(current.sets, previous.sets, current.sessions, previous.sessions), normalizedVolume: make(current.volume, previous.volume, current.sessions, previous.sessions), averageDurationMinutes: make(current.duration, previous.duration, current.durationSamples, previous.durationSamples), prCount: make(current.prs, previous.prs, current.sessions, previous.sessions) };
+  }).sort((a, b) => b.currentSessionCount - a.currentSessionCount || a.routineName.localeCompare(b.routineName));
 }
 
 function dateKey(date: Date) {

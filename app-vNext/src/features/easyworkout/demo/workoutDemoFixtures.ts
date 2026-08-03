@@ -134,7 +134,7 @@ function demoSession(week: number, dayInWeek: number, lane: "upper" | "lower" | 
     id: `demo-session-w${week}-${lane}`,
     clientDraftId: `demo-draft-w${week}-${lane}`,
     schemaVersion: 2,
-    routineId: lane === "lower" ? "demo-routine-lower" : "demo-routine-upper",
+    routineId: lane === "lower" ? "demo-routine-lower" : lane === "upper" ? "demo-routine-upper" : null,
     routineName: lane === "lower" ? "Lower — hinge and squat" : lane === "upper" ? "Upper — steady progress" : "Pull and accessories",
     performedOn,
     durationMinutes: 48 + ((week + dayInWeek) % 4) * 6,

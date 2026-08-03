@@ -2,7 +2,7 @@ import test, { after, before, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { initializeTestEnvironment, assertFails, assertSucceeds } from "@firebase/rules-unit-testing";
-import { collection, doc, getDoc, getDocs, setDoc, setLogLevel, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, setLogLevel, updateDoc } from "firebase/firestore";
 import { deriveWeeklyReview } from "../src/features/easystatistics/domain/weeklyReview.ts";
 import { deriveGuidedWorkoutPlan, getGuidedWorkoutAction } from "../src/features/easyworkout/domain/guidedWorkoutPlan.ts";
 import { createWorkoutExportPayload, filterWorkoutHistory, getWorkoutPrSessionIds, serializeWorkoutCsv } from "../src/features/easyworkout/domain/workoutHistoryTools.ts";
@@ -137,9 +137,31 @@ test("authenticated owner records drive Wave 3 search, focused review, and safe 
 
   const payload = buildAccountExport({ collections: { ...emptyAccountDataCollections, tasks, notes, projects, pipelineApplications: applications, contacts, workoutSessions: workouts }, settings: { easyWorkout: { weightUnit: "lb" }, apiKey: "blocked" }, exportedAt: "2026-08-02T00:00:00.000Z", timeZone: "America/Denver", weightUnit: "lb", appVersion: "test" });
   const serialized = serializeAccountExport(payload);
-  assert.match(serialized, /easylife-account-export-v1/);
+  assert.match(serialized, /easylife-account-export-v2/);
   assert.doesNotMatch(serialized, /blocked/);
   await assertFails(getDocs(collection(rulesEnvironment.authenticatedContext(otherId).firestore(), "users", ownerId, "notes")));
+});
+
+test("workout goals enforce versioned ownership, lifecycle validation, and recoverable archive behavior", async () => {
+  const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
+  const otherDb = rulesEnvironment.authenticatedContext(otherId).firestore();
+  const weeklyRef = doc(ownerDb, ownerPath("workoutGoals", "weekly-completed-workouts"));
+  const createdAt = new Date("2026-08-02T12:00:00Z");
+  const goal = { ownerId, schemaVersion: "easyworkout-goal-v1", formulaVersion: "completed-workout-week-v1", goalType: "weekly-workouts", status: "active", target: 3, sourceUnit: "count", exerciseId: null, exerciseName: "", createdAt, updatedAt: createdAt, archivedAt: null };
+  await assertSucceeds(setDoc(weeklyRef, goal));
+  await assertSucceeds(setDoc(weeklyRef, goal));
+  await assertFails(getDoc(doc(otherDb, ownerPath("workoutGoals", "weekly-completed-workouts"))));
+  await assertFails(setDoc(doc(otherDb, `users/${otherId}/workoutGoals/stolen`), { ...goal, ownerId }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("workoutGoals", "bad-schema")), { ...goal, schemaVersion: "unknown" }));
+  await assertFails(updateDoc(weeklyRef, { target: 2.5, updatedAt: new Date("2026-08-02T13:00:00Z") }));
+  await assertSucceeds(updateDoc(weeklyRef, { status: "paused", updatedAt: new Date("2026-08-02T13:00:00Z") }));
+  await assertSucceeds(updateDoc(weeklyRef, { status: "archived", archivedAt: new Date("2026-08-02T14:00:00Z"), updatedAt: new Date("2026-08-02T14:00:00Z") }));
+  await assertFails(deleteDoc(weeklyRef));
+  await assertSucceeds(updateDoc(weeklyRef, { status: "active", archivedAt: null, updatedAt: new Date("2026-08-02T15:00:00Z") }));
+
+  const e1rmRef = doc(ownerDb, ownerPath("workoutGoals", "exercise-e1rm-bench"));
+  await assertSucceeds(setDoc(e1rmRef, { ...goal, formulaVersion: "epley-v1", goalType: "exercise-e1rm", target: 100, sourceUnit: "kg", exerciseId: "bench", exerciseName: "Bench Press" }));
+  await assertFails(updateDoc(e1rmRef, { formulaVersion: "unreviewed-formula", updatedAt: new Date("2026-08-02T16:00:00Z") }));
 });
 
 test("all product-wave collections deny cross-owner and top-level access", async () => {

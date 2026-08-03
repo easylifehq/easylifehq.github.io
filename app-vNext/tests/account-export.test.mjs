@@ -13,10 +13,11 @@ test("whole-account export is versioned, deterministic, manifested, and secret-f
   const second = serializeAccountExport(buildAccountExport(input));
   assert.equal(first, second);
   const parsed = JSON.parse(first);
-  assert.equal(parsed.schemaVersion, "easylife-account-export-v1");
+  assert.equal(parsed.schemaVersion, "easylife-account-export-v2");
+  assert.deepEqual(parsed.manifest.compatibleWith, ["easylife-account-export-v1"]);
   assert.equal(parsed.metadata.timeZone, "America/Denver");
   assert.equal(parsed.metadata.weightUnit, "lb");
-  assert.equal(parsed.manifest.included.length, 15);
+  assert.equal(parsed.manifest.included.length, 16);
   assert.deepEqual(parsed.collections.tasks.map((entry) => entry.id), ["a", "b"]);
   assert.equal(parsed.collections.tasks[1].projectId, "relationship-project");
   assert.ok(!first.includes("hidden") && !first.includes("nope") && !first.includes("storageBucket"));
