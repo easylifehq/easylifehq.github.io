@@ -1,0 +1,53 @@
+name: Publication candidate dry run
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "app-vNext/**"
+      - "scripts/prepare-pages-publication.mjs"
+      - "scripts/tests/prepare-pages-publication.test.mjs"
+      - "scripts/verify-release.ps1"
+      - ".github/workflows/publication-candidate.yml"
+      - ".github/workflows/release-candidate.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  candidate:
+    name: Complete verification and staged Pages artifact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            app-vNext/package-lock.json
+            functions/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Install application dependencies
+        run: npm ci --prefix app-vNext
+      - name: Install Functions dependencies
+        run: npm ci --prefix functions
+      - name: Run complete deterministic release verification
+        shell: pwsh
+        run: ./scripts/verify-release.ps1
+      - name: Create isolated publication candidate and root plan
+        run: node scripts/prepare-pages-publication.mjs --stage "$RUNNER_TEMP/easylife-pages-candidate" --plan "$RUNNER_TEMP/easylife-pages-root-plan.json"
+      - name: Verify manifest and SHA-256 inventory
+        run: node scripts/prepare-pages-publication.mjs --verify-stage "$RUNNER_TEMP/easylife-pages-candidate"
+      - name: Upload review-only publication artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: easylife-pages-dry-run-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/easylife-pages-candidate
+            ${{ runner.temp }}/easylife-pages-root-plan.json
+          if-no-files-found: error
+          retention-days: 14

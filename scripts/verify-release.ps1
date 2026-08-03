@@ -3,6 +3,7 @@ param()
 
 $ErrorActionPreference = "Stop"
 $repositoryRoot = Split-Path -Parent $PSScriptRoot
+$npmExecutable = if ([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT) { "npm.cmd" } else { "npm" }
 
 function Invoke-ReleaseGate {
   param(
@@ -22,20 +23,43 @@ function Invoke-ReleaseGate {
 
 Push-Location (Join-Path $repositoryRoot "app-vNext")
 try {
-  Invoke-ReleaseGate "Application tests" { npm.cmd test }
-  Invoke-ReleaseGate "Firestore Emulator integration" { npm.cmd run test:emulator }
-  Invoke-ReleaseGate "TypeScript" { npm.cmd run typecheck }
-  Invoke-ReleaseGate "Production build" { npm.cmd run build }
-  Invoke-ReleaseGate "Web production critical advisory gate" { npm.cmd audit --omit=dev --audit-level=critical }
+  Invoke-ReleaseGate "Application tests" { & $npmExecutable test }
+  Invoke-ReleaseGate "Firestore Emulator integration" { & $npmExecutable run test:emulator }
+  Invoke-ReleaseGate "TypeScript" { & $npmExecutable run typecheck }
+  Invoke-ReleaseGate "Production build" { & $npmExecutable run build }
+  Invoke-ReleaseGate "Web production critical advisory gate" { & $npmExecutable audit --omit=dev --audit-level=critical }
 }
 finally {
   Pop-Location
 }
 
+Invoke-ReleaseGate "Publication tool tests" {
+  node --test (Join-Path $repositoryRoot "scripts/tests/prepare-pages-publication.test.mjs")
+}
+
+$temporaryRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("easylife-pages-verification-" + [Guid]::NewGuid().ToString("N"))
+$candidateRoot = Join-Path $temporaryRoot "candidate"
+$planPath = Join-Path $temporaryRoot "root-diff-plan.json"
+try {
+  Invoke-ReleaseGate "Staged publication candidate" {
+    node (Join-Path $repositoryRoot "scripts/prepare-pages-publication.mjs") --stage $candidateRoot --plan $planPath
+  }
+  Invoke-ReleaseGate "Publication hash verification" {
+    node (Join-Path $repositoryRoot "scripts/prepare-pages-publication.mjs") --verify-stage $candidateRoot
+  }
+}
+finally {
+  $resolvedTemp = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath())
+  $resolvedTarget = [System.IO.Path]::GetFullPath($temporaryRoot)
+  if ((Test-Path -LiteralPath $resolvedTarget) -and $resolvedTarget.StartsWith($resolvedTemp, [StringComparison]::OrdinalIgnoreCase)) {
+    Remove-Item -LiteralPath $resolvedTarget -Recurse -Force
+  }
+}
+
 Push-Location (Join-Path $repositoryRoot "functions")
 try {
-  Invoke-ReleaseGate "Functions syntax lint" { npm.cmd run lint }
-  Invoke-ReleaseGate "Functions production critical advisory gate" { npm.cmd audit --omit=dev --audit-level=critical }
+  Invoke-ReleaseGate "Functions syntax lint" { & $npmExecutable run lint }
+  Invoke-ReleaseGate "Functions production critical advisory gate" { & $npmExecutable audit --omit=dev --audit-level=critical }
 }
 finally {
   Pop-Location

@@ -32,6 +32,21 @@ jobs:
       - run: npm test
       - run: npm run test:emulator
       - run: npm run build
+      - name: Test publication contract
+        run: node ../scripts/tests/prepare-pages-publication.test.mjs
+      - name: Stage non-deploying Pages candidate
+        run: node ../scripts/prepare-pages-publication.mjs --stage "$RUNNER_TEMP/easylife-pages-candidate" --plan "$RUNNER_TEMP/easylife-pages-root-plan.json"
+      - name: Verify staged candidate hashes
+        run: node ../scripts/prepare-pages-publication.mjs --verify-stage "$RUNNER_TEMP/easylife-pages-candidate"
+      - name: Upload publication review artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: easylife-pages-candidate-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/easylife-pages-candidate
+            ${{ runner.temp }}/easylife-pages-root-plan.json
+          if-no-files-found: error
+          retention-days: 14
       - run: npm audit --omit=dev --audit-level=critical
 
   functions:
