@@ -1,4 +1,8 @@
 export const WORKOUT_DRAFT_SCHEMA_VERSION = 3 as const;
+export const WORKOUT_DRAFT_MAX_SERIALIZED_CHARS = 500_000;
+export const WORKOUT_DRAFT_MAX_EXERCISES = 80;
+export const WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE = 100;
+export const WORKOUT_MAX_AUTOMATIC_DURATION_MINUTES = 360;
 export const UNSCOPED_WORKOUT_DRAFT_STORAGE_KEY = "easylife.easyworkout.activeDraft.v2";
 export const UNSCOPED_LEGACY_WORKOUT_DRAFT_STORAGE_KEY = "easylife.easyworkout.activeDraft.v1";
 
@@ -72,6 +76,18 @@ export type WorkoutDraftRecovery = {
   migrated: boolean;
 };
 
+const unreadableDraft = (): WorkoutDraftRecovery => ({
+  draft: null,
+  message: "The saved workout draft was unreadable and was left aside safely.",
+  migrated: false,
+});
+
+const oversizedDraft = (): WorkoutDraftRecovery => ({
+  draft: null,
+  message: "The saved workout draft was too large to restore automatically and was left aside safely.",
+  migrated: false,
+});
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const finiteNonNegative = (value: unknown, fallback = 0) => {
@@ -127,9 +143,16 @@ export function recoverWorkoutDraft(
   options: { today: string; nowIso: string; ownerId: string; defaultWeightUnit?: "lb" | "kg"; createId: () => string }
 ): WorkoutDraftRecovery {
   if (!isRecord(value)) {
-    return { draft: null, message: "The saved workout draft was unreadable and was left aside safely.", migrated: false };
+    return unreadableDraft();
   }
-  const exerciseLogs = (Array.isArray(value.exerciseLogs) ? value.exerciseLogs : [])
+  const rawExerciseLogs = Array.isArray(value.exerciseLogs) ? value.exerciseLogs : [];
+  if (
+    rawExerciseLogs.length > WORKOUT_DRAFT_MAX_EXERCISES ||
+    rawExerciseLogs.some((exercise) => isRecord(exercise) && Array.isArray(exercise.sets) && exercise.sets.length > WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE)
+  ) {
+    return oversizedDraft();
+  }
+  const exerciseLogs = rawExerciseLogs
     .map((exercise) => normalizeExercise(exercise, options.createId))
     .filter((exercise): exercise is WorkoutExerciseLogDraft => Boolean(exercise));
   if (!exerciseLogs.length) {
@@ -161,6 +184,32 @@ export function recoverWorkoutDraft(
     message: migrated ? "An older workout draft was upgraded and restored on this device." : "Workout draft restored on this device.",
     migrated,
   };
+}
+
+export function recoverWorkoutDraftFromStorage(
+  raw: string,
+  options: Parameters<typeof recoverWorkoutDraft>[1]
+): WorkoutDraftRecovery {
+  if (raw.length > WORKOUT_DRAFT_MAX_SERIALIZED_CHARS) return oversizedDraft();
+  try {
+    return recoverWorkoutDraft(JSON.parse(raw), options);
+  } catch {
+    return unreadableDraft();
+  }
+}
+
+export function serializeWorkoutDraftForStorage(draft: StoredWorkoutDraft) {
+  const serialized = JSON.stringify(draft);
+  return serialized.length <= WORKOUT_DRAFT_MAX_SERIALIZED_CHARS ? serialized : null;
+}
+
+export function resolveWorkoutDurationMinutes(manualDuration: string, elapsedSeconds: number) {
+  if (manualDuration.trim()) {
+    const parsed = Number(manualDuration);
+    return Number.isFinite(parsed) && parsed > 0 && parsed <= 1440 ? Math.round(parsed) : null;
+  }
+  const automaticMinutes = Math.max(1, Math.round(Math.max(0, elapsedSeconds) / 60));
+  return automaticMinutes <= WORKOUT_MAX_AUTOMATIC_DURATION_MINUTES ? automaticMinutes : null;
 }
 
 export function hasWorkoutDraftWork(draft: Pick<StoredWorkoutDraft, "selectedRoutineId" | "durationMinutes" | "sessionNotes" | "exerciseLogs">) {

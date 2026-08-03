@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { WorkoutSaveCoordinator, canClearMatchingWorkoutDraft, getWorkoutDraftStorageKey, hasWorkoutDraftWork, recoverWorkoutDraft } from "../src/features/easyworkout/domain/workoutDraftLifecycle.ts";
+import { readFile } from "node:fs/promises";
+import { WORKOUT_DRAFT_MAX_EXERCISES, WORKOUT_DRAFT_MAX_SERIALIZED_CHARS, WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE, WorkoutSaveCoordinator, canClearMatchingWorkoutDraft, getWorkoutDraftStorageKey, hasWorkoutDraftWork, recoverWorkoutDraft, recoverWorkoutDraftFromStorage, resolveWorkoutDurationMinutes, serializeWorkoutDraftForStorage } from "../src/features/easyworkout/domain/workoutDraftLifecycle.ts";
 import { workoutSessionDocumentId } from "../src/lib/firestore/workoutSessionIdentity.ts";
 
 const options = { today: "2026-08-01", nowIso: "2026-08-01T12:00:00.000Z", ownerId: "user-a", defaultWeightUnit: "lb", createId: (() => { let id = 0; return () => `generated-id-${++id}`; })() };
@@ -21,6 +22,45 @@ test("malformed and old drafts fail safely with readable recovery", () => {
   assert.equal(recoverWorkoutDraft("bad", options).draft, null);
   assert.match(recoverWorkoutDraft("bad", options).message, /unreadable/i);
   assert.equal(recoverWorkoutDraft({ exerciseLogs: [] }, options).draft, null);
+});
+
+test("oversized and structurally abusive drafts are rejected before recovery work", () => {
+  const serialized = `${" ".repeat(WORKOUT_DRAFT_MAX_SERIALIZED_CHARS + 1)}`;
+  const oversizedText = recoverWorkoutDraftFromStorage(serialized, options);
+  assert.equal(oversizedText.draft, null);
+  assert.match(oversizedText.message, /too large/i);
+
+  const tooManyExercises = recoverWorkoutDraft({ ...legacy, exerciseLogs: Array.from({ length: WORKOUT_DRAFT_MAX_EXERCISES + 1 }, () => legacy.exerciseLogs[0]) }, options);
+  assert.equal(tooManyExercises.draft, null);
+  assert.match(tooManyExercises.message, /too large/i);
+
+  const tooManySets = recoverWorkoutDraft({ ...legacy, exerciseLogs: [{ ...legacy.exerciseLogs[0], sets: Array.from({ length: WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE + 1 }, () => legacy.exerciseLogs[0].sets[0]) }] }, options);
+  assert.equal(tooManySets.draft, null);
+  assert.match(tooManySets.message, /too large/i);
+});
+
+test("draft serialization fails closed before local-storage quota pressure", () => {
+  const recovered = recoverWorkoutDraft(legacy, options).draft;
+  assert.ok(recovered);
+  assert.ok(serializeWorkoutDraftForStorage(recovered));
+  assert.equal(serializeWorkoutDraftForStorage({ ...recovered, sessionNotes: "x".repeat(WORKOUT_DRAFT_MAX_SERIALIZED_CHARS) }), null);
+});
+
+test("workout log flushes its latest controlled draft before page suspension or unload", async () => {
+  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  assert.match(source, /latestDraftRef\.current = \{/);
+  assert.match(source, /addEventListener\("pagehide", persistLatestDraft\)/);
+  assert.match(source, /visibilityState === "hidden"/);
+  assert.match(source, /serializeWorkoutDraftForStorage\(\{ \.\.\.draft, updatedAt:/);
+});
+
+test("automatic workout duration excludes implausible overnight drafts and preserves explicit duration", () => {
+  assert.equal(resolveWorkoutDurationMinutes("", 45 * 60), 45);
+  assert.equal(resolveWorkoutDurationMinutes("", 6 * 60 * 60), 360);
+  assert.equal(resolveWorkoutDurationMinutes("", 6 * 60 * 60 + 60), null);
+  assert.equal(resolveWorkoutDurationMinutes("75", 24 * 60 * 60), 75);
+  assert.equal(resolveWorkoutDurationMinutes("0", 120), null);
+  assert.equal(resolveWorkoutDurationMinutes("1441", 120), null);
 });
 
 test("draft storage and recovery are isolated by authenticated owner", () => {

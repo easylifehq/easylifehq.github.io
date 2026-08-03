@@ -14,3 +14,10 @@ test("service worker does not persist failed asset responses", async () => {
   const successfulResponseGuards = source.match(/if \(networkResponse\.ok\)/g) || [];
   assert.equal(successfulResponseGuards.length, 2);
 });
+
+test("service worker updates safely without deleting unrelated origin caches", async () => {
+  const source = await readFile(new URL("../public/sw.js", import.meta.url), "utf8");
+  assert.match(source, /cacheName\.startsWith\(CACHE_PREFIX\)/);
+  assert.doesNotMatch(source, /self\.skipWaiting\(\)/);
+  assert.match(source, /catch\(\(\) => caches\.match\(event\.request\)\)/);
+});

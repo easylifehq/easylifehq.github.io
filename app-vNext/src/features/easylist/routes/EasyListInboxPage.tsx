@@ -725,7 +725,7 @@ export function EasyListInboxPage() {
       <section className="panel-section easylist-inbox-surface" aria-labelledby="easylist-inbox-title">
         <header className="panel-header easylist-inbox-header">
           <p className="eyebrow">Inbox</p>
-          <h2 id="easylist-inbox-title">Review the intake queue</h2>
+          <h1 id="easylist-inbox-title">Review the intake queue</h1>
           <p className="page-section-description">
             Draft first. Tasks save here after final confirmation. Notes save in Notes. Plans, reminders, and follow-ups stay preview-only.
           </p>

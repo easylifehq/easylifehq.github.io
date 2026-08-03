@@ -512,6 +512,7 @@ export function EasyCalendarDayPage() {
   return (
     <>
       <PageSection
+        headingLevel={1}
         eyebrow="Plan"
         title="Plan a realistic day"
         description={`${formatLongDate(selectedDate)}. Use today's capacity before adding more.`}
