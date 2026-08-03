@@ -115,5 +115,4 @@ The final-build viewport captures were inspected independently after correcting 
 - The repository's root `index.html` has a pre-existing checkout-normalization mismatch: its raw worktree hash equals the HEAD blob while Git's LF clean filter reports it modified. It is not staged, is absent from the branch/PR diff, and was not rewritten.
 - The PR is intentionally draft. Merge requires green hosted checks and human review. Deployment additionally requires an explicit production authorization and credentials; this run neither merged nor deployed.
 
-At receipt creation, local release gates are green and hosted Release candidate checks are running on draft PR #2.
-
+Local release gates are green. Hosted Release candidate checks also passed on the receipt-bearing branch SHA in run `30775047093`: Functions syntax and critical advisory gate passed in 15 seconds, and Web tests and production build (including the repaired Java 21 Firestore Emulator step) passed in 40 seconds. Run: https://github.com/easylifehq/easylifehq.github.io/actions/runs/30775047093
