@@ -15043,6 +15043,15 @@ button.calendar-detail-card:disabled {
   margin-top: 0.35rem;
 }
 
+.review-project-handoff {
+  display: grid;
+  gap: 1rem;
+}
+
+.review-project-handoff .task-composer-grid {
+  margin: 0;
+}
+
 @media (max-width: 640px) {
   .app-search-command span {
     position: absolute;
@@ -15078,6 +15087,10 @@ button.calendar-detail-card:disabled {
   }
 
   .focused-review-actions > * {
+    width: 100%;
+  }
+
+  .review-project-handoff .task-composer-actions > * {
     width: 100%;
   }
 }

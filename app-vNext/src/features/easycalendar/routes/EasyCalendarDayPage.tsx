@@ -7,6 +7,8 @@ import type { AssistantPlanHandoffPreview } from "@/features/assistant/localDraf
 import { CalendarEventDrawer } from "@/features/easycalendar/components/CalendarEventDrawer";
 import { CalendarTaskBlockDrawer } from "@/features/easycalendar/components/CalendarTaskBlockDrawer";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
+import { useAuth } from "@/features/auth/AuthContext";
+import { buildReviewScheduleWindow, resolveReviewTaskHandoff } from "@/features/coreloop/domain/reviewHandoffs";
 import { useSettings } from "@/features/settings/SettingsContext";
 import type { CalendarEventType } from "@/lib/firestore/calendarEvents";
 import type { CalendarTaskBlockRecord } from "@/lib/firestore/calendarTaskBlocks";
@@ -79,6 +81,7 @@ export function EasyCalendarDayPage() {
     deleteTaskBlock,
     scheduleTask,
   } = useEasyCalendar();
+  const { isDemoMode } = useAuth();
   const { settings } = useSettings();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -190,6 +193,59 @@ export function EasyCalendarDayPage() {
       : openWindows.length
         ? "Preview a plan, then approve only the blocks that fit the open windows."
       : "Review fixed commitments before adding more to this day.";
+  const requestedScheduleTaskId = searchParams.get("scheduleTask");
+  const scheduleHandoff = resolveReviewTaskHandoff(requestedScheduleTaskId, tasks, isLoading);
+
+  useEffect(() => {
+    if (!requestedScheduleTaskId || scheduleHandoff.state === "loading" || scheduleHandoff.state === "idle") return;
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("scheduleTask");
+    const nextSearch = nextParams.toString();
+
+    if (scheduleHandoff.state === "missing") {
+      setPlanMessage("That review task is no longer available. Choose another task from Plan.");
+    } else if (scheduleHandoff.state === "completed") {
+      setPlanMessage("That review task is already complete, so it was not added to Plan.");
+    } else if (scheduleHandoff.state === "ready") {
+      const handoffTask = scheduleHandoff.task;
+      const window = buildReviewScheduleWindow({
+        selectedDate,
+        wakeHour,
+        defaultMinutes: settings.easyCalendar.defaultTaskBlockMinutes,
+        taskMinutes: handoffTask.estimatedLength,
+        firstOpenWindow: openWindows[0] || null,
+      });
+      setQuickEvent({
+        mode: "task-block",
+        date: toDateInputValue(window.startAt),
+        startTime: normalizeTimeInput(toTimeInputValue(window.startAt)),
+        endTime: normalizeTimeInput(toTimeInputValue(window.endAt), "10:00"),
+        title: "",
+        eventType: "work",
+        selectedTaskId: handoffTask.id,
+      });
+      setQuickEventMessage("");
+      setPlanMessage(`Review handoff ready. Choose when to place “${handoffTask.title || "Untitled task"}”.`);
+    }
+
+    navigate(
+      { pathname: "/app/easycalendar/day", search: nextSearch ? `?${nextSearch}` : "" },
+      { replace: true },
+    );
+  }, [
+    isLoading,
+    navigate,
+    openWindows,
+    requestedScheduleTaskId,
+    scheduleHandoff.state,
+    scheduleHandoff.task,
+    searchParams,
+    selectedDate,
+    settings.easyCalendar.defaultTaskBlockMinutes,
+    tasks,
+    wakeHour,
+  ]);
   const assistantPlanSuggestion = useMemo(
     () => classifyAssistantIntent("Block 45 minutes today for the highest-friction item after fixed commitments."),
     []
@@ -426,6 +482,11 @@ export function EasyCalendarDayPage() {
         });
         setQuickEvent(null);
         setQuickEventMessage("");
+        setPlanMessage(
+          isDemoMode
+            ? `Demo preview complete for “${task.title || "Untitled task"}”. No Firebase write ran.`
+            : `Placed “${task.title || "Untitled task"}” in Plan.`,
+        );
         return;
       }
 
