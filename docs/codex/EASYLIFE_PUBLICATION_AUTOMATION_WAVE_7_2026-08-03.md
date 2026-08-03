@@ -53,6 +53,7 @@ The source worktree reports a different unchanged/update split because of the kn
 - TypeScript/build: pass, 210 modules;
 - Functions lint: pass;
 - existing critical advisory gates: pass; the final Functions audit reports eight inherited moderate transitive `uuid` advisories with only a breaking forced resolution, so no dependency change was made;
+- hosted draft-PR checks at implementation/evidence SHA `44751371`: 3/3 green (complete publication artifact 1m25s, web 54s, Functions 12s);
 - staged route matrix: 63/63 desktop at 1440×900 and 63/63 phone at 390×844 (126/126 total);
 - direct deep route: truthful HTTP 404 with renderable `404.html` shell;
 - manifest and four icons: HTTP 200 with correct media types;
