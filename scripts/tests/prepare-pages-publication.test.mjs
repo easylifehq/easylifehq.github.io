@@ -232,6 +232,25 @@ test("rejects credential-shaped content and absolute machine paths", async (t) =
   }
 });
 
+test("allows only the explicitly approved public Firebase web API key", async (t) => {
+  const fixture = await makeFixture();
+  t.after(() => rm(fixture.parent, { recursive: true, force: true }));
+  const publicKey = "AIza012345678901234567890123456789";
+  await write(path.join(fixture.dist, "assets", "firebase-public.js"), `const apiKey="${publicKey}";\n`);
+  await assert.rejects(
+    stagePublication({ repoRoot: fixture.repo, buildRoot: fixture.dist, stageRoot: path.join(fixture.parent, "rejected"), metadata: METADATA }),
+    /Unapproved Firebase web API key/,
+  );
+  const prior = process.env.VITE_FIREBASE_API_KEY;
+  process.env.VITE_FIREBASE_API_KEY = publicKey;
+  try {
+    await stagePublication({ repoRoot: fixture.repo, buildRoot: fixture.dist, stageRoot: path.join(fixture.parent, "approved"), metadata: METADATA });
+  } finally {
+    if (prior === undefined) delete process.env.VITE_FIREBASE_API_KEY;
+    else process.env.VITE_FIREBASE_API_KEY = prior;
+  }
+});
+
 test("dry-run analysis changes zero repository bytes", async (t) => {
   const fixture = await makeFixture();
   t.after(() => rm(fixture.parent, { recursive: true, force: true }));

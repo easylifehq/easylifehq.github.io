@@ -70,9 +70,9 @@ const PROHIBITED_FILE_PATTERNS = [
 const SECRET_CONTENT_PATTERNS = [
   /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
   /\bgh[opusr]_[A-Za-z0-9_]{20,}\b/,
-  /\bAIza[0-9A-Za-z_-]{30,}\b/,
   /\b(?:sk|rk)-[A-Za-z0-9_-]{20,}\b/,
 ];
+const FIREBASE_WEB_API_KEY_PATTERN = /\bAIza[0-9A-Za-z_-]{30,}\b/g;
 
 export class PublicationError extends Error {
   constructor(message, exitCode = EXIT.VALIDATION) {
@@ -173,6 +173,13 @@ async function assertNoSecretsOrMachinePaths(target, relative, repoRoot) {
   for (const pattern of SECRET_CONTENT_PATTERNS) {
     if (pattern.test(contents)) {
       throw new PublicationError(`Credential-shaped content rejected in ${relative}.`);
+    }
+  }
+  const firebaseWebKeys = [...contents.matchAll(FIREBASE_WEB_API_KEY_PATTERN)].map((match) => match[0]);
+  if (firebaseWebKeys.length > 0) {
+    const approvedPublicKey = process.env.VITE_FIREBASE_API_KEY?.trim();
+    if (!approvedPublicKey || firebaseWebKeys.some((value) => value !== approvedPublicKey)) {
+      throw new PublicationError(`Unapproved Firebase web API key rejected in ${relative}.`);
     }
   }
   const normalizedRepo = repoRoot.replaceAll("\\", "/");

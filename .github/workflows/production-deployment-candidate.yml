@@ -1,0 +1,59 @@
+name: Production deployment candidate verification
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-candidate:
+    name: Production-configured root integrity
+    runs-on: ubuntu-latest
+    env:
+      VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+      VITE_FIREBASE_PROJECT_ID: ${{ vars.VITE_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_STORAGE_BUCKET: ${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_FIREBASE_APP_ID: ${{ vars.VITE_FIREBASE_APP_ID }}
+      VITE_FIREBASE_MEASUREMENT_ID: ${{ vars.VITE_FIREBASE_MEASUREMENT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            app-vNext/package-lock.json
+            functions/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Install application dependencies
+        run: npm ci --prefix app-vNext
+      - name: Install Functions dependencies
+        run: npm ci --prefix functions
+      - name: Run complete release verification with production web configuration
+        shell: pwsh
+        run: ./scripts/verify-release.ps1
+      - name: Verify approved production web configuration and prohibited-content boundary
+        run: node scripts/verify-production-publication.mjs
+      - name: Recreate isolated production Pages candidate
+        run: node scripts/prepare-pages-publication.mjs --stage "$RUNNER_TEMP/easylife-production-candidate" --plan "$RUNNER_TEMP/easylife-production-root-plan.json"
+      - name: Verify candidate hashes
+        run: node scripts/prepare-pages-publication.mjs --verify-stage "$RUNNER_TEMP/easylife-production-candidate"
+      - name: Require committed root to match the deterministic production candidate
+        run: node scripts/prepare-pages-publication.mjs --check --plan "$RUNNER_TEMP/easylife-production-root-check.json"
+      - name: Upload non-deploying production review artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: easylife-production-candidate-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/easylife-production-candidate
+            ${{ runner.temp }}/easylife-production-root-plan.json
+            ${{ runner.temp }}/easylife-production-root-check.json
+          if-no-files-found: error
+          retention-days: 14
