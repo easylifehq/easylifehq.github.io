@@ -1,0 +1,1631 @@
+{
+  "generatedAt": "2026-08-03T06:25:55.015Z",
+  "artifact": "app-vNext/dist",
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "total": 63,
+      "passed": 63,
+      "results": [
+        {
+          "path": "/",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 0,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": "marketing shell"
+        },
+        {
+          "path": "/easylist",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easylist",
+          "h1": [
+            "Clear the annoying stuff. Protect your real time."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/easynotes",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easynotes",
+          "h1": [
+            "Write first. Sort it out later."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/easycalendar",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easycalendar",
+          "h1": [
+            "See when your life is full and where real work still fits."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/easypipeline",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easypipeline",
+          "h1": [
+            "Stay on top of every application, follow-up, and opportunity."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/easyhq",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easyhq",
+          "h1": [
+            "Open the app and know where to go next."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/easyprojects",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easyprojects",
+          "h1": [
+            "Turn big messy goals into sections, tasks, and next steps."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/easycontacts",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easycontacts",
+          "h1": [
+            "Keep track of the people attached to the work."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/easyworkout",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easyworkout",
+          "h1": [
+            "Start a workout and log without fighting the app."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/easystatistics",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easystatistics",
+          "h1": [
+            "Keep progress fun without crowding every page."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/login",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/login",
+          "h1": [
+            "Open your assistant"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/settings",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/settings?demo=1&visual=1",
+          "h1": [
+            "Settings"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easystatistics?demo=1&visual=1",
+          "h1": [
+            "Progress hub"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/hq",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/hq?demo=1&visual=1",
+          "h1": [
+            "Start with what matters."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/today",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/hq?demo=1&visual=1",
+          "h1": [
+            "Start with what matters."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/inbox",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/add?demo=1&visual=1",
+          "h1": [
+            "Review the intake queue"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/notes",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/plan",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/plan?demo=1&visual=1",
+          "h1": [
+            "Open today's Plan."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/people",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycontacts?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/workout",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/workout?demo=1&visual=1",
+          "h1": [
+            "Start from the Workout dashboard."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/command",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/command?demo=1&visual=1",
+          "h1": [
+            "Review one draft."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easylist",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easylist/dashboard",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easylist/add",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/add?demo=1&visual=1",
+          "h1": [
+            "Review the intake queue"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easylist/email",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/email?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easylist/inbox",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/add?demo=1&visual=1",
+          "h1": [
+            "Review the intake queue"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easylist/today",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easylist/upcoming",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easylist/archive",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/archive?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easylist/deleted",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/deleted?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easycalendar",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycalendar/month?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easycalendar/week",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycalendar/month?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easycalendar/day",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycalendar/day?demo=1&visual=1",
+          "h1": [
+            "Plan a realistic day"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easycalendar/month",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycalendar/month?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easynotes",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easynotes/new",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easynotes/trash",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes/trash?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easynotes/visual-note-brief",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes/visual-note-brief?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easypipeline",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easypipeline/dashboard?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easypipeline/dashboard",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easypipeline/dashboard?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easypipeline/stats",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easypipeline/stats?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easypipeline/email",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easypipeline/email?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easycontacts",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycontacts?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyprojects",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyprojects/visual-project",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects/visual-project?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyprojects/visual-project/timeline",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects/visual-project/timeline?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyworkout",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/dashboard?demo=1&visual=1",
+          "h1": [
+            "Start or resume"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyworkout/dashboard",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/dashboard?demo=1&visual=1",
+          "h1": [
+            "Start or resume"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyworkout/routines",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/routines?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyworkout/log",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/log?demo=1&visual=1",
+          "h1": [
+            "Log workout"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyworkout/exercise/demo-bench",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/exercise/demo-bench?demo=1&visual=1",
+          "h1": [
+            "Bench Press"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyworkout/session/demo-session-w8-upper",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/session/demo-session-w8-upper?demo=1&visual=1",
+          "h1": [
+            "Upper — steady progress"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easystatistics",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easystatistics?demo=1&visual=1",
+          "h1": [
+            "Progress hub"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/settings",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/settings?demo=1&visual=1",
+          "h1": [
+            "Settings"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/not-a-real-route",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/not-a-real-route?demo=1&visual=1",
+          "h1": [
+            "This page is not part of the demo path."
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easynotes/missing-record",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes/missing-record?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyprojects/missing-record",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects/missing-record?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyprojects/missing-record/timeline",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects/missing-record/timeline?demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyworkout/exercise/missing-record",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/exercise/missing-record?demo=1&visual=1",
+          "h1": [
+            "Not enough data yet"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easyworkout/session/missing-record",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/session/missing-record?demo=1&visual=1",
+          "h1": [
+            "Workout not found"
+          ],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easycontacts?contact=%E0%A4%A",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycontacts?contact=%E0%A4%A&demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easypipeline/dashboard?application=%E0%A4%A",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easypipeline/dashboard?application=%E0%A4%A&demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        },
+        {
+          "path": "/app/easylist/dashboard?task=%E0%A4%A",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?task=%E0%A4%A&demo=1&visual=1",
+          "h1": [],
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "rootChildren": 0,
+          "title": "EasyLife",
+          "note": ""
+        }
+      ]
+    },
+    "phone": {
+      "width": 390,
+      "height": 844,
+      "total": 63,
+      "passed": 63,
+      "results": [
+        {
+          "path": "/",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/",
+          "horizontalOverflow": 0,
+          "mainCount": 0,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/easylist",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easylist",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/easynotes",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easynotes",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/easycalendar",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easycalendar",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/easypipeline",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easypipeline",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/easyhq",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easyhq",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/easyprojects",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easyprojects",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/easycontacts",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easycontacts",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/easyworkout",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easyworkout",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/easystatistics",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/easystatistics",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/login",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/login",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/settings",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/settings?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/hq",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/hq?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/today",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/hq?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/inbox",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/add?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/notes",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/plan",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/plan?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/people",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycontacts?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/workout",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/workout?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/command",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/command?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easylist",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easylist/dashboard",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easylist/add",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/add?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easylist/email",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/email?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easylist/inbox",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/add?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easylist/today",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easylist/upcoming",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easylist/archive",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/archive?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easylist/deleted",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/deleted?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easycalendar",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycalendar/month?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easycalendar/week",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycalendar/month?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easycalendar/day",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycalendar/day?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easycalendar/month",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycalendar/month?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easynotes",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easynotes/new",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easynotes/trash",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes/trash?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easynotes/visual-note-brief",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes/visual-note-brief?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easypipeline",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easypipeline/dashboard?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easypipeline/dashboard",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easypipeline/dashboard?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easypipeline/stats",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easypipeline/stats?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easypipeline/email",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easypipeline/email?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easycontacts",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycontacts?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyprojects",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyprojects/visual-project",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects/visual-project?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyprojects/visual-project/timeline",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects/visual-project/timeline?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyworkout",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/dashboard?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyworkout/dashboard",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/dashboard?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyworkout/routines",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/routines?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyworkout/log",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/log?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyworkout/exercise/demo-bench",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/exercise/demo-bench?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyworkout/session/demo-session-w8-upper",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/session/demo-session-w8-upper?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easystatistics",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easystatistics?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/settings",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/settings?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/not-a-real-route",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/not-a-real-route?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easynotes/missing-record",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easynotes/missing-record?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyprojects/missing-record",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects/missing-record?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyprojects/missing-record/timeline",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects/missing-record/timeline?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyworkout/exercise/missing-record",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/exercise/missing-record?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easyworkout/session/missing-record",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/session/missing-record?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easycontacts?contact=%E0%A4%A",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easycontacts?contact=%E0%A4%A&demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easypipeline/dashboard?application=%E0%A4%A",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easypipeline/dashboard?application=%E0%A4%A&demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        },
+        {
+          "path": "/app/easylist/dashboard?task=%E0%A4%A",
+          "ok": true,
+          "alertCount": 0,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/dashboard?task=%E0%A4%A&demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1,
+          "title": "EasyLife"
+        }
+      ]
+    },
+    "narrow": {
+      "width": 320,
+      "height": 568,
+      "total": 10,
+      "passed": 10,
+      "results": [
+        {
+          "path": "/app/hq",
+          "ok": true,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/hq?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1
+        },
+        {
+          "path": "/app/easylist/add",
+          "ok": true,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easylist/add?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1
+        },
+        {
+          "path": "/app/command",
+          "ok": true,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/command?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1
+        },
+        {
+          "path": "/app/easystatistics?tab=week",
+          "ok": true,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easystatistics?tab=week&demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1
+        },
+        {
+          "path": "/app/easystatistics?tab=workout",
+          "ok": true,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easystatistics?tab=workout&demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1
+        },
+        {
+          "path": "/app/easyworkout/dashboard",
+          "ok": true,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/dashboard?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1
+        },
+        {
+          "path": "/app/easyworkout/log",
+          "ok": true,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/log?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1
+        },
+        {
+          "path": "/app/easyworkout/session/demo-session-w8-upper",
+          "ok": true,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyworkout/session/demo-session-w8-upper?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1
+        },
+        {
+          "path": "/app/easyprojects",
+          "ok": true,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/easyprojects?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1
+        },
+        {
+          "path": "/app/settings",
+          "ok": true,
+          "alerts": [],
+          "finalUrl": "http://127.0.0.1:4173/app/settings?demo=1&visual=1",
+          "horizontalOverflow": 0,
+          "mainCount": 1
+        }
+      ]
+    }
+  },
+  "diagnostics": {
+    "browserLogEntries": 0,
+    "priorFullTrace": {
+      "events": 425,
+      "failedLoads": 0,
+      "httpErrors": 0,
+      "productionFirebaseOrFunctionsRequests": 0,
+      "consoleWarningsOrErrors": 0
+    }
+  }
+}

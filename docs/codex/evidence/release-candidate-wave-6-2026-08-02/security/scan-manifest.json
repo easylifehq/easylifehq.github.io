@@ -1,0 +1,98 @@
+{
+  "documentType": "codex-security.scan-manifest",
+  "scan": {
+    "artifacts": [
+      {
+        "mediaType": "application/json",
+        "path": "findings.json",
+        "sha256": "e3cce98937b9118819d8e9fd026f6e8cbb9c452a1c4498baa1282e94f1d30811"
+      },
+      {
+        "mediaType": "application/json",
+        "path": "coverage.json",
+        "sha256": "9d1898faba1ba3c3505cb0327dc60f45ea29f538b3384567142386c2581da0e0"
+      }
+    ],
+    "completedAt": "2026-08-03T05:54:05.363087Z",
+    "coverageRef": "coverage.json",
+    "findingsRef": "findings.json",
+    "id": "cb89466f-f22e-47cb-a919-a01f645d3c38",
+    "producer": {
+      "name": "codex-security-plugin",
+      "version": "0.1.15"
+    },
+    "scope": {
+      "artifactsReviewed": [
+        "746 tracked files",
+        "Firestore rules and Emulator tests",
+        "Firebase Functions",
+        "demo adapters",
+        "export implementations",
+        "PWA and deployment configuration",
+        "all package and lockfiles"
+      ],
+      "context": "The threat model was generated during Phase 1. Focus included secrets, demo isolation, Firestore authorization, query trust, exports, PWA cache, and deployment compatibility.",
+      "excludePaths": [],
+      "includePaths": [
+        "."
+      ],
+      "limitations": [
+        "No production environment inspection",
+        "No physical-device or installed-PWA validation",
+        "Archived old-site is reviewed but outside the approved runtime"
+      ],
+      "runtimeStatus": "Application, Emulator, build, Functions lint, and advisory gates were independently reproduced; no production data or deployment was used.",
+      "summary": "Whole-repository release-candidate security review of the immutable Wave 5 source tree.",
+      "validationMode": "Static source-to-sink analysis plus bounded deterministic local tests and authenticated Firebase Emulator probes."
+    },
+    "sealedAt": "2026-08-03T05:54:05.363087Z",
+    "startedAt": "2026-08-03T05:15:00.926867Z",
+    "status": "completed",
+    "target": {
+      "displayName": "easylifehq.github.io",
+      "kind": "git_worktree",
+      "remote": "https://github.com/easylifehq/easylifehq.github.io.git",
+      "revision": "222df60f94fb18bbbd556b2ae03efe2978b38087",
+      "snapshotDigest": "codex-security-snapshot/v1:sha256:ea6a3160cee02115542259bc810ef29ae1d765c8356899c8c2a92913a6b5022b",
+      "targetId": "target_sha256_640ab6bb141059e607da48bb6932d8f4287f7dfb0f1ca4596367e8f249f321ee"
+    },
+    "threatModel": {
+      "assets": [
+        "User-owned EasyLife records",
+        "Firestore storage and authorization",
+        "OpenAI provider quota and secrets",
+        "Downloaded account/workout exports",
+        "PWA application shell"
+      ],
+      "assumptions": [
+        "Repository maintainers and merged automation configuration are trusted",
+        "old-site is not an approved deployment surface",
+        "Production provider features remain disabled until explicitly approved"
+      ],
+      "attackerCapabilities": [
+        "Create an ordinary public account",
+        "Control fields in their own supported records",
+        "Invoke authenticated Functions",
+        "Open crafted deep links and query parameters",
+        "Trigger user-initiated exports"
+      ],
+      "securityObjectives": [
+        "Enforce cross-account isolation and bounded schemas",
+        "Require server-issued authorization for provider work",
+        "Guarantee demo mode makes no production Firebase calls",
+        "Exclude credential-shaped fields and neutralize spreadsheet formulas",
+        "Publish only the current built app and exclude the archive"
+      ],
+      "summary": "Public account creation and signed-in user-controlled records are the principal attacker boundaries. Firebase Functions, Firestore ownership, demo isolation, downloaded exports, and the static hosting boundary protect cost, confidentiality, integrity, and release safety.",
+      "trustBoundaries": [
+        "Unauthenticated browser to Firebase Auth",
+        "Authenticated user to per-user Firestore namespace",
+        "Client request to cost-bearing Functions",
+        "Synthetic demo context to production Firebase singleton",
+        "User records to spreadsheet/JSON downloads",
+        "Source app to generated hosting artifact"
+      ]
+    }
+  },
+  "schemaVersion": "1.0"
+}
