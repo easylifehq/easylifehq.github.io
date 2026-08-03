@@ -12,7 +12,7 @@ import {
   setPersistence,
   type User,
 } from "firebase/auth";
-import { auth } from "@/lib/firebase/client";
+import { auth, firebaseConfigured } from "@/lib/firebase/client";
 
 type AuthContextValue = {
   user: User | null;
@@ -37,6 +37,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (isDemoMode) {
       setUser({ uid: "local-preview", email: "preview@easylife.local" } as User);
+      setIsLoading(false);
+      return;
+    }
+
+    if (!firebaseConfigured) {
+      setUser(null);
       setIsLoading(false);
       return;
     }
