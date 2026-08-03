@@ -1,0 +1,1 @@
+import{j as a,O as e}from"./vendor-react-CYC41qgq.js";import"./vendor-router-DitFJT1U.js";function p(){return a.jsx("main",{className:"page-wrap app-theme app-theme-easycalendar",children:a.jsx(e,{})})}export{p as EasyCalendarLayout};
