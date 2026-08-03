@@ -36,6 +36,19 @@ jobs:
         run: npm ci --prefix app-vNext
       - name: Install Functions dependencies
         run: npm ci --prefix functions
+      - name: Lock candidate metadata to the reviewed source commit
+        shell: pwsh
+        run: |
+          $manifest = Get-Content -Raw pages-publication-manifest.json | ConvertFrom-Json
+          $sourceSha = [string]$manifest.source.sha
+          if ($sourceSha -notmatch '^[0-9a-f]{40}$') {
+            throw 'Committed publication manifest has an invalid source SHA.'
+          }
+          git merge-base --is-ancestor $sourceSha HEAD
+          if ($LASTEXITCODE -ne 0) {
+            throw 'Committed publication source SHA is not an ancestor of this candidate.'
+          }
+          "EASYLIFE_PUBLICATION_SOURCE_SHA=$sourceSha" >> $env:GITHUB_ENV
       - name: Run complete release verification with production web configuration
         shell: pwsh
         run: ./scripts/verify-release.ps1
