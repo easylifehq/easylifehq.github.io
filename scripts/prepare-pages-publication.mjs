@@ -268,7 +268,7 @@ async function validateBuild(repoRoot, buildRoot) {
     assertApprovedBuildPath(relative);
     await assertNoSecretsOrMachinePaths(path.join(resolvedBuild, ...relative.split("/")), relative, repoRoot);
   }
-  const indexBytes = await readFile(path.join(resolvedBuild, "index.html"));
+  const indexBytes = await readPublicationBytes(path.join(resolvedBuild, "index.html"), "index.html");
   const indexText = indexBytes.toString("utf8");
   if (!/^<!doctype html>/i.test(indexText.trimStart()) || !indexText.includes('id="root"')) {
     throw new PublicationError("Malformed index.html: expected an HTML doctype and #root mount point.");
@@ -295,12 +295,18 @@ async function validateBuild(repoRoot, buildRoot) {
   return { buildRoot: resolvedBuild, files, indexBytes };
 }
 
+async function readPublicationBytes(target, relative) {
+  const bytes = await readFile(target);
+  if (!TEXT_EXTENSIONS.has(path.posix.extname(relative).toLowerCase())) return bytes;
+  return Buffer.from(bytes.toString("utf8").replace(/\r\n?/g, "\n"), "utf8");
+}
+
 async function copyPath(sourceRoot, destinationRoot, relative) {
   const safe = normalizeRelativePath(relative);
   const source = path.join(sourceRoot, ...safe.split("/"));
   const destination = path.join(destinationRoot, ...safe.split("/"));
   await mkdir(path.dirname(destination), { recursive: true });
-  await copyFile(source, destination);
+  await writeFile(destination, await readPublicationBytes(source, safe));
 }
 
 async function fileRecord(root, relative, managed) {

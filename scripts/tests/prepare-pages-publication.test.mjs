@@ -149,6 +149,27 @@ test("preserved metadata uses committed bytes across worktree line-ending expans
   assert.equal(noJekyll.size, 1);
 });
 
+test("managed text payloads are canonical LF while binary assets remain byte-identical", async (t) => {
+  const fixture = await makeFixture();
+  t.after(() => rm(fixture.parent, { recursive: true, force: true }));
+  const textPaths = ["index.html", "manifest.webmanifest", "sw.js", "icons/easylife-icon.svg"];
+  for (const relative of textPaths) {
+    const target = path.join(fixture.dist, ...relative.split("/"));
+    const expanded = (await readFile(target, "utf8")).replace(/\n/g, "\r\n");
+    await writeFile(target, expanded);
+  }
+  const binaryBefore = await readFile(path.join(fixture.dist, "icons", "easylife-icon-192.png"));
+
+  const stage = path.join(fixture.parent, "candidate");
+  await stagePublication({ repoRoot: fixture.repo, buildRoot: fixture.dist, stageRoot: stage, metadata: METADATA });
+
+  for (const relative of textPaths) {
+    assert.equal((await readFile(path.join(stage, ...relative.split("/")), "utf8")).includes("\r"), false);
+  }
+  assert.deepEqual(await readFile(path.join(stage, "404.html")), await readFile(path.join(stage, "index.html")));
+  assert.deepEqual(await readFile(path.join(stage, "icons", "easylife-icon-192.png")), binaryBefore);
+});
+
 test("repeat staging is byte-idempotent", async (t) => {
   const fixture = await makeFixture();
   t.after(() => rm(fixture.parent, { recursive: true, force: true }));
