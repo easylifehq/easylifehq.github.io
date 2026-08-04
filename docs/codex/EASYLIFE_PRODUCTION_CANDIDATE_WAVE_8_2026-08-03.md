@@ -13,10 +13,13 @@ Wave 8 produced and committed a deterministic, production-configured GitHub Page
 - reviewed source/verification SHA: `09e8b959deccfdd77537d1a69e6382afbe1091f8`;
 - generated-output commit: `cb630db2942e69fada4c6eec870144d44e3a8a1b`;
 - production metadata-convergence fix: `26dc3050`;
+- hosted ancestry fix: `4be10d21`;
+- cross-platform publication fixes: `146fcc65`, `88744319`;
+- canonical publication metadata: `18b5d085`;
 - final receipt commit: the branch HEAD reported by the draft PR and final handoff;
 - publication schema: `easylife-pages-publication/v1`;
 - payload: 91 files;
-- SHA-256 of `pages-publication-sha256.txt`: `79B24D0362132C1CE0AFFABFC0C133D847CC8FFB404FB4C297E6B12AE69E3ADD`.
+- SHA-256 of `pages-publication-sha256.txt`: `5BB5AA54E4340ECC5515EEED67398678B3EB5DB30BD037AAEF21F7606923FC7B`.
 
 ## Deployment inputs and identity
 
@@ -40,11 +43,13 @@ The counts exactly match Wave 7's authoritative clean-checkout plan. Material fi
 
 The guarded apply ran only in `C:\Dev\easylife-wave8-production-candidate`. `--check` converged at zero changes when locked to the reviewed source SHA. A second isolated candidate produced the same complete inventory hash. The original checkout was not changed.
 
+Hosted Linux initially exposed two Windows-only determinism gaps: shallow checkout prevented the reviewed-source ancestry check, and worktree line-ending expansion changed publication metadata for `.nojekyll`, the SVG icon, web manifest, and service worker. The workflow now fetches full history, preserved metadata uses committed blobs, and all managed text is canonicalized to LF before hashing. Regression tests cover both cases. The production payload was not otherwise changed.
+
 ## Verification
 
 - application tests: 72/72;
 - authenticated Firestore Emulator integration: 7/7;
-- publication/server/production-input tests: 28 discovered, 27 pass and 1 Windows symlink-privilege skip (covered on hosted Linux);
+- publication/server/production-input tests: 30 discovered, 29 pass and 1 Windows symlink-privilege skip (covered on hosted Linux);
 - TypeScript: pass;
 - production build: pass, 210 modules;
 - Functions lint: pass;
@@ -59,6 +64,7 @@ The guarded apply ran only in `C:\Dev\easylife-wave8-production-candidate`. `--c
 - production login boundary: sign-in UI rendered, configuration-unavailable state absent, zero external requests, no sign-in performed;
 - PWA: active `sw.js`, controlling scope, current `easylife-shell-v6` cache, offline Progress reload pass, online recovery pass;
 - synthetic flows: Capture save, focused Review processing/persistence, Plan ownership, global Workout search, goal pause/resume, 12-working-set workout save, post-workout review, four-session PR filter, My Week, and whole-account export surface pass.
+- hosted draft-PR checks: 4/4 pass (`Complete verification and staged Pages artifact`, `Functions syntax and critical advisory gate`, `Web tests and production build`, and `Production-configured root integrity`).
 
 The in-app browser did not expose a download event for the local blob CSV button. The button interaction ran, while deterministic JSON/CSV escaping, manifest, formula-injection, schema, and download-content rules remain covered by the 72-test application suite. This is a browser-harness limitation, not evidence of a production failure.
 

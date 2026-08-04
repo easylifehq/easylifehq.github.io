@@ -12,4 +12,4 @@ Wave 7 authoritative clean-checkout plan had the same counts. The production can
 
 All creates/updates/deletes are one of the six fixed generated paths, `assets/**`, or `icons/**`. Deletes are stale generated assets accumulated in the existing root. No plan entry targets source, tests, docs, Functions, Firestore rules, Git metadata, `old-site`, `CNAME`, `.nojekyll`, or an unknown root path.
 
-The pre-apply and guarded-apply JSON plans are retained beside this record. `CNAME` hashes matched before and after apply. Independent regeneration and the applied root share inventory SHA-256 `79B24D0362132C1CE0AFFABFC0C133D847CC8FFB404FB4C297E6B12AE69E3ADD`.
+The pre-apply and guarded-apply JSON plans are retained beside this record. `CNAME` hashes matched before and after apply. Independent regeneration and the applied root share inventory SHA-256 `5BB5AA54E4340ECC5515EEED67398678B3EB5DB30BD037AAEF21F7606923FC7B`. The final metadata records committed preserved blobs and LF-canonical managed text, matching both Windows and hosted Linux regeneration.

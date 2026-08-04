@@ -14,7 +14,7 @@ Draft PR only. Firebase deployment is separate and has not occurred. Green CI al
 | Wave 7 base | `5fa26608ed74de5d8f6dac2875c5c88b06b76c54` |
 | Reviewed source SHA | `09e8b959deccfdd77537d1a69e6382afbe1091f8` |
 | Generated-output commit | `cb630db2942e69fada4c6eec870144d44e3a8a1b` |
-| Inventory SHA-256 | `79B24D0362132C1CE0AFFABFC0C133D847CC8FFB404FB4C297E6B12AE69E3ADD` |
+| Inventory SHA-256 | `5BB5AA54E4340ECC5515EEED67398678B3EB5DB30BD037AAEF21F7606923FC7B` |
 | Payload | 91 files |
 | Root plan | 75 create / 11 update / 181 delete / 5 unchanged / 2 preserved |
 | Pages source | `main` at `/` (authenticated repository metadata) |
@@ -22,6 +22,8 @@ Draft PR only. Firebase deployment is separate and has not occurred. Green CI al
 | Proposed rollback | `5fa26608ed74de5d8f6dac2875c5c88b06b76c54` — awaiting human approval |
 
 The rollback proposal is the verified `origin/main`/Pages source checkpoint immediately before this candidate. It is not approved merely because it is recorded here.
+
+The draft PR's four hosted checks passed at candidate commit `18b5d085`: complete verification/artifact, Functions/advisory gate, web tests/build, and production-configured root integrity. Green CI is evidence, not deployment approval.
 
 ## Predeployment approval fields
 

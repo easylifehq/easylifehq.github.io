@@ -9,7 +9,7 @@ The production candidate is not deployment-approved.
 - provider operator custom-claim verification: pending;
 - proposed rollback SHA human approval: pending;
 - deployment window and named operator: pending;
-- hosted draft-PR checks: to be recorded after push.
+- hosted draft-PR checks: 4/4 green at candidate commit `18b5d085` ([complete verification](https://github.com/easylifehq/easylifehq.github.io/actions/runs/30865032866), [release checks](https://github.com/easylifehq/easylifehq.github.io/actions/runs/30865032859), [production root integrity](https://github.com/easylifehq/easylifehq.github.io/actions/runs/30865032914)).
 
 No Pages, Firebase, claims, production accounts, or real user data were changed. The draft PR must remain draft.
 

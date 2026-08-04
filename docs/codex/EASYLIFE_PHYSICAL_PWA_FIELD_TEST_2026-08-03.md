@@ -2,7 +2,7 @@
 
 Candidate: `codex/easylife-production-candidate-wave-8-20260803`
 Generated-output commit: `cb630db2942e69fada4c6eec870144d44e3a8a1b`
-Inventory SHA-256: `79B24D0362132C1CE0AFFABFC0C133D847CC8FFB404FB4C297E6B12AE69E3ADD`
+Inventory SHA-256: `5BB5AA54E4340ECC5515EEED67398678B3EB5DB30BD037AAEF21F7606923FC7B`
 
 Status: pending on both physical platforms. Desktop emulation is evidence, not a substitute.
 

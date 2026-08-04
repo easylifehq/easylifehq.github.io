@@ -38,8 +38,8 @@
     {
       "path": ".nojekyll",
       "managed": false,
-      "size": 2,
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+      "size": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
       "path": "404.html",
@@ -560,8 +560,8 @@
     {
       "path": "icons/easylife-icon.svg",
       "managed": true,
-      "size": 936,
-      "sha256": "f4ce710294453b3321580c9281320812495269b19f32dbc276a0312d75c9e115"
+      "size": 926,
+      "sha256": "2b6714970659011fa6b7b7b76486736efb7a9f72cda39af92df91ae8d74d824e"
     },
     {
       "path": "index.html",
@@ -572,14 +572,14 @@
     {
       "path": "manifest.webmanifest",
       "managed": true,
-      "size": 851,
-      "sha256": "1edaae2f8a0c53ef13ad4bc19935f2a60912b4b86ba8628925e8c6c252eb1742"
+      "size": 819,
+      "sha256": "0296199a38d917f44c2f1f3ba437982d8081c89b89d66463ba7e756e1e6142ab"
     },
     {
       "path": "sw.js",
       "managed": true,
-      "size": 2042,
-      "sha256": "a53311a2516346e47aaee8981404db3065e897c2b675b87d86556b54ee27ceb5"
+      "size": 1976,
+      "sha256": "bcfed6091b752f6de6670458b85261a0784e1fa9e0ede7687cea76a93a9550fa"
     }
   ]
 }

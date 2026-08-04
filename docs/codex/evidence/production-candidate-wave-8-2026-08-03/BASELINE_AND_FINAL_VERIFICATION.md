@@ -5,7 +5,7 @@
 - base/proposed rollback: `5fa26608ed74de5d8f6dac2875c5c88b06b76c54`;
 - reviewed source: `09e8b959deccfdd77537d1a69e6382afbe1091f8`;
 - generated root: `cb630db2942e69fada4c6eec870144d44e3a8a1b`;
-- inventory: `79B24D0362132C1CE0AFFABFC0C133D847CC8FFB404FB4C297E6B12AE69E3ADD`;
+- inventory: `5BB5AA54E4340ECC5515EEED67398678B3EB5DB30BD037AAEF21F7606923FC7B`;
 - approved Firebase project: `pipeline-2f422`;
 - variables: 6/6 required present; optional measurement present; values deliberately omitted.
 
@@ -17,7 +17,7 @@
 - 7/7 authenticated Firestore Emulator tests using demo project `demo-easylife-wave2`;
 - TypeScript;
 - production Vite build, 210 modules;
-- 28 publication/server/input tests: 27 pass, 1 Windows-only symlink privilege skip;
+- 30 publication/server/input tests: 29 pass, 1 Windows-only symlink privilege skip;
 - staged candidate creation and 91-file SHA-256 verification;
 - Functions syntax lint;
 - application and Functions critical production advisory gates.
@@ -27,6 +27,8 @@
 `node scripts/prepare-pages-publication.mjs --check`, with `EASYLIFE_PUBLICATION_SOURCE_SHA` locked to the committed manifest's reviewed ancestor, reported 91 unchanged payload files, preserved `CNAME`/`.nojekyll`, and zero create/update/delete operations.
 
 Two isolated generations and the applied root produced byte-identical inventories.
+
+The final draft-PR run passed all four hosted checks, including the Linux production-configured root-integrity job. Its full-history ancestry gate and LF-canonical publication metadata reproduce the same committed root across Windows and Linux.
 
 ## Browser and PWA
 
