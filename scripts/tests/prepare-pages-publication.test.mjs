@@ -128,6 +128,27 @@ test("creates a complete deterministic candidate and preserves CNAME", async (t)
   assert.deepEqual(await readFile(path.join(stage, "CNAME")), await readFile(path.join(fixture.repo, "CNAME")));
 });
 
+test("preserved metadata uses committed bytes across worktree line-ending expansion", async (t) => {
+  const fixture = await makeFixture();
+  t.after(() => rm(fixture.parent, { recursive: true, force: true }));
+  await rm(path.join(fixture.repo, ".git"), { recursive: true, force: true });
+  await execFile("git", ["init"], { cwd: fixture.repo });
+  await execFile("git", ["config", "user.email", "publication-test@example.invalid"], { cwd: fixture.repo });
+  await execFile("git", ["config", "user.name", "Publication Test"], { cwd: fixture.repo });
+  await execFile("git", ["add", "."], { cwd: fixture.repo });
+  await execFile("git", ["commit", "-m", "fixture"], { cwd: fixture.repo });
+  await writeFile(path.join(fixture.repo, ".nojekyll"), "\r\n");
+
+  const stage = path.join(fixture.parent, "candidate");
+  await stagePublication({ repoRoot: fixture.repo, buildRoot: fixture.dist, stageRoot: stage, metadata: METADATA });
+  const manifest = await verifyStagedCandidate(stage);
+  const noJekyll = manifest.files.find((record) => record.path === ".nojekyll");
+
+  assert.equal((await readFile(path.join(fixture.repo, ".nojekyll"))).length, 2);
+  assert.deepEqual(await readFile(path.join(stage, ".nojekyll")), Buffer.from("\n"));
+  assert.equal(noJekyll.size, 1);
+});
+
 test("repeat staging is byte-idempotent", async (t) => {
   const fixture = await makeFixture();
   t.after(() => rm(fixture.parent, { recursive: true, force: true }));

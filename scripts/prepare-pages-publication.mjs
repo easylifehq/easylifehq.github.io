@@ -232,6 +232,21 @@ async function resolveBuildMetadata(repoRoot, override = {}) {
   return { sourceSha: sourceSha.toLowerCase(), buildTimestamp, buildTimestampPolicy };
 }
 
+async function readCommittedPreservedFile(repoRoot, relative, workingPath) {
+  try {
+    const { stdout } = await execFile("git", ["show", `HEAD:${relative}`], {
+      cwd: repoRoot,
+      encoding: null,
+      maxBuffer: 1024 * 1024,
+    });
+    return Buffer.isBuffer(stdout) ? stdout : Buffer.from(stdout);
+  } catch {
+    // Unit fixtures without a real Git object database still exercise the
+    // publication contract using their on-disk preserved files.
+    return readFile(workingPath);
+  }
+}
+
 async function validateBuild(repoRoot, buildRoot) {
   const resolvedBuild = await realpath(buildRoot);
   const expectedParent = await realpath(path.join(repoRoot, "app-vNext"));
@@ -316,7 +331,10 @@ async function createCandidateInDirectory({ repoRoot, buildRoot, candidateRoot, 
     if (sourceStat.isSymbolicLink() || !sourceStat.isFile()) {
       throw new PublicationError(`Preserved root file must be a regular file: ${relative}`);
     }
-    await copyPath(repo.repoRoot, candidateRoot, relative);
+    await writeFile(
+      path.join(candidateRoot, ...relative.split("/")),
+      await readCommittedPreservedFile(repo.repoRoot, relative, source),
+    );
     preserved.push(relative);
   }
   if (!preserved.includes("CNAME")) throw new PublicationError("CNAME is required and must be preserved byte-for-byte.");
