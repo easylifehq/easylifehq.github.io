@@ -61,8 +61,32 @@ jobs:
       - name: Verify candidate hashes
         run: node scripts/prepare-pages-publication.mjs --verify-stage "$RUNNER_TEMP/easylife-production-candidate"
       - name: Require committed root to match the deterministic production candidate
-        run: node scripts/prepare-pages-publication.mjs --check --plan "$RUNNER_TEMP/easylife-production-root-check.json"
+        shell: pwsh
+        run: |
+          node scripts/prepare-pages-publication.mjs --check --plan "$env:RUNNER_TEMP/easylife-production-root-check.json"
+          $checkExit = $LASTEXITCODE
+          if ($checkExit -ne 0) {
+            $committed = Get-Content -Raw pages-publication-manifest.json | ConvertFrom-Json -AsHashtable
+            $candidate = Get-Content -Raw "$env:RUNNER_TEMP/easylife-production-candidate/pages-publication-manifest.json" | ConvertFrom-Json -AsHashtable
+            function Compare-MetadataShape($left, $right, [string]$path = '$') {
+              if ($left -is [System.Collections.IDictionary] -and $right -is [System.Collections.IDictionary]) {
+                foreach ($key in @(@($left.Keys) + @($right.Keys) | Sort-Object -Unique)) {
+                  Compare-MetadataShape $left[$key] $right[$key] "$path.$key"
+                }
+              } elseif ($left -is [System.Collections.IList] -and $right -is [System.Collections.IList]) {
+                $count = [Math]::Max($left.Count, $right.Count)
+                for ($index = 0; $index -lt $count; $index++) {
+                  Compare-MetadataShape $left[$index] $right[$index] "$path[$index]"
+                }
+              } elseif ([string]$left -cne [string]$right) {
+                Write-Host "metadata mismatch at $path"
+              }
+            }
+            Compare-MetadataShape $committed $candidate
+            exit $checkExit
+          }
       - name: Upload non-deploying production review artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: easylife-production-candidate-${{ github.sha }}
