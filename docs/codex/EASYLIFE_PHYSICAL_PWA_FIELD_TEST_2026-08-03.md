@@ -1,8 +1,8 @@
 # EasyLife physical PWA field test
 
 Candidate: `codex/easylife-production-candidate-wave-8-20260803`
-Generated-output commit: `cb630db2942e69fada4c6eec870144d44e3a8a1b`
-Inventory SHA-256: `5BB5AA54E4340ECC5515EEED67398678B3EB5DB30BD037AAEF21F7606923FC7B`
+Generated-output commit: `af89fe0acd6c25edb276704c3951c0294fe511fd`
+Inventory SHA-256: `BF3887E03E988D1E6663BBB50D1F7A2DA0DAA5B287FBADBE05A8B934ED8046A8`
 
 Status: pending on both physical platforms. Desktop emulation is evidence, not a substitute.
 
