@@ -70,9 +70,9 @@ const PROHIBITED_FILE_PATTERNS = [
 const SECRET_CONTENT_PATTERNS = [
   /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
   /\bgh[opusr]_[A-Za-z0-9_]{20,}\b/,
-  /\bAIza[0-9A-Za-z_-]{30,}\b/,
   /\b(?:sk|rk)-[A-Za-z0-9_-]{20,}\b/,
 ];
+const FIREBASE_WEB_API_KEY_PATTERN = /\bAIza[0-9A-Za-z_-]{30,}\b/g;
 
 export class PublicationError extends Error {
   constructor(message, exitCode = EXIT.VALIDATION) {
@@ -175,6 +175,13 @@ async function assertNoSecretsOrMachinePaths(target, relative, repoRoot) {
       throw new PublicationError(`Credential-shaped content rejected in ${relative}.`);
     }
   }
+  const firebaseWebKeys = [...contents.matchAll(FIREBASE_WEB_API_KEY_PATTERN)].map((match) => match[0]);
+  if (firebaseWebKeys.length > 0) {
+    const approvedPublicKey = process.env.VITE_FIREBASE_API_KEY?.trim();
+    if (!approvedPublicKey || firebaseWebKeys.some((value) => value !== approvedPublicKey)) {
+      throw new PublicationError(`Unapproved Firebase web API key rejected in ${relative}.`);
+    }
+  }
   const normalizedRepo = repoRoot.replaceAll("\\", "/");
   const machinePatterns = [normalizedRepo, repoRoot, "C:\\Users\\", "C:\\\\Users\\\\", "/home/runner/work/", "/Users/"];
   if (machinePatterns.some((needle) => needle && contents.includes(needle))) {
@@ -225,6 +232,21 @@ async function resolveBuildMetadata(repoRoot, override = {}) {
   return { sourceSha: sourceSha.toLowerCase(), buildTimestamp, buildTimestampPolicy };
 }
 
+async function readCommittedPreservedFile(repoRoot, relative, workingPath) {
+  try {
+    const { stdout } = await execFile("git", ["show", `HEAD:${relative}`], {
+      cwd: repoRoot,
+      encoding: null,
+      maxBuffer: 1024 * 1024,
+    });
+    return Buffer.isBuffer(stdout) ? stdout : Buffer.from(stdout);
+  } catch {
+    // Unit fixtures without a real Git object database still exercise the
+    // publication contract using their on-disk preserved files.
+    return readFile(workingPath);
+  }
+}
+
 async function validateBuild(repoRoot, buildRoot) {
   const resolvedBuild = await realpath(buildRoot);
   const expectedParent = await realpath(path.join(repoRoot, "app-vNext"));
@@ -246,7 +268,7 @@ async function validateBuild(repoRoot, buildRoot) {
     assertApprovedBuildPath(relative);
     await assertNoSecretsOrMachinePaths(path.join(resolvedBuild, ...relative.split("/")), relative, repoRoot);
   }
-  const indexBytes = await readFile(path.join(resolvedBuild, "index.html"));
+  const indexBytes = await readPublicationBytes(path.join(resolvedBuild, "index.html"), "index.html");
   const indexText = indexBytes.toString("utf8");
   if (!/^<!doctype html>/i.test(indexText.trimStart()) || !indexText.includes('id="root"')) {
     throw new PublicationError("Malformed index.html: expected an HTML doctype and #root mount point.");
@@ -273,12 +295,18 @@ async function validateBuild(repoRoot, buildRoot) {
   return { buildRoot: resolvedBuild, files, indexBytes };
 }
 
+async function readPublicationBytes(target, relative) {
+  const bytes = await readFile(target);
+  if (!TEXT_EXTENSIONS.has(path.posix.extname(relative).toLowerCase())) return bytes;
+  return Buffer.from(bytes.toString("utf8").replace(/\r\n?/g, "\n"), "utf8");
+}
+
 async function copyPath(sourceRoot, destinationRoot, relative) {
   const safe = normalizeRelativePath(relative);
   const source = path.join(sourceRoot, ...safe.split("/"));
   const destination = path.join(destinationRoot, ...safe.split("/"));
   await mkdir(path.dirname(destination), { recursive: true });
-  await copyFile(source, destination);
+  await writeFile(destination, await readPublicationBytes(source, safe));
 }
 
 async function fileRecord(root, relative, managed) {
@@ -309,7 +337,10 @@ async function createCandidateInDirectory({ repoRoot, buildRoot, candidateRoot, 
     if (sourceStat.isSymbolicLink() || !sourceStat.isFile()) {
       throw new PublicationError(`Preserved root file must be a regular file: ${relative}`);
     }
-    await copyPath(repo.repoRoot, candidateRoot, relative);
+    await writeFile(
+      path.join(candidateRoot, ...relative.split("/")),
+      await readCommittedPreservedFile(repo.repoRoot, relative, source),
+    );
     preserved.push(relative);
   }
   if (!preserved.includes("CNAME")) throw new PublicationError("CNAME is required and must be preserved byte-for-byte.");

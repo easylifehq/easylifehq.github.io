@@ -33,7 +33,7 @@ jobs:
       - run: npm run test:emulator
       - run: npm run build
       - name: Test publication contract and review server
-        run: node --test ../scripts/tests/prepare-pages-publication.test.mjs ../scripts/tests/serve-pages-candidate.test.mjs
+        run: node --test ../scripts/tests/prepare-pages-publication.test.mjs ../scripts/tests/serve-pages-candidate.test.mjs ../scripts/tests/verify-production-publication.test.mjs
       - name: Stage non-deploying Pages candidate
         run: node ../scripts/prepare-pages-publication.mjs --stage "$RUNNER_TEMP/easylife-pages-candidate" --plan "$RUNNER_TEMP/easylife-pages-root-plan.json"
       - name: Verify staged candidate hashes

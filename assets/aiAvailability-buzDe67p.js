@@ -1,0 +1,1 @@
+const t={label:"Live AI off",badge:"No live AI"},s={today:"Capture, Today review, task saves, and note saves still work.",inbox:"Local rules are active; saves still need your final confirmation."};function i(a){return s[a]}export{t as a,i as g};

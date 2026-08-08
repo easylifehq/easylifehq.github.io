@@ -1,8 +1,8 @@
-const CACHE_NAME = "easylife-shell-v4";
+const CACHE_PREFIX = "easylife-shell-";
+const CACHE_NAME = `${CACHE_PREFIX}v6`;
 const CORE_ASSETS = ["/", "/manifest.webmanifest", "/icons/easylife-icon.svg", "/icons/easylife-icon-192.png", "/icons/easylife-icon-512.png", "/icons/easylife-apple-touch-icon.png"];
 
 self.addEventListener("install", (event) => {
-  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS))
   );
@@ -13,7 +13,7 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((cacheNames) =>
       Promise.all(
         cacheNames
-          .filter((cacheName) => cacheName !== CACHE_NAME)
+          .filter((cacheName) => cacheName.startsWith(CACHE_PREFIX) && cacheName !== CACHE_NAME)
           .map((cacheName) => caches.delete(cacheName))
       )
     ).then(() => self.clients.claim())
@@ -33,7 +33,15 @@ self.addEventListener("fetch", (event) => {
 
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match("/"))
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse.ok) {
+            const responseCopy = networkResponse.clone();
+            event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put("/", responseCopy)));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match("/"))
     );
     return;
   }
@@ -44,11 +52,15 @@ self.addEventListener("fetch", (event) => {
         return cachedResponse;
       }
 
-      return fetch(event.request).then((networkResponse) => {
-        const responseCopy = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseCopy));
-        return networkResponse;
-      });
+      return fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse.ok) {
+            const responseCopy = networkResponse.clone();
+            event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseCopy)));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request));
     })
   );
 });

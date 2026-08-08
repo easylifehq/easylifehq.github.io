@@ -1,1 +1,0 @@
-const t={label:"Live AI off",badge:"Local mode"},s={today:"Local mode. Capture, Today review, task saves, and note saves still work.",inbox:"Local rules are active; saves still need your final confirmation."};function e(a){return s[a]}export{t as a,e as g};
