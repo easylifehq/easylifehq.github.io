@@ -361,6 +361,7 @@ export function EasyProjectsHomePage() {
 
       <div className="dashboard-grid">
         <PageSection
+          headingLevel={1}
           eyebrow="Projects"
           title="Start a project"
           description="Give the work a name now. Sections, tasks, and dates can come after."
