@@ -15201,6 +15201,284 @@ button.calendar-detail-card:disabled {
   text-align: right;
 }
 
+/* Wave 9: a quieter, denser shared application surface. */
+:root {
+  --easy-space-1: 0.25rem;
+  --easy-space-2: 0.5rem;
+  --easy-space-3: 0.75rem;
+  --easy-space-4: 1rem;
+  --easy-space-5: 1.5rem;
+  --easy-control-height: 44px;
+  --easy-compact-control-height: 36px;
+  --shell-card-radius: 12px;
+  --shell-control-radius: 10px;
+  --shell-panel-radius: 14px;
+  --shell-card-shadow: 0 8px 24px rgba(24, 35, 38, 0.055);
+  --shell-control-shadow: 0 3px 10px rgba(24, 35, 38, 0.09);
+  --shell-grid-line: rgba(35, 48, 51, 0.025);
+  --ui-border-subtle: rgba(35, 48, 51, 0.11);
+}
+
+.app-shell-vnext,
+.app-content {
+  background-image:
+    radial-gradient(circle at top left, var(--shell-page-overlay-1), transparent 28%),
+    linear-gradient(180deg, var(--shell-bg-top) 0%, var(--shell-bg-bottom) 100%);
+  background-size: auto, auto;
+}
+
+.app-header {
+  width: min(1120px, calc(100% - 2rem));
+  margin-top: var(--easy-space-2);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(7, 18, 22, 0.055);
+}
+
+.app-header-main {
+  min-height: 48px;
+  padding: 0.3rem 0.5rem;
+}
+
+.app-suite-control {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.brand-badge {
+  width: 36px;
+  height: 36px;
+}
+
+.site-brand-title {
+  font-size: 0.94rem;
+}
+
+.app-search-command {
+  min-height: var(--easy-compact-control-height);
+  padding: 0.35rem 0.55rem;
+  background: color-mix(in srgb, var(--ui-bg-card-elevated) 76%, transparent);
+  font-size: 0.86rem;
+}
+
+.app-content {
+  padding: var(--easy-space-4);
+}
+
+.app-content-shell {
+  padding-top: var(--easy-space-3);
+  padding-bottom: calc(var(--easy-space-5) + env(safe-area-inset-bottom, 0px) + var(--easy-keyboard-inset, 0px));
+}
+
+.app-content-shell > .page-wrap:not(.page-wrap-notes),
+.site-footer {
+  width: min(1120px, 100%);
+}
+
+.page-wrap {
+  gap: var(--easy-space-3);
+}
+
+.page-hero-vnext,
+.panel-section,
+.loading-card,
+.auth-card-vnext {
+  background: color-mix(in srgb, var(--app-panel-bg, var(--shell-card-bg)) 96%, white 4%);
+  border-color: color-mix(in srgb, var(--app-panel-border, var(--shell-card-border)) 72%, transparent);
+  box-shadow: 0 1px 2px rgba(24, 35, 38, 0.035), 0 7px 18px rgba(24, 35, 38, 0.035);
+}
+
+.page-hero-vnext,
+.panel-section {
+  padding: var(--easy-space-4);
+}
+
+.panel-header {
+  gap: var(--easy-space-1);
+  margin-bottom: var(--easy-space-3);
+}
+
+.panel-header h1,
+.panel-header h2 {
+  font-size: clamp(1.25rem, 1.8vw, 1.62rem);
+  line-height: 1.13;
+}
+
+.page-section-description {
+  font-size: 0.89rem;
+  line-height: 1.42;
+}
+
+.eyebrow,
+.app-theme .eyebrow,
+.brand-kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+}
+
+.subnav {
+  display: flex;
+  gap: var(--easy-space-2);
+  overflow-x: auto;
+  padding-bottom: var(--easy-space-1);
+  scrollbar-width: thin;
+}
+
+.subnav-link {
+  flex: 0 0 auto;
+  min-height: var(--easy-compact-control-height);
+  padding: 0.42rem 0.7rem;
+  font-size: 0.86rem;
+}
+
+.button-primary,
+.button-secondary,
+.primary-button,
+.ghost-button,
+.toggle-button,
+.menu-trigger-button,
+.danger-button,
+.compact-button {
+  min-height: var(--easy-control-height);
+  padding: 0.62rem 0.85rem;
+}
+
+.compact-button,
+.task-card-actions .button-secondary,
+.task-card-actions .ghost-button,
+.task-card-actions .compact-button {
+  min-height: var(--easy-compact-control-height);
+  padding: 0.4rem 0.65rem;
+}
+
+.stats-grid {
+  gap: var(--easy-space-2);
+}
+
+.stat-card-vnext {
+  min-height: 0;
+  padding: 0.7rem 0.75rem;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.stat-card-vnext strong {
+  font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+}
+
+.task-list-vnext,
+.stacked-sections,
+.workout-insights-stack {
+  gap: var(--easy-space-2);
+}
+
+.task-card-vnext,
+.workout-next-move,
+.workout-plan-bridge,
+.focused-review-entry {
+  box-shadow: none;
+}
+
+.task-card-vnext {
+  border-radius: 10px;
+}
+
+.empty-card-vnext,
+.workout-empty-state,
+.focused-review-clear {
+  padding: 1rem;
+  box-shadow: none;
+}
+
+.deep-module-hero {
+  gap: var(--easy-space-2);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.deep-module-primary-action {
+  min-height: 50px;
+}
+
+.workout-save-status,
+.demo-data-banner,
+.workout-rule-receipt {
+  padding: 0.6rem 0.72rem;
+  border-radius: 10px;
+}
+
+.workout-comparison-table th,
+.workout-comparison-table td,
+.workout-chart-alternative th,
+.workout-chart-alternative td {
+  padding: 0.55rem 0.6rem;
+}
+
+.core-palette {
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(7, 18, 22, 0.24);
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    width: calc(100% - 1rem);
+    margin-top: 0.25rem;
+  }
+
+  .app-content {
+    padding: var(--easy-space-2);
+  }
+
+  .app-content-shell {
+    padding-top: var(--easy-space-2);
+  }
+
+  .page-wrap {
+    gap: var(--easy-space-2);
+  }
+
+  .page-hero-vnext,
+  .panel-section {
+    padding: 0.82rem;
+    border-radius: 12px;
+  }
+
+  .panel-header h1,
+  .panel-header h2 {
+    font-size: clamp(1.16rem, 6.3vw, 1.42rem);
+  }
+
+  .page-section-description {
+    font-size: 0.84rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .stat-card-vnext {
+    padding: 0.58rem 0.5rem;
+  }
+
+  .stat-card-vnext span {
+    font-size: 0.64rem;
+  }
+
+  .app-search-command {
+    min-width: var(--easy-control-height);
+    min-height: var(--easy-control-height);
+  }
+
+  .workout-set-row input,
+  .workout-set-row select,
+  .workout-set-row button,
+  .statistics-tab-strip button {
+    min-height: var(--easy-control-height);
+  }
+}
+
 .guided-workout-list,
 .workout-history-results {
   margin-top: 1rem;
@@ -15219,5 +15497,108 @@ button.calendar-detail-card:disabled {
     justify-items: stretch;
     max-width: none;
     text-align: left;
+  }
+}
+
+/* Wave 9: Today is the most frequent entry point, so it gets the tightest hierarchy. */
+.app-theme-easyhq:not(.command-center-page) {
+  --hq-shadow: 0 5px 18px rgba(32, 48, 52, 0.045);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-card {
+  gap: var(--easy-space-3);
+  padding: clamp(0.95rem, 2vw, 1.3rem);
+  box-shadow: var(--hq-shadow);
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-heading h1 {
+  max-width: 14ch;
+  font-size: clamp(2rem, 4.2vw, 3.2rem);
+  line-height: 1.02;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-start-heading p {
+  margin-bottom: 0.18rem;
+  font-size: 0.8rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-today-summary {
+  gap: 0;
+  border: 1px solid var(--hq-line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-today-summary span {
+  min-height: 3.15rem;
+  padding: 0.46rem 0.62rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) .assistant-next-inline {
+  padding: 0.72rem 0.8rem;
+  border-radius: 10px;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture {
+  min-height: var(--easy-control-height);
+  padding: 0.52rem 0.65rem;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-natural-capture small {
+  font-size: 0.7rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-demo-step {
+  min-height: 0;
+  padding: 0.75rem;
+}
+
+.app-theme-easyhq:not(.command-center-page) .hq-demo-step p {
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 640px) {
+  .app-header .site-brand,
+  .app-shell-vnext .button-primary,
+  .app-shell-vnext .button-secondary,
+  .app-shell-vnext .primary-button,
+  .app-shell-vnext .ghost-button,
+  .app-shell-vnext .toggle-button,
+  .app-shell-vnext .menu-trigger-button,
+  .app-shell-vnext .danger-button,
+  .app-shell-vnext .compact-button,
+  .site-footer a {
+    min-height: var(--easy-control-height) !important;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-start-card {
+    padding: 0.82rem;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-start-heading h1 {
+    max-width: 12ch;
+    font-size: clamp(1.78rem, 9.4vw, 2.2rem);
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-today-summary span {
+    min-height: 3rem;
+    padding: 0.42rem;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .assistant-next-inline {
+    gap: 0.62rem;
+    padding: 0.7rem;
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-natural-capture {
+    grid-template-columns: auto minmax(0, 1fr);
+    min-height: var(--easy-control-height);
+  }
+
+  .app-theme-easyhq:not(.command-center-page) .hq-natural-capture em {
+    display: none;
   }
 }
