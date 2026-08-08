@@ -12,9 +12,9 @@ Draft PR only. Firebase deployment is separate and has not occurred. Green CI al
 | Repository | `easylifehq/easylifehq.github.io` |
 | Branch | `codex/easylife-production-candidate-wave-8-20260803` |
 | Wave 7 base | `5fa26608ed74de5d8f6dac2875c5c88b06b76c54` |
-| Reviewed source SHA | `09e8b959deccfdd77537d1a69e6382afbe1091f8` |
-| Generated-output commit | `cb630db2942e69fada4c6eec870144d44e3a8a1b` |
-| Inventory SHA-256 | `5BB5AA54E4340ECC5515EEED67398678B3EB5DB30BD037AAEF21F7606923FC7B` |
+| Reviewed source SHA | `da3d92d47778b29902e6b2a0c2c61c9c73a30c58` |
+| Generated-output commit | `af89fe0acd6c25edb276704c3951c0294fe511fd` |
+| Inventory SHA-256 | `BF3887E03E988D1E6663BBB50D1F7A2DA0DAA5B287FBADBE05A8B934ED8046A8` |
 | Payload | 91 files |
 | Root plan | 75 create / 11 update / 181 delete / 5 unchanged / 2 preserved |
 | Pages source | `main` at `/` (authenticated repository metadata) |
@@ -23,7 +23,7 @@ Draft PR only. Firebase deployment is separate and has not occurred. Green CI al
 
 The rollback proposal is the verified `origin/main`/Pages source checkpoint immediately before this candidate. It is not approved merely because it is recorded here.
 
-The draft PR's four hosted checks passed at candidate commit `18b5d085`: complete verification/artifact, Functions/advisory gate, web tests/build, and production-configured root integrity. Green CI is evidence, not deployment approval.
+The four hosted check types passed after the 2026-08-08 accessibility repair: complete verification/artifact, Functions/advisory gate, web tests/build, and production-configured root integrity. Reconfirm all four at the current PR head before approval. Green CI is evidence, not deployment approval. The detailed rerun is recorded in `EASYLIFE_RELEASE_READINESS_SPRINT_2026-08-08.md`.
 
 ## Predeployment approval fields
 
