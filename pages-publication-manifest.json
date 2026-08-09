@@ -2,7 +2,7 @@
   "schemaVersion": "easylife-pages-publication/v1",
   "source": {
     "sha": "8c2a45fbbee920e6d05ea7f004899f2375855e71",
-    "applicationVersion": "4.37.1"
+    "applicationVersion": "5.0.0"
   },
   "build": {
     "timestamp": "2026-08-08T19:31:58.000Z",
@@ -32,7 +32,7 @@
   "entrypoints": {
     "application": "index.html",
     "deepRouteFallback": "404.html",
-    "paritySha256": "a8d1e20795ec5b6d3f3e2bb1ffab2dedad1dbab484e49e54b9af1f18a6d7ec80"
+    "paritySha256": "43eb89a835cc2e757a8d8e98fdf38af528b02622e54db12e057974943bb7ddaf"
   },
   "files": [
     {
@@ -45,7 +45,7 @@
       "path": "404.html",
       "managed": true,
       "size": 2072,
-      "sha256": "a8d1e20795ec5b6d3f3e2bb1ffab2dedad1dbab484e49e54b9af1f18a6d7ec80"
+      "sha256": "43eb89a835cc2e757a8d8e98fdf38af528b02622e54db12e057974943bb7ddaf"
     },
     {
       "path": "CNAME",
@@ -54,34 +54,40 @@
       "sha256": "8c70efb77e5bf4aa6ab4a00fe4e0ae2ea2ef0274c14cadcdcebc6276e03d1a77"
     },
     {
-      "path": "assets/AppWorkspaceHeader-BIcbh_XW.js",
+      "path": "assets/AppWorkspaceHeader-CisuRAN-.js",
       "managed": true,
-      "size": 309,
-      "sha256": "7eec49c245c70c5daa7b5adb991649d430c1f7a0123c51bdc9caf4b256564e0f"
+      "size": 380,
+      "sha256": "50c4d203ddb5933adffae8f3ccd690c8b0f605d58d6253f6d4434044333e4a0e"
     },
     {
-      "path": "assets/CalendarComposer-A_UZTWpH.js",
+      "path": "assets/CalendarComposer-C3zqVzG5.js",
       "managed": true,
       "size": 10040,
-      "sha256": "e541c7b17e3b62b53d317deb6fbe5ad2c5a77f7a6a38bbfd58fed797722f0053"
+      "sha256": "8e15c8295c6b80c87d557dd6d1fa7c26f1ee217b541b8b81edad63e87de901fd"
     },
     {
-      "path": "assets/CalendarTaskBlockDrawer-CxtzN_Lk.js",
+      "path": "assets/CalendarTaskBlockDrawer-RTXdvSUt.js",
       "managed": true,
       "size": 11534,
-      "sha256": "7e4590ba3260e7201244e04cc9caa04023f050241ea6437105a6ee3b75129fae"
+      "sha256": "e2288156a9d5a9d918c4720469409cd99a7042482cddd2a15d1f1dfcd7f44d7a"
     },
     {
-      "path": "assets/CommandCenterPage-C0I7cqrV.js",
+      "path": "assets/CommandCenterPage-D3HSFT8Z.js",
       "managed": true,
       "size": 11219,
-      "sha256": "efb0ac4e64c7746bda1cf5f619dd51630d13ecd67a9b90ece735dd41f5e3b56b"
+      "sha256": "4483cd47c72ef3a67462416e85509bb1eec748699b3347afee7fe2e3b595c6aa"
     },
     {
-      "path": "assets/EasyCalendarDayPage-BIghxCTr.js",
+      "path": "assets/DrinkEditorForm-dfwC5y-G.js",
+      "managed": true,
+      "size": 4567,
+      "sha256": "214f7520710665b633d9c67f6607bd33570569b992323424cfac0a70fb51d50e"
+    },
+    {
+      "path": "assets/EasyCalendarDayPage-BX3d8Sel.js",
       "managed": true,
       "size": 21677,
-      "sha256": "7b0c54f0c091293c04eb7f2d70173f938025ef5961e0fd107426e2a7f852474a"
+      "sha256": "fa151d8ce7300abcfabdd4f178ed6c89c41f433c1ce86c2807d2373d540e5af7"
     },
     {
       "path": "assets/EasyCalendarLayout-6Jm3ovrv.js",
@@ -96,28 +102,28 @@
       "sha256": "9d5cb83acde13476d362d3a3fd3327f447f7ae48aaab3984b76df9821172329b"
     },
     {
-      "path": "assets/EasyCalendarMonthPage-nPLPn00m.js",
+      "path": "assets/EasyCalendarMonthPage-CXCeVaG-.js",
       "managed": true,
       "size": 6280,
-      "sha256": "c01c9e478b52470f3b39d3e21c3c1e7902a859d0b2ee78c0e89506aad253e162"
+      "sha256": "1b7dab6a59c83e743d83d19e415f2df2dbebeb89f9adc53067935258b671a24b"
     },
     {
-      "path": "assets/EasyCalendarWeekPage-DL6NTdTo.js",
+      "path": "assets/EasyCalendarWeekPage-BOsND_Qf.js",
       "managed": true,
       "size": 5759,
-      "sha256": "c48cac70cad8f73df75eefd78203ed241da1d3fc3609f60ae2592e97ed37efce"
+      "sha256": "2a3e6b4de7b58836bc4dbf05adfb70d8a3f69cb3504b2f86ab5b3c4b8cc05395"
     },
     {
-      "path": "assets/EasyContactsContext-DX-x_yDh.js",
+      "path": "assets/EasyContactsContext-DF_XNhrS.js",
       "managed": true,
       "size": 2116,
-      "sha256": "ee3e1a49419ec972606a2f0b2fc68b6e0986b8279d2f997a4e9d513205d5a48b"
+      "sha256": "8f94691c17bc70ce2f47b7641026b9232f6d3d37dac3ed5b344dda8c5420e1d1"
     },
     {
-      "path": "assets/EasyContactsLayout-CXKOtSla.js",
+      "path": "assets/EasyContactsLayout--gBmlEXb.js",
       "managed": true,
       "size": 739,
-      "sha256": "572f10655994e1df10d4f724564a8f2ab8f44e188b6db7435a0754e6da2975dc"
+      "sha256": "df625fe4af778a1d6b93eb7ae7689f24a013d8dc28b14afa8c6761a088d66d06"
     },
     {
       "path": "assets/EasyContactsMarketingPage-5q3uWZCX.js",
@@ -126,10 +132,58 @@
       "sha256": "25376da0005afeec5fc14728f3a4f6c3ae79e1b69de9ea598c78cd167781598b"
     },
     {
-      "path": "assets/EasyContactsPage-VHBDti4C.js",
+      "path": "assets/EasyContactsPage-yKEUS5zu.js",
       "managed": true,
       "size": 17901,
-      "sha256": "5a22d6d66b70161386111372fc31c56f0027e2d6cc8902e4c8e837c856b897b5"
+      "sha256": "74c2524d5c05dfdf106082cf01c13bc9c61e84025b7351ed76534f70c2de4de5"
+    },
+    {
+      "path": "assets/EasyDrinkDetailPage-CdFPsgAo.js",
+      "managed": true,
+      "size": 2408,
+      "sha256": "8303bbb03fca4254de339ffbed5fd0847635bb593d66bdf950e12629e27fc4cd"
+    },
+    {
+      "path": "assets/EasyDrinkNewPage-CswHHgJq.js",
+      "managed": true,
+      "size": 1059,
+      "sha256": "95afb62e0a32758fd98e9dea1f89956dba25cd8f7eb9138ce2fa29361a082f19"
+    },
+    {
+      "path": "assets/EasyDrinksContext-CIt1Txl5.js",
+      "managed": true,
+      "size": 2958,
+      "sha256": "9900978c09bbc9583b84d7c15c7fd98bad48c66f9fbf69f6490ce3bb1f1f4ced"
+    },
+    {
+      "path": "assets/EasyDrinksLayout-DG2M2vyQ.js",
+      "managed": true,
+      "size": 821,
+      "sha256": "e5c7a22655d2ed87e635e34ef2d3b1f2cdb3c642478df1508d958af82d7f2155"
+    },
+    {
+      "path": "assets/EasyDrinksPage-CUKJZL67.js",
+      "managed": true,
+      "size": 6888,
+      "sha256": "4fe697a714a717b6ef9dc128a6a397c6eed01f1a59217dfc83307217cbef881c"
+    },
+    {
+      "path": "assets/EasyGamesContext-24knIsq9.js",
+      "managed": true,
+      "size": 1190,
+      "sha256": "0166b438f4e4f8bdee46fe57b1bde0e359c96f37144be13e84ca5471126601b3"
+    },
+    {
+      "path": "assets/EasyGamesLayout-Ca706czG.js",
+      "managed": true,
+      "size": 877,
+      "sha256": "9be5b50c79c8fb912526eec9a329f8769dfabbd1e8b6e07d89a5bf3a523ae7df"
+    },
+    {
+      "path": "assets/EasyGamesPage-DSJDfAhL.js",
+      "managed": true,
+      "size": 3058,
+      "sha256": "d35286c810f55d292838db659a627b2ecda2d41f4b36a5ca1680b8c05ce98484"
     },
     {
       "path": "assets/EasyHQMarketingPage-B6v5pH1u.js",
@@ -138,28 +192,28 @@
       "sha256": "4807d4ad06d452efa32e48ae70aa0d1f81bf7b3e7c927a471e398150bd084acd"
     },
     {
-      "path": "assets/EasyListArchivePage-B1TI34_n.js",
+      "path": "assets/EasyListArchivePage-D7J1vXEc.js",
       "managed": true,
       "size": 2064,
-      "sha256": "2dcab08ce0e3c97781183ea3ed78b3abd1ad0dba14adc9971763df7b3db81c57"
+      "sha256": "f199c69bc0a14f58a52b2b73a08df47b255e09978d1d30323cb9fd95faa3bafd"
     },
     {
-      "path": "assets/EasyListContext-DZOymnjE.js",
+      "path": "assets/EasyListContext-CUdC-JQA.js",
       "managed": true,
       "size": 1323,
-      "sha256": "5345045a5c4ece46d47b3ef044fd29ef9bf8b45ff04022ce11437c672a6f74fa"
+      "sha256": "f70a6e42a435e7824ccc92c8b39b70e4d30b8b6078e4560cc756e5558ce5b1e0"
     },
     {
-      "path": "assets/EasyListDashboardPage-Btc7I_WF.js",
+      "path": "assets/EasyListDashboardPage-C4VaalsO.js",
       "managed": true,
       "size": 10565,
-      "sha256": "be374b1cccb19db82f89003fa5a56b01faae320aadc29019a3e16250e32f881c"
+      "sha256": "1bafae47f2d563bcf2119e2a0b80e237a48858a3aa00c50b1dc7fbfdab67d130"
     },
     {
-      "path": "assets/EasyListDeletedPage-BtrC0CzR.js",
+      "path": "assets/EasyListDeletedPage-BEg4W8vn.js",
       "managed": true,
       "size": 2495,
-      "sha256": "a7e88d78764c63c0d8f15711a6970bcc5fc0d2c42d573ac38c7f25ff98287135"
+      "sha256": "0b1a21f75a175906204e25d502b8c2c6bdfc8f4c144b0c2926428db791e88c5d"
     },
     {
       "path": "assets/EasyListEmailPage-z55frSc-.js",
@@ -168,16 +222,16 @@
       "sha256": "b45b56052b0c53ac00693cf489cf5ea60448fc16b9db39dff765c1e1746749c0"
     },
     {
-      "path": "assets/EasyListInboxPage-CO1tg-kF.js",
+      "path": "assets/EasyListInboxPage-BuhJe-_G.js",
       "managed": true,
       "size": 110340,
-      "sha256": "f33e43dfbcab551f6ad9f7195814804f4fc8baef560b34300196fb43d96b5e2b"
+      "sha256": "d5fdaee596615a71878c443e0d2a189b53af5efa0a44743aaa339bd2099a7bfa"
     },
     {
-      "path": "assets/EasyListLayout-Dho0t8YK.js",
+      "path": "assets/EasyListLayout-Dt6b7x9e.js",
       "managed": true,
       "size": 829,
-      "sha256": "714d0e9236a6e804854e10f2e23fb13d753f04d1a9a7894af4b5a03bbe76f122"
+      "sha256": "3c2e832cd3f23be2b1477aad03bbc0879490ef7189f1714ef43bee83823b8888"
     },
     {
       "path": "assets/EasyListMarketingPage-DmiCw09b.js",
@@ -186,28 +240,28 @@
       "sha256": "09bfc084eea2adf0e7a14118253dbedb161377dd1975d58d77902ad6e49d22dc"
     },
     {
-      "path": "assets/EasyNotesContext-DNmSXl9A.js",
+      "path": "assets/EasyNotesContext-CdvU33pd.js",
       "managed": true,
-      "size": 5632,
-      "sha256": "96be1dcac2f3e1cb8da0d69400822790646b2e5d36c4772163fac9f22c3e94e4"
+      "size": 5633,
+      "sha256": "be98b84f4d9756734942eabadfb7890661c80774a87fc68a03ea4847b1f05076"
     },
     {
-      "path": "assets/EasyNotesEditorPage-DQEcMWad.js",
+      "path": "assets/EasyNotesEditorPage-DvEL9A5Y.js",
       "managed": true,
       "size": 8827,
-      "sha256": "184f4486ca8ae8ddb95b43e797b6a655250461f75d45935e6862656f495dd451"
+      "sha256": "0a64194a9bcb8ad77aa99e004072008e0ac556d1052bf59a54078988fd51959d"
     },
     {
-      "path": "assets/EasyNotesLayout-B0V-0qIz.js",
+      "path": "assets/EasyNotesLayout-CcvuHmkX.js",
       "managed": true,
       "size": 876,
-      "sha256": "4dab9fafa0531799aa5192fd6b4a7f6c46f407a09166209c812fa1e83b1b4cee"
+      "sha256": "9c2857fa5b61642294fc260b1d90e980c72abed531c2536d6e73f722b2773fbb"
     },
     {
-      "path": "assets/EasyNotesLibraryPage-DLM7_uSF.js",
+      "path": "assets/EasyNotesLibraryPage-WyABs-Ab.js",
       "managed": true,
       "size": 20212,
-      "sha256": "88dc60803f16561db85460ce0d501a43ca57f3517553bc559e168190e9d16bac"
+      "sha256": "ecb635384b320733611fb5b4f50afa9440d60ce67269849fae9337e7ef3c5aff"
     },
     {
       "path": "assets/EasyNotesMarketingPage-CwtkSa8N.js",
@@ -216,40 +270,40 @@
       "sha256": "dca1a19f07691b780f050e2fb1d4b6fdbddc3770233390caf672e140239e21f8"
     },
     {
-      "path": "assets/EasyNotesNewPage-BpUvjHJx.js",
+      "path": "assets/EasyNotesNewPage-BMEXi8z9.js",
       "managed": true,
-      "size": 890,
-      "sha256": "f39bdbb6c43744441514a63a04d8f87fa8d9cc6dfad41fc5a803f0f9db2104a5"
+      "size": 938,
+      "sha256": "9efc495f96da293aebaa057c58179a45e45d016d03873b2a83bde662dee9ef73"
     },
     {
-      "path": "assets/EasyNotesTrashPage-NUFxUCRn.js",
+      "path": "assets/EasyNotesTrashPage-z9jo22NA.js",
       "managed": true,
       "size": 4081,
-      "sha256": "98cdae740c9b7c096bde8594f5fba3ac939886e39daaf010bedafc9613750162"
+      "sha256": "2c5854c86b8223ab4fd87cb344d8ae7d1de2f1cf53af422b97a126dba7df93bd"
     },
     {
-      "path": "assets/EasyPipelineContext-CqAGjuP3.js",
+      "path": "assets/EasyPipelineContext-DIcqOBbj.js",
       "managed": true,
       "size": 2653,
-      "sha256": "d23188357c8ee242a3d94dcff05bbe9eb78fa6f705ead8fdcf04b6ef4e063dc3"
+      "sha256": "ec1cdfb1c992b6e4ef728db523f6e9cf70dd7cb275a22b2174d3a061247cb431"
     },
     {
-      "path": "assets/EasyPipelineDashboardPage-Db8G4Q4G.js",
+      "path": "assets/EasyPipelineDashboardPage-BuYwV8I-.js",
       "managed": true,
       "size": 9926,
-      "sha256": "6c055d9cce5bbf1d00f10e3aef10e1ee2899bb645d3a4d3131a248aa21164f5d"
+      "sha256": "3478246ade36d5d8c3476039ba20a3effbd3cddeaa3dcad8474802255fbbe06f"
     },
     {
-      "path": "assets/EasyPipelineEmailPage-CLwGfae_.js",
+      "path": "assets/EasyPipelineEmailPage-CwuwgrOs.js",
       "managed": true,
       "size": 4428,
-      "sha256": "032cf245a4d278a9165936ab2f160b2842bfd66cef123429c0a5d713ea308bd0"
+      "sha256": "1a2c96a778991dbf235370e5e155b1f3747468dfed20908f5c5404bbf040d40e"
     },
     {
-      "path": "assets/EasyPipelineLayout-B8IB1Rb-.js",
+      "path": "assets/EasyPipelineLayout-hpyqvU6U.js",
       "managed": true,
       "size": 904,
-      "sha256": "4d48290eb7c6676872cc859211ce0fc5e88e2d7a7f491161d968b39c78b97e08"
+      "sha256": "1760a33e18d6917188e35c0e9bf77652e75d9038167bab996de3d822be4383c4"
     },
     {
       "path": "assets/EasyPipelineMarketingPage-DWV9Hy_Z.js",
@@ -258,34 +312,34 @@
       "sha256": "07d65d82e7f678c538eda4d9bcf9cd187531bfa4edd08844c1c1bb5f00336a57"
     },
     {
-      "path": "assets/EasyPipelineStatsPage-BA9IhtvT.js",
+      "path": "assets/EasyPipelineStatsPage-C-qBNu18.js",
       "managed": true,
       "size": 3355,
-      "sha256": "56cfbfe47acf4a1d18282ae9cb47a33b2c1efcf4b0516c5013eaf326391dc5e0"
+      "sha256": "d063f155d3244861f7bb63cc712bae1a543fe20b1b366a9d184552f2cabade86"
     },
     {
-      "path": "assets/EasyProjectDetailPage-JiKMYbnQ.js",
+      "path": "assets/EasyProjectDetailPage-BXZWGsVD.js",
       "managed": true,
       "size": 8892,
-      "sha256": "2ac39a27285c6afa1df9b19fdc17b115cb4530935fe6ea44e400408398dc419b"
+      "sha256": "ed00cbbbc16ec671dad10918ec5ebf261a2332bc9fd845ad8600e9671e0ce49e"
     },
     {
-      "path": "assets/EasyProjectsContext-DJWzEqml.js",
+      "path": "assets/EasyProjectsContext-C6SXEAye.js",
       "managed": true,
       "size": 5497,
-      "sha256": "fa6bb2a6be26ee42d5e2618aae17dd717786fe05a9c35ab8476ba4898c532e9f"
+      "sha256": "c709e101536c675223e3a5f07bc06cbcdf9d158b513509a08394c4f01cda9043"
     },
     {
-      "path": "assets/EasyProjectsHomePage-BUYX3s0w.js",
+      "path": "assets/EasyProjectsHomePage-Bnguj2Ru.js",
       "managed": true,
       "size": 16929,
-      "sha256": "3258c6bf780ff269b2225e7b4a203d6145f15c5cdc95b212f12121686c5b229b"
+      "sha256": "6566b522b2090a312ec0a1a333b7c4d57ec7954f9dfb56b4bacf4b8d669a2523"
     },
     {
-      "path": "assets/EasyProjectsLayout-Bkg5UR8A.js",
+      "path": "assets/EasyProjectsLayout-BkcNfYZE.js",
       "managed": true,
       "size": 722,
-      "sha256": "12bbabf4432aa7543c432a08831f176f75eb39de183cec1816f94f2fa0c9dd58"
+      "sha256": "eb908418690342829c82cfc1fee6c678c535f181e67a75c28bcfeab3ec8694e6"
     },
     {
       "path": "assets/EasyProjectsMarketingPage-GMiLMIfd.js",
@@ -294,10 +348,10 @@
       "sha256": "405d9371fa5ff0a2199bef97cdf4fd985bab3062caf241400c62c4c38fb92b6b"
     },
     {
-      "path": "assets/EasyProjectsTimelinePage-m6ytdACO.js",
+      "path": "assets/EasyProjectsTimelinePage-C9WdqTIL.js",
       "managed": true,
       "size": 3637,
-      "sha256": "3d5abfef2d8ccd6fcee9dcc4c1a34a9700af29f85f46083c3ecb3bd342bf3898"
+      "sha256": "03aa3df6e18b79181f3833ea2eb36b79666b970ebdd34a8ee1a7f547994e7343"
     },
     {
       "path": "assets/EasyStatisticsMarketingPage-BB7Vil9F.js",
@@ -306,34 +360,34 @@
       "sha256": "d868d6e106a6d25e7b8109bba48e26649be4b47af3954fb73be126bc1808e24b"
     },
     {
-      "path": "assets/EasyStatisticsPage-B59qwxg1.js",
+      "path": "assets/EasyStatisticsPage-DZu8s1HI.js",
       "managed": true,
       "size": 49188,
-      "sha256": "3e51e921f1396ae2536df5a8b14541a793b90b18ea21d0b8588d5d46dc6edd64"
+      "sha256": "0b7eb44316f2907bcb473fc6c411c66fd4beea6cf2ff9c5b6bce91a830534f7e"
     },
     {
-      "path": "assets/EasyWorkoutContext-BKD-t-nY.js",
+      "path": "assets/EasyWorkoutContext-Bbo6Cf-5.js",
       "managed": true,
       "size": 2868,
-      "sha256": "868d00de27b32964a80cb22460ababb8da53f1a217b8270043671439ef9ec0e4"
+      "sha256": "293fb2dcc32fd3afb1e1bf7daef51daa895dcfe2441e99038553e5016c31b97d"
     },
     {
-      "path": "assets/EasyWorkoutDashboardPage-c0HjELkR.js",
+      "path": "assets/EasyWorkoutDashboardPage-B0RP_r3b.js",
       "managed": true,
       "size": 15535,
-      "sha256": "36abdcc9773ed01df8b7be04dd2fcd8928f9de226c875a413a5ab32e0629aa32"
+      "sha256": "9de3d4f5bf4b72e0f08bd86c918e9d42d674f32e210bb7ccc0aef4dc4fab3410"
     },
     {
-      "path": "assets/EasyWorkoutLayout-CcgCf0mY.js",
+      "path": "assets/EasyWorkoutLayout-B6cQGpsB.js",
       "managed": true,
       "size": 680,
-      "sha256": "e268260e17472783494e1e5edf630bf7d58ac5b4d30a386d58437e4f8e31c93b"
+      "sha256": "ef1aea6c17dd65fd68b06696501aa22f22193d9db6306165bb24f4da51f353d7"
     },
     {
-      "path": "assets/EasyWorkoutLogPage-Ccw-6pPz.js",
+      "path": "assets/EasyWorkoutLogPage-Sl3GRFL2.js",
       "managed": true,
       "size": 27914,
-      "sha256": "5b8adf7be5c27d15e097423f5d549a1e5e08f95cebc90eacfc7ca8cdd6bef696"
+      "sha256": "c2900d114227ff3faa69d5ca196cdfb9c0d2c24595136d4c8e220e9ad54bf8e8"
     },
     {
       "path": "assets/EasyWorkoutMarketingPage-BeCJ3-G3.js",
@@ -342,22 +396,22 @@
       "sha256": "86305cec9e84f3acde531e1fd30bae000827a30d014efbac9841451cbfa6f0a9"
     },
     {
-      "path": "assets/EasyWorkoutRoutinesPage-B9ib1Vgt.js",
+      "path": "assets/EasyWorkoutRoutinesPage-FXxId2mF.js",
       "managed": true,
       "size": 12890,
-      "sha256": "ee4e5c871e8000bd9a27b38ea3657885187a12e23c109110cc7ec5edc9a13677"
+      "sha256": "4c9e63876c75de48202ceb8a36b9f2be0ff9a1ac0c7e1a3c8b7a232bbf99bc74"
     },
     {
-      "path": "assets/HQPage-wB6yXqBF.js",
+      "path": "assets/HQPage-DysXLbdt.js",
       "managed": true,
       "size": 15824,
-      "sha256": "ea5b812cae0b1c0c6afe00adfc667508bdd80803f9bcfcfa7650d924976d7d50"
+      "sha256": "76680ba2cb7206dca527a8fc4754525916f98e9836b9401f1cb8c92f16096bc0"
     },
     {
-      "path": "assets/LoginPage-CQF0cj2j.js",
+      "path": "assets/LoginPage-BK3FGXs_.js",
       "managed": true,
       "size": 3461,
-      "sha256": "8b90982534ab6f7e58503daace81a6233c90162dfa31f5fe01ec8d8dd42497df"
+      "sha256": "d090938451db336855823514912e2a6d6252721e9c18a8d96a10789654125aaf"
     },
     {
       "path": "assets/MarketingLandingPage-Ckh4ixQ8.js",
@@ -372,16 +426,22 @@
       "sha256": "673c1ffd86a7d84d1d3228b52914e6feea717d632851cca41f795b17cbabacd3"
     },
     {
+      "path": "assets/PairGardenPage-CLmJ2jhS.js",
+      "managed": true,
+      "size": 5969,
+      "sha256": "27406335db62dddaccb6da53be2a7041cf94c93e4f6108e29dd61f7f85ee72ec"
+    },
+    {
       "path": "assets/ProductMarketingPage-pnOJohPY.js",
       "managed": true,
       "size": 3985,
       "sha256": "81bc866bf5e863aacaa08b1d52316de4c7da9f50072d44cd34937c88d6a3cee2"
     },
     {
-      "path": "assets/SettingsPage-Lntz31jr.js",
+      "path": "assets/SettingsPage-CgVlXhyf.js",
       "managed": true,
-      "size": 75429,
-      "sha256": "e3e7df416a16f5e56a1182b641fb28ef51d78bf5562b401ce75f27a8e441f0af"
+      "size": 76238,
+      "sha256": "29fc0715720fdb2598a4242ba4f77a7bc635464340592ccee58bbefdff799904"
     },
     {
       "path": "assets/TaskCard-B9P4sWWJ.js",
@@ -390,22 +450,34 @@
       "sha256": "a14257814912c4629aeb4130791ad3a52ad76877b45b62b1d26c49e8c3aedf91"
     },
     {
-      "path": "assets/TaskDrawer-B_g4nMSC.js",
+      "path": "assets/TaskDrawer-ZL8qGsLT.js",
       "managed": true,
       "size": 11859,
-      "sha256": "8997f5f2bfdd83275318ca4423875c1c016dfccb5ab26353e6c4e0df90639752"
+      "sha256": "ed47966cad42b57bddfc84f457069c10916369eca79b80688a7b1ad664881efd"
     },
     {
-      "path": "assets/WorkoutExerciseInsightPage-BnHL9RZP.js",
+      "path": "assets/TrailScoutPage-84z4yBLX.js",
+      "managed": true,
+      "size": 6224,
+      "sha256": "ece1c872e83313a4dcfd63cbf8ad9b33bf3d010c8647b06479a59d698033c41b"
+    },
+    {
+      "path": "assets/WorkoutExerciseInsightPage-DfpQ1rc0.js",
       "managed": true,
       "size": 3280,
-      "sha256": "96af9696c707269e83196a1b8c9100038b4219c9e154df3655639b1101875906"
+      "sha256": "f2ecedf41596c203bd045c96259be7b3cc7cda4c9b114de24a3d8fbe817fa5f2"
     },
     {
-      "path": "assets/WorkoutSessionReviewPage-CjauruBd.js",
+      "path": "assets/WorkoutSessionReviewPage-CVlr32Ti.js",
       "managed": true,
-      "size": 3933,
-      "sha256": "50c5ccceeb739164369b35ec25cbfdf819fb7281257db7460b454b45e8c4461e"
+      "size": 3923,
+      "sha256": "36d19dd224e25f980e7c167ac7e33a815899bc88857f2d1b82ff6e48cbb380f9"
+    },
+    {
+      "path": "assets/activeGameStorage-yXfWxP3U.js",
+      "managed": true,
+      "size": 285,
+      "sha256": "114339702b03da4ad333d6d9edba3980f66fa3e521312e3864872fb55b3e78c8"
     },
     {
       "path": "assets/aiAvailability-buzDe67p.js",
@@ -414,10 +486,10 @@
       "sha256": "94358a69efbbee3a33955dd0819b12b07444c69913563ce8a0e437ea3d866798"
     },
     {
-      "path": "assets/calendarUtils-Cdrn77QB.js",
+      "path": "assets/calendarUtils-DDpdnalJ.js",
       "managed": true,
       "size": 8545,
-      "sha256": "e3ba16c893ab375b962ab751ff01e3dcbbb3a65ebc610ce1a667c864702c0dec"
+      "sha256": "591eb91b8a1bc23e0c27d5d01a4b3afb43f174fba13b58f21b4708589fd15d59"
     },
     {
       "path": "assets/firebase-BJ18tVlS.js",
@@ -468,16 +540,16 @@
       "sha256": "357fc618bebecf6854268b68aef002e5e918bb13324f4d276afcb27be444aedd"
     },
     {
-      "path": "assets/index-Cy5ARIGk.css",
+      "path": "assets/index-CdObSAxv.css",
       "managed": true,
-      "size": 329756,
-      "sha256": "3b4728d51a4d614923d293675324f60359ae1c1f379c586e518cedf5cb0dd577"
+      "size": 337838,
+      "sha256": "e17413bb6f1fa627549a7906f9dd55b854e46f1b42ac003f726a15de50c68b96"
     },
     {
-      "path": "assets/index-DOsqVvZC.js",
+      "path": "assets/index-UqHwlDQq.js",
       "managed": true,
-      "size": 130600,
-      "sha256": "97f8827f76bd5e89fa86fb4c58f9c8088568fe00727ed1ce51ac542b00aaf230"
+      "size": 138739,
+      "sha256": "fb21cc28a6ba9f524359e770c22bcc3e1cc0c5ed5f4371aa683ddcb385e2abcc"
     },
     {
       "path": "assets/intentClassifier-DFtSglgr.js",
@@ -486,16 +558,16 @@
       "sha256": "f0ed2911471a9736a957aac823b9a85951e8cdd3ccf9461860bfd38ef74e6a44"
     },
     {
-      "path": "assets/projectSections-BCwA2yhy.js",
+      "path": "assets/projectSections-CJjkgDxz.js",
       "managed": true,
       "size": 931,
-      "sha256": "cf4eb3461cb29605b8b1c00420676b49b42dfa883b0bbe98da6193ebb111010a"
+      "sha256": "520bb543b1c23a40c6d75891a2a2b99fdd120d2f4e03fe2a2eb223472e0ddcc0"
     },
     {
-      "path": "assets/projectTaskLinks-Dcl2bzsA.js",
+      "path": "assets/projectTaskLinks-wU9YNqIS.js",
       "managed": true,
       "size": 992,
-      "sha256": "fa9f085047a2bfc256fd693dc286e16af24924c80cf971b5aa65656cd95d2f7f"
+      "sha256": "b12920ed48b9c3d08d7af8a2b6ddbc4dc905a757aa08285b7871005387af9c3e"
     },
     {
       "path": "assets/reviewHandoffs-CLyCVWuW.js",
@@ -528,16 +600,16 @@
       "sha256": "8f0973fe7ea68f15a72cde0b8b20efb497ee8a32056d1698320b7fe5cae35200"
     },
     {
-      "path": "assets/workoutGoals-gvc3esDz.js",
+      "path": "assets/workoutGoals-bEplchlR.js",
       "managed": true,
       "size": 1508,
-      "sha256": "a5a6335b0281084c018a702cbdc30541a93242b9f4a3101d183acedbe70cbcb7"
+      "sha256": "2065feeb723162d4b3c335967fab308e0149719635d819f278857ca50b37fb63"
     },
     {
-      "path": "assets/workoutRoutines-tLp2ltsD.js",
+      "path": "assets/workoutRoutines-BlgkCRZk.js",
       "managed": true,
       "size": 1829,
-      "sha256": "8784da8e5f4689837c465f8651a1e4a68f1b5c81ace6e2ac727fd817e44d4c57"
+      "sha256": "e63671e8636e86ddc6434f7a242e4cde5ee0f3a62586f7f7b1d375d9a0a1c471"
     },
     {
       "path": "icons/easylife-apple-touch-icon.png",
@@ -567,19 +639,19 @@
       "path": "index.html",
       "managed": true,
       "size": 2072,
-      "sha256": "a8d1e20795ec5b6d3f3e2bb1ffab2dedad1dbab484e49e54b9af1f18a6d7ec80"
+      "sha256": "43eb89a835cc2e757a8d8e98fdf38af528b02622e54db12e057974943bb7ddaf"
     },
     {
       "path": "manifest.webmanifest",
       "managed": true,
-      "size": 819,
-      "sha256": "0296199a38d917f44c2f1f3ba437982d8081c89b89d66463ba7e756e1e6142ab"
+      "size": 824,
+      "sha256": "fb1811cdf9b434a6563d44ffbb10667ca619efa6e57d79c64aaf7beff95f227f"
     },
     {
       "path": "sw.js",
       "managed": true,
       "size": 1976,
-      "sha256": "bcfed6091b752f6de6670458b85261a0784e1fa9e0ede7687cea76a93a9550fa"
+      "sha256": "661387502d59cfaf28f744de5e439819cf6cc855227fbf3057eebb4cb51bf580"
     }
   ]
 }

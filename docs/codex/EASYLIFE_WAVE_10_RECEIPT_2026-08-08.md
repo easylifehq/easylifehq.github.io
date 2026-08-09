@@ -50,7 +50,8 @@ The final `scripts/verify-release.ps1` run passed in full.
 - Functions syntax lint: passed.
 - Web and Functions production critical advisory gates: passed. The audit reports contain 2 web and 8 Functions moderate advisories; no high or critical advisory failed the configured release gate.
 - Publication tooling: 29 passed, 0 failed, 1 skipped because optional Windows symlink creation was unavailable.
-- Guarded Pages dry run: staged and hash-verified 103 payload files in a temporary directory, then cleaned it. No generated publication root was applied.
+- Guarded Pages dry run: staged and hash-verified 103 payload files in a temporary directory, then cleaned it.
+- Hosted CI's production-root integrity contract required the brief's allowed exception: the guarded publication script rebuilt with repository variables without printing their values, verified the approved configuration across 97 text files, and applied only the deterministic 103-file managed root. A follow-up `--check` reported an exact match. This was a committed review artifact update, not a deployment.
 - `git diff --check`: passed before the implementation commit.
 
 ## Browser and game playtest
@@ -80,7 +81,7 @@ Evidence:
 - Draft PR: `https://github.com/easylifehq/easylifehq.github.io/pull/8`, targeting the unchanged Wave 9 branch.
 - Hosted CI: triggered for the final receipt update and recorded in PR #8's check history.
 
-No merge, production deployment, production-data access, production write, or Pages-root apply occurred. PR #7 was not modified, merged, closed, or deployed.
+No merge, production deployment, production-data access, or production write occurred. The deterministic managed Pages root was applied to this branch only after hosted CI proved the draft PR's integrity contract required it; nothing was published. PR #7 was not modified, merged, closed, or deployed.
 
 ## Deployment sequencing and remaining limits
 
