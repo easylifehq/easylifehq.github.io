@@ -9,6 +9,8 @@ on:
       - "scripts/serve-pages-candidate.mjs"
       - "scripts/tests/prepare-pages-publication.test.mjs"
       - "scripts/tests/serve-pages-candidate.test.mjs"
+      - "scripts/tests/verify-production-publication.test.mjs"
+      - "scripts/verify-production-publication.mjs"
       - "scripts/verify-release.ps1"
       - ".github/workflows/publication-candidate.yml"
       - ".github/workflows/release-candidate.yml"

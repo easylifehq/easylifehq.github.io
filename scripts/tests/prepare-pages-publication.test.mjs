@@ -128,6 +128,48 @@ test("creates a complete deterministic candidate and preserves CNAME", async (t)
   assert.deepEqual(await readFile(path.join(stage, "CNAME")), await readFile(path.join(fixture.repo, "CNAME")));
 });
 
+test("preserved metadata uses committed bytes across worktree line-ending expansion", async (t) => {
+  const fixture = await makeFixture();
+  t.after(() => rm(fixture.parent, { recursive: true, force: true }));
+  await rm(path.join(fixture.repo, ".git"), { recursive: true, force: true });
+  await execFile("git", ["init"], { cwd: fixture.repo });
+  await execFile("git", ["config", "user.email", "publication-test@example.invalid"], { cwd: fixture.repo });
+  await execFile("git", ["config", "user.name", "Publication Test"], { cwd: fixture.repo });
+  await execFile("git", ["add", "."], { cwd: fixture.repo });
+  await execFile("git", ["commit", "-m", "fixture"], { cwd: fixture.repo });
+  await writeFile(path.join(fixture.repo, ".nojekyll"), "\r\n");
+
+  const stage = path.join(fixture.parent, "candidate");
+  await stagePublication({ repoRoot: fixture.repo, buildRoot: fixture.dist, stageRoot: stage, metadata: METADATA });
+  const manifest = await verifyStagedCandidate(stage);
+  const noJekyll = manifest.files.find((record) => record.path === ".nojekyll");
+
+  assert.equal((await readFile(path.join(fixture.repo, ".nojekyll"))).length, 2);
+  assert.deepEqual(await readFile(path.join(stage, ".nojekyll")), Buffer.from("\n"));
+  assert.equal(noJekyll.size, 1);
+});
+
+test("managed text payloads are canonical LF while binary assets remain byte-identical", async (t) => {
+  const fixture = await makeFixture();
+  t.after(() => rm(fixture.parent, { recursive: true, force: true }));
+  const textPaths = ["index.html", "manifest.webmanifest", "sw.js", "icons/easylife-icon.svg"];
+  for (const relative of textPaths) {
+    const target = path.join(fixture.dist, ...relative.split("/"));
+    const expanded = (await readFile(target, "utf8")).replace(/\n/g, "\r\n");
+    await writeFile(target, expanded);
+  }
+  const binaryBefore = await readFile(path.join(fixture.dist, "icons", "easylife-icon-192.png"));
+
+  const stage = path.join(fixture.parent, "candidate");
+  await stagePublication({ repoRoot: fixture.repo, buildRoot: fixture.dist, stageRoot: stage, metadata: METADATA });
+
+  for (const relative of textPaths) {
+    assert.equal((await readFile(path.join(stage, ...relative.split("/")), "utf8")).includes("\r"), false);
+  }
+  assert.deepEqual(await readFile(path.join(stage, "404.html")), await readFile(path.join(stage, "index.html")));
+  assert.deepEqual(await readFile(path.join(stage, "icons", "easylife-icon-192.png")), binaryBefore);
+});
+
 test("repeat staging is byte-idempotent", async (t) => {
   const fixture = await makeFixture();
   t.after(() => rm(fixture.parent, { recursive: true, force: true }));
@@ -229,6 +271,25 @@ test("rejects credential-shaped content and absolute machine paths", async (t) =
       stagePublication({ repoRoot: fixture.repo, buildRoot: fixture.dist, stageRoot: path.join(fixture.parent, "candidate"), metadata: METADATA }),
       PublicationError,
     );
+  }
+});
+
+test("allows only the explicitly approved public Firebase web API key", async (t) => {
+  const fixture = await makeFixture();
+  t.after(() => rm(fixture.parent, { recursive: true, force: true }));
+  const publicKey = "AIza012345678901234567890123456789";
+  await write(path.join(fixture.dist, "assets", "firebase-public.js"), `const apiKey="${publicKey}";\n`);
+  await assert.rejects(
+    stagePublication({ repoRoot: fixture.repo, buildRoot: fixture.dist, stageRoot: path.join(fixture.parent, "rejected"), metadata: METADATA }),
+    /Unapproved Firebase web API key/,
+  );
+  const prior = process.env.VITE_FIREBASE_API_KEY;
+  process.env.VITE_FIREBASE_API_KEY = publicKey;
+  try {
+    await stagePublication({ repoRoot: fixture.repo, buildRoot: fixture.dist, stageRoot: path.join(fixture.parent, "approved"), metadata: METADATA });
+  } finally {
+    if (prior === undefined) delete process.env.VITE_FIREBASE_API_KEY;
+    else process.env.VITE_FIREBASE_API_KEY = prior;
   }
 });
 

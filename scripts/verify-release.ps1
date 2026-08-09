@@ -36,7 +36,8 @@ finally {
 Invoke-ReleaseGate "Publication tool tests" {
   node --test `
     (Join-Path $repositoryRoot "scripts/tests/prepare-pages-publication.test.mjs") `
-    (Join-Path $repositoryRoot "scripts/tests/serve-pages-candidate.test.mjs")
+    (Join-Path $repositoryRoot "scripts/tests/serve-pages-candidate.test.mjs") `
+    (Join-Path $repositoryRoot "scripts/tests/verify-production-publication.test.mjs")
 }
 
 $temporaryRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("easylife-pages-verification-" + [Guid]::NewGuid().ToString("N"))
