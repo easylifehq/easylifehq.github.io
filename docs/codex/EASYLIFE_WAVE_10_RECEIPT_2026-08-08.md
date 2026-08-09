@@ -76,8 +76,9 @@ Evidence:
 
 - `93ca7602` — `docs: inventory EasyDrinks and EasyGames history`
 - `cc7cb6ec` — `feat: add EasyDrinks and EasyGames MVPs`
-- Evidence/receipt commit: recorded by this file's Git history.
-- Draft PR and hosted CI: to be recorded after creation.
+- `a2ae7af3` — `docs: record Wave 10 verification evidence`
+- Draft PR: `https://github.com/easylifehq/easylifehq.github.io/pull/8`, targeting the unchanged Wave 9 branch.
+- Hosted CI: triggered for the final receipt update and recorded in PR #8's check history.
 
 No merge, production deployment, production-data access, production write, or Pages-root apply occurred. PR #7 was not modified, merged, closed, or deployed.
 
