@@ -1,10 +1,12 @@
 import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { LoadingState } from "@/components/feedback/LoadingState";
+import { withReviewMode } from "@/features/coreloop/demo/reviewRoute";
 import { useEasyNotes } from "@/features/easynotes/EasyNotesContext";
 
 export function EasyNotesNewPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { addNote } = useEasyNotes();
   const hasStartedRef = useRef(false);
 
@@ -13,11 +15,11 @@ export function EasyNotesNewPage() {
     hasStartedRef.current = true;
 
     void addNote().then((noteId) => {
-      navigate(noteId ? `/app/easynotes/${noteId}` : "/app/easynotes", { replace: true });
+      navigate(withReviewMode(noteId ? `/app/easynotes/${noteId}` : "/app/easynotes", location.search), { replace: true });
     }).catch(() => {
-      navigate("/app/easynotes", { replace: true });
+      navigate(withReviewMode("/app/easynotes", location.search), { replace: true });
     });
-  }, [addNote, navigate]);
+  }, [addNote, location.search, navigate]);
 
   return <LoadingState label="Saving a place for this thought..." />;
 }

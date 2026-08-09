@@ -48,6 +48,8 @@ const demoVisibleApps: VisibleAppId[] = [
   "easyprojects",
   "easyworkout",
   "easystatistics",
+  "easydrinks",
+  "easygames",
 ];
 
 function getVisualQaSettings(): UserShellSettings {

@@ -71,6 +71,483 @@
   --easy-keyboard-inset: 0px;
 }
 
+/* Wave 10: compact lifestyle capture and short-session games. */
+.app-theme.app-theme-easydrinks {
+  --app-accent: #2f887d;
+  --app-accent-soft: #e9f7f3;
+  --app-accent-border: rgba(47, 136, 125, 0.22);
+  --app-accent-text: #22685f;
+}
+
+.app-theme.app-theme-easygames {
+  --app-accent: #6959b8;
+  --app-accent-soft: #f0edff;
+  --app-accent-border: rgba(105, 89, 184, 0.22);
+  --app-accent-text: #4f438e;
+}
+
+.drink-quick-capture,
+.drink-library,
+.games-calm-note {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 0.85rem;
+  padding: clamp(0.85rem, 2.2vw, 1.2rem);
+  border: 1px solid var(--app-panel-border);
+  border-radius: var(--shell-card-radius);
+  background: var(--app-panel-bg);
+}
+
+.drink-quick-capture h2,
+.drink-library h2,
+.game-shelf-card h2,
+.game-result h2 {
+  margin: 0;
+}
+
+.drink-quick-capture p,
+.game-shelf-card p,
+.games-calm-note p {
+  margin: 0.2rem 0 0;
+  color: var(--ui-text-muted);
+}
+
+.drink-quick-capture form {
+  display: grid;
+  grid-template-columns: minmax(12rem, 2fr) minmax(9rem, 1fr) minmax(9rem, 1fr) auto;
+  gap: 0.55rem;
+  align-items: end;
+}
+
+.drink-summary,
+.games-dashboard-summary,
+.game-stat-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+
+.drink-summary span,
+.games-dashboard-summary span,
+.game-stat-strip span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  min-height: 32px;
+  padding: 0.35rem 0.62rem;
+  border: 1px solid var(--app-stat-border);
+  border-radius: 999px;
+  background: var(--app-stat-bg);
+  color: var(--ui-text-secondary);
+  font-size: 0.82rem;
+}
+
+.drink-library-heading,
+.drink-card-top,
+.drink-card-bottom,
+.game-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.drink-filters {
+  display: grid;
+  grid-template-columns: minmax(12rem, 2fr) repeat(2, minmax(8.5rem, 1fr)) auto;
+  gap: 0.55rem;
+  align-items: end;
+}
+
+.drink-filter-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 42px;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: var(--shell-control-radius);
+  background: var(--ui-bg-input);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.drink-card-grid,
+.game-shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 0.7rem;
+}
+
+.drink-card,
+.game-shelf-card {
+  display: grid;
+  gap: 0.7rem;
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: var(--shell-card-radius);
+  background: var(--ui-bg-card-elevated);
+  box-shadow: 0 8px 22px rgba(24, 35, 38, 0.06);
+}
+
+.drink-card h3,
+.drink-card p {
+  margin: 0;
+}
+
+.drink-card h3 a {
+  color: var(--ui-text-primary);
+  text-decoration: none;
+}
+
+.drink-card p,
+.drink-card-bottom {
+  color: var(--ui-text-muted);
+  font-size: 0.82rem;
+}
+
+.favorite-button {
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: 50%;
+  background: var(--ui-bg-card);
+  color: #8d651d;
+  font-size: 1.15rem;
+}
+
+.drink-tags {
+  display: flex;
+  gap: 0.28rem;
+  flex-wrap: wrap;
+}
+
+.drink-tags span {
+  padding: 0.18rem 0.42rem;
+  border-radius: 999px;
+  background: var(--app-chip-bg);
+  color: var(--app-chip-text);
+  font-size: 0.72rem;
+}
+
+.drink-editor {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.drink-editor-primary,
+.drink-editor-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.drink-ingredients {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: var(--shell-card-radius);
+  background: var(--ui-bg-card);
+}
+
+.drink-ingredients legend {
+  padding: 0 0.25rem;
+  font-weight: 800;
+}
+
+.drink-ingredient-row {
+  display: grid;
+  grid-template-columns: minmax(10rem, 2fr) minmax(5rem, 0.7fr) minmax(5rem, 0.7fr) auto;
+  gap: 0.45rem;
+  align-items: end;
+}
+
+.drink-editor textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.drink-favorite-toggle {
+  max-width: 24rem;
+}
+
+.game-shelf-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1rem, 2.8vw, 1.35rem);
+}
+
+.game-shelf-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--app-accent);
+}
+
+.game-shelf-card dl {
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+}
+
+.game-shelf-card dl div {
+  display: grid;
+}
+
+.game-shelf-card dt,
+.game-shelf-card small {
+  color: var(--ui-text-muted);
+  font-size: 0.75rem;
+}
+
+.game-shelf-card dd {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 850;
+}
+
+.game-instructions {
+  margin: 0.7rem 0;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: var(--shell-control-radius);
+  background: var(--ui-bg-card);
+}
+
+.game-instructions summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.game-instructions p {
+  margin: 0.5rem 0 0;
+  color: var(--ui-text-muted);
+}
+
+.pair-garden-board,
+.trail-board {
+  position: relative;
+  isolation: isolate;
+}
+
+.pair-garden-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.4rem, 1.5vw, 0.65rem);
+  width: min(100%, 620px);
+  margin: 0 auto;
+}
+
+.pair-card {
+  position: relative;
+  aspect-ratio: 0.82;
+  min-height: 76px;
+  border: 1px solid color-mix(in srgb, var(--app-accent) 38%, var(--ui-border-subtle));
+  border-radius: var(--shell-card-radius);
+  background: color-mix(in srgb, var(--app-accent) 12%, var(--ui-bg-card-elevated));
+  color: var(--app-accent-text);
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  font-weight: 900;
+  transition: transform var(--shell-motion-fast), background var(--shell-motion-fast);
+}
+
+.pair-card:not(:disabled):hover,
+.pair-card:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+}
+
+.pair-card.is-visible {
+  background: var(--ui-bg-card-elevated);
+}
+
+.pair-card.is-matched {
+  border-color: #3a8b68;
+  background: color-mix(in srgb, #4ea87f 18%, var(--ui-bg-card-elevated));
+  opacity: 1;
+}
+
+.pair-card kbd {
+  position: absolute;
+  top: 0.3rem;
+  left: 0.36rem;
+  color: var(--ui-text-muted);
+  font-size: 0.65rem;
+}
+
+.game-pause-overlay {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.7rem;
+  text-align: center;
+  border-radius: var(--shell-card-radius);
+  background: color-mix(in srgb, var(--ui-bg-section) 92%, transparent);
+  backdrop-filter: blur(5px);
+}
+
+.game-result {
+  display: grid;
+  justify-items: start;
+  gap: 0.5rem;
+  width: min(100%, 620px);
+  margin: 0.8rem auto 0;
+  padding: 0.9rem;
+  border: 1px solid var(--app-accent-border);
+  border-radius: var(--shell-card-radius);
+  background: var(--app-accent-soft);
+}
+
+.game-result p,
+.game-live-message {
+  margin: 0;
+  color: var(--ui-text-muted);
+}
+
+.game-live-message {
+  min-height: 1.5rem;
+  margin-top: 0.65rem;
+  text-align: center;
+}
+
+.trail-game-shell {
+  display: grid;
+  grid-template-columns: minmax(250px, 440px) auto;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.trail-board {
+  display: grid;
+  gap: 0.32rem;
+  aspect-ratio: 1;
+  width: min(100%, 440px);
+  padding: 0.45rem;
+  border: 1px solid var(--app-accent-border);
+  border-radius: var(--shell-card-radius);
+  background: color-mix(in srgb, var(--app-accent) 8%, var(--ui-bg-card));
+}
+
+.trail-cell {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: 6px;
+  background: var(--ui-bg-card-elevated);
+  color: var(--app-accent-text);
+  font-size: clamp(1rem, 4vw, 1.7rem);
+}
+
+.trail-cell-stone {
+  background: color-mix(in srgb, #5f6870 28%, var(--ui-bg-card));
+  color: #495057;
+}
+
+.trail-cell-light {
+  background: color-mix(in srgb, #f2c94c 24%, var(--ui-bg-card-elevated));
+  color: #8a6200;
+}
+
+.trail-cell-scout {
+  background: color-mix(in srgb, var(--app-accent) 22%, var(--ui-bg-card-elevated));
+}
+
+.trail-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(2, 48px);
+  gap: 0.35rem;
+}
+
+.trail-controls button {
+  min-height: 48px;
+  border: 1px solid var(--app-accent-border);
+  border-radius: var(--shell-control-radius);
+  background: var(--ui-bg-card-elevated);
+  color: var(--app-accent-text);
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.trail-controls button:nth-child(1) { grid-column: 2; }
+.trail-controls button:nth-child(2) { grid-column: 1; grid-row: 2; }
+.trail-controls button:nth-child(3) { grid-column: 2; grid-row: 2; }
+.trail-controls button:nth-child(4) { grid-column: 3; grid-row: 2; }
+
+@media (max-width: 720px) {
+  .drink-quick-capture form,
+  .drink-filters,
+  .drink-editor-primary,
+  .drink-editor-notes {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .drink-ingredient-row {
+    grid-template-columns: minmax(0, 2fr) minmax(4.5rem, 0.8fr) minmax(4.5rem, 0.8fr);
+  }
+
+  .drink-ingredient-row button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .trail-game-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .trail-controls {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 390px) {
+  .drink-quick-capture form,
+  .drink-filters,
+  .drink-editor-primary,
+  .drink-editor-notes,
+  .drink-ingredient-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pair-garden-board {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pair-card {
+    min-height: 68px;
+  }
+
+  .game-toolbar {
+    align-items: stretch;
+  }
+
+  .game-toolbar > * {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pair-card {
+    transition: none;
+  }
+
+  .pair-card:not(:disabled):hover,
+  .pair-card:not(:disabled):focus-visible {
+    transform: none;
+  }
+}
+
 /* Weekend workout intelligence: truthful persistence and accessible analytics. */
 .workout-save-status,
 .demo-data-banner,

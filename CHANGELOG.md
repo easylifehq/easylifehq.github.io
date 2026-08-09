@@ -6,6 +6,24 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 5.0.0
+
+### Added
+
+- Added EasyDrinks with fast capture, flexible ingredients and amounts, instructions, notes, ratings, tags, dates, favorites, filters, editing, and duplication.
+- Added EasyGames with Pair Garden and Trail Scout, touch and keyboard controls, pause/resume, owner-scoped local recovery, and durable lightweight statistics.
+- Added authenticated Firestore contracts, synthetic zero-write demo fixtures, global search commands, app visibility controls, and JSON/CSV export coverage for both apps.
+
+### Changed
+
+- Kept Drinks and Games hidden under the optional More area by default while preserving every existing visibility choice during settings normalization.
+- Advanced the account export contract to `easylife-account-export-v3` and the PWA shell cache to `easylife-shell-v7`.
+
+### Safety
+
+- Alcohol-related copy remains neutral; EasyDrinks does not recommend consumption levels.
+- EasyGames includes no gambling, real money, ads, copyrighted assets, or endless-session mechanics.
+
 ## 4.37.1
 
 ### Changed

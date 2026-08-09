@@ -29,6 +29,8 @@ import { subscribeToWorkoutExercises } from "@/lib/firestore/workoutExercises";
 import { subscribeToWorkoutRoutines } from "@/lib/firestore/workoutRoutines";
 import { subscribeToWorkoutSessions } from "@/lib/firestore/workoutSessions";
 import { subscribeToWorkoutGoals } from "@/lib/firestore/workoutGoals";
+import { subscribeToDrinks } from "@/lib/firestore/drinks";
+import { subscribeToGameStats } from "@/lib/firestore/gameStats";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 import {
   getNotificationPermission,
@@ -156,6 +158,18 @@ const appVisibilityOptions: Array<{
     description: "Optional project sections and milestones.",
     home: "Optional",
   },
+  {
+    id: "easydrinks",
+    label: "Drinks",
+    description: "Optional drink journal and saved recipe details, parked under More.",
+    home: "Optional",
+  },
+  {
+    id: "easygames",
+    label: "Games",
+    description: "Optional short games and lightweight play statistics, parked under More.",
+    home: "Optional",
+  },
 ];
 
 const appVisibilityGroups: Array<{
@@ -171,7 +185,7 @@ const appVisibilityGroups: Array<{
   {
     id: "Optional",
     title: "Parked in More",
-    description: "Keep workout, projects, follow-ups, people, and progress out of the default path until needed.",
+    description: "Keep workout, projects, follow-ups, people, progress, drinks, and games out of the default path until needed.",
   },
 ];
 
@@ -665,6 +679,8 @@ export function SettingsPage() {
       subscribeToApplications(user.uid, setCollection("pipelineApplications"), handleError("pipelineApplications")),
       subscribeToGeneratedDrafts(user.uid, setCollection("pipelineDrafts"), handleError("pipelineDrafts")),
       subscribeToContacts(user.uid, setCollection("contacts"), handleError("contacts")),
+      subscribeToDrinks(user.uid, setCollection("drinks"), handleError("drinks")),
+      subscribeToGameStats(user.uid, setCollection("gameStats"), handleError("gameStats")),
     ];
 
     return () => {

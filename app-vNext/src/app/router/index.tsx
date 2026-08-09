@@ -147,6 +147,38 @@ const EasyStatisticsPage = lazyNamed(
   () => import("@/features/easystatistics/routes/EasyStatisticsPage"),
   "EasyStatisticsPage"
 );
+const EasyDrinksLayout = lazyNamed(
+  () => import("@/features/easydrinks/layouts/EasyDrinksLayout"),
+  "EasyDrinksLayout"
+);
+const EasyDrinksPage = lazyNamed(
+  () => import("@/features/easydrinks/routes/EasyDrinksPage"),
+  "EasyDrinksPage"
+);
+const EasyDrinkNewPage = lazyNamed(
+  () => import("@/features/easydrinks/routes/EasyDrinkNewPage"),
+  "EasyDrinkNewPage"
+);
+const EasyDrinkDetailPage = lazyNamed(
+  () => import("@/features/easydrinks/routes/EasyDrinkDetailPage"),
+  "EasyDrinkDetailPage"
+);
+const EasyGamesLayout = lazyNamed(
+  () => import("@/features/easygames/layouts/EasyGamesLayout"),
+  "EasyGamesLayout"
+);
+const EasyGamesPage = lazyNamed(
+  () => import("@/features/easygames/routes/EasyGamesPage"),
+  "EasyGamesPage"
+);
+const PairGardenPage = lazyNamed(
+  () => import("@/features/easygames/routes/PairGardenPage"),
+  "PairGardenPage"
+);
+const TrailScoutPage = lazyNamed(
+  () => import("@/features/easygames/routes/TrailScoutPage"),
+  "TrailScoutPage"
+);
 const HQPage = lazyNamed(() => import("@/features/hq/routes/HQPage"), "HQPage");
 const CommandCenterPage = lazyNamed(
   () => import("@/features/hq/routes/CommandCenterPage"),
@@ -423,6 +455,16 @@ export function AppRouter() {
               <Route path="session/:sessionId" element={<WorkoutSessionReviewPage />} />
             </Route>
             <Route path="easystatistics" element={<EasyStatisticsPage />} />
+            <Route path="easydrinks" element={<EasyDrinksLayout />}>
+              <Route index element={<EasyDrinksPage />} />
+              <Route path="new" element={<EasyDrinkNewPage />} />
+              <Route path=":drinkId" element={<EasyDrinkDetailPage />} />
+            </Route>
+            <Route path="easygames" element={<EasyGamesLayout />}>
+              <Route index element={<EasyGamesPage />} />
+              <Route path="pair-garden" element={<PairGardenPage />} />
+              <Route path="trail-scout" element={<TrailScoutPage />} />
+            </Route>
             <Route path="settings" element={<SettingsPage />} />
             <Route path="*" element={<SafeAppNotFoundPage />} />
           </Route>

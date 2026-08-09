@@ -53,6 +53,38 @@ service cloud.firestore {
         && (!('updatedAt' in session) || session.updatedAt == null || session.updatedAt is timestamp);
     }
 
+    function validDrink(userId) {
+      let drink = request.resource.data;
+      return drink.keys().hasAll(['ownerId', 'schemaVersion', 'name', 'type', 'ingredients', 'instructions', 'notes', 'rating', 'tags', 'date', 'favorite', 'sourceDrinkId', 'createdAt', 'updatedAt'])
+        && drink.keys().hasOnly(['ownerId', 'schemaVersion', 'name', 'type', 'ingredients', 'instructions', 'notes', 'rating', 'tags', 'date', 'favorite', 'sourceDrinkId', 'createdAt', 'updatedAt'])
+        && drink.ownerId == userId
+        && drink.schemaVersion == 'easydrinks-v1'
+        && drink.name is string && drink.name.size() > 0 && drink.name.size() <= 300
+        && drink.type in ['cocktail', 'mocktail', 'coffee', 'tea', 'smoothie', 'protein-shake', 'other']
+        && drink.ingredients is list && drink.ingredients.size() <= 40
+        && drink.instructions is string && drink.instructions.size() <= 20000
+        && drink.notes is string && drink.notes.size() <= 20000
+        && drink.rating is int && drink.rating >= 0 && drink.rating <= 5
+        && drink.tags is list && drink.tags.size() <= 24
+        && drink.date is string && drink.date.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && drink.favorite is bool
+        && (drink.sourceDrinkId == null || (drink.sourceDrinkId is string && drink.sourceDrinkId.size() <= 200))
+        && drink.createdAt is timestamp && drink.updatedAt is timestamp;
+    }
+
+    function validGameStat(userId, gameId) {
+      let stat = request.resource.data;
+      return stat.keys().hasAll(['ownerId', 'schemaVersion', 'sessionsPlayed', 'bestScore', 'totalScore', 'lastPlayedAt', 'createdAt', 'updatedAt'])
+        && stat.keys().hasOnly(['ownerId', 'schemaVersion', 'sessionsPlayed', 'bestScore', 'totalScore', 'lastPlayedAt', 'createdAt', 'updatedAt'])
+        && gameId in ['pair-garden', 'trail-scout']
+        && stat.ownerId == userId
+        && stat.schemaVersion == 'easygames-stats-v1'
+        && stat.sessionsPlayed is int && stat.sessionsPlayed >= 1 && stat.sessionsPlayed <= 1000000
+        && stat.bestScore is int && stat.bestScore >= 0 && stat.bestScore <= 1000000
+        && stat.totalScore is int && stat.totalScore >= 0 && stat.totalScore <= 1000000000
+        && stat.lastPlayedAt is timestamp && stat.createdAt is timestamp && stat.updatedAt is timestamp;
+    }
+
     match /users/{userId} {
       allow read, create, update, delete: if isOwner(userId);
 
@@ -74,6 +106,30 @@ service cloud.firestore {
           && resource.data.get('clientDraftId', null) == request.resource.data.get('clientDraftId', null)
           && resource.data.get('createdAt', null) == request.resource.data.get('createdAt', null);
         allow delete: if isOwner(userId);
+      }
+
+      match /drinks/{drinkId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validDrink(userId);
+        allow update: if isOwner(userId) && validDrink(userId)
+          && resource.data.ownerId == request.resource.data.ownerId
+          && resource.data.schemaVersion == request.resource.data.schemaVersion
+          && resource.data.createdAt == request.resource.data.createdAt;
+        allow delete: if isOwner(userId);
+      }
+
+      match /gameStats/{gameId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validGameStat(userId, gameId)
+          && request.resource.data.sessionsPlayed == 1;
+        allow update: if isOwner(userId) && validGameStat(userId, gameId)
+          && resource.data.ownerId == request.resource.data.ownerId
+          && resource.data.schemaVersion == request.resource.data.schemaVersion
+          && resource.data.createdAt == request.resource.data.createdAt
+          && request.resource.data.sessionsPlayed == resource.data.sessionsPlayed + 1
+          && request.resource.data.bestScore >= resource.data.bestScore
+          && request.resource.data.totalScore >= resource.data.totalScore;
+        allow delete: if false;
       }
 
       match /{collectionId}/{documentId} {

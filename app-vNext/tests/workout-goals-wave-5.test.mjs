@@ -46,7 +46,7 @@ test("goal document IDs are deterministic for idempotent creates", () => {
 test("whole-account export includes versioned goals without ownership identifiers", () => {
   const workoutGoals = [{ id: "weekly", ownerId: "secret-owner", schemaVersion: WORKOUT_GOAL_SCHEMA_VERSION, formulaVersion: "completed-workout-week-v1", goalType: "weekly-workouts", status: "active", target: 3, sourceUnit: "count", exerciseId: null, exerciseName: "" }];
   const payload = buildAccountExport({ collections: { ...emptyAccountDataCollections, workoutGoals }, settings: {}, exportedAt: "2026-08-02T00:00:00.000Z", timeZone: "America/Denver", weightUnit: "lb", appVersion: "test" });
-  assert.equal(payload.schemaVersion, "easylife-account-export-v2");
+  assert.equal(payload.schemaVersion, "easylife-account-export-v3");
   assert.equal(payload.manifest.included.find((entry) => entry.domain === "workoutGoals").recordCount, 1);
   assert.equal(Object.hasOwn(payload.collections.workoutGoals[0], "ownerId"), false);
   assert.match(serializeDomainCsv("workoutGoals", workoutGoals), /easyworkout-goal-v1/);

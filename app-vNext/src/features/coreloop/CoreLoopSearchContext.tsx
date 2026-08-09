@@ -4,14 +4,16 @@ import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
 import { coreLoopDemoApplications, coreLoopDemoContacts, coreLoopDemoNotes, coreLoopDemoProjects } from "./demo/coreLoopDemoFixtures";
 import { searchCoreLoopDocuments, type CoreSearchDocument } from "./domain/globalSearch";
 import { workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
+import { drinkDemoFixtures } from "@/features/easydrinks/demo/drinkDemoFixtures";
 import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 import { subscribeToApplications, type ApplicationRecord } from "@/lib/firestore/applications";
 import { subscribeToContacts, type ContactRecord } from "@/lib/firestore/contacts";
 import { subscribeToNotes, type NoteRecord } from "@/lib/firestore/notes";
 import { subscribeToProjects, type ProjectRecord } from "@/lib/firestore/projects";
 import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
+import { subscribeToDrinks, type DrinkRecord } from "@/lib/firestore/drinks";
 
-type SearchSource = "notes" | "contacts" | "projects" | "applications" | "workouts";
+type SearchSource = "notes" | "contacts" | "projects" | "applications" | "workouts" | "drinks";
 type CoreLoopSearchContextValue = {
   documents: CoreSearchDocument[];
   search: (query: string) => ReturnType<typeof searchCoreLoopDocuments>;
@@ -21,7 +23,7 @@ type CoreLoopSearchContextValue = {
 };
 
 const CoreLoopSearchContext = createContext<CoreLoopSearchContextValue | undefined>(undefined);
-const initialLoading: Record<SearchSource, boolean> = { notes: true, contacts: true, projects: true, applications: true, workouts: true };
+const initialLoading: Record<SearchSource, boolean> = { notes: true, contacts: true, projects: true, applications: true, workouts: true, drinks: true };
 
 export function CoreLoopSearchProvider({ children }: { children: ReactNode }) {
   const { user, isDemoMode } = useAuth();
@@ -31,6 +33,7 @@ export function CoreLoopSearchProvider({ children }: { children: ReactNode }) {
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [workouts, setWorkouts] = useState<WorkoutSessionRecord[]>([]);
+  const [drinks, setDrinks] = useState<DrinkRecord[]>([]);
   const [loading, setLoading] = useState(initialLoading);
   const [sourceErrors, setSourceErrors] = useState<Partial<Record<SearchSource, string>>>({});
   const [isOnline, setIsOnline] = useState(() => typeof navigator === "undefined" || navigator.onLine);
@@ -52,14 +55,15 @@ export function CoreLoopSearchProvider({ children }: { children: ReactNode }) {
       setProjects(coreLoopDemoProjects);
       setApplications(coreLoopDemoApplications);
       setWorkouts(workoutDemoSessions);
-      setLoading({ notes: false, contacts: false, projects: false, applications: false, workouts: false });
+      setDrinks(drinkDemoFixtures);
+      setLoading({ notes: false, contacts: false, projects: false, applications: false, workouts: false, drinks: false });
       setSourceErrors({});
       return;
     }
 
     if (!user) {
-      setNotes([]); setContacts([]); setProjects([]); setApplications([]); setWorkouts([]);
-      setLoading({ notes: false, contacts: false, projects: false, applications: false, workouts: false });
+      setNotes([]); setContacts([]); setProjects([]); setApplications([]); setWorkouts([]); setDrinks([]);
+      setLoading({ notes: false, contacts: false, projects: false, applications: false, workouts: false, drinks: false });
       setSourceErrors({});
       return;
     }
@@ -81,6 +85,7 @@ export function CoreLoopSearchProvider({ children }: { children: ReactNode }) {
       subscribeToProjects(user.uid, settle("projects", setProjects), fail("projects")),
       subscribeToApplications(user.uid, settle("applications", setApplications), fail("applications")),
       subscribeToWorkoutSessions(user.uid, settle("workouts", setWorkouts), fail("workouts")),
+      subscribeToDrinks(user.uid, settle("drinks", setDrinks), fail("drinks")),
     ];
     return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
   }, [isDemoMode, user]);
@@ -92,7 +97,16 @@ export function CoreLoopSearchProvider({ children }: { children: ReactNode }) {
     ...applications.map((application) => ({ id: `application:${application.id}`, group: "Job applications" as const, title: `${application.company} — ${application.title}`, detail: `${application.status.replace(/_/g, " ")}${application.nextFollowUp ? ` · Follow-up ${application.nextFollowUp}` : ""}`, searchText: `${application.location} ${application.notes} ${application.contactName}`, to: `/app/easypipeline/dashboard?application=${encodeURIComponent(application.id)}`, updatedAt: application.updatedAt })),
     ...tasks.filter((task) => !task.deletedAt).map((task) => ({ id: `task:${task.id}`, group: "Plan" as const, title: task.title || "Untitled plan item", detail: [task.listName, task.category, task.dueDate?.toLocaleDateString()].filter(Boolean).join(" · ") || "Inbox task", searchText: `${task.notes} ${task.priorityLabel}`, to: `/app/easylist/dashboard?task=${encodeURIComponent(task.id)}`, updatedAt: task.updatedAt })),
     ...workouts.map((session) => ({ id: `workout:${session.id}`, group: "Workouts" as const, title: session.routineName || "Workout session", detail: `${session.performedOn}${session.durationMinutes ? ` · ${session.durationMinutes} min` : ""}`, searchText: `${session.notes} ${(session.exercises || []).map((exercise) => `${exercise.exerciseName} ${exercise.notes}`).join(" ")}`, to: `/app/easyworkout/session/${encodeURIComponent(session.id)}`, updatedAt: session.updatedAt || session.createdAt })),
-  ], [applications, contacts, notes, projects, tasks, workouts]);
+    ...drinks.map((drink) => ({
+      id: `drink:${drink.id}`,
+      group: "Drinks" as const,
+      title: drink.name || "Untitled drink",
+      detail: `${drink.type.replace(/-/g, " ")} · ${drink.date}`,
+      searchText: `${drink.notes} ${drink.instructions} ${drink.tags.join(" ")} ${drink.ingredients.map((ingredient) => `${ingredient.name} ${ingredient.amount} ${ingredient.unit}`).join(" ")}`,
+      to: `/app/easydrinks/${encodeURIComponent(drink.id)}`,
+      updatedAt: drink.updatedAt || drink.createdAt,
+    })),
+  ], [applications, contacts, drinks, notes, projects, tasks, workouts]);
 
   const errors = useMemo(() => [calendarError, ...Object.values(sourceErrors)].filter((value): value is string => Boolean(value)), [calendarError, sourceErrors]);
   const value = useMemo(() => ({ documents, search: (query: string) => searchCoreLoopDocuments(documents, query), isLoading: isDailyDataLoading || Object.values(loading).some(Boolean), errors, isOnline }), [documents, errors, isDailyDataLoading, isOnline, loading]);
@@ -104,4 +118,3 @@ export function useCoreLoopSearch() {
   if (!value) throw new Error("useCoreLoopSearch must be used inside CoreLoopSearchProvider");
   return value;
 }
-

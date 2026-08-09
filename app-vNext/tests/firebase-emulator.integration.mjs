@@ -151,7 +151,7 @@ test("authenticated owner records drive Wave 3 search, focused review, and safe 
 
   const payload = buildAccountExport({ collections: { ...emptyAccountDataCollections, tasks, notes, projects, pipelineApplications: applications, contacts, workoutSessions: workouts }, settings: { easyWorkout: { weightUnit: "lb" }, apiKey: "blocked" }, exportedAt: "2026-08-02T00:00:00.000Z", timeZone: "America/Denver", weightUnit: "lb", appVersion: "test" });
   const serialized = serializeAccountExport(payload);
-  assert.match(serialized, /easylife-account-export-v2/);
+  assert.match(serialized, /easylife-account-export-v3/);
   assert.doesNotMatch(serialized, /blocked/);
   await assertFails(getDocs(collection(rulesEnvironment.authenticatedContext(otherId).firestore(), "users", ownerId, "notes")));
 });
@@ -176,6 +176,38 @@ test("workout goals enforce versioned ownership, lifecycle validation, and recov
   const e1rmRef = doc(ownerDb, ownerPath("workoutGoals", "exercise-e1rm-bench"));
   await assertSucceeds(setDoc(e1rmRef, { ...goal, formulaVersion: "epley-v1", goalType: "exercise-e1rm", target: 100, sourceUnit: "kg", exerciseId: "bench", exerciseName: "Bench Press" }));
   await assertFails(updateDoc(e1rmRef, { formulaVersion: "unreviewed-formula", updatedAt: new Date("2026-08-02T16:00:00Z") }));
+});
+
+test("EasyDrinks rules validate bounded owner records and immutable provenance", async () => {
+  const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
+  const otherDb = rulesEnvironment.authenticatedContext(otherId).firestore();
+  const createdAt = new Date("2026-08-08T12:00:00Z");
+  const drink = { ownerId, schemaVersion: "easydrinks-v1", name: "Maple oat latte", type: "coffee", ingredients: [{ name: "Oat milk", amount: "8", unit: "oz" }], instructions: "Warm and combine.", notes: "Comforting.", rating: 5, tags: ["morning"], date: "2026-08-08", favorite: true, sourceDrinkId: null, createdAt, updatedAt: createdAt };
+  const reference = doc(ownerDb, ownerPath("drinks", "latte"));
+  await assertSucceeds(setDoc(reference, drink));
+  await assertSucceeds(getDoc(reference));
+  await assertSucceeds(updateDoc(reference, { notes: "Less sweet next time.", updatedAt: new Date("2026-08-08T13:00:00Z") }));
+  await assertFails(updateDoc(reference, { ownerId: otherId, updatedAt: new Date("2026-08-08T14:00:00Z") }));
+  await assertFails(updateDoc(reference, { createdAt: new Date("2026-08-09T12:00:00Z"), updatedAt: new Date("2026-08-09T12:00:00Z") }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("drinks", "bad-type")), { ...drink, type: "unsafe", name: "Bad" }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("drinks", "bad-rating")), { ...drink, rating: 6, name: "Bad" }));
+  await assertFails(getDoc(doc(otherDb, ownerPath("drinks", "latte"))));
+  await assertFails(setDoc(doc(otherDb, `users/${otherId}/drinks/stolen`), drink));
+});
+
+test("EasyGames statistics increment monotonically and remain owner-only", async () => {
+  const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
+  const otherDb = rulesEnvironment.authenticatedContext(otherId).firestore();
+  const createdAt = new Date("2026-08-08T12:00:00Z");
+  const stat = { ownerId, schemaVersion: "easygames-stats-v1", sessionsPlayed: 1, bestScore: 800, totalScore: 800, lastPlayedAt: createdAt, createdAt, updatedAt: createdAt };
+  const reference = doc(ownerDb, ownerPath("gameStats", "pair-garden"));
+  await assertSucceeds(setDoc(reference, stat));
+  await assertSucceeds(updateDoc(reference, { sessionsPlayed: 2, bestScore: 900, totalScore: 1700, lastPlayedAt: new Date("2026-08-08T13:00:00Z"), updatedAt: new Date("2026-08-08T13:00:00Z") }));
+  await assertFails(updateDoc(reference, { sessionsPlayed: 4, totalScore: 2500, updatedAt: new Date("2026-08-08T14:00:00Z") }));
+  await assertFails(updateDoc(reference, { sessionsPlayed: 3, bestScore: 700, totalScore: 2400, updatedAt: new Date("2026-08-08T14:00:00Z") }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("gameStats", "unknown-game")), stat));
+  await assertFails(getDoc(doc(otherDb, ownerPath("gameStats", "pair-garden"))));
+  await assertFails(deleteDoc(reference));
 });
 
 test("all product-wave collections deny cross-owner and top-level access", async () => {

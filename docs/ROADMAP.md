@@ -4,12 +4,12 @@ This roadmap is the working source of truth for product direction, release plann
 
 ## Current Version
 
-- App package version: `4.37.1`
-- Current planning target: `4.37.1` Pre-5.0.0 Stabilization Patch
-- Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
+- App package version: `5.0.0`
+- Current planning target: `5.0.0` EasyDrinks and EasyGames Suite Expansion
+- Next patch target: `5.0.1` lived-in fixes after review
 - Product polish queue: mobile real-device QA, calendar/list real-use patches, native wrapping readiness
 - Future major target: native mobile wrapping after the PWA install path proves stable
-- Future suite expansion target: `5.0.0` EasyDrinks and EasyGames
+- Suite expansion milestone: `5.0.0` EasyDrinks and EasyGames
 
 ## Working Rules
 
@@ -916,18 +916,17 @@ Goal: Use the app in real life, patch what breaks trust, and only then open the 
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 
-Status: Held
+Status: Implemented in Wave 10; awaiting review
 
 Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun apps after the mobile foundation is stable.
 
-- Add EasyDrinks as a quick drink journal and recipe app.
-- EasyDrinks can save drink name, ingredients, notes, rating, tags, date, and favorite status.
-- EasyDrinks supports broad drink types such as cocktails, mocktails, coffee, smoothies, and protein shakes.
-- Add EasyGames as a small games hub.
-- EasyGames launches with one or two lightweight built-in games instead of a giant game library.
-- EasyGames tracks simple play stats or favorites where useful.
-- Add EasyDrinks and EasyGames to navigation, app visibility settings, theme styling, roadmap, changelog, and versioning.
-- Keep both apps MVP-sized for `5.0.0`, then deepen them in later `5.x` releases.
+- Done in Wave 10: Add EasyDrinks as a quick drink journal and recipe app.
+- Done in Wave 10: Save drink name, flexible ingredients, instructions, notes, rating, tags, date, favorite status, and copy provenance.
+- Done in Wave 10: Support cocktails, mocktails, coffee, tea, smoothies, protein shakes, and custom drinks with neutral language.
+- Done in Wave 10: Add the Pair Garden and Trail Scout short-session games with touch, keyboard, pause, restart, and local recovery.
+- Done in Wave 10: Track owner-safe sessions, best scores, and total scores without favorites or platform-style engagement mechanics.
+- Done in Wave 10: Add both apps to routes, lazy loading, optional navigation, settings normalization, search, themes, demo fixtures, exports, rules, tests, roadmap, changelog, and versioning.
+- Hold for later `5.x`: deepen only after lived-in use confirms the MVP boundaries.
 
 ## Backlog by Area
 
@@ -996,15 +995,11 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 
 ### EasyDrinks
 
-- Build the EasyDrinks MVP when the `5.0.0` hold lifts.
-- Add fast drink capture.
-- Add saved favorite drinks.
-- Add ingredients, notes, rating, tags, and date fields.
-- Keep any alcohol-related copy neutral and responsible.
+- Done in Wave 10: Build the EasyDrinks MVP with fast capture, detail editing, search, filters, favorites, duplication, and full recipe fields.
+- Continue keeping any alcohol-related copy neutral and responsible.
 
 ### EasyGames
 
-- Build the EasyGames MVP when the `5.0.0` hold lifts.
-- Add a games dashboard.
-- Add one or two lightweight built-in games.
-- Add simple favorites or stats if they do not slow down the MVP.
+- Done in Wave 10: Build the EasyGames dashboard with Pair Garden and Trail Scout.
+- Done in Wave 10: Add local active-game recovery plus durable sessions, best score, and total score.
+- Hold additional games until the two-game MVP proves useful.
