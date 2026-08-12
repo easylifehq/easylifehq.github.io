@@ -836,6 +836,19 @@ a {
   min-width: 0;
 }
 
+.audit-preview-label {
+  width: 100%;
+  padding: 0.35rem 0.75rem;
+  border-bottom: 1px solid var(--shell-card-border);
+  background: color-mix(in srgb, var(--ui-bg-card-elevated) 88%, var(--app-accent) 12%);
+  color: var(--ui-text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
 .mobile-standalone-shell {
   min-height: var(--easy-viewport-height, 100dvh);
 }

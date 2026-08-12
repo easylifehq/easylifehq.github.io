@@ -1,4 +1,4 @@
-import { lazy, Suspense, type ComponentType } from "react";
+import { lazy, Suspense, type ComponentType, type ReactNode } from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AuthenticatedLayout } from "@/app/layouts/AuthenticatedLayout";
 import { MarketingLayout } from "@/app/layouts/MarketingLayout";
@@ -383,10 +383,23 @@ function WorkoutRouteLandingPage() {
   );
 }
 
+function AuditOnlyRouteBoundary({ children }: { children: ReactNode }) {
+  const { isAuditMode } = useAuth();
+  const location = useLocation();
+  const isSyntheticAppRoute = /^\/app(?:\/|$)/.test(location.pathname) || location.pathname === "/settings";
+
+  if (isAuditMode && !isSyntheticAppRoute) {
+    return <Navigate to={{ pathname: "/app/hq", search: "", hash: "" }} replace />;
+  }
+
+  return children;
+}
+
 export function AppRouter() {
   return (
     <Suspense fallback={<LoadingState label="Loading EasyLife..." detail="Preparing the next screen." />}>
-      <Routes>
+      <AuditOnlyRouteBoundary>
+        <Routes>
         <Route element={<MarketingLayout />}>
           <Route path="/" element={<PublicHomeRoute />} />
           <Route path="/easylist" element={<EasyListMarketingPage />} />
@@ -474,7 +487,8 @@ export function AppRouter() {
             <Route path="*" element={<SafeAppNotFoundPage />} />
           </Route>
         </Route>
-      </Routes>
+        </Routes>
+      </AuditOnlyRouteBoundary>
     </Suspense>
   );
 }

@@ -1,7 +1,7 @@
 import { initializeApp, type FirebaseApp, type FirebaseOptions } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore, type Firestore } from "firebase/firestore";
-import { firebaseConfig, firebaseConfigured } from "./config";
+import { firebaseConfig, firebaseConfigured as buildFirebaseConfigured } from "./config";
 import { resolveFirestoreRuntimeTarget } from "./runtimeSafety";
 
 export const firestoreRuntimeTarget = resolveFirestoreRuntimeTarget({
@@ -18,7 +18,8 @@ const emulatorOnlyConfig: FirebaseOptions | null = firestoreRuntimeTarget.kind =
     }
   : null;
 
-const runtimeConfig = firebaseConfig ?? emulatorOnlyConfig;
+export const firebaseConfigured = firestoreRuntimeTarget.kind === "configured-project" && buildFirebaseConfigured;
+const runtimeConfig = firestoreRuntimeTarget.kind === "configured-project" ? firebaseConfig : emulatorOnlyConfig;
 const app: FirebaseApp | null = runtimeConfig ? initializeApp(runtimeConfig) : null;
 
 function unavailableService<T extends object>(service: string) {
@@ -32,8 +33,6 @@ function unavailableService<T extends object>(service: string) {
 export const auth: Auth = app ? getAuth(app) : unavailableService<Auth>("Firebase Auth");
 export const db: Firestore = app ? getFirestore(app) : unavailableService<Firestore>("Firestore");
 export const firebaseRuntimeAvailable = app !== null;
-export { firebaseConfigured };
-
 if (app && firestoreRuntimeTarget.kind === "emulator") {
   connectFirestoreEmulator(db, firestoreRuntimeTarget.host, firestoreRuntimeTarget.port);
 }
