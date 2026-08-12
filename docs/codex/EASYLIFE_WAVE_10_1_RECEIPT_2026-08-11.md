@@ -51,7 +51,7 @@ Rejected or deferred:
 - no sound/haptics dependency;
 - no manipulative streaks, gambling, purchases, ads, scarcity, or punitive loss;
 - no third game in this wave;
-- per-shopping-item editing and richer third-game concepts remain future work.
+- per-shopping-item editing remains future work; the deferred third-game concept is Pocket Balance, a finite accessible arithmetic-placement puzzle that requires generator solvability/uniqueness proof and physical screen-reader QA before implementation.
 
 ## EasyDrinks delivered
 

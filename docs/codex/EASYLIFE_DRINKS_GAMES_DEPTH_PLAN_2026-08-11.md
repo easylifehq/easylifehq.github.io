@@ -271,6 +271,11 @@ Achievements are deterministic, local derivations with evidence and no reward cu
 
 - third game
 - scraped or generated recipe content
+
+Deferred third-game concept: **Pocket Balance**. A finite arithmetic puzzle would ask the player to place a small set of numbered stones on two labelled trays so both sides meet a target relationship. It would be meaningfully different from memory matching and route finding, asset-light, offline-first, fully describable without color, and suitable for focus-move/place/undo keyboard and touch controls. Free play and UTC dailies could use deterministic seeds only after a generator proves every board has a solution and the intended difficulty. It is deferred until uniqueness/solvability tests and real mobile screen-reader interaction can be designed; shipping a weak curated set now would not justify a third game.
+
+Other rejected scope:
+
 - inferred substitutions, ABV, nutrition, allergies, or medical claims
 - quantity sufficiency across flexible units
 - timers inferred from free-form prose
