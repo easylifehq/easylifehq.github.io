@@ -2,39 +2,21 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
 
     function validWorkoutGoal(userId) {
       let goal = request.resource.data;
       return goal.keys().hasOnly(['ownerId', 'schemaVersion', 'formulaVersion', 'goalType', 'status', 'target', 'sourceUnit', 'exerciseId', 'exerciseName', 'createdAt', 'updatedAt', 'archivedAt'])
-        && goal.ownerId == userId
-        && goal.schemaVersion == 'easyworkout-goal-v1'
-        && goal.status in ['active', 'paused', 'archived']
-        && goal.target is number && goal.target > 0
+        && goal.ownerId == userId && goal.schemaVersion == 'easyworkout-goal-v1'
+        && goal.status in ['active', 'paused', 'archived'] && goal.target is number && goal.target > 0
         && goal.createdAt is timestamp && goal.updatedAt is timestamp
         && ((goal.status == 'archived' && goal.archivedAt is timestamp) || (goal.status != 'archived' && goal.archivedAt == null))
-        && ((goal.goalType == 'weekly-workouts'
-          && goal.formulaVersion == 'completed-workout-week-v1'
-          && goal.sourceUnit == 'count'
-          && goal.target is int && goal.target <= 14
-          && goal.exerciseId == null && goal.exerciseName == '')
-        || (goal.goalType == 'exercise-e1rm'
-          && goal.formulaVersion == 'epley-v1'
-          && goal.sourceUnit in ['lb', 'kg']
-          && goal.target <= 5000
-          && goal.exerciseId is string && goal.exerciseId.size() > 0 && goal.exerciseId.size() <= 200
-          && goal.exerciseName is string && goal.exerciseName.size() > 0 && goal.exerciseName.size() <= 200));
+        && ((goal.goalType == 'weekly-workouts' && goal.formulaVersion == 'completed-workout-week-v1' && goal.sourceUnit == 'count' && goal.target is int && goal.target <= 14 && goal.exerciseId == null && goal.exerciseName == '')
+        || (goal.goalType == 'exercise-e1rm' && goal.formulaVersion == 'epley-v1' && goal.sourceUnit in ['lb', 'kg'] && goal.target <= 5000 && goal.exerciseId is string && goal.exerciseId.size() > 0 && goal.exerciseId.size() <= 200 && goal.exerciseName is string && goal.exerciseName.size() > 0 && goal.exerciseName.size() <= 200));
     }
 
-    function isSupportedUserCollection(collectionId) {
-      return collectionId in ['tasks', 'calendarEvents', 'calendarTaskBlocks', 'categories', 'projects', 'projectSections', 'projectTaskLinks', 'applications', 'generatedDrafts', 'notes', 'noteFolders', 'contacts', 'workoutExercises', 'workoutRoutines', 'workoutSessions', 'appPreferences'];
-    }
+    function isSupportedUserCollection(collectionId) { return collectionId in ['tasks', 'calendarEvents', 'calendarTaskBlocks', 'categories', 'projects', 'projectSections', 'projectTaskLinks', 'applications', 'generatedDrafts', 'notes', 'noteFolders', 'contacts', 'workoutExercises', 'workoutRoutines', 'workoutSessions', 'appPreferences']; }
 
     function validWorkoutSession() {
       let session = request.resource.data;
@@ -55,13 +37,14 @@ service cloud.firestore {
 
     function validDrink(userId) {
       let drink = request.resource.data;
-      return drink.keys().hasAll(['ownerId', 'schemaVersion', 'name', 'type', 'ingredients', 'instructions', 'notes', 'rating', 'tags', 'date', 'favorite', 'sourceDrinkId', 'createdAt', 'updatedAt'])
-        && drink.keys().hasOnly(['ownerId', 'schemaVersion', 'name', 'type', 'ingredients', 'instructions', 'notes', 'rating', 'tags', 'date', 'favorite', 'sourceDrinkId', 'createdAt', 'updatedAt'])
-        && drink.ownerId == userId
-        && drink.schemaVersion == 'easydrinks-v1'
+      return drink.keys().hasAll(['ownerId', 'schemaVersion', 'name', 'type', 'baseServings', 'ingredients', 'steps', 'instructions', 'notes', 'rating', 'tags', 'date', 'favorite', 'sourceDrinkId', 'createdAt', 'updatedAt'])
+        && drink.keys().hasOnly(['ownerId', 'schemaVersion', 'name', 'type', 'baseServings', 'ingredients', 'steps', 'instructions', 'notes', 'rating', 'tags', 'date', 'favorite', 'sourceDrinkId', 'createdAt', 'updatedAt'])
+        && drink.ownerId == userId && drink.schemaVersion == 'easydrinks-v2'
         && drink.name is string && drink.name.size() > 0 && drink.name.size() <= 300
         && drink.type in ['cocktail', 'mocktail', 'coffee', 'tea', 'smoothie', 'protein-shake', 'other']
+        && drink.baseServings is int && drink.baseServings >= 1 && drink.baseServings <= 100
         && drink.ingredients is list && drink.ingredients.size() <= 40
+        && drink.steps is list && drink.steps.size() <= 40
         && drink.instructions is string && drink.instructions.size() <= 20000
         && drink.notes is string && drink.notes.size() <= 20000
         && drink.rating is int && drink.rating >= 0 && drink.rating <= 5
@@ -72,17 +55,59 @@ service cloud.firestore {
         && drink.createdAt is timestamp && drink.updatedAt is timestamp;
     }
 
-    function validGameStat(userId, gameId) {
-      let stat = request.resource.data;
-      return stat.keys().hasAll(['ownerId', 'schemaVersion', 'sessionsPlayed', 'bestScore', 'totalScore', 'lastPlayedAt', 'createdAt', 'updatedAt'])
-        && stat.keys().hasOnly(['ownerId', 'schemaVersion', 'sessionsPlayed', 'bestScore', 'totalScore', 'lastPlayedAt', 'createdAt', 'updatedAt'])
-        && gameId in ['pair-garden', 'trail-scout']
-        && stat.ownerId == userId
-        && stat.schemaVersion == 'easygames-stats-v1'
-        && stat.sessionsPlayed is int && stat.sessionsPlayed >= 1 && stat.sessionsPlayed <= 1000000
-        && stat.bestScore is int && stat.bestScore >= 0 && stat.bestScore <= 1000000
-        && stat.totalScore is int && stat.totalScore >= 0 && stat.totalScore <= 1000000000
-        && stat.lastPlayedAt is timestamp && stat.createdAt is timestamp && stat.updatedAt is timestamp;
+    function validPantryItem(userId) {
+      let item = request.resource.data;
+      return item.keys().hasAll(['ownerId', 'schemaVersion', 'name', 'canonicalName', 'status', 'note', 'createdAt', 'updatedAt'])
+        && item.keys().hasOnly(['ownerId', 'schemaVersion', 'name', 'canonicalName', 'status', 'note', 'createdAt', 'updatedAt'])
+        && item.ownerId == userId && item.schemaVersion == 'easydrinks-pantry-v1'
+        && item.name is string && item.name.size() > 0 && item.name.size() <= 200
+        && item.canonicalName is string && item.canonicalName.size() > 0 && item.canonicalName.size() <= 200
+        && item.status in ['available', 'unavailable'] && item.note is string && item.note.size() <= 500
+        && item.createdAt is timestamp && item.updatedAt is timestamp;
+    }
+
+    function validPreparation(userId) {
+      let prep = request.resource.data;
+      return prep.keys().hasAll(['ownerId', 'schemaVersion', 'drinkId', 'drinkName', 'drinkType', 'servings', 'rating', 'preparedAt', 'createdAt'])
+        && prep.keys().hasOnly(['ownerId', 'schemaVersion', 'drinkId', 'drinkName', 'drinkType', 'servings', 'rating', 'preparedAt', 'createdAt'])
+        && prep.ownerId == userId && prep.schemaVersion == 'easydrinks-preparation-v1'
+        && prep.drinkId is string && prep.drinkId.size() > 0 && prep.drinkId.size() <= 200
+        && prep.drinkName is string && prep.drinkName.size() > 0 && prep.drinkName.size() <= 300
+        && prep.drinkType in ['cocktail', 'mocktail', 'coffee', 'tea', 'smoothie', 'protein-shake', 'other']
+        && prep.servings is int && prep.servings >= 1 && prep.servings <= 100
+        && prep.rating is int && prep.rating >= 0 && prep.rating <= 5
+        && prep.preparedAt is timestamp && prep.createdAt == request.time;
+    }
+
+    function validShoppingHandoff(userId, handoffId) {
+      let handoff = request.resource.data;
+      return handoff.keys().hasAll(['ownerId', 'schemaVersion', 'drinkId', 'drinkName', 'canonicalIngredients', 'taskId', 'createdAt'])
+        && handoff.keys().hasOnly(['ownerId', 'schemaVersion', 'drinkId', 'drinkName', 'canonicalIngredients', 'taskId', 'createdAt'])
+        && handoff.ownerId == userId && handoff.schemaVersion == 'easydrinks-shopping-v1'
+        && handoff.drinkId is string && handoff.drinkId.size() > 0 && handoff.drinkId.size() <= 200
+        && handoff.drinkName is string && handoff.drinkName.size() > 0 && handoff.drinkName.size() <= 300
+        && handoff.canonicalIngredients is list && handoff.canonicalIngredients.size() > 0 && handoff.canonicalIngredients.size() <= 40
+        && handoff.taskId == handoffId && handoff.createdAt == request.time;
+    }
+
+    function validGameSession(userId, sessionId) {
+      let session = request.resource.data;
+      return session.keys().hasAll(['ownerId', 'schemaVersion', 'formulaVersion', 'gameId', 'difficulty', 'mode', 'dateKey', 'challengeKey', 'generatorVersion', 'seed', 'puzzleSpec', 'completed', 'score', 'moves', 'pairs', 'goalsCollected', 'totalGoals', 'movesRemaining', 'startedAt', 'completedAt', 'createdAt'])
+        && session.keys().hasOnly(['ownerId', 'schemaVersion', 'formulaVersion', 'gameId', 'difficulty', 'mode', 'dateKey', 'challengeKey', 'generatorVersion', 'seed', 'puzzleSpec', 'completed', 'score', 'moves', 'pairs', 'goalsCollected', 'totalGoals', 'movesRemaining', 'startedAt', 'completedAt', 'createdAt'])
+        && sessionId.matches('^[A-Za-z0-9_-]{8,180}$')
+        && session.ownerId == userId && session.schemaVersion == 'easygames-session-v1' && session.formulaVersion == 'easygames-score-v2'
+        && session.gameId in ['pair-garden', 'trail-scout'] && session.difficulty in ['easy', 'standard', 'hard'] && session.mode in ['free', 'daily']
+        && ((session.mode == 'daily' && session.dateKey is string && session.dateKey.matches('^\\d{4}-\\d{2}-\\d{2}$') && session.challengeKey is string && session.challengeKey.size() >= 20 && session.challengeKey.size() <= 300)
+          || (session.mode == 'free' && session.dateKey == null && session.challengeKey == null))
+        && session.generatorVersion == 'easygames-generator-v2'
+        && session.seed is int && session.seed >= 0 && session.seed <= 4294967295
+        && session.puzzleSpec is map && session.puzzleSpec.size() <= 8
+        && session.completed is bool && session.score is int && session.score >= 0 && session.score <= 1000000
+        && session.moves is int && session.moves >= 0 && session.moves <= 10000
+        && ((session.gameId == 'pair-garden' && session.pairs is int && session.pairs >= 4 && session.pairs <= 8 && session.goalsCollected == null && session.totalGoals == null && session.movesRemaining == null)
+          || (session.gameId == 'trail-scout' && session.pairs == null && session.goalsCollected is int && session.goalsCollected >= 0 && session.goalsCollected <= 20 && session.totalGoals is int && session.totalGoals >= 1 && session.totalGoals <= 20 && session.goalsCollected <= session.totalGoals && session.movesRemaining is int && session.movesRemaining >= 0 && session.movesRemaining <= 100))
+        && session.startedAt is timestamp && session.completedAt is timestamp && session.startedAt <= session.completedAt
+        && session.completedAt <= request.time && session.createdAt == request.time;
     }
 
     match /users/{userId} {
@@ -91,61 +116,52 @@ service cloud.firestore {
       match /workoutGoals/{goalId} {
         allow read: if isOwner(userId);
         allow create: if isOwner(userId) && validWorkoutGoal(userId);
-        allow update: if isOwner(userId) && validWorkoutGoal(userId)
-          && resource.data.ownerId == request.resource.data.ownerId
-          && resource.data.goalType == request.resource.data.goalType
-          && resource.data.formulaVersion == request.resource.data.formulaVersion
-          && resource.data.createdAt == request.resource.data.createdAt;
+        allow update: if isOwner(userId) && validWorkoutGoal(userId) && resource.data.ownerId == request.resource.data.ownerId && resource.data.goalType == request.resource.data.goalType && resource.data.formulaVersion == request.resource.data.formulaVersion && resource.data.createdAt == request.resource.data.createdAt;
         allow delete: if false;
       }
-
       match /workoutSessions/{sessionId} {
         allow read: if isOwner(userId);
         allow create: if isOwner(userId) && validWorkoutSession();
-        allow update: if isOwner(userId) && validWorkoutSession()
-          && resource.data.get('clientDraftId', null) == request.resource.data.get('clientDraftId', null)
-          && resource.data.get('createdAt', null) == request.resource.data.get('createdAt', null);
+        allow update: if isOwner(userId) && validWorkoutSession() && resource.data.get('clientDraftId', null) == request.resource.data.get('clientDraftId', null) && resource.data.get('createdAt', null) == request.resource.data.get('createdAt', null);
         allow delete: if isOwner(userId);
       }
-
       match /drinks/{drinkId} {
         allow read: if isOwner(userId);
         allow create: if isOwner(userId) && validDrink(userId);
-        allow update: if isOwner(userId) && validDrink(userId)
-          && resource.data.ownerId == request.resource.data.ownerId
-          && resource.data.schemaVersion == request.resource.data.schemaVersion
-          && resource.data.createdAt == request.resource.data.createdAt;
+        allow update: if isOwner(userId) && validDrink(userId) && resource.data.ownerId == request.resource.data.ownerId && resource.data.createdAt == request.resource.data.createdAt && resource.data.schemaVersion in ['easydrinks-v1', 'easydrinks-v2'];
         allow delete: if isOwner(userId);
       }
-
+      match /drinkPantry/{itemId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validPantryItem(userId);
+        allow update: if isOwner(userId) && validPantryItem(userId) && resource.data.ownerId == request.resource.data.ownerId && resource.data.schemaVersion == request.resource.data.schemaVersion && resource.data.createdAt == request.resource.data.createdAt;
+        allow delete: if isOwner(userId);
+      }
+      match /drinkPreparations/{preparationId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validPreparation(userId);
+        allow update: if false;
+        allow delete: if isOwner(userId) && request.time - resource.data.createdAt < duration.value(10, 'm');
+      }
+      match /drinkShoppingHandoffs/{handoffId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validShoppingHandoff(userId, handoffId);
+        allow update, delete: if false;
+      }
       match /gameStats/{gameId} {
         allow read: if isOwner(userId);
-        allow create: if isOwner(userId) && validGameStat(userId, gameId)
-          && request.resource.data.sessionsPlayed == 1;
-        allow update: if isOwner(userId) && validGameStat(userId, gameId)
-          && resource.data.ownerId == request.resource.data.ownerId
-          && resource.data.schemaVersion == request.resource.data.schemaVersion
-          && resource.data.createdAt == request.resource.data.createdAt
-          && request.resource.data.sessionsPlayed == resource.data.sessionsPlayed + 1
-          && request.resource.data.bestScore >= resource.data.bestScore
-          && request.resource.data.totalScore >= resource.data.totalScore;
-        allow delete: if false;
+        allow create, update, delete: if false;
       }
-
+      match /gameSessions/{sessionId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validGameSession(userId, sessionId);
+        allow update, delete: if false;
+      }
       match /{collectionId}/{documentId} {
-        allow read, create, update, delete: if isSupportedUserCollection(collectionId)
-          && collectionId != 'workoutGoals'
-          && collectionId != 'workoutSessions'
-          && isOwner(userId);
+        allow read, create, update, delete: if isSupportedUserCollection(collectionId) && collectionId != 'workoutGoals' && collectionId != 'workoutSessions' && isOwner(userId);
       }
-
-      match /{document=**} {
-        allow read, create, update, delete: if false;
-      }
+      match /{document=**} { allow read, create, update, delete: if false; }
     }
-
-    match /{document=**} {
-      allow read, write: if false;
-    }
+    match /{document=**} { allow read, write: if false; }
   }
 }

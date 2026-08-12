@@ -916,7 +916,7 @@ Goal: Use the app in real life, patch what breaks trust, and only then open the 
 
 ### 5.0.0 EasyDrinks and EasyGames Suite Expansion
 
-Status: Implemented in Wave 10; awaiting review
+Status: Implemented through Wave 10.1; awaiting review
 
 Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun apps after the mobile foundation is stable.
 
@@ -926,7 +926,10 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 - Done in Wave 10: Add the Pair Garden and Trail Scout short-session games with touch, keyboard, pause, restart, and local recovery.
 - Done in Wave 10: Track owner-safe sessions, best scores, and total scores without favorites or platform-style engagement mechanics.
 - Done in Wave 10: Add both apps to routes, lazy loading, optional navigation, settings normalization, search, themes, demo fixtures, exports, rules, tests, roadmap, changelog, and versioning.
-- Hold for later `5.x`: deepen only after lived-in use confirms the MVP boundaries.
+- Done in Wave 10.1: Add a reusable evidence-backed pantry, deterministic make-now ranking, safe scaling, guided preparation, preparation history/statistics, and confirmed shopping handoff.
+- Done in Wave 10.1: Add meaningful game difficulty, UTC daily challenges, immutable session history, evidence-derived statistics/achievements, cross-tab recovery, completion clearing, and offline outbox sync.
+- Done in Wave 10.1: Harden v2 data contracts, owner-only rules, v4 account export, responsive 320px/390px play surfaces, demo isolation, and release/browser evidence.
+- Hold a third game for later `5.x`; the next concept should be original, finite, offline-friendly, accessible, and interaction-distinct after lived-in use of both current games.
 
 ## Backlog by Area
 
@@ -996,10 +999,12 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 ### EasyDrinks
 
 - Done in Wave 10: Build the EasyDrinks MVP with fast capture, detail editing, search, filters, favorites, duplication, and full recipe fields.
-- Continue keeping any alcohol-related copy neutral and responsible.
+- Done in Wave 10.1: Add pantry evidence, make-now and missing-one-to-two ranking, safe recipe scaling, guided steps/timers, preparation history, and explicit shopping handoff.
+- Continue keeping any alcohol-related copy neutral and responsible; do not infer nutrition, allergens, potency, substitutions, or safe consumption.
 
 ### EasyGames
 
 - Done in Wave 10: Build the EasyGames dashboard with Pair Garden and Trail Scout.
 - Done in Wave 10: Add local active-game recovery plus durable sessions, best score, and total score.
-- Hold additional games until the two-game MVP proves useful.
+- Done in Wave 10.1: Add difficulty, UTC dailies, immutable sessions, transparent formulas, quiet achievements, cross-tab recovery, and offline result retry.
+- Hold additional games until Pair Garden and Trail Scout prove useful in physical-device testing.

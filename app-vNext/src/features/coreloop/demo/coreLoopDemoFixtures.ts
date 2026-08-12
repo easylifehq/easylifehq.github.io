@@ -7,7 +7,9 @@ import { weeklyReviewDemoApplications, weeklyReviewDemoNotes, weeklyReviewDemoPr
 import { workoutDemoExercises, workoutDemoRoutines, workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
 import { workoutGoalDemoFixtures } from "@/features/easyworkout/demo/workoutGoalDemoFixtures";
 import { drinkDemoFixtures } from "@/features/easydrinks/demo/drinkDemoFixtures";
+import { drinkDemoPantry, drinkDemoPreparations } from "@/features/easydrinks/demo/drinkDepthDemoFixtures";
 import { gameDemoStats } from "@/features/easygames/demo/gameDemoFixtures";
+import { gameDemoSessions } from "@/features/easygames/demo/gameSessionDemoFixtures";
 
 export const CORE_LOOP_DEMO_VERSION = "core-loop-wave-3-v1";
 
@@ -54,5 +56,9 @@ export const coreLoopDemoExportCollections: AccountDataCollections = {
   pipelineDrafts: [{ id: "visual-draft-cedar", subject: "Thanks for the conversation", body: "A user-owned draft.", company: "Cedar Labs", applicationId: "visual-app-cedar", emailType: "follow_up", tone: "warm", createdAt: new Date("2026-08-01T16:00:00Z") }],
   contacts: coreLoopDemoContacts,
   drinks: drinkDemoFixtures,
+  drinkPantry: drinkDemoPantry,
+  drinkPreparations: drinkDemoPreparations,
+  drinkShoppingHandoffs: [],
   gameStats: gameDemoStats,
+  gameSessions: gameDemoSessions,
 };

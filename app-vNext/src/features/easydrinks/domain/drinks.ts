@@ -12,11 +12,17 @@ export function todayDateKey(now = new Date()) {
   return local.toISOString().slice(0, 10);
 }
 
+export function createLocalId(prefix: string, random = Math.random()) {
+  return `${prefix}-${Date.now().toString(36)}-${Math.floor(random * 0x100000).toString(36)}`;
+}
+
 export function emptyDrinkDraft(date = todayDateKey()): DrinkDraft {
   return {
     name: "",
     type: "coffee",
-    ingredients: [{ name: "", amount: "", unit: "" }],
+    baseServings: 1,
+    ingredients: [{ id: "ingredient-1", name: "", amount: "", unit: "", optional: false }],
+    steps: [{ id: "step-1", text: "", durationSeconds: null }],
     instructions: "",
     notes: "",
     rating: 0,
@@ -31,6 +37,11 @@ function clean(value: string, maximum: number) {
   return value.trim().replace(/\s+/g, " ").slice(0, maximum);
 }
 
+function safeId(value: string, fallback: string) {
+  const normalized = clean(value, 120).replace(/[^A-Za-z0-9_-]/g, "-");
+  return normalized || fallback;
+}
+
 export function normalizeDrinkDraft(draft: DrinkDraft): DrinkDraft {
   const seenTags = new Set<string>();
   const tags = draft.tags
@@ -38,19 +49,34 @@ export function normalizeDrinkDraft(draft: DrinkDraft): DrinkDraft {
     .filter((tag) => tag && !seenTags.has(tag) && seenTags.add(tag))
     .slice(0, 24);
   const ingredients = draft.ingredients
-    .map((ingredient) => ({
+    .map((ingredient, index) => ({
+      id: safeId(ingredient.id, `ingredient-${index + 1}`),
       name: clean(ingredient.name, 200),
       amount: clean(ingredient.amount, 80),
       unit: clean(ingredient.unit, 80),
+      optional: Boolean(ingredient.optional),
     }))
     .filter((ingredient) => ingredient.name || ingredient.amount || ingredient.unit)
     .slice(0, 40);
+  const steps = draft.steps
+    .map((step, index) => ({
+      id: safeId(step.id, `step-${index + 1}`),
+      text: step.text.trim().slice(0, 2_000),
+      durationSeconds: Number.isInteger(step.durationSeconds) && Number(step.durationSeconds) >= 1 && Number(step.durationSeconds) <= 86_400
+        ? Number(step.durationSeconds)
+        : null,
+    }))
+    .filter((step) => step.text)
+    .slice(0, 40);
+  const instructions = steps.map((step) => step.text).join("\n").slice(0, 20_000);
 
   return {
     name: clean(draft.name, 300),
     type: draft.type,
+    baseServings: Math.max(1, Math.min(100, Math.round(Number(draft.baseServings) || 1))),
     ingredients,
-    instructions: draft.instructions.trim().slice(0, 20_000),
+    steps,
+    instructions,
     notes: draft.notes.trim().slice(0, 20_000),
     rating: Math.max(0, Math.min(5, Math.round(draft.rating))),
     tags,
@@ -71,6 +97,7 @@ export function filterDrinks(drinks: DrinkRecord[], filters: DrinkFilters) {
       drink.type,
       drink.instructions,
       drink.notes,
+      ...drink.steps.map((step) => step.text),
       ...drink.tags,
       ...drink.ingredients.flatMap((ingredient) => [ingredient.name, ingredient.amount, ingredient.unit]),
     ].join(" ").toLocaleLowerCase();
@@ -82,7 +109,9 @@ export function duplicateDrinkDraft(drink: DrinkRecord, date = todayDateKey()): 
   return {
     name: `${drink.name} copy`.slice(0, 300),
     type: drink.type,
-    ingredients: drink.ingredients.map((ingredient) => ({ ...ingredient })),
+    baseServings: drink.baseServings,
+    ingredients: drink.ingredients.map((ingredient, index) => ({ ...ingredient, id: `ingredient-${index + 1}` })),
+    steps: drink.steps.map((step, index) => ({ ...step, id: `step-${index + 1}` })),
     instructions: drink.instructions,
     notes: drink.notes,
     rating: drink.rating,

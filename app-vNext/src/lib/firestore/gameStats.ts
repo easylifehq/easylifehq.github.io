@@ -1,9 +1,6 @@
 import {
   collection,
-  doc,
   onSnapshot,
-  runTransaction,
-  serverTimestamp,
   type DocumentData,
   type QueryDocumentSnapshot,
   type QuerySnapshot,
@@ -59,26 +56,4 @@ export function subscribeToGameStats(
     (snapshot: QuerySnapshot<DocumentData>) => callback(snapshot.docs.map(normalizeGameStat).filter((record): record is GameStatRecord => Boolean(record))),
     (error) => onError?.(error)
   );
-}
-
-export async function recordGameSession(userId: string, gameId: GameId, score: number) {
-  const safeScore = Math.max(0, Math.min(1_000_000, Math.round(score)));
-  const reference = doc(db, "users", userId, "gameStats", gameId);
-  await runTransaction(db, async (transaction) => {
-    const snapshot = await transaction.get(reference);
-    const current = snapshot.data() || {};
-    const sessionsPlayed = Number.isInteger(current.sessionsPlayed) ? current.sessionsPlayed : 0;
-    const bestScore = Number.isInteger(current.bestScore) ? current.bestScore : 0;
-    const totalScore = Number.isInteger(current.totalScore) ? current.totalScore : 0;
-    transaction.set(reference, {
-      ownerId: userId,
-      schemaVersion: GAME_STATS_SCHEMA_VERSION,
-      sessionsPlayed: sessionsPlayed + 1,
-      bestScore: Math.max(bestScore, safeScore),
-      totalScore: totalScore + safeScore,
-      lastPlayedAt: serverTimestamp(),
-      createdAt: snapshot.exists() ? current.createdAt : serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    });
-  });
 }

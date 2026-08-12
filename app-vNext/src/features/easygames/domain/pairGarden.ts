@@ -1,64 +1,20 @@
-export const PAIR_GARDEN_VERSION = 1;
-export const pairSymbols = ["sun", "leaf", "drop", "moon", "spark", "stone"] as const;
+import { createGameSessionId, EASYGAMES_GENERATOR_VERSION, type GameDifficulty, type GameMode } from "./gameContracts.ts";
 
-export type PairGardenState = {
-  version: typeof PAIR_GARDEN_VERSION;
-  seed: number;
-  sessionKey: string;
-  deck: string[];
-  revealed: number[];
-  matched: number[];
-  moves: number;
-  status: "playing" | "paused" | "won";
-  submitted: boolean;
-};
+export const PAIR_GARDEN_VERSION = 2;
+export const pairSymbols = ["sun", "leaf", "drop", "moon", "spark", "stone", "fern", "cloud"] as const;
+const pairCountByDifficulty: Record<GameDifficulty, number> = { easy: 4, standard: 6, hard: 8 };
 
-function shuffled<T>(items: T[], seed: number) {
-  const result = [...items];
-  let value = Math.abs(Math.round(seed)) || 1;
-  for (let index = result.length - 1; index > 0; index -= 1) {
-    value = (value * 1664525 + 1013904223) % 4294967296;
-    const target = value % (index + 1);
-    [result[index], result[target]] = [result[target], result[index]];
-  }
-  return result;
+export type PairGardenState = { version: typeof PAIR_GARDEN_VERSION; generatorVersion: typeof EASYGAMES_GENERATOR_VERSION; difficulty: GameDifficulty; mode: GameMode; dateKey: string | null; challengeKey: string | null; seed: number; sessionId: string; startedAt: string; updatedAt: string; revision: number; deck: string[]; revealed: number[]; matched: number[]; moves: number; status: "playing" | "paused" | "won"; };
+
+function shuffled<T>(items: T[], seed: number) { const result = [...items]; let value = Math.abs(Math.round(seed)) || 1; for (let index = result.length - 1; index > 0; index -= 1) { value = (Math.imul(value, 1664525) + 1013904223) >>> 0; const target = value % (index + 1);[result[index], result[target]] = [result[target], result[index]]; } return result; }
+function advanced(state: PairGardenState, updates: Partial<PairGardenState>): PairGardenState { return { ...state, ...updates, revision: state.revision + 1, updatedAt: new Date().toISOString() }; }
+
+export function createPairGarden(seed = Date.now(), options: Partial<Pick<PairGardenState, "difficulty" | "mode" | "dateKey" | "challengeKey" | "sessionId" | "startedAt">> = {}): PairGardenState {
+  const difficulty = options.difficulty || "standard"; const mode = options.mode || "free"; const startedAt = options.startedAt || new Date().toISOString(); const count = pairCountByDifficulty[difficulty];
+  return { version: PAIR_GARDEN_VERSION, generatorVersion: EASYGAMES_GENERATOR_VERSION, difficulty, mode, dateKey: options.dateKey || null, challengeKey: options.challengeKey || null, seed: seed >>> 0, sessionId: options.sessionId || createGameSessionId("pair-garden", mode, difficulty, seed), startedAt, updatedAt: startedAt, revision: 0, deck: shuffled(pairSymbols.slice(0, count).flatMap((symbol) => [symbol, symbol]), seed), revealed: [], matched: [], moves: 0, status: "playing" };
 }
-
-export function createPairGarden(seed = Date.now()): PairGardenState {
-  return {
-    version: PAIR_GARDEN_VERSION,
-    seed,
-    sessionKey: `pair-${seed}`,
-    deck: shuffled(pairSymbols.flatMap((symbol) => [symbol, symbol]), seed),
-    revealed: [],
-    matched: [],
-    moves: 0,
-    status: "playing",
-    submitted: false,
-  };
-}
-
-export function revealPairCard(state: PairGardenState, index: number): PairGardenState {
-  if (state.status !== "playing" || state.revealed.length >= 2 || state.revealed.includes(index) || state.matched.includes(index) || index < 0 || index >= state.deck.length) return state;
-  const revealed = [...state.revealed, index];
-  return { ...state, revealed, moves: revealed.length === 2 ? state.moves + 1 : state.moves };
-}
-
-export function resolvePairCards(state: PairGardenState): PairGardenState {
-  if (state.revealed.length !== 2) return state;
-  const [left, right] = state.revealed;
-  if (state.deck[left] !== state.deck[right]) return { ...state, revealed: [] };
-  const matched = [...state.matched, left, right];
-  return { ...state, revealed: [], matched, status: matched.length === state.deck.length ? "won" : state.status };
-}
-
-export function pairGardenScore(state: PairGardenState) {
-  if (state.status !== "won") return 0;
-  return Math.max(100, 1_000 - Math.max(0, state.moves - pairSymbols.length) * 55);
-}
-
-export function isPairGardenState(value: unknown): value is PairGardenState {
-  if (!value || typeof value !== "object") return false;
-  const state = value as Partial<PairGardenState>;
-  return state.version === PAIR_GARDEN_VERSION && Array.isArray(state.deck) && state.deck.length === 12 && Array.isArray(state.revealed) && Array.isArray(state.matched) && typeof state.moves === "number" && ["playing", "paused", "won"].includes(state.status || "");
-}
+export function revealPairCard(state: PairGardenState, index: number) { if (state.status !== "playing" || state.revealed.length >= 2 || state.revealed.includes(index) || state.matched.includes(index) || !Number.isInteger(index) || index < 0 || index >= state.deck.length) return state; const revealed = [...state.revealed, index]; return advanced(state, { revealed, moves: revealed.length === 2 ? state.moves + 1 : state.moves }); }
+export function resolvePairCards(state: PairGardenState) { if (state.revealed.length !== 2) return state; const [left, right] = state.revealed; if (state.deck[left] !== state.deck[right]) return advanced(state, { revealed: [] }); const matched = [...state.matched, left, right]; return advanced(state, { revealed: [], matched, status: matched.length === state.deck.length ? "won" : state.status }); }
+export function pausePairGarden(state: PairGardenState) { return state.status === "playing" ? advanced(state, { status: "paused" }) : state.status === "paused" ? advanced(state, { status: "playing" }) : state; }
+export function pairGardenScore(state: PairGardenState) { if (state.status !== "won") return 0; const pairs = state.deck.length / 2; const base = { easy: 700, standard: 1_000, hard: 1_300 }[state.difficulty]; const penalty = { easy: 40, standard: 55, hard: 65 }[state.difficulty]; return Math.max(100, base - Math.max(0, state.moves - pairs) * penalty); }
+export function isPairGardenState(value: unknown): value is PairGardenState { if (!value || typeof value !== "object") return false; const state = value as Partial<PairGardenState>; const expected = state.difficulty && pairCountByDifficulty[state.difficulty] * 2; if (state.version !== 2 || state.generatorVersion !== EASYGAMES_GENERATOR_VERSION || !expected || !Array.isArray(state.deck) || state.deck.length !== expected || !state.deck.every((symbol) => pairSymbols.includes(symbol as typeof pairSymbols[number]))) return false; const counts = new Map<string, number>(); state.deck.forEach((symbol) => counts.set(symbol, (counts.get(symbol) || 0) + 1)); if ([...counts.values()].some((count) => count !== 2)) return false; const validIndexes = (items: unknown) => Array.isArray(items) && items.every((index) => Number.isInteger(index) && Number(index) >= 0 && Number(index) < expected); return validIndexes(state.revealed) && state.revealed!.length <= 2 && validIndexes(state.matched) && Number.isInteger(state.moves) && state.moves! >= 0 && ["playing", "paused", "won"].includes(state.status || "") && ["free", "daily"].includes(state.mode || "") && typeof state.sessionId === "string" && state.sessionId.length >= 8 && Number.isInteger(state.revision) && state.revision! >= 0; }

@@ -1,62 +1,52 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { withReviewMode } from "@/features/coreloop/demo/reviewRoute";
 import { useEasyGames } from "@/features/easygames/EasyGamesContext";
-import { loadActiveGame, saveActiveGame } from "@/features/easygames/domain/activeGameStorage";
-import { createPairGarden, isPairGardenState, pairGardenScore, resolvePairCards, revealPairCard, type PairGardenState } from "@/features/easygames/domain/pairGarden";
+import { activeGameKey, clearActiveGame, hasMeaningfulProgress, loadActiveGame, saveActiveGame, shouldAcceptRemoteGame, type GameSlot } from "@/features/easygames/domain/activeGameStorage";
+import { dailyChallenge, difficultyLabels, gameDifficulties, gameModes, modeLabels, utcDateKey, type GameDifficulty, type GameMode } from "@/features/easygames/domain/gameContracts";
+import { deriveGameStats } from "@/features/easygames/domain/gameAnalytics";
+import { createPairGarden, isPairGardenState, pairGardenScore, pausePairGarden, resolvePairCards, revealPairCard, type PairGardenState } from "@/features/easygames/domain/pairGarden";
 
-const cardKeys = ["q", "w", "e", "r", "a", "s", "d", "f", "z", "x", "c", "v"];
-const symbolLabels: Record<string, string> = { sun: "Sun", leaf: "Leaf", drop: "Drop", moon: "Moon", spark: "Spark", stone: "Stone" };
-const symbolMarks: Record<string, string> = { sun: "☀", leaf: "⌁", drop: "●", moon: "☾", spark: "✦", stone: "◆" };
+const cardKeys = ["q", "w", "e", "r", "a", "s", "d", "f", "z", "x", "c", "v", "t", "y", "g", "h"];
+const symbolLabels: Record<string, string> = { sun: "Sun", leaf: "Leaf", drop: "Drop", moon: "Moon", spark: "Spark", stone: "Stone", fern: "Fern", cloud: "Cloud" };
+const symbolMarks: Record<string, string> = { sun: "☀", leaf: "⌁", drop: "●", moon: "☾", spark: "✦", stone: "◆", fern: "❧", cloud: "☁" };
+
+function newPairState(slot: GameSlot) { const challenge = slot.mode === "daily" ? dailyChallenge("pair-garden", slot.difficulty, new Date(`${slot.dateKey}T12:00:00Z`)) : null; return createPairGarden(challenge?.seed || Date.now(), { difficulty: slot.difficulty, mode: slot.mode, dateKey: challenge?.dateKey || null, challengeKey: challenge?.challengeKey || null }); }
 
 export function PairGardenPage() {
-  const location = useLocation();
-  const { userKey, finishSession, stats } = useEasyGames();
-  const [state, setState] = useState<PairGardenState>(() => loadActiveGame(localStorage, userKey, "pair-garden", isPairGardenState) || createPairGarden());
-  const score = pairGardenScore(state);
-  const stat = stats.find((record) => record.id === "pair-garden");
-  const visible = useMemo(() => new Set([...state.revealed, ...state.matched]), [state.matched, state.revealed]);
+  const location = useLocation(); const { userKey, finishSession, sessions } = useEasyGames(); const [difficulty, setDifficulty] = useState<GameDifficulty>("standard"); const [mode, setMode] = useState<GameMode>("free"); const dateKey = utcDateKey();
+  const slot = useMemo<GameSlot>(() => ({ gameId: "pair-garden", mode, difficulty, dateKey: mode === "daily" ? dateKey : null }), [dateKey, difficulty, mode]);
+  const [state, setState] = useState<PairGardenState>(() => loadActiveGame(localStorage, userKey, slot, isPairGardenState) || newPairState(slot)); const [liveMessage, setLiveMessage] = useState("Choose any two cards."); const [syncMessage, setSyncMessage] = useState(""); const [saveAttempt, setSaveAttempt] = useState(0); const completedRef = useRef(new Set<string>());
+  const score = pairGardenScore(state); const gameStats = deriveGameStats(sessions, "pair-garden", difficulty); const visible = useMemo(() => new Set([...state.revealed, ...state.matched]), [state.matched, state.revealed]); const pairCount = state.deck.length / 2;
 
-  useEffect(() => saveActiveGame(localStorage, userKey, "pair-garden", state), [state, userKey]);
+  useEffect(() => { setState(loadActiveGame(localStorage, userKey, slot, isPairGardenState) || newPairState(slot)); setLiveMessage("Choose any two cards."); }, [slot, userKey]);
+  useEffect(() => { if (state.status === "won") return; if (!saveActiveGame(localStorage, userKey, slot, state)) setSyncMessage("Progress could not be saved on this device. Keep this tab open."); }, [slot, state, userKey]);
+  useEffect(() => { if (state.revealed.length !== 2 || state.status !== "playing") return; const isMatch = state.deck[state.revealed[0]] === state.deck[state.revealed[1]]; setLiveMessage(isMatch ? "Match found." : "Not a match. The cards will turn back over."); const timeout = window.setTimeout(() => setState((current) => resolvePairCards(current)), 520); return () => window.clearTimeout(timeout); }, [state.deck, state.revealed, state.status]);
   useEffect(() => {
-    if (state.revealed.length !== 2 || state.status !== "playing") return;
-    const timeout = window.setTimeout(() => setState((current) => resolvePairCards(current)), 520);
-    return () => window.clearTimeout(timeout);
-  }, [state.revealed, state.status]);
-  useEffect(() => {
-    if (state.status !== "won" || state.submitted) return;
-    let active = true;
-    void finishSession("pair-garden", score).then(() => active && setState((current) => ({ ...current, submitted: true })));
-    return () => { active = false; };
-  }, [finishSession, score, state.status, state.submitted]);
-  useEffect(() => {
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.ctrlKey || event.metaKey || event.altKey || (event.target instanceof HTMLElement && ["INPUT", "TEXTAREA", "SELECT"].includes(event.target.tagName))) return;
-      const index = cardKeys.indexOf(event.key.toLocaleLowerCase());
-      if (index >= 0) {
-        event.preventDefault();
-        setState((current) => revealPairCard(current, index));
-      }
-      if (event.key.toLocaleLowerCase() === "p") setState((current) => current.status === "playing" ? { ...current, status: "paused" } : current.status === "paused" ? { ...current, status: "playing" } : current);
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, []);
+    if (state.status !== "won" || completedRef.current.has(state.sessionId)) return;
+    completedRef.current.add(state.sessionId);
+    const completedAt = new Date().toISOString();
+    void finishSession({ sessionId: state.sessionId, gameId: "pair-garden", difficulty: state.difficulty, mode: state.mode, dateKey: state.dateKey, challengeKey: state.challengeKey, generatorVersion: state.generatorVersion, seed: state.seed, puzzleSpec: { deck: state.deck }, completed: true, score, moves: state.moves, pairs: pairCount, goalsCollected: null, totalGoals: null, movesRemaining: null, startedAt: state.startedAt, completedAt })
+      .then(() => { clearActiveGame(localStorage, userKey, slot); setSyncMessage("Result saved on this device and queued for private sync."); })
+      .catch(() => { completedRef.current.delete(state.sessionId); setSyncMessage("Result not saved on this device. Keep this tab open, allow local storage, then retry."); });
+  }, [finishSession, pairCount, saveAttempt, score, slot, state, userKey]);
+  useEffect(() => { const key = activeGameKey(userKey, slot); const handleStorage = (event: StorageEvent) => { if (event.key !== key || !event.newValue) return; try { const incoming: unknown = JSON.parse(event.newValue); if (isPairGardenState(incoming)) setState((current) => shouldAcceptRemoteGame(current, incoming) ? incoming : current); setSyncMessage("Another tab advanced this game; the newer valid state is shown."); } catch { /* ignore corrupt cross-tab state */ } }; window.addEventListener("storage", handleStorage); return () => window.removeEventListener("storage", handleStorage); }, [slot, userKey]);
+  useEffect(() => { const pauseHidden = () => { if (document.hidden) setState((current) => current.status === "playing" ? pausePairGarden(current) : current); }; document.addEventListener("visibilitychange", pauseHidden); return () => document.removeEventListener("visibilitychange", pauseHidden); }, []);
+
+  function restart() { if (hasMeaningfulProgress(state) && !window.confirm(mode === "daily" ? "Restart today's same Pair Garden board? Your current progress will be replaced." : "Start a new Pair Garden board? Your current progress will be replaced.")) return; const next = mode === "daily" ? newPairState(slot) : createPairGarden(Date.now(), { difficulty, mode }); setState(next); setLiveMessage("New board ready. Choose any two cards."); }
+  function handleKey(event: React.KeyboardEvent<HTMLDivElement>) { if (event.ctrlKey || event.metaKey || event.altKey) return; const index = cardKeys.indexOf(event.key.toLocaleLowerCase()); if (index >= 0 && index < state.deck.length) { event.preventDefault(); setState((current) => revealPairCard(current, index)); } if (event.key.toLocaleLowerCase() === "p") { event.preventDefault(); setState((current) => pausePairGarden(current)); } }
+
+  const saveFailed = syncMessage.startsWith("Result not saved");
 
   return (
-    <PageSection eyebrow="EasyGames · Memory" title="Pair Garden" description="Find all six symbol pairs. Fewer turns earn a higher score." headingLevel={1}>
-      <div className="game-toolbar"><Link className="ghost-button compact-button" to={withReviewMode("/app/easygames", location.search)}>Game shelf</Link><div className="game-stat-strip"><span><strong>{state.moves}</strong> moves</span><span><strong>{state.matched.length / 2}</strong> / 6 pairs</span><span><strong>{stat?.bestScore || 0}</strong> best</span></div><div className="button-row"><button type="button" className="button-secondary compact-button" disabled={state.status === "won"} onClick={() => setState((current) => current.status === "playing" ? { ...current, status: "paused" } : { ...current, status: "playing" })}>{state.status === "paused" ? "Resume" : "Pause"}</button><button type="button" className="button-secondary compact-button" onClick={() => setState(createPairGarden())}>New game</button></div></div>
-      <details className="game-instructions"><summary>How to play</summary><p>Select two cards. A matching pair stays open; otherwise both turn back over. Use touch or pointer, move with Tab and press Enter, or use the letter shown on each card. Press P to pause.</p></details>
-      <div className={`pair-garden-board${state.status === "paused" ? " is-paused" : ""}`} aria-label="Pair Garden card board">
-        {state.deck.map((symbol, index) => {
-          const isVisible = visible.has(index);
-          const isMatched = state.matched.includes(index);
-          return <button key={`${state.seed}-${index}`} type="button" className={`pair-card${isVisible ? " is-visible" : ""}${isMatched ? " is-matched" : ""}`} disabled={state.status !== "playing" || isMatched || state.revealed.length >= 2} aria-label={isVisible ? `${symbolLabels[symbol]} card${isMatched ? ", matched" : ""}` : `Hidden card ${index + 1}, key ${cardKeys[index].toUpperCase()}`} onClick={() => setState((current) => revealPairCard(current, index))}><kbd>{cardKeys[index].toUpperCase()}</kbd><span aria-hidden="true">{isVisible ? symbolMarks[symbol] : "?"}</span></button>;
-        })}
-        {state.status === "paused" ? <div className="game-pause-overlay" role="status"><strong>Game paused</strong><button type="button" className="button-primary" onClick={() => setState((current) => ({ ...current, status: "playing" }))}>Resume</button></div> : null}
-      </div>
-      {state.status === "won" ? <div className="game-result" role="status"><p className="eyebrow">Garden complete</p><h2>{score} points</h2><p>You found every pair in {state.moves} moves. Your durable stats update once for this finished session.</p><button type="button" className="button-primary" onClick={() => setState(createPairGarden())}>Play again</button></div> : <p className="game-live-message" aria-live="polite">{state.revealed.length === 1 ? "Choose one more card." : state.revealed.length === 2 ? "Checking the pair…" : "Choose any two cards."}</p>}
+    <PageSection eyebrow="EasyGames · Memory" title="Pair Garden" description={`Find ${pairCount} pairs on ${difficultyLabels[difficulty]}. Score rewards careful moves; elapsed time never changes it.`} headingLevel={1}>
+      {!sessions.some((record) => record.gameId === "pair-garden") ? <aside className="game-onboarding"><strong>First game?</strong><p>Choose two cards. Matching symbols stay open. The session ends after every pair is found.</p></aside> : null}
+      <div className="game-mode-panel"><label className="field-stack"><span>Mode</span><select value={mode} onChange={(event) => setMode(event.target.value as GameMode)}>{gameModes.map((item) => <option key={item} value={item}>{modeLabels[item]}</option>)}</select></label><label className="field-stack"><span>Difficulty</span><select value={difficulty} onChange={(event) => setDifficulty(event.target.value as GameDifficulty)}>{gameDifficulties.map((item) => <option key={item} value={item}>{difficultyLabels[item]}</option>)}</select></label>{mode === "daily" ? <p><strong>UTC daily:</strong> {dateKey}. Everyone receives the same board for this difficulty.</p> : <p>Free play makes a fresh board after confirmation.</p>}</div>
+      <div className="game-toolbar"><Link className="ghost-button compact-button" to={withReviewMode("/app/easygames", location.search)}>Game shelf</Link><div className="game-stat-strip"><span><strong>{state.moves}</strong> moves</span><span><strong>{state.matched.length / 2}</strong> / {pairCount} pairs</span><span><strong>{gameStats.bestScore}</strong> v2 best</span></div><div className="button-row"><button type="button" className="button-secondary compact-button" disabled={state.status === "won"} onClick={() => setState((current) => pausePairGarden(current))}>{state.status === "paused" ? "Resume" : "Pause"}</button><button type="button" className="button-secondary compact-button" onClick={restart}>{mode === "daily" ? "Restart daily" : "New game"}</button></div></div>
+      <details className="game-instructions"><summary>Rules, controls, and scoring</summary><p>Select two cards. A match stays open; a mismatch turns back. Tab + Enter works on every card; the printed letter shortcuts work when this board has focus. Press P to pause. Score is {difficulty === "easy" ? "700 − 40" : difficulty === "standard" ? "1,000 − 55" : "1,300 − 65"} points per move beyond the minimum, with a 100-point floor.</p></details>
+      <div className={`pair-garden-board pair-count-${pairCount}${state.status === "paused" ? " is-paused" : ""}`} tabIndex={0} onKeyDown={handleKey} aria-label="Pair Garden card board. Letter shortcuts are active while focused.">{state.deck.map((symbol, index) => { const isVisible = visible.has(index); const isMatched = state.matched.includes(index); return <button key={`${state.seed}-${index}`} type="button" className={`pair-card${isVisible ? " is-visible" : ""}${isMatched ? " is-matched" : ""}`} disabled={state.status !== "playing" || isMatched || state.revealed.length >= 2} aria-label={isVisible ? `${symbolLabels[symbol]} card${isMatched ? ", matched" : ""}` : `Hidden card ${index + 1}, key ${cardKeys[index].toUpperCase()}`} onClick={() => setState((current) => revealPairCard(current, index))}><kbd>{cardKeys[index].toUpperCase()}</kbd><span aria-hidden="true">{isVisible ? symbolMarks[symbol] : "?"}</span></button>; })}{state.status === "paused" ? <div className="game-pause-overlay" role="status"><strong>Game paused</strong><button type="button" className="button-primary" onClick={() => setState((current) => pausePairGarden(current))}>Resume</button></div> : null}</div>
+      {state.status === "won" ? <div className="game-result" role="status"><p className="eyebrow">Garden complete</p><h2>{score} points</h2><p>All {pairCount} pairs in {state.moves} moves. {syncMessage}</p><button type="button" className="button-primary" disabled={saveFailed} onClick={restart}>{mode === "daily" ? "Replay same daily" : "Play again"}</button>{saveFailed ? <button type="button" className="button-secondary" onClick={() => setSaveAttempt((attempt) => attempt + 1)}>Retry saving result</button> : null}</div> : <p className="game-live-message" aria-live="polite">{liveMessage} {syncMessage}</p>}
     </PageSection>
   );
 }

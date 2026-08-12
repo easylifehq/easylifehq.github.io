@@ -163,6 +163,10 @@ const EasyDrinkDetailPage = lazyNamed(
   () => import("@/features/easydrinks/routes/EasyDrinkDetailPage"),
   "EasyDrinkDetailPage"
 );
+const GuidedDrinkPage = lazyNamed(
+  () => import("@/features/easydrinks/routes/GuidedDrinkPage"),
+  "GuidedDrinkPage"
+);
 const EasyGamesLayout = lazyNamed(
   () => import("@/features/easygames/layouts/EasyGamesLayout"),
   "EasyGamesLayout"
@@ -458,6 +462,7 @@ export function AppRouter() {
             <Route path="easydrinks" element={<EasyDrinksLayout />}>
               <Route index element={<EasyDrinksPage />} />
               <Route path="new" element={<EasyDrinkNewPage />} />
+              <Route path=":drinkId/prepare" element={<GuidedDrinkPage />} />
               <Route path=":drinkId" element={<EasyDrinkDetailPage />} />
             </Route>
             <Route path="easygames" element={<EasyGamesLayout />}>

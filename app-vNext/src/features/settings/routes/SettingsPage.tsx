@@ -30,7 +30,11 @@ import { subscribeToWorkoutRoutines } from "@/lib/firestore/workoutRoutines";
 import { subscribeToWorkoutSessions } from "@/lib/firestore/workoutSessions";
 import { subscribeToWorkoutGoals } from "@/lib/firestore/workoutGoals";
 import { subscribeToDrinks } from "@/lib/firestore/drinks";
+import { subscribeToDrinkPantry } from "@/lib/firestore/drinkPantry";
+import { subscribeToDrinkPreparations } from "@/lib/firestore/drinkPreparations";
+import { subscribeToDrinkShoppingHandoffs } from "@/lib/firestore/drinkShopping";
 import { subscribeToGameStats } from "@/lib/firestore/gameStats";
+import { subscribeToGameSessions } from "@/lib/firestore/gameSessions";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 import {
   getNotificationPermission,
@@ -680,7 +684,11 @@ export function SettingsPage() {
       subscribeToGeneratedDrafts(user.uid, setCollection("pipelineDrafts"), handleError("pipelineDrafts")),
       subscribeToContacts(user.uid, setCollection("contacts"), handleError("contacts")),
       subscribeToDrinks(user.uid, setCollection("drinks"), handleError("drinks")),
+      subscribeToDrinkPantry(user.uid, setCollection("drinkPantry"), handleError("drinkPantry")),
+      subscribeToDrinkPreparations(user.uid, setCollection("drinkPreparations"), handleError("drinkPreparations")),
+      subscribeToDrinkShoppingHandoffs(user.uid, setCollection("drinkShoppingHandoffs"), handleError("drinkShoppingHandoffs")),
       subscribeToGameStats(user.uid, setCollection("gameStats"), handleError("gameStats")),
+      subscribeToGameSessions(user.uid, setCollection("gameSessions"), handleError("gameSessions")),
     ];
 
     return () => {

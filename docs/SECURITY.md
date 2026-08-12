@@ -7,6 +7,8 @@ This checklist is the working security baseline for the web app, mobile app, Fir
 - Firestore rules must stay deployed with `firestore.rules`.
 - User data must live under `users/{uid}/...` and only be readable or writable by that authenticated `uid`.
 - New shared or public collections require an explicit rule review before use.
+- EasyDrinks pantry, preparation history, shopping handoffs, and EasyGames sessions stay under `users/{uid}` with exact owner checks, bounded fields, and deny-by-default unsupported operations.
+- Preparation records allow only a ten-minute owner undo; shopping handoffs and game sessions are immutable, and legacy game aggregates are read-only.
 - The 4.6.0 Firestore path verification lives in `docs/FIREBASE_RULES_VERIFICATION.md`.
 - Firebase Authentication must be required for every private app route.
 - Cloud Functions that use private app data or AI features must verify Firebase ID tokens.
@@ -19,6 +21,8 @@ This checklist is the working security baseline for the web app, mobile app, Fir
 - Show friendly error messages to users instead of raw Firebase, network, stack, or provider errors.
 - Keep data export user-controlled and avoid silently sending exports to third-party services.
 - Keep destructive actions reviewable and reversible where practical.
+- Cross-module shopping writes require an explicit confirmation and use deterministic provenance IDs to prevent accidental duplicates.
+- Browser recovery records and queued game results are device-specific, owner/slot scoped, validated before use, and excluded from account export until a result has synchronized.
 
 ## Release Review
 
