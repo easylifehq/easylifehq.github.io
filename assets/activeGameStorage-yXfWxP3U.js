@@ -1,1 +1,0 @@
-const c="easylife:easygames:active:v1";function i(e,t){return`${c}:${e}:${t}`}function l(e,t,n,a){e.setItem(i(t,n),JSON.stringify(a))}function u(e,t,n,a){try{const s=e.getItem(i(t,n));if(!s)return null;const r=JSON.parse(s);return a(r)?r:null}catch{return null}}export{u as l,l as s};
