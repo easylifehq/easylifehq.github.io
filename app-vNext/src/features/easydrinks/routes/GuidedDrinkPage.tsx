@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { withReviewMode } from "@/features/coreloop/demo/reviewRoute";
 import { useEasyDrinks } from "@/features/easydrinks/EasyDrinksContext";
-import { clearGuidedDrink, loadGuidedDrink, saveGuidedDrink, type GuidedDrinkState } from "@/features/easydrinks/domain/preparation";
+import { clearGuidedDrink, formatAuthoredDuration, loadGuidedDrink, saveGuidedDrink, type GuidedDrinkState } from "@/features/easydrinks/domain/preparation";
 import { scaleIngredient } from "@/features/easydrinks/domain/scaling";
 
 type WakeLockSentinelLike = { release: () => Promise<void>; addEventListener?: (type: "release", listener: () => void) => void; };
@@ -67,7 +67,7 @@ export function GuidedDrinkPage() {
         <section className="guided-step-card" aria-labelledby="guided-step-title">
           <p className="eyebrow">Step {drink.steps.length ? state.stepIndex + 1 : 0} of {drink.steps.length}</p>
           <h2 id="guided-step-title">{step?.text || "No preparation steps were saved."}</h2>
-          {step?.durationSeconds ? <div className="guided-timer"><strong>{secondsLeft ? `${Math.floor(secondsLeft / 60)}:${String(secondsLeft % 60).padStart(2, "0")}` : `${Math.ceil(step.durationSeconds / 60)} min timer`}</strong><button type="button" className="button-secondary compact-button" onClick={() => setState({ ...state, timerEndsAt: new Date(Date.now() + step.durationSeconds! * 1_000).toISOString() })}>{secondsLeft ? "Restart timer" : "Start timer"}</button></div> : <p className="helper-copy">No timer was authored for this step.</p>}
+          {step?.durationSeconds ? <div className="guided-timer"><strong>{secondsLeft ? `${Math.floor(secondsLeft / 60)}:${String(secondsLeft % 60).padStart(2, "0")}` : formatAuthoredDuration(step.durationSeconds)}</strong><button type="button" className="button-secondary compact-button" onClick={() => setState({ ...state, timerEndsAt: new Date(Date.now() + step.durationSeconds! * 1_000).toISOString() })}>{secondsLeft ? "Restart timer" : "Start timer"}</button></div> : <p className="helper-copy">No timer was authored for this step.</p>}
           <div className="button-row"><button type="button" className="button-secondary" disabled={state.stepIndex === 0} onClick={() => setState({ ...state, stepIndex: Math.max(0, state.stepIndex - 1), timerEndsAt: null })}>Previous</button>{state.stepIndex < drink.steps.length - 1 ? <button type="button" className="button-primary" onClick={() => setState({ ...state, completedStepIds: step ? [...new Set([...state.completedStepIds, step.id])] : state.completedStepIds, stepIndex: state.stepIndex + 1, timerEndsAt: null })}>Complete step</button> : <button type="button" className="button-primary" disabled={Boolean(loggedId)} onClick={() => void finish()}>{loggedId ? "Preparation logged" : "Finish and log"}</button>}</div>
           {loggedId ? <button type="button" className="ghost-button compact-button" onClick={() => void undoPreparation(loggedId).then(() => { setLoggedId(null); setMessage("Preparation log undone. Your recipe was not changed."); })}>Undo preparation log</button> : null}
         </section>

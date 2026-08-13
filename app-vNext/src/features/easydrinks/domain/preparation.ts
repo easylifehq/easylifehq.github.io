@@ -55,6 +55,15 @@ export function clearGuidedDrink(storage: Pick<Storage, "removeItem">, ownerKey:
   try { storage.removeItem(guidedDrinkStorageKey(ownerKey, drinkId)); } catch { /* recovery storage is best effort */ }
 }
 
+export function formatAuthoredDuration(durationSeconds: number) {
+  const totalSeconds = Math.max(0, Math.round(durationSeconds));
+  if (totalSeconds < 60) return `${totalSeconds} sec timer`;
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  const minuteLabel = `${minutes} min`;
+  return seconds ? `${minuteLabel} ${seconds} sec timer` : `${minuteLabel} timer`;
+}
+
 export function derivePreparationStats(records: DrinkPreparationRecord[], favoriteDrinkIds: ReadonlySet<string> = new Set()) {
   const byDrink = new Map<string, { name: string; count: number; }>();
   const byType = new Map<string, number>();
