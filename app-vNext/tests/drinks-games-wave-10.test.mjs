@@ -4,12 +4,12 @@ import { readFile } from "node:fs/promises";
 import { duplicateDrinkDraft, filterDrinks, normalizeDrinkDraft } from "../src/features/easydrinks/domain/drinks.ts";
 import { canonicalIngredientName, drinkShoppingFingerprint, matchDrinkToPantry, rankDrinksForPantry, shoppingIngredients } from "../src/features/easydrinks/domain/pantry.ts";
 import { formatDrinkAmount, parseDrinkAmount, scaleIngredient } from "../src/features/easydrinks/domain/scaling.ts";
-import { derivePreparationStats, loadGuidedDrink, saveGuidedDrink } from "../src/features/easydrinks/domain/preparation.ts";
+import { derivePreparationStats, formatAuthoredDuration, loadGuidedDrink, saveGuidedDrink } from "../src/features/easydrinks/domain/preparation.ts";
 import { dailyChallenge, utcDateKey } from "../src/features/easygames/domain/gameContracts.ts";
 import { completionRuns, deriveGameAchievements, deriveGameStats } from "../src/features/easygames/domain/gameAnalytics.ts";
 import { createPairGarden, isPairGardenState, pairGardenScore, resolvePairCards, revealPairCard } from "../src/features/easygames/domain/pairGarden.ts";
 import { createTrailScout, isTrailScoutState, moveTrailScout, trailBoardSpecs, trailScoutScore } from "../src/features/easygames/domain/trailScout.ts";
-import { clearActiveGame, loadActiveGame, saveActiveGame, shouldAcceptRemoteGame } from "../src/features/easygames/domain/activeGameStorage.ts";
+import { canReplaceActiveGame, clearActiveGame, loadActiveGame, saveActiveGame, shouldAcceptRemoteGame } from "../src/features/easygames/domain/activeGameStorage.ts";
 import { loadGameSessionOutbox, queueGameSession, removeGameSessionFromOutbox } from "../src/features/easygames/domain/gameSessionOutbox.ts";
 import { buildAccountExport, emptyAccountDataCollections, serializeDomainCsv } from "../src/features/coreloop/domain/accountExport.ts";
 import { withReviewMode } from "../src/features/coreloop/demo/reviewRoute.ts";
@@ -50,6 +50,7 @@ test("scaling parses only explicit numeric amounts and never converts units", ()
 });
 
 test("guided preparation is owner scoped, corrupt-safe, clamped, and statistics are evidence-derived", () => {
+  assert.equal(formatAuthoredDuration(5), "5 sec timer"); assert.equal(formatAuthoredDuration(60), "1 min timer"); assert.equal(formatAuthoredDuration(65), "1 min 5 sec timer");
   const values = new Map(); const storage = { setItem: (key, value) => values.set(key, value), getItem: (key) => values.get(key) || null };
   const state = { version: 1, ownerKey: "owner-a", drinkId: "latte", recipeUpdatedAt: drink.updatedAt.toISOString(), targetServings: 2, stepIndex: 99, completedStepIds: ["warm", "unknown"], timerEndsAt: null, updatedAt: new Date().toISOString() };
   assert.equal(saveGuidedDrink(storage, state), true); const loaded = loadGuidedDrink(storage, "owner-a", drink); assert.equal(loaded.stepIndex, 0); assert.deepEqual(loaded.completedStepIds, ["warm"]); assert.equal(loadGuidedDrink(storage, "owner-b", drink), null);
@@ -86,6 +87,15 @@ test("active recovery and completed outbox are owner/slot scoped, corrupt-safe, 
   assert.equal(saveActiveGame(storage, "owner-a", slot, state), true); assert.deepEqual(loadActiveGame(storage, "owner-a", slot, isPairGardenState), state); assert.equal(loadActiveGame(storage, "owner-b", slot, isPairGardenState), null); clearActiveGame(storage, "owner-a", slot); assert.equal(loadActiveGame(storage, "owner-a", slot, isPairGardenState), null); assert.equal(shouldAcceptRemoteGame({ revision: 2, updatedAt: "2026-01-01" }, { revision: 3, updatedAt: "2025-01-01" }), true);
   const draft = { sessionId: "session-safe-1", gameId: "pair-garden", difficulty: "standard", mode: "free", dateKey: null, challengeKey: null, generatorVersion: "easygames-generator-v2", seed: 7, puzzleSpec: { deck: state.deck }, completed: true, score: 900, moves: 7, pairs: 6, goalsCollected: null, totalGoals: null, movesRemaining: null, startedAt: state.startedAt, completedAt: new Date().toISOString() };
   queueGameSession(storage, "owner-a", draft); queueGameSession(storage, "owner-a", draft); assert.equal(loadGameSessionOutbox(storage, "owner-a").length, 1); assert.equal(loadGameSessionOutbox(storage, "owner-b").length, 0); removeGameSessionFromOutbox(storage, "owner-a", draft.sessionId); assert.equal(loadGameSessionOutbox(storage, "owner-a").length, 0);
+});
+
+test("replacing an in-progress game requires explicit confirmation", () => {
+  let confirmationCalls = 0;
+  const inProgress = { revision: 2, status: "paused" };
+  assert.equal(canReplaceActiveGame(inProgress, () => { confirmationCalls += 1; return false; }), false);
+  assert.equal(canReplaceActiveGame(inProgress, () => { confirmationCalls += 1; return true; }), true);
+  assert.equal(canReplaceActiveGame({ revision: 0, status: "playing" }, () => { confirmationCalls += 1; return false; }), true);
+  assert.equal(confirmationCalls, 2);
 });
 
 test("game history formulas dedupe UTC completion days and achievements use evidence", () => {

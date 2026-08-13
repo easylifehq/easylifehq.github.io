@@ -88,8 +88,8 @@ test("authentication, global capture, login containment, Firebase initialization
   assert.match(authSource, /resolveReviewRuntimeMode/);
   assert.match(authSource, /reviewRuntime === "audit"/);
   assert.ok(authSource.indexOf("if (isDemoMode)") < authSource.indexOf("if (!firebaseConfigured)"));
-  assert.match(captureSource, /const \{ isAuditMode \} = useAuth\(\)/);
-  assert.ok(captureSource.indexOf("if (isAuditMode)") < captureSource.indexOf("onAuthStateChanged(auth"));
+  assert.match(captureSource, /const \{ isDemoMode \} = useAuth\(\)/);
+  assert.ok(captureSource.indexOf("if (isDemoMode)") < captureSource.indexOf("onAuthStateChanged(auth"));
   assert.match(clientSource, /firestoreRuntimeTarget\.kind === "configured-project" && buildFirebaseConfigured/);
   assert.match(clientSource, /firestoreRuntimeTarget\.kind === "configured-project" \? firebaseConfig : emulatorOnlyConfig/);
   assert.match(routerSource, /function AuditOnlyRouteBoundary/);
