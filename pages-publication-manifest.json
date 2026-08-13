@@ -6,7 +6,7 @@
   },
   "build": {
     "timestamp": "2026-08-13T05:50:50.000Z",
-    "timestampPolicy": "explicit-reproducible-input"
+    "timestampPolicy": "source-commit-time"
   },
   "contract": {
     "authoritativeSource": "app-vNext",
