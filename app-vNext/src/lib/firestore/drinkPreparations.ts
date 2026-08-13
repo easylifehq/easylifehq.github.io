@@ -1,0 +1,13 @@
+import { addDoc, collection, deleteDoc, doc, onSnapshot, serverTimestamp, type DocumentData, type QueryDocumentSnapshot, type QuerySnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase/client";
+import type { DrinkType } from "@/lib/firestore/drinks";
+
+export const DRINK_PREPARATION_SCHEMA_VERSION = "easydrinks-preparation-v1";
+export type DrinkPreparationRecord = { id: string; ownerId: string; schemaVersion: typeof DRINK_PREPARATION_SCHEMA_VERSION; drinkId: string; drinkName: string; drinkType: DrinkType; servings: number; rating: number; preparedAt: Date | null; createdAt: Date | null; };
+export type DrinkPreparationDraft = Pick<DrinkPreparationRecord, "drinkId" | "drinkName" | "drinkType" | "servings" | "rating">;
+function toDate(value: unknown) { if (!value) return null; if (value instanceof Date) return value; if (typeof (value as { toDate?: () => Date; }).toDate === "function") return (value as { toDate: () => Date; }).toDate(); const parsed = new Date(String(value)); return Number.isNaN(parsed.getTime()) ? null : parsed; }
+function normalize(snapshot: QueryDocumentSnapshot<DocumentData>): DrinkPreparationRecord { const data = snapshot.data(); return { id: snapshot.id, ownerId: typeof data.ownerId === "string" ? data.ownerId : "", schemaVersion: DRINK_PREPARATION_SCHEMA_VERSION, drinkId: typeof data.drinkId === "string" ? data.drinkId : "", drinkName: typeof data.drinkName === "string" ? data.drinkName.slice(0, 300) : "", drinkType: data.drinkType || "other", servings: Number.isInteger(data.servings) ? data.servings : 1, rating: Number.isInteger(data.rating) ? data.rating : 0, preparedAt: toDate(data.preparedAt), createdAt: toDate(data.createdAt) }; }
+function preparationsCollection(userId: string) { return collection(db, "users", userId, "drinkPreparations"); }
+export function subscribeToDrinkPreparations(userId: string, callback: (records: DrinkPreparationRecord[]) => void, onError?: (error: Error) => void) { return onSnapshot(preparationsCollection(userId), (snapshot: QuerySnapshot<DocumentData>) => callback(snapshot.docs.map(normalize).sort((a, b) => (b.preparedAt?.getTime() || 0) - (a.preparedAt?.getTime() || 0) || b.id.localeCompare(a.id))), (error) => onError?.(error)); }
+export async function createDrinkPreparation(userId: string, draft: DrinkPreparationDraft) { return (await addDoc(preparationsCollection(userId), { ...draft, ownerId: userId, schemaVersion: DRINK_PREPARATION_SCHEMA_VERSION, preparedAt: serverTimestamp(), createdAt: serverTimestamp() })).id; }
+export async function deleteDrinkPreparation(userId: string, preparationId: string) { await deleteDoc(doc(db, "users", userId, "drinkPreparations", preparationId)); }

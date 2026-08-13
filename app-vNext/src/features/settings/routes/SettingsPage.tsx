@@ -29,7 +29,14 @@ import { subscribeToWorkoutExercises } from "@/lib/firestore/workoutExercises";
 import { subscribeToWorkoutRoutines } from "@/lib/firestore/workoutRoutines";
 import { subscribeToWorkoutSessions } from "@/lib/firestore/workoutSessions";
 import { subscribeToWorkoutGoals } from "@/lib/firestore/workoutGoals";
+import { subscribeToDrinks } from "@/lib/firestore/drinks";
+import { subscribeToDrinkPantry } from "@/lib/firestore/drinkPantry";
+import { subscribeToDrinkPreparations } from "@/lib/firestore/drinkPreparations";
+import { subscribeToDrinkShoppingHandoffs } from "@/lib/firestore/drinkShopping";
+import { subscribeToGameStats } from "@/lib/firestore/gameStats";
+import { subscribeToGameSessions } from "@/lib/firestore/gameSessions";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
+import { useSyntheticAuditState } from "@/lib/runtime/syntheticAuditState";
 import {
   getNotificationPermission,
   requestNotificationPermission,
@@ -156,6 +163,18 @@ const appVisibilityOptions: Array<{
     description: "Optional project sections and milestones.",
     home: "Optional",
   },
+  {
+    id: "easydrinks",
+    label: "Drinks",
+    description: "Optional drink journal and saved recipe details, parked under More.",
+    home: "Optional",
+  },
+  {
+    id: "easygames",
+    label: "Games",
+    description: "Optional short games and lightweight play statistics, parked under More.",
+    home: "Optional",
+  },
 ];
 
 const appVisibilityGroups: Array<{
@@ -171,7 +190,7 @@ const appVisibilityGroups: Array<{
   {
     id: "Optional",
     title: "Parked in More",
-    description: "Keep workout, projects, follow-ups, people, and progress out of the default path until needed.",
+    description: "Keep workout, projects, follow-ups, people, progress, drinks, and games out of the default path until needed.",
   },
 ];
 
@@ -526,6 +545,7 @@ export function SettingsPage() {
   const [searchParams] = useSearchParams();
   const [activeSection, setActiveSection] = useState<SettingsSectionId>("customize");
   const { user, isDemoMode } = useAuth();
+  const syntheticState = useSyntheticAuditState(isDemoMode);
   const [dataCollections, setDataCollections] = useState<DataCollections>(emptyDataCollections);
   const [dataError, setDataError] = useState("");
   const [dataPendingCount, setDataPendingCount] = useState(0);
@@ -610,7 +630,14 @@ export function SettingsPage() {
 
   useEffect(() => {
     if (isDemoMode) {
-      setDataCollections(coreLoopDemoExportCollections);
+      setDataCollections({
+        ...coreLoopDemoExportCollections,
+        tasks: syntheticState.tasks,
+        notes: syntheticState.notes,
+        drinks: syntheticState.drinks,
+        drinkPantry: syntheticState.pantry,
+        drinkPreparations: syntheticState.preparations,
+      });
       setDataError("");
       setDataPendingCount(0);
       settledDataSourcesRef.current.clear();
@@ -665,13 +692,19 @@ export function SettingsPage() {
       subscribeToApplications(user.uid, setCollection("pipelineApplications"), handleError("pipelineApplications")),
       subscribeToGeneratedDrafts(user.uid, setCollection("pipelineDrafts"), handleError("pipelineDrafts")),
       subscribeToContacts(user.uid, setCollection("contacts"), handleError("contacts")),
+      subscribeToDrinks(user.uid, setCollection("drinks"), handleError("drinks")),
+      subscribeToDrinkPantry(user.uid, setCollection("drinkPantry"), handleError("drinkPantry")),
+      subscribeToDrinkPreparations(user.uid, setCollection("drinkPreparations"), handleError("drinkPreparations")),
+      subscribeToDrinkShoppingHandoffs(user.uid, setCollection("drinkShoppingHandoffs"), handleError("drinkShoppingHandoffs")),
+      subscribeToGameStats(user.uid, setCollection("gameStats"), handleError("gameStats")),
+      subscribeToGameSessions(user.uid, setCollection("gameSessions"), handleError("gameSessions")),
     ];
 
     return () => {
       active = false;
       unsubscribers.forEach((unsubscribe) => unsubscribe());
     };
-  }, [isDemoMode, user]);
+  }, [isDemoMode, syntheticState.drinks, syntheticState.notes, syntheticState.pantry, syntheticState.preparations, syntheticState.tasks, user]);
 
   function handleExportAll() {
     const exportedAt = new Date().toISOString();
@@ -772,7 +805,7 @@ export function SettingsPage() {
         <div className="settings-status-grid" aria-label="Current assistant status">
           <article className="settings-status-card">
             <span>Signed in</span>
-            <strong>{auth.currentUser?.email || user?.email || "EasyLife account"}</strong>
+            <strong>{user?.email || "EasyLife account"}</strong>
           </article>
           <article className="settings-status-card">
             <span>Control skin</span>
@@ -849,7 +882,7 @@ export function SettingsPage() {
         </nav>
 
         <div className="settings-section-content">
-          {activeSection === "customize" ? null : (
+          {activeSection === "customize" || activeSection === "trust" ? null : (
             <div className="settings-section-heading">
               <p className="eyebrow">{activeSectionConfig.eyebrow}</p>
               <h2>{activeSectionConfig.label}</h2>
@@ -2106,7 +2139,7 @@ export function SettingsPage() {
         <div className="settings-baseline-grid">
           <article className="mini-panel-vnext">
             <span>Email</span>
-            <strong>{auth.currentUser?.email || "Signed in"}</strong>
+            <strong>{user?.email || "Signed in"}</strong>
             <p>Your EasyLife account.</p>
           </article>
           <article className="mini-panel-vnext">
@@ -2118,7 +2151,13 @@ export function SettingsPage() {
             <span>Session</span>
             <strong>Current browser</strong>
             <p>This is the only sign-out control in Settings.</p>
-            <button type="button" className="button-secondary compact-button" onClick={() => void auth.signOut()}>
+            <button
+              type="button"
+              className="button-secondary compact-button"
+              disabled={isDemoMode}
+              title={isDemoMode ? "Synthetic preview sessions do not use Firebase Auth." : undefined}
+              onClick={() => void auth.signOut()}
+            >
               Log out
             </button>
           </article>

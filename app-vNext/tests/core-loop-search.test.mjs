@@ -17,9 +17,11 @@ test("global search ranks title matches and groups supported records", () => {
 });
 
 test("command matching and keyboard index movement remain deterministic", () => {
-  assert.equal(filterCoreLoopCommands("").length, 7);
+  assert.equal(filterCoreLoopCommands("").length, 9);
   assert.equal(filterCoreLoopCommands("weekly review")[0].id, "my-week");
   assert.equal(filterCoreLoopCommands("resume gym")[0].id, "workout");
+  assert.equal(filterCoreLoopCommands("mocktail recipe")[0].id, "new-drink");
+  assert.equal(filterCoreLoopCommands("offline play")[0].id, "games");
   assert.equal(movePaletteIndex(-1, 1, 3), 0);
   assert.equal(movePaletteIndex(0, -1, 3), 2);
   assert.equal(movePaletteIndex(2, 1, 3), 0);

@@ -6,6 +6,29 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+## 5.0.0
+
+### Added
+
+- Added EasyDrinks with fast capture, flexible ingredients and amounts, instructions, notes, ratings, tags, dates, favorites, filters, editing, and duplication.
+- Added EasyGames with Pair Garden and Trail Scout, touch and keyboard controls, pause/resume, owner-scoped local recovery, and durable lightweight statistics.
+- Added authenticated Firestore contracts, synthetic zero-write demo fixtures, global search commands, app visibility controls, and JSON/CSV export coverage for both apps.
+- Added an owner-scoped EasyDrinks pantry with conservative ingredient identity, evidence-backed make-now ranking, optional-ingredient handling, and deduplicated confirmed EasyList shopping handoffs.
+- Added safe recipe scaling, phone-first guided preparation with authored timers and local step recovery, and immutable preparation history with recent undo plus sample-labeled statistics.
+- Added EasyGames difficulty, deterministic UTC dailies, immutable session history, derived streaks and quiet achievements, cross-tab revision recovery, and a local idempotent sync outbox.
+
+### Changed
+
+- Kept Drinks and Games hidden under the optional More area by default while preserving every existing visibility choice during settings normalization.
+- Advanced the account export contract to `easylife-account-export-v4`, retained compatibility with v1-v3, and kept the PWA shell cache at `easylife-shell-v7`.
+
+### Safety
+
+- Alcohol-related copy remains neutral; EasyDrinks does not recommend consumption levels.
+- EasyGames includes no gambling, real money, ads, copyrighted assets, or endless-session mechanics.
+- New pantry, preparation, shopping-handoff, and game-session records are private owner subcollections with strict field validation; histories are immutable except for the bounded ten-minute preparation undo.
+- Device recovery and queued game results remain owner/slot scoped; demo mode remains synthetic and performs no production Firebase reads or writes.
+
 ## 4.37.1
 
 ### Changed

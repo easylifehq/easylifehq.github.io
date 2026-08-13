@@ -1,14 +1,14 @@
 {
   "name": "EasyLife",
   "short_name": "EasyLife",
-  "description": "A personal command center for tasks, notes, calendar planning, workouts, projects, and pipeline work.",
+  "description": "A personal command center for planning, notes, workouts, projects, saved drinks, and short games.",
   "start_url": "/app",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#f8faf8",
   "theme_color": "#f8faf8",
-  "categories": ["productivity", "lifestyle"],
+  "categories": ["productivity", "lifestyle", "games"],
   "icons": [
     {
       "src": "/icons/easylife-icon.svg",

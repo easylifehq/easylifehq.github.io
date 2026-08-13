@@ -16,6 +16,15 @@ test("a demo query on the deployed hostname never enables demo Firebase access",
   assert.equal(resolveFirestoreRuntimeTarget({ hostname: "localhost", search: "" }).kind, "configured-project");
 });
 
+test("the dedicated audit Pages host is synthetic-only rather than a configured or emulator target", () => {
+  assert.deepEqual(resolveFirestoreRuntimeTarget({ hostname: "easylife-wave10-1-audit.pages.dev", search: "" }), {
+    kind: "synthetic-audit", reason: "allowlisted-pages-host",
+  });
+  assert.deepEqual(resolveFirestoreRuntimeTarget({ hostname: "abc123.easylife-wave10-1-audit.pages.dev", search: "?demo=0" }), {
+    kind: "synthetic-audit", reason: "allowlisted-pages-host",
+  });
+});
+
 test("automated Firebase access accepts only an explicit loopback emulator", () => {
   assert.deepEqual(resolveFirestoreRuntimeTarget({ hostname: "", search: "", explicitEmulatorHost: "localhost:8088" }), {
     kind: "emulator", host: "127.0.0.1", port: 8088, reason: "explicit-test",

@@ -1,4 +1,4 @@
-export const ACCOUNT_EXPORT_SCHEMA_VERSION = "easylife-account-export-v2";
+export const ACCOUNT_EXPORT_SCHEMA_VERSION = "easylife-account-export-v4";
 export const ACCOUNT_EXPORT_FORMULA_VERSION = "easylife-portability-v1";
 
 export type AccountDataCollections = {
@@ -18,12 +18,18 @@ export type AccountDataCollections = {
   pipelineApplications: unknown[];
   pipelineDrafts: unknown[];
   contacts: unknown[];
+  drinks: unknown[];
+  drinkPantry: unknown[];
+  drinkPreparations: unknown[];
+  drinkShoppingHandoffs: unknown[];
+  gameStats: unknown[];
+  gameSessions: unknown[];
 };
 
 export const emptyAccountDataCollections: AccountDataCollections = {
   tasks: [], notes: [], noteFolders: [], calendarEvents: [], calendarTaskBlocks: [], calendarCategories: [],
   workoutExercises: [], workoutRoutines: [], workoutSessions: [], workoutGoals: [], projects: [], projectSections: [],
-  projectTaskLinks: [], pipelineApplications: [], pipelineDrafts: [], contacts: [],
+  projectTaskLinks: [], pipelineApplications: [], pipelineDrafts: [], contacts: [], drinks: [], drinkPantry: [], drinkPreparations: [], drinkShoppingHandoffs: [], gameStats: [], gameSessions: [],
 };
 
 export const accountExportGroups: Array<{ key: keyof AccountDataCollections; label: string; app: string; csv: boolean }> = [
@@ -43,6 +49,12 @@ export const accountExportGroups: Array<{ key: keyof AccountDataCollections; lab
   { key: "pipelineApplications", label: "Applications", app: "Job applications", csv: true },
   { key: "pipelineDrafts", label: "Email drafts", app: "Job applications", csv: false },
   { key: "contacts", label: "Contacts", app: "People", csv: true },
+  { key: "drinks", label: "Saved drinks", app: "Drinks", csv: true },
+  { key: "drinkPantry", label: "Pantry", app: "Drinks", csv: true },
+  { key: "drinkPreparations", label: "Preparation history", app: "Drinks", csv: true },
+  { key: "drinkShoppingHandoffs", label: "Shopping handoffs", app: "Drinks", csv: true },
+  { key: "gameStats", label: "Legacy play totals", app: "Games", csv: true },
+  { key: "gameSessions", label: "Session history", app: "Games", csv: true },
 ];
 
 const forbiddenKeys = /^(uid|ownerId|clientDraftId|apiKey|authDomain|storageBucket|messagingSenderId|appId|measurementId|password|passwordHash|accessToken|refreshToken|idToken|token|authorization|bearerToken|clientSecret|credential|secret|session|sessionId|cookie|privateKey|serviceAccount)$/i;
@@ -85,7 +97,7 @@ export function buildAccountExport(input: {
     exportedAt: input.exportedAt,
     metadata: { appVersion: input.appVersion, timeZone: input.timeZone, weightUnit: input.weightUnit },
     manifest: {
-      compatibleWith: ["easylife-account-export-v1"],
+      compatibleWith: ["easylife-account-export-v1", "easylife-account-export-v2", "easylife-account-export-v3"],
       included: accountExportGroups.map((group) => ({ domain: group.key, label: `${group.app} — ${group.label}`, recordCount: input.collections[group.key].length })),
       unsupported: [
         "Authentication credentials and session tokens",
@@ -123,6 +135,12 @@ const csvColumns: Partial<Record<keyof AccountDataCollections, string[]>> = {
   projects: ["id", "title", "description", "targetDate", "status", "createdAt", "updatedAt"],
   pipelineApplications: ["id", "company", "title", "status", "priority", "dateApplied", "nextFollowUp", "location", "link", "notes", "contactName", "contactEmail"],
   contacts: ["id", "fullName", "relationship", "company", "role", "email", "phone", "status", "lastContactedAt", "nextFollowUpAt", "notes"],
+  drinks: ["id", "schemaVersion", "name", "type", "baseServings", "ingredients", "steps", "instructions", "notes", "rating", "tags", "date", "favorite", "sourceDrinkId", "createdAt", "updatedAt"],
+  drinkPantry: ["id", "schemaVersion", "name", "canonicalName", "status", "note", "createdAt", "updatedAt"],
+  drinkPreparations: ["id", "schemaVersion", "drinkId", "drinkName", "drinkType", "servings", "rating", "preparedAt", "createdAt"],
+  drinkShoppingHandoffs: ["id", "schemaVersion", "drinkId", "drinkName", "canonicalIngredients", "taskId", "createdAt"],
+  gameStats: ["id", "schemaVersion", "sessionsPlayed", "bestScore", "totalScore", "lastPlayedAt", "createdAt", "updatedAt"],
+  gameSessions: ["id", "schemaVersion", "formulaVersion", "gameId", "difficulty", "mode", "dateKey", "challengeKey", "generatorVersion", "seed", "completed", "score", "moves", "pairs", "goalsCollected", "totalGoals", "movesRemaining", "startedAt", "completedAt", "createdAt"],
 };
 
 export function serializeDomainCsv(key: keyof AccountDataCollections, records: unknown[]) {

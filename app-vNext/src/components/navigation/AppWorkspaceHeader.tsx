@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import { withReviewMode } from "@/features/coreloop/demo/reviewRoute";
 
 type WorkspaceLink = {
   to: string;
@@ -14,6 +15,7 @@ export function AppWorkspaceHeader({
   appLabel,
   links = [],
 }: AppWorkspaceHeaderProps) {
+  const location = useLocation();
   if (!links.length) {
     return null;
   }
@@ -23,7 +25,7 @@ export function AppWorkspaceHeader({
       {links.map((link) => (
         <NavLink
           key={link.to}
-          to={link.to}
+          to={withReviewMode(link.to, location.search)}
           className={({ isActive }) => `subnav-link${isActive ? " active" : ""}`}
         >
           {link.label}

@@ -2,18 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 import { useCoreLoopSearch } from "../CoreLoopSearchContext";
+import { withReviewMode } from "../demo/reviewRoute";
 import { filterCoreLoopCommands, getSearchPresentationState, isGlobalSearchShortcut, movePaletteIndex, type CoreSearchResult } from "../domain/globalSearch";
-
-function withReviewMode(target: string, currentSearch: string) {
-  const [pathname, rawSearch = ""] = target.split("?");
-  const next = new URLSearchParams(rawSearch);
-  const current = new URLSearchParams(currentSearch);
-  ["demo", "visualQa"].forEach((key) => {
-    if (current.get(key) === "1" && !next.has(key)) next.set(key, "1");
-  });
-  const search = next.toString();
-  return `${pathname}${search ? `?${search}` : ""}`;
-}
 
 function HighlightedText({ text, query }: { text: string; query: string }) {
   const terms = query.trim().split(/\s+/).filter(Boolean).map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
@@ -110,7 +100,7 @@ export function GlobalCommandPalette() {
           <button type="button" className="ghost-button compact-button" onClick={close} aria-label="Close search">Close</button>
         </div>
         <label className="core-palette-search">
-          <span className="sr-only">Search Notes, People, Projects, Job Applications, Plan items, and Workouts</span>
+          <span className="sr-only">Search Notes, People, Projects, Job Applications, Plan items, Workouts, Drinks, and commands</span>
           <input
             ref={inputRef}
             value={query}

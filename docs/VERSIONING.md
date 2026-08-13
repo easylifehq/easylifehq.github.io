@@ -4,9 +4,9 @@ EasyLife uses the app package version in `app-vNext/package.json` as the source 
 
 ## Current Version
 
-- Current app version: `4.37.1`
-- Next patch target: `4.37.2`
-- Next feature target: `5.0.0` EasyDrinks and EasyGames Suite Expansion.
+- Current app version: `5.0.0`
+- Next patch target: `5.0.1`
+- Current feature milestone: `5.0.0` EasyDrinks and EasyGames Suite Expansion.
 
 ## What To Update
 

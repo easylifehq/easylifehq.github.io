@@ -160,7 +160,7 @@ export function EasyWorkoutRoutinesPage() {
 
   return (
     <>
-      <div className="dashboard-grid">
+      <div className="dashboard-grid workout-routines-dashboard-grid">
         <PageSection
           eyebrow="Library"
           title="Custom exercises"

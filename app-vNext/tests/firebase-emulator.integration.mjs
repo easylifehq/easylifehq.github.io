@@ -2,7 +2,7 @@ import test, { after, before, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { initializeTestEnvironment, assertFails, assertSucceeds } from "@firebase/rules-unit-testing";
-import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, setLogLevel, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, setLogLevel, serverTimestamp, updateDoc } from "firebase/firestore";
 import { deriveWeeklyReview } from "../src/features/easystatistics/domain/weeklyReview.ts";
 import { deriveGuidedWorkoutPlan, getGuidedWorkoutAction } from "../src/features/easyworkout/domain/guidedWorkoutPlan.ts";
 import { createWorkoutExportPayload, filterWorkoutHistory, getWorkoutPrSessionIds, serializeWorkoutCsv } from "../src/features/easyworkout/domain/workoutHistoryTools.ts";
@@ -151,7 +151,7 @@ test("authenticated owner records drive Wave 3 search, focused review, and safe 
 
   const payload = buildAccountExport({ collections: { ...emptyAccountDataCollections, tasks, notes, projects, pipelineApplications: applications, contacts, workoutSessions: workouts }, settings: { easyWorkout: { weightUnit: "lb" }, apiKey: "blocked" }, exportedAt: "2026-08-02T00:00:00.000Z", timeZone: "America/Denver", weightUnit: "lb", appVersion: "test" });
   const serialized = serializeAccountExport(payload);
-  assert.match(serialized, /easylife-account-export-v2/);
+  assert.match(serialized, /easylife-account-export-v4/);
   assert.doesNotMatch(serialized, /blocked/);
   await assertFails(getDocs(collection(rulesEnvironment.authenticatedContext(otherId).firestore(), "users", ownerId, "notes")));
 });
@@ -176,6 +176,69 @@ test("workout goals enforce versioned ownership, lifecycle validation, and recov
   const e1rmRef = doc(ownerDb, ownerPath("workoutGoals", "exercise-e1rm-bench"));
   await assertSucceeds(setDoc(e1rmRef, { ...goal, formulaVersion: "epley-v1", goalType: "exercise-e1rm", target: 100, sourceUnit: "kg", exerciseId: "bench", exerciseName: "Bench Press" }));
   await assertFails(updateDoc(e1rmRef, { formulaVersion: "unreviewed-formula", updatedAt: new Date("2026-08-02T16:00:00Z") }));
+});
+
+test("EasyDrinks v2 rules validate migration, pantry, immutable preparations, and handoff provenance", async () => {
+  const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
+  const otherDb = rulesEnvironment.authenticatedContext(otherId).firestore();
+  const createdAt = new Date("2026-08-08T12:00:00Z");
+  const drink = { ownerId, schemaVersion: "easydrinks-v2", name: "Maple oat latte", type: "coffee", baseServings: 1, ingredients: [{ id: "oat", name: "Oat milk", amount: "8", unit: "oz", optional: false }], steps: [{ id: "warm", text: "Warm and combine.", durationSeconds: 120 }], instructions: "Warm and combine.", notes: "Comforting.", rating: 5, tags: ["morning"], date: "2026-08-08", favorite: true, sourceDrinkId: null, createdAt, updatedAt: createdAt };
+  const reference = doc(ownerDb, ownerPath("drinks", "latte"));
+  await assertSucceeds(setDoc(reference, drink));
+  await assertSucceeds(updateDoc(reference, { notes: "Less sweet next time.", updatedAt: new Date("2026-08-08T13:00:00Z") }));
+  await assertFails(updateDoc(reference, { ownerId: otherId, updatedAt: new Date("2026-08-08T14:00:00Z") }));
+  await assertFails(updateDoc(reference, { createdAt: new Date("2026-08-09T12:00:00Z"), updatedAt: new Date("2026-08-09T12:00:00Z") }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("drinks", "bad-extra")), { ...drink, accessToken: "blocked" }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("drinks", "bad-servings")), { ...drink, baseServings: 0 }));
+  await assertFails(getDoc(doc(otherDb, ownerPath("drinks", "latte"))));
+
+  await rulesEnvironment.withSecurityRulesDisabled(async (context) => setDoc(doc(context.firestore(), ownerPath("drinks", "legacy")), { ...drink, schemaVersion: "easydrinks-v1", ingredients: [{ name: "Oat milk", amount: "8", unit: "oz" }], baseServings: null, steps: null }));
+  await assertSucceeds(setDoc(doc(ownerDb, ownerPath("drinks", "legacy")), { ...drink, createdAt }));
+
+  const pantryRef = doc(ownerDb, ownerPath("drinkPantry", "oat"));
+  const pantry = { ownerId, schemaVersion: "easydrinks-pantry-v1", name: "Oat milk", canonicalName: "oat milk", status: "available", note: "one carton", createdAt, updatedAt: createdAt };
+  await assertSucceeds(setDoc(pantryRef, pantry));
+  await assertSucceeds(updateDoc(pantryRef, { status: "unavailable", updatedAt: new Date("2026-08-08T13:00:00Z") }));
+  await assertFails(updateDoc(pantryRef, { ownerId: otherId }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("drinkPantry", "bad")), { ...pantry, status: "maybe" }));
+
+  const prepRef = doc(ownerDb, ownerPath("drinkPreparations", "prep-safe"));
+  const prep = { ownerId, schemaVersion: "easydrinks-preparation-v1", drinkId: "latte", drinkName: "Maple oat latte", drinkType: "coffee", servings: 1, rating: 5, preparedAt: serverTimestamp(), createdAt: serverTimestamp() };
+  await assertSucceeds(setDoc(prepRef, prep));
+  await assertFails(updateDoc(prepRef, { rating: 1 }));
+  await assertSucceeds(deleteDoc(prepRef));
+  await rulesEnvironment.withSecurityRulesDisabled(async (context) => setDoc(doc(context.firestore(), ownerPath("drinkPreparations", "old-prep")), { ownerId, schemaVersion: "easydrinks-preparation-v1", drinkId: "latte", drinkName: "Maple oat latte", drinkType: "coffee", servings: 1, rating: 5, preparedAt: new Date("2026-08-01T12:00:00Z"), createdAt: new Date("2026-08-01T12:00:00Z") }));
+  await assertFails(deleteDoc(doc(ownerDb, ownerPath("drinkPreparations", "old-prep"))));
+  await assertFails(setDoc(doc(otherDb, `users/${otherId}/drinkPreparations/stolen`), { ...prep, ownerId }));
+
+  const handoffId = "drink-shopping-safe";
+  const handoffRef = doc(ownerDb, ownerPath("drinkShoppingHandoffs", handoffId));
+  await assertSucceeds(setDoc(handoffRef, { ownerId, schemaVersion: "easydrinks-shopping-v1", drinkId: "latte", drinkName: "Maple oat latte", canonicalIngredients: ["maple syrup"], taskId: handoffId, createdAt: serverTimestamp() }));
+  await assertFails(updateDoc(handoffRef, { canonicalIngredients: ["other"] }));
+  await assertFails(deleteDoc(handoffRef));
+});
+
+test("EasyGames v2 sessions are strict, immutable, idempotent by document ID, and owner-only", async () => {
+  const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
+  const otherDb = rulesEnvironment.authenticatedContext(otherId).firestore();
+  const sessionId = "pair-session-safe-1";
+  const reference = doc(ownerDb, ownerPath("gameSessions", sessionId));
+  const session = { ownerId, schemaVersion: "easygames-session-v1", formulaVersion: "easygames-score-v2", gameId: "pair-garden", difficulty: "standard", mode: "daily", dateKey: "2026-08-11", challengeKey: "pair-garden:standard:easygames-generator-v2:2026-08-11", generatorVersion: "easygames-generator-v2", seed: 42, puzzleSpec: { deck: ["sun", "sun"] }, completed: true, score: 890, moves: 8, pairs: 6, goalsCollected: null, totalGoals: null, movesRemaining: null, startedAt: new Date("2026-08-11T12:00:00Z"), completedAt: new Date("2026-08-11T12:03:00Z"), createdAt: serverTimestamp() };
+  await assertSucceeds(setDoc(reference, session));
+  await assertSucceeds(getDoc(reference));
+  await assertFails(setDoc(reference, session));
+  await assertFails(updateDoc(reference, { score: 999 }));
+  await assertFails(deleteDoc(reference));
+  await assertFails(getDoc(doc(otherDb, ownerPath("gameSessions", sessionId))));
+  await assertFails(setDoc(doc(otherDb, `users/${otherId}/gameSessions/stolen-session`), session));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("gameSessions", "bad-mode-session")), { ...session, mode: "endless", dateKey: null, challengeKey: null }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("gameSessions", "bad-evidence-session")), { ...session, gameId: "trail-scout", pairs: 6 }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("gameSessions", "bad-extra-session")), { ...session, accessToken: "blocked" }));
+
+  await rulesEnvironment.withSecurityRulesDisabled(async (context) => setDoc(doc(context.firestore(), ownerPath("gameStats", "pair-garden")), { ownerId, schemaVersion: "easygames-stats-v1", sessionsPlayed: 2, bestScore: 900, totalScore: 1700, lastPlayedAt: new Date(), createdAt: new Date(), updatedAt: new Date() }));
+  await assertSucceeds(getDoc(doc(ownerDb, ownerPath("gameStats", "pair-garden"))));
+  await assertFails(updateDoc(doc(ownerDb, ownerPath("gameStats", "pair-garden")), { sessionsPlayed: 3 }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("gameStats", "trail-scout")), { ownerId, schemaVersion: "easygames-stats-v1", sessionsPlayed: 1, bestScore: 100, totalScore: 100, lastPlayedAt: new Date(), createdAt: new Date(), updatedAt: new Date() }));
 });
 
 test("all product-wave collections deny cross-owner and top-level access", async () => {
