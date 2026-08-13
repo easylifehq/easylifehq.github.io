@@ -1,10 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useAuth } from "@/features/auth/AuthContext";
 import { useEasyCalendar } from "@/features/easycalendar/EasyCalendarContext";
-import { coreLoopDemoApplications, coreLoopDemoContacts, coreLoopDemoNotes, coreLoopDemoProjects } from "./demo/coreLoopDemoFixtures";
+import { coreLoopDemoApplications, coreLoopDemoContacts, coreLoopDemoProjects } from "./demo/coreLoopDemoFixtures";
 import { searchCoreLoopDocuments, type CoreSearchDocument } from "./domain/globalSearch";
 import { workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
-import { drinkDemoFixtures } from "@/features/easydrinks/demo/drinkDemoFixtures";
 import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
 import { subscribeToApplications, type ApplicationRecord } from "@/lib/firestore/applications";
 import { subscribeToContacts, type ContactRecord } from "@/lib/firestore/contacts";
@@ -12,6 +11,7 @@ import { subscribeToNotes, type NoteRecord } from "@/lib/firestore/notes";
 import { subscribeToProjects, type ProjectRecord } from "@/lib/firestore/projects";
 import { subscribeToWorkoutSessions, type WorkoutSessionRecord } from "@/lib/firestore/workoutSessions";
 import { subscribeToDrinks, type DrinkRecord } from "@/lib/firestore/drinks";
+import { useSyntheticAuditState } from "@/lib/runtime/syntheticAuditState";
 
 type SearchSource = "notes" | "contacts" | "projects" | "applications" | "workouts" | "drinks";
 type CoreLoopSearchContextValue = {
@@ -28,6 +28,7 @@ const initialLoading: Record<SearchSource, boolean> = { notes: true, contacts: t
 export function CoreLoopSearchProvider({ children }: { children: ReactNode }) {
   const { user, isDemoMode } = useAuth();
   const { tasks, isDailyDataLoading, error: calendarError } = useEasyCalendar();
+  const syntheticState = useSyntheticAuditState(isDemoMode);
   const [notes, setNotes] = useState<NoteRecord[]>([]);
   const [contacts, setContacts] = useState<ContactRecord[]>([]);
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
@@ -50,12 +51,12 @@ export function CoreLoopSearchProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (isDemoMode) {
-      setNotes(coreLoopDemoNotes);
+      setNotes(syntheticState.notes);
       setContacts(coreLoopDemoContacts);
       setProjects(coreLoopDemoProjects);
       setApplications(coreLoopDemoApplications);
       setWorkouts(workoutDemoSessions);
-      setDrinks(drinkDemoFixtures);
+      setDrinks(syntheticState.drinks);
       setLoading({ notes: false, contacts: false, projects: false, applications: false, workouts: false, drinks: false });
       setSourceErrors({});
       return;
@@ -88,7 +89,7 @@ export function CoreLoopSearchProvider({ children }: { children: ReactNode }) {
       subscribeToDrinks(user.uid, settle("drinks", setDrinks), fail("drinks")),
     ];
     return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
-  }, [isDemoMode, user]);
+  }, [isDemoMode, syntheticState.drinks, syntheticState.notes, user]);
 
   const documents = useMemo<CoreSearchDocument[]>(() => [
     ...notes.filter((note) => !note.deletedAt).map((note) => ({ id: `note:${note.id}`, group: "Notes" as const, title: note.title || "Untitled note", detail: note.bodyText.slice(0, 140) || "Empty note", searchText: `${note.tags.join(" ")} ${note.bodyText}`, to: `/app/easynotes/${encodeURIComponent(note.id)}`, updatedAt: note.updatedAt })),

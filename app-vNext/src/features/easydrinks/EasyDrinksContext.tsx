@@ -2,13 +2,21 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { useAuth } from "@/features/auth/AuthContext";
 import { duplicateDrinkDraft, normalizeDrinkDraft } from "@/features/easydrinks/domain/drinks";
 import { canonicalIngredientName } from "@/features/easydrinks/domain/pantry";
-import { drinkDemoFixtures } from "@/features/easydrinks/demo/drinkDemoFixtures";
-import { drinkDemoPantry, drinkDemoPreparations } from "@/features/easydrinks/demo/drinkDepthDemoFixtures";
 import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
-import { createDrink, subscribeToDrinks, updateDrink, DRINK_SCHEMA_VERSION, type DrinkDraft, type DrinkRecord } from "@/lib/firestore/drinks";
-import { createDrinkPantryItem, deleteDrinkPantryItem, subscribeToDrinkPantry, updateDrinkPantryItem, DRINK_PANTRY_SCHEMA_VERSION, type DrinkPantryDraft, type DrinkPantryItem } from "@/lib/firestore/drinkPantry";
-import { createDrinkPreparation, deleteDrinkPreparation, subscribeToDrinkPreparations, DRINK_PREPARATION_SCHEMA_VERSION, type DrinkPreparationDraft, type DrinkPreparationRecord } from "@/lib/firestore/drinkPreparations";
+import { createDrink, subscribeToDrinks, updateDrink, type DrinkDraft, type DrinkRecord } from "@/lib/firestore/drinks";
+import { createDrinkPantryItem, deleteDrinkPantryItem, subscribeToDrinkPantry, updateDrinkPantryItem, type DrinkPantryDraft, type DrinkPantryItem } from "@/lib/firestore/drinkPantry";
+import { createDrinkPreparation, deleteDrinkPreparation, subscribeToDrinkPreparations, type DrinkPreparationDraft, type DrinkPreparationRecord } from "@/lib/firestore/drinkPreparations";
 import { createDrinkShoppingHandoff } from "@/lib/firestore/drinkShopping";
+import {
+  createSyntheticDrink,
+  createSyntheticPantryItem,
+  createSyntheticPreparation,
+  removeSyntheticPantryItem,
+  removeSyntheticPreparation,
+  updateSyntheticDrink,
+  updateSyntheticPantryItem,
+  useSyntheticAuditState,
+} from "@/lib/runtime/syntheticAuditState";
 
 type EasyDrinksContextValue = {
   drinks: DrinkRecord[];
@@ -32,6 +40,7 @@ const EasyDrinksContext = createContext<EasyDrinksContextValue | undefined>(unde
 
 export function EasyDrinksProvider({ children }: { children: ReactNode; }) {
   const { user, isDemoMode } = useAuth();
+  const syntheticState = useSyntheticAuditState(isDemoMode);
   const [drinks, setDrinks] = useState<DrinkRecord[]>([]);
   const [pantry, setPantry] = useState<DrinkPantryItem[]>([]);
   const [preparations, setPreparations] = useState<DrinkPreparationRecord[]>([]);
@@ -41,9 +50,9 @@ export function EasyDrinksProvider({ children }: { children: ReactNode; }) {
 
   useEffect(() => {
     if (isDemoMode) {
-      setDrinks(drinkDemoFixtures);
-      setPantry(drinkDemoPantry);
-      setPreparations(drinkDemoPreparations);
+      setDrinks(syntheticState.drinks);
+      setPantry(syntheticState.pantry);
+      setPreparations(syntheticState.preparations);
       setLoadingSources(0);
       setError("");
       return;
@@ -62,16 +71,13 @@ export function EasyDrinksProvider({ children }: { children: ReactNode; }) {
       subscribeToDrinkPreparations(user.uid, (records) => { setPreparations(records); setError(""); settle(); }, fail),
     ];
     return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
-  }, [isDemoMode, user]);
+  }, [isDemoMode, syntheticState.drinks, syntheticState.pantry, syntheticState.preparations, user]);
 
   async function addDrink(draft: DrinkDraft) {
     const normalized = normalizeDrinkDraft(draft);
     if (!normalized.name) throw new Error("Drink name is required.");
     if (isDemoMode) {
-      const id = `demo-drink-${Date.now()}`;
-      const now = new Date();
-      setDrinks((current) => [{ id, ownerId: "local-preview", schemaVersion: DRINK_SCHEMA_VERSION, ...normalized, createdAt: now, updatedAt: now }, ...current]);
-      return id;
+      return createSyntheticDrink(normalized);
     }
     if (!user) return null;
     return createDrink(user.uid, normalized);
@@ -80,7 +86,7 @@ export function EasyDrinksProvider({ children }: { children: ReactNode; }) {
   async function saveDrink(drinkId: string, draft: DrinkDraft) {
     const normalized = normalizeDrinkDraft(draft);
     if (!normalized.name) throw new Error("Drink name is required.");
-    if (isDemoMode) { setDrinks((current) => current.map((drink) => drink.id === drinkId ? { ...drink, schemaVersion: DRINK_SCHEMA_VERSION, ...normalized, updatedAt: new Date() } : drink)); return; }
+    if (isDemoMode) return updateSyntheticDrink(drinkId, normalized);
     if (user) await updateDrink(user.uid, drinkId, normalized);
   }
 
@@ -88,30 +94,30 @@ export function EasyDrinksProvider({ children }: { children: ReactNode; }) {
     const normalized = { ...draft, name: draft.name.trim().slice(0, 200), canonicalName: canonicalIngredientName(draft.name), note: draft.note.trim().slice(0, 500) };
     if (!normalized.canonicalName) throw new Error("Pantry ingredient name is required.");
     if (pantry.some((item) => item.canonicalName === normalized.canonicalName)) throw new Error("That pantry ingredient is already listed. Update its status instead.");
-    if (isDemoMode) { const id = "demo-pantry-" + Date.now(); const now = new Date(); const record: DrinkPantryItem = { id, ownerId: "local-preview", schemaVersion: DRINK_PANTRY_SCHEMA_VERSION, ...normalized, createdAt: now, updatedAt: now }; setPantry((current) => [...current, record].sort((a, b) => a.name.localeCompare(b.name))); return id; }
+    if (isDemoMode) return createSyntheticPantryItem(normalized);
     if (!user) return null;
     return createDrinkPantryItem(user.uid, normalized);
   }
 
   async function savePantryItem(itemId: string, draft: Omit<DrinkPantryDraft, "canonicalName">) {
     const normalized = { ...draft, name: draft.name.trim().slice(0, 200), canonicalName: canonicalIngredientName(draft.name), note: draft.note.trim().slice(0, 500) };
-    if (isDemoMode) { setPantry((current) => current.map((item) => item.id === itemId ? { ...item, ...normalized, updatedAt: new Date() } : item)); return; }
+    if (isDemoMode) return updateSyntheticPantryItem(itemId, normalized);
     if (user) await updateDrinkPantryItem(user.uid, itemId, normalized);
   }
 
   async function removePantryItem(itemId: string) {
-    if (isDemoMode) { setPantry((current) => current.filter((item) => item.id !== itemId)); return; }
+    if (isDemoMode) return removeSyntheticPantryItem(itemId);
     if (user) await deleteDrinkPantryItem(user.uid, itemId);
   }
 
   async function logPreparation(draft: DrinkPreparationDraft) {
-    if (isDemoMode) { const id = `demo-prep-${Date.now()}`; const now = new Date(); setPreparations((current) => [{ id, ownerId: "local-preview", schemaVersion: DRINK_PREPARATION_SCHEMA_VERSION, ...draft, preparedAt: now, createdAt: now }, ...current]); return id; }
+    if (isDemoMode) return createSyntheticPreparation(draft);
     if (!user) return null;
     return createDrinkPreparation(user.uid, draft);
   }
 
   async function undoPreparation(preparationId: string) {
-    if (isDemoMode) { setPreparations((current) => current.filter((record) => record.id !== preparationId)); return; }
+    if (isDemoMode) return removeSyntheticPreparation(preparationId);
     if (user) await deleteDrinkPreparation(user.uid, preparationId);
   }
 

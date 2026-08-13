@@ -849,6 +849,25 @@ a {
   text-align: center;
 }
 
+.audit-preview-label span {
+  margin-inline-end: 0.75rem;
+}
+
+.audit-reset-button {
+  appearance: none;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.audit-reset-button:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 3px;
+}
+
 .mobile-standalone-shell {
   min-height: var(--easy-viewport-height, 100dvh);
 }

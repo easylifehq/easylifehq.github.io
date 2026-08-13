@@ -12,6 +12,7 @@ import { NotificationScheduler } from "@/lib/mobile/NotificationScheduler";
 import { useMobileThemeColor } from "@/lib/mobile/useMobileThemeColor";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 import { useMobileViewportCssVars } from "@/lib/mobile/useMobileViewportCssVars";
+import { resetSyntheticAuditState } from "@/lib/runtime/syntheticAuditState";
 
 export function AuthenticatedLayout() {
   const location = useLocation();
@@ -33,11 +34,22 @@ export function AuthenticatedLayout() {
     .filter(Boolean)
     .join(" ");
 
+  function resetAuditPreview() {
+    if (!window.confirm("Reset local audit data to the clean seeded preview? This only clears EasyLife synthetic data on this audit origin.")) return;
+    resetSyntheticAuditState();
+    window.location.assign("/app/hq");
+  }
+
   return (
     <EasyCalendarProvider>
       <CoreLoopSearchProvider>
         <div className={`app-shell-vnext app-shell-header shell-theme-${settings.themeMode}${experimentalClasses ? ` ${experimentalClasses}` : ""}`}>
-          {isAuditMode ? <div className="audit-preview-label" role="note">Synthetic audit preview · local demo data only</div> : null}
+          {isAuditMode ? (
+            <div className="audit-preview-label" role="note">
+              <span>Synthetic audit preview · local demo data only</span>
+              <button type="button" className="audit-reset-button" onClick={resetAuditPreview}>Reset preview data</button>
+            </div>
+          ) : null}
           {isDistractionFreeRoute ? null : <AppHeader />}
           <div className="app-content app-content-shell">
             <Outlet />

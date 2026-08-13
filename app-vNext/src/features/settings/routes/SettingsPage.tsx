@@ -36,6 +36,7 @@ import { subscribeToDrinkShoppingHandoffs } from "@/lib/firestore/drinkShopping"
 import { subscribeToGameStats } from "@/lib/firestore/gameStats";
 import { subscribeToGameSessions } from "@/lib/firestore/gameSessions";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
+import { useSyntheticAuditState } from "@/lib/runtime/syntheticAuditState";
 import {
   getNotificationPermission,
   requestNotificationPermission,
@@ -544,6 +545,7 @@ export function SettingsPage() {
   const [searchParams] = useSearchParams();
   const [activeSection, setActiveSection] = useState<SettingsSectionId>("customize");
   const { user, isDemoMode } = useAuth();
+  const syntheticState = useSyntheticAuditState(isDemoMode);
   const [dataCollections, setDataCollections] = useState<DataCollections>(emptyDataCollections);
   const [dataError, setDataError] = useState("");
   const [dataPendingCount, setDataPendingCount] = useState(0);
@@ -628,7 +630,14 @@ export function SettingsPage() {
 
   useEffect(() => {
     if (isDemoMode) {
-      setDataCollections(coreLoopDemoExportCollections);
+      setDataCollections({
+        ...coreLoopDemoExportCollections,
+        tasks: syntheticState.tasks,
+        notes: syntheticState.notes,
+        drinks: syntheticState.drinks,
+        drinkPantry: syntheticState.pantry,
+        drinkPreparations: syntheticState.preparations,
+      });
       setDataError("");
       setDataPendingCount(0);
       settledDataSourcesRef.current.clear();
@@ -695,7 +704,7 @@ export function SettingsPage() {
       active = false;
       unsubscribers.forEach((unsubscribe) => unsubscribe());
     };
-  }, [isDemoMode, user]);
+  }, [isDemoMode, syntheticState.drinks, syntheticState.notes, syntheticState.pantry, syntheticState.preparations, syntheticState.tasks, user]);
 
   function handleExportAll() {
     const exportedAt = new Date().toISOString();
@@ -873,7 +882,7 @@ export function SettingsPage() {
         </nav>
 
         <div className="settings-section-content">
-          {activeSection === "customize" ? null : (
+          {activeSection === "customize" || activeSection === "trust" ? null : (
             <div className="settings-section-heading">
               <p className="eyebrow">{activeSectionConfig.eyebrow}</p>
               <h2>{activeSectionConfig.label}</h2>

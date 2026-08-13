@@ -22,6 +22,7 @@ import {
   taskToDraft,
 } from "@/features/easylist/lib/taskUtils";
 import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
+import { useAuth } from "@/features/auth/AuthContext";
 
 type TaskDrawerProps = {
   task: TaskRecord | null;
@@ -122,6 +123,7 @@ export function TaskDrawer({
   onReopen,
 }: TaskDrawerProps) {
   const { scheduleTask } = useEasyCalendar();
+  const { isDemoMode } = useAuth();
   const [draft, setDraft] = useState<TaskDraft>(getEmptyTaskDraft());
   const [isSaving, setIsSaving] = useState(false);
   const drawerRef = useRef<HTMLElement | null>(null);
@@ -147,6 +149,12 @@ export function TaskDrawer({
   const [targetSectionId, setTargetSectionId] = useState("");
 
   useEffect(() => {
+    if (isDemoMode) {
+      setProjects([]);
+      setSections([]);
+      setNotes([]);
+      return;
+    }
     const user = auth.currentUser;
     if (!user || !isOpen) {
       setProjects([]);
@@ -164,7 +172,7 @@ export function TaskDrawer({
       unsubscribeSections();
       unsubscribeNotes();
     };
-  }, [isOpen]);
+  }, [isDemoMode, isOpen]);
 
   useEffect(() => {
     if (task) {
@@ -213,6 +221,10 @@ export function TaskDrawer({
 
   async function handleSchedule() {
     if (currentTask.completed) return;
+    if (isDemoMode) {
+      setScheduleMessage("Plan scheduling is read-only in the local preview; no calendar block was created.");
+      return;
+    }
 
     const startAt = combineDateAndTime(scheduleDate, scheduleTime);
     const totalMinutes = Math.max(5, Number(scheduleDuration) || 30);
@@ -247,6 +259,10 @@ export function TaskDrawer({
   }
 
   async function handleSendToProject() {
+    if (isDemoMode) {
+      setRoutingMessage("Project routing is read-only in the local preview; the task remains safely in Inbox.");
+      return;
+    }
     const user = auth.currentUser;
     if (!user || isRouting) return;
 
@@ -291,6 +307,10 @@ export function TaskDrawer({
   }
 
   async function handleSendToPipeline() {
+    if (isDemoMode) {
+      setRoutingMessage("Follow-up routing is read-only in the local preview; the task remains safely in Inbox.");
+      return;
+    }
     const user = auth.currentUser;
     if (!user || isRouting) return;
 

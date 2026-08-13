@@ -18,6 +18,11 @@ import { useSettings } from "@/features/settings/SettingsContext";
 import { useAuth } from "@/features/auth/AuthContext";
 import { isCaptureShortcut } from "@/features/coreloop/domain/globalSearch";
 import type { VisibleAppId } from "@/lib/firestore/settings";
+import {
+  createSyntheticNote,
+  createSyntheticTask,
+  useSyntheticAuditState,
+} from "@/lib/runtime/syntheticAuditState";
 
 type CaptureMode = "raw" | "task" | "brainDump" | "note" | "event" | "application" | "contact" | "project" | "workout";
 
@@ -320,7 +325,8 @@ function parseWorkoutSet(value: string) {
 export function UniversalCapture() {
   const location = useLocation();
   const { isAppVisible } = useSettings();
-  const { isAuditMode } = useAuth();
+  const { isDemoMode } = useAuth();
+  const syntheticState = useSyntheticAuditState(isDemoMode);
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<CaptureMode>("raw");
   const [text, setText] = useState("");
@@ -478,27 +484,30 @@ export function UniversalCapture() {
   }
 
   async function saveRawToInbox() {
-    const user = auth.currentUser;
     const rawText = text.trim();
     if (!rawText || isSavingRaw) return;
-    if (!user) {
-      setSaveError("Sign in to save this capture. Your draft is still here.");
-      return;
-    }
 
     setIsSavingRaw(true);
     setSaveError("");
     try {
-      await createTask(user.uid, {
+      const draft = {
         title: rawText,
         notes: rawText,
+        listName: "Inbox",
         category: "Inbox",
         estimatedLength: null,
-        priorityTier: 3,
+        priorityTier: 3 as const,
         priorityLabel: priorityLabel(3),
         dueDate: null,
         recurring: false,
-      });
+      };
+      if (isDemoMode) {
+        await createSyntheticTask(draft);
+      } else {
+        const user = auth.currentUser;
+        if (!user) throw new Error("signed-out");
+        await createTask(user.uid, draft);
+      }
       setOpenTarget({ to: "/app/easylist/dashboard", label: "Review Inbox" });
       resetFields("Saved to Inbox. Organize it when you are ready.", { keepOpenTarget: true });
       window.setTimeout(() => textInputRef.current?.focus(), 0);
@@ -542,8 +551,8 @@ export function UniversalCapture() {
   }, [captureModes, isAppVisible, screenAction.mode]);
 
   useEffect(() => {
-    if (isAuditMode) {
-      setTasks([]);
+    if (isDemoMode) {
+      setTasks(syntheticState.tasks);
       return;
     }
 
@@ -561,25 +570,32 @@ export function UniversalCapture() {
       unsubscribeTasks?.();
       unsubscribeAuth();
     };
-  }, [isAuditMode]);
+  }, [isDemoMode, syntheticState.tasks]);
 
   async function saveAsTask(options: { addAnother?: boolean } = {}) {
-    const user = auth.currentUser;
-    if (!user || !text.trim()) return;
+    if (!text.trim()) return;
     const minutes = Number(details.taskMinutes);
     const inferredPriority = suggestion === "follow-up" ? 2 : 3;
     const priorityTier = details.taskPriority || inferredPriority;
 
-    await createTask(user.uid, {
+    const draft = {
       title: text.trim().slice(0, 140),
       notes: text.trim(),
+      listName: "Inbox",
       category: details.taskCategory.trim() || (suggestion === "follow-up" ? "Follow-up" : "Inbox"),
       estimatedLength: Number.isFinite(minutes) && minutes > 0 ? minutes : null,
       priorityTier,
       priorityLabel: priorityLabel(priorityTier),
       dueDate: details.taskDueDate || null,
       recurring: false,
-    });
+    };
+    if (isDemoMode) {
+      await createSyntheticTask(draft);
+    } else {
+      const user = auth.currentUser;
+      if (!user) return;
+      await createTask(user.uid, draft);
+    }
     if (!options.addAnother) {
       setOpenTarget({ to: `/app/easylist/dashboard`, label: "Open task list" });
     }
@@ -587,9 +603,10 @@ export function UniversalCapture() {
   }
 
   async function saveBrainDump(options: { addAnother?: boolean } = {}) {
-    const user = auth.currentUser;
     const parsedEntries = parseBrainDumpEntries(text);
-    if (!user || !parsedEntries.length) return;
+    if (!parsedEntries.length) return;
+    const user = isDemoMode ? null : auth.currentUser;
+    if (!isDemoMode && !user) return;
 
     let taskCount = 0;
     let eventCount = 0;
@@ -597,8 +614,12 @@ export function UniversalCapture() {
 
     for (const entry of parsedEntries) {
       if (entry.kind === "event") {
+        if (isDemoMode) {
+          setSaveError("Calendar-event rows are read-only in the local preview. Task and deadline rows can still be saved locally.");
+          continue;
+        }
         const { startAt, endAt } = getDateTimeFromEntry(entry);
-        await createCalendarEvent(user.uid, {
+        await createCalendarEvent(user!.uid, {
           title: entry.title,
           description: entry.notes,
           categoryId: null,
@@ -613,17 +634,20 @@ export function UniversalCapture() {
         continue;
       }
 
-      await createTask(user.uid, {
-        itemKind: entry.kind === "deadline" ? "deadline" : "task",
+      const draft = {
+        itemKind: entry.kind === "deadline" ? "deadline" as const : "task" as const,
         title: entry.title,
         notes: entry.notes,
+        listName: "Inbox",
         category: entry.kind === "deadline" ? "Deadline" : "Inbox",
         estimatedLength: null,
-        priorityTier: entry.kind === "deadline" ? 2 : 3,
+        priorityTier: (entry.kind === "deadline" ? 2 : 3) as 2 | 3,
         priorityLabel: entry.kind === "deadline" ? "High" : "Medium",
         dueDate: entry.date || null,
         recurring: false,
-      });
+      };
+      if (isDemoMode) await createSyntheticTask(draft);
+      else await createTask(user!.uid, draft);
 
       if (entry.kind === "deadline") {
         deadlineCount += 1;
@@ -652,17 +676,24 @@ export function UniversalCapture() {
   }
 
   async function saveAsNote(options: { addAnother?: boolean } = {}) {
-    const user = auth.currentUser;
-    if (!user || !text.trim()) return;
+    if (!text.trim()) return;
 
-    const noteId = await createNote(user.uid);
-    await updateNote(user.uid, noteId, {
+    const draft = {
       title: text.trim().split(/\s+/).slice(0, 8).join(" "),
       tags: ["inbox"],
       folderId: "",
       pinned: false,
       bodyText: text.trim(),
-    });
+    };
+    let noteId: string;
+    if (isDemoMode) {
+      noteId = await createSyntheticNote(draft);
+    } else {
+      const user = auth.currentUser;
+      if (!user) return;
+      noteId = await createNote(user.uid);
+      await updateNote(user.uid, noteId, draft);
+    }
     if (!options.addAnother) {
       setOpenTarget({ to: `/app/easynotes/${noteId}`, label: "Open note" });
     }
@@ -676,8 +707,6 @@ export function UniversalCapture() {
       return;
     }
 
-    const user = auth.currentUser;
-    if (!user) return;
     const title = text.trim();
 
     if (mode === "task") {
@@ -692,6 +721,12 @@ export function UniversalCapture() {
       await saveAsNote(options);
       return;
     }
+    if (isDemoMode) {
+      setSaveError("This action is read-only in the local preview. Tasks, brain-dump task rows, and notes can be saved locally without contacting Firebase.");
+      return;
+    }
+    const user = auth.currentUser;
+    if (!user) return;
     if (mode === "application") {
       const draft: ApplicationDraft = {
         company: details.company.trim(),

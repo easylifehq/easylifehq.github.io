@@ -45,6 +45,12 @@ import {
   type TaskDraft,
   type TaskRecord,
 } from "@/lib/firestore/tasks";
+import {
+  createSyntheticTask,
+  setSyntheticTaskComplete,
+  updateSyntheticTask,
+  useSyntheticAuditState,
+} from "@/lib/runtime/syntheticAuditState";
 
 type EasyCalendarContextValue = {
   categories: CategoryRecord[];
@@ -256,6 +262,7 @@ function getPreviewTaskBlocks(): CalendarTaskBlockRecord[] {
 
 export function EasyCalendarProvider({ children }: { children: ReactNode }) {
   const { user, isDemoMode } = useAuth();
+  const syntheticState = useSyntheticAuditState(isDemoMode);
   const [categories, setCategories] = useState<CategoryRecord[]>([]);
   const [events, setEvents] = useState<CalendarEventRecord[]>([]);
   const [taskBlocks, setTaskBlocks] = useState<CalendarTaskBlockRecord[]>([]);
@@ -271,7 +278,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       setCategories([]);
       setEvents(getPreviewEvents());
       setTaskBlocks(getPreviewTaskBlocks());
-      setTasks(getPreviewTasks());
+      setTasks(syntheticState.tasks);
       setCategoriesLoading(false);
       setEventsLoading(false);
       setTaskBlocksLoading(false);
@@ -355,7 +362,7 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
       unsubscribeTaskBlocks();
       unsubscribeTasks();
     };
-  }, [isDemoMode, user]);
+  }, [isDemoMode, syntheticState.tasks, user]);
 
   const value = useMemo(
     () => ({
@@ -371,7 +378,8 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         return createCalendarEvent(user.uid, draft);
       },
       addTask: async (draft: TaskDraft) => {
-        if (!user || isDemoMode) return null;
+        if (isDemoMode) return createSyntheticTask(draft);
+        if (!user) return null;
         return createTask(user.uid, draft);
       },
       saveEvent: async (eventId: string, draft: CalendarEventDraft) => {
@@ -432,7 +440,8 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         return blockId;
       },
       completeTaskFromCalendar: async (taskId: string) => {
-        if (!user || isDemoMode) return;
+        if (isDemoMode) return setSyntheticTaskComplete(taskId, true);
+        if (!user) return;
         const matchingTask = tasks.find((task) => task.id === taskId);
         await completeTask(user.uid, taskId);
         if (matchingTask?.linkedCalendarBlockIds.length) {
@@ -440,7 +449,8 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         }
       },
       reopenTaskFromCalendar: async (taskId: string) => {
-        if (!user || isDemoMode) return;
+        if (isDemoMode) return setSyntheticTaskComplete(taskId, false);
+        if (!user) return;
         const matchingTask = tasks.find((task) => task.id === taskId);
         await reopenTask(user.uid, taskId);
         if (matchingTask?.linkedCalendarBlockIds.length) {
@@ -448,9 +458,26 @@ export function EasyCalendarProvider({ children }: { children: ReactNode }) {
         }
       },
       assignTaskToToday: async (taskId: string) => {
-        if (!user || isDemoMode) return;
         const task = tasks.find((candidate) => candidate.id === taskId);
         if (!task) throw new Error("The selected task is no longer available.");
+        if (isDemoMode) {
+          await updateSyntheticTask(taskId, {
+            itemKind: task.itemKind,
+            title: task.title,
+            notes: task.notes,
+            listName: "Today",
+            category: task.category,
+            estimatedLength: task.estimatedLength,
+            priorityTier: task.priorityTier,
+            priorityLabel: task.priorityLabel,
+            dueDate: localDateInput(task.dueDate),
+            linkedCalendarEventId: task.linkedCalendarEventId,
+            linkedNoteId: task.linkedNoteId,
+            recurring: task.recurring,
+          });
+          return;
+        }
+        if (!user) return;
         await updateTask(user.uid, taskId, {
           itemKind: task.itemKind,
           title: task.title,
