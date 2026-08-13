@@ -796,7 +796,7 @@ export function SettingsPage() {
         <div className="settings-status-grid" aria-label="Current assistant status">
           <article className="settings-status-card">
             <span>Signed in</span>
-            <strong>{auth.currentUser?.email || user?.email || "EasyLife account"}</strong>
+            <strong>{user?.email || "EasyLife account"}</strong>
           </article>
           <article className="settings-status-card">
             <span>Control skin</span>
@@ -2130,7 +2130,7 @@ export function SettingsPage() {
         <div className="settings-baseline-grid">
           <article className="mini-panel-vnext">
             <span>Email</span>
-            <strong>{auth.currentUser?.email || "Signed in"}</strong>
+            <strong>{user?.email || "Signed in"}</strong>
             <p>Your EasyLife account.</p>
           </article>
           <article className="mini-panel-vnext">
@@ -2142,7 +2142,13 @@ export function SettingsPage() {
             <span>Session</span>
             <strong>Current browser</strong>
             <p>This is the only sign-out control in Settings.</p>
-            <button type="button" className="button-secondary compact-button" onClick={() => void auth.signOut()}>
+            <button
+              type="button"
+              className="button-secondary compact-button"
+              disabled={isDemoMode}
+              title={isDemoMode ? "Synthetic preview sessions do not use Firebase Auth." : undefined}
+              onClick={() => void auth.signOut()}
+            >
               Log out
             </button>
           </article>

@@ -107,14 +107,17 @@ test("service-worker navigation remains same-origin and cannot change the hostna
 });
 
 test("EasyDrinks, EasyGames, and Settings keep demo mutations synthetic or local", async () => {
-  const [drinksSource, gamesSource, settingsSource] = await Promise.all([
+  const [drinksSource, gamesSource, settingsSource, settingsPageSource] = await Promise.all([
     readFile(new URL("../src/features/easydrinks/EasyDrinksContext.tsx", import.meta.url), "utf8"),
     readFile(new URL("../src/features/easygames/EasyGamesContext.tsx", import.meta.url), "utf8"),
     readFile(new URL("../src/features/settings/SettingsContext.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../src/features/settings/routes/SettingsPage.tsx", import.meta.url), "utf8"),
   ]);
   assert.match(drinksSource, /if \(isDemoMode\) return `demo-shopping-/);
   assert.ok(drinksSource.indexOf("if (isDemoMode)") < drinksSource.indexOf("subscribeToDrinks(user.uid"));
   assert.match(gamesSource, /if \(isDemoMode\) \{ setSessions/);
   assert.ok(gamesSource.indexOf("if (isDemoMode)") < gamesSource.indexOf("subscribeToGameStats(user.uid"));
   assert.match(settingsSource, /if \(!user \|\| isDemoMode\) return/);
+  assert.doesNotMatch(settingsPageSource, /auth\.currentUser/);
+  assert.match(settingsPageSource, /disabled=\{isDemoMode\}/);
 });
