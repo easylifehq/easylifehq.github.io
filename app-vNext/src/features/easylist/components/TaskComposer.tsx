@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import type { PriorityTier, TaskDraft, TaskItemKind } from "@/lib/firestore/tasks";
 import { getPriorityMeta, normalizePriorityTier, PRIORITY_TIERS } from "@/features/easylist/lib/taskUtils";
-import { auth } from "@/lib/firebase/client";
+import { auth, firebaseRuntimeAvailable } from "@/lib/firebase/client";
 import { addLinkedCalendarBlock } from "@/lib/firestore/tasks";
 import { createCalendarTaskBlock } from "@/lib/firestore/calendarTaskBlocks";
 import { useSettings } from "@/features/settings/SettingsContext";
@@ -317,9 +317,10 @@ function normalizeAiTaskRows(rows: AiTaskRow[]): TaskRowDraft[] {
 
 async function analyzeBrainDumpWithAi(brainDump: string) {
   const endpoint = import.meta.env.VITE_TASK_ANALYZER_URL;
+  if (!endpoint || !firebaseRuntimeAvailable) return null;
   const user = auth.currentUser;
 
-  if (!endpoint || !user) {
+  if (!user) {
     return null;
   }
 
@@ -428,6 +429,7 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisMessage, setAnalysisMessage] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
+  const [dateErrors, setDateErrors] = useState<Record<string, string>>({});
   const [createCalendarSuggestions, setCreateCalendarSuggestions] = useState(false);
   const readyCount = useMemo(
     () => rows.filter((row) => row.title.trim()).length,
@@ -563,6 +565,7 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
   }
 
   async function createSuggestedCalendarBlock(taskId: string, draft: TaskDraft) {
+    if (!firebaseRuntimeAvailable) return;
     const user = auth.currentUser;
     if (!user || !draft.dueDate) return;
 
@@ -627,6 +630,7 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
       setRows(makeStarterRows());
       setBrainDump("");
       setCreateCalendarSuggestions(false);
+      setDateErrors({});
       setSaveMessage(drafts.length === 1 ? "Task saved to Inbox" : `${drafts.length} tasks added to Inbox`);
       setRestoredDraftMessage("");
       window.localStorage.removeItem(BRAIN_DUMP_DRAFT_KEY);
@@ -751,12 +755,29 @@ export function TaskComposer({ onSubmit, listName = "Main", showBrainDump = true
                 </label>
 
                 <label className="field-stack task-row-field">
-                  <span>{row.itemKind === "deadline" ? "Due by" : "Due"}</span>
+                  <span>{row.itemKind === "deadline" ? "Deadline due date" : "Task due date"}</span>
                   <input
                     type="date"
                     value={row.dueDate}
-                    onChange={(event) => updateRow(row.id, "dueDate", event.target.value)}
+                    aria-label={`${row.itemKind === "deadline" ? "Deadline" : "Task"} due date for ${row.title.trim() || `row ${index + 1}`}`}
+                    aria-describedby={dateErrors[row.id] ? `task-date-error-${row.id}` : undefined}
+                    aria-invalid={Boolean(dateErrors[row.id])}
+                    onInvalid={(event) => {
+                      event.preventDefault();
+                      setDateErrors((current) => ({ ...current, [row.id]: "Enter a complete date using this browser's date format, or clear the date before saving." }));
+                      event.currentTarget.focus();
+                    }}
+                    onInput={(event) => {
+                      if (event.currentTarget.validity.valid) {
+                        setDateErrors((current) => ({ ...current, [row.id]: "" }));
+                      }
+                    }}
+                    onChange={(event) => {
+                      updateRow(row.id, "dueDate", event.target.value);
+                      if (event.currentTarget.validity.valid) setDateErrors((current) => ({ ...current, [row.id]: "" }));
+                    }}
                   />
+                  {dateErrors[row.id] ? <span id={`task-date-error-${row.id}`} className="error-copy" role="alert">{dateErrors[row.id]}</span> : null}
                 </label>
 
                 <label className="field-stack task-row-field">
