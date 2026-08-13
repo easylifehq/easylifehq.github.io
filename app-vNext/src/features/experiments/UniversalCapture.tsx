@@ -15,6 +15,7 @@ import { addSetToDailyWorkoutSession } from "@/lib/firestore/workoutSessions";
 import { auth } from "@/lib/firebase/client";
 import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 import { useSettings } from "@/features/settings/SettingsContext";
+import { useAuth } from "@/features/auth/AuthContext";
 import { isCaptureShortcut } from "@/features/coreloop/domain/globalSearch";
 import type { VisibleAppId } from "@/lib/firestore/settings";
 
@@ -319,6 +320,7 @@ function parseWorkoutSet(value: string) {
 export function UniversalCapture() {
   const location = useLocation();
   const { isAppVisible } = useSettings();
+  const { isAuditMode } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<CaptureMode>("raw");
   const [text, setText] = useState("");
@@ -540,6 +542,11 @@ export function UniversalCapture() {
   }, [captureModes, isAppVisible, screenAction.mode]);
 
   useEffect(() => {
+    if (isAuditMode) {
+      setTasks([]);
+      return;
+    }
+
     let unsubscribeTasks: (() => void) | undefined;
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       unsubscribeTasks?.();
@@ -554,7 +561,7 @@ export function UniversalCapture() {
       unsubscribeTasks?.();
       unsubscribeAuth();
     };
-  }, []);
+  }, [isAuditMode]);
 
   async function saveAsTask(options: { addAnother?: boolean } = {}) {
     const user = auth.currentUser;

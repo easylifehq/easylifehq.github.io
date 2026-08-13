@@ -74,10 +74,11 @@ test("audit hosts fail closed before any configured Firebase or explicit emulato
   });
 });
 
-test("authentication, login containment, Firebase initialization, and the audit label share the centralized boundary", async () => {
-  const [runtimeSource, authSource, clientSource, routerSource, layoutSource] = await Promise.all([
+test("authentication, global capture, login containment, Firebase initialization, and the audit label share the centralized boundary", async () => {
+  const [runtimeSource, authSource, captureSource, clientSource, routerSource, layoutSource] = await Promise.all([
     readFile(new URL("../src/lib/runtime/reviewRuntime.ts", import.meta.url), "utf8"),
     readFile(new URL("../src/features/auth/AuthContext.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../src/features/experiments/UniversalCapture.tsx", import.meta.url), "utf8"),
     readFile(new URL("../src/lib/firebase/client.ts", import.meta.url), "utf8"),
     readFile(new URL("../src/app/router/index.tsx", import.meta.url), "utf8"),
     readFile(new URL("../src/app/layouts/AuthenticatedLayout.tsx", import.meta.url), "utf8"),
@@ -87,6 +88,8 @@ test("authentication, login containment, Firebase initialization, and the audit 
   assert.match(authSource, /resolveReviewRuntimeMode/);
   assert.match(authSource, /reviewRuntime === "audit"/);
   assert.ok(authSource.indexOf("if (isDemoMode)") < authSource.indexOf("if (!firebaseConfigured)"));
+  assert.match(captureSource, /const \{ isAuditMode \} = useAuth\(\)/);
+  assert.ok(captureSource.indexOf("if (isAuditMode)") < captureSource.indexOf("onAuthStateChanged(auth"));
   assert.match(clientSource, /firestoreRuntimeTarget\.kind === "configured-project" && buildFirebaseConfigured/);
   assert.match(clientSource, /firestoreRuntimeTarget\.kind === "configured-project" \? firebaseConfig : emulatorOnlyConfig/);
   assert.match(routerSource, /function AuditOnlyRouteBoundary/);
