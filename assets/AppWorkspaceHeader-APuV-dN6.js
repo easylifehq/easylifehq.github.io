@@ -1,0 +1,1 @@
+import{u as r,j as o,g as i}from"./vendor-react-CYC41qgq.js";import{J as c}from"./index-DugZGB85.js";function m({appLabel:s,links:e=[]}){const t=r();return e.length?o.jsx("nav",{className:"subnav","aria-label":`${s} navigation`,children:e.map(a=>o.jsx(i,{to:c(a.to,t.search),className:({isActive:n})=>`subnav-link${n?" active":""}`,children:a.label},a.to))}):null}export{m as A};
