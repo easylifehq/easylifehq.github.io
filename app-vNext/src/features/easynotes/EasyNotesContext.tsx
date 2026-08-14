@@ -32,15 +32,6 @@ import { createProjectSection } from "@/lib/firestore/projectSections";
 import { createProjectTaskLink } from "@/lib/firestore/projectTaskLinks";
 import { useAuth } from "@/features/auth/AuthContext";
 import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
-import {
-  createSyntheticNote,
-  createSyntheticTask,
-  moveSyntheticNotes,
-  removeSyntheticNotes,
-  setSyntheticNotesDeleted,
-  updateSyntheticNote,
-  useSyntheticAuditState,
-} from "@/lib/runtime/syntheticAuditState";
 
 type EasyNotesContextValue = {
   notes: NoteRecord[];
@@ -128,7 +119,6 @@ const visualQaNotes: NoteRecord[] = [
 
 export function EasyNotesProvider({ children }: { children: ReactNode }) {
   const { user, isDemoMode } = useAuth();
-  const syntheticState = useSyntheticAuditState(isDemoMode);
   const [notes, setNotes] = useState<NoteRecord[]>([]);
   const [deletedNotes, setDeletedNotes] = useState<NoteRecord[]>([]);
   const [folders, setFolders] = useState<NoteFolderRecord[]>([]);
@@ -138,8 +128,8 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (isDemoMode) {
-      setNotes(sortNotes(syntheticState.notes.filter((note) => !note.deletedAt)));
-      setDeletedNotes(sortNotes(syntheticState.notes.filter((note) => note.deletedAt)));
+      setNotes(visualQaNotes);
+      setDeletedNotes([]);
       setFolders([]);
       setIsLoading(false);
       setError("");
@@ -183,22 +173,13 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       unsubscribeNotes();
       unsubscribeFolders();
     };
-  }, [isDemoMode, syntheticState.notes, user]);
+  }, [isDemoMode, user]);
 
   async function addNoteForUser() {
+    if (!user || isDemoMode) return null;
     const emptyNote = sortNotes(notes).find(isEmptyUntitledNote);
     if (emptyNote) return emptyNote.id;
     if (pendingBlankNoteRef.current) return pendingBlankNoteRef.current;
-
-    if (isDemoMode) {
-      pendingBlankNoteRef.current = createSyntheticNote();
-      try {
-        return await pendingBlankNoteRef.current;
-      } finally {
-        pendingBlankNoteRef.current = null;
-      }
-    }
-    if (!user) return null;
 
     pendingBlankNoteRef.current = (async () => {
       const noteId = await createNote(user.uid);
@@ -239,8 +220,7 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function createNoteFromDraftForUser(draft: NoteDraft) {
-    if (isDemoMode) return createSyntheticNote(draft);
-    if (!user) return null;
+    if (!user || isDemoMode) return null;
 
     const noteId = await addNoteForUser();
     if (!noteId) return null;
@@ -290,30 +270,24 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function saveNoteForUser(noteId: string, draft: NoteDraft) {
-    if (isDemoMode) return updateSyntheticNote(noteId, draft);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await updateNote(user.uid, noteId, draft);
   }
 
   async function deleteNoteForUser(noteId: string) {
-    if (isDemoMode) return setSyntheticNotesDeleted([noteId], true);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await softDeleteNote(user.uid, noteId);
     setNotes((current) => current.filter((note) => note.id !== noteId));
   }
 
   async function deleteNotesForUser(noteIds: string[]) {
-    if (!noteIds.length) return;
-    if (isDemoMode) return setSyntheticNotesDeleted(noteIds, true);
-    if (!user) return;
+    if (!user || isDemoMode || !noteIds.length) return;
     await softDeleteNotes(user.uid, noteIds);
     setNotes((current) => current.filter((note) => !noteIds.includes(note.id)));
   }
 
   async function moveNotesToFolderForUser(noteIds: string[], folderId: string) {
-    if (!noteIds.length) return;
-    if (isDemoMode) return moveSyntheticNotes(noteIds, folderId);
-    if (!user) return;
+    if (!user || isDemoMode || !noteIds.length) return;
     await moveNotesToFolder(user.uid, noteIds, folderId);
     setNotes((current) =>
       sortNotes(current.map((note) => (noteIds.includes(note.id) ? { ...note, folderId } : note)))
@@ -321,14 +295,9 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function cleanUpEmptyNotesForUser() {
+    if (!user || isDemoMode) return 0;
     const emptyNoteIds = notes.filter(isEmptyUntitledNote).map((note) => note.id);
     if (!emptyNoteIds.length) return 0;
-
-    if (isDemoMode) {
-      await setSyntheticNotesDeleted(emptyNoteIds, true);
-      return emptyNoteIds.length;
-    }
-    if (!user) return 0;
 
     await softDeleteNotes(user.uid, emptyNoteIds);
     setNotes((current) => current.filter((note) => !emptyNoteIds.includes(note.id)));
@@ -336,36 +305,32 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
   }
 
   async function restoreNoteForUser(noteId: string) {
-    if (isDemoMode) return setSyntheticNotesDeleted([noteId], false);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await restoreNote(user.uid, noteId);
     setDeletedNotes((current) => current.filter((note) => note.id !== noteId));
   }
 
   async function restoreNotesForUser(noteIds: string[]) {
-    if (!noteIds.length) return;
-    if (isDemoMode) return setSyntheticNotesDeleted(noteIds, false);
-    if (!user) return;
+    if (!user || isDemoMode || !noteIds.length) return;
     await restoreNotes(user.uid, noteIds);
     setDeletedNotes((current) => current.filter((note) => !noteIds.includes(note.id)));
   }
 
   async function permanentlyDeleteNoteForUser(noteId: string) {
-    if (isDemoMode) return removeSyntheticNotes([noteId]);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await removeNote(user.uid, noteId);
     setDeletedNotes((current) => current.filter((note) => note.id !== noteId));
   }
 
   async function permanentlyDeleteNotesForUser(noteIds: string[]) {
-    if (!noteIds.length) return;
-    if (isDemoMode) return removeSyntheticNotes(noteIds);
-    if (!user) return;
+    if (!user || isDemoMode || !noteIds.length) return;
     await removeNotes(user.uid, noteIds);
     setDeletedNotes((current) => current.filter((note) => !noteIds.includes(note.id)));
   }
 
   async function createTaskDraftsFromNote(payload: { noteTitle: string; text: string }) {
+    if (!user || isDemoMode) return 0;
+
     const lines = normalizeLinesToTasks(payload.text);
     if (!lines.length) return 0;
 
@@ -380,11 +345,6 @@ export function EasyNotesProvider({ children }: { children: ReactNode }) {
       recurring: false,
     }));
 
-    if (isDemoMode) {
-      await Promise.all(drafts.map((draft) => createSyntheticTask(draft)));
-      return drafts.length;
-    }
-    if (!user) return 0;
     await Promise.all(drafts.map((draft) => createTask(user.uid, draft)));
     return drafts.length;
   }

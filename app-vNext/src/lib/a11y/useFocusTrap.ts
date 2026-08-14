@@ -35,17 +35,6 @@ export function useFocusTrap(
     const activeContainer = container;
 
     const previousActiveElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const outsideElements: Array<{ element: HTMLElement; inert: boolean; ariaHidden: string | null }> = [];
-    let currentBoundary = activeContainer.parentElement;
-    while (currentBoundary?.parentElement) {
-      for (const sibling of Array.from(currentBoundary.parentElement.children)) {
-        if (!(sibling instanceof HTMLElement) || sibling === currentBoundary || ["SCRIPT", "STYLE", "LINK"].includes(sibling.tagName)) continue;
-        outsideElements.push({ element: sibling, inert: sibling.inert, ariaHidden: sibling.getAttribute("aria-hidden") });
-        sibling.inert = true;
-        sibling.setAttribute("aria-hidden", "true");
-      }
-      currentBoundary = currentBoundary.parentElement;
-    }
     function getFocusTarget() {
       const initialFocusTarget = initialFocusRef?.current;
       if (initialFocusTarget && activeContainer.contains(initialFocusTarget)) return initialFocusTarget;
@@ -104,11 +93,6 @@ export function useFocusTrap(
       window.clearTimeout(focusTimer);
       document.removeEventListener("focusin", handleFocusIn);
       document.removeEventListener("keydown", handleKeyDown);
-      outsideElements.forEach(({ element, inert, ariaHidden }) => {
-        element.inert = inert;
-        if (ariaHidden === null) element.removeAttribute("aria-hidden");
-        else element.setAttribute("aria-hidden", ariaHidden);
-      });
       const returnTarget = returnFocusRef?.current || previousActiveElement;
       if (returnTarget && document.contains(returnTarget)) {
         window.setTimeout(() => returnTarget.focus(), 0);

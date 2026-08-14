@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
-import { withReviewMode } from "@/features/coreloop/demo/reviewRoute";
 
 export type ProductsMenuItem = {
   href: string;
@@ -224,7 +223,7 @@ export function ProductsMenu({
               ) : (
                 <Link
                   key={item.href}
-                  to={withReviewMode(item.href, location.search)}
+                  to={item.href}
                   className={`menu-link-card${isCurrent ? " active" : ""}`}
                   aria-current={isCurrent ? "page" : undefined}
                   onClick={closeMenu}

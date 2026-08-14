@@ -18,9 +18,7 @@ export type VisibleAppId =
   | "easycontacts"
   | "easyprojects"
   | "easyworkout"
-  | "easystatistics"
-  | "easydrinks"
-  | "easygames";
+  | "easystatistics";
 
 export type ExperimentalFeatureId =
   | "smartTaskEntry"
@@ -180,8 +178,6 @@ const validVisibleApps: VisibleAppId[] = [
   "easyprojects",
   "easyworkout",
   "easystatistics",
-  "easydrinks",
-  "easygames",
 ];
 
 const validExperimentalFeatures: ExperimentalFeatureId[] = [

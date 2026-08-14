@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "easylife-shell-";
-const CACHE_NAME = `${CACHE_PREFIX}v7`;
+const CACHE_NAME = `${CACHE_PREFIX}v6`;
 const CORE_ASSETS = ["/", "/manifest.webmanifest", "/icons/easylife-icon.svg", "/icons/easylife-icon-192.png", "/icons/easylife-icon-512.png", "/icons/easylife-apple-touch-icon.png"];
 
 self.addEventListener("install", (event) => {

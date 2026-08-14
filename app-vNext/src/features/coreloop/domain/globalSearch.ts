@@ -1,4 +1,4 @@
-export type CoreSearchGroup = "Commands" | "Notes" | "People" | "Projects" | "Job applications" | "Plan" | "Workouts" | "Drinks";
+export type CoreSearchGroup = "Commands" | "Notes" | "People" | "Projects" | "Job applications" | "Plan" | "Workouts";
 
 export type CoreSearchDocument = {
   id: string;
@@ -19,12 +19,10 @@ export const CORE_LOOP_COMMANDS = [
   { id: "my-week", label: "My Week", detail: "Review the week or start the focused queue", keywords: "weekly review progress", to: "/app/easystatistics?tab=week" },
   { id: "plan", label: "Plan", detail: "Schedule work deliberately", keywords: "calendar day schedule", to: "/app/easycalendar/day" },
   { id: "workout", label: "Start or resume a workout", detail: "Open the workout logger and restore any saved draft", keywords: "exercise gym training", to: "/app/easyworkout/log?workoutMode=1" },
-  { id: "new-drink", label: "Save a drink", detail: "Open fast drink and recipe capture", keywords: "drinks recipe coffee tea smoothie cocktail mocktail", to: "/app/easydrinks/new" },
-  { id: "games", label: "Play a short game", detail: "Open Pair Garden or Trail Scout", keywords: "games memory path offline play", to: "/app/easygames" },
   { id: "settings", label: "Settings", detail: "Preferences, export, and account controls", keywords: "data export account", to: "/app/settings" },
 ] as const;
 
-const groupOrder: CoreSearchDocument["group"][] = ["Notes", "People", "Projects", "Job applications", "Plan", "Drinks", "Workouts"];
+const groupOrder: CoreSearchDocument["group"][] = ["Notes", "People", "Projects", "Job applications", "Plan", "Workouts"];
 
 function normalized(value: string) {
   return value.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
