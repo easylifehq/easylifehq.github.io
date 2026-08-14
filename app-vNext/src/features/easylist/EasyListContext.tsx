@@ -23,14 +23,6 @@ import {
 } from "@/lib/firestore/calendarTaskBlocks";
 import { useAuth } from "@/features/auth/AuthContext";
 import { toSafeFirebaseMessage } from "@/lib/firebase/errors";
-import {
-  createSyntheticTask,
-  removeSyntheticTask,
-  setSyntheticTaskComplete,
-  setSyntheticTaskDeleted,
-  updateSyntheticTask,
-  useSyntheticAuditState,
-} from "@/lib/runtime/syntheticAuditState";
 
 type EasyListContextValue = {
   tasks: TaskRecord[];
@@ -49,14 +41,13 @@ const EasyListContext = createContext<EasyListContextValue | undefined>(undefine
 
 export function EasyListProvider({ children }: { children: ReactNode }) {
   const { user, isDemoMode } = useAuth();
-  const syntheticState = useSyntheticAuditState(isDemoMode);
   const [tasks, setTasks] = useState<TaskRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (!user || isDemoMode) {
-      setTasks(isDemoMode ? syntheticState.tasks : []);
+      setTasks([]);
       setIsLoading(false);
       setError("");
       return;
@@ -77,23 +68,20 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
     );
 
     return unsubscribe;
-  }, [isDemoMode, syntheticState.tasks, user]);
+  }, [isDemoMode, user]);
 
   async function addTaskFromDraft(draft: TaskDraft) {
-    if (isDemoMode) return createSyntheticTask(draft);
-    if (!user) return null;
+    if (!user || isDemoMode) return null;
     return createTask(user.uid, draft);
   }
 
   async function saveTaskFromDraft(taskId: string, draft: TaskDraft) {
-    if (isDemoMode) return updateSyntheticTask(taskId, draft);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await updateTask(user.uid, taskId, draft);
   }
 
   async function markCompleteForUser(taskId: string) {
-    if (isDemoMode) return setSyntheticTaskComplete(taskId, true);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     const task = tasks.find((entry) => entry.id === taskId);
     await completeTask(user.uid, taskId);
     if (task?.linkedCalendarBlockIds.length) {
@@ -102,8 +90,7 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
   }
 
   async function markActiveForUser(taskId: string) {
-    if (isDemoMode) return setSyntheticTaskComplete(taskId, false);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     const task = tasks.find((entry) => entry.id === taskId);
     await reopenTask(user.uid, taskId);
     if (task?.linkedCalendarBlockIds.length) {
@@ -112,20 +99,17 @@ export function EasyListProvider({ children }: { children: ReactNode }) {
   }
 
   async function deleteTaskForUser(taskId: string) {
-    if (isDemoMode) return setSyntheticTaskDeleted(taskId, true);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await softDeleteTask(user.uid, taskId);
   }
 
   async function restoreDeletedTaskForUser(taskId: string) {
-    if (isDemoMode) return setSyntheticTaskDeleted(taskId, false);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await restoreTask(user.uid, taskId);
   }
 
   async function removeTaskPermanentlyForUser(taskId: string) {
-    if (isDemoMode) return removeSyntheticTask(taskId);
-    if (!user) return;
+    if (!user || isDemoMode) return;
     await removeTask(user.uid, taskId);
   }
 

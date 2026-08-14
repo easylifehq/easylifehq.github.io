@@ -54,22 +54,6 @@ export const appProductItems: AppProductItem[] = [
     groupDescription: "Relationships and longer-term work.",
   },
   {
-    appId: "easydrinks",
-    href: "/app/easydrinks",
-    label: "Drinks",
-    description: "Save drinks and useful recipe notes.",
-    group: "Life",
-    groupDescription: "Relationships, recipes, and longer-term work.",
-  },
-  {
-    appId: "easygames",
-    href: "/app/easygames",
-    label: "Games",
-    description: "Play two small offline-friendly games.",
-    group: "Play",
-    groupDescription: "Short sessions with a clear stopping point.",
-  },
-  {
     appId: "easypipeline",
     href: "/app/easypipeline/dashboard",
     label: "Job applications",

@@ -438,7 +438,7 @@ export function EasyListInboxPage() {
 
       try {
         authToken =
-          !isDemoReviewMode && ASSISTANT_INTAKE_SUGGESTION_ENDPOINT && auth.currentUser
+          ASSISTANT_INTAKE_SUGGESTION_ENDPOINT && auth.currentUser
             ? await auth.currentUser.getIdToken()
             : undefined;
       } catch {

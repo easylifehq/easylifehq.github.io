@@ -13,26 +13,26 @@ import {
   type User,
 } from "firebase/auth";
 import { auth, firebaseConfigured } from "@/lib/firebase/client";
-import { resolveReviewRuntimeMode, type ReviewRuntimeMode } from "@/lib/runtime/reviewRuntime";
 
 type AuthContextValue = {
   user: User | null;
   isLoading: boolean;
   isDemoMode: boolean;
-  isAuditMode: boolean;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+function isDevReviewMode() {
+  const isLoopback = ["localhost", "127.0.0.1", "[::1]", "::1"].includes(window.location.hostname);
+  if (!import.meta.env.DEV && !isLoopback) return false;
+  const params = new URLSearchParams(window.location.search);
+  return params.get("visualQa") === "1" || params.get("demo") === "1";
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [reviewRuntime] = useState<ReviewRuntimeMode>(() => resolveReviewRuntimeMode({
-    hostname: window.location.hostname,
-    search: window.location.search,
-  }));
-  const isDemoMode = reviewRuntime !== "none";
-  const isAuditMode = reviewRuntime === "audit";
+  const [isDemoMode] = useState(isDevReviewMode);
 
   useEffect(() => {
     if (isDemoMode) {
@@ -73,9 +73,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       isLoading,
       isDemoMode,
-      isAuditMode,
     }),
-    [user, isLoading, isDemoMode, isAuditMode]
+    [user, isLoading, isDemoMode]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

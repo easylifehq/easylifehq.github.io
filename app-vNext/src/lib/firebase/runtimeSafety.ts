@@ -1,8 +1,5 @@
-import { resolveReviewRuntimeMode } from "../runtime/reviewRuntime.ts";
-
 export type FirestoreRuntimeTarget =
   | { kind: "configured-project" }
-  | { kind: "synthetic-audit"; reason: "allowlisted-pages-host" }
   | { kind: "emulator"; host: "127.0.0.1"; port: number; reason: "explicit-test" | "loopback-demo" };
 
 const loopbackHosts = new Set(["localhost", "127.0.0.1", "[::1]", "::1"]);
@@ -21,16 +18,14 @@ export function resolveFirestoreRuntimeTarget(input: {
   search: string;
   explicitEmulatorHost?: string;
 }): FirestoreRuntimeTarget {
-  const reviewRuntime = resolveReviewRuntimeMode({ hostname: input.hostname, search: input.search });
-  if (reviewRuntime === "audit") {
-    return { kind: "synthetic-audit", reason: "allowlisted-pages-host" };
-  }
-
   if (input.explicitEmulatorHost) {
     return { kind: "emulator", ...parseLoopbackEmulatorHost(input.explicitEmulatorHost), reason: "explicit-test" };
   }
 
-  if (reviewRuntime === "loopback-demo") {
+  const isLoopback = loopbackHosts.has(input.hostname);
+  const params = new URLSearchParams(input.search);
+  const isLocalReview = params.get("demo") === "1" || params.get("visualQa") === "1";
+  if (isLoopback && isLocalReview) {
     return { kind: "emulator", host: "127.0.0.1", port: 8088, reason: "loopback-demo" };
   }
 

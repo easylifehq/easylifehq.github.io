@@ -16,7 +16,6 @@ import {
 import { sortActiveTasks } from "@/features/easylist/lib/taskUtils";
 import { useLastAppRoute } from "@/lib/mobile/appRouteMemory";
 import { useAuth } from "@/features/auth/AuthContext";
-import { calendarDayDifference } from "@/lib/dates/calendarDayDifference";
 
 type TodayContextItem = {
   label: string;
@@ -95,8 +94,10 @@ function parseDate(value?: string) {
 }
 
 function formatFollowUpDate(value?: string) {
-  const diffDays = value ? calendarDayDifference(value) : null;
-  if (diffDays === null) return "No follow-up date";
+  const target = parseDate(value);
+  if (!target) return "No follow-up date";
+  const today = startOfDay(new Date());
+  const diffDays = Math.round((startOfDay(target).getTime() - today.getTime()) / 86400000);
 
   if (diffDays < 0) return `${Math.abs(diffDays)} day${Math.abs(diffDays) === 1 ? "" : "s"} overdue`;
   if (diffDays === 0) return "Due today";

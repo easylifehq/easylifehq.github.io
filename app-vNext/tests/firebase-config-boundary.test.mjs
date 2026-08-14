@@ -29,9 +29,3 @@ test("review builds fail closed while loopback demo may use only an emulator ide
   assert.match(authContextSource, /if \(!firebaseConfigured\)/);
   assert.ok(authContextSource.indexOf("if (isDemoMode)") < authContextSource.indexOf("if (!firebaseConfigured)"));
 });
-
-test("allowlisted audit hosts cannot initialize configured Firebase", () => {
-  assert.match(clientSource, /firestoreRuntimeTarget\.kind === "configured-project" && buildFirebaseConfigured/);
-  assert.match(clientSource, /firestoreRuntimeTarget\.kind === "configured-project" \? firebaseConfig : emulatorOnlyConfig/);
-  assert.match(authContextSource, /reviewRuntime === "audit"/);
-});

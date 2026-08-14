@@ -247,7 +247,7 @@ export function EasyCalendarDayPage() {
     wakeHour,
   ]);
   const assistantPlanSuggestion = useMemo(
-    () => classifyAssistantIntent("Block 45 minutes for the highest-friction item after fixed commitments."),
+    () => classifyAssistantIntent("Block 45 minutes today for the highest-friction item after fixed commitments."),
     []
   );
   const assistantPlanDraft = useMemo(
@@ -515,7 +515,7 @@ export function EasyCalendarDayPage() {
         headingLevel={1}
         eyebrow="Plan"
         title="Plan a realistic day"
-        description={`${formatLongDate(selectedDate)}. Use this day's capacity before adding more.`}
+        description={`${formatLongDate(selectedDate)}. Use today's capacity before adding more.`}
       >
         {error ? <p className="error-copy">{error}</p> : null}
         <div className="calendar-day-topbar">
@@ -687,11 +687,11 @@ export function EasyCalendarDayPage() {
       </PageSection>
 
       <PageSection
-        eyebrow={isSameDay(selectedDate, new Date()) ? "Today" : "Selected day"}
+        eyebrow="Today"
         title="Timeline"
         description="Scan fixed commitments, planned blocks, and open windows in order."
       >
-        {isLoading ? <p className="helper-copy">Loading this day...</p> : null}
+        {isLoading ? <p className="helper-copy">Loading today...</p> : null}
 
         <div className="calendar-day-actions calendar-command-bar">
           <div className="calendar-status-card">

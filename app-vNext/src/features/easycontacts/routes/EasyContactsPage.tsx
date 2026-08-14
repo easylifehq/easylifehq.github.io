@@ -4,7 +4,6 @@ import { PageSection } from "@/components/ui/PageSection";
 import { ContactDrawer } from "@/features/easycontacts/components/ContactDrawer";
 import { useEasyContacts, type EasyContactRecord } from "@/features/easycontacts/EasyContactsContext";
 import type { ContactDraft } from "@/lib/firestore/contacts";
-import { calendarDayDifference } from "@/lib/dates/calendarDayDifference";
 
 function isFollowUpNeeded(value: string) {
   if (!value) return false;
@@ -35,8 +34,11 @@ const emptyDraft: ContactDraft = {
 
 function formatRelativeDate(value: string) {
   if (!value) return "No follow-up set";
-  const diffDays = calendarDayDifference(value);
-  if (diffDays === null) return "No follow-up set";
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const target = new Date(value);
+  target.setHours(0, 0, 0, 0);
+  const diffDays = Math.round((target.getTime() - today.getTime()) / 86400000);
 
   if (diffDays < 0) return `${Math.abs(diffDays)} day${Math.abs(diffDays) === 1 ? "" : "s"} overdue`;
   if (diffDays === 0) return "Due today";
