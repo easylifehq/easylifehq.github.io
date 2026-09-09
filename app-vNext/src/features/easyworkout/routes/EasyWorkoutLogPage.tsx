@@ -19,7 +19,13 @@ import {
   type WorkoutExerciseLogDraft,
   type WorkoutSetDraft,
 } from "@/features/easyworkout/domain/workoutDraftLifecycle";
-import { convertWeight, isValidLocalDateKey, isValidWorkingSet } from "@/features/easyworkout/domain/workoutStatistics";
+import {
+  buildWorkoutExerciseOptions,
+  deriveExerciseHistory,
+  fillSetsFromLastPerformance,
+  findExerciseHistory,
+} from "@/features/easyworkout/domain/workoutLogAssist";
+import { isValidLocalDateKey, isValidWorkingSet } from "@/features/easyworkout/domain/workoutStatistics";
 type DeletedSetUndo = {
   exerciseLocalId: string;
   exerciseName: string;
@@ -85,15 +91,6 @@ function readStoredWorkoutDraft(storageKey: string, ownerId: string, defaultWeig
   }
 }
 
-type ExerciseHistorySummary = {
-  lastWeight: number;
-  lastReps: number;
-  performedOn: string;
-  bestWeight: number;
-  bestVolume: number;
-  sessionCount: number;
-};
-
 type WorkoutExerciseSuggestion = {
   name: string;
   muscleGroup: string;
@@ -148,7 +145,7 @@ export function EasyWorkoutLogPage() {
   const routineId = searchParams.get("routineId");
   const gymMode = searchParams.get("gymMode") === "1";
   const workoutMode = searchParams.get("workoutMode") === "1" || searchParams.get("start") === "1";
-  const { routines, exercises, sessions, addSession, error } = useEasyWorkout();
+  const { routines, exercises, sessions, addSession, isLoading, error } = useEasyWorkout();
   const [draftId] = useState(restoredDraft?.draftId || createLocalId());
   const [startedAt] = useState(restoredDraft?.startedAt || new Date().toISOString());
   const [elapsedSeconds, setElapsedSeconds] = useState(restoredDraft?.elapsedSeconds || 0);
@@ -195,6 +192,14 @@ export function EasyWorkoutLogPage() {
     () => routines.find((routine) => routine.id === selectedRoutineId) || null,
     [routines, selectedRoutineId]
   );
+  const previousByExercise = useMemo(
+    () => deriveExerciseHistory(sessions, draftWeightUnit),
+    [draftWeightUnit, sessions]
+  );
+  const exerciseOptions = useMemo(
+    () => buildWorkoutExerciseOptions(exercises, sessions, defaultWorkoutExercises),
+    [exercises, sessions]
+  );
 
   useEffect(() => {
     if (didUseRestoredDraftRef.current) {
@@ -211,6 +216,8 @@ export function EasyWorkoutLogPage() {
       return;
     }
 
+    if (isLoading) return;
+
     if (!selectedRoutine) {
       const nextLogs =
         workoutMode || gymMode
@@ -223,16 +230,8 @@ export function EasyWorkoutLogPage() {
 
     const nextLogs =
       selectedRoutine.exercises.length
-        ? selectedRoutine.exercises.map((exercise) => ({
-            localId: createLocalId(),
-            exerciseId: exercise.exerciseId,
-            exerciseName: exercise.exerciseName,
-            muscleGroup: exercise.muscleGroup,
-            primaryMuscles: exercise.muscleGroup ? [exercise.muscleGroup] : [],
-            secondaryMuscles: [],
-            exerciseType: "weighted" as const,
-            notes: exercise.notes,
-            sets: Array.from({ length: Math.max(exercise.targetSets, 1) }, () => ({
+        ? selectedRoutine.exercises.map((exercise) => {
+            const baseSets = Array.from({ length: Math.max(exercise.targetSets, 1) }, () => ({
               reps: Number(exercise.targetReps.split("-")[0]) || 8,
               weight: exercise.targetWeight || 0,
               localId: createLocalId(),
@@ -241,58 +240,30 @@ export function EasyWorkoutLogPage() {
               completed: true,
               deleted: false,
               rir: null,
-            })),
-          }))
+            }));
+            const previous = findExerciseHistory(previousByExercise, exercise.exerciseName);
+            const sets = fillSetsFromLastPerformance(baseSets, previous).map((set) =>
+              exercise.targetWeight == null ? set : { ...set, weight: exercise.targetWeight }
+            );
+            return {
+              localId: createLocalId(),
+              exerciseId: exercise.exerciseId,
+              exerciseName: exercise.exerciseName,
+              muscleGroup: exercise.muscleGroup,
+              primaryMuscles: exercise.muscleGroup ? [exercise.muscleGroup] : [],
+              secondaryMuscles: [],
+              exerciseType: "weighted" as const,
+              notes: exercise.notes,
+              sets,
+            };
+          })
         : workoutMode || gymMode
           ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
           : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)];
 
     setExerciseLogs(nextLogs);
     setActiveExerciseId(nextLogs[0]?.localId ?? "");
-  }, [selectedRoutine, workoutMode, gymMode, settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount]);
-
-  const previousByExercise = useMemo(() => {
-    const accumulator: Record<string, ExerciseHistorySummary> = {};
-
-    sessions.forEach((session) => {
-      session.exercises.forEach((exercise) => {
-        const key = exercise.exerciseName.trim();
-        if (!key) return;
-
-        const kind = exercise.exerciseType || "weighted";
-        const validSets = exercise.sets.filter((set) => isValidWorkingSet(set, kind));
-        const sourceUnit = session.weightUnit || "lb";
-        const bestSetSourceWeight = validSets.reduce((best, set) => Math.max(best, set.weight), 0);
-        const bestSet = validSets.find((set) => set.weight === bestSetSourceWeight);
-        const bestSetWeight = convertWeight(bestSetSourceWeight, sourceUnit, draftWeightUnit);
-        const exerciseVolume = convertWeight(validSets.reduce((sum, set) => sum + set.reps * set.weight, 0), sourceUnit, draftWeightUnit);
-        const current = accumulator[key];
-
-        if (!current) {
-          accumulator[key] = {
-            lastWeight: convertWeight(bestSet?.weight || 0, sourceUnit, draftWeightUnit),
-            lastReps: bestSet?.reps || 0,
-            performedOn: session.performedOn,
-            bestWeight: bestSetWeight,
-            bestVolume: exerciseVolume,
-            sessionCount: 1,
-          };
-          return;
-        }
-
-        accumulator[key] = {
-          lastWeight: current.lastWeight,
-          lastReps: current.lastReps,
-          performedOn: current.performedOn,
-          bestWeight: Math.max(current.bestWeight, bestSetWeight),
-          bestVolume: Math.max(current.bestVolume, exerciseVolume),
-          sessionCount: current.sessionCount + 1,
-        };
-      });
-    });
-
-    return accumulator;
-  }, [draftWeightUnit, sessions]);
+  }, [isLoading, previousByExercise, selectedRoutine, workoutMode, gymMode, settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount]);
 
   const nextExerciseSuggestions = useMemo<WorkoutExerciseSuggestion[]>(() => {
     const currentNames = new Set(
@@ -333,7 +304,7 @@ export function EasyWorkoutLogPage() {
       })
       .slice(0, 3)
       .map((exercise) => {
-        const previous = previousByExercise[exercise.name];
+        const previous = findExerciseHistory(previousByExercise, exercise.name);
         return {
           name: exercise.name,
           muscleGroup: exercise.muscleGroup,
@@ -539,13 +510,11 @@ export function EasyWorkoutLogPage() {
 
   function fillFromLastTime(exerciseIndex: number) {
     const exercise = exerciseLogs[exerciseIndex];
-    const previous = previousByExercise[exercise.exerciseName];
+    const previous = findExerciseHistory(previousByExercise, exercise.exerciseName);
     if (!previous) return;
 
     updateExerciseLog(exerciseIndex, {
-      sets: exercise.sets.map((set, index) =>
-        index === 0 ? { ...set, reps: previous.lastReps, weight: previous.lastWeight } : set
-      ),
+      sets: fillSetsFromLastPerformance(exercise.sets, previous),
     });
   }
 
@@ -556,7 +525,7 @@ export function EasyWorkoutLogPage() {
   }
 
   function addSuggestedExercise(suggestion: WorkoutExerciseSuggestion) {
-    const previous = previousByExercise[suggestion.name];
+    const previous = findExerciseHistory(previousByExercise, suggestion.name);
     const nextExercise: WorkoutExerciseLogDraft = {
       ...emptyExerciseLog(settings.easyWorkout.defaultSetCount),
       exerciseName: suggestion.name,
@@ -897,9 +866,17 @@ export function EasyWorkoutLogPage() {
           </section>
         ) : null}
 
+        <datalist id="workout-log-exercise-options">
+          {exerciseOptions.map((option) => (
+            <option key={`${option.exerciseId || "free"}-${option.name}`} value={option.name}>
+              {option.muscleGroup || "Saved exercise"}
+            </option>
+          ))}
+        </datalist>
+
         <div className="task-list-vnext workout-exercise-list">
           {exerciseLogs.map((exercise, exerciseIndex) => {
-            const previous = previousByExercise[exercise.exerciseName];
+            const previous = findExerciseHistory(previousByExercise, exercise.exerciseName);
             const loggedSetCount = exercise.sets.filter(hasSetWork).length;
             const lastLoggedSet = [...exercise.sets].reverse().find(hasSetWork);
             const isCollapsed = isFocusedWorkoutMode && activeExerciseId && activeExerciseId !== exercise.localId;
@@ -934,7 +911,7 @@ export function EasyWorkoutLogPage() {
                   <div className="calendar-info-card gym-suggestion">
                     <strong>{previous.lastWeight.toFixed(1)} {draftWeightUnit} x {previous.lastReps} last time</strong>
                     <button type="button" className="primary-button compact-button" onClick={() => fillFromLastTime(exerciseIndex)}>
-                      Fill first set
+                      Fill all sets
                     </button>
                   </div>
                 ) : null}
@@ -951,14 +928,18 @@ export function EasyWorkoutLogPage() {
                     <span>Exercise</span>
                     <input
                       ref={exerciseIndex === 0 ? firstExerciseInputRef : undefined}
+                      list="workout-log-exercise-options"
+                      autoComplete="off"
                       value={exercise.exerciseName}
                       onChange={(event) => {
-                        const match = exercises.find((entry) => entry.name === event.target.value);
-                        const builtIn = defaultWorkoutExercises.find((entry) => entry.name === event.target.value);
+                        const match = exerciseOptions.find((entry) => entry.name.toLocaleLowerCase() === event.target.value.trim().toLocaleLowerCase());
                         updateExerciseLog(exerciseIndex, {
                           exerciseName: event.target.value,
-                          exerciseId: match?.id || null,
-                          muscleGroup: match?.muscleGroup || builtIn?.muscleGroup || exercise.muscleGroup,
+                          exerciseId: match?.exerciseId || null,
+                          muscleGroup: match?.muscleGroup || exercise.muscleGroup,
+                          primaryMuscles: match?.primaryMuscles.length ? match.primaryMuscles : exercise.primaryMuscles,
+                          secondaryMuscles: match?.secondaryMuscles.length ? match.secondaryMuscles : exercise.secondaryMuscles,
+                          exerciseType: match?.exerciseType || exercise.exerciseType,
                         });
                       }}
                       placeholder="Lat pulldown"
