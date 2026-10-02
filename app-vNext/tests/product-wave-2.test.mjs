@@ -97,6 +97,15 @@ test("history filters compose routine, exercise, period, and PR-only rules", () 
   assert.deepEqual(filterWorkoutHistory(sessions, { routineId: "all", exerciseQuery: "", periodDays: 30, prOnly: true }, "lb", "2026-08-01").map((session) => session.id), ["new-pr", "new-row"]);
 });
 
+test("demo workout history includes a deterministic Last Setup fixture", () => {
+  const source = workoutDemoSessions
+    .flatMap((session) => session.exercises.map((exercise) => ({ session, exercise })))
+    .find(({ exercise }) => exercise.exerciseId === "demo-pulldown");
+  assert.ok(source);
+  assert.deepEqual(source.exercise.setup, { seat: "2", arm: "4" });
+  assert.ok(source.exercise.sets.every((set) => set.completed === true));
+});
+
 test("saved-history browsing hides uncredited schema-v4 plans while retaining legacy sessions", () => {
   const sessions = [
     { id: "v4-plan", schemaVersion: 4, routineId: null, routineName: "Workout", performedOn: "2026-08-01", exercises: [{ exerciseName: "Bench", exerciseType: "weighted", sets: [{ reps: 5, weight: 200 }] }] },
@@ -124,6 +133,20 @@ test("CSV export fails closed for missing schema-v4 completion and preserves leg
   const completedColumn = v4Csv.split("\n")[0].split(",").indexOf('"completed"');
   assert.equal(v4Csv.split("\n")[1].split(",")[completedColumn], '"false"');
   assert.equal(legacyCsv.split("\n")[1].split(",")[completedColumn], '"true"');
+});
+
+test("workout exports keep machine setup portable without changing completion", () => {
+  const payload = createWorkoutExportPayload({ routines: [], sessions: [{
+    id: "setup-session", schemaVersion: 5, routineId: null, routineName: "Workout", performedOn: "2026-08-01", weightUnit: "lb", durationMinutes: 30, notes: "", createdAt: null, updatedAt: null,
+    exercises: [{ exerciseId: "pulldown", exerciseName: "Lat Pulldown", exerciseType: "weighted", setup: { seat: "2", arm: "4", other: "left tower" }, sets: [{ reps: 8, weight: 110, completed: true, deleted: false }] }],
+  }], exportedAt: "2026-08-02T00:00:00Z", displayUnit: "lb" });
+  assert.deepEqual(payload.sessions[0].exercises[0].setup, { seat: "2", arm: "4", other: "left tower" });
+  const csv = serializeWorkoutCsv(payload);
+  const header = csv.split("\n")[0];
+  const row = csv.split("\n")[1];
+  for (const column of ["setupSeat", "setupArm", "setupBack", "setupPad", "setupOther"]) assert.match(header, new RegExp(`"${column}"`));
+  assert.match(row, /"2","4","","","left tower"/);
+  assert.match(row, /"true"/);
 });
 
 test("workout CSV neutralizes spreadsheet formulas in user-authored fields", () => {

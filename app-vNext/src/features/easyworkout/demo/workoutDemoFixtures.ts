@@ -90,6 +90,7 @@ function weightedExercise(id: string, weight: number, reps: number, week: number
     primaryMuscles: definition.primaryMuscles,
     secondaryMuscles: definition.secondaryMuscles,
     exerciseType: definition.exerciseType,
+    setup: id === "pulldown" ? { seat: "2", arm: "4" } : {},
     notes: week === 8 ? "Planned deload" : "",
     sets: [
       { reps: 8, weight: Math.max(20, workingWeight * 0.55), notes: "Warm-up", setType: "warmup" as const, completed: true, deleted: false, rir: null },

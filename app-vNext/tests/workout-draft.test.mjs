@@ -40,7 +40,7 @@ test("schema-v3 active drafts preserve entered values but never certify performe
   assert.equal(result.draft?.completionReviewRequired, true);
 });
 
-test("schema-v4 drafts fail closed when completion is missing or malformed", () => {
+test("schema-v4 drafts add empty setup without losing trusted completion", () => {
   const result = recoverWorkoutDraft({
     ...legacy,
     schemaVersion: 4,
@@ -55,9 +55,27 @@ test("schema-v4 drafts fail closed when completion is missing or malformed", () 
     }],
   }, options);
 
-  assert.equal(result.migrated, false);
+  assert.equal(result.migrated, true);
   assert.deepEqual(result.draft?.exerciseLogs[0].sets.map((set) => set.completed), [true, false, false]);
   assert.equal(result.draft?.completionReviewRequired, false);
+  assert.deepEqual(result.draft?.exerciseLogs[0].setup, {});
+  assert.doesNotMatch(result.message, /review which sets/i);
+});
+
+test("current drafts recover bounded setup and discard malformed fields", () => {
+  const result = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 5,
+    completionReviewRequired: false,
+    exerciseLogs: [{
+      ...legacy.exerciseLogs[0],
+      setup: { seat: " 2 ", arm: "4", back: 8, pad: "", other: " left tower " },
+      sets: [{ ...legacy.exerciseLogs[0].sets[0], completed: true }],
+    }],
+  }, options);
+  assert.equal(result.migrated, false);
+  assert.deepEqual(result.draft?.exerciseLogs[0].setup, { seat: "2", arm: "4", other: "left tower" });
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].completed, true);
 });
 
 test("malformed and old drafts fail safely with readable recovery", () => {
@@ -104,6 +122,25 @@ test("workout log exposes one-tap set completion, undo, and legacy-draft review"
   assert.match(source, /Review which sets you performed/);
   assert.match(source, /Mark all shown sets done/);
   assert.match(source, /Review complete/);
+});
+
+test("workout log exposes explicit setup recall without conflating it with completion", async () => {
+  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  assert.match(source, /Use last sets & setup/);
+  assert.match(source, /Use last setup/);
+  assert.match(source, /seat setting/);
+  assert.match(source, /arm setting/);
+  assert.match(source, /Last completed on/);
+  assert.match(source, /completed: false/);
+});
+
+test("completed workout persistence and review normalize and display setup", async () => {
+  const persistenceSource = await readFile(new URL("../src/lib/firestore/workoutSessions.ts", import.meta.url), "utf8");
+  const reviewSource = await readFile(new URL("../src/features/easyworkout/routes/WorkoutSessionReviewPage.tsx", import.meta.url), "utf8");
+  assert.match(persistenceSource, /normalizeWorkoutEquipmentSetup/);
+  assert.match(persistenceSource, /exercises: draft\.exercises\.map/);
+  assert.match(reviewSource, /formatWorkoutEquipmentSetup/);
+  assert.match(reviewSource, /Machine setup/);
 });
 
 test("all new, copied, imported, and prefilled workout rows remain unperformed", async () => {

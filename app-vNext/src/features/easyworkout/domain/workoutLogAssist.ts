@@ -2,6 +2,7 @@ import type { WorkoutExerciseRecord } from "../../../lib/firestore/workoutExerci
 import type { WorkoutSessionRecord, WorkoutSetRecord } from "../../../lib/firestore/workoutSessions.ts";
 import type { WorkoutSetDraft } from "./workoutDraftLifecycle.ts";
 import { convertWeight, isValidWorkingSet, type WorkoutDisplayUnit } from "./workoutStatistics.ts";
+import { normalizeWorkoutEquipmentSetup, type WorkoutEquipmentSetup } from "../../../lib/workoutEquipmentSetup.ts";
 
 export type WorkoutExerciseOption = {
   exerciseId: string | null;
@@ -13,9 +14,12 @@ export type WorkoutExerciseOption = {
 };
 
 export type ExerciseHistorySummary = {
+  sourceSessionId: string;
+  sourceExerciseId: string | null;
   lastWeight: number;
   lastReps: number;
   lastSets: Array<Pick<WorkoutSetRecord, "reps" | "weight" | "durationSeconds" | "distanceMeters">>;
+  lastSetup: WorkoutEquipmentSetup;
   performedOn: string;
   bestWeight: number;
   bestVolume: number;
@@ -26,6 +30,8 @@ type BasicExercise = Pick<WorkoutExerciseRecord, "id" | "name" | "muscleGroup"> 
 type DefaultExercise = { name: string; muscleGroup: string };
 
 const exerciseKey = (name: string) => name.trim().toLocaleLowerCase();
+const stableHistoryKey = (exerciseId: string) => `id:${exerciseId}`;
+const legacyHistoryKey = (name: string) => `legacy:${exerciseKey(name)}`;
 
 function newestSessions(sessions: WorkoutSessionRecord[]) {
   return [...sessions].sort((left, right) =>
@@ -87,8 +93,9 @@ export function deriveExerciseHistory(
 
   newestSessions(sessions).forEach((session) => {
     session.exercises.forEach((exercise) => {
-      const key = exerciseKey(exercise.exerciseName);
-      if (!key) return;
+      const normalizedName = exerciseKey(exercise.exerciseName);
+      if (!normalizedName) return;
+      const key = exercise.exerciseId ? stableHistoryKey(exercise.exerciseId) : legacyHistoryKey(exercise.exerciseName);
       const kind = exercise.exerciseType || "weighted";
       const validSets = exercise.sets.filter((set) => isValidWorkingSet(set, kind, {
         requiresExplicitCompletion: typeof session.schemaVersion === "number" && session.schemaVersion >= 4,
@@ -108,9 +115,12 @@ export function deriveExerciseHistory(
 
       if (!current) {
         summaries[key] = {
+          sourceSessionId: session.id,
+          sourceExerciseId: exercise.exerciseId,
           lastWeight: bestSet.weight,
           lastReps: bestSet.reps,
           lastSets: convertedSets,
+          lastSetup: normalizeWorkoutEquipmentSetup(exercise.setup),
           performedOn: session.performedOn,
           bestWeight: bestSetWeight,
           bestVolume: exerciseVolume,
@@ -133,9 +143,13 @@ export function deriveExerciseHistory(
 
 export function findExerciseHistory(
   history: Record<string, ExerciseHistorySummary>,
-  exerciseName: string
+  exerciseName: string,
+  exerciseId?: string | null
 ) {
-  return history[exerciseKey(exerciseName)];
+  if (exerciseId) {
+    return history[stableHistoryKey(exerciseId)] || history[legacyHistoryKey(exerciseName)];
+  }
+  return history[legacyHistoryKey(exerciseName)];
 }
 
 export function fillSetsFromLastPerformance(

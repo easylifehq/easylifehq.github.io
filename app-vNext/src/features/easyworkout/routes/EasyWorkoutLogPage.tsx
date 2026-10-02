@@ -26,6 +26,14 @@ import {
   findExerciseHistory,
 } from "@/features/easyworkout/domain/workoutLogAssist";
 import { isValidLocalDateKey, isValidWorkingSet, isWorkoutSessionCredited } from "@/features/easyworkout/domain/workoutStatistics";
+import {
+  WORKOUT_SETUP_OTHER_MAX_LENGTH,
+  WORKOUT_SETUP_SHORT_MAX_LENGTH,
+  formatWorkoutEquipmentSetup,
+  hasWorkoutEquipmentSetup,
+  normalizeWorkoutEquipmentSetup,
+  type WorkoutEquipmentSetup,
+} from "@/lib/workoutEquipmentSetup";
 type DeletedSetUndo = {
   exerciseLocalId: string;
   exerciseName: string;
@@ -49,6 +57,7 @@ const emptyExerciseLog = (setCount = 1): WorkoutExerciseLogDraft => ({
   primaryMuscles: [],
   secondaryMuscles: [],
   exerciseType: "weighted",
+  setup: {},
   notes: "",
   sets: Array.from({ length: setCount }, () => emptySet()),
 });
@@ -76,6 +85,7 @@ const hasExerciseWork = (exercise: WorkoutExerciseLogDraft) =>
   exercise.exerciseName.trim() ||
   exercise.muscleGroup.trim() ||
   exercise.notes.trim() ||
+  hasWorkoutEquipmentSetup(exercise.setup) ||
   (exercise.exerciseType !== "weighted" && exercise.sets.some((set) => set.reps > 0 || (set.durationSeconds || 0) > 0 || (set.distanceMeters || 0) > 0)) ||
   exercise.sets.some(hasSetWork);
 
@@ -92,6 +102,7 @@ function readStoredWorkoutDraft(storageKey: string, ownerId: string, defaultWeig
 }
 
 type WorkoutExerciseSuggestion = {
+  exerciseId: string | null;
   name: string;
   muscleGroup: string;
   reason: string;
@@ -243,7 +254,7 @@ export function EasyWorkoutLogPage() {
               deleted: false,
               rir: null,
             }));
-            const previous = findExerciseHistory(previousByExercise, exercise.exerciseName);
+            const previous = findExerciseHistory(previousByExercise, exercise.exerciseName, exercise.exerciseId);
             const sets = fillSetsFromLastPerformance(baseSets, previous).map((set) =>
               exercise.targetWeight == null ? set : { ...set, weight: exercise.targetWeight }
             );
@@ -255,6 +266,7 @@ export function EasyWorkoutLogPage() {
               primaryMuscles: exercise.muscleGroup ? [exercise.muscleGroup] : [],
               secondaryMuscles: [],
               exerciseType: "weighted" as const,
+              setup: {},
               notes: exercise.notes,
               sets,
             };
@@ -287,8 +299,7 @@ export function EasyWorkoutLogPage() {
       accumulator[group] = (accumulator[group] || 0) + setCount;
       return accumulator;
     }, {});
-    const savedOptions = exercises.map((exercise) => ({ name: exercise.name, muscleGroup: exercise.muscleGroup }));
-    const options = [...defaultWorkoutExercises, ...savedOptions].filter(
+    const options = [...exerciseOptions].filter(
       (exercise, index, list) =>
         exercise.name &&
         !currentNames.has(exercise.name.toLowerCase()) &&
@@ -306,8 +317,9 @@ export function EasyWorkoutLogPage() {
       })
       .slice(0, 3)
       .map((exercise) => {
-        const previous = findExerciseHistory(previousByExercise, exercise.name);
+        const previous = findExerciseHistory(previousByExercise, exercise.name, exercise.exerciseId);
         return {
+          exerciseId: exercise.exerciseId,
           name: exercise.name,
           muscleGroup: exercise.muscleGroup,
           reason: targetGroups.includes(exercise.muscleGroup)
@@ -315,11 +327,11 @@ export function EasyWorkoutLogPage() {
             : "Good general slot if you need one more lift.",
           detail: exerciseSuggestionDetails[exercise.name] || `Use this when ${exercise.muscleGroup || "this area"} still needs controlled volume.`,
           target: previous?.lastWeight
-            ? `Try ${previous.lastWeight.toFixed(1)} ${draftWeightUnit} x ${previous.lastReps || 8}, then adjust by feel.`
+            ? `Last completed: ${previous.lastWeight.toFixed(1)} ${draftWeightUnit} x ${previous.lastReps || 8}.`
             : "Start with a clean warm-up weight and log what moved well.",
         };
       });
-  }, [activeExerciseId, exerciseLogs, exercises, previousByExercise]);
+  }, [activeExerciseId, exerciseLogs, exerciseOptions, previousByExercise]);
 
   const isGymModeActive = gymMode;
   const isFocusedWorkoutMode = workoutMode || isGymModeActive;
@@ -510,14 +522,22 @@ export function EasyWorkoutLogPage() {
     setDeletedSetUndo(null);
   }
 
-  function fillFromLastTime(exerciseIndex: number) {
+  function fillFromLastTime(exerciseIndex: number, mode: "sets" | "setup" | "both") {
     const exercise = exerciseLogs[exerciseIndex];
-    const previous = findExerciseHistory(previousByExercise, exercise.exerciseName);
+    const previous = findExerciseHistory(previousByExercise, exercise.exerciseName, exercise.exerciseId);
     if (!previous) return;
 
-    updateExerciseLog(exerciseIndex, {
-      sets: fillSetsFromLastPerformance(exercise.sets, previous),
-    });
+    const next: Partial<WorkoutExerciseLogDraft> = {};
+    if (mode === "sets" || mode === "both") next.sets = fillSetsFromLastPerformance(exercise.sets, previous);
+    if (mode === "setup" || mode === "both") next.setup = normalizeWorkoutEquipmentSetup(previous.lastSetup);
+    updateExerciseLog(exerciseIndex, next);
+    setSaveMessage(`${mode === "sets" ? "Last sets" : mode === "setup" ? "Last setup" : "Last sets and setup"} copied as editable draft values. No set was marked done.`);
+  }
+
+  function updateExerciseSetup(exerciseIndex: number, field: keyof WorkoutEquipmentSetup, value: string) {
+    const exercise = exerciseLogs[exerciseIndex];
+    const maximum = field === "other" ? WORKOUT_SETUP_OTHER_MAX_LENGTH : WORKOUT_SETUP_SHORT_MAX_LENGTH;
+    updateExerciseLog(exerciseIndex, { setup: { ...exercise.setup, [field]: value.slice(0, maximum) } });
   }
 
   function addExerciseBoxes(count = 1) {
@@ -527,9 +547,10 @@ export function EasyWorkoutLogPage() {
   }
 
   function addSuggestedExercise(suggestion: WorkoutExerciseSuggestion) {
-    const previous = findExerciseHistory(previousByExercise, suggestion.name);
+    const previous = findExerciseHistory(previousByExercise, suggestion.name, suggestion.exerciseId);
     const nextExercise: WorkoutExerciseLogDraft = {
       ...emptyExerciseLog(settings.easyWorkout.defaultSetCount),
+      exerciseId: suggestion.exerciseId,
       exerciseName: suggestion.name,
       muscleGroup: suggestion.muscleGroup,
       sets: [
@@ -597,6 +618,7 @@ export function EasyWorkoutLogPage() {
           primaryMuscles: saved?.muscleGroup || builtIn?.muscleGroup ? [saved?.muscleGroup || builtIn?.muscleGroup || ""] : [],
           secondaryMuscles: [],
           exerciseType: "weighted" as const,
+          setup: {},
           notes: "",
           sets: [
             {
@@ -643,6 +665,7 @@ export function EasyWorkoutLogPage() {
         primaryMuscles: exercise.primaryMuscles,
         secondaryMuscles: exercise.secondaryMuscles,
         exerciseType: exercise.exerciseType,
+        setup: normalizeWorkoutEquipmentSetup(exercise.setup),
         notes: exercise.notes,
         sets: exercise.sets
           .filter((set) => isValidWorkingSet(set, exercise.exerciseType))
@@ -917,7 +940,15 @@ export function EasyWorkoutLogPage() {
 
         <div className="task-list-vnext workout-exercise-list">
           {exerciseLogs.map((exercise, exerciseIndex) => {
-            const previous = findExerciseHistory(previousByExercise, exercise.exerciseName);
+            const previous = findExerciseHistory(previousByExercise, exercise.exerciseName, exercise.exerciseId);
+            const previousSetupLabel = formatWorkoutEquipmentSetup(previous?.lastSetup);
+            const currentHasSetup = hasWorkoutEquipmentSetup(exercise.setup);
+            const previousSetsLabel = previous?.lastSets.map((set) => {
+              if (exercise.exerciseType === "bodyweight") return `${set.reps} reps`;
+              if (exercise.exerciseType === "duration") return `${set.durationSeconds || 0} sec`;
+              if (exercise.exerciseType === "distance") return `${set.distanceMeters || 0} m`;
+              return `${set.reps} × ${set.weight.toFixed(1)} ${draftWeightUnit}`;
+            }).join(" · ");
             const loggedSetCount = exercise.sets.filter((set) => isValidWorkingSet(set, exercise.exerciseType, { requiresExplicitCompletion: true })).length;
             const lastLoggedSet = [...exercise.sets].reverse().find((set) => isValidWorkingSet(set, exercise.exerciseType, { requiresExplicitCompletion: true }));
             const isCollapsed = isFocusedWorkoutMode && activeExerciseId && activeExerciseId !== exercise.localId;
@@ -950,10 +981,23 @@ export function EasyWorkoutLogPage() {
                 </div>
                 {isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper && previous ? (
                   <div className="calendar-info-card gym-suggestion">
-                    <strong>{previous.lastWeight.toFixed(1)} {draftWeightUnit} x {previous.lastReps} last time</strong>
-                    <button type="button" className="primary-button compact-button" onClick={() => fillFromLastTime(exerciseIndex)}>
-                      Fill all sets
-                    </button>
+                    <span>Last completed on {previous.performedOn}</span>
+                    <strong>{previousSetsLabel}</strong>
+                    {previousSetupLabel ? <span>{previousSetupLabel}</span> : null}
+                    <div className="task-composer-actions workout-last-time-actions">
+                      <button
+                        type="button"
+                        className="primary-button compact-button"
+                        onClick={() => fillFromLastTime(exerciseIndex, previousSetupLabel && !currentHasSetup ? "both" : "sets")}
+                      >
+                        {previousSetupLabel && !currentHasSetup ? "Use last sets & setup" : "Use last sets"}
+                      </button>
+                      {previousSetupLabel && currentHasSetup ? (
+                        <button type="button" className="button-secondary compact-button" onClick={() => fillFromLastTime(exerciseIndex, "setup")}>
+                          Use last setup
+                        </button>
+                      ) : null}
+                    </div>
                   </div>
                 ) : null}
                 {previous ? (
@@ -996,6 +1040,37 @@ export function EasyWorkoutLogPage() {
                     <span>Exercise notes</span>
                     <input value={exercise.notes} onChange={(event) => updateExerciseLog(exerciseIndex, { notes: event.target.value })} placeholder="Vertical grip, slow eccentric, machine 4, etc." />
                   </label>
+                </div>
+
+                <div className="workout-setup-fields">
+                  <label className="field-stack">
+                    <span>Seat</span>
+                    <input
+                      aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} seat setting`}
+                      value={exercise.setup.seat || ""}
+                      maxLength={WORKOUT_SETUP_SHORT_MAX_LENGTH}
+                      onChange={(event) => updateExerciseSetup(exerciseIndex, "seat", event.target.value)}
+                      placeholder="2"
+                    />
+                  </label>
+                  <label className="field-stack">
+                    <span>Arm</span>
+                    <input
+                      aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} arm setting`}
+                      value={exercise.setup.arm || ""}
+                      maxLength={WORKOUT_SETUP_SHORT_MAX_LENGTH}
+                      onChange={(event) => updateExerciseSetup(exerciseIndex, "arm", event.target.value)}
+                      placeholder="4"
+                    />
+                  </label>
+                  <details className="workout-more-setup">
+                    <summary>More setup</summary>
+                    <div className="workout-more-setup-grid">
+                      <label className="field-stack"><span>Back</span><input aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} back setting`} value={exercise.setup.back || ""} maxLength={WORKOUT_SETUP_SHORT_MAX_LENGTH} onChange={(event) => updateExerciseSetup(exerciseIndex, "back", event.target.value)} /></label>
+                      <label className="field-stack"><span>Pad</span><input aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} pad setting`} value={exercise.setup.pad || ""} maxLength={WORKOUT_SETUP_SHORT_MAX_LENGTH} onChange={(event) => updateExerciseSetup(exerciseIndex, "pad", event.target.value)} /></label>
+                      <label className="field-stack workout-setup-other"><span>Other setup</span><input aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} other setup`} value={exercise.setup.other || ""} maxLength={WORKOUT_SETUP_OTHER_MAX_LENGTH} onChange={(event) => updateExerciseSetup(exerciseIndex, "other", event.target.value)} placeholder="Left tower, neutral handles" /></label>
+                    </div>
+                  </details>
                 </div>
 
                 <p className="helper-copy">
