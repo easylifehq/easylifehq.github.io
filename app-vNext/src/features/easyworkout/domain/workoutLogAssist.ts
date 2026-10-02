@@ -7,6 +7,7 @@ import { normalizeWorkoutEquipmentSetup, type WorkoutEquipmentSetup } from "../.
 export type WorkoutExerciseOption = {
   exerciseId: string | null;
   name: string;
+  selectionLabel: string;
   muscleGroup: string;
   primaryMuscles: string[];
   secondaryMuscles: string[];
@@ -52,12 +53,28 @@ export function buildWorkoutExerciseOptions(
     fillOnly = false
   ) => {
     const name = entry.name?.trim() || "";
-    const key = exerciseKey(name);
-    if (!key) return;
-    const current = options.get(key);
+    const normalizedName = exerciseKey(name);
+    if (!normalizedName) return;
+    const matchingNameEntries = [...options.entries()].filter(([, option]) => exerciseKey(option.name) === normalizedName);
+    if (fillOnly && matchingNameEntries.length) {
+      matchingNameEntries.forEach(([key, current]) => options.set(key, {
+        ...current,
+        muscleGroup: current.muscleGroup || entry.muscleGroup || "",
+        primaryMuscles: current.primaryMuscles.length ? current.primaryMuscles : entry.primaryMuscles || [],
+        secondaryMuscles: current.secondaryMuscles.length ? current.secondaryMuscles : entry.secondaryMuscles || [],
+        exerciseType: current.exerciseType || entry.exerciseType || "weighted",
+      }));
+      return;
+    }
+    const stableId = entry.exerciseId || null;
+    const key = stableId ? `id:${stableId}` : `name:${normalizedName}`;
+    const legacy = stableId ? options.get(`name:${normalizedName}`) : undefined;
+    const current = options.get(key) || legacy;
+    if (stableId && legacy) options.delete(`name:${normalizedName}`);
     options.set(key, {
-      exerciseId: entry.exerciseId || current?.exerciseId || null,
+      exerciseId: stableId || current?.exerciseId || null,
       name: current?.name || name,
+      selectionLabel: current?.selectionLabel || name,
       muscleGroup: fillOnly ? current?.muscleGroup || entry.muscleGroup || "" : entry.muscleGroup || current?.muscleGroup || "",
       primaryMuscles: fillOnly
         ? current?.primaryMuscles.length ? current.primaryMuscles : entry.primaryMuscles || []
@@ -82,7 +99,34 @@ export function buildWorkoutExerciseOptions(
   });
   exercises.forEach((exercise) => add({ exerciseId: exercise.id, ...exercise }));
   defaults.forEach((exercise) => add(exercise, true));
-  return [...options.values()];
+  const nameCounts = [...options.values()].reduce<Record<string, number>>((counts, option) => {
+    const key = exerciseKey(option.name);
+    counts[key] = (counts[key] || 0) + 1;
+    return counts;
+  }, {});
+  return [...options.values()].map((option) => ({
+    ...option,
+    selectionLabel: nameCounts[exerciseKey(option.name)] > 1
+      ? `${option.name} · ${option.exerciseId || "legacy"}`
+      : option.name,
+  }));
+}
+
+export function resolveWorkoutExerciseOption(
+  options: WorkoutExerciseOption[],
+  input: string,
+  currentExerciseId?: string | null
+) {
+  const normalizedInput = exerciseKey(input);
+  if (!normalizedInput) return undefined;
+  const exactSelection = options.find((option) => exerciseKey(option.selectionLabel) === normalizedInput);
+  if (exactSelection) return exactSelection;
+  const nameMatches = options.filter((option) => exerciseKey(option.name) === normalizedInput);
+  if (currentExerciseId) {
+    const current = nameMatches.find((option) => option.exerciseId === currentExerciseId);
+    if (current) return current;
+  }
+  return nameMatches.length === 1 ? nameMatches[0] : undefined;
 }
 
 export function deriveExerciseHistory(
