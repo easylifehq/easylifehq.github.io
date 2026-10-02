@@ -17,8 +17,15 @@ import {
 import { db } from "@/lib/firebase/client";
 import { workoutSessionDocumentId } from "./workoutSessionIdentity";
 import { normalizeWorkoutEquipmentSetup, type WorkoutEquipmentSetup } from "../workoutEquipmentSetup";
+import {
+  applyQuickWorkoutSetOperation,
+  quickWorkoutSessionDocumentId,
+  type QuickWorkoutCaptureIntent,
+  type QuickWorkoutSession,
+} from "@/features/experiments/domain/quickWorkoutCapture";
 
 export type WorkoutSetRecord = {
+  clientSetId?: string;
   reps: number;
   weight: number;
   notes: string;
@@ -160,55 +167,36 @@ export async function createWorkoutSession(userId: string, draft: WorkoutSession
 
 export async function addSetToDailyWorkoutSession(
   userId: string,
-  performedOn: string,
-  exercise: WorkoutExerciseLogRecord
+  operation: QuickWorkoutCaptureIntent
 ) {
+  if (operation.ownerId !== userId) throw new Error("Quick workout capture owner does not match the signed-in user.");
   const sessionsQuery = query(
     getWorkoutSessionsCollection(userId),
-    where("performedOn", "==", performedOn)
+    where("performedOn", "==", operation.performedOn)
   );
   const snapshot = await getDocs(sessionsQuery);
   const existingSession = snapshot.docs
     .map(normalizeSession)
-    .find((session) => session.routineName === "Quick Add" || session.routineName === "Gym Log");
+    .filter((session) => session.routineName === "Quick Add" || session.routineName === "Gym Log")
+    .sort((left, right) => left.id.localeCompare(right.id))[0];
+  const sessionId = existingSession?.id || quickWorkoutSessionDocumentId(operation.performedOn);
+  const reference = doc(getWorkoutSessionsCollection(userId), sessionId);
 
-  if (!existingSession) {
-    return createWorkoutSession(userId, {
-      routineId: null,
-      routineName: "Quick Add",
-      performedOn,
-      durationMinutes: null,
-      notes: "",
-      exercises: [exercise],
-    });
-  }
-
-  const exerciseIndex = existingSession.exercises.findIndex(
-    (entry) => entry.exerciseName.toLowerCase() === exercise.exerciseName.toLowerCase()
-  );
-  const exercises: WorkoutExerciseLogRecord[] = [...existingSession.exercises];
-
-  if (exerciseIndex >= 0) {
-    const existingExercise = exercises[exerciseIndex];
-    exercises[exerciseIndex] = {
-      ...existingExercise,
-      sets: [...existingExercise.sets, ...exercise.sets],
-      notes: existingExercise.notes || exercise.notes,
-    };
-  } else {
-    exercises.push(exercise);
-  }
-
-  await updateWorkoutSession(userId, existingSession.id, {
-    routineId: existingSession.routineId,
-    routineName: existingSession.routineName || "Quick Add",
-    performedOn: existingSession.performedOn,
-    durationMinutes: existingSession.durationMinutes,
-    notes: existingSession.notes,
-    exercises,
+  await runTransaction(db, async (transaction) => {
+    const existingSnapshot = await transaction.get(reference);
+    const existing = existingSnapshot.exists()
+      ? existingSnapshot.data() as QuickWorkoutSession
+      : null;
+    const result = applyQuickWorkoutSetOperation(existing, operation);
+    if (!result.applied) return;
+    transaction.set(reference, {
+      ...result.session,
+      ...(existingSnapshot.exists() ? {} : { createdAt: serverTimestamp() }),
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
   });
 
-  return existingSession.id;
+  return reference.id;
 }
 
 export async function updateWorkoutSession(

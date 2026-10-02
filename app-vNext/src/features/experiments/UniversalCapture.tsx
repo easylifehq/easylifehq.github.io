@@ -16,7 +16,17 @@ import { auth } from "@/lib/firebase/client";
 import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { isCaptureShortcut } from "@/features/coreloop/domain/globalSearch";
+import { useAuth } from "@/features/auth/AuthContext";
 import type { VisibleAppId } from "@/lib/firestore/settings";
+import {
+  QuickWorkoutCaptureCoordinator,
+  canClearMatchingQuickWorkoutCapture,
+  createQuickWorkoutCaptureIntent,
+  quickWorkoutCaptureStorageKey,
+  selectOldestPendingQuickWorkoutCapture,
+  serializeQuickWorkoutCaptureIntent,
+  type QuickWorkoutCaptureIntent,
+} from "@/features/experiments/domain/quickWorkoutCapture";
 
 type CaptureMode = "raw" | "task" | "brainDump" | "note" | "event" | "application" | "contact" | "project" | "workout";
 
@@ -289,35 +299,9 @@ function parseBrainDumpEntries(value: string) {
     .filter((entry): entry is BrainDumpEntry => Boolean(entry));
 }
 
-function parseWorkoutSet(value: string) {
-  const text = value.trim();
-  const setMatch = text.match(/\b(\d{1,3})\s*(?:reps?|x|@)\s*(\d{1,4}(?:\.\d+)?)?\s*(?:lbs?|lb|pounds?)?\b/i);
-  const compactMatch = text.match(/\b(\d{1,4}(?:\.\d+)?)\s*x\s*(\d{1,3})\b/i);
-  const weightMatch = text.match(/\b(\d{1,4}(?:\.\d+)?)\s*(?:lbs?|lb|pounds?)\b/i);
-  const reps = setMatch ? Number(setMatch[1]) : compactMatch ? Number(compactMatch[2]) : 0;
-  const weight = setMatch?.[2]
-    ? Number(setMatch[2])
-    : compactMatch
-      ? Number(compactMatch[1])
-      : weightMatch
-        ? Number(weightMatch[1])
-        : 0;
-  const exerciseName = text
-    .replace(/\b\d{1,4}(?:\.\d+)?\s*x\s*\d{1,3}\b/gi, "")
-    .replace(/\b\d{1,3}\s*(?:reps?|x|@)\s*\d{0,4}(?:\.\d+)?\s*(?:lbs?|lb|pounds?)?\b/gi, "")
-    .replace(/\b\d{1,4}(?:\.\d+)?\s*(?:lbs?|lb|pounds?)\b/gi, "")
-    .replace(/\s{2,}/g, " ")
-    .trim();
-
-  return {
-    exerciseName: exerciseName || "Quick set",
-    reps: Number.isFinite(reps) && reps > 0 ? reps : 0,
-    weight: Number.isFinite(weight) && weight > 0 ? weight : 0,
-  };
-}
-
 export function UniversalCapture() {
   const location = useLocation();
+  const { user: captureUser } = useAuth();
   const { isAppVisible } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<CaptureMode>("raw");
@@ -325,6 +309,9 @@ export function UniversalCapture() {
   const [message, setMessage] = useState("");
   const [saveError, setSaveError] = useState("");
   const [isSavingRaw, setIsSavingRaw] = useState(false);
+  const [isSavingStructured, setIsSavingStructured] = useState(false);
+  const [firebaseUserId, setFirebaseUserId] = useState(auth.currentUser?.uid || "");
+  const [pendingWorkoutCapture, setPendingWorkoutCapture] = useState<QuickWorkoutCaptureIntent | null>(null);
   const [structuredOptionsOpen, setStructuredOptionsOpen] = useState(false);
   const [details, setDetails] = useState<QuickAddDetails>(defaultDetails);
   const [tasks, setTasks] = useState<TaskRecord[]>([]);
@@ -333,6 +320,10 @@ export function UniversalCapture() {
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const modalRef = useRef<HTMLElement | null>(null);
   const textInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const isSavingStructuredRef = useRef(false);
+  const pendingWorkoutCaptureRef = useRef<QuickWorkoutCaptureIntent | null>(null);
+  const workoutCaptureCoordinatorRef = useRef(new QuickWorkoutCaptureCoordinator());
+  const activeUserId = captureUser?.uid || firebaseUserId;
   const suggestion = useMemo(() => mode === "raw" ? "task" : detectCaptureType(text), [mode, text]);
   const brainDumpEntries = useMemo(() => mode === "brainDump" ? parseBrainDumpEntries(text) : [], [mode, text]);
   const isEasyListCapture = location.pathname.startsWith("/app/easylist");
@@ -400,6 +391,8 @@ export function UniversalCapture() {
     [isAppVisible]
   );
 
+  pendingWorkoutCaptureRef.current = pendingWorkoutCapture;
+
   useEffect(() => {
     const savedDraft = window.localStorage.getItem(QUICK_ADD_DRAFT_KEY);
     if (!savedDraft) return;
@@ -419,6 +412,10 @@ export function UniversalCapture() {
   }, []);
 
   useEffect(() => {
+    if (pendingWorkoutCapture) {
+      window.localStorage.removeItem(QUICK_ADD_DRAFT_KEY);
+      return;
+    }
     const hasDraft =
       text.trim() ||
       Object.entries(details).some(
@@ -437,7 +434,32 @@ export function UniversalCapture() {
         details,
       })
     );
-  }, [details, mode, text]);
+  }, [details, mode, pendingWorkoutCapture, text]);
+
+  useEffect(() => {
+    if (!activeUserId) {
+      pendingWorkoutCaptureRef.current = null;
+      setPendingWorkoutCapture(null);
+      return;
+    }
+    pendingWorkoutCaptureRef.current = null;
+    setPendingWorkoutCapture(null);
+    const prefix = `${quickWorkoutCaptureStorageKey(activeUserId)}:`;
+    const entries = Array.from({ length: window.localStorage.length }, (_, index) => {
+      const key = window.localStorage.key(index) || "";
+      return { key, value: key.startsWith(prefix) ? window.localStorage.getItem(key) : null };
+    });
+    const intent = selectOldestPendingQuickWorkoutCapture(entries, activeUserId);
+    if (!intent) return;
+    pendingWorkoutCaptureRef.current = intent;
+    setPendingWorkoutCapture(intent);
+    setMode("workout");
+    setStructuredOptionsOpen(true);
+    setText(intent.sourceText);
+    setDetails((current) => ({ ...current, date: intent.performedOn, notes: intent.notes }));
+    setMessage("");
+    setSaveError("Set not confirmed. Retry when you are online; this pending set has not been counted twice.");
+  }, [activeUserId]);
 
   const closeCapture = useCallback(() => {
     setIsOpen(false);
@@ -451,10 +473,12 @@ export function UniversalCapture() {
       activeElement !== document.documentElement
         ? activeElement
         : triggerRef.current;
-    setStructuredOptionsOpen(false);
-    setMode("raw");
+    setStructuredOptionsOpen(Boolean(pendingWorkoutCaptureRef.current));
+    setMode(pendingWorkoutCaptureRef.current ? "workout" : "raw");
     setMessage("");
-    setSaveError("");
+    setSaveError(pendingWorkoutCaptureRef.current
+      ? "Set not confirmed. Retry when you are online; this pending set has not been counted twice."
+      : "");
     setOpenTarget(null);
     setIsOpen(true);
   }
@@ -543,6 +567,7 @@ export function UniversalCapture() {
     let unsubscribeTasks: (() => void) | undefined;
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       unsubscribeTasks?.();
+      setFirebaseUserId(user?.uid || "");
       if (!user) {
         setTasks([]);
         return;
@@ -662,10 +687,87 @@ export function UniversalCapture() {
     resetFields(options.addAnother ? "Note saved. Add the next one." : "Saved as a note.", { keepOpenTarget: !options.addAnother });
   }
 
+  async function saveWorkoutSet(options: { addAnother?: boolean } = {}) {
+    if (isSavingStructuredRef.current) return;
+    const user = captureUser || auth.currentUser;
+    if (!user) {
+      setSaveError("Sign in to add this set. Your capture is still here.");
+      return;
+    }
+    let intent = pendingWorkoutCaptureRef.current;
+    if (intent && intent.ownerId !== user.uid) {
+      setSaveError("This pending set belongs to another account and was not submitted.");
+      return;
+    }
+    if (!intent) {
+      const created = createQuickWorkoutCaptureIntent({
+        ownerId: user.uid,
+        performedOn: details.date || formatDateInput(new Date()),
+        text,
+        notes: details.notes,
+      });
+      if (!created.ok) {
+        setSaveError(created.error);
+        return;
+      }
+      intent = created.intent;
+      const storageKey = quickWorkoutCaptureStorageKey(user.uid, intent.clientSetId);
+      try {
+        window.localStorage.setItem(storageKey, serializeQuickWorkoutCaptureIntent(intent));
+      } catch {
+        setSaveError("Could not keep retry information on this device, so the set was not submitted.");
+        return;
+      }
+      pendingWorkoutCaptureRef.current = intent;
+      setPendingWorkoutCapture(intent);
+    }
+
+    isSavingStructuredRef.current = true;
+    setIsSavingStructured(true);
+    setSaveError("");
+    setMessage("Saving set...");
+    if (navigator.onLine === false) {
+      setMessage("");
+      setSaveError("Set not confirmed—connect and retry. The pending set remains on this device.");
+      isSavingStructuredRef.current = false;
+      setIsSavingStructured(false);
+      return;
+    }
+
+    try {
+      const confirmedIntent = intent;
+      await workoutCaptureCoordinatorRef.current.run(
+        confirmedIntent.clientSetId,
+        () => addSetToDailyWorkoutSession(user.uid, confirmedIntent)
+      );
+      const storageKey = quickWorkoutCaptureStorageKey(user.uid, confirmedIntent.clientSetId);
+      const raw = window.localStorage.getItem(storageKey);
+      if (canClearMatchingQuickWorkoutCapture(raw, user.uid, confirmedIntent.clientSetId)) {
+        window.localStorage.removeItem(storageKey);
+      }
+      pendingWorkoutCaptureRef.current = null;
+      setPendingWorkoutCapture(null);
+      if (!options.addAnother) {
+        setOpenTarget({ to: "/app/easyworkout/log", label: "Open workout" });
+      }
+      resetFields(options.addAnother ? "Set added. Add the next one." : "Set added.", { keepOpenTarget: !options.addAnother });
+    } catch {
+      setMessage("");
+      setSaveError("Set not confirmed—retry. The same pending set will be reconciled without adding it twice.");
+    } finally {
+      isSavingStructuredRef.current = false;
+      setIsSavingStructured(false);
+    }
+  }
+
   async function saveContextItem(options: { addAnother?: boolean } = {}) {
     if (!text.trim()) return;
     if (mode === "raw") {
       await saveRawToInbox();
+      return;
+    }
+    if (mode === "workout") {
+      await saveWorkoutSet(options);
       return;
     }
 
@@ -769,28 +871,6 @@ export function UniversalCapture() {
       resetFields(options.addAnother ? "Event added. Add the next one." : "Event added.", { keepOpenTarget: !options.addAnother });
       return;
     }
-    if (mode === "workout") {
-      const dateValue = details.date || formatDateInput(new Date());
-      const parsedSet = parseWorkoutSet(title);
-      const sessionId = await addSetToDailyWorkoutSession(user.uid, dateValue, {
-        exerciseId: null,
-        exerciseName: parsedSet.exerciseName,
-        muscleGroup: "",
-        notes: details.notes.trim(),
-        sets: [
-          {
-            reps: parsedSet.reps,
-            weight: parsedSet.weight,
-            notes: details.notes.trim(),
-          },
-        ],
-      });
-      if (!options.addAnother) {
-        setOpenTarget({ to: `/app/easyworkout/log`, label: "Open workout" });
-      }
-      resetFields(options.addAnother ? "Set added. Add the next one." : "Set added.", { keepOpenTarget: !options.addAnother });
-      return sessionId;
-    }
   }
 
   return (
@@ -833,6 +913,7 @@ export function UniversalCapture() {
           <textarea
             ref={textInputRef}
             value={text}
+            disabled={mode === "workout" && Boolean(pendingWorkoutCapture)}
             onChange={(event) => {
               const nextValue = event.target.value;
               setText(nextValue);
@@ -865,16 +946,22 @@ export function UniversalCapture() {
 
         <details
           className="advanced-disclosure capture-structured-options"
-          open={structuredOptionsOpen}
+          open={structuredOptionsOpen || Boolean(pendingWorkoutCapture)}
           onToggle={(event) => {
             const isOpen = event.currentTarget.open;
+            if (pendingWorkoutCapture && !isOpen) {
+              setStructuredOptionsOpen(true);
+              return;
+            }
             setStructuredOptionsOpen(isOpen);
             if (!isOpen) {
               setMode("raw");
             }
           }}
         >
-          <summary>More capture options</summary>
+          <summary onClick={(event) => {
+            if (pendingWorkoutCapture) event.preventDefault();
+          }}>More capture options</summary>
           {structuredOptionsOpen ? (
             <>
           <div className="capture-mode-row" role="tablist" aria-label="Structured capture type">
@@ -885,6 +972,7 @@ export function UniversalCapture() {
                 role="tab"
                 aria-selected={mode === value}
                 className={`capture-mode-button${mode === value ? " active" : ""}`}
+                disabled={Boolean(pendingWorkoutCapture)}
                 onClick={() => {
                   setMode(value as CaptureMode);
                   setMessage("");
@@ -1002,7 +1090,7 @@ export function UniversalCapture() {
           <div className="capture-detail-grid">
             <label className="field-stack">
               <span>Target date</span>
-              <input type="date" value={details.date} onChange={(event) => setDetails((current) => ({ ...current, date: event.target.value }))} />
+              <input type="date" value={details.date} disabled={Boolean(pendingWorkoutCapture)} onChange={(event) => setDetails((current) => ({ ...current, date: event.target.value }))} />
             </label>
             <label className="field-stack">
               <span>Status</span>
@@ -1014,7 +1102,7 @@ export function UniversalCapture() {
             </label>
             <label className="field-stack field-stack-wide">
               <span>Notes</span>
-              <textarea rows={3} value={details.notes} onChange={(event) => setDetails((current) => ({ ...current, notes: event.target.value }))} />
+              <textarea rows={3} value={details.notes} disabled={Boolean(pendingWorkoutCapture)} onChange={(event) => setDetails((current) => ({ ...current, notes: event.target.value }))} />
             </label>
           </div>
         ) : null}
@@ -1087,15 +1175,17 @@ export function UniversalCapture() {
               type="button"
               className="primary-button"
               onClick={() => void saveContextItem()}
-              disabled={!text.trim() || (mode === "brainDump" && brainDumpEntries.length === 0)}
+              disabled={!text.trim() || isSavingStructured || (mode === "brainDump" && brainDumpEntries.length === 0)}
             >
-              {mode === "workout" ? "Add set" : mode === "brainDump" ? "Add brain dump" : `Save ${mode}`}
+              {mode === "workout"
+                ? isSavingStructured ? "Saving set..." : pendingWorkoutCapture ? "Retry set" : "Add set"
+                : mode === "brainDump" ? "Add brain dump" : `Save ${mode}`}
             </button>
-            <button type="button" className="button-secondary" onClick={() => void saveContextItem({ addAnother: true })} disabled={!text.trim() || (mode === "brainDump" && brainDumpEntries.length === 0)}>
-              {mode === "workout" ? "Add set and another" : "Save and add another"}
+            <button type="button" className="button-secondary" onClick={() => void saveContextItem({ addAnother: true })} disabled={!text.trim() || isSavingStructured || (mode === "brainDump" && brainDumpEntries.length === 0)}>
+              {mode === "workout" ? pendingWorkoutCapture ? "Retry set, then add another" : "Add set and another" : "Save and add another"}
             </button>
             {mode === "brainDump" ? null : (
-              <button type="button" className="button-secondary" onClick={() => void saveAsNote()} disabled={!text.trim()}>
+              <button type="button" className="button-secondary" onClick={() => void saveAsNote()} disabled={!text.trim() || Boolean(pendingWorkoutCapture)}>
                 Save as note
               </button>
             )}
@@ -1109,7 +1199,7 @@ export function UniversalCapture() {
         </details>
         {saveError ? <p className="error-copy" role="alert">{saveError}</p> : null}
         {message ? (
-          <div className="calendar-info-card capture-success-card">
+          <div className="calendar-info-card capture-success-card" role="status" aria-live="polite">
             <span>{message}</span>
             {openTarget ? (
               <Link className="button-secondary compact-button" to={openTarget.to} onClick={closeCapture}>
