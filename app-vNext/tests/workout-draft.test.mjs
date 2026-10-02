@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { WORKOUT_DRAFT_MAX_EXERCISES, WORKOUT_DRAFT_MAX_SERIALIZED_CHARS, WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE, WorkoutSaveCoordinator, canClearMatchingWorkoutDraft, getWorkoutDraftStorageKey, hasWorkoutDraftWork, recoverWorkoutDraft, recoverWorkoutDraftFromStorage, resolveWorkoutDurationMinutes, serializeWorkoutDraftForStorage } from "../src/features/easyworkout/domain/workoutDraftLifecycle.ts";
+import { WORKOUT_DRAFT_MAX_EXERCISES, WORKOUT_DRAFT_MAX_SERIALIZED_CHARS, WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE, WORKOUT_DRAFT_SCHEMA_VERSION, WorkoutSaveCoordinator, canClearMatchingWorkoutDraft, getWorkoutDraftStorageKey, hasWorkoutDraftWork, recoverWorkoutDraft, recoverWorkoutDraftFromStorage, resolveWorkoutDurationMinutes, serializeWorkoutDraftForStorage } from "../src/features/easyworkout/domain/workoutDraftLifecycle.ts";
 import { workoutSessionDocumentId } from "../src/lib/firestore/workoutSessionIdentity.ts";
 
 const options = { today: "2026-08-01", nowIso: "2026-08-01T12:00:00.000Z", ownerId: "user-a", defaultWeightUnit: "lb", createId: (() => { let id = 0; return () => `generated-id-${++id}`; })() };
@@ -65,8 +65,9 @@ test("schema-v4 drafts add empty setup without losing trusted completion", () =>
 test("current drafts recover bounded setup and discard malformed fields", () => {
   const result = recoverWorkoutDraft({
     ...legacy,
-    schemaVersion: 5,
+    schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
     completionReviewRequired: false,
+    appliedImportOperationIds: ["import-a", "", 42, "import-b"],
     exerciseLogs: [{
       ...legacy.exerciseLogs[0],
       setup: { seat: " 2 ", arm: "4", back: 8, pad: "", other: " left tower " },
@@ -76,6 +77,24 @@ test("current drafts recover bounded setup and discard malformed fields", () => 
   assert.equal(result.migrated, false);
   assert.deepEqual(result.draft?.exerciseLogs[0].setup, { seat: "2", arm: "4", other: "left tower" });
   assert.equal(result.draft?.exerciseLogs[0].sets[0].completed, true);
+  assert.deepEqual(result.draft?.appliedImportOperationIds, ["import-a", "import-b"]);
+});
+
+test("schema-v5 drafts migrate with completion intact and no fabricated import operations", () => {
+  const result = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 5,
+    completionReviewRequired: false,
+    exerciseLogs: [{
+      ...legacy.exerciseLogs[0],
+      setup: { seat: "2" },
+      sets: [{ ...legacy.exerciseLogs[0].sets[0], completed: true }],
+    }],
+  }, options);
+  assert.equal(result.migrated, true);
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].completed, true);
+  assert.deepEqual(result.draft?.exerciseLogs[0].setup, { seat: "2" });
+  assert.deepEqual(result.draft?.appliedImportOperationIds, []);
 });
 
 test("malformed and old drafts fail safely with readable recovery", () => {
@@ -158,11 +177,13 @@ test("completed workout persistence and review normalize and display setup", asy
 
 test("all new, copied, imported, and prefilled workout rows remain unperformed", async () => {
   const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  const importSource = await readFile(new URL("../src/features/easyworkout/domain/workoutImportPreview.ts", import.meta.url), "utf8");
   assert.match(source, /const emptySet[\s\S]{0,250}completed: false/);
   assert.match(source, /baseSets[\s\S]{0,500}completed: false/);
   assert.match(source, /Copy previous set[\s\S]{0,500}/);
   assert.match(source, /previousSet, localId: createLocalId\(\), completed: false/);
-  assert.match(source, /parseWorkoutPaste[\s\S]{0,2500}completed: false/);
+  assert.match(importSource, /function materializeRow[\s\S]{0,900}completed: false/);
+  assert.match(importSource, /applyWorkoutImportPreview[\s\S]*materializeRow/);
 });
 
 test("automatic workout duration excludes implausible overnight drafts and preserves explicit duration", () => {
