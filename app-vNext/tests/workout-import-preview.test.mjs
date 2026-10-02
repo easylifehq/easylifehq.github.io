@@ -10,6 +10,8 @@ const options = [
   { exerciseId: "lat-b", name: "Lat Pulldown", selectionLabel: "Lat Pulldown · lat-b", muscleGroup: "Back", primaryMuscles: ["Lats"], secondaryMuscles: ["Biceps"], exerciseType: "weighted" },
   { exerciseId: "pull-up", name: "Pull Up", selectionLabel: "Pull Up", muscleGroup: "Back", primaryMuscles: ["Lats"], secondaryMuscles: ["Biceps"], exerciseType: "bodyweight" },
   { exerciseId: "assist", name: "Assisted Pull-Up", selectionLabel: "Assisted Pull-Up", muscleGroup: "Back", primaryMuscles: ["Lats"], secondaryMuscles: ["Biceps"], exerciseType: "assisted" },
+  { exerciseId: "plank", name: "Plank", selectionLabel: "Plank", muscleGroup: "Core", primaryMuscles: ["Core"], secondaryMuscles: [], exerciseType: "duration" },
+  { exerciseId: "rower", name: "Rower", selectionLabel: "Rower", muscleGroup: "Cardio", primaryMuscles: ["Cardio"], secondaryMuscles: [], exerciseType: "distance" },
 ];
 
 const set = (localId, overrides = {}) => ({
@@ -128,6 +130,51 @@ test("bodyweight and assisted syntax is accepted only from explicit matched exer
   ]);
 });
 
+test("unsupported duration and distance exercise types are blocked instead of creating unusable sets", () => {
+  for (const sourceText of ["Plank [id=plank]: 8@100 lb", "Rower [id=rower]: 8@100 lb"]) {
+    const result = preview(sourceText);
+    assert.equal(result.canConfirm, false, sourceText);
+    assert.match(result.rows[0].errors.join(" "), /duration|distance|not supported/i);
+  }
+});
+
+test("append blocks stable-ID type conflicts while replace can safely correct the draft row", () => {
+  const sourceDraft = draft({
+    exerciseLogs: [exercise("mistyped-pull-up", {
+      exerciseId: "pull-up",
+      exerciseName: "Pull Up",
+      exerciseType: "weighted",
+    })],
+  });
+  const parsed = workoutImport.parseWorkoutImportPreview({
+    sourceText: "Pull Up [id=pull-up]: 3x8 reps",
+    draft: sourceDraft,
+    exerciseOptions: options,
+    today: "2026-10-02",
+    operationId: "import-operation-1",
+  });
+  const originalExerciseLogs = structuredClone(sourceDraft.exerciseLogs);
+  assert.equal(parsed.canConfirm, true);
+  assert.match(parsed.appendErrors.join(" "), /type|weighted|bodyweight/i);
+
+  const appended = workoutImport.applyWorkoutImportPreview({
+    draft: sourceDraft, preview: parsed, mode: "append", applyMetadata: false, createId: () => "unused",
+  });
+  assert.equal(appended.ok, false);
+  assert.deepEqual(sourceDraft.exerciseLogs, originalExerciseLogs);
+
+  const replaced = workoutImport.applyWorkoutImportPreview({
+    draft: sourceDraft,
+    preview: parsed,
+    mode: "replace",
+    applyMetadata: false,
+    createId: (() => { let value = 0; return () => `replacement-${++value}`; })(),
+  });
+  assert.equal(replaced.ok, true);
+  assert.equal(replaced.draft.exerciseLogs[0].exerciseType, "bodyweight");
+  assert.deepEqual(replaced.draft.exerciseLogs[0].sets.map((entry) => entry.completed), [false, false, false]);
+});
+
 test("invalid directives, impossible values, rep ranges, and malformed tokens block atomically", () => {
   const cases = [
     "unit: stone\nBench Press: 8@100 stone",
@@ -173,9 +220,15 @@ test("append merges only stable identities and keeps unknown same-name machines 
   const sourceDraft = draft({ exerciseLogs: [
     exercise("existing-bench"),
     exercise("garage-machine", { exerciseId: "garage-stable", exerciseName: "Garage Press", sets: [set("garage-set")] }),
+    exercise("legacy-garage-machine", {
+      exerciseId: null,
+      exerciseName: "Garage Press",
+      setup: { seat: "1" },
+      sets: [set("legacy-garage-set")],
+    }),
   ] });
   const parsed = workoutImport.parseWorkoutImportPreview({
-    sourceText: "Bench Press [id=bench-a]: 8@135 lb\nGarage Press: 8@95 lb",
+    sourceText: "Bench Press [id=bench-a]: 8@135 lb\nGarage Press: 8@95 lb | seat=9",
     draft: sourceDraft,
     exerciseOptions: options,
     today: "2026-10-02",
@@ -187,10 +240,13 @@ test("append merges only stable identities and keeps unknown same-name machines 
   assert.equal(applied.ok, true);
   assert.equal(applied.applied, true);
   assert.equal(applied.draft.draftId, "draft-12345678");
-  assert.equal(applied.draft.exerciseLogs.length, 3);
+  assert.equal(applied.draft.exerciseLogs.length, 4);
   assert.equal(applied.draft.exerciseLogs[0].sets.length, 2);
   assert.equal(applied.draft.exerciseLogs[1].sets.length, 1);
-  assert.equal(applied.draft.exerciseLogs[2].exerciseId, null);
+  assert.equal(applied.draft.exerciseLogs[2].sets.length, 1);
+  assert.deepEqual(applied.draft.exerciseLogs[2].setup, { seat: "1" });
+  assert.equal(applied.draft.exerciseLogs[3].exerciseId, null);
+  assert.deepEqual(applied.draft.exerciseLogs[3].setup, { seat: "9" });
   assert.deepEqual(applied.draft.exerciseLogs.flatMap((entry) => entry.sets.slice(1)).map((entry) => entry.completed), [false]);
   assert.equal(applied.draft.performedOn, "2026-10-01");
   assert.equal(applied.draft.durationMinutes, "30");
@@ -253,6 +309,8 @@ test("workout log exposes an accessible review gate before atomically changing t
   assert.match(source, /aria-live="polite"/);
   assert.match(source, /latestDraftRef\.current/);
   assert.match(source, /appliedImportOperationIds/);
+  assert.match(source, /workoutImportPreview\.appendErrors\.length/);
+  assert.match(source, /disabled=\{Boolean\(workoutImportPreview\.appendErrors\.length\)\}/);
   assert.doesNotMatch(source, /function parseWorkoutPaste/);
   assert.doesNotMatch(source, /setWorkoutPaste\(""\)/);
   assert.match(styles, /\.workout-import-preview/);

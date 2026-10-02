@@ -873,6 +873,11 @@ export function EasyWorkoutLogPage() {
                     {workoutImportPreview.errors.map((errorMessage) => <li key={errorMessage}>{errorMessage}</li>)}
                   </ul>
                 ) : null}
+                {workoutImportPreview.appendErrors.length ? (
+                  <ul className="error-copy" role="alert">
+                    {workoutImportPreview.appendErrors.map((errorMessage) => <li key={errorMessage}>{errorMessage}</li>)}
+                  </ul>
+                ) : null}
                 <div className="workout-import-preview-list">
                   {workoutImportPreview.rows.map((row) => (
                     <article key={`${row.lineNumber}-${row.source}`} className="workout-import-preview-row">
@@ -926,6 +931,7 @@ export function EasyWorkoutLogPage() {
                       name="workout-import-mode"
                       value="append"
                       checked={workoutImportMode === "append"}
+                      disabled={Boolean(workoutImportPreview.appendErrors.length)}
                       onChange={() => setWorkoutImportMode("append")}
                     />
                     <span>Append to matching stable exercise IDs; add all other exercises separately</span>
@@ -947,7 +953,9 @@ export function EasyWorkoutLogPage() {
                   type="button"
                   className="button-primary"
                   onClick={confirmWorkoutImport}
-                  disabled={!workoutImportPreview.canConfirm || !workoutImportMode || workoutImportPreviewIsStale || externalDraftConflict || isApplyingImport}
+                  disabled={!workoutImportPreview.canConfirm || !workoutImportMode ||
+                    (workoutImportMode === "append" && Boolean(workoutImportPreview.appendErrors.length)) ||
+                    workoutImportPreviewIsStale || externalDraftConflict || isApplyingImport}
                 >
                   {isApplyingImport ? "Importing..." : "Import as planned sets"}
                 </button>

@@ -47,6 +47,7 @@ export type WorkoutImportPreview = {
   rows: WorkoutImportPreviewRow[];
   errors: string[];
   warnings: string[];
+  appendErrors: string[];
   canConfirm: boolean;
 };
 
@@ -100,6 +101,7 @@ function emptyPreview(input: ParseInput, errors: string[]): WorkoutImportPreview
     rows: [],
     errors,
     warnings: [],
+    appendErrors: [],
     canConfirm: false,
   };
 }
@@ -213,6 +215,9 @@ function parseSetTokens(
 ) {
   const errors: string[] = [];
   const sets: WorkoutImportPreviewSet[] = [];
+  if (exerciseType === "duration" || exerciseType === "distance") {
+    return { sets, errors: [`${exerciseType === "duration" ? "Duration" : "Distance"} exercise imports are not supported yet.`] };
+  }
   const tokens = source.split(",").map((token) => token.trim()).filter(Boolean);
   if (!tokens.length) return { sets, errors: ["At least one set is required."] };
   for (const token of tokens) {
@@ -277,6 +282,7 @@ export function parseWorkoutImportPreview(input: ParseInput): WorkoutImportPrevi
   let unitContext: UnitContext = { unit: input.draft.weightUnit, source: "draft" };
   const seenDirectives = new Set<string>();
   const exerciseLines: Array<{ lineNumber: number; source: string }> = [];
+  const appendErrors: string[] = [];
   input.sourceText.split(/\r?\n/).forEach((raw, index) => {
     const source = raw.trim();
     if (!source) return;
@@ -326,9 +332,15 @@ export function parseWorkoutImportPreview(input: ParseInput): WorkoutImportPrevi
     const resolved = resolveExercise(exerciseMatch[1], input.exerciseOptions);
     const parsedSetup = parseSetup(sections.slice(1));
     const parsedSets = parseSetTokens(exerciseMatch[2].trim(), resolved.exercise.exerciseType, unitContext, input.draft.weightUnit);
-    const destination = resolved.exercise.exerciseId
-      ? input.draft.exerciseLogs.find((exercise) => exercise.exerciseId === resolved.exercise.exerciseId)
-      : input.draft.exerciseLogs.find((exercise) => !exercise.exerciseId && normalizeName(exercise.exerciseName) === normalizeName(resolved.exercise.exerciseName) && exercise.exerciseType === resolved.exercise.exerciseType);
+    const stableMatches = resolved.exercise.exerciseId
+      ? input.draft.exerciseLogs.filter((exercise) => exercise.exerciseId === resolved.exercise.exerciseId)
+      : [];
+    const destination = stableMatches.find((exercise) => exercise.exerciseType === resolved.exercise.exerciseType);
+    for (const incompatible of stableMatches.filter((exercise) => exercise.exerciseType !== resolved.exercise.exerciseType)) {
+      appendErrors.push(
+        `Line ${lineNumber}: Append cannot combine ${resolved.exercise.exerciseName} (${resolved.exercise.exerciseType}) with the existing ${incompatible.exerciseType} row. Use Replace or resolve the draft row first.`
+      );
+    }
     const warnings = [...resolved.warnings];
     if (destination && Object.keys(parsedSetup.setup).some((key) => {
       const setupKey = key as keyof WorkoutEquipmentSetup;
@@ -368,6 +380,7 @@ export function parseWorkoutImportPreview(input: ParseInput): WorkoutImportPrevi
     rows,
     errors: globalErrors,
     warnings: globalWarnings,
+    appendErrors,
     canConfirm,
   };
 }
@@ -396,7 +409,7 @@ function appendRows(current: WorkoutExerciseLogDraft[], rows: WorkoutImportPrevi
   for (const row of rows) {
     const index = row.exercise.exerciseId
       ? next.findIndex((exercise) => exercise.exerciseId === row.exercise.exerciseId)
-      : next.findIndex((exercise) => !exercise.exerciseId && normalizeName(exercise.exerciseName) === normalizeName(row.exercise.exerciseName) && exercise.exerciseType === row.exercise.exerciseType);
+      : -1;
     const imported = materializeRow(row, createId);
     if (index < 0) {
       next.push(imported);
@@ -422,6 +435,9 @@ export function applyWorkoutImportPreview(input: {
   if (appliedIds.includes(input.preview.operationId)) return { ok: true, applied: false, draft: input.draft };
   if (!input.preview.canConfirm) return { ok: false, error: "Fix every import error before confirming." };
   if (input.mode !== "append" && input.mode !== "replace") return { ok: false, error: "Choose Append or Replace before confirming." };
+  if (input.mode === "append" && input.preview.appendErrors.length) {
+    return { ok: false, error: input.preview.appendErrors[0] };
+  }
   if (workoutImportDraftFingerprint(input.draft) !== input.preview.draftFingerprint) {
     return { ok: false, error: "The workout draft changed while this preview was open. Refresh the preview before confirming." };
   }
