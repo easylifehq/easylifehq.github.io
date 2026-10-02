@@ -97,6 +97,62 @@ test("schema-v5 drafts migrate with completion intact and no fabricated import o
   assert.deepEqual(result.draft?.appliedImportOperationIds, []);
 });
 
+test("schema-v6 drafts migrate to planning context without losing completion or import identity", () => {
+  const result = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 6,
+    completionReviewRequired: false,
+    appliedImportOperationIds: ["import-operation-1"],
+    exerciseLogs: [{
+      ...legacy.exerciseLogs[0],
+      setup: { seat: "2" },
+      sets: [{ ...legacy.exerciseLogs[0].sets[0], completed: true }],
+    }],
+  }, options);
+  assert.equal(result.migrated, true);
+  assert.equal(result.draft?.schemaVersion, 7);
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].completed, true);
+  assert.deepEqual(result.draft?.exerciseLogs[0].setup, { seat: "2" });
+  assert.deepEqual(result.draft?.appliedImportOperationIds, ["import-operation-1"]);
+  assert.deepEqual(result.draft?.planningContext, {
+    focusGroups: [], availableEquipment: [], plannedDurationMinutes: null,
+  });
+});
+
+test("planning context is bounded, survives serialization, and does not overwrite actual duration", () => {
+  const recovered = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 7,
+    durationMinutes: "52",
+    planningContext: {
+      focusGroups: [" Back ", "Biceps", "Back", "Unknown"],
+      availableEquipment: ["dumbbell", "selectorized-machine", "dumbbell", "teleporter"],
+      plannedDurationMinutes: 45,
+    },
+    appliedImportOperationIds: [],
+  }, options).draft;
+  assert.ok(recovered);
+  assert.equal(recovered.durationMinutes, "52");
+  assert.deepEqual(recovered.planningContext, {
+    focusGroups: ["Back", "Biceps"],
+    availableEquipment: ["dumbbell", "selectorized-machine"],
+    plannedDurationMinutes: 45,
+  });
+  const restored = recoverWorkoutDraftFromStorage(serializeWorkoutDraftForStorage(recovered), options).draft;
+  assert.deepEqual(restored?.planningContext, recovered.planningContext);
+  assert.equal(restored?.durationMinutes, "52");
+});
+
+test("planning context alone is recoverable draft work", () => {
+  assert.equal(hasWorkoutDraftWork({
+    selectedRoutineId: "",
+    durationMinutes: "",
+    sessionNotes: "",
+    planningContext: { focusGroups: ["Back"], availableEquipment: [], plannedDurationMinutes: 30 },
+    exerciseLogs: [],
+  }), true);
+});
+
 test("malformed and old drafts fail safely with readable recovery", () => {
   assert.equal(recoverWorkoutDraft("bad", options).draft, null);
   assert.match(recoverWorkoutDraft("bad", options).message, /unreadable/i);
@@ -153,17 +209,25 @@ test("workout log exposes explicit setup recall without conflating it with compl
   assert.match(source, /completed: false/);
 });
 
-test("suggested exercises preserve source type and muscle metadata", async () => {
+test("next-exercise UI uses explicit planning context and adds only pure planned rows", async () => {
   const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
-  assert.match(source, /type WorkoutExerciseSuggestion[\s\S]{0,500}exerciseType:/);
-  assert.match(source, /addSuggestedExercise[\s\S]{0,900}exerciseType: suggestion\.exerciseType/);
-  assert.match(source, /addSuggestedExercise[\s\S]{0,900}primaryMuscles: suggestion\.primaryMuscles/);
-  assert.match(source, /addSuggestedExercise[\s\S]{0,900}secondaryMuscles: suggestion\.secondaryMuscles/);
-  assert.match(source, /resolveWorkoutExerciseOption/);
+  assert.match(source, /deriveNextExerciseSuggestions/);
+  assert.match(source, /createPlannedExerciseFromSuggestion/);
+  assert.match(source, /planningContext/);
+  assert.match(source, /Session focus/);
+  assert.match(source, /Available equipment/);
+  assert.match(source, /Planning budget/);
+  assert.match(source, /Planning estimate only/);
+  assert.match(source, /Add as planned/);
   assert.match(source, /key=\{suggestion\.exerciseId \|\| suggestion\.name\}/);
   assert.match(source, /<strong>\{suggestion\.selectionLabel\}<\/strong>/);
-  assert.match(source, /currentExerciseKeys/);
-  assert.match(source, /workoutExerciseIdentityKey/);
+  assert.doesNotMatch(source, /exerciseSuggestionDetails/);
+  assert.doesNotMatch(source, /const groupPairs/);
+  const addStart = source.indexOf("function addSuggestedExercise");
+  const addEnd = source.indexOf("function removeBlankExerciseBoxes", addStart);
+  const addSource = source.slice(addStart, addEnd);
+  assert.match(addSource, /createPlannedExerciseFromSuggestion/);
+  assert.doesNotMatch(addSource, /addSession|lastWeight|lastReps|completed:\s*true/);
 });
 
 test("completed workout persistence and review normalize and display setup", async () => {

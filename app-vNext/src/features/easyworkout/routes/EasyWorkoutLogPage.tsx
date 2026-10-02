@@ -25,8 +25,18 @@ import {
   fillSetsFromLastPerformance,
   findExerciseHistory,
   resolveWorkoutExerciseOption,
-  workoutExerciseIdentityKey,
 } from "@/features/easyworkout/domain/workoutLogAssist";
+import {
+  createPlannedExerciseFromSuggestion,
+  deriveNextExerciseSuggestions,
+  type WorkoutNextExerciseSuggestion,
+} from "@/features/easyworkout/domain/workoutNextExercise";
+import {
+  WORKOUT_EQUIPMENT_KINDS,
+  WORKOUT_FOCUS_GROUPS,
+  emptyWorkoutPlanningContext,
+  parseWorkoutPlanningDurationInput,
+} from "@/features/easyworkout/domain/workoutPlanning";
 import {
   applyWorkoutImportPreview,
   parseWorkoutImportPreview,
@@ -109,44 +119,6 @@ function readStoredWorkoutDraft(storageKey: string, ownerId: string, defaultWeig
   }
 }
 
-type WorkoutExerciseSuggestion = {
-  exerciseId: string | null;
-  name: string;
-  selectionLabel: string;
-  muscleGroup: string;
-  primaryMuscles: string[];
-  secondaryMuscles: string[];
-  exerciseType: WorkoutExerciseLogDraft["exerciseType"];
-  reason: string;
-  detail: string;
-  target: string;
-};
-
-const exerciseSuggestionDetails: Record<string, string> = {
-  "Lat Pulldown": "Good when you still need vertical pulling. Keep your ribs down, pull elbows toward your pockets, and stop before it turns into a shrug.",
-  "Seated Row": "Good when your lats and mid-back need more work. Think chest tall, elbows back, and squeeze without yanking.",
-  "Bicep Curl": "Good after back work when biceps are warm. Keep the upper arm still and pick a weight you can control.",
-  "Hammer Curl": "Good for a more joint-friendly biceps/forearm finisher. Keep the wrists neutral and avoid swinging.",
-  "Romanian Deadlift": "Good when your workout needs posterior-chain work. Hinge back, keep the bar close, and stop when hamstrings are loaded.",
-  Squat: "Good when the day needs a main leg movement. Use a weight you can keep braced and repeatable.",
-  "Leg Press": "Good when you want leg volume without as much setup. Control the bottom and keep reps smooth.",
-  "Hip Thrust": "Good when glutes are under-hit. Pause at the top and keep the movement controlled.",
-  "Bench Press": "Good when chest needs a main press. Keep shoulders set and use a weight you can own.",
-  "Incline Dumbbell Press": "Good for upper chest and controlled pressing volume. Keep the range smooth and avoid rushing.",
-  "Shoulder Press": "Good when shoulders need the main work. Brace first, then press without over-arching.",
-  "Lateral Raise": "Good as a low-fatigue shoulder finisher. Lead with elbows and stop before momentum takes over.",
-};
-
-const groupPairs: Record<string, string[]> = {
-  Back: ["Back", "Biceps", "Hamstrings"],
-  Biceps: ["Back", "Biceps"],
-  Chest: ["Chest", "Shoulders"],
-  Shoulders: ["Shoulders", "Chest"],
-  Legs: ["Legs", "Hamstrings", "Glutes"],
-  Hamstrings: ["Hamstrings", "Glutes", "Back"],
-  Glutes: ["Glutes", "Hamstrings", "Legs"],
-};
-
 export function EasyWorkoutLogPage() {
   const firstExerciseInputRef = useRef<HTMLInputElement | null>(null);
   const saveCoordinatorRef = useRef(new WorkoutSaveCoordinator<string | null>());
@@ -176,6 +148,14 @@ export function EasyWorkoutLogPage() {
   const [selectedRoutineId, setSelectedRoutineId] = useState(restoredDraft?.selectedRoutineId ?? routineId ?? "");
   const [performedOn, setPerformedOn] = useState(restoredDraft?.performedOn ?? localDateKey());
   const [durationMinutes, setDurationMinutes] = useState(restoredDraft?.durationMinutes ?? "");
+  const [planningContext, setPlanningContext] = useState(
+    restoredDraft?.planningContext ?? emptyWorkoutPlanningContext()
+  );
+  const [planningDurationInput, setPlanningDurationInput] = useState(
+    restoredDraft?.planningContext.plannedDurationMinutes === null || restoredDraft?.planningContext.plannedDurationMinutes === undefined
+      ? ""
+      : String(restoredDraft.planningContext.plannedDurationMinutes)
+  );
   const [draftWeightUnit] = useState<"lb" | "kg">(restoredDraft?.weightUnit ?? settings.easyWorkout.weightUnit);
   const [sessionNotes, setSessionNotes] = useState(restoredDraft?.sessionNotes ?? "");
   const [completionReviewRequired, setCompletionReviewRequired] = useState(restoredDraft?.completionReviewRequired ?? false);
@@ -213,6 +193,7 @@ export function EasyWorkoutLogPage() {
     startedAt,
     elapsedSeconds,
     durationMinutes,
+    planningContext,
     sessionNotes,
     completionReviewRequired,
     activeExerciseId,
@@ -247,6 +228,9 @@ export function EasyWorkoutLogPage() {
     const hasActiveDraftWork =
       sessionNotes.trim() ||
       durationMinutes ||
+      planningContext.focusGroups.length ||
+      planningContext.availableEquipment.length ||
+      planningContext.plannedDurationMinutes !== null ||
       exerciseLogs.some(hasExerciseWork);
 
     if (hasActiveDraftWork) {
@@ -303,67 +287,15 @@ export function EasyWorkoutLogPage() {
     setActiveExerciseId(nextLogs[0]?.localId ?? "");
   }, [isLoading, previousByExercise, selectedRoutine, workoutMode, gymMode, settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount]);
 
-  const nextExerciseSuggestions = useMemo<WorkoutExerciseSuggestion[]>(() => {
-    const currentExerciseKeys = new Set(
-      exerciseLogs
-        .filter((exercise) => exercise.exerciseName.trim())
-        .map((exercise) => workoutExerciseIdentityKey({ exerciseId: exercise.exerciseId, name: exercise.exerciseName }))
-    );
-    const loggedGroups = exerciseLogs
-      .filter((exercise) => exercise.sets.some(hasSetWork))
-      .map((exercise) => exercise.muscleGroup || defaultWorkoutExercises.find((entry) => entry.name === exercise.exerciseName)?.muscleGroup || "")
-      .filter(Boolean);
-    const activeGroup =
-      exerciseLogs.find((exercise) => exercise.localId === activeExerciseId)?.muscleGroup ||
-      loggedGroups[loggedGroups.length - 1] ||
-      "";
-    const targetGroups = Array.from(new Set([...(groupPairs[activeGroup] || []), activeGroup, ...loggedGroups])).filter(Boolean);
-    const groupSetCounts = exerciseLogs.reduce<Record<string, number>>((accumulator, exercise) => {
-      const group = exercise.muscleGroup || defaultWorkoutExercises.find((entry) => entry.name === exercise.exerciseName)?.muscleGroup || "";
-      if (!group) return accumulator;
-      const setCount = exercise.sets.filter(hasSetWork).length;
-      accumulator[group] = (accumulator[group] || 0) + setCount;
-      return accumulator;
-    }, {});
-    const options = [...exerciseOptions].filter((exercise, index, list) => {
-      const identityKey = workoutExerciseIdentityKey(exercise);
-      return (
-        exercise.name &&
-        !currentExerciseKeys.has(identityKey) &&
-        list.findIndex((candidate) => workoutExerciseIdentityKey(candidate) === identityKey) === index
-      );
-    });
-    const rankedGroups = targetGroups.length
-      ? targetGroups.sort((first, second) => (groupSetCounts[first] || 0) - (groupSetCounts[second] || 0))
-      : ["Back", "Chest", "Legs", "Shoulders", "Biceps"];
-
-    return options
-      .sort((first, second) => {
-        const firstRank = rankedGroups.indexOf(first.muscleGroup);
-        const secondRank = rankedGroups.indexOf(second.muscleGroup);
-        return (firstRank === -1 ? 99 : firstRank) - (secondRank === -1 ? 99 : secondRank);
-      })
-      .slice(0, 3)
-      .map((exercise) => {
-        const previous = findExerciseHistory(previousByExercise, exercise.name, exercise.exerciseId);
-        return {
-          exerciseId: exercise.exerciseId,
-          name: exercise.name,
-          selectionLabel: exercise.selectionLabel,
-          muscleGroup: exercise.muscleGroup,
-          primaryMuscles: exercise.primaryMuscles,
-          secondaryMuscles: exercise.secondaryMuscles,
-          exerciseType: exercise.exerciseType,
-          reason: targetGroups.includes(exercise.muscleGroup)
-            ? `${exercise.muscleGroup} is still in today's lane.`
-            : "Good general slot if you need one more lift.",
-          detail: exerciseSuggestionDetails[exercise.name] || `Use this when ${exercise.muscleGroup || "this area"} still needs controlled volume.`,
-          target: previous?.lastWeight
-            ? `Last completed: ${previous.lastWeight.toFixed(1)} ${draftWeightUnit} x ${previous.lastReps || 8}.`
-            : "Start with a clean warm-up weight and log what moved well.",
-        };
-      });
-  }, [activeExerciseId, exerciseLogs, exerciseOptions, previousByExercise]);
+  const nextExerciseResult = useMemo(() => deriveNextExerciseSuggestions({
+    planningContext,
+    elapsedSeconds,
+    defaultSetCount: settings.easyWorkout.defaultSetCount,
+    exerciseOptions,
+    exerciseLogs,
+    history: previousByExercise,
+  }), [elapsedSeconds, exerciseLogs, exerciseOptions, planningContext, previousByExercise, settings.easyWorkout.defaultSetCount]);
+  const nextExerciseSuggestions = nextExerciseResult.suggestions;
 
   const isGymModeActive = gymMode;
   const isFocusedWorkoutMode = workoutMode || isGymModeActive;
@@ -472,7 +404,7 @@ export function EasyWorkoutLogPage() {
         // The visible status from the mounted page already explains local storage failures.
       }
     };
-  }, [activeExerciseId, completionReviewRequired, draftId, draftStorageKey, draftWeightUnit, durationMinutes, elapsedSeconds, exerciseLogs, externalDraftConflict, ownerId, performedOn, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
+  }, [activeExerciseId, completionReviewRequired, draftId, draftStorageKey, draftWeightUnit, durationMinutes, elapsedSeconds, exerciseLogs, externalDraftConflict, ownerId, performedOn, planningContext, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
 
   function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogDraft>) {
     setExerciseLogs((current) =>
@@ -578,27 +510,11 @@ export function EasyWorkoutLogPage() {
     setActiveExerciseId(nextBoxes[0]?.localId ?? "");
   }
 
-  function addSuggestedExercise(suggestion: WorkoutExerciseSuggestion) {
-    const previous = findExerciseHistory(previousByExercise, suggestion.name, suggestion.exerciseId);
-    const nextExercise: WorkoutExerciseLogDraft = {
-      ...emptyExerciseLog(settings.easyWorkout.defaultSetCount),
-      exerciseId: suggestion.exerciseId,
-      exerciseName: suggestion.name,
-      muscleGroup: suggestion.muscleGroup,
-      primaryMuscles: suggestion.primaryMuscles,
-      secondaryMuscles: suggestion.secondaryMuscles,
-      exerciseType: suggestion.exerciseType,
-      sets: [
-        {
-          ...emptySet(),
-          reps: previous?.lastReps || 8,
-          weight: previous?.lastWeight || 0,
-        },
-      ],
-    };
+  function addSuggestedExercise(suggestion: WorkoutNextExerciseSuggestion) {
+    const nextExercise = createPlannedExerciseFromSuggestion(suggestion, createLocalId);
     setExerciseLogs((current) => [...current, nextExercise]);
     setActiveExerciseId(nextExercise.localId);
-    setSaveMessage(`${suggestion.name} added as the next exercise. Nothing saved yet.`);
+    setSaveMessage(`${suggestion.name} added with ${suggestion.proposedSets} planned set${suggestion.proposedSets === 1 ? "" : "s"}, no load, and nothing marked done. Copy last sets or setup separately if you want them.`);
   }
 
   function removeBlankExerciseBoxes() {
@@ -1025,35 +941,109 @@ export function EasyWorkoutLogPage() {
           </div>
         ) : null}
 
-        {isFocusedWorkoutMode && nextExerciseSuggestions.length ? (
-          <section className="calendar-info-card workout-next-lift-card" aria-label="Next exercise suggestions">
-            <div className="workout-next-lift-header">
-              <div>
-                <span className="priority-pill-vnext">Need next lift?</span>
-                <strong>Pick one more exercise</strong>
+        {isFocusedWorkoutMode ? (
+          <details className="calendar-info-card workout-next-lift-card">
+            <summary className="workout-next-lift-summary">
+              <span className="priority-pill-vnext">Need next lift?</span>
+              <strong>Plan one more exercise</strong>
+            </summary>
+            <div className="workout-planning-controls">
+              <fieldset>
+                <legend>Session focus</legend>
+                <div className="workout-planning-choices">
+                  {WORKOUT_FOCUS_GROUPS.map((focusGroup) => (
+                    <label key={focusGroup} className="workout-planning-choice">
+                      <input
+                        type="checkbox"
+                        checked={planningContext.focusGroups.includes(focusGroup)}
+                        onChange={(event) => setPlanningContext((current) => ({
+                          ...current,
+                          focusGroups: event.target.checked
+                            ? [...current.focusGroups, focusGroup].slice(0, 4)
+                            : current.focusGroups.filter((entry) => entry !== focusGroup),
+                        }))}
+                      />
+                      <span>{focusGroup}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Available equipment</legend>
+                <div className="workout-planning-choices">
+                  {WORKOUT_EQUIPMENT_KINDS.map((equipment) => (
+                    <label key={equipment} className="workout-planning-choice">
+                      <input
+                        type="checkbox"
+                        checked={planningContext.availableEquipment.includes(equipment)}
+                        onChange={(event) => setPlanningContext((current) => ({
+                          ...current,
+                          availableEquipment: event.target.checked
+                            ? [...current.availableEquipment, equipment]
+                            : current.availableEquipment.filter((entry) => entry !== equipment),
+                        }))}
+                      />
+                      <span>{equipment.replace(/-/g, " ")}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+              <label className="field-label workout-planning-budget">
+                <span>Planning budget</span>
+                <span className="helper-copy">Target session minutes. Actual duration stays separate.</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={planningDurationInput}
+                  onChange={(event) => {
+                    setPlanningDurationInput(event.target.value);
+                    setPlanningContext((current) => ({
+                      ...current,
+                      plannedDurationMinutes: parseWorkoutPlanningDurationInput(event.target.value),
+                    }));
+                  }}
+                  placeholder="45"
+                />
+              </label>
+            </div>
+
+            {nextExerciseResult.state === "needs-context" ? (
+              <p className="helper-copy" role="status">Choose focus, available equipment, and a planning budget to get a deterministic suggestion.</p>
+            ) : nextExerciseResult.state === "unclassified-completed" ? (
+              <p className="helper-copy" role="status">
+                Suggestion paused: completed work for {nextExerciseResult.unclassifiedCompletedExercises.join(", ")} is not classified reliably yet.
+              </p>
+            ) : nextExerciseResult.state === "no-fit" ? (
+              <p className="helper-copy" role="status">There is not enough planning time left for another set with the disclosed estimate.</p>
+            ) : nextExerciseResult.state === "no-candidates" ? (
+              <p className="helper-copy" role="status">No classified exercise fits the selected focus, equipment, and remaining time.</p>
+            ) : (
+              <div className="workout-next-lift-grid" aria-label="Next exercise suggestions">
+                {nextExerciseSuggestions.map((suggestion, index) => (
+                  <article key={suggestion.exerciseId || suggestion.name} className="workout-next-lift-option">
+                    <div>
+                      <span>{index === 0 ? "Primary" : "Alternative"}</span>
+                      <strong>{suggestion.selectionLabel}</strong>
+                      <span>{suggestion.focusGroups.join(" + ")} · {suggestion.movementPattern.replace(/-/g, " ")}</span>
+                      <p>{suggestion.reason}</p>
+                      <p>About {suggestion.estimatedMinutes} minutes for {suggestion.proposedSets} planned set{suggestion.proposedSets === 1 ? "" : "s"}. Planning estimate only.</p>
+                      <p className="helper-copy">
+                        {suggestion.lastCompletedOn
+                          ? `Last comparable completed session: ${suggestion.lastCompletedOn}. No load is copied automatically.`
+                          : "No comparable completed history. No load is suggested."}
+                      </p>
+                    </div>
+                    <button type="button" className="button-secondary compact-button" onClick={() => addSuggestedExercise(suggestion)}>
+                      Add as planned
+                    </button>
+                  </article>
+                ))}
               </div>
-              <p>Local suggestions only. Nothing is saved until you save the workout.</p>
-            </div>
-            <div className="workout-next-lift-grid">
-              {nextExerciseSuggestions.map((suggestion) => (
-                <article key={suggestion.exerciseId || suggestion.name} className="workout-next-lift-option">
-                  <div>
-                    <strong>{suggestion.selectionLabel}</strong>
-                    <span>{suggestion.muscleGroup}</span>
-                    <p>{suggestion.reason}</p>
-                    <details>
-                      <summary>Read more</summary>
-                      <p>{suggestion.detail}</p>
-                      <p>{suggestion.target}</p>
-                    </details>
-                  </div>
-                  <button type="button" className="button-secondary compact-button" onClick={() => addSuggestedExercise(suggestion)}>
-                    Add
-                  </button>
-                </article>
-              ))}
-            </div>
-          </section>
+            )}
+            <p className="helper-copy workout-planning-disclosure">
+              Planning estimate only: 1 minute to transition plus 2.5 minutes per planned set. Ranking uses only explicitly completed, valid sets and trusted catalog metadata.
+            </p>
+          </details>
         ) : null}
 
         <datalist id="workout-log-exercise-options">

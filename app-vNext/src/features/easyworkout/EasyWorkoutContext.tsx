@@ -77,19 +77,19 @@ function writeDemoAddedSessions(sessions: WorkoutSessionRecord[]) {
   window.sessionStorage.setItem(demoAddedSessionsStorageKey, JSON.stringify(sessions.filter((session) => session.id.startsWith("demo-saved-"))));
 }
 
-export const defaultWorkoutExercises: Array<Pick<WorkoutExerciseDraft, "name" | "muscleGroup">> = [
-  { name: "Bench Press", muscleGroup: "Chest" },
-  { name: "Incline Dumbbell Press", muscleGroup: "Chest" },
-  { name: "Lat Pulldown", muscleGroup: "Back" },
-  { name: "Seated Row", muscleGroup: "Back" },
-  { name: "Bicep Curl", muscleGroup: "Biceps" },
-  { name: "Hammer Curl", muscleGroup: "Biceps" },
-  { name: "Shoulder Press", muscleGroup: "Shoulders" },
-  { name: "Lateral Raise", muscleGroup: "Shoulders" },
-  { name: "Squat", muscleGroup: "Legs" },
-  { name: "Romanian Deadlift", muscleGroup: "Hamstrings" },
-  { name: "Leg Press", muscleGroup: "Legs" },
-  { name: "Hip Thrust", muscleGroup: "Glutes" },
+export const defaultWorkoutExercises: Array<Pick<WorkoutExerciseDraft, "name" | "muscleGroup" | "exerciseType" | "planningMetadata">> = [
+  { name: "Bench Press", muscleGroup: "Chest", exerciseType: "weighted", planningMetadata: { focusGroups: ["Chest"], movementPattern: "horizontal-push", requiredEquipment: ["barbell", "bench"] } },
+  { name: "Incline Dumbbell Press", muscleGroup: "Chest", exerciseType: "weighted", planningMetadata: { focusGroups: ["Chest"], movementPattern: "horizontal-push", requiredEquipment: ["dumbbell", "bench"] } },
+  { name: "Lat Pulldown", muscleGroup: "Back", exerciseType: "weighted", planningMetadata: { focusGroups: ["Back"], movementPattern: "vertical-pull", requiredEquipment: ["selectorized-machine"] } },
+  { name: "Seated Row", muscleGroup: "Back", exerciseType: "weighted", planningMetadata: { focusGroups: ["Back"], movementPattern: "horizontal-pull", requiredEquipment: ["selectorized-machine"] } },
+  { name: "Bicep Curl", muscleGroup: "Biceps", exerciseType: "weighted", planningMetadata: { focusGroups: ["Biceps"], movementPattern: "elbow-flexion-supinated", requiredEquipment: ["dumbbell"] } },
+  { name: "Hammer Curl", muscleGroup: "Biceps", exerciseType: "weighted", planningMetadata: { focusGroups: ["Biceps"], movementPattern: "elbow-flexion-neutral", requiredEquipment: ["dumbbell"] } },
+  { name: "Shoulder Press", muscleGroup: "Shoulders", exerciseType: "weighted", planningMetadata: { focusGroups: ["Shoulders"], movementPattern: "vertical-push", requiredEquipment: ["dumbbell"] } },
+  { name: "Lateral Raise", muscleGroup: "Shoulders", exerciseType: "weighted", planningMetadata: { focusGroups: ["Shoulders"], movementPattern: "shoulder-abduction", requiredEquipment: ["dumbbell"] } },
+  { name: "Squat", muscleGroup: "Legs", exerciseType: "weighted", planningMetadata: { focusGroups: ["Legs", "Glutes"], movementPattern: "squat", requiredEquipment: ["barbell"] } },
+  { name: "Romanian Deadlift", muscleGroup: "Hamstrings", exerciseType: "weighted", planningMetadata: { focusGroups: ["Hamstrings", "Glutes"], movementPattern: "hinge", requiredEquipment: ["barbell"] } },
+  { name: "Leg Press", muscleGroup: "Legs", exerciseType: "weighted", planningMetadata: { focusGroups: ["Legs", "Glutes"], movementPattern: "knee-dominant", requiredEquipment: ["plate-loaded-machine"] } },
+  { name: "Hip Thrust", muscleGroup: "Glutes", exerciseType: "weighted", planningMetadata: { focusGroups: ["Glutes"], movementPattern: "hip-extension", requiredEquipment: ["barbell", "bench"] } },
 ];
 
 export function EasyWorkoutProvider({ children }: { children: ReactNode }) {
