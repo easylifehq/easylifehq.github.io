@@ -48,11 +48,11 @@ const csvCell = (value: unknown) => {
 };
 
 export function serializeWorkoutCsv(payload: ReturnType<typeof createWorkoutExportPayload>) {
-  const header = ["exportVersion", "formulaVersion", "sessionId", "clientDraftId", "performedOn", "createdAt", "updatedAt", "routineId", "routineName", "durationMinutes", "storedWeightUnit", "exerciseId", "exerciseName", "exerciseType", "muscleGroup", "setNumber", "setType", "completed", "deleted", "reps", "weight", "durationSeconds", "distanceMeters", "rir", "setNotes", "sessionNotes"];
+  const header = ["exportVersion", "formulaVersion", "sessionId", "clientDraftId", "performedOn", "createdAt", "updatedAt", "routineId", "routineName", "durationMinutes", "storedWeightUnit", "exerciseId", "exerciseName", "exerciseType", "muscleGroup", "setupSeat", "setupArm", "setupBack", "setupPad", "setupOther", "setNumber", "setType", "completed", "deleted", "reps", "weight", "durationSeconds", "distanceMeters", "rir", "setNotes", "sessionNotes"];
   const rows: unknown[][] = [];
   payload.sessions.forEach((session) => (session.exercises || []).forEach((exercise) => (exercise.sets || []).forEach((set, index) => rows.push([
     payload.exportVersion, payload.formulaVersion, session.id, session.clientDraftId, session.performedOn, session.createdAt, session.updatedAt, session.routineId, session.routineName, session.durationMinutes, session.weightUnit,
-    exercise.exerciseId, exercise.exerciseName, exercise.exerciseType || "weighted", (exercise as { muscleGroup?: string }).muscleGroup, index + 1, set.setType || "standard", (session.schemaVersion || 0) >= 4 ? set.completed === true : set.completed !== false, Boolean(set.deleted), set.reps, set.weight, set.durationSeconds, set.distanceMeters, (set as { rir?: number | null }).rir, (set as { notes?: string }).notes, session.notes,
+    exercise.exerciseId, exercise.exerciseName, exercise.exerciseType || "weighted", (exercise as { muscleGroup?: string }).muscleGroup, exercise.setup?.seat, exercise.setup?.arm, exercise.setup?.back, exercise.setup?.pad, exercise.setup?.other, index + 1, set.setType || "standard", (session.schemaVersion || 0) >= 4 ? set.completed === true : set.completed !== false, Boolean(set.deleted), set.reps, set.weight, set.durationSeconds, set.distanceMeters, (set as { rir?: number | null }).rir, (set as { notes?: string }).notes, session.notes,
   ]))));
   return [header, ...rows].map((row) => row.map(csvCell).join(",")).join("\n");
 }

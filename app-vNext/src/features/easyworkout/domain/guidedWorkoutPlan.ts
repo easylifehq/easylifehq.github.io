@@ -1,9 +1,10 @@
 import { convertWeight, isValidWorkingSet, isWorkoutSessionCredited, type WorkoutDisplayUnit, type WorkoutExerciseType } from "./workoutStatistics.ts";
+import type { WorkoutEquipmentSetup } from "../../../lib/workoutEquipmentSetup.ts";
 
 type RoutineExercise = { exerciseId: string | null; exerciseName: string; exerciseType?: WorkoutExerciseType; targetSets: number; targetReps: string; targetWeight: number | null };
 export type GuidedRoutine = { id: string; name: string; dayLabel: string; exercises: RoutineExercise[]; createdAt?: Date | null; updatedAt?: Date | null };
 type SessionSet = { reps?: number; weight?: number; durationSeconds?: number; distanceMeters?: number; completed?: boolean; deleted?: boolean; setType?: "warmup" | "standard" | "drop" | "failure" };
-type SessionExercise = { exerciseId?: string | null; exerciseName?: string; exerciseType?: WorkoutExerciseType; sets?: SessionSet[] };
+type SessionExercise = { exerciseId?: string | null; exerciseName?: string; exerciseType?: WorkoutExerciseType; setup?: WorkoutEquipmentSetup; sets?: SessionSet[] };
 export type GuidedSession = { id: string; clientDraftId?: string; schemaVersion?: number; routineId?: string | null; routineName?: string; performedOn: string; weightUnit?: WorkoutDisplayUnit; durationMinutes?: number | null; notes?: string; exercises?: SessionExercise[]; createdAt?: Date | null; updatedAt?: Date | null };
 export type GuidedExerciseSuggestion = { exerciseId: string | null; exerciseName: string; target: string; previous: string; suggestion: string; ruleId: "start-from-routine-v1" | "repeat-latest-effort-v1" | "optional-small-increase-v1"; sourceSessionId: string | null; sourceDate: string | null };
 export type GuidedWorkoutPlan = { formulaVersion: "guided-workout-v1"; routineId: string; routineName: string; reason: string; lastPerformedOn: string | null; suggestions: GuidedExerciseSuggestion[] };

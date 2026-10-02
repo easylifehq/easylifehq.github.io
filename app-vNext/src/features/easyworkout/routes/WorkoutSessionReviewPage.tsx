@@ -4,6 +4,7 @@ import { useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
 import { convertWeight, deriveWorkoutStatistics, isValidWorkingSet, sessionRequiresExplicitCompletion, weightedSetVolume } from "@/features/easyworkout/domain/workoutStatistics";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { useAuth } from "@/features/auth/AuthContext";
+import { formatWorkoutEquipmentSetup } from "@/lib/workoutEquipmentSetup";
 
 const today = () => {
   const date = new Date();
@@ -52,6 +53,14 @@ export function WorkoutSessionReviewPage() {
         <article><span>Weighted workload</span><strong>{workload.toLocaleString()} {settings.easyWorkout.weightUnit}·reps</strong></article>
         <article><span>Muscles trained</span><strong>{[...muscles].join(", ") || "Unmapped"}</strong></article>
       </div>
+      {session.exercises.some((exercise) => formatWorkoutEquipmentSetup(exercise.setup)) ? (
+        <div className="statistics-app-grid workout-review-setup-grid">
+          {session.exercises.map((exercise) => {
+            const setup = formatWorkoutEquipmentSetup(exercise.setup);
+            return setup ? <article className="statistics-insight-card" key={`${exercise.exerciseId || exercise.exerciseName}-setup`}><span>Machine setup</span><strong>{exercise.exerciseName}</strong><p>{setup}</p></article> : null;
+          })}
+        </div>
+      ) : null}
       <div className="workout-next-move"><div><span>Next time · rule comparable-trend-v1</span><strong>{nextObservation}</strong><p>This is a transparent observation from logged evidence, not AI or a recovery diagnosis.</p></div></div>
       <div className="statistics-app-grid">
         {records.length ? records.map(({ summary, record }) => <article className="statistics-insight-card" key={`${summary.exerciseKey}-${record.type}-${record.label}`}><span>{summary.exerciseName}</span><strong>{record.label}</strong><p>{record.value.toFixed(record.unit === "reps" ? 0 : 1)} {record.unit} · exact source is this workout</p></article>) : <p className="empty-card-vnext">No new all-history record in this session. Comparable workload still counts toward the trend.</p>}

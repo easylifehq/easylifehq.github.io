@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 import { workoutSessionDocumentId } from "./workoutSessionIdentity";
+import { normalizeWorkoutEquipmentSetup, type WorkoutEquipmentSetup } from "../workoutEquipmentSetup";
 
 export type WorkoutSetRecord = {
   reps: number;
@@ -36,6 +37,7 @@ export type WorkoutExerciseLogRecord = {
   primaryMuscles?: string[];
   secondaryMuscles?: string[];
   exerciseType?: "weighted" | "bodyweight" | "assisted" | "duration" | "distance";
+  setup?: WorkoutEquipmentSetup;
   notes: string;
   sets: WorkoutSetRecord[];
 };
@@ -84,10 +86,25 @@ function normalizeSession(snapshot: QueryDocumentSnapshot<DocumentData>) {
     weightUnit: data.weightUnit === "kg" ? "kg" : "lb",
     durationMinutes: typeof data.durationMinutes === "number" ? data.durationMinutes : null,
     notes: data.notes || "",
-    exercises: Array.isArray(data.exercises) ? data.exercises : [],
+    exercises: Array.isArray(data.exercises)
+      ? data.exercises.map((exercise: WorkoutExerciseLogRecord) => ({
+          ...exercise,
+          setup: normalizeWorkoutEquipmentSetup(exercise?.setup),
+        }))
+      : [],
     createdAt: toDate(data.createdAt),
     updatedAt: toDate(data.updatedAt),
   } satisfies WorkoutSessionRecord;
+}
+
+function normalizeWorkoutSessionDraft(draft: WorkoutSessionDraft): WorkoutSessionDraft {
+  return {
+    ...draft,
+    exercises: draft.exercises.map((exercise) => ({
+      ...exercise,
+      setup: normalizeWorkoutEquipmentSetup(exercise.setup),
+    })),
+  };
 }
 
 function getWorkoutSessionsCollection(userId: string) {
@@ -117,13 +134,14 @@ export function subscribeToWorkoutSessions(
 }
 
 export async function createWorkoutSession(userId: string, draft: WorkoutSessionDraft) {
+  const normalizedDraft = normalizeWorkoutSessionDraft(draft);
   if (draft.clientDraftId) {
     const reference = doc(getWorkoutSessionsCollection(userId), workoutSessionDocumentId(draft.clientDraftId));
     await runTransaction(db, async (transaction) => {
       const existing = await transaction.get(reference);
       if (existing.exists()) return;
       transaction.set(reference, {
-        ...draft,
+        ...normalizedDraft,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
@@ -132,7 +150,7 @@ export async function createWorkoutSession(userId: string, draft: WorkoutSession
   }
 
   const reference = await addDoc(getWorkoutSessionsCollection(userId), {
-    ...draft,
+    ...normalizedDraft,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -168,7 +186,7 @@ export async function addSetToDailyWorkoutSession(
   const exerciseIndex = existingSession.exercises.findIndex(
     (entry) => entry.exerciseName.toLowerCase() === exercise.exerciseName.toLowerCase()
   );
-  const exercises = [...existingSession.exercises];
+  const exercises: WorkoutExerciseLogRecord[] = [...existingSession.exercises];
 
   if (exerciseIndex >= 0) {
     const existingExercise = exercises[exerciseIndex];
@@ -198,8 +216,9 @@ export async function updateWorkoutSession(
   sessionId: string,
   draft: WorkoutSessionDraft
 ) {
+  const normalizedDraft = normalizeWorkoutSessionDraft(draft);
   await updateDoc(doc(db, "users", userId, "workoutSessions", sessionId), {
-    ...draft,
+    ...normalizedDraft,
     updatedAt: serverTimestamp(),
   });
 }

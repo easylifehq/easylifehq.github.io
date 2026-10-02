@@ -11303,8 +11303,50 @@ button.calendar-detail-card:disabled {
   grid-template-columns: minmax(170px, 0.7fr) minmax(0, 1fr);
 }
 
+.workout-setup-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0.65rem 0 0.8rem;
+}
+
+.workout-setup-fields input,
+.workout-more-setup summary {
+  min-height: 44px;
+}
+
+.workout-more-setup {
+  grid-column: 1 / -1;
+}
+
+.workout-more-setup summary {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  cursor: pointer;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  font-weight: 800;
+}
+
+.workout-more-setup-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.55rem;
+}
+
+.workout-setup-other {
+  grid-column: 1 / -1;
+}
+
+.workout-last-time-actions {
+  flex-wrap: wrap;
+  margin: 0;
+}
+
 .gym-suggestion {
   margin-bottom: 0.8rem;
+  flex-wrap: wrap;
 }
 
 .workout-set-row {
@@ -13789,12 +13831,23 @@ button.calendar-detail-card:disabled {
   }
 
   .task-row-grid-workout {
-    grid-template-columns: 1fr;
+    grid-template-columns: 52px minmax(64px, 0.75fr) minmax(96px, 1.1fr);
+    gap: 0.48rem;
   }
 
   .task-row-grid-workout .workout-set-actions {
-    grid-column: auto;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     justify-content: stretch;
+  }
+
+  .task-row-grid-workout > .task-row-field:nth-child(4) {
+    grid-column: 1 / span 2;
+  }
+
+  .task-row-grid-workout > .task-row-field:nth-child(5) {
+    grid-column: 3;
   }
 
 .workout-set-actions .workout-delete-button {
@@ -14151,6 +14204,26 @@ button.calendar-detail-card:disabled {
   }
 
   .task-row-card .task-row-field {
+    grid-column: 1 / -1;
+  }
+
+  .app-theme-easyworkout .task-row-grid-workout {
+    grid-template-columns: 52px minmax(64px, 0.75fr) minmax(96px, 1.1fr);
+  }
+
+  .app-theme-easyworkout .task-row-grid-workout > .task-row-field {
+    grid-column: auto;
+  }
+
+  .app-theme-easyworkout .task-row-grid-workout > .task-row-field:nth-child(4) {
+    grid-column: 1 / span 2;
+  }
+
+  .app-theme-easyworkout .task-row-grid-workout > .task-row-field:nth-child(5) {
+    grid-column: 3;
+  }
+
+  .app-theme-easyworkout .task-row-grid-workout > .workout-set-actions {
     grid-column: 1 / -1;
   }
 
