@@ -16,6 +16,48 @@ test("legacy draft migrates without losing routine, active exercise, notes, dura
   assert.equal(result.draft?.durationMinutes, "52");
   assert.equal(result.draft?.exerciseLogs[0].sets[0].weight, 185);
   assert.equal(result.draft?.exerciseLogs[0].sets[0].setType, "standard");
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].completed, false);
+  assert.equal(result.draft?.completionReviewRequired, true);
+  assert.match(result.message, /review which sets/i);
+});
+
+test("schema-v3 active drafts preserve entered values but never certify performed sets", () => {
+  const result = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 3,
+    exerciseLogs: [{
+      ...legacy.exerciseLogs[0],
+      sets: [
+        { ...legacy.exerciseLogs[0].sets[0], completed: true, notes: "performed or planned is ambiguous" },
+        { localId: "set-two", reps: 8, weight: 135, notes: "", completed: false },
+      ],
+    }],
+  }, options);
+
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].weight, 185);
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].notes, "performed or planned is ambiguous");
+  assert.deepEqual(result.draft?.exerciseLogs[0].sets.map((set) => set.completed), [false, false]);
+  assert.equal(result.draft?.completionReviewRequired, true);
+});
+
+test("schema-v4 drafts fail closed when completion is missing or malformed", () => {
+  const result = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 4,
+    completionReviewRequired: false,
+    exerciseLogs: [{
+      ...legacy.exerciseLogs[0],
+      sets: [
+        { ...legacy.exerciseLogs[0].sets[0], completed: true },
+        { ...legacy.exerciseLogs[0].sets[0], localId: "missing", completed: undefined },
+        { ...legacy.exerciseLogs[0].sets[0], localId: "malformed", completed: "yes" },
+      ],
+    }],
+  }, options);
+
+  assert.equal(result.migrated, false);
+  assert.deepEqual(result.draft?.exerciseLogs[0].sets.map((set) => set.completed), [true, false, false]);
+  assert.equal(result.draft?.completionReviewRequired, false);
 });
 
 test("malformed and old drafts fail safely with readable recovery", () => {
@@ -52,6 +94,24 @@ test("workout log flushes its latest controlled draft before page suspension or 
   assert.match(source, /addEventListener\("pagehide", persistLatestDraft\)/);
   assert.match(source, /visibilityState === "hidden"/);
   assert.match(source, /serializeWorkoutDraftForStorage\(\{ \.\.\.draft, updatedAt:/);
+});
+
+test("workout log exposes one-tap set completion, undo, and legacy-draft review", async () => {
+  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  assert.match(source, /aria-pressed=\{set\.completed\}/);
+  assert.match(source, /set\.completed \? "Undo done" : "Mark done"/);
+  assert.match(source, /Review which sets you performed/);
+  assert.match(source, /Mark all shown sets done/);
+  assert.match(source, /Review complete/);
+});
+
+test("all new, copied, imported, and prefilled workout rows remain unperformed", async () => {
+  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  assert.match(source, /const emptySet[\s\S]{0,250}completed: false/);
+  assert.match(source, /baseSets[\s\S]{0,500}completed: false/);
+  assert.match(source, /Copy previous set[\s\S]{0,500}/);
+  assert.match(source, /previousSet, localId: createLocalId\(\), completed: false/);
+  assert.match(source, /parseWorkoutPaste[\s\S]{0,2500}completed: false/);
 });
 
 test("automatic workout duration excludes implausible overnight drafts and preserves explicit duration", () => {

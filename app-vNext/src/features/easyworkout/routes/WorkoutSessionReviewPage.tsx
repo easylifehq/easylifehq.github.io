@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
-import { convertWeight, deriveWorkoutStatistics, isValidWorkingSet, weightedSetVolume } from "@/features/easyworkout/domain/workoutStatistics";
+import { convertWeight, deriveWorkoutStatistics, isValidWorkingSet, sessionRequiresExplicitCompletion, weightedSetVolume } from "@/features/easyworkout/domain/workoutStatistics";
 import { useSettings } from "@/features/settings/SettingsContext";
 import { useAuth } from "@/features/auth/AuthContext";
 
@@ -24,14 +24,15 @@ export function WorkoutSessionReviewPage() {
   let workingSets = 0;
   let workload = 0;
   const muscles = new Set<string>();
+  const validity = { requiresExplicitCompletion: sessionRequiresExplicitCompletion(session) };
   session.exercises.forEach((exercise) => {
     const kind = exercise.exerciseType || "weighted";
     let exerciseWorkingSets = 0;
     exercise.sets.forEach((set) => {
-      if (!isValidWorkingSet(set, kind)) return;
+      if (!isValidWorkingSet(set, kind, validity)) return;
       workingSets += 1;
       exerciseWorkingSets += 1;
-      workload += convertWeight(weightedSetVolume(set, kind), session.weightUnit || "lb", settings.easyWorkout.weightUnit);
+      workload += convertWeight(weightedSetVolume(set, kind, validity), session.weightUnit || "lb", settings.easyWorkout.weightUnit);
     });
     if (exerciseWorkingSets) {
       (exercise.primaryMuscles?.length ? exercise.primaryMuscles : exercise.muscleGroup ? [exercise.muscleGroup] : []).forEach((muscle) => muscles.add(muscle));

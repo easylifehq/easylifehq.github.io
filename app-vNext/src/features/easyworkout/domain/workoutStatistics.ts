@@ -30,6 +30,7 @@ export type AnalyticsExercise = {
 };
 export type AnalyticsSession = {
   id: string;
+  schemaVersion?: number;
   routineId?: string | null;
   routineName?: string;
   performedOn: string;
@@ -101,8 +102,15 @@ const nonNegative = (value: unknown) => (finite(value) && (value as number) >= 0
 const getExerciseType = (exercise: AnalyticsExercise): WorkoutExerciseType => exercise.exerciseType || "weighted";
 const getSetType = (set: AnalyticsSet): WorkoutSetType => set.setType || "standard";
 
-export function isValidWorkingSet(set: AnalyticsSet, kind: WorkoutExerciseType = "weighted") {
-  if (set.deleted || set.completed === false || getSetType(set) === "warmup") return false;
+export type WorkingSetValidityOptions = { requiresExplicitCompletion?: boolean };
+
+export function isValidWorkingSet(
+  set: AnalyticsSet,
+  kind: WorkoutExerciseType = "weighted",
+  options: WorkingSetValidityOptions = {}
+) {
+  const completionIsValid = options.requiresExplicitCompletion ? set.completed === true : set.completed !== false;
+  if (set.deleted || !completionIsValid || getSetType(set) === "warmup") return false;
   if (kind === "duration") return (nonNegative(set.durationSeconds) ?? 0) > 0;
   if (kind === "distance") return (nonNegative(set.distanceMeters) ?? 0) > 0;
   if (kind === "bodyweight") return (nonNegative(set.reps) ?? 0) > 0;
@@ -110,8 +118,12 @@ export function isValidWorkingSet(set: AnalyticsSet, kind: WorkoutExerciseType =
   return (nonNegative(set.reps) ?? 0) > 0 && (nonNegative(set.weight) ?? 0) > 0;
 }
 
-export function weightedSetVolume(set: AnalyticsSet, kind: WorkoutExerciseType = "weighted") {
-  if (kind !== "weighted" || !isValidWorkingSet(set, kind)) return 0;
+export function weightedSetVolume(
+  set: AnalyticsSet,
+  kind: WorkoutExerciseType = "weighted",
+  options: WorkingSetValidityOptions = {}
+) {
+  if (kind !== "weighted" || !isValidWorkingSet(set, kind, options)) return 0;
   return (nonNegative(set.weight) || 0) * (nonNegative(set.reps) || 0);
 }
 
@@ -135,7 +147,11 @@ export function deriveRoutineComparisons(sessionsInput: AnalyticsSession[], opti
   const currentStart = shiftDateKey(options.nowDateKey, -(days - 1));
   const previousEnd = shiftDateKey(currentStart, -1);
   const previousStart = shiftDateKey(previousEnd, -(days - 1));
-  const sessions = sessionsInput.filter((session) => isValidLocalDateKey(session.performedOn) && session.performedOn <= options.nowDateKey);
+  const sessions = sessionsInput.filter((session) =>
+    isValidLocalDateKey(session.performedOn) &&
+    session.performedOn <= options.nowDateKey &&
+    isWorkoutSessionCredited(session)
+  );
   const prSessionIds = new Set<string>();
   const bestE1rm = new Map<string, number>();
   [...sessions].sort((a, b) => a.performedOn.localeCompare(b.performedOn) || a.id.localeCompare(b.id)).forEach((session) => {
@@ -143,7 +159,7 @@ export function deriveRoutineComparisons(sessionsInput: AnalyticsSession[], opti
     (session.exercises || []).forEach((exercise) => {
       if (getExerciseType(exercise) !== "weighted") return;
       const key = exerciseKey(exercise);
-      validSets(exercise).forEach((set) => {
+      validSets(exercise, session).forEach((set) => {
         const estimate = estimateOneRepMax(set.weight || 0, set.reps || 0);
         if (!estimate) return;
         const value = convertWeight(estimate.value, session.weightUnit || "lb", options.displayUnit);
@@ -168,8 +184,9 @@ export function deriveRoutineComparisons(sessionsInput: AnalyticsSession[], opti
       windowSessions.forEach((session) => {
         if (typeof session.durationMinutes === "number" && Number.isFinite(session.durationMinutes) && session.durationMinutes >= 0) durations.push(session.durationMinutes);
         (session.exercises || []).forEach((exercise) => {
-          const valid = validSets(exercise); sets += valid.length;
-          volume += convertWeight(valid.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise)), 0), session.weightUnit || "lb", options.displayUnit);
+          const valid = validSets(exercise, session); sets += valid.length;
+          const validity = { requiresExplicitCompletion: sessionRequiresExplicitCompletion(session) };
+          volume += convertWeight(valid.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise), validity), 0), session.weightUnit || "lb", options.displayUnit);
         });
       });
       return { sessions: windowSessions.length, sets, volume, duration: durations.length ? durations.reduce((sum, value) => sum + value, 0) / durations.length : null, durationSamples: durations.length, prs: windowSessions.filter((session) => prSessionIds.has(session.id)).length };
@@ -210,9 +227,20 @@ function confidenceForSamples(count: number): DataConfidence {
 function metric(current: number, previous: number, currentSamples: number, previousSamples: number): PeriodMetric {
   return { current, previous, delta: current - previous, percentDelta: previous > 0 && currentSamples > 0 && previousSamples > 0 ? ((current - previous) / previous) * 100 : null };
 }
-function validSets(exercise: AnalyticsExercise) {
+export function sessionRequiresExplicitCompletion(session: Pick<AnalyticsSession, "schemaVersion">) {
+  return typeof session.schemaVersion === "number" && session.schemaVersion >= 4;
+}
+
+function validSets(exercise: AnalyticsExercise, session?: Pick<AnalyticsSession, "schemaVersion">) {
   const kind = getExerciseType(exercise);
-  return (exercise.sets || []).filter((set) => isValidWorkingSet(set, kind));
+  return (exercise.sets || []).filter((set) => isValidWorkingSet(set, kind, {
+    requiresExplicitCompletion: session ? sessionRequiresExplicitCompletion(session) : false,
+  }));
+}
+
+export function isWorkoutSessionCredited(session: AnalyticsSession) {
+  if (!sessionRequiresExplicitCompletion(session)) return true;
+  return (session.exercises || []).some((exercise) => validSets(exercise, session).length > 0);
 }
 function exerciseKey(exercise: AnalyticsExercise) {
   return exercise.exerciseId?.trim() || `name:${(exercise.exerciseName || "Unknown exercise").trim().toLowerCase()}`;
@@ -221,6 +249,7 @@ function exerciseKey(exercise: AnalyticsExercise) {
 function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDisplayUnit): ExerciseSummary[] {
   const groups = new Map<string, { exerciseId: string | null; exerciseName: string; entries: Array<{ session: AnalyticsSession; exercise: AnalyticsExercise }> }>();
   sessions.forEach((session) => (session.exercises || []).forEach((exercise) => {
+    if (sessionRequiresExplicitCompletion(session) && !validSets(exercise, session).length) return;
     const key = exerciseKey(exercise);
     const current = groups.get(key) || { exerciseId: exercise.exerciseId || null, exerciseName: exercise.exerciseName?.trim() || "Unknown exercise", entries: [] };
     current.entries.push({ session, exercise });
@@ -239,11 +268,12 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
     });
     entriesBySession.forEach(({ session, exercises }) => {
       const sourceUnit = session.weightUnit || "lb";
-      const weighted = exercises.flatMap((exercise) => getExerciseType(exercise) === "weighted" ? validSets(exercise) : []);
+      const weighted = exercises.flatMap((exercise) => getExerciseType(exercise) === "weighted" ? validSets(exercise, session) : []);
       const estimated = weighted.map((set) => ({ set, result: estimateOneRepMax(set.weight || 0, set.reps || 0) }))
         .filter((entry): entry is { set: AnalyticsSet; result: NonNullable<ReturnType<typeof estimateOneRepMax>> } => Boolean(entry.result))
         .sort((a, b) => b.result.value - a.result.value)[0];
-      const sessionVolume = convertWeight(weighted.reduce((sum, set) => sum + weightedSetVolume(set, "weighted"), 0), sourceUnit, unit);
+      const validity = { requiresExplicitCompletion: sessionRequiresExplicitCompletion(session) };
+      const sessionVolume = convertWeight(weighted.reduce((sum, set) => sum + weightedSetVolume(set, "weighted", validity), 0), sourceUnit, unit);
       if (estimated) observations.push({
         sessionId: session.id,
         performedOn: session.performedOn,
@@ -287,7 +317,11 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
 
 export function deriveWorkoutStatistics(sessionsInput: AnalyticsSession[], options: { nowDateKey: string; periodDays?: number; displayUnit?: WorkoutDisplayUnit; draftStatus?: string }): WorkoutStatistics {
   const displayUnit = options.displayUnit || "lb";
-  const sessions = sessionsInput.filter((session) => isValidLocalDateKey(session.performedOn) && session.performedOn <= options.nowDateKey);
+  const sessions = sessionsInput.filter((session) =>
+    isValidLocalDateKey(session.performedOn) &&
+    session.performedOn <= options.nowDateKey &&
+    isWorkoutSessionCredited(session)
+  );
   const days = Math.max(1, Math.floor(options.periodDays || 28));
   const currentStart = shiftDateKey(options.nowDateKey, -(days - 1));
   const previousEnd = shiftDateKey(currentStart, -1);
@@ -299,9 +333,10 @@ export function deriveWorkoutStatistics(sessionsInput: AnalyticsSession[], optio
     windowSessions.forEach((session) => {
       durationMinutes += Math.max(0, finite(session.durationMinutes) ? (session.durationMinutes as number) : 0);
       (session.exercises || []).forEach((exercise) => {
-        const sets = validSets(exercise);
+        const sets = validSets(exercise, session);
         workingSets += sets.length;
-        const sourceWorkload = sets.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise)), 0);
+        const validity = { requiresExplicitCompletion: sessionRequiresExplicitCompletion(session) };
+        const sourceWorkload = sets.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise), validity), 0);
         workload += convertWeight(sourceWorkload, session.weightUnit || "lb", displayUnit);
       });
     });
@@ -311,7 +346,7 @@ export function deriveWorkoutStatistics(sessionsInput: AnalyticsSession[], optio
   const muscleMap = new Map<string, { directSets: number; secondarySets: number; sessions: Set<string> }>();
   let unmappedWorkingSets = 0;
   currentSessions.forEach((session) => (session.exercises || []).forEach((exercise) => {
-    const count = validSets(exercise).length;
+    const count = validSets(exercise, session).length;
     if (!count) return;
     const primary = [...new Set((exercise.primaryMuscles?.filter(Boolean).length ? exercise.primaryMuscles : exercise.muscleGroup ? [exercise.muscleGroup] : []).map((muscle) => muscle.trim()).filter(Boolean))];
     const primaryKeys = new Set(primary.map((muscle) => muscle.toLowerCase()));

@@ -90,7 +90,9 @@ export function deriveExerciseHistory(
       const key = exerciseKey(exercise.exerciseName);
       if (!key) return;
       const kind = exercise.exerciseType || "weighted";
-      const validSets = exercise.sets.filter((set) => isValidWorkingSet(set, kind));
+      const validSets = exercise.sets.filter((set) => isValidWorkingSet(set, kind, {
+        requiresExplicitCompletion: typeof session.schemaVersion === "number" && session.schemaVersion >= 4,
+      }));
       if (!validSets.length) return;
       const sourceUnit = session.weightUnit || "lb";
       const convertedSets = validSets.map((set) => ({

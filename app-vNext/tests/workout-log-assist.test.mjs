@@ -42,6 +42,32 @@ test("previous-performance assist uses the newest completed working sets in orde
   assert.equal(previous?.sessionCount, 2);
 });
 
+test("schema-v4 history ignores sets without explicit completion while legacy history remains compatible", () => {
+  const sessions = [
+    session({
+      id: "v4",
+      schemaVersion: 4,
+      performedOn: "2026-09-02",
+      exercises: [{ exerciseId: "bench", exerciseName: "Bench Press", muscleGroup: "Chest", notes: "", sets: [
+        { reps: 5, weight: 225, notes: "", setType: "standard", deleted: false },
+        { reps: 5, weight: 185, notes: "", setType: "standard", completed: true, deleted: false },
+      ] }],
+    }),
+    session({
+      id: "legacy",
+      performedOn: "2026-09-01",
+      exercises: [{ exerciseId: "bench", exerciseName: "Bench Press", muscleGroup: "Chest", notes: "", sets: [
+        { reps: 5, weight: 205, notes: "", setType: "standard", deleted: false },
+      ] }],
+    }),
+  ];
+
+  const previous = findExerciseHistory(deriveExerciseHistory(sessions, "lb"), "bench press");
+  assert.deepEqual(previous?.lastSets.map(({ reps, weight }) => ({ reps, weight })), [{ reps: 5, weight: 185 }]);
+  assert.equal(previous?.bestWeight, 205);
+  assert.equal(previous?.sessionCount, 2);
+});
+
 test("all routine sets prefill from the last sequence and repeat the final set when needed", () => {
   const previous = {
     lastWeight: 185,
@@ -52,7 +78,7 @@ test("all routine sets prefill from the last sequence and repeat the final set w
     bestVolume: 1645,
     sessionCount: 1,
   };
-  const sets = [1, 2, 3].map((index) => ({ localId: `set-${index}`, reps: 8, weight: 0, notes: "", setType: "standard", completed: true, deleted: false, rir: null }));
+  const sets = [1, 2, 3].map((index) => ({ localId: `set-${index}`, reps: 8, weight: 0, notes: "", setType: "standard", completed: false, deleted: false, rir: null }));
   const filled = fillSetsFromLastPerformance(sets, previous);
   assert.deepEqual(filled.map(({ reps, weight }) => ({ reps, weight })), [
     { reps: 5, weight: 185 },
@@ -60,6 +86,7 @@ test("all routine sets prefill from the last sequence and repeat the final set w
     { reps: 4, weight: 180 },
   ]);
   assert.deepEqual(filled.map((set) => set.localId), ["set-1", "set-2", "set-3"]);
+  assert.deepEqual(filled.map((set) => set.completed), [false, false, false]);
 });
 
 test("exercise options put recently used names first and deduplicate saved and built-in matches", () => {
