@@ -143,6 +143,8 @@ test("suggested exercises preserve source type and muscle metadata", async () =>
   assert.match(source, /resolveWorkoutExerciseOption/);
   assert.match(source, /key=\{suggestion\.exerciseId \|\| suggestion\.name\}/);
   assert.match(source, /<strong>\{suggestion\.selectionLabel\}<\/strong>/);
+  assert.match(source, /currentExerciseKeys/);
+  assert.match(source, /workoutExerciseIdentityKey/);
 });
 
 test("completed workout persistence and review normalize and display setup", async () => {
