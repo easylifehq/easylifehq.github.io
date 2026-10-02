@@ -1,6 +1,6 @@
 import { normalizeWorkoutEquipmentSetup, type WorkoutEquipmentSetup } from "../../../lib/workoutEquipmentSetup.ts";
 
-export const WORKOUT_DRAFT_SCHEMA_VERSION = 5 as const;
+export const WORKOUT_DRAFT_SCHEMA_VERSION = 6 as const;
 export const WORKOUT_DRAFT_MAX_SERIALIZED_CHARS = 500_000;
 export const WORKOUT_DRAFT_MAX_EXERCISES = 80;
 export const WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE = 100;
@@ -71,6 +71,7 @@ export type StoredWorkoutDraft = {
   completionReviewRequired: boolean;
   activeExerciseId?: string;
   exerciseLogs: WorkoutExerciseLogDraft[];
+  appliedImportOperationIds: string[];
   updatedAt: string;
 };
 
@@ -173,6 +174,10 @@ export function recoverWorkoutDraft(
   const migrated = value.schemaVersion !== WORKOUT_DRAFT_SCHEMA_VERSION;
   const selectedRoutineId = text(value.selectedRoutineId);
   const recoveredDraftId = text(value.draftId);
+  const appliedImportOperationIds = textList(value.appliedImportOperationIds)
+    .map((operationId) => operationId.trim().slice(0, 256))
+    .filter(Boolean)
+    .slice(-20);
   return {
     draft: {
       schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
@@ -189,11 +194,12 @@ export function recoverWorkoutDraft(
       completionReviewRequired: trustsExplicitCompletion ? value.completionReviewRequired === true : true,
       activeExerciseId: text(value.activeExerciseId) || exerciseLogs[0]?.localId,
       exerciseLogs,
+      appliedImportOperationIds,
       updatedAt: text(value.updatedAt) || options.nowIso,
     },
     message: migrated
       ? trustsExplicitCompletion
-        ? "Workout draft updated with machine setup support. Your completed-set choices were preserved."
+        ? "Workout draft updated safely. Your completed-set choices were preserved."
         : "An older workout draft was restored. Review which sets you performed before saving."
       : "Workout draft restored on this device.",
     migrated,

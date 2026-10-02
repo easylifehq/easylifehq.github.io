@@ -3806,6 +3806,79 @@ textarea::placeholder {
   background: var(--app-card-elevated);
 }
 
+.workout-import-preview,
+.workout-import-preview-list,
+.workout-import-metadata,
+.workout-import-mode {
+  display: grid;
+  min-width: 0;
+  gap: 0.75rem;
+}
+
+.workout-import-preview {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--app-border-subtle);
+}
+
+.workout-import-preview .workout-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.workout-import-preview .workout-section-heading > div {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.workout-import-preview .workout-check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  min-height: 44px;
+  padding: 0.35rem 0;
+}
+
+.workout-import-preview .workout-check-row input {
+  margin-top: 0.25rem;
+  flex: 0 0 auto;
+}
+
+.workout-import-preview button {
+  min-height: 44px;
+}
+
+.workout-import-preview-row {
+  min-width: 0;
+  padding: 0.75rem;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--app-border-subtle);
+  border-radius: 8px;
+  background: var(--app-input-bg);
+}
+
+.workout-import-preview-row p,
+.workout-import-preview-row ul,
+.workout-import-metadata p,
+.workout-import-metadata ul {
+  margin: 0;
+}
+
+.workout-import-mode {
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--app-border-subtle);
+  border-radius: 8px;
+}
+
+.workout-import-mode legend {
+  padding: 0 0.35rem;
+  font-weight: 800;
+}
+
 .deep-module-hero {
   display: flex;
   align-items: center;

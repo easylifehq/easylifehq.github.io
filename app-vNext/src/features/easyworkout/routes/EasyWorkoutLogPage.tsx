@@ -27,6 +27,12 @@ import {
   resolveWorkoutExerciseOption,
   workoutExerciseIdentityKey,
 } from "@/features/easyworkout/domain/workoutLogAssist";
+import {
+  applyWorkoutImportPreview,
+  parseWorkoutImportPreview,
+  workoutImportDraftFingerprint,
+  type WorkoutImportPreview,
+} from "@/features/easyworkout/domain/workoutImportPreview";
 import { isValidLocalDateKey, isValidWorkingSet, isWorkoutSessionCredited } from "@/features/easyworkout/domain/workoutStatistics";
 import {
   WORKOUT_SETUP_OTHER_MAX_LENGTH,
@@ -146,6 +152,7 @@ export function EasyWorkoutLogPage() {
   const saveCoordinatorRef = useRef(new WorkoutSaveCoordinator<string | null>());
   const skipDraftFlushRef = useRef(false);
   const latestDraftRef = useRef<StoredWorkoutDraft | null>(null);
+  const isApplyingImportRef = useRef(false);
   const elapsedTickRef = useRef(Date.now());
   const { settings } = useSettings();
   const { user, isDemoMode } = useAuth();
@@ -181,6 +188,12 @@ export function EasyWorkoutLogPage() {
   );
   const [activeExerciseId, setActiveExerciseId] = useState(restoredDraft?.activeExerciseId || restoredDraft?.exerciseLogs[0]?.localId || "");
   const [workoutPaste, setWorkoutPaste] = useState("");
+  const [workoutImportPreview, setWorkoutImportPreview] = useState<WorkoutImportPreview | null>(null);
+  const [workoutImportMode, setWorkoutImportMode] = useState<"append" | "replace" | null>(null);
+  const [applyWorkoutImportMetadata, setApplyWorkoutImportMetadata] = useState(false);
+  const [isApplyingImport, setIsApplyingImport] = useState(false);
+  const [workoutImportError, setWorkoutImportError] = useState("");
+  const [appliedImportOperationIds, setAppliedImportOperationIds] = useState(restoredDraft?.appliedImportOperationIds || []);
   const [saveMessage, setSaveMessage] = useState(restoredDraftRecovery?.message || "");
   const [draftStatus, setDraftStatus] = useState<WorkoutDraftLifecycleStatus>("saved-local");
   const [isSaving, setIsSaving] = useState(false);
@@ -204,6 +217,7 @@ export function EasyWorkoutLogPage() {
     completionReviewRequired,
     activeExerciseId,
     exerciseLogs,
+    appliedImportOperationIds,
     updatedAt: new Date().toISOString(),
   };
 
@@ -218,6 +232,10 @@ export function EasyWorkoutLogPage() {
   const exerciseOptions = useMemo(
     () => buildWorkoutExerciseOptions(exercises, sessions, defaultWorkoutExercises),
     [exercises, sessions]
+  );
+  const workoutImportPreviewIsStale = Boolean(
+    workoutImportPreview && latestDraftRef.current &&
+    workoutImportDraftFingerprint(latestDraftRef.current) !== workoutImportPreview.draftFingerprint
   );
 
   useEffect(() => {
@@ -601,65 +619,68 @@ export function EasyWorkoutLogPage() {
     });
   }
 
-  function parseWorkoutPaste() {
-    const parsed = workoutPaste
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .map((line) => {
-        const cleaned = line.replace(/^\s*(?:[-*+]|[0-9]+[.)])\s*/, "");
-        const compactMatch = cleaned.match(/^(.+?)\s+(\d+)\s*(?:x|by|for|@)\s*(\d+(?:\.\d+)?)\s*(?:lb|lbs|pounds?)?$/i);
-        const wordsMatch = cleaned.match(/^(.+?)\s+(\d+)\s*(?:reps?)?\s*(?:at|@|x|with)?\s*(\d+(?:\.\d+)?)\s*(?:lb|lbs|pounds?)?$/i);
-        const match = compactMatch || wordsMatch;
+  function previewWorkoutImport() {
+    const currentDraft = latestDraftRef.current;
+    if (!currentDraft) return;
+    const nextPreview = parseWorkoutImportPreview({
+      sourceText: workoutPaste,
+      draft: currentDraft,
+      exerciseOptions,
+      today: localDateKey(),
+      operationId: createLocalId(),
+    });
+    setWorkoutImportPreview(nextPreview);
+    setWorkoutImportMode(null);
+    setApplyWorkoutImportMetadata(false);
+    setWorkoutImportError("");
+    setSaveMessage(nextPreview.canConfirm
+      ? "Preview ready. Choose Append or Replace; imported sets remain planned until you mark them done."
+      : "Import preview found errors. Your workout draft and source text are unchanged.");
+  }
 
-        if (!match) {
-          return {
-            ...emptyExerciseLog(settings.easyWorkout.defaultSetCount),
-            exerciseName: cleaned,
-          };
-        }
-
-        const exerciseName = match[1].trim();
-        const builtIn = defaultWorkoutExercises.find(
-          (exercise) => exercise.name.toLowerCase() === exerciseName.toLowerCase()
-        );
-        const saved = exercises.find(
-          (exercise) => exercise.name.toLowerCase() === exerciseName.toLowerCase()
-        );
-
-        return {
-          localId: createLocalId(),
-          exerciseId: saved?.id || null,
-          exerciseName,
-          muscleGroup: saved?.muscleGroup || builtIn?.muscleGroup || "",
-          primaryMuscles: saved?.muscleGroup || builtIn?.muscleGroup ? [saved?.muscleGroup || builtIn?.muscleGroup || ""] : [],
-          secondaryMuscles: [],
-          exerciseType: "weighted" as const,
-          setup: {},
-          notes: "",
-          sets: [
-            {
-              reps: Number(match[2]) || 0,
-              weight: Number(match[3]) || 0,
-              notes: "",
-              localId: createLocalId(),
-              setType: "standard" as const,
-              completed: false,
-              deleted: false,
-              rir: null,
-            },
-          ],
-        };
-      });
-
-    if (!parsed.length) {
-      setSaveMessage("Paste at least one exercise line first.");
+  function confirmWorkoutImport() {
+    if (isApplyingImportRef.current || !workoutImportPreview || !workoutImportMode) return;
+    const currentDraft = latestDraftRef.current;
+    if (!currentDraft) return;
+    if (externalDraftConflict) {
+      setWorkoutImportError("This workout changed in another tab. Reload before importing so this tab cannot overwrite it.");
       return;
     }
-
-    setExerciseLogs(parsed);
-    setWorkoutPaste("");
-    setSaveMessage("Workout notes turned into editable sets.");
+    isApplyingImportRef.current = true;
+    setIsApplyingImport(true);
+    setWorkoutImportError("");
+    try {
+      const result = applyWorkoutImportPreview({
+        draft: currentDraft,
+        preview: workoutImportPreview,
+        mode: workoutImportMode,
+        applyMetadata: applyWorkoutImportMetadata,
+        createId: createLocalId,
+      });
+      if (!result.ok) {
+        setWorkoutImportError(result.error);
+        return;
+      }
+      if (!result.applied) {
+        setSaveMessage("This import was already applied; no sets were duplicated.");
+        setWorkoutImportPreview(null);
+        return;
+      }
+      setExerciseLogs(result.draft.exerciseLogs);
+      setActiveExerciseId(result.draft.activeExerciseId || result.draft.exerciseLogs[0]?.localId || "");
+      setAppliedImportOperationIds(result.draft.appliedImportOperationIds);
+      if (applyWorkoutImportMetadata) {
+        setPerformedOn(result.draft.performedOn);
+        setDurationMinutes(result.draft.durationMinutes);
+      }
+      setWorkoutImportPreview(null);
+      setWorkoutImportMode(null);
+      setApplyWorkoutImportMetadata(false);
+      setSaveMessage("Planned sets imported into this draft. Review them and mark only performed sets done.");
+    } finally {
+      isApplyingImportRef.current = false;
+      setIsApplyingImport(false);
+    }
   }
 
   async function handleSaveSession(event: React.FormEvent<HTMLFormElement>) {
@@ -800,23 +821,138 @@ export function EasyWorkoutLogPage() {
       <form className="task-composer" onSubmit={handleSaveSession}>
         {!isFocusedWorkoutMode ? (
         <details className="advanced-disclosure workout-advanced-tools">
-          <summary>Import old workout notes</summary>
+          <summary>Import planned workout sets</summary>
           <div className="workout-quick-paste">
             <label className="field-stack">
-              <span>Workout notes</span>
+              <span>Workout text</span>
               <textarea
-                rows={4}
+                rows={7}
                 value={workoutPaste}
-                onChange={(event) => setWorkoutPaste(event.target.value)}
-                placeholder={"Bench press 8x135\nLat pulldown 10x110\nSquat 5x185"}
+                onChange={(event) => {
+                  setWorkoutPaste(event.target.value);
+                  setWorkoutImportPreview(null);
+                  setWorkoutImportMode(null);
+                  setApplyWorkoutImportMetadata(false);
+                  setWorkoutImportError("");
+                }}
+                placeholder={"unit: lb\nBench Press: 3x8@135 lb\nLat Pulldown [id=machine-id]: 10@110 lb | seat=2"}
               />
             </label>
             <div className="task-composer-actions">
-              <button type="button" className="button-secondary" onClick={parseWorkoutPaste} disabled={!workoutPaste.trim()}>
-                Turn into sets
+              <button type="button" className="button-secondary" onClick={previewWorkoutImport} disabled={!workoutPaste.trim()}>
+                Preview planned sets
               </button>
-              <span className="helper-copy">One line per exercise, like 8x135 or 8 reps at 135.</span>
+              <span className="helper-copy">Use Exercise: 8@135 lb, 3x8@135 lb, or legacy 8x135 lb. This never imports completed history.</span>
             </div>
+            {workoutImportPreview ? (
+              <section className="workout-import-preview" aria-live="polite" aria-label="Workout import preview">
+                <div className="workout-section-heading">
+                  <div>
+                    <span>Review before changing the draft</span>
+                    <strong>{workoutImportPreview.rows.length} exercise line{workoutImportPreview.rows.length === 1 ? "" : "s"}</strong>
+                  </div>
+                  <button
+                    type="button"
+                    className="button-link"
+                    onClick={() => {
+                      setWorkoutImportPreview(null);
+                      setWorkoutImportMode(null);
+                      setApplyWorkoutImportMetadata(false);
+                      setWorkoutImportError("");
+                    }}
+                  >
+                    Cancel preview
+                  </button>
+                </div>
+                <p className="helper-copy">
+                  Source units: {workoutImportPreview.unitContext.unit} ({workoutImportPreview.unitContext.source === "draft" ? "current draft unit" : "unit directive"}).
+                  Every imported row starts unperformed.
+                </p>
+                {workoutImportPreview.errors.length ? (
+                  <ul className="error-copy" role="alert">
+                    {workoutImportPreview.errors.map((errorMessage) => <li key={errorMessage}>{errorMessage}</li>)}
+                  </ul>
+                ) : null}
+                <div className="workout-import-preview-list">
+                  {workoutImportPreview.rows.map((row) => (
+                    <article key={`${row.lineNumber}-${row.source}`} className="workout-import-preview-row">
+                      <div className="workout-section-heading">
+                        <div>
+                          <span>Line {row.lineNumber}</span>
+                          <strong>{row.exercise.exerciseName || "Unrecognized exercise"}</strong>
+                        </div>
+                        <span>{row.destinationAction}</span>
+                      </div>
+                      <p className="helper-copy">
+                        {row.sets.length
+                          ? row.sets.map((set) => set.sourceUnit
+                            ? `${set.reps}@${set.sourceWeight} ${set.sourceUnit} → ${set.weight.toFixed(2)} ${draftWeightUnit}`
+                            : `${set.reps} bodyweight reps`).join(" · ")
+                          : "No valid planned sets"}
+                      </p>
+                      {hasWorkoutEquipmentSetup(row.setup) ? <p className="helper-copy">Setup: {formatWorkoutEquipmentSetup(row.setup)}</p> : null}
+                      {row.warnings.map((warning) => <p key={warning} className="helper-copy">Warning: {warning}</p>)}
+                      {row.errors.length ? (
+                        <ul className="error-copy" role="alert">
+                          {row.errors.map((errorMessage) => <li key={errorMessage}>{errorMessage}</li>)}
+                        </ul>
+                      ) : null}
+                    </article>
+                  ))}
+                </div>
+                {workoutImportPreview.metadataChanges.length ? (
+                  <div className="workout-import-metadata">
+                    <p className="helper-copy">Imported metadata is separate from set completion and stays unchanged unless selected:</p>
+                    <ul>
+                      {workoutImportPreview.metadataChanges.map((change) => (
+                        <li key={change.field}>{change.field === "performedOn" ? "Date" : "Duration"}: {change.from || "blank"} → {change.to}</li>
+                      ))}
+                    </ul>
+                    <label className="workout-check-row">
+                      <input
+                        type="checkbox"
+                        checked={applyWorkoutImportMetadata}
+                        onChange={(event) => setApplyWorkoutImportMetadata(event.target.checked)}
+                      />
+                      <span>Apply imported date and duration</span>
+                    </label>
+                  </div>
+                ) : null}
+                <fieldset className="workout-import-mode">
+                  <legend>Choose how to change this active draft</legend>
+                  <label className="workout-check-row">
+                    <input
+                      type="radio"
+                      name="workout-import-mode"
+                      value="append"
+                      checked={workoutImportMode === "append"}
+                      onChange={() => setWorkoutImportMode("append")}
+                    />
+                    <span>Append to matching stable exercise IDs; add all other exercises separately</span>
+                  </label>
+                  <label className="workout-check-row">
+                    <input
+                      type="radio"
+                      name="workout-import-mode"
+                      value="replace"
+                      checked={workoutImportMode === "replace"}
+                      onChange={() => setWorkoutImportMode("replace")}
+                    />
+                    <span>Replace {workoutImportPreview.replacementSummary.exerciseCount} exercise{workoutImportPreview.replacementSummary.exerciseCount === 1 ? "" : "s"} and {workoutImportPreview.replacementSummary.setCount} set{workoutImportPreview.replacementSummary.setCount === 1 ? "" : "s"}</span>
+                  </label>
+                </fieldset>
+                {workoutImportPreviewIsStale ? <p className="error-copy" role="alert">The active draft changed. Preview again before importing.</p> : null}
+                {workoutImportError ? <p className="error-copy" role="alert">{workoutImportError}</p> : null}
+                <button
+                  type="button"
+                  className="button-primary"
+                  onClick={confirmWorkoutImport}
+                  disabled={!workoutImportPreview.canConfirm || !workoutImportMode || workoutImportPreviewIsStale || externalDraftConflict || isApplyingImport}
+                >
+                  {isApplyingImport ? "Importing..." : "Import as planned sets"}
+                </button>
+              </section>
+            ) : null}
           </div>
         </details>
         ) : null}
