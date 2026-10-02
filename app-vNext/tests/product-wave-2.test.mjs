@@ -97,6 +97,15 @@ test("history filters compose routine, exercise, period, and PR-only rules", () 
   assert.deepEqual(filterWorkoutHistory(sessions, { routineId: "all", exerciseQuery: "", periodDays: 30, prOnly: true }, "lb", "2026-08-01").map((session) => session.id), ["new-pr", "new-row"]);
 });
 
+test("saved-history browsing hides uncredited schema-v4 plans while retaining legacy sessions", () => {
+  const sessions = [
+    { id: "v4-plan", schemaVersion: 4, routineId: null, routineName: "Workout", performedOn: "2026-08-01", exercises: [{ exerciseName: "Bench", exerciseType: "weighted", sets: [{ reps: 5, weight: 200 }] }] },
+    { id: "legacy", routineId: null, routineName: "Workout", performedOn: "2026-07-31", exercises: [{ exerciseName: "Bench", exerciseType: "weighted", sets: [{ reps: 5, weight: 100 }] }] },
+  ];
+  const filtered = filterWorkoutHistory(sessions, { routineId: "all", exerciseQuery: "", periodDays: null, prOnly: false }, "lb", "2026-08-01");
+  assert.deepEqual(filtered.map((session) => session.id), ["legacy"]);
+});
+
 test("JSON and CSV exports preserve versions, stored units, timestamps, and escaped user text", () => {
   const payload = createWorkoutExportPayload({ routines: [{ id: "r", name: "Upper", dayLabel: "Upper", exercises: [], createdAt: new Date("2026-07-01T00:00:00Z"), updatedAt: null }], sessions: [{ id: "s", routineId: "r", routineName: "Upper", performedOn: "2026-08-01", weightUnit: "kg", durationMinutes: 50, notes: "steady, controlled", createdAt: new Date("2026-08-01T18:00:00Z"), updatedAt: null, exercises: [{ exerciseId: "bench", exerciseName: "Bench", exerciseType: "weighted", sets: [{ reps: 5, weight: 100, notes: "say \"go\"", deleted: false }] }] }], exportedAt: "2026-08-02T00:00:00Z", displayUnit: "lb" });
   assert.equal(payload.exportVersion, "easyworkout-export-v1");
@@ -106,6 +115,15 @@ test("JSON and CSV exports preserve versions, stored units, timestamps, and esca
   assert.match(csv, /easyworkout-stats-v1/);
   assert.match(csv, /"steady, controlled"/);
   assert.match(csv, /"say ""go"""/);
+});
+
+test("CSV export fails closed for missing schema-v4 completion and preserves legacy semantics", () => {
+  const session = { routineId: null, routineName: "Workout", performedOn: "2026-08-01", weightUnit: "lb", durationMinutes: 30, notes: "", createdAt: null, updatedAt: null, exercises: [{ exerciseId: "bench", exerciseName: "Bench", exerciseType: "weighted", sets: [{ reps: 5, weight: 100, deleted: false }] }] };
+  const v4Csv = serializeWorkoutCsv(createWorkoutExportPayload({ routines: [], sessions: [{ ...session, id: "v4", schemaVersion: 4 }], exportedAt: "2026-08-02T00:00:00Z", displayUnit: "lb" }));
+  const legacyCsv = serializeWorkoutCsv(createWorkoutExportPayload({ routines: [], sessions: [{ ...session, id: "legacy" }], exportedAt: "2026-08-02T00:00:00Z", displayUnit: "lb" }));
+  const completedColumn = v4Csv.split("\n")[0].split(",").indexOf('"completed"');
+  assert.equal(v4Csv.split("\n")[1].split(",")[completedColumn], '"false"');
+  assert.equal(legacyCsv.split("\n")[1].split(",")[completedColumn], '"true"');
 });
 
 test("workout CSV neutralizes spreadsheet formulas in user-authored fields", () => {
