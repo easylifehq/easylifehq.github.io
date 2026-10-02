@@ -1,6 +1,10 @@
 import { normalizeWorkoutEquipmentSetup, type WorkoutEquipmentSetup } from "../../../lib/workoutEquipmentSetup.ts";
+import {
+  normalizeWorkoutPlanningContext,
+  type WorkoutPlanningContext,
+} from "./workoutPlanning.ts";
 
-export const WORKOUT_DRAFT_SCHEMA_VERSION = 6 as const;
+export const WORKOUT_DRAFT_SCHEMA_VERSION = 7 as const;
 export const WORKOUT_DRAFT_MAX_SERIALIZED_CHARS = 500_000;
 export const WORKOUT_DRAFT_MAX_EXERCISES = 80;
 export const WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE = 100;
@@ -72,6 +76,7 @@ export type StoredWorkoutDraft = {
   activeExerciseId?: string;
   exerciseLogs: WorkoutExerciseLogDraft[];
   appliedImportOperationIds: string[];
+  planningContext: WorkoutPlanningContext;
   updatedAt: string;
 };
 
@@ -195,6 +200,7 @@ export function recoverWorkoutDraft(
       activeExerciseId: text(value.activeExerciseId) || exerciseLogs[0]?.localId,
       exerciseLogs,
       appliedImportOperationIds,
+      planningContext: normalizeWorkoutPlanningContext(value.planningContext),
       updatedAt: text(value.updatedAt) || options.nowIso,
     },
     message: migrated
@@ -232,9 +238,14 @@ export function resolveWorkoutDurationMinutes(manualDuration: string, elapsedSec
   return automaticMinutes <= WORKOUT_MAX_AUTOMATIC_DURATION_MINUTES ? automaticMinutes : null;
 }
 
-export function hasWorkoutDraftWork(draft: Pick<StoredWorkoutDraft, "selectedRoutineId" | "durationMinutes" | "sessionNotes" | "exerciseLogs">) {
+export function hasWorkoutDraftWork(
+  draft: Pick<StoredWorkoutDraft, "selectedRoutineId" | "durationMinutes" | "sessionNotes" | "exerciseLogs"> &
+    { planningContext?: WorkoutPlanningContext }
+) {
+  const planningContext = draft.planningContext;
   return Boolean(
     draft.selectedRoutineId || draft.durationMinutes || draft.sessionNotes.trim() ||
+      planningContext?.focusGroups.length || planningContext?.availableEquipment.length || planningContext?.plannedDurationMinutes ||
       draft.exerciseLogs.some((exercise) =>
         exercise.exerciseName.trim() || exercise.notes.trim() || Object.values(exercise.setup || {}).some((entry) => Boolean(entry?.trim())) ||
         exercise.sets.some((set) => !set.deleted && (

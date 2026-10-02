@@ -3,6 +3,7 @@ import type { WorkoutSessionRecord, WorkoutSetRecord } from "../../../lib/firest
 import type { WorkoutSetDraft } from "./workoutDraftLifecycle.ts";
 import { convertWeight, isValidWorkingSet, type WorkoutDisplayUnit } from "./workoutStatistics.ts";
 import { normalizeWorkoutEquipmentSetup, type WorkoutEquipmentSetup } from "../../../lib/workoutEquipmentSetup.ts";
+import type { WorkoutExercisePlanningMetadata } from "./workoutPlanning.ts";
 
 export type WorkoutExerciseOption = {
   exerciseId: string | null;
@@ -12,6 +13,7 @@ export type WorkoutExerciseOption = {
   primaryMuscles: string[];
   secondaryMuscles: string[];
   exerciseType: "weighted" | "bodyweight" | "assisted" | "duration" | "distance";
+  planningMetadata: WorkoutExercisePlanningMetadata | null;
 };
 
 export type ExerciseHistorySummary = {
@@ -28,7 +30,7 @@ export type ExerciseHistorySummary = {
 };
 
 type BasicExercise = Pick<WorkoutExerciseRecord, "id" | "name" | "muscleGroup"> & Partial<WorkoutExerciseOption>;
-type DefaultExercise = { name: string; muscleGroup: string };
+type DefaultExercise = { name: string; muscleGroup: string } & Partial<WorkoutExerciseOption>;
 
 const exerciseKey = (name: string) => name.trim().toLocaleLowerCase();
 export const workoutExerciseIdentityKey = (exercise: { exerciseId?: string | null; name: string }) =>
@@ -66,6 +68,7 @@ export function buildWorkoutExerciseOptions(
         primaryMuscles: current.primaryMuscles.length ? current.primaryMuscles : entry.primaryMuscles || [],
         secondaryMuscles: current.secondaryMuscles.length ? current.secondaryMuscles : entry.secondaryMuscles || [],
         exerciseType: current.exerciseType || entry.exerciseType || "weighted",
+        planningMetadata: current.planningMetadata || (current.exerciseId ? null : entry.planningMetadata || null),
       }));
       return;
     }
@@ -86,6 +89,9 @@ export function buildWorkoutExerciseOptions(
         ? current?.secondaryMuscles.length ? current.secondaryMuscles : entry.secondaryMuscles || []
         : entry.secondaryMuscles?.length ? entry.secondaryMuscles : current?.secondaryMuscles || [],
       exerciseType: fillOnly ? current?.exerciseType || entry.exerciseType || "weighted" : entry.exerciseType || current?.exerciseType || "weighted",
+      planningMetadata: fillOnly
+        ? current?.planningMetadata || (current?.exerciseId ? null : entry.planningMetadata || null)
+        : entry.planningMetadata || current?.planningMetadata || null,
     });
   };
 

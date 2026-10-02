@@ -196,6 +196,25 @@ test("exercise options put recently used names first and deduplicate saved and b
   assert.equal(options[0].muscleGroup, "Upper back");
 });
 
+test("planning metadata is explicit for stable saved exercises and is never borrowed by name", () => {
+  const builtInPlanning = { focusGroups: ["Back"], movementPattern: "vertical-pull", requiredEquipment: ["selectorized-machine"] };
+  const savedPlanning = { focusGroups: ["Back"], movementPattern: "horizontal-pull", requiredEquipment: ["cable"] };
+  const options = buildWorkoutExerciseOptions(
+    [
+      { id: "unclassified", name: "Lat Pulldown", muscleGroup: "Back", notes: "Custom machine", createdAt: null, updatedAt: null },
+      { id: "classified", name: "Cable Row", muscleGroup: "Back", notes: "", exerciseType: "weighted", planningMetadata: savedPlanning, createdAt: null, updatedAt: null },
+    ],
+    [],
+    [
+      { name: "Lat Pulldown", muscleGroup: "Back", exerciseType: "weighted", planningMetadata: builtInPlanning },
+      { name: "Seated Row", muscleGroup: "Back", exerciseType: "weighted", planningMetadata: { focusGroups: ["Back"], movementPattern: "horizontal-pull", requiredEquipment: ["selectorized-machine"] } },
+    ]
+  );
+  assert.equal(options.find((entry) => entry.exerciseId === "unclassified")?.planningMetadata, null);
+  assert.deepEqual(options.find((entry) => entry.exerciseId === "classified")?.planningMetadata, savedPlanning);
+  assert.equal(options.find((entry) => entry.name === "Seated Row")?.planningMetadata?.movementPattern, "horizontal-pull");
+});
+
 test("same-name saved machines remain distinct and require an unambiguous selection", () => {
   const options = buildWorkoutExerciseOptions(
     [

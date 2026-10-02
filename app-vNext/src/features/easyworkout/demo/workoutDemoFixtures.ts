@@ -1,6 +1,7 @@
 import type { WorkoutExerciseRecord } from "../../../lib/firestore/workoutExercises";
 import type { WorkoutRoutineRecord } from "../../../lib/firestore/workoutRoutines";
 import type { WorkoutSessionRecord } from "../../../lib/firestore/workoutSessions";
+import type { WorkoutExercisePlanningMetadata } from "../domain/workoutPlanning";
 
 export const WORKOUT_DEMO_FIXTURE_VERSION = "weekend-14-week-v1";
 
@@ -25,6 +26,21 @@ const exerciseDefinitions = [
   ["rower", "Row Erg", "Conditioning", ["Conditioning"], [], "distance"],
 ] as const;
 
+const demoPlanning: Record<string, WorkoutExercisePlanningMetadata> = {
+  bench: { focusGroups: ["Chest"], movementPattern: "horizontal-push", requiredEquipment: ["barbell", "bench"] },
+  incline: { focusGroups: ["Chest"], movementPattern: "horizontal-push", requiredEquipment: ["dumbbell", "bench"] },
+  row: { focusGroups: ["Back"], movementPattern: "horizontal-pull", requiredEquipment: ["selectorized-machine"] },
+  pulldown: { focusGroups: ["Back"], movementPattern: "vertical-pull", requiredEquipment: ["selectorized-machine"] },
+  squat: { focusGroups: ["Legs", "Glutes"], movementPattern: "squat", requiredEquipment: ["barbell"] },
+  rdl: { focusGroups: ["Hamstrings", "Glutes"], movementPattern: "hinge", requiredEquipment: ["barbell"] },
+  press: { focusGroups: ["Shoulders"], movementPattern: "vertical-push", requiredEquipment: ["dumbbell"] },
+  curl: { focusGroups: ["Biceps"], movementPattern: "elbow-flexion-supinated", requiredEquipment: ["dumbbell"] },
+  triceps: { focusGroups: ["Triceps"], movementPattern: "elbow-extension", requiredEquipment: ["cable"] },
+  pullup: { focusGroups: ["Back"], movementPattern: "vertical-pull", requiredEquipment: ["pull-up-bar"] },
+  plank: { focusGroups: ["Core"], movementPattern: "trunk", requiredEquipment: ["bodyweight"] },
+  rower: { focusGroups: ["Conditioning"], movementPattern: "conditioning", requiredEquipment: ["cardio-machine"] },
+};
+
 export const workoutDemoExercises: DemoExercise[] = exerciseDefinitions.map(
   ([id, name, muscleGroup, primaryMuscles, secondaryMuscles, exerciseType]) => ({
     id: `demo-${id}`,
@@ -33,6 +49,7 @@ export const workoutDemoExercises: DemoExercise[] = exerciseDefinitions.map(
     primaryMuscles: [...primaryMuscles],
     secondaryMuscles: [...secondaryMuscles],
     exerciseType,
+    planningMetadata: demoPlanning[id],
     notes: "Synthetic demo exercise",
     createdAt: new Date("2026-04-20T12:00:00Z"),
     updatedAt: new Date("2026-08-01T12:00:00Z"),
