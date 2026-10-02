@@ -1,3 +1,5 @@
+import { convertWeight } from "../../easyworkout/domain/workoutStatistics.ts";
+
 export type QuickWorkoutCaptureIntent = {
   schemaVersion: 1;
   clientSetId: string;
@@ -38,15 +40,13 @@ function isValidLocalDate(value: string) {
 }
 
 function parseWeightedSet(text: string) {
-  const compact = /\b(\d+(?:\.\d+)?)\s*x\s*(\d+)\s*(?:lbs?|pounds?)?\b/i.exec(text);
-  const explicit = /\b(\d+)\s*(?:reps?|@)\s*(\d+(?:\.\d+)?)\s*(?:lbs?|pounds?)?\b/i.exec(text);
+  const compact = /^(.*?)\s+(\d+(?:\.\d+)?)\s*x\s*(\d+)\s*(?:lbs?|pounds?)?\s*$/i.exec(text);
+  const explicit = /^(.*?)\s+(\d+)\s*(?:reps?|@)\s*(\d+(?:\.\d+)?)\s*(?:lbs?|pounds?)?\s*$/i.exec(text);
   const match = compact || explicit;
-  if (!match || match.index === undefined) return null;
-  const weight = Number(match[compact ? 1 : 2]);
-  const reps = Number(match[compact ? 2 : 1]);
-  const exerciseName = `${text.slice(0, match.index)} ${text.slice(match.index + match[0].length)}`
-    .replace(/\s{2,}/g, " ")
-    .trim();
+  if (!match) return null;
+  const exerciseName = match[1].trim();
+  const weight = Number(match[compact ? 2 : 3]);
+  const reps = Number(match[compact ? 3 : 2]);
   if (!exerciseName || !Number.isFinite(reps) || reps <= 0 || !Number.isInteger(reps) || !Number.isFinite(weight) || weight <= 0) {
     return null;
   }
@@ -65,7 +65,7 @@ export function createQuickWorkoutCaptureIntent(
   const sourceText = trimBounded(input.text, 2_000);
   if (!ownerId) return { ok: false, error: "A signed-in owner is required." };
   if (!isValidLocalDate(performedOn)) return { ok: false, error: "Choose a valid workout date." };
-  if (/\bkgs?\b/i.test(sourceText)) {
+  if (/\b(?:kgs?|kilograms?)\b/i.test(sourceText)) {
     return { ok: false, error: "Enter a valid pound value; Quick Capture does not convert kilograms yet." };
   }
   const parsed = parseWeightedSet(sourceText);
@@ -189,6 +189,38 @@ export function selectOldestPendingQuickWorkoutCapture(
     .sort((left, right) => left.createdAt.localeCompare(right.createdAt) || left.clientSetId.localeCompare(right.clientSetId))[0] || null;
 }
 
+export function isActiveQuickWorkoutCapture(
+  activeOwnerId: string,
+  activeIntent: QuickWorkoutCaptureIntent | null,
+  expectedIntent: QuickWorkoutCaptureIntent
+) {
+  const ownerId = trimBounded(activeOwnerId, 256);
+  return (
+    ownerId === expectedIntent.ownerId &&
+    activeIntent?.ownerId === expectedIntent.ownerId &&
+    activeIntent.clientSetId === expectedIntent.clientSetId
+  );
+}
+
+export function resolveQuickWorkoutCaptureConfirmation(
+  entries: Array<{ key: string; value: string | null }>,
+  activeOwnerId: string,
+  activeIntent: QuickWorkoutCaptureIntent | null,
+  confirmedIntent: QuickWorkoutCaptureIntent
+) {
+  const ownerId = trimBounded(activeOwnerId, 256);
+  const isCurrent = isActiveQuickWorkoutCapture(ownerId, activeIntent, confirmedIntent);
+  if (!isCurrent) return { isCurrent: false, nextIntent: null };
+  const remainingEntries = entries.filter((entry) => {
+    const recovered = recoverQuickWorkoutCaptureIntent(entry.value, ownerId).intent;
+    return recovered?.clientSetId !== confirmedIntent.clientSetId;
+  });
+  return {
+    isCurrent: true,
+    nextIntent: selectOldestPendingQuickWorkoutCapture(remainingEntries, ownerId),
+  };
+}
+
 export type QuickWorkoutSetRecord = {
   clientSetId?: string;
   reps: number;
@@ -260,7 +292,7 @@ export function applyQuickWorkoutSetOperation(
   const set: QuickWorkoutSetRecord = {
     clientSetId: intent.clientSetId,
     reps: intent.reps,
-    weight: intent.weight,
+    weight: session.weightUnit === "kg" ? convertWeight(intent.weight, "lb", "kg") : intent.weight,
     notes: intent.notes,
     setType: "standard",
     completed: true,

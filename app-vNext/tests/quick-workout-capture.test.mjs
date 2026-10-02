@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { isValidWorkingSet } from "../src/features/easyworkout/domain/workoutStatistics.ts";
+import { convertWeight, isValidWorkingSet } from "../src/features/easyworkout/domain/workoutStatistics.ts";
 
 const quickCapture = await import("../src/features/experiments/domain/quickWorkoutCapture.ts").catch(() => ({}));
 
@@ -56,6 +56,9 @@ test("invalid or incomplete weighted input never creates a capture intent", () =
     { ownerId: "user-a", performedOn: "2026-10-02", text: "Bench press 0 x 8", notes: "" },
     { ownerId: "user-a", performedOn: "2026-10-02", text: "Bench press 135 x 0", notes: "" },
     { ownerId: "user-a", performedOn: "2026-10-02", text: "Bench press 60 x 8 kg", notes: "" },
+    { ownerId: "user-a", performedOn: "2026-10-02", text: "Bench press 60 x 8 kilograms", notes: "" },
+    { ownerId: "user-a", performedOn: "2026-10-02", text: "Bench press -135 x 8", notes: "" },
+    { ownerId: "user-a", performedOn: "2026-10-02", text: "Bench press 135 x 8.5", notes: "" },
     { ownerId: "user-a", performedOn: "2026-02-30", text: "Bench press 135 x 8", notes: "" },
     { ownerId: "", performedOn: "2026-10-02", text: "Bench press 135 x 8", notes: "" },
   ]) {
@@ -216,6 +219,51 @@ test("appending to legacy saved history preserves its established completion sem
   assert.equal(result.session.exercises[0].sets[1].completed, true);
 });
 
+test("pound captures are converted before appending to a kilogram session", () => {
+  const legacyMetric = {
+    routineId: null,
+    routineName: "Gym Log",
+    performedOn: "2026-10-02",
+    weightUnit: "kg",
+    durationMinutes: null,
+    notes: "",
+    exercises: [{
+      exerciseId: null,
+      exerciseName: "Bench press",
+      muscleGroup: "Chest",
+      notes: "",
+      sets: [],
+    }],
+  };
+
+  const result = quickCapture.applyQuickWorkoutSetOperation(legacyMetric, captureIntent("metric-intent"));
+  const storedWeight = result.session.exercises[0].sets[0].weight;
+  assert.equal(result.session.weightUnit, "kg");
+  assert.ok(Math.abs(storedWeight - convertWeight(135, "lb", "kg")) < 1e-10);
+  assert.ok(Math.abs(convertWeight(storedWeight * 8, "kg", "lb") - 1080) < 1e-8);
+});
+
+test("confirmation reconciliation ignores stale owners and advances the same-owner queue", () => {
+  const confirmed = captureIntent("confirmed-a");
+  const ownerB = captureIntent("pending-b", { ownerId: "user-b" });
+  const nextA = captureIntent("pending-a-2", { createdAt: "2026-10-02T09:00:00.000Z" });
+  const entries = [{
+    key: quickCapture.quickWorkoutCaptureStorageKey("user-a", nextA.clientSetId),
+    value: JSON.stringify(nextA),
+  }];
+
+  assert.deepEqual(
+    quickCapture.resolveQuickWorkoutCaptureConfirmation(entries, "user-b", ownerB, confirmed),
+    { isCurrent: false, nextIntent: null }
+  );
+  assert.equal(quickCapture.isActiveQuickWorkoutCapture("user-b", ownerB, confirmed), false);
+  assert.equal(quickCapture.isActiveQuickWorkoutCapture("user-a", confirmed, confirmed), true);
+  assert.deepEqual(
+    quickCapture.resolveQuickWorkoutCaptureConfirmation(entries, "user-a", confirmed, confirmed),
+    { isCurrent: true, nextIntent: nextA }
+  );
+});
+
 test("double activation shares one in-flight write", async () => {
   const coordinator = new quickCapture.QuickWorkoutCaptureCoordinator();
   let calls = 0;
@@ -281,6 +329,8 @@ test("Quick Capture persists before writing and exposes honest retry state", asy
   assert.match(source, /navigator\.onLine === false/);
   assert.match(source, /Set not confirmed/);
   assert.match(source, /canClearMatchingQuickWorkoutCapture/);
+  assert.match(source, /resolveQuickWorkoutCaptureConfirmation/);
+  assert.match(source, /activeUserIdRef\.current/);
   assert.match(source, /disabled=\{[^}]*isSavingStructured/);
   assert.match(source, /role="status"/);
   assert.match(source, /aria-live="polite"/);
