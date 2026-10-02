@@ -39,6 +39,20 @@ test("guided routine selection rotates to the least-recent saved routine", () =>
   assert.equal(selected.id, "lower");
 });
 
+test("guided routine progress ignores schema-v4 sessions without a deliberately completed set", () => {
+  const routines = [
+    { id: "upper", name: "Upper", dayLabel: "Upper", exercises: [] },
+    { id: "lower", name: "Lower", dayLabel: "Lower", exercises: [] },
+  ];
+  const sessions = [
+    { id: "upper-valid", routineId: "upper", routineName: "Upper", performedOn: "2026-08-01", exercises: [{ exerciseName: "Bench", sets: [{ reps: 5, weight: 100 }] }] },
+    { id: "lower-valid", routineId: "lower", routineName: "Lower", performedOn: "2026-07-28", exercises: [{ exerciseName: "Squat", sets: [{ reps: 5, weight: 100 }] }] },
+    { id: "lower-plan", schemaVersion: 4, routineId: "lower", routineName: "Lower", performedOn: "2026-08-02", exercises: [{ exerciseName: "Squat", sets: [{ reps: 5, weight: 100 }] }] },
+  ];
+  assert.equal(selectGuidedRoutine(routines, sessions).id, "lower");
+  assert.equal(deriveGuidedWorkoutPlan(routines[1], sessions, "lb").lastPerformedOn, "2026-07-28");
+});
+
 test("guided workout preserves an existing draft instead of promising a new routine", () => {
   assert.deepEqual(getGuidedWorkoutAction("upper", true, true), {
     label: "Resume saved draft",

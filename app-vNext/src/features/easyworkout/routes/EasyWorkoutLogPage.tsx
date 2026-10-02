@@ -25,7 +25,7 @@ import {
   fillSetsFromLastPerformance,
   findExerciseHistory,
 } from "@/features/easyworkout/domain/workoutLogAssist";
-import { isValidLocalDateKey, isValidWorkingSet } from "@/features/easyworkout/domain/workoutStatistics";
+import { isValidLocalDateKey, isValidWorkingSet, isWorkoutSessionCredited } from "@/features/easyworkout/domain/workoutStatistics";
 type DeletedSetUndo = {
   exerciseLocalId: string;
   exerciseName: string;
@@ -39,7 +39,7 @@ const localDateKey = () => {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 };
 const emptySet = (): WorkoutSetDraft => ({
-  localId: createLocalId(), reps: 8, weight: 0, notes: "", setType: "standard", completed: true, deleted: false, rir: null,
+  localId: createLocalId(), reps: 8, weight: 0, notes: "", setType: "standard", completed: false, deleted: false, rir: null,
 });
 const emptyExerciseLog = (setCount = 1): WorkoutExerciseLogDraft => ({
   localId: createLocalId(),
@@ -154,6 +154,7 @@ export function EasyWorkoutLogPage() {
   const [durationMinutes, setDurationMinutes] = useState(restoredDraft?.durationMinutes ?? "");
   const [draftWeightUnit] = useState<"lb" | "kg">(restoredDraft?.weightUnit ?? settings.easyWorkout.weightUnit);
   const [sessionNotes, setSessionNotes] = useState(restoredDraft?.sessionNotes ?? "");
+  const [completionReviewRequired, setCompletionReviewRequired] = useState(restoredDraft?.completionReviewRequired ?? false);
   const [exerciseLogs, setExerciseLogs] = useState<WorkoutExerciseLogDraft[]>(
     restoredDraft?.exerciseLogs.length
       ? restoredDraft.exerciseLogs
@@ -169,7 +170,7 @@ export function EasyWorkoutLogPage() {
   const [externalDraftConflict, setExternalDraftConflict] = useState(false);
   const [deletedSetUndo, setDeletedSetUndo] = useState<DeletedSetUndo | null>(null);
   const todayKey = localDateKey();
-  const todayLoggedCount = sessions.filter((session) => session.performedOn === todayKey).length;
+  const todayLoggedCount = sessions.filter((session) => session.performedOn === todayKey && isWorkoutSessionCredited(session)).length;
 
   latestDraftRef.current = {
     schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
@@ -183,6 +184,7 @@ export function EasyWorkoutLogPage() {
     elapsedSeconds,
     durationMinutes,
     sessionNotes,
+    completionReviewRequired,
     activeExerciseId,
     exerciseLogs,
     updatedAt: new Date().toISOString(),
@@ -237,7 +239,7 @@ export function EasyWorkoutLogPage() {
               localId: createLocalId(),
               notes: "",
               setType: "standard" as const,
-              completed: true,
+              completed: false,
               deleted: false,
               rir: null,
             }));
@@ -426,7 +428,7 @@ export function EasyWorkoutLogPage() {
         // The visible status from the mounted page already explains local storage failures.
       }
     };
-  }, [activeExerciseId, draftId, draftStorageKey, draftWeightUnit, durationMinutes, elapsedSeconds, exerciseLogs, externalDraftConflict, ownerId, performedOn, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
+  }, [activeExerciseId, completionReviewRequired, draftId, draftStorageKey, draftWeightUnit, durationMinutes, elapsedSeconds, exerciseLogs, externalDraftConflict, ownerId, performedOn, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
 
   function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogDraft>) {
     setExerciseLogs((current) =>
@@ -603,7 +605,7 @@ export function EasyWorkoutLogPage() {
               notes: "",
               localId: createLocalId(),
               setType: "standard" as const,
-              completed: true,
+              completed: false,
               deleted: false,
               rir: null,
             },
@@ -628,6 +630,10 @@ export function EasyWorkoutLogPage() {
       setSaveMessage("This workout changed in another tab. Reload before saving so one tab does not overwrite the other.");
       return;
     }
+    if (completionReviewRequired) {
+      setSaveMessage("Review which sets you performed, then choose Review complete before saving.");
+      return;
+    }
     const cleanedExercises = exerciseLogs
       .filter((exercise) => exercise.exerciseName.trim())
       .map((exercise) => ({
@@ -645,7 +651,7 @@ export function EasyWorkoutLogPage() {
       .filter((exercise) => exercise.sets.length);
 
     if (!cleanedExercises.length) {
-      setSaveMessage("Add at least one exercise with a complete working set first. Weighted sets need reps and a positive load.");
+      setSaveMessage("Mark at least one set done before saving. Weighted sets also need reps and a positive load.");
       return;
     }
 
@@ -874,11 +880,46 @@ export function EasyWorkoutLogPage() {
           ))}
         </datalist>
 
+        {completionReviewRequired ? (
+          <div className="calendar-plan-undo-card workout-completion-review" role="status" aria-live="polite">
+            <div>
+              <strong>Review which sets you performed</strong>
+              <p>This restored draft could not distinguish planned rows from performed sets. Its values are intact, but every set starts unconfirmed.</p>
+            </div>
+            <div className="pill-row">
+              <button
+                type="button"
+                className="button-secondary compact-button"
+                onClick={() => {
+                  setExerciseLogs((current) => current.map((exercise) => ({
+                    ...exercise,
+                    sets: exercise.sets.map((set) => ({ ...set, completed: !set.deleted })),
+                  })));
+                  setCompletionReviewRequired(false);
+                  setSaveMessage("All shown sets were marked done. You can still undo any set before saving.");
+                }}
+              >
+                Mark all shown sets done
+              </button>
+              <button
+                type="button"
+                className="ghost-button compact-button"
+                onClick={() => {
+                  setCompletionReviewRequired(false);
+                  setSaveMessage("Review complete. Only sets marked done will be saved.");
+                }}
+              >
+                Review complete
+              </button>
+            </div>
+          </div>
+        ) : null}
+
         <div className="task-list-vnext workout-exercise-list">
           {exerciseLogs.map((exercise, exerciseIndex) => {
             const previous = findExerciseHistory(previousByExercise, exercise.exerciseName);
-            const loggedSetCount = exercise.sets.filter(hasSetWork).length;
-            const lastLoggedSet = [...exercise.sets].reverse().find(hasSetWork);
+            const loggedSetCount = exercise.sets.filter((set) => isValidWorkingSet(set, exercise.exerciseType, { requiresExplicitCompletion: true })).length;
+            const lastLoggedSet = [...exercise.sets].reverse().find((set) => isValidWorkingSet(set, exercise.exerciseType, { requiresExplicitCompletion: true }));
             const isCollapsed = isFocusedWorkoutMode && activeExerciseId && activeExerciseId !== exercise.localId;
 
             if (isCollapsed) {
@@ -1029,6 +1070,15 @@ export function EasyWorkoutLogPage() {
                           {previous && set.weight > previous.bestWeight ? <span className="workout-pr-chip">PR</span> : null}
                           <button
                             type="button"
+                            className={`${set.completed ? "button-secondary is-complete" : "primary-button"} compact-button workout-completion-button`}
+                            aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} set ${setIndex + 1}: ${set.completed ? "undo completion" : "mark done"}`}
+                            aria-pressed={set.completed}
+                            onClick={() => updateSet(exerciseIndex, setIndex, { completed: !set.completed })}
+                          >
+                            {set.completed ? "Undo done" : "Mark done"}
+                          </button>
+                          <button
+                            type="button"
                             className="danger-button compact-button workout-delete-button"
                             onClick={() => deleteSet(exerciseIndex, setIndex)}
                             aria-label={`Remove set ${setIndex + 1}`}
@@ -1052,7 +1102,7 @@ export function EasyWorkoutLogPage() {
                         className="button-secondary"
                         onClick={() => {
                           const previousSet = exercise.sets[exercise.sets.length - 1];
-                          updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, { ...previousSet, localId: createLocalId() }] });
+                          updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, { ...previousSet, localId: createLocalId(), completed: false }] });
                         }}
                       >
                         Copy previous set
