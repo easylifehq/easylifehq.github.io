@@ -100,6 +100,7 @@ test("workout log exposes one-tap set completion, undo, and legacy-draft review"
   const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
   assert.match(source, /aria-pressed=\{set\.completed\}/);
   assert.match(source, /set\.completed \? "Undo done" : "Mark done"/);
+  assert.match(source, /aria-label=\{[\s\S]{0,240}set\.completed \? "Undo done" : "Mark done"/);
   assert.match(source, /Review which sets you performed/);
   assert.match(source, /Mark all shown sets done/);
   assert.match(source, /Review complete/);

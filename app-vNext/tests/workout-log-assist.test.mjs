@@ -89,6 +89,24 @@ test("all routine sets prefill from the last sequence and repeat the final set w
   assert.deepEqual(filled.map((set) => set.completed), [false, false, false]);
 });
 
+test("recalling historical measurements requires fresh completion even for a previously done row", () => {
+  const previous = {
+    lastWeight: 185,
+    lastReps: 5,
+    lastSets: [{ reps: 5, weight: 185 }],
+    performedOn: "2026-09-01",
+    bestWeight: 185,
+    bestVolume: 925,
+    sessionCount: 1,
+  };
+  const filled = fillSetsFromLastPerformance([
+    { localId: "set-done", reps: 8, weight: 135, notes: "", setType: "standard", completed: true, deleted: false, rir: null },
+  ], previous);
+  assert.equal(filled[0].weight, 185);
+  assert.equal(filled[0].reps, 5);
+  assert.equal(filled[0].completed, false);
+});
+
 test("exercise options put recently used names first and deduplicate saved and built-in matches", () => {
   const sessions = [session({ exercises: [{ exerciseId: "row-history", exerciseName: "Seated Row", muscleGroup: "Back", primaryMuscles: ["Back"], secondaryMuscles: ["Biceps"], exerciseType: "weighted", notes: "", sets: [] }] })];
   const options = buildWorkoutExerciseOptions(

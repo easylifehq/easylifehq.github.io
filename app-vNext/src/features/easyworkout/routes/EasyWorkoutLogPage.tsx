@@ -1071,7 +1071,7 @@ export function EasyWorkoutLogPage() {
                           <button
                             type="button"
                             className={`${set.completed ? "button-secondary is-complete" : "primary-button"} compact-button workout-completion-button`}
-                            aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} set ${setIndex + 1}: ${set.completed ? "undo completion" : "mark done"}`}
+                            aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} set ${setIndex + 1}: ${set.completed ? "Undo done" : "Mark done"}`}
                             aria-pressed={set.completed}
                             onClick={() => updateSet(exerciseIndex, setIndex, { completed: !set.completed })}
                           >

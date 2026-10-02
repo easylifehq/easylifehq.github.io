@@ -147,6 +147,7 @@ export function fillSetsFromLastPerformance(
     const source = previous.lastSets[Math.min(index, previous.lastSets.length - 1)];
     return {
       ...set,
+      completed: false,
       reps: source.reps,
       weight: source.weight,
       durationSeconds: source.durationSeconds,
