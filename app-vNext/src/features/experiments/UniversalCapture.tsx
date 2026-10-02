@@ -22,7 +22,9 @@ import {
   QuickWorkoutCaptureCoordinator,
   canClearMatchingQuickWorkoutCapture,
   createQuickWorkoutCaptureIntent,
+  isActiveQuickWorkoutCapture,
   quickWorkoutCaptureStorageKey,
+  resolveQuickWorkoutCaptureConfirmation,
   selectOldestPendingQuickWorkoutCapture,
   serializeQuickWorkoutCaptureIntent,
   type QuickWorkoutCaptureIntent,
@@ -78,6 +80,14 @@ const defaultDetails: QuickAddDetails = {
 };
 
 const QUICK_ADD_DRAFT_KEY = "easylife.quickAddDraft";
+
+function readPendingWorkoutCaptureEntries(ownerId: string) {
+  const prefix = `${quickWorkoutCaptureStorageKey(ownerId)}:`;
+  return Array.from({ length: window.localStorage.length }, (_, index) => {
+    const key = window.localStorage.key(index) || "";
+    return { key, value: key.startsWith(prefix) ? window.localStorage.getItem(key) : null };
+  });
+}
 
 function detectCaptureType(value: string) {
   const text = value.toLowerCase();
@@ -324,6 +334,7 @@ export function UniversalCapture() {
   const pendingWorkoutCaptureRef = useRef<QuickWorkoutCaptureIntent | null>(null);
   const workoutCaptureCoordinatorRef = useRef(new QuickWorkoutCaptureCoordinator());
   const activeUserId = captureUser?.uid || firebaseUserId;
+  const activeUserIdRef = useRef(activeUserId);
   const suggestion = useMemo(() => mode === "raw" ? "task" : detectCaptureType(text), [mode, text]);
   const brainDumpEntries = useMemo(() => mode === "brainDump" ? parseBrainDumpEntries(text) : [], [mode, text]);
   const isEasyListCapture = location.pathname.startsWith("/app/easylist");
@@ -392,6 +403,7 @@ export function UniversalCapture() {
   );
 
   pendingWorkoutCaptureRef.current = pendingWorkoutCapture;
+  activeUserIdRef.current = activeUserId;
 
   useEffect(() => {
     const savedDraft = window.localStorage.getItem(QUICK_ADD_DRAFT_KEY);
@@ -444,12 +456,10 @@ export function UniversalCapture() {
     }
     pendingWorkoutCaptureRef.current = null;
     setPendingWorkoutCapture(null);
-    const prefix = `${quickWorkoutCaptureStorageKey(activeUserId)}:`;
-    const entries = Array.from({ length: window.localStorage.length }, (_, index) => {
-      const key = window.localStorage.key(index) || "";
-      return { key, value: key.startsWith(prefix) ? window.localStorage.getItem(key) : null };
-    });
-    const intent = selectOldestPendingQuickWorkoutCapture(entries, activeUserId);
+    const intent = selectOldestPendingQuickWorkoutCapture(
+      readPendingWorkoutCaptureEntries(activeUserId),
+      activeUserId
+    );
     if (!intent) return;
     pendingWorkoutCaptureRef.current = intent;
     setPendingWorkoutCapture(intent);
@@ -734,8 +744,8 @@ export function UniversalCapture() {
       return;
     }
 
+    const confirmedIntent = intent;
     try {
-      const confirmedIntent = intent;
       await workoutCaptureCoordinatorRef.current.run(
         confirmedIntent.clientSetId,
         () => addSetToDailyWorkoutSession(user.uid, confirmedIntent)
@@ -745,6 +755,26 @@ export function UniversalCapture() {
       if (canClearMatchingQuickWorkoutCapture(raw, user.uid, confirmedIntent.clientSetId)) {
         window.localStorage.removeItem(storageKey);
       }
+      const resolution = resolveQuickWorkoutCaptureConfirmation(
+        readPendingWorkoutCaptureEntries(user.uid),
+        activeUserIdRef.current,
+        pendingWorkoutCaptureRef.current,
+        confirmedIntent
+      );
+      if (!resolution.isCurrent) return;
+      if (resolution.nextIntent) {
+        const nextIntent = resolution.nextIntent;
+        pendingWorkoutCaptureRef.current = nextIntent;
+        setPendingWorkoutCapture(nextIntent);
+        setMode("workout");
+        setStructuredOptionsOpen(true);
+        setText(nextIntent.sourceText);
+        setDetails((current) => ({ ...current, date: nextIntent.performedOn, notes: nextIntent.notes }));
+        setOpenTarget(null);
+        setMessage("Set added. The next pending set is ready to retry.");
+        setSaveError("This next set is not confirmed yet and has not been counted twice.");
+        return;
+      }
       pendingWorkoutCaptureRef.current = null;
       setPendingWorkoutCapture(null);
       if (!options.addAnother) {
@@ -752,8 +782,14 @@ export function UniversalCapture() {
       }
       resetFields(options.addAnother ? "Set added. Add the next one." : "Set added.", { keepOpenTarget: !options.addAnother });
     } catch {
-      setMessage("");
-      setSaveError("Set not confirmed—retry. The same pending set will be reconciled without adding it twice.");
+      if (isActiveQuickWorkoutCapture(
+        activeUserIdRef.current,
+        pendingWorkoutCaptureRef.current,
+        confirmedIntent
+      )) {
+        setMessage("");
+        setSaveError("Set not confirmed-retry. The same pending set will be reconciled without adding it twice.");
+      }
     } finally {
       isSavingStructuredRef.current = false;
       setIsSavingStructured(false);
