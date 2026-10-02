@@ -206,10 +206,38 @@ test("same-name saved machines remain distinct and require an unambiguous select
     [{ name: "Lat Pulldown", muscleGroup: "Back" }]
   );
   assert.equal(typeof workoutLogAssist.resolveWorkoutExerciseOption, "function");
+  assert.notEqual(
+    workoutLogAssist.workoutExerciseIdentityKey(options[0]),
+    workoutLogAssist.workoutExerciseIdentityKey(options[1])
+  );
   assert.deepEqual(options.map((option) => option.exerciseId), ["pulldown-a", "pulldown-b"]);
   assert.equal(new Set(options.map((option) => option.selectionLabel)).size, 2);
   assert.equal(workoutLogAssist.resolveWorkoutExerciseOption(options, options[0].selectionLabel, null)?.exerciseId, "pulldown-a");
   assert.equal(workoutLogAssist.resolveWorkoutExerciseOption(options, options[1].selectionLabel, null)?.exerciseId, "pulldown-b");
   assert.equal(workoutLogAssist.resolveWorkoutExerciseOption(options, "Lat Pulldown", "pulldown-a")?.exerciseId, "pulldown-a");
   assert.equal(workoutLogAssist.resolveWorkoutExerciseOption(options, "Lat Pulldown", null), undefined);
+});
+
+test("current saved name replaces a historical snapshot without losing stable identity", () => {
+  const options = buildWorkoutExerciseOptions(
+    [{ id: "machine-a", name: "Lat Pulldown", muscleGroup: "Back", notes: "", createdAt: null, updatedAt: null }],
+    [session({
+      exercises: [{
+        exerciseId: "machine-a",
+        exerciseName: "Vertical Pull",
+        muscleGroup: "Back",
+        primaryMuscles: ["Back"],
+        secondaryMuscles: ["Biceps"],
+        exerciseType: "weighted",
+        notes: "",
+        sets: [],
+      }],
+    })],
+    []
+  );
+
+  assert.equal(options.length, 1);
+  assert.equal(options[0].name, "Lat Pulldown");
+  assert.equal(options[0].exerciseId, "machine-a");
+  assert.equal(workoutLogAssist.resolveWorkoutExerciseOption(options, "Lat Pulldown", null)?.exerciseId, "machine-a");
 });

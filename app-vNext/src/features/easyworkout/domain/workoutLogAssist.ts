@@ -31,6 +31,8 @@ type BasicExercise = Pick<WorkoutExerciseRecord, "id" | "name" | "muscleGroup"> 
 type DefaultExercise = { name: string; muscleGroup: string };
 
 const exerciseKey = (name: string) => name.trim().toLocaleLowerCase();
+export const workoutExerciseIdentityKey = (exercise: { exerciseId?: string | null; name: string }) =>
+  exercise.exerciseId ? `id:${exercise.exerciseId}` : `name:${exerciseKey(exercise.name)}`;
 const stableHistoryKey = (exerciseId: string) => `id:${exerciseId}`;
 const legacyHistoryKey = (name: string) => `legacy:${exerciseKey(name)}`;
 
@@ -50,7 +52,8 @@ export function buildWorkoutExerciseOptions(
   const options = new Map<string, WorkoutExerciseOption>();
   const add = (
     entry: Partial<WorkoutExerciseOption> & { name?: string; muscleGroup?: string },
-    fillOnly = false
+    fillOnly = false,
+    preferEntryName = false
   ) => {
     const name = entry.name?.trim() || "";
     const normalizedName = exerciseKey(name);
@@ -73,7 +76,7 @@ export function buildWorkoutExerciseOptions(
     if (stableId && legacy) options.delete(`name:${normalizedName}`);
     options.set(key, {
       exerciseId: stableId || current?.exerciseId || null,
-      name: current?.name || name,
+      name: preferEntryName ? name : current?.name || name,
       selectionLabel: current?.selectionLabel || name,
       muscleGroup: fillOnly ? current?.muscleGroup || entry.muscleGroup || "" : entry.muscleGroup || current?.muscleGroup || "",
       primaryMuscles: fillOnly
@@ -97,7 +100,7 @@ export function buildWorkoutExerciseOptions(
       exerciseType: exercise.exerciseType,
     }));
   });
-  exercises.forEach((exercise) => add({ exerciseId: exercise.id, ...exercise }));
+  exercises.forEach((exercise) => add({ exerciseId: exercise.id, ...exercise }, false, true));
   defaults.forEach((exercise) => add(exercise, true));
   const nameCounts = [...options.values()].reduce<Record<string, number>>((counts, option) => {
     const key = exerciseKey(option.name);

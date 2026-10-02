@@ -25,6 +25,7 @@ import {
   fillSetsFromLastPerformance,
   findExerciseHistory,
   resolveWorkoutExerciseOption,
+  workoutExerciseIdentityKey,
 } from "@/features/easyworkout/domain/workoutLogAssist";
 import { isValidLocalDateKey, isValidWorkingSet, isWorkoutSessionCredited } from "@/features/easyworkout/domain/workoutStatistics";
 import {
@@ -285,8 +286,10 @@ export function EasyWorkoutLogPage() {
   }, [isLoading, previousByExercise, selectedRoutine, workoutMode, gymMode, settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount]);
 
   const nextExerciseSuggestions = useMemo<WorkoutExerciseSuggestion[]>(() => {
-    const currentNames = new Set(
-      exerciseLogs.map((exercise) => exercise.exerciseName.trim().toLowerCase()).filter(Boolean)
+    const currentExerciseKeys = new Set(
+      exerciseLogs
+        .filter((exercise) => exercise.exerciseName.trim())
+        .map((exercise) => workoutExerciseIdentityKey({ exerciseId: exercise.exerciseId, name: exercise.exerciseName }))
     );
     const loggedGroups = exerciseLogs
       .filter((exercise) => exercise.sets.some(hasSetWork))
@@ -304,12 +307,14 @@ export function EasyWorkoutLogPage() {
       accumulator[group] = (accumulator[group] || 0) + setCount;
       return accumulator;
     }, {});
-    const options = [...exerciseOptions].filter(
-      (exercise, index, list) =>
+    const options = [...exerciseOptions].filter((exercise, index, list) => {
+      const identityKey = workoutExerciseIdentityKey(exercise);
+      return (
         exercise.name &&
-        !currentNames.has(exercise.name.toLowerCase()) &&
-        list.findIndex((candidate) => candidate.name.toLowerCase() === exercise.name.toLowerCase()) === index
-    );
+        !currentExerciseKeys.has(identityKey) &&
+        list.findIndex((candidate) => workoutExerciseIdentityKey(candidate) === identityKey) === index
+      );
+    });
     const rankedGroups = targetGroups.length
       ? targetGroups.sort((first, second) => (groupSetCounts[first] || 0) - (groupSetCounts[second] || 0))
       : ["Back", "Chest", "Legs", "Shoulders", "Biceps"];
