@@ -134,6 +134,17 @@ test("workout log exposes explicit setup recall without conflating it with compl
   assert.match(source, /completed: false/);
 });
 
+test("suggested exercises preserve source type and muscle metadata", async () => {
+  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  assert.match(source, /type WorkoutExerciseSuggestion[\s\S]{0,500}exerciseType:/);
+  assert.match(source, /addSuggestedExercise[\s\S]{0,900}exerciseType: suggestion\.exerciseType/);
+  assert.match(source, /addSuggestedExercise[\s\S]{0,900}primaryMuscles: suggestion\.primaryMuscles/);
+  assert.match(source, /addSuggestedExercise[\s\S]{0,900}secondaryMuscles: suggestion\.secondaryMuscles/);
+  assert.match(source, /resolveWorkoutExerciseOption/);
+  assert.match(source, /key=\{suggestion\.exerciseId \|\| suggestion\.name\}/);
+  assert.match(source, /<strong>\{suggestion\.selectionLabel\}<\/strong>/);
+});
+
 test("completed workout persistence and review normalize and display setup", async () => {
   const persistenceSource = await readFile(new URL("../src/lib/firestore/workoutSessions.ts", import.meta.url), "utf8");
   const reviewSource = await readFile(new URL("../src/features/easyworkout/routes/WorkoutSessionReviewPage.tsx", import.meta.url), "utf8");

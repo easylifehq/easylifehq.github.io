@@ -1,11 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {
+import * as workoutLogAssist from "../src/features/easyworkout/domain/workoutLogAssist.ts";
+const {
   buildWorkoutExerciseOptions,
   deriveExerciseHistory,
   fillSetsFromLastPerformance,
   findExerciseHistory,
-} from "../src/features/easyworkout/domain/workoutLogAssist.ts";
+} = workoutLogAssist;
 
 const session = (overrides = {}) => ({
   id: "latest",
@@ -184,7 +185,7 @@ test("bodyweight and assisted completed history can recall setup without marking
 });
 
 test("exercise options put recently used names first and deduplicate saved and built-in matches", () => {
-  const sessions = [session({ exercises: [{ exerciseId: "row-history", exerciseName: "Seated Row", muscleGroup: "Back", primaryMuscles: ["Back"], secondaryMuscles: ["Biceps"], exerciseType: "weighted", notes: "", sets: [] }] })];
+  const sessions = [session({ exercises: [{ exerciseId: "row-saved", exerciseName: "Seated Row", muscleGroup: "Back", primaryMuscles: ["Back"], secondaryMuscles: ["Biceps"], exerciseType: "weighted", notes: "", sets: [] }] })];
   const options = buildWorkoutExerciseOptions(
     [{ id: "row-saved", name: "Seated Row", muscleGroup: "Upper back", notes: "", createdAt: null, updatedAt: null }, { id: "curl", name: "Cable Curl", muscleGroup: "Biceps", notes: "", createdAt: null, updatedAt: null }],
     sessions,
@@ -193,4 +194,22 @@ test("exercise options put recently used names first and deduplicate saved and b
   assert.deepEqual(options.map((option) => option.name), ["Seated Row", "Cable Curl", "Squat"]);
   assert.equal(options[0].exerciseId, "row-saved");
   assert.equal(options[0].muscleGroup, "Upper back");
+});
+
+test("same-name saved machines remain distinct and require an unambiguous selection", () => {
+  const options = buildWorkoutExerciseOptions(
+    [
+      { id: "pulldown-a", name: "Lat Pulldown", muscleGroup: "Back", notes: "Machine A", createdAt: null, updatedAt: null },
+      { id: "pulldown-b", name: "Lat Pulldown", muscleGroup: "Back", notes: "Machine B", createdAt: null, updatedAt: null },
+    ],
+    [],
+    [{ name: "Lat Pulldown", muscleGroup: "Back" }]
+  );
+  assert.equal(typeof workoutLogAssist.resolveWorkoutExerciseOption, "function");
+  assert.deepEqual(options.map((option) => option.exerciseId), ["pulldown-a", "pulldown-b"]);
+  assert.equal(new Set(options.map((option) => option.selectionLabel)).size, 2);
+  assert.equal(workoutLogAssist.resolveWorkoutExerciseOption(options, options[0].selectionLabel, null)?.exerciseId, "pulldown-a");
+  assert.equal(workoutLogAssist.resolveWorkoutExerciseOption(options, options[1].selectionLabel, null)?.exerciseId, "pulldown-b");
+  assert.equal(workoutLogAssist.resolveWorkoutExerciseOption(options, "Lat Pulldown", "pulldown-a")?.exerciseId, "pulldown-a");
+  assert.equal(workoutLogAssist.resolveWorkoutExerciseOption(options, "Lat Pulldown", null), undefined);
 });

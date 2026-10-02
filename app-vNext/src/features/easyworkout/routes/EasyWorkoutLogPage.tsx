@@ -24,6 +24,7 @@ import {
   deriveExerciseHistory,
   fillSetsFromLastPerformance,
   findExerciseHistory,
+  resolveWorkoutExerciseOption,
 } from "@/features/easyworkout/domain/workoutLogAssist";
 import { isValidLocalDateKey, isValidWorkingSet, isWorkoutSessionCredited } from "@/features/easyworkout/domain/workoutStatistics";
 import {
@@ -104,7 +105,11 @@ function readStoredWorkoutDraft(storageKey: string, ownerId: string, defaultWeig
 type WorkoutExerciseSuggestion = {
   exerciseId: string | null;
   name: string;
+  selectionLabel: string;
   muscleGroup: string;
+  primaryMuscles: string[];
+  secondaryMuscles: string[];
+  exerciseType: WorkoutExerciseLogDraft["exerciseType"];
   reason: string;
   detail: string;
   target: string;
@@ -321,7 +326,11 @@ export function EasyWorkoutLogPage() {
         return {
           exerciseId: exercise.exerciseId,
           name: exercise.name,
+          selectionLabel: exercise.selectionLabel,
           muscleGroup: exercise.muscleGroup,
+          primaryMuscles: exercise.primaryMuscles,
+          secondaryMuscles: exercise.secondaryMuscles,
+          exerciseType: exercise.exerciseType,
           reason: targetGroups.includes(exercise.muscleGroup)
             ? `${exercise.muscleGroup} is still in today's lane.`
             : "Good general slot if you need one more lift.",
@@ -553,6 +562,9 @@ export function EasyWorkoutLogPage() {
       exerciseId: suggestion.exerciseId,
       exerciseName: suggestion.name,
       muscleGroup: suggestion.muscleGroup,
+      primaryMuscles: suggestion.primaryMuscles,
+      secondaryMuscles: suggestion.secondaryMuscles,
+      exerciseType: suggestion.exerciseType,
       sets: [
         {
           ...emptySet(),
@@ -875,9 +887,9 @@ export function EasyWorkoutLogPage() {
             </div>
             <div className="workout-next-lift-grid">
               {nextExerciseSuggestions.map((suggestion) => (
-                <article key={suggestion.name} className="workout-next-lift-option">
+                <article key={suggestion.exerciseId || suggestion.name} className="workout-next-lift-option">
                   <div>
-                    <strong>{suggestion.name}</strong>
+                    <strong>{suggestion.selectionLabel}</strong>
                     <span>{suggestion.muscleGroup}</span>
                     <p>{suggestion.reason}</p>
                     <details>
@@ -897,7 +909,7 @@ export function EasyWorkoutLogPage() {
 
         <datalist id="workout-log-exercise-options">
           {exerciseOptions.map((option) => (
-            <option key={`${option.exerciseId || "free"}-${option.name}`} value={option.name}>
+            <option key={`${option.exerciseId || "free"}-${option.name}`} value={option.selectionLabel}>
               {option.muscleGroup || "Saved exercise"}
             </option>
           ))}
@@ -1017,10 +1029,17 @@ export function EasyWorkoutLogPage() {
                       autoComplete="off"
                       value={exercise.exerciseName}
                       onChange={(event) => {
-                        const match = exerciseOptions.find((entry) => entry.name.toLocaleLowerCase() === event.target.value.trim().toLocaleLowerCase());
+                        const nextName = event.target.value;
+                        const match = resolveWorkoutExerciseOption(exerciseOptions, nextName, exercise.exerciseId);
+                        const currentOption = exercise.exerciseId ? exerciseOptions.find((entry) => entry.exerciseId === exercise.exerciseId) : undefined;
+                        const normalizedNextName = nextName.trim().toLocaleLowerCase();
+                        const normalizedCurrentName = currentOption?.name.trim().toLocaleLowerCase() || "";
+                        const retainsCurrentIdentity = Boolean(normalizedNextName && currentOption && (
+                          normalizedCurrentName.startsWith(normalizedNextName) || normalizedNextName.startsWith(normalizedCurrentName)
+                        ));
                         updateExerciseLog(exerciseIndex, {
-                          exerciseName: event.target.value,
-                          exerciseId: match?.exerciseId || null,
+                          exerciseName: match?.name || nextName,
+                          exerciseId: match?.exerciseId || (retainsCurrentIdentity ? exercise.exerciseId : null),
                           muscleGroup: match?.muscleGroup || exercise.muscleGroup,
                           primaryMuscles: match?.primaryMuscles.length ? match.primaryMuscles : exercise.primaryMuscles,
                           secondaryMuscles: match?.secondaryMuscles.length ? match.secondaryMuscles : exercise.secondaryMuscles,
