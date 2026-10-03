@@ -28,7 +28,15 @@ export const workoutDraftStatusCopy: Record<WorkoutDraftLifecycleStatus, string>
   "saved-local": "Saved on this device",
   syncing: "Syncing",
   synced: "Workout saved",
-  "sync-failed-draft-retained": "Couldn't sync—draft retained",
+  "sync-failed-draft-retained": "Couldn't sync — draft retained",
+};
+
+export const workoutDraftStatusDetailCopy: Record<WorkoutDraftLifecycleStatus, string> = {
+  "saving-local": "Keep this page open while your latest edits are written to this device.",
+  "saved-local": "Your latest edits can survive refresh, route changes, and a temporary interruption.",
+  syncing: "Your local draft stays on this device until the workout is confirmed.",
+  synced: "The workout was confirmed and its matching local draft was cleared.",
+  "sync-failed-draft-retained": "Review the message below before leaving this page.",
 };
 
 export type WorkoutDraftSetType = "warmup" | "standard" | "drop" | "failure";
