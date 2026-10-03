@@ -29,8 +29,18 @@ import {
   serializeQuickWorkoutCaptureIntent,
   type QuickWorkoutCaptureIntent,
 } from "@/features/experiments/domain/quickWorkoutCapture";
+import {
+  UniversalCaptureOwnerScope,
+  isUniversalCaptureDraftScopeReady,
+  persistUniversalCaptureDraft,
+  quarantineLegacyUniversalCaptureDraft,
+  recoverUniversalCaptureDraft,
+  removeUniversalCaptureDraft,
+  type UniversalCaptureMode,
+  type UniversalCaptureOwnerToken,
+} from "@/features/experiments/domain/universalCaptureDraft";
 
-type CaptureMode = "raw" | "task" | "brainDump" | "note" | "event" | "application" | "contact" | "project" | "workout";
+type CaptureMode = UniversalCaptureMode;
 
 const captureModeAppMap: Partial<Record<CaptureMode, VisibleAppId>> = {
   task: "easylist",
@@ -78,8 +88,6 @@ const defaultDetails: QuickAddDetails = {
   endTime: "10:00",
   eventType: "other",
 };
-
-const QUICK_ADD_DRAFT_KEY = "easylife.quickAddDraft";
 
 function readPendingWorkoutCaptureEntries(ownerId: string) {
   const prefix = `${quickWorkoutCaptureStorageKey(ownerId)}:`;
@@ -311,7 +319,7 @@ function parseBrainDumpEntries(value: string) {
 
 export function UniversalCapture() {
   const location = useLocation();
-  const { user: captureUser } = useAuth();
+  const { user: captureUser, isLoading: isAuthLoading } = useAuth();
   const { isAppVisible } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<CaptureMode>("raw");
@@ -320,8 +328,9 @@ export function UniversalCapture() {
   const [saveError, setSaveError] = useState("");
   const [isSavingRaw, setIsSavingRaw] = useState(false);
   const [isSavingStructured, setIsSavingStructured] = useState(false);
-  const [firebaseUserId, setFirebaseUserId] = useState(auth.currentUser?.uid || "");
   const [pendingWorkoutCapture, setPendingWorkoutCapture] = useState<QuickWorkoutCaptureIntent | null>(null);
+  const [draftOwnerId, setDraftOwnerId] = useState("");
+  const [hasQuarantinedLegacyDraft, setHasQuarantinedLegacyDraft] = useState(false);
   const [structuredOptionsOpen, setStructuredOptionsOpen] = useState(false);
   const [details, setDetails] = useState<QuickAddDetails>(defaultDetails);
   const [tasks, setTasks] = useState<TaskRecord[]>([]);
@@ -333,7 +342,8 @@ export function UniversalCapture() {
   const isSavingStructuredRef = useRef(false);
   const pendingWorkoutCaptureRef = useRef<QuickWorkoutCaptureIntent | null>(null);
   const workoutCaptureCoordinatorRef = useRef(new QuickWorkoutCaptureCoordinator());
-  const activeUserId = captureUser?.uid || firebaseUserId;
+  const ownerScopeRef = useRef(new UniversalCaptureOwnerScope());
+  const activeUserId = isAuthLoading ? "" : captureUser?.uid || "";
   const activeUserIdRef = useRef(activeUserId);
   const suggestion = useMemo(() => mode === "raw" ? "task" : detectCaptureType(text), [mode, text]);
   const brainDumpEntries = useMemo(() => mode === "brainDump" ? parseBrainDumpEntries(text) : [], [mode, text]);
@@ -406,26 +416,39 @@ export function UniversalCapture() {
   activeUserIdRef.current = activeUserId;
 
   useEffect(() => {
-    const savedDraft = window.localStorage.getItem(QUICK_ADD_DRAFT_KEY);
-    if (!savedDraft) return;
-
-    try {
-      const parsed = JSON.parse(savedDraft) as {
-        mode?: CaptureMode;
-        text?: string;
-        details?: Partial<QuickAddDetails>;
-      };
-      if (parsed.mode) setMode(parsed.mode);
-      if (typeof parsed.text === "string") setText(parsed.text);
-      if (parsed.details) setDetails((current) => ({ ...current, ...parsed.details }));
-    } catch {
-      window.localStorage.removeItem(QUICK_ADD_DRAFT_KEY);
+    if (!ownerScopeRef.current.transition(activeUserId)) return;
+    setDraftOwnerId("");
+    setIsOpen(false);
+    setMode("raw");
+    setText("");
+    setDetails(defaultDetails);
+    setMessage("");
+    setSaveError("");
+    setOpenTarget(null);
+    setStructuredOptionsOpen(false);
+    setIsSavingRaw(false);
+    setIsSavingStructured(false);
+    isSavingStructuredRef.current = false;
+    if (!activeUserId) {
+      setHasQuarantinedLegacyDraft(false);
+      return;
     }
-  }, []);
+
+    const quarantine = quarantineLegacyUniversalCaptureDraft(window.localStorage);
+    setHasQuarantinedLegacyDraft(quarantine.hasQuarantinedLegacyDraft);
+    const recovered = recoverUniversalCaptureDraft(window.localStorage, activeUserId);
+    if (recovered) {
+      setMode(recovered.mode);
+      setText(recovered.text);
+      setDetails({ ...defaultDetails, ...recovered.details } as QuickAddDetails);
+    }
+    setDraftOwnerId(activeUserId);
+  }, [activeUserId]);
 
   useEffect(() => {
+    if (!activeUserId || draftOwnerId !== activeUserId) return;
     if (pendingWorkoutCapture) {
-      window.localStorage.removeItem(QUICK_ADD_DRAFT_KEY);
+      removeUniversalCaptureDraft(window.localStorage, activeUserId);
       return;
     }
     const hasDraft =
@@ -434,19 +457,14 @@ export function UniversalCapture() {
         ([key, value]) => String(value || "") !== String(defaultDetails[key as keyof QuickAddDetails] || "")
       );
     if (!hasDraft) {
-      window.localStorage.removeItem(QUICK_ADD_DRAFT_KEY);
+      removeUniversalCaptureDraft(window.localStorage, activeUserId);
       return;
     }
 
-    window.localStorage.setItem(
-      QUICK_ADD_DRAFT_KEY,
-      JSON.stringify({
-        mode,
-        text,
-        details,
-      })
-    );
-  }, [details, mode, pendingWorkoutCapture, text]);
+    if (!persistUniversalCaptureDraft(window.localStorage, activeUserId, { mode, text, details })) {
+      setSaveError("Could not save this draft on this device. Keep this tab open until you finish it.");
+    }
+  }, [activeUserId, details, draftOwnerId, mode, pendingWorkoutCapture, text]);
 
   useEffect(() => {
     if (!activeUserId) {
@@ -499,14 +517,26 @@ export function UniversalCapture() {
     onEscape: closeCapture,
   });
 
-  function resetFields(nextMessage: string, options: { keepOpenTarget?: boolean } = {}) {
+  function isCurrentOwnerOperation(token: UniversalCaptureOwnerToken | null) {
+    return ownerScopeRef.current.isCurrent(token) && activeUserIdRef.current === token?.ownerId;
+  }
+
+  function resetFields(
+    nextMessage: string,
+    options: { keepOpenTarget?: boolean } = {},
+    ownerToken?: UniversalCaptureOwnerToken | null
+  ) {
+    if (ownerToken && !isCurrentOwnerOperation(ownerToken)) return false;
     setText("");
     setDetails(defaultDetails);
     setMessage(nextMessage);
-    window.localStorage.removeItem(QUICK_ADD_DRAFT_KEY);
+    if (activeUserIdRef.current) {
+      removeUniversalCaptureDraft(window.localStorage, activeUserIdRef.current);
+    }
     if (!options.keepOpenTarget) {
       setOpenTarget(null);
     }
+    return true;
   }
 
   async function saveRawToInbox() {
@@ -515,6 +545,11 @@ export function UniversalCapture() {
     if (!rawText || isSavingRaw) return;
     if (!user) {
       setSaveError("Sign in to save this capture. Your draft is still here.");
+      return;
+    }
+    const ownerToken = ownerScopeRef.current.issueToken(user.uid);
+    if (!ownerToken) {
+      setSaveError("Your account changed. Reopen Capture before saving this draft.");
       return;
     }
 
@@ -531,13 +566,16 @@ export function UniversalCapture() {
         dueDate: null,
         recurring: false,
       });
+      if (!isCurrentOwnerOperation(ownerToken)) return;
       setOpenTarget({ to: "/app/easylist/dashboard", label: "Review Inbox" });
-      resetFields("Saved to Inbox. Organize it when you are ready.", { keepOpenTarget: true });
+      resetFields("Saved to Inbox. Organize it when you are ready.", { keepOpenTarget: true }, ownerToken);
       window.setTimeout(() => textInputRef.current?.focus(), 0);
     } catch {
-      setSaveError("Could not save to Inbox. Your draft is still here.");
+      if (isCurrentOwnerOperation(ownerToken)) {
+        setSaveError("Could not save to Inbox. Your draft is still here.");
+      }
     } finally {
-      setIsSavingRaw(false);
+      if (isCurrentOwnerOperation(ownerToken)) setIsSavingRaw(false);
     }
   }
 
@@ -577,7 +615,6 @@ export function UniversalCapture() {
     let unsubscribeTasks: (() => void) | undefined;
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       unsubscribeTasks?.();
-      setFirebaseUserId(user?.uid || "");
       if (!user) {
         setTasks([]);
         return;
@@ -594,6 +631,8 @@ export function UniversalCapture() {
   async function saveAsTask(options: { addAnother?: boolean } = {}) {
     const user = auth.currentUser;
     if (!user || !text.trim()) return;
+    const ownerToken = ownerScopeRef.current.issueToken(user.uid);
+    if (!ownerToken) return;
     const minutes = Number(details.taskMinutes);
     const inferredPriority = suggestion === "follow-up" ? 2 : 3;
     const priorityTier = details.taskPriority || inferredPriority;
@@ -608,16 +647,19 @@ export function UniversalCapture() {
       dueDate: details.taskDueDate || null,
       recurring: false,
     });
+    if (!isCurrentOwnerOperation(ownerToken)) return;
     if (!options.addAnother) {
       setOpenTarget({ to: `/app/easylist/dashboard`, label: "Open task list" });
     }
-    resetFields(options.addAnother ? "Task saved. Add the next one." : "Saved as a task.", { keepOpenTarget: !options.addAnother });
+    resetFields(options.addAnother ? "Task saved. Add the next one." : "Saved as a task.", { keepOpenTarget: !options.addAnother }, ownerToken);
   }
 
   async function saveBrainDump(options: { addAnother?: boolean } = {}) {
     const user = auth.currentUser;
     const parsedEntries = parseBrainDumpEntries(text);
     if (!user || !parsedEntries.length) return;
+    const ownerToken = ownerScopeRef.current.issueToken(user.uid);
+    if (!ownerToken) return;
 
     let taskCount = 0;
     let eventCount = 0;
@@ -660,6 +702,8 @@ export function UniversalCapture() {
       }
     }
 
+    if (!isCurrentOwnerOperation(ownerToken)) return;
+
     const parts = [
       taskCount ? `${taskCount} task${taskCount === 1 ? "" : "s"}` : "",
       eventCount ? `${eventCount} event${eventCount === 1 ? "" : "s"}` : "",
@@ -675,13 +719,16 @@ export function UniversalCapture() {
     }
     resetFields(
       options.addAnother ? "Brain dump added. Add the next one." : `Added ${parts.join(", ")}.`,
-      { keepOpenTarget: !options.addAnother }
+      { keepOpenTarget: !options.addAnother },
+      ownerToken
     );
   }
 
   async function saveAsNote(options: { addAnother?: boolean } = {}) {
     const user = auth.currentUser;
     if (!user || !text.trim()) return;
+    const ownerToken = ownerScopeRef.current.issueToken(user.uid);
+    if (!ownerToken) return;
 
     const noteId = await createNote(user.uid);
     await updateNote(user.uid, noteId, {
@@ -691,10 +738,11 @@ export function UniversalCapture() {
       pinned: false,
       bodyText: text.trim(),
     });
+    if (!isCurrentOwnerOperation(ownerToken)) return;
     if (!options.addAnother) {
       setOpenTarget({ to: `/app/easynotes/${noteId}`, label: "Open note" });
     }
-    resetFields(options.addAnother ? "Note saved. Add the next one." : "Saved as a note.", { keepOpenTarget: !options.addAnother });
+    resetFields(options.addAnother ? "Note saved. Add the next one." : "Saved as a note.", { keepOpenTarget: !options.addAnother }, ownerToken);
   }
 
   async function saveWorkoutSet(options: { addAnother?: boolean } = {}) {
@@ -702,6 +750,11 @@ export function UniversalCapture() {
     const user = captureUser || auth.currentUser;
     if (!user) {
       setSaveError("Sign in to add this set. Your capture is still here.");
+      return;
+    }
+    const ownerToken = ownerScopeRef.current.issueToken(user.uid);
+    if (!ownerToken) {
+      setSaveError("Your account changed. Reopen Capture before saving this set.");
       return;
     }
     let intent = pendingWorkoutCaptureRef.current;
@@ -761,7 +814,7 @@ export function UniversalCapture() {
         pendingWorkoutCaptureRef.current,
         confirmedIntent
       );
-      if (!resolution.isCurrent) return;
+      if (!resolution.isCurrent || !isCurrentOwnerOperation(ownerToken)) return;
       if (resolution.nextIntent) {
         const nextIntent = resolution.nextIntent;
         pendingWorkoutCaptureRef.current = nextIntent;
@@ -780,9 +833,9 @@ export function UniversalCapture() {
       if (!options.addAnother) {
         setOpenTarget({ to: "/app/easyworkout/log", label: "Open workout" });
       }
-      resetFields(options.addAnother ? "Set added. Add the next one." : "Set added.", { keepOpenTarget: !options.addAnother });
+      resetFields(options.addAnother ? "Set added. Add the next one." : "Set added.", { keepOpenTarget: !options.addAnother }, ownerToken);
     } catch {
-      if (isActiveQuickWorkoutCapture(
+      if (isCurrentOwnerOperation(ownerToken) && isActiveQuickWorkoutCapture(
         activeUserIdRef.current,
         pendingWorkoutCaptureRef.current,
         confirmedIntent
@@ -791,8 +844,10 @@ export function UniversalCapture() {
         setSaveError("Set not confirmed-retry. The same pending set will be reconciled without adding it twice.");
       }
     } finally {
-      isSavingStructuredRef.current = false;
-      setIsSavingStructured(false);
+      if (isCurrentOwnerOperation(ownerToken)) {
+        isSavingStructuredRef.current = false;
+        setIsSavingStructured(false);
+      }
     }
   }
 
@@ -809,6 +864,8 @@ export function UniversalCapture() {
 
     const user = auth.currentUser;
     if (!user) return;
+    const ownerToken = ownerScopeRef.current.issueToken(user.uid);
+    if (!ownerToken) return;
     const title = text.trim();
 
     if (mode === "task") {
@@ -839,10 +896,11 @@ export function UniversalCapture() {
         contactEmail: "",
       };
       const applicationId = await createApplication(user.uid, draft);
+      if (!isCurrentOwnerOperation(ownerToken)) return;
       if (!options.addAnother) {
         setOpenTarget({ to: `/app/easypipeline/dashboard?application=${applicationId}`, label: "Open board" });
       }
-      resetFields(options.addAnother ? "Application added. Add the next one." : "Application added.", { keepOpenTarget: !options.addAnother });
+      resetFields(options.addAnother ? "Application added. Add the next one." : "Application added.", { keepOpenTarget: !options.addAnother }, ownerToken);
       return;
     }
     if (mode === "contact") {
@@ -863,10 +921,11 @@ export function UniversalCapture() {
         archived: false,
       };
       const contactId = await createContact(user.uid, draft);
+      if (!isCurrentOwnerOperation(ownerToken)) return;
       if (!options.addAnother) {
         setOpenTarget({ to: `/app/easycontacts?contact=${contactId}`, label: "Open contacts" });
       }
-      resetFields(options.addAnother ? "Contact added. Add the next one." : "Contact added.", { keepOpenTarget: !options.addAnother });
+      resetFields(options.addAnother ? "Contact added. Add the next one." : "Contact added.", { keepOpenTarget: !options.addAnother }, ownerToken);
       return;
     }
     if (mode === "project") {
@@ -877,10 +936,11 @@ export function UniversalCapture() {
         status: details.projectStatus,
       };
       const projectId = await createProject(user.uid, draft);
+      if (!isCurrentOwnerOperation(ownerToken)) return;
       if (!options.addAnother) {
         setOpenTarget({ to: `/app/easyprojects/${projectId}`, label: "Open project" });
       }
-      resetFields(options.addAnother ? "Project added. Add the next one." : "Project added.", { keepOpenTarget: !options.addAnother });
+      resetFields(options.addAnother ? "Project added. Add the next one." : "Project added.", { keepOpenTarget: !options.addAnother }, ownerToken);
       return;
     }
     if (mode === "event") {
@@ -901,13 +961,16 @@ export function UniversalCapture() {
         recurrenceRule: null,
         eventType: details.eventType,
       });
+      if (!isCurrentOwnerOperation(ownerToken)) return;
       if (!options.addAnother) {
         setOpenTarget({ to: `/app/easycalendar/day`, label: "Open calendar" });
       }
-      resetFields(options.addAnother ? "Event added. Add the next one." : "Event added.", { keepOpenTarget: !options.addAnother });
+      resetFields(options.addAnother ? "Event added. Add the next one." : "Event added.", { keepOpenTarget: !options.addAnother }, ownerToken);
       return;
     }
   }
+
+  if (!isUniversalCaptureDraftScopeReady(activeUserId, draftOwnerId)) return null;
 
   return (
     <>
@@ -943,6 +1006,15 @@ export function UniversalCapture() {
             </button>
           </div>
         </div>
+
+        {hasQuarantinedLegacyDraft ? (
+          <div className="calendar-info-card" role="status">
+            <strong>Older capture kept private</strong>
+            <span>
+              An older unowned capture is safely quarantined on this device. It was not opened or assigned to this account; assisted recovery is required.
+            </span>
+          </div>
+        ) : null}
 
         <label className="field-stack">
           <span>{mode === "raw" ? "Capture for Inbox" : mode === "application" ? "Role" : mode === "contact" ? "Name" : mode === "event" ? "Event" : mode === "brainDump" ? "Brain dump" : mode === "project" ? "Project" : mode === "workout" ? "Exercise and set" : "Task"}</span>
