@@ -335,7 +335,7 @@ test("Quick Capture persists before writing and exposes honest retry state", asy
   assert.match(source, /disabled=\{[^}]*isSavingStructured/);
   assert.match(source, /role="status"/);
   assert.match(source, /aria-live="polite"/);
-  assert.match(source, /const \{ user: captureUser \} = useAuth\(\)/);
+  assert.match(source, /const \{ user: captureUser, isLoading: isAuthLoading \} = useAuth\(\)/);
   assert.match(source, /const user = captureUser \|\| auth\.currentUser/);
   assert.match(
     source,
@@ -345,4 +345,11 @@ test("Quick Capture persists before writing and exposes honest retry state", asy
     source,
     /if \(!activeUserId\)[\s\S]{0,200}return;\s+}\s+pendingWorkoutCaptureRef\.current = null;\s+setPendingWorkoutCapture\(null\);/
   );
+  assert.match(source, /UniversalCaptureOwnerScope/);
+  assert.match(source, /universalCaptureDraftStorageKey|persistUniversalCaptureDraft/);
+  assert.match(source, /quarantineLegacyUniversalCaptureDraft/);
+  assert.match(source, /isAuthLoading \? "" : captureUser\?\.uid \|\| ""/);
+  assert.match(source, /An older unowned capture is safely quarantined on this device/);
+  assert.doesNotMatch(source, /Restore older draft|Claim older draft|claimQuarantinedUniversalCaptureDraft/);
+  assert.doesNotMatch(source, /const QUICK_ADD_DRAFT_KEY/);
 });
