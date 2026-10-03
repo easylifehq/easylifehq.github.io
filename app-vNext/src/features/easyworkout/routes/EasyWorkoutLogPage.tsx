@@ -1411,7 +1411,7 @@ export function EasyWorkoutLogPage() {
           <strong>{workoutDraftStatusCopy[draftStatus]}</strong>
           <span>{workoutDraftStatusDetailCopy[draftStatus]}</span>
         </div>
-        <div className="workout-action-message">
+        <div className="workout-action-message" role="status" aria-live="polite" aria-atomic="true">
           {saveMessage ? <div className="calendar-info-card workout-action-message-card">{saveMessage}</div> : null}
         </div>
         <div className="workout-validation-message" role="status" aria-live="polite" aria-atomic="true">
