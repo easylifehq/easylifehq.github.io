@@ -239,6 +239,16 @@ test("completed workout persistence and review normalize and display setup", asy
   assert.match(reviewSource, /Machine setup/);
 });
 
+test("completed workout persistence uses the remote session schema instead of the local draft schema", async () => {
+  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  const saveStart = source.indexOf("saveCoordinatorRef.current.save");
+  const saveEnd = source.indexOf("setSaveMessage", saveStart);
+  const saveSource = source.slice(saveStart, saveEnd);
+  assert.match(source, /WORKOUT_SESSION_SCHEMA_VERSION/);
+  assert.match(saveSource, /schemaVersion:\s*WORKOUT_SESSION_SCHEMA_VERSION/);
+  assert.doesNotMatch(saveSource, /schemaVersion:\s*WORKOUT_DRAFT_SCHEMA_VERSION/);
+});
+
 test("all new, copied, imported, and prefilled workout rows remain unperformed", async () => {
   const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
   const importSource = await readFile(new URL("../src/features/easyworkout/domain/workoutImportPreview.ts", import.meta.url), "utf8");

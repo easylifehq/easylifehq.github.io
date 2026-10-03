@@ -6,6 +6,7 @@ import { convertWeight, isValidWorkingSet } from "../src/features/easyworkout/do
 const quickCapture = await import("../src/features/experiments/domain/quickWorkoutCapture.ts").catch(() => ({}));
 
 test("quick workout capture exposes a validated durable intent boundary", () => {
+  assert.equal(quickCapture.WORKOUT_SESSION_SCHEMA_VERSION, 4);
   assert.equal(typeof quickCapture.createQuickWorkoutCaptureIntent, "function");
   assert.equal(typeof quickCapture.recoverQuickWorkoutCaptureIntent, "function");
   assert.equal(typeof quickCapture.applyQuickWorkoutSetOperation, "function");

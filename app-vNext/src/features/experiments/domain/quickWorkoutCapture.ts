@@ -1,5 +1,9 @@
 import { convertWeight } from "../../easyworkout/domain/workoutStatistics.ts";
 
+import { WORKOUT_SESSION_SCHEMA_VERSION } from "../../easyworkout/domain/workoutSessionContract.ts";
+
+export { WORKOUT_SESSION_SCHEMA_VERSION };
+
 export type QuickWorkoutCaptureIntent = {
   schemaVersion: 1;
   clientSetId: string;
@@ -280,7 +284,7 @@ export function applyQuickWorkoutSetOperation(
         })),
       }
     : {
-        schemaVersion: 4,
+        schemaVersion: WORKOUT_SESSION_SCHEMA_VERSION,
         routineId: null,
         routineName: "Quick Add",
         performedOn: intent.performedOn,
