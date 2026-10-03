@@ -44,6 +44,7 @@ import {
   type WorkoutImportPreview,
 } from "@/features/easyworkout/domain/workoutImportPreview";
 import { isValidLocalDateKey, isValidWorkingSet, isWorkoutSessionCredited } from "@/features/easyworkout/domain/workoutStatistics";
+import { WORKOUT_SESSION_SCHEMA_VERSION } from "@/features/easyworkout/domain/workoutSessionContract";
 import {
   WORKOUT_SETUP_OTHER_MAX_LENGTH,
   WORKOUT_SETUP_SHORT_MAX_LENGTH,
@@ -656,7 +657,7 @@ export function EasyWorkoutLogPage() {
     try {
       const sessionId = await saveCoordinatorRef.current.save(draftId, () => addSession({
         clientDraftId: draftId,
-        schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
+        schemaVersion: WORKOUT_SESSION_SCHEMA_VERSION,
         routineId: selectedRoutine?.id || null,
         routineName: selectedRoutine?.name || "Workout",
         performedOn,

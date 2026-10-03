@@ -2,13 +2,15 @@ import test, { after, before, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { initializeTestEnvironment, assertFails, assertSucceeds } from "@firebase/rules-unit-testing";
-import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, setLogLevel, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, runTransaction, setDoc, setLogLevel, updateDoc } from "firebase/firestore";
 import { deriveWeeklyReview } from "../src/features/easystatistics/domain/weeklyReview.ts";
 import { deriveGuidedWorkoutPlan, getGuidedWorkoutAction } from "../src/features/easyworkout/domain/guidedWorkoutPlan.ts";
 import { createWorkoutExportPayload, filterWorkoutHistory, getWorkoutPrSessionIds, serializeWorkoutCsv } from "../src/features/easyworkout/domain/workoutHistoryTools.ts";
 import { searchCoreLoopDocuments } from "../src/features/coreloop/domain/globalSearch.ts";
 import { deriveFocusedReviewQueue } from "../src/features/coreloop/domain/focusedReviewQueue.ts";
 import { buildAccountExport, emptyAccountDataCollections, serializeAccountExport } from "../src/features/coreloop/domain/accountExport.ts";
+import { applyQuickWorkoutSetOperation, createQuickWorkoutCaptureIntent } from "../src/features/experiments/domain/quickWorkoutCapture.ts";
+import { WORKOUT_SESSION_SCHEMA_VERSION } from "../src/features/easyworkout/domain/workoutSessionContract.ts";
 
 const projectId = "demo-easylife-wave2";
 const ownerId = "closure-owner";
@@ -118,6 +120,89 @@ test("workout session rules accept legacy shapes but reject corrupt, oversized, 
   await assertFails(setDoc(doc(ownerDb, ownerPath("workoutSessions", "bad-date")), { routineName: "Upper", performedOn: "not-a-date", exercises: [] }));
   await assertFails(setDoc(doc(ownerDb, ownerPath("workoutSessions", "bad-duration")), { routineName: "Upper", performedOn: "2026-08-01", durationMinutes: 1441, exercises: [] }));
   await assertFails(setDoc(doc(ownerDb, ownerPath("workoutSessions", "bad-extra-field")), { routineName: "Upper", performedOn: "2026-08-01", exercises: [], accessToken: "must-not-be-stored" }));
+});
+
+test("current workout client payloads honor the session schema contract, retry identity, and owner boundary", async () => {
+  const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
+  const otherDb = rulesEnvironment.authenticatedContext(otherId).firestore();
+  const currentSession = {
+    clientDraftId: "draft-current-v4",
+    schemaVersion: WORKOUT_SESSION_SCHEMA_VERSION,
+    routineId: "upper",
+    routineName: "Upper",
+    performedOn: "2026-10-02",
+    weightUnit: "lb",
+    durationMinutes: 42,
+    notes: "current client payload",
+    exercises: [{
+      exerciseId: "bench",
+      exerciseName: "Bench Press",
+      muscleGroup: "Chest",
+      exerciseType: "weighted",
+      notes: "",
+      sets: [{ reps: 5, weight: 185, notes: "", setType: "standard", completed: true, deleted: false }],
+    }],
+    createdAt: new Date("2026-10-02T12:00:00Z"),
+    updatedAt: new Date("2026-10-02T12:00:00Z"),
+  };
+  await assertSucceeds(setDoc(doc(ownerDb, ownerPath("workoutSessions", "current-v4")), currentSession));
+  await assertFails(setDoc(doc(otherDb, ownerPath("workoutSessions", "cross-owner-v4")), currentSession));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("workoutSessions", "draft-schema-v7")), { ...currentSession, clientDraftId: "draft-schema-v7", schemaVersion: 7 }));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("workoutSessions", "future-schema-v8")), { ...currentSession, clientDraftId: "future-schema-v8", schemaVersion: 8 }));
+
+  const createdIntent = createQuickWorkoutCaptureIntent({
+    ownerId,
+    performedOn: "2026-10-02",
+    text: "Bench press 135 x 8",
+    notes: "quick capture",
+  }, {
+    createId: () => "quick-intent-current-v4",
+    nowIso: () => "2026-10-02T12:30:00.000Z",
+  });
+  assert.equal(createdIntent.ok, true);
+  const quickRef = doc(ownerDb, ownerPath("workoutSessions", "quick-add-2026-10-02"));
+  const persistQuickIntent = () => runTransaction(ownerDb, async (transaction) => {
+    const snapshot = await transaction.get(quickRef);
+    const result = applyQuickWorkoutSetOperation(snapshot.exists() ? snapshot.data() : null, createdIntent.intent);
+    if (result.applied) transaction.set(quickRef, result.session);
+  });
+  await assertSucceeds(persistQuickIntent());
+  await assertSucceeds(persistQuickIntent());
+  const quickSession = (await getDoc(quickRef)).data();
+  assert.equal(quickSession.schemaVersion, WORKOUT_SESSION_SCHEMA_VERSION);
+  assert.equal(quickSession.exercises.flatMap((exercise) => exercise.sets).length, 1);
+  assert.equal(quickSession.exercises[0].sets[0].clientSetId, "quick-intent-current-v4");
+
+  const legacyRef = doc(ownerDb, ownerPath("workoutSessions", "legacy-v3-append"));
+  await assertSucceeds(setDoc(legacyRef, {
+    schemaVersion: 3,
+    routineId: null,
+    routineName: "Gym Log",
+    performedOn: "2026-10-03",
+    weightUnit: "lb",
+    durationMinutes: null,
+    notes: "",
+    exercises: [{ exerciseId: null, exerciseName: "Bench press", muscleGroup: "Chest", notes: "", sets: [{ reps: 6, weight: 145, notes: "" }] }],
+  }));
+  const legacyIntent = createQuickWorkoutCaptureIntent({
+    ownerId,
+    performedOn: "2026-10-03",
+    text: "Bench press 150 x 6",
+    notes: "",
+  }, {
+    createId: () => "legacy-append-intent",
+    nowIso: () => "2026-10-03T12:30:00.000Z",
+  });
+  assert.equal(legacyIntent.ok, true);
+  await assertSucceeds(runTransaction(ownerDb, async (transaction) => {
+    const snapshot = await transaction.get(legacyRef);
+    const result = applyQuickWorkoutSetOperation(snapshot.data(), legacyIntent.intent);
+    transaction.set(legacyRef, result.session);
+  }));
+  const legacySession = (await getDoc(legacyRef)).data();
+  assert.equal(legacySession.schemaVersion, 3);
+  assert.equal(legacySession.exercises[0].sets[0].completed, undefined);
+  assert.equal(legacySession.exercises[0].sets[1].completed, true);
 });
 
 test("authenticated owner records drive Wave 3 search, focused review, and safe whole-account export", async () => {

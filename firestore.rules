@@ -44,7 +44,7 @@ service cloud.firestore {
         && session.performedOn is string && session.performedOn.matches('^\\d{4}-\\d{2}-\\d{2}$')
         && session.exercises is list && session.exercises.size() <= 80
         && (!('clientDraftId' in session) || (session.clientDraftId is string && session.clientDraftId.matches('^[A-Za-z0-9_-]{8,180}$')))
-        && (!('schemaVersion' in session) || session.schemaVersion == 3)
+        && (!('schemaVersion' in session) || session.schemaVersion in [3, 4])
         && (!('routineId' in session) || session.routineId == null || (session.routineId is string && session.routineId.size() <= 200))
         && (!('weightUnit' in session) || session.weightUnit in ['lb', 'kg'])
         && (!('durationMinutes' in session) || session.durationMinutes == null || (session.durationMinutes is number && session.durationMinutes >= 0 && session.durationMinutes <= 1440))
