@@ -85,10 +85,6 @@
   background: var(--surface-soft, rgba(120, 130, 150, 0.08));
 }
 
-.workout-save-status {
-  min-height: 4.75rem;
-}
-
 .workout-save-status strong,
 .demo-data-banner strong {
   color: var(--text-strong, inherit);
@@ -114,7 +110,6 @@
 .workout-action-message {
   display: flex;
   align-items: center;
-  min-height: 3.75rem;
 }
 
 .workout-action-message .calendar-info-card {
@@ -125,11 +120,23 @@
 .workout-validation-message {
   display: flex;
   align-items: center;
-  min-height: 3.5rem;
   color: var(--ui-danger, #a2332d);
   font-size: 0.88rem;
   font-weight: 750;
   line-height: 1.35;
+}
+
+.workout-action-message:empty,
+.workout-validation-message:empty {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .demo-data-banner {
@@ -247,10 +254,6 @@
 }
 
 @media (max-width: 520px) {
-  .workout-save-status {
-    min-height: 6.25rem;
-  }
-
   .workout-save-status,
   .demo-data-banner,
   .workout-rule-receipt {
