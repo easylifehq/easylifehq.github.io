@@ -14,6 +14,7 @@ import {
   resolveWorkoutDurationMinutes,
   serializeWorkoutDraftForStorage,
   workoutDraftStatusCopy,
+  workoutDraftStatusDetailCopy,
   type StoredWorkoutDraft,
   type WorkoutDraftLifecycleStatus,
   type WorkoutExerciseLogDraft,
@@ -176,6 +177,7 @@ export function EasyWorkoutLogPage() {
   const [workoutImportError, setWorkoutImportError] = useState("");
   const [appliedImportOperationIds, setAppliedImportOperationIds] = useState(restoredDraft?.appliedImportOperationIds || []);
   const [saveMessage, setSaveMessage] = useState(restoredDraftRecovery?.message || "");
+  const [validationMessage, setValidationMessage] = useState("");
   const [draftStatus, setDraftStatus] = useState<WorkoutDraftLifecycleStatus>("saved-local");
   const [isSaving, setIsSaving] = useState(false);
   const [externalDraftConflict, setExternalDraftConflict] = useState(false);
@@ -604,11 +606,11 @@ export function EasyWorkoutLogPage() {
     event.preventDefault();
     if (externalDraftConflict) {
       setDraftStatus("sync-failed-draft-retained");
-      setSaveMessage("This workout changed in another tab. Reload before saving so one tab does not overwrite the other.");
+      setValidationMessage("This workout changed in another tab. Reload before saving so one tab does not overwrite the other.");
       return;
     }
     if (completionReviewRequired) {
-      setSaveMessage("Review which sets you performed, then choose Review complete before saving.");
+      setValidationMessage("Review which sets you performed, then choose Review complete before saving.");
       return;
     }
     const cleanedExercises = exerciseLogs
@@ -629,25 +631,26 @@ export function EasyWorkoutLogPage() {
       .filter((exercise) => exercise.sets.length);
 
     if (!cleanedExercises.length) {
-      setSaveMessage("Mark at least one set done before saving. Weighted sets also need reps and a positive load.");
+      setValidationMessage("Mark at least one set done before saving. Weighted sets also need reps and a positive load.");
       return;
     }
 
     if (!isValidLocalDateKey(performedOn)) {
-      setSaveMessage("Choose a valid local workout date before saving.");
-      return;
-    }
-
-    if (typeof navigator !== "undefined" && !navigator.onLine) {
-      setDraftStatus("sync-failed-draft-retained");
-      setSaveMessage("Couldn't sync—draft retained. Reconnect, then retry Save workout.");
+      setValidationMessage("Choose a valid local workout date before saving.");
       return;
     }
 
     const resolvedDurationMinutes = resolveWorkoutDurationMinutes(durationMinutes, elapsedSeconds);
     if (resolvedDurationMinutes == null) {
       setDraftStatus("sync-failed-draft-retained");
-      setSaveMessage("This draft has been open too long to infer a truthful duration. Open Full log and enter the session duration before saving.");
+      setValidationMessage("This draft has been open too long to infer a truthful duration. Open Full log and enter the session duration before saving.");
+      return;
+    }
+
+    setValidationMessage("");
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      setDraftStatus("sync-failed-draft-retained");
+      setSaveMessage("Couldn't sync — draft retained. Reconnect, then retry Save workout.");
       return;
     }
 
@@ -684,7 +687,7 @@ export function EasyWorkoutLogPage() {
       navigate({ pathname: `/app/easyworkout/session/${encodeURIComponent(sessionId)}`, search: isDemoMode ? "?demo=1" : "" });
     } catch {
       setDraftStatus("sync-failed-draft-retained");
-      setSaveMessage("Couldn't sync—draft retained. Retry when the connection is ready.");
+      setSaveMessage("Couldn't sync — draft retained. Retry when the connection is ready.");
     } finally {
       setIsSaving(false);
     }
@@ -1406,9 +1409,14 @@ export function EasyWorkoutLogPage() {
         ) : null}
         <div className={`workout-save-status status-${draftStatus}`} role="status" aria-live="polite" aria-atomic="true">
           <strong>{workoutDraftStatusCopy[draftStatus]}</strong>
-          <span>{draftStatus === "saved-local" ? "Your latest edits can survive refresh, route changes, and a temporary interruption." : saveMessage}</span>
+          <span>{workoutDraftStatusDetailCopy[draftStatus]}</span>
         </div>
-        {saveMessage && draftStatus === "saved-local" ? <div className="calendar-info-card">{saveMessage}</div> : null}
+        <div className="workout-action-message">
+          {saveMessage ? <div className="calendar-info-card workout-action-message-card">{saveMessage}</div> : null}
+        </div>
+        <div className="workout-validation-message" role="status" aria-live="polite" aria-atomic="true">
+          {validationMessage ? <span>{validationMessage}</span> : null}
+        </div>
       </form>
     </PageSection>
   );
