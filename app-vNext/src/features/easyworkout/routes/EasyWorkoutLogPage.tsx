@@ -1009,20 +1009,22 @@ export function EasyWorkoutLogPage() {
               <p>This restored draft could not distinguish planned rows from performed sets. Its values are intact, but every set starts unconfirmed. {isFocusedWorkoutMode ? "Choose Done & next exercise on each exercise you performed, then Review complete." : ""}</p>
             </div>
             <div className="pill-row">
-              <button
-                type="button"
-                className="button-secondary compact-button"
-                onClick={() => {
-                  setExerciseLogs((current) => current.map((exercise) => ({
-                    ...exercise,
-                    sets: exercise.sets.map((set) => ({ ...set, completed: !set.deleted })),
-                  })));
-                  setCompletionReviewRequired(false);
-                  setSaveMessage("All shown sets were marked done. You can still undo any set before saving.");
-                }}
-              >
-                Mark all shown sets done
-              </button>
+              {!isFocusedWorkoutMode ? (
+                <button
+                  type="button"
+                  className="button-secondary compact-button"
+                  onClick={() => {
+                    setExerciseLogs((current) => current.map((exercise) => ({
+                      ...exercise,
+                      sets: exercise.sets.map((set) => ({ ...set, completed: !set.deleted })),
+                    })));
+                    setCompletionReviewRequired(false);
+                    setSaveMessage("All shown sets were marked done. You can still undo any set before saving.");
+                  }}
+                >
+                  Mark all shown sets done
+                </button>
+              ) : null}
               <button
                 type="button"
                 className="ghost-button compact-button"

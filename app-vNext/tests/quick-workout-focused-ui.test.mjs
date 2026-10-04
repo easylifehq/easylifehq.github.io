@@ -118,3 +118,15 @@ test("compact focused styles keep 390px layouts free of horizontal overflow", as
   }
   assert.match(css, /\.quick-workout-icon-button\s*\{[^}]*min-(?:width|height):\s*44px/);
 });
+
+test("focused recovery cannot mass-complete sets, while full-log keeps the legacy shortcut", async () => {
+  const source = await page();
+  const shortcut = source.indexOf("Mark all shown sets done");
+  assert.ok(shortcut > 0, "full-log shortcut remains");
+  const button = source.slice(source.lastIndexOf("<button", shortcut), shortcut);
+  const guardStart = source.lastIndexOf("{!isFocusedWorkoutMode ? (", shortcut);
+  assert.ok(guardStart > 0 && guardStart > source.lastIndexOf("workout-completion-review", shortcut) - 600, "shortcut is guarded to full-log mode");
+  assert.ok(source.indexOf("Review complete", shortcut) > shortcut, "Review complete is retained");
+  assert.match(source, /Choose Done & next exercise on each exercise you performed/);
+  assert.ok(button.includes("onClick"));
+});
