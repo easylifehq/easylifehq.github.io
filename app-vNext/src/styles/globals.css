@@ -11401,7 +11401,199 @@ button.calendar-detail-card:disabled {
 }
 
 .workout-session-strip {
-  grid-template-columns: minmax(120px, 0.3fr) minmax(0, 1fr);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 0.5rem 0.65rem;
+  align-items: end;
+  margin-bottom: 0.65rem;
+  min-width: 0;
+}
+
+.workout-strip-notes {
+  grid-column: 1 / -1;
+}
+
+.workout-strip-date,
+.workout-strip-focus,
+.workout-strip-notes {
+  min-width: 0;
+}
+
+.workout-strip-focus summary {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 44px;
+  padding: 0 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: var(--ui-bg-card, var(--shell-input-bg));
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.workout-strip-focus fieldset {
+  min-width: 0;
+  margin: 0.4rem 0 0;
+}
+
+.quick-workout-card {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.7rem;
+  min-width: 0;
+}
+
+.quick-workout-header {
+  display: flex;
+  align-items: end;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.quick-workout-name {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.quick-workout-index {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.quick-workout-last {
+  flex: 0 1 auto;
+  min-height: 44px;
+  max-width: 9rem;
+  white-space: normal;
+  line-height: 1.15;
+}
+
+.quick-workout-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+  background: transparent;
+  color: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.quick-workout-confirm {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border-subtle, var(--shell-card-border));
+}
+
+.quick-workout-confirm p {
+  margin: 0;
+}
+
+.quick-workout-set-head,
+.quick-workout-set-row {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr) 44px;
+  gap: 0.35rem;
+  align-items: center;
+  min-width: 0;
+}
+
+.quick-workout-set-head {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.quick-workout-sets {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.quick-workout-set-row input,
+.quick-workout-set-row select {
+  min-width: 0;
+  width: 100%;
+  min-height: 44px;
+}
+
+.quick-workout-set-number {
+  display: grid;
+  justify-items: center;
+  font-weight: 800;
+}
+
+.quick-workout-more summary {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 44px;
+  cursor: pointer;
+  font-weight: 800;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+}
+
+.quick-workout-more-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.quick-workout-more-grid input {
+  min-height: 44px;
+}
+
+.quick-workout-wide {
+  grid-column: 1 / -1;
+}
+
+.quick-workout-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.quick-workout-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.quick-workout-summary > div:first-child {
+  display: grid;
+  min-width: 0;
+}
+
+.quick-workout-summary-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+}
+
+.quick-workout-card-collapsed {
+  padding: 0.5rem 0.7rem;
+}
+
+.workout-action-message-card button {
+  margin-left: 0.5rem;
 }
 
 .workout-exercise-fields {

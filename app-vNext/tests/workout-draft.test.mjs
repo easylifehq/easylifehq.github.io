@@ -200,7 +200,7 @@ test("workout log exposes one-tap set completion, undo, and legacy-draft review"
 });
 
 test("workout log exposes explicit setup recall without conflating it with completion", async () => {
-  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  const source = (await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8")) + (await readFile(new URL("../src/features/easyworkout/components/QuickWorkoutExerciseCard.tsx", import.meta.url), "utf8"));
   assert.match(source, /Use last sets & setup/);
   assert.match(source, /Use last setup/);
   assert.match(source, /seat setting/);
@@ -210,7 +210,7 @@ test("workout log exposes explicit setup recall without conflating it with compl
 });
 
 test("next-exercise UI uses explicit planning context and adds only pure planned rows", async () => {
-  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  const source = (await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8")) + (await readFile(new URL("../src/features/easyworkout/components/QuickWorkoutSessionStrip.tsx", import.meta.url), "utf8")) + (await readFile(new URL("../src/features/easyworkout/components/QuickWorkoutNextExercise.tsx", import.meta.url), "utf8"));
   assert.match(source, /deriveNextExerciseSuggestions/);
   assert.match(source, /createPlannedExerciseFromSuggestion/);
   assert.match(source, /planningContext/);
@@ -224,7 +224,7 @@ test("next-exercise UI uses explicit planning context and adds only pure planned
   assert.doesNotMatch(source, /exerciseSuggestionDetails/);
   assert.doesNotMatch(source, /const groupPairs/);
   const addStart = source.indexOf("function addSuggestedExercise");
-  const addEnd = source.indexOf("function removeBlankExerciseBoxes", addStart);
+  const addEnd = source.indexOf("function editSet", addStart);
   const addSource = source.slice(addStart, addEnd);
   assert.match(addSource, /createPlannedExerciseFromSuggestion/);
   assert.doesNotMatch(addSource, /addSession|lastWeight|lastReps|completed:\s*true/);
@@ -254,8 +254,8 @@ test("all new, copied, imported, and prefilled workout rows remain unperformed",
   const importSource = await readFile(new URL("../src/features/easyworkout/domain/workoutImportPreview.ts", import.meta.url), "utf8");
   assert.match(source, /const emptySet[\s\S]{0,250}completed: false/);
   assert.match(source, /baseSets[\s\S]{0,500}completed: false/);
-  assert.match(source, /Copy previous set[\s\S]{0,500}/);
-  assert.match(source, /previousSet, localId: createLocalId\(\), completed: false/);
+  assert.match(source, /onAddSet=\{\(\) => updateExerciseLog\(exerciseIndex, \{ sets: \[\.\.\.exercise\.sets, emptySet\(0\)\] \}\)\}/);
+  assert.match(source, /fillSetsFromLastPerformance\(exercise\.sets, previous\)/);
   assert.match(importSource, /function materializeRow[\s\S]{0,900}completed: false/);
   assert.match(importSource, /applyWorkoutImportPreview[\s\S]*materializeRow/);
 });
