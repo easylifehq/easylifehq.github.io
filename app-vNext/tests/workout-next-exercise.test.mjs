@@ -101,7 +101,7 @@ test("planning duration accepts sequential editing and backspace without inventi
   assert.equal(workoutPlanning.parseWorkoutPlanningDurationInput("30"), 30);
   assert.equal(workoutPlanning.parseWorkoutPlanningDurationInput(""), null);
   assert.equal(workoutPlanning.parseWorkoutPlanningDurationInput("361"), null);
-  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  const source = await readFile(new URL("../src/features/easyworkout/components/QuickWorkoutNextExercise.tsx", import.meta.url), "utf8");
   assert.match(source, /value=\{planningDurationInput\}/);
   assert.match(source, /setPlanningDurationInput\(event\.target\.value\)/);
   const planningInput = source.slice(Math.max(0, source.indexOf("value={planningDurationInput}") - 300), source.indexOf("value={planningDurationInput}"));
