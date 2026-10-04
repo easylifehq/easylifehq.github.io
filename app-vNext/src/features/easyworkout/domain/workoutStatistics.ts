@@ -59,13 +59,47 @@ export type ExerciseObservation = {
   sessionVolume: number;
 };
 export type ExerciseRecord = {
-  type: "heaviest-weight" | "most-reps" | "estimated-1rm" | "set-volume" | "session-volume" | "rep-record";
+  type: "heaviest-weight" | "most-reps" | "estimated-1rm" | "set-volume" | "session-volume" | "rep-record" | "longest-duration" | "longest-distance";
   label: string;
   value: number;
   unit: string;
   sourceWorkoutId: string;
   performedOn: string;
   previousValue: number | null;
+};
+export const EXERCISE_HISTORY_RECENT_LIMIT = 5;
+export type ExerciseHistoryKind = WorkoutExerciseType | "mixed";
+export type ExerciseHistoryRow = {
+  sessionId: string;
+  performedOn: string;
+  setCount: number;
+  topWeight: number | null;
+  repsAtTopWeight: number | null;
+  estimatedOneRepMax: number | null;
+  e1rmConfidence: DataConfidence | null;
+  workload: number | null;
+  bestReps: number | null;
+  totalReps: number | null;
+  assistance: number | null;
+  bestDurationSeconds: number | null;
+  totalDurationSeconds: number | null;
+  bestDistanceMeters: number | null;
+  totalDistanceMeters: number | null;
+  holdsRecords: string[];
+};
+export type ExerciseHistoryComparison = {
+  state: "empty" | "single-session" | "comparable" | "not-comparable" | "mixed-types";
+  metricLabel: string | null;
+  unit: string | null;
+  latest: number | null;
+  previous: number | null;
+  delta: number | null;
+};
+export type ExerciseHistory = {
+  kind: ExerciseHistoryKind;
+  totalSessions: number;
+  rows: ExerciseHistoryRow[];
+  comparison: ExerciseHistoryComparison;
 };
 export type ExerciseSummary = {
   exerciseKey: string;
@@ -74,6 +108,7 @@ export type ExerciseSummary = {
   sessionCount: number;
   observations: ExerciseObservation[];
   records: ExerciseRecord[];
+  history: ExerciseHistory;
   trend: "improving" | "plateau" | "declining" | "insufficient";
   trendConfidence: DataConfidence;
   trendChangePercent: number | null;
@@ -246,6 +281,68 @@ function exerciseKey(exercise: AnalyticsExercise) {
   return exercise.exerciseId?.trim() || `name:${(exercise.exerciseName || "Unknown exercise").trim().toLowerCase()}`;
 }
 
+const sumOf = (values: number[]) => values.reduce((sum, value) => sum + value, 0);
+const maxOf = (values: number[]) => (values.length ? Math.max(...values) : null);
+type HistoryBlocks = Array<{ session: AnalyticsSession; blocks: Array<{ kind: WorkoutExerciseType; sets: AnalyticsSet[] }> }>;
+
+function buildExerciseHistory(bySession: HistoryBlocks, records: ExerciseRecord[], unit: WorkoutDisplayUnit): ExerciseHistory {
+  const kinds = new Set(bySession.flatMap(({ blocks }) => blocks.map((block) => block.kind)));
+  const emptyComparison = (state: ExerciseHistoryComparison["state"]): ExerciseHistoryComparison => ({ state, metricLabel: null, unit: null, latest: null, previous: null, delta: null });
+  if (kinds.size > 1) return { kind: "mixed", totalSessions: bySession.length, rows: [], comparison: emptyComparison("mixed-types") };
+  const kind: ExerciseHistoryKind = [...kinds][0] ?? "weighted";
+  const ordered = [...bySession].sort((a, b) => b.session.performedOn.localeCompare(a.session.performedOn) || a.session.id.localeCompare(b.session.id));
+  const allRows = ordered.map(({ session, blocks }): ExerciseHistoryRow => {
+    const sourceUnit = session.weightUnit || "lb";
+    const sets = blocks.flatMap((block) => block.sets);
+    const row: ExerciseHistoryRow = {
+      sessionId: session.id, performedOn: session.performedOn, setCount: sets.length,
+      topWeight: null, repsAtTopWeight: null, estimatedOneRepMax: null, e1rmConfidence: null, workload: null,
+      bestReps: null, totalReps: null, assistance: null,
+      bestDurationSeconds: null, totalDurationSeconds: null, bestDistanceMeters: null, totalDistanceMeters: null,
+      holdsRecords: records.filter((record) => record.sourceWorkoutId === session.id).map((record) => record.label),
+    };
+    if (kind === "weighted") {
+      const top = Math.max(...sets.map((set) => set.weight || 0));
+      row.topWeight = convertWeight(top, sourceUnit, unit);
+      row.repsAtTopWeight = maxOf(sets.filter((set) => (set.weight || 0) === top).map((set) => set.reps || 0));
+      row.workload = convertWeight(sumOf(sets.map((set) => weightedSetVolume(set, "weighted"))), sourceUnit, unit);
+      const best = sets.map((set) => estimateOneRepMax(set.weight || 0, set.reps || 0)).filter((result): result is NonNullable<ReturnType<typeof estimateOneRepMax>> => Boolean(result)).sort((a, b) => b.value - a.value)[0];
+      if (best) { row.estimatedOneRepMax = convertWeight(best.value, sourceUnit, unit); row.e1rmConfidence = best.confidence; }
+    } else if (kind === "bodyweight") {
+      row.bestReps = maxOf(sets.map((set) => set.reps || 0));
+      row.totalReps = sumOf(sets.map((set) => set.reps || 0));
+    } else if (kind === "assisted") {
+      row.bestReps = maxOf(sets.map((set) => set.reps || 0));
+      const bestSet = [...sets].sort((a, b) => (b.reps || 0) - (a.reps || 0) || (a.weight || 0) - (b.weight || 0))[0];
+      row.assistance = convertWeight(bestSet.weight || 0, sourceUnit, unit);
+    } else if (kind === "duration") {
+      row.bestDurationSeconds = maxOf(sets.map((set) => set.durationSeconds || 0));
+      row.totalDurationSeconds = sumOf(sets.map((set) => set.durationSeconds || 0));
+    } else {
+      row.bestDistanceMeters = maxOf(sets.map((set) => set.distanceMeters || 0));
+      row.totalDistanceMeters = sumOf(sets.map((set) => set.distanceMeters || 0));
+    }
+    return row;
+  });
+  let comparison = emptyComparison(allRows.length === 0 ? "empty" : allRows.length === 1 ? "single-session" : "comparable");
+  if (allRows.length > 1) {
+    const pick = (row: ExerciseHistoryRow): { label: string; unit: string; value: number | null } | null =>
+      kind === "weighted" ? { label: "Estimated 1RM", unit, value: row.estimatedOneRepMax }
+      : kind === "bodyweight" ? { label: "Best set reps", unit: "reps", value: row.bestReps }
+      : kind === "duration" ? { label: "Longest set", unit: "s", value: row.bestDurationSeconds }
+      : kind === "distance" ? { label: "Longest set", unit: "m", value: row.bestDistanceMeters }
+      : null;
+    const latest = pick(allRows[0]);
+    const previous = pick(allRows[1]);
+    if (latest && previous && latest.value !== null && previous.value !== null && Number.isFinite(latest.value) && Number.isFinite(previous.value)) {
+      comparison = { state: "comparable", metricLabel: latest.label, unit: latest.unit, latest: latest.value, previous: previous.value, delta: latest.value - previous.value };
+    } else {
+      comparison = { ...emptyComparison("not-comparable"), metricLabel: latest?.label ?? null, unit: latest?.unit ?? null };
+    }
+  }
+  return { kind, totalSessions: allRows.length, rows: allRows.slice(0, EXERCISE_HISTORY_RECENT_LIMIT), comparison };
+}
+
 function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDisplayUnit): ExerciseSummary[] {
   const groups = new Map<string, { exerciseId: string | null; exerciseName: string; entries: Array<{ session: AnalyticsSession; exercise: AnalyticsExercise }> }>();
   sessions.forEach((session) => (session.exercises || []).forEach((exercise) => {
@@ -266,7 +363,10 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
       current.exercises.push(exercise);
       entriesBySession.set(session.id, current);
     });
+    const historyBySession: HistoryBlocks = [];
     entriesBySession.forEach(({ session, exercises }) => {
+      const blocks = exercises.map((exercise) => ({ kind: getExerciseType(exercise), sets: validSets(exercise, session) })).filter((block) => block.sets.length > 0);
+      if (blocks.length) historyBySession.push({ session, blocks });
       const sourceUnit = session.weightUnit || "lb";
       const weighted = exercises.flatMap((exercise) => getExerciseType(exercise) === "weighted" ? validSets(exercise, session) : []);
       const estimated = weighted.map((set) => ({ set, result: estimateOneRepMax(set.weight || 0, set.reps || 0) }))
@@ -296,6 +396,11 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
         );
         if (e1rm) candidates.push({ type: "estimated-1rm", label: "Best estimated 1RM", value: convertWeight(e1rm.value, sourceUnit, unit), unit, sessionId: session.id, performedOn: session.performedOn });
       });
+      blocks.forEach(({ kind, sets }) => sets.forEach((set) => {
+        if (kind === "bodyweight") candidates.push({ type: "most-reps", label: "Most reps", value: set.reps || 0, unit: "reps", sessionId: session.id, performedOn: session.performedOn });
+        if (kind === "duration") candidates.push({ type: "longest-duration", label: "Longest duration", value: set.durationSeconds || 0, unit: "s", sessionId: session.id, performedOn: session.performedOn });
+        if (kind === "distance") candidates.push({ type: "longest-distance", label: "Longest distance", value: set.distanceMeters || 0, unit: "m", sessionId: session.id, performedOn: session.performedOn });
+      }));
       if (sessionVolume > 0) candidates.push({ type: "session-volume", label: "Best session workload", value: sessionVolume, unit: `${unit}·reps`, sessionId: session.id, performedOn: session.performedOn });
     });
     const records = [...new Set(candidates.map((candidate) => `${candidate.type}:${candidate.label}`))].map((recordKey) => {
@@ -311,7 +416,8 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
     const recentCenter = half ? median(observations.slice(-half).map((item) => item.estimatedOneRepMax)) : 0;
     const change = previousCenter > 0 ? ((recentCenter - previousCenter) / previousCenter) * 100 : null;
     const trend: ExerciseSummary["trend"] = confidence === "insufficient" || change === null ? "insufficient" : Math.abs(change) <= 2.5 ? "plateau" : change > 0 ? "improving" : "declining";
-    return { exerciseKey: key, exerciseId: group.exerciseId, exerciseName: group.exerciseName, sessionCount: new Set(entries.map((entry) => entry.session.id)).size, observations, records, trend, trendConfidence: confidence, trendChangePercent: change };
+    const history = buildExerciseHistory(historyBySession, records, unit);
+    return { exerciseKey: key, exerciseId: group.exerciseId, exerciseName: group.exerciseName, sessionCount: new Set(entries.map((entry) => entry.session.id)).size, observations, records, history, trend, trendConfidence: confidence, trendChangePercent: change };
   }).sort((a, b) => b.sessionCount - a.sessionCount || a.exerciseName.localeCompare(b.exerciseName));
 }
 

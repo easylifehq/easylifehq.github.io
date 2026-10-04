@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { deriveRoutineComparisons, deriveWorkoutStatistics, ROUTINE_COMPARISON_FORMULA_VERSION, type AnalyticsSession, type PeriodMetric } from "@/features/easyworkout/domain/workoutStatistics";
+import { ExerciseRecentSessions } from "./ExerciseRecentSessions";
 import { WorkoutGoalsPanel } from "./WorkoutGoalsPanel";
 import type { WorkoutGoal, WorkoutGoalDraft, WorkoutGoalStatus } from "../domain/workoutGoals";
 import { workoutDemoMetadata } from "@/features/easyworkout/demo/workoutDemoFixtures";
@@ -122,7 +123,7 @@ export function WorkoutInsightsPanel({ sessions, routines, exercises, goals, onC
         </PageSection>
       </div>
 
-      <PageSection eyebrow="Exercise detail" title="Progress by exercise" description="Estimated 1RM uses Epley for 1–15 reps; 11–15 reps are low confidence and higher-rep sets are omitted.">
+      <PageSection eyebrow="Exercise detail" title="Progress by exercise" description="Each exercise is tracked on its own type-appropriate measurements and never combined with other exercises. Estimated 1RM (weighted only) uses Epley for 1–15 reps; 11–15 reps are low confidence.">
         <label className="field-stack workout-exercise-search">
           <span>Search or select exercise</span>
           <input list="workout-exercise-options" value={exerciseQuery} onChange={(event) => setExerciseQuery(event.target.value)} placeholder={stats.exerciseSummaries[0]?.exerciseName || "Bench Press"} />
@@ -131,13 +132,14 @@ export function WorkoutInsightsPanel({ sessions, routines, exercises, goals, onC
         {selectedExercise ? (
           <div className="workout-exercise-detail">
             <div className="statistics-insight-grid">
-              <article className="statistics-insight-card"><span>Trend</span><strong>{selectedExercise.trend}</strong><p>{selectedExercise.sessionCount} comparable sessions · {selectedExercise.trendConfidence} confidence</p></article>
+              {selectedExercise.history.kind === "weighted" ? <article className="statistics-insight-card"><span>Trend</span><strong>{selectedExercise.trend}</strong><p>{selectedExercise.sessionCount} comparable sessions · {selectedExercise.trendConfidence} confidence</p></article> : <article className="statistics-insight-card"><span>Saved sessions</span><strong>{selectedExercise.history.totalSessions}</strong><p>{selectedExercise.history.kind === "mixed" ? "Mixed exercise types are not combined" : `${selectedExercise.history.kind} exercise · no estimated 1RM`}</p></article>}
               {selectedExercise.records.slice(0, 5).map((record) => <article className="statistics-insight-card" key={`${record.type}-${record.label}`}><span>{record.label}</span><strong>{record.value.toFixed(record.unit === "reps" ? 0 : 1)} {record.unit}</strong><p>{record.performedOn} · <Link to={`/app/easyworkout/session/${encodeURIComponent(record.sourceWorkoutId)}${demoOnlySearch}`}>source</Link></p></article>)}
             </div>
-            <div className="workout-chart-alternative" aria-label={`${selectedExercise.exerciseName} estimated one-repetition maximum history`}>
+            <ExerciseRecentSessions summary={selectedExercise} unit={settings.easyWorkout.weightUnit} demoOnlySearch={demoOnlySearch} />
+            {selectedExercise.observations.length ? <div className="workout-chart-alternative" aria-label={`${selectedExercise.exerciseName} estimated one-repetition maximum history`}>
               <h3>{selectedExercise.exerciseName} estimated 1RM history</h3>
               <ol>{selectedExercise.observations.slice(-10).map((point) => <li key={`${point.sessionId}-${point.performedOn}`}><Link to={`/app/easyworkout/session/${encodeURIComponent(point.sessionId)}${demoOnlySearch}`}>{point.performedOn}</Link>: {point.estimatedOneRepMax.toFixed(1)} {settings.easyWorkout.weightUnit}, {point.confidence} confidence from {point.sourceWeight.toFixed(1)} {settings.easyWorkout.weightUnit} × {point.sourceReps}</li>)}</ol>
-            </div>
+            </div> : null}
             <Link className="button-secondary compact-button" to={`/app/easyworkout/exercise/${encodeURIComponent(selectedExercise.exerciseId || selectedExercise.exerciseName)}${demoOnlySearch}`}>Open full exercise detail</Link>
           </div>
         ) : <p className="empty-card-vnext">Log another comparable session to unlock exercise detail.</p>}
