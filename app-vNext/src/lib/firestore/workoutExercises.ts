@@ -11,11 +11,18 @@ import {
   type QuerySnapshot,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
+import {
+  normalizeWorkoutExercisePlanningMetadata,
+  type WorkoutExercisePlanningMetadata,
+} from "@/features/easyworkout/domain/workoutPlanning";
+import type { WorkoutDraftExerciseType } from "@/features/easyworkout/domain/workoutDraftLifecycle";
 
 export type WorkoutExerciseRecord = {
   id: string;
   name: string;
   muscleGroup: string;
+  exerciseType?: WorkoutDraftExerciseType;
+  planningMetadata?: WorkoutExercisePlanningMetadata | null;
   notes: string;
   createdAt: Date | null;
   updatedAt: Date | null;
@@ -39,15 +46,30 @@ function toDate(value: unknown) {
 
 function normalizeExercise(snapshot: QueryDocumentSnapshot<DocumentData>) {
   const data = snapshot.data();
+  const exerciseType = ["weighted", "bodyweight", "assisted", "duration", "distance"].includes(String(data.exerciseType))
+    ? data.exerciseType as WorkoutDraftExerciseType
+    : undefined;
 
   return {
     id: snapshot.id,
     name: data.name || "",
     muscleGroup: data.muscleGroup || "",
+    exerciseType,
+    planningMetadata: normalizeWorkoutExercisePlanningMetadata(data.planningMetadata),
     notes: data.notes || "",
     createdAt: toDate(data.createdAt),
     updatedAt: toDate(data.updatedAt),
   } satisfies WorkoutExerciseRecord;
+}
+
+function exercisePayload(draft: WorkoutExerciseDraft) {
+  return {
+    name: draft.name.trim(),
+    muscleGroup: draft.muscleGroup.trim(),
+    notes: draft.notes.trim(),
+    exerciseType: draft.exerciseType || "weighted",
+    planningMetadata: normalizeWorkoutExercisePlanningMetadata(draft.planningMetadata) || null,
+  };
 }
 
 function getWorkoutExercisesCollection(userId: string) {
@@ -74,7 +96,7 @@ export function subscribeToWorkoutExercises(
 
 export async function createWorkoutExercise(userId: string, draft: WorkoutExerciseDraft) {
   const reference = await addDoc(getWorkoutExercisesCollection(userId), {
-    ...draft,
+    ...exercisePayload(draft),
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -88,7 +110,7 @@ export async function updateWorkoutExercise(
   draft: WorkoutExerciseDraft
 ) {
   await updateDoc(doc(db, "users", userId, "workoutExercises", exerciseId), {
-    ...draft,
+    ...exercisePayload(draft),
     updatedAt: serverTimestamp(),
   });
 }

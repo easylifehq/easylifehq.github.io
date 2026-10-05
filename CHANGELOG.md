@@ -6,6 +6,11 @@ The app version lives in `app-vNext/package.json`. When a release changes app be
 
 ## Unreleased
 
+### Changed
+
+- EasyWorkout routine starts now prefill every planned working set from the newest comparable completed sets, while preserving an explicit routine weight when one is configured.
+- EasyWorkout exercise fields now offer recent, saved, and built-in exercise names without preventing free-form entry.
+
 ## 4.37.1
 
 ### Changed

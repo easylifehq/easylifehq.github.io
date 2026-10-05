@@ -27,6 +27,52 @@ test("working-set validity excludes warm-ups, deleted, incomplete, and corrupt v
   assert.equal(isValidWorkingSet({ reps: -2, weight: 100 }), false);
 });
 
+test("schema-v4 validity requires an explicit completed true while legacy validity stays compatible", () => {
+  const explicit = { requiresExplicitCompletion: true };
+  assert.equal(isValidWorkingSet({ reps: 8, weight: 100 }, "weighted", explicit), false);
+  assert.equal(isValidWorkingSet({ reps: 8, weight: 100, completed: "yes" }, "weighted", explicit), false);
+  assert.equal(isValidWorkingSet({ reps: 8, weight: 100, completed: true }, "weighted", explicit), true);
+  assert.equal(isValidWorkingSet({ reps: 8, weight: 100 }, "weighted"), true);
+});
+
+test("untouched schema-v4 weighted, bodyweight, and assisted plans do not inflate statistics", () => {
+  const sessions = [
+    session("weighted", "2026-08-01", [{ reps: 8, weight: 135 }], { schemaVersion: 4 }),
+    session("bodyweight", "2026-08-01", [{ reps: 8, weight: 0 }], { schemaVersion: 4, exercises: [{ exerciseId: "pushup", exerciseName: "Push-up", muscleGroup: "Chest", exerciseType: "bodyweight", sets: [{ reps: 8, weight: 0 }] }] }),
+    session("assisted", "2026-08-01", [{ reps: 8, weight: 0 }], { schemaVersion: 4, exercises: [{ exerciseId: "pullup", exerciseName: "Assisted pull-up", muscleGroup: "Back", exerciseType: "assisted", sets: [{ reps: 8, weight: 0 }] }] }),
+  ];
+  const stats = deriveWorkoutStatistics(sessions, { nowDateKey: "2026-08-01" });
+  assert.equal(stats.pulse.sessions.current, 0);
+  assert.equal(stats.pulse.workingSets.current, 0);
+  assert.equal(stats.pulse.workload.current, 0);
+  assert.equal(stats.exerciseSummaries.length, 0);
+  assert.equal(stats.muscleExposure.length, 0);
+});
+
+test("only deliberately completed valid schema-v4 sets feed workload and progress", () => {
+  const stats = deriveWorkoutStatistics([
+    session("v4", "2026-08-01", [
+      { reps: 8, weight: 135, completed: false },
+      { reps: 5, weight: 185, completed: true },
+      { reps: 4, weight: 225 },
+    ], { schemaVersion: 4 }),
+  ], { nowDateKey: "2026-08-01" });
+
+  assert.equal(stats.pulse.sessions.current, 1);
+  assert.equal(stats.pulse.workingSets.current, 1);
+  assert.equal(stats.pulse.workload.current, 925);
+  assert.equal(stats.exerciseSummaries[0].records.find((record) => record.type === "heaviest-weight")?.value, 185);
+});
+
+test("saved legacy sessions with omitted completion retain established statistics", () => {
+  const stats = deriveWorkoutStatistics([
+    session("legacy", "2026-08-01", [{ reps: 5, weight: 200 }]),
+  ], { nowDateKey: "2026-08-01" });
+  assert.equal(stats.pulse.sessions.current, 1);
+  assert.equal(stats.pulse.workingSets.current, 1);
+  assert.equal(stats.pulse.workload.current, 1000);
+});
+
 test("weighted sets require a positive load so blank-input zeroes do not become records", () => {
   assert.equal(isValidWorkingSet({ reps: 8, weight: 0 }, "weighted"), false);
   assert.equal(isValidWorkingSet({ reps: 8, weight: 45 }, "weighted"), true);

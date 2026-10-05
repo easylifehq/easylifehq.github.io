@@ -38,6 +38,21 @@ test("weekly and e1RM achievement are derived from local workout evidence", () =
   assert.equal(progress[1].sourceWorkoutId, "old");
 });
 
+test("schema-v4 planned rows do not advance weekly or e1RM goals", () => {
+  const stamp = new Date("2026-08-01T12:00:00Z");
+  const goals = [
+    { id: "weekly", ownerId: "owner", schemaVersion: WORKOUT_GOAL_SCHEMA_VERSION, formulaVersion: "completed-workout-week-v1", goalType: "weekly-workouts", status: "active", target: 1, sourceUnit: "count", exerciseId: null, exerciseName: "", createdAt: stamp, updatedAt: stamp, archivedAt: null },
+    { id: "bench", ownerId: "owner", schemaVersion: WORKOUT_GOAL_SCHEMA_VERSION, formulaVersion: "epley-v1", goalType: "exercise-e1rm", status: "active", target: 200, sourceUnit: "lb", exerciseId: "bench", exerciseName: "Bench Press", createdAt: stamp, updatedAt: stamp, archivedAt: null },
+  ];
+  const planned = { ...weighted("planned", "2026-08-01", "lb", 225), schemaVersion: 4 };
+  planned.exercises[0].sets[0].completed = undefined;
+  const progress = deriveWorkoutGoalProgress(goals, [planned], { nowDateKey: "2026-08-01" });
+  assert.equal(progress[0].current, 0);
+  assert.equal(progress[0].achieved, false);
+  assert.equal(progress[1].current, 0);
+  assert.equal(progress[1].achieved, false);
+});
+
 test("goal document IDs are deterministic for idempotent creates", () => {
   assert.equal(workoutGoalDocumentId({ goalType: "weekly-workouts", exerciseId: null }), "weekly-completed-workouts");
   assert.equal(workoutGoalDocumentId({ goalType: "exercise-e1rm", exerciseId: "bench" }), workoutGoalDocumentId({ goalType: "exercise-e1rm", exerciseId: "bench" }));

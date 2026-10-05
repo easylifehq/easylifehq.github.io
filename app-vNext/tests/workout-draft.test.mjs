@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { WORKOUT_DRAFT_MAX_EXERCISES, WORKOUT_DRAFT_MAX_SERIALIZED_CHARS, WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE, WorkoutSaveCoordinator, canClearMatchingWorkoutDraft, getWorkoutDraftStorageKey, hasWorkoutDraftWork, recoverWorkoutDraft, recoverWorkoutDraftFromStorage, resolveWorkoutDurationMinutes, serializeWorkoutDraftForStorage } from "../src/features/easyworkout/domain/workoutDraftLifecycle.ts";
+import { WORKOUT_DRAFT_MAX_EXERCISES, WORKOUT_DRAFT_MAX_SERIALIZED_CHARS, WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE, WORKOUT_DRAFT_SCHEMA_VERSION, WorkoutSaveCoordinator, canClearMatchingWorkoutDraft, getWorkoutDraftStorageKey, hasWorkoutDraftWork, recoverWorkoutDraft, recoverWorkoutDraftFromStorage, resolveWorkoutDurationMinutes, serializeWorkoutDraftForStorage } from "../src/features/easyworkout/domain/workoutDraftLifecycle.ts";
 import { workoutSessionDocumentId } from "../src/lib/firestore/workoutSessionIdentity.ts";
 
 const options = { today: "2026-08-01", nowIso: "2026-08-01T12:00:00.000Z", ownerId: "user-a", defaultWeightUnit: "lb", createId: (() => { let id = 0; return () => `generated-id-${++id}`; })() };
@@ -16,6 +16,141 @@ test("legacy draft migrates without losing routine, active exercise, notes, dura
   assert.equal(result.draft?.durationMinutes, "52");
   assert.equal(result.draft?.exerciseLogs[0].sets[0].weight, 185);
   assert.equal(result.draft?.exerciseLogs[0].sets[0].setType, "standard");
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].completed, false);
+  assert.equal(result.draft?.completionReviewRequired, true);
+  assert.match(result.message, /review which sets/i);
+});
+
+test("schema-v3 active drafts preserve entered values but never certify performed sets", () => {
+  const result = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 3,
+    exerciseLogs: [{
+      ...legacy.exerciseLogs[0],
+      sets: [
+        { ...legacy.exerciseLogs[0].sets[0], completed: true, notes: "performed or planned is ambiguous" },
+        { localId: "set-two", reps: 8, weight: 135, notes: "", completed: false },
+      ],
+    }],
+  }, options);
+
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].weight, 185);
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].notes, "performed or planned is ambiguous");
+  assert.deepEqual(result.draft?.exerciseLogs[0].sets.map((set) => set.completed), [false, false]);
+  assert.equal(result.draft?.completionReviewRequired, true);
+});
+
+test("schema-v4 drafts add empty setup without losing trusted completion", () => {
+  const result = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 4,
+    completionReviewRequired: false,
+    exerciseLogs: [{
+      ...legacy.exerciseLogs[0],
+      sets: [
+        { ...legacy.exerciseLogs[0].sets[0], completed: true },
+        { ...legacy.exerciseLogs[0].sets[0], localId: "missing", completed: undefined },
+        { ...legacy.exerciseLogs[0].sets[0], localId: "malformed", completed: "yes" },
+      ],
+    }],
+  }, options);
+
+  assert.equal(result.migrated, true);
+  assert.deepEqual(result.draft?.exerciseLogs[0].sets.map((set) => set.completed), [true, false, false]);
+  assert.equal(result.draft?.completionReviewRequired, false);
+  assert.deepEqual(result.draft?.exerciseLogs[0].setup, {});
+  assert.doesNotMatch(result.message, /review which sets/i);
+});
+
+test("current drafts recover bounded setup and discard malformed fields", () => {
+  const result = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
+    completionReviewRequired: false,
+    appliedImportOperationIds: ["import-a", "", 42, "import-b"],
+    exerciseLogs: [{
+      ...legacy.exerciseLogs[0],
+      setup: { seat: " 2 ", arm: "4", back: 8, pad: "", other: " left tower " },
+      sets: [{ ...legacy.exerciseLogs[0].sets[0], completed: true }],
+    }],
+  }, options);
+  assert.equal(result.migrated, false);
+  assert.deepEqual(result.draft?.exerciseLogs[0].setup, { seat: "2", arm: "4", other: "left tower" });
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].completed, true);
+  assert.deepEqual(result.draft?.appliedImportOperationIds, ["import-a", "import-b"]);
+});
+
+test("schema-v5 drafts migrate with completion intact and no fabricated import operations", () => {
+  const result = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 5,
+    completionReviewRequired: false,
+    exerciseLogs: [{
+      ...legacy.exerciseLogs[0],
+      setup: { seat: "2" },
+      sets: [{ ...legacy.exerciseLogs[0].sets[0], completed: true }],
+    }],
+  }, options);
+  assert.equal(result.migrated, true);
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].completed, true);
+  assert.deepEqual(result.draft?.exerciseLogs[0].setup, { seat: "2" });
+  assert.deepEqual(result.draft?.appliedImportOperationIds, []);
+});
+
+test("schema-v6 drafts migrate to planning context without losing completion or import identity", () => {
+  const result = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 6,
+    completionReviewRequired: false,
+    appliedImportOperationIds: ["import-operation-1"],
+    exerciseLogs: [{
+      ...legacy.exerciseLogs[0],
+      setup: { seat: "2" },
+      sets: [{ ...legacy.exerciseLogs[0].sets[0], completed: true }],
+    }],
+  }, options);
+  assert.equal(result.migrated, true);
+  assert.equal(result.draft?.schemaVersion, 7);
+  assert.equal(result.draft?.exerciseLogs[0].sets[0].completed, true);
+  assert.deepEqual(result.draft?.exerciseLogs[0].setup, { seat: "2" });
+  assert.deepEqual(result.draft?.appliedImportOperationIds, ["import-operation-1"]);
+  assert.deepEqual(result.draft?.planningContext, {
+    focusGroups: [], availableEquipment: [], plannedDurationMinutes: null,
+  });
+});
+
+test("planning context is bounded, survives serialization, and does not overwrite actual duration", () => {
+  const recovered = recoverWorkoutDraft({
+    ...legacy,
+    schemaVersion: 7,
+    durationMinutes: "52",
+    planningContext: {
+      focusGroups: [" Back ", "Biceps", "Back", "Unknown"],
+      availableEquipment: ["dumbbell", "selectorized-machine", "dumbbell", "teleporter"],
+      plannedDurationMinutes: 45,
+    },
+    appliedImportOperationIds: [],
+  }, options).draft;
+  assert.ok(recovered);
+  assert.equal(recovered.durationMinutes, "52");
+  assert.deepEqual(recovered.planningContext, {
+    focusGroups: ["Back", "Biceps"],
+    availableEquipment: ["dumbbell", "selectorized-machine"],
+    plannedDurationMinutes: 45,
+  });
+  const restored = recoverWorkoutDraftFromStorage(serializeWorkoutDraftForStorage(recovered), options).draft;
+  assert.deepEqual(restored?.planningContext, recovered.planningContext);
+  assert.equal(restored?.durationMinutes, "52");
+});
+
+test("planning context alone is recoverable draft work", () => {
+  assert.equal(hasWorkoutDraftWork({
+    selectedRoutineId: "",
+    durationMinutes: "",
+    sessionNotes: "",
+    planningContext: { focusGroups: ["Back"], availableEquipment: [], plannedDurationMinutes: 30 },
+    exerciseLogs: [],
+  }), true);
 });
 
 test("malformed and old drafts fail safely with readable recovery", () => {
@@ -52,6 +187,77 @@ test("workout log flushes its latest controlled draft before page suspension or 
   assert.match(source, /addEventListener\("pagehide", persistLatestDraft\)/);
   assert.match(source, /visibilityState === "hidden"/);
   assert.match(source, /serializeWorkoutDraftForStorage\(\{ \.\.\.draft, updatedAt:/);
+});
+
+test("workout log exposes one-tap set completion, undo, and legacy-draft review", async () => {
+  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  assert.match(source, /aria-pressed=\{set\.completed\}/);
+  assert.match(source, /set\.completed \? "Undo done" : "Mark done"/);
+  assert.match(source, /aria-label=\{[\s\S]{0,240}set\.completed \? "Undo done" : "Mark done"/);
+  assert.match(source, /Review which sets you performed/);
+  assert.match(source, /Mark all shown sets done/);
+  assert.match(source, /Review complete/);
+});
+
+test("workout log exposes explicit setup recall without conflating it with completion", async () => {
+  const source = (await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8")) + (await readFile(new URL("../src/features/easyworkout/components/QuickWorkoutExerciseCard.tsx", import.meta.url), "utf8"));
+  assert.match(source, /Use last sets & setup/);
+  assert.match(source, /Use last setup/);
+  assert.match(source, /seat setting/);
+  assert.match(source, /arm setting/);
+  assert.match(source, /Last completed on/);
+  assert.match(source, /completed: false/);
+});
+
+test("next-exercise UI uses explicit planning context and adds only pure planned rows", async () => {
+  const source = (await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8")) + (await readFile(new URL("../src/features/easyworkout/components/QuickWorkoutSessionStrip.tsx", import.meta.url), "utf8")) + (await readFile(new URL("../src/features/easyworkout/components/QuickWorkoutNextExercise.tsx", import.meta.url), "utf8"));
+  assert.match(source, /deriveNextExerciseSuggestions/);
+  assert.match(source, /createPlannedExerciseFromSuggestion/);
+  assert.match(source, /planningContext/);
+  assert.match(source, /Session focus/);
+  assert.match(source, /Available equipment/);
+  assert.match(source, /Planning budget/);
+  assert.match(source, /Planning estimate only/);
+  assert.match(source, /Add as planned/);
+  assert.match(source, /key=\{suggestion\.exerciseId \|\| suggestion\.name\}/);
+  assert.match(source, /<strong>\{suggestion\.selectionLabel\}<\/strong>/);
+  assert.doesNotMatch(source, /exerciseSuggestionDetails/);
+  assert.doesNotMatch(source, /const groupPairs/);
+  const addStart = source.indexOf("function addSuggestedExercise");
+  const addEnd = source.indexOf("function editSet", addStart);
+  const addSource = source.slice(addStart, addEnd);
+  assert.match(addSource, /createPlannedExerciseFromSuggestion/);
+  assert.doesNotMatch(addSource, /addSession|lastWeight|lastReps|completed:\s*true/);
+});
+
+test("completed workout persistence and review normalize and display setup", async () => {
+  const persistenceSource = await readFile(new URL("../src/lib/firestore/workoutSessions.ts", import.meta.url), "utf8");
+  const reviewSource = await readFile(new URL("../src/features/easyworkout/routes/WorkoutSessionReviewPage.tsx", import.meta.url), "utf8");
+  assert.match(persistenceSource, /normalizeWorkoutEquipmentSetup/);
+  assert.match(persistenceSource, /exercises: draft\.exercises\.map/);
+  assert.match(reviewSource, /formatWorkoutEquipmentSetup/);
+  assert.match(reviewSource, /Machine setup/);
+});
+
+test("completed workout persistence uses the remote session schema instead of the local draft schema", async () => {
+  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  const saveStart = source.indexOf("saveCoordinatorRef.current.save");
+  const saveEnd = source.indexOf("setSaveMessage", saveStart);
+  const saveSource = source.slice(saveStart, saveEnd);
+  assert.match(source, /WORKOUT_SESSION_SCHEMA_VERSION/);
+  assert.match(saveSource, /schemaVersion:\s*WORKOUT_SESSION_SCHEMA_VERSION/);
+  assert.doesNotMatch(saveSource, /schemaVersion:\s*WORKOUT_DRAFT_SCHEMA_VERSION/);
+});
+
+test("all new, copied, imported, and prefilled workout rows remain unperformed", async () => {
+  const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  const importSource = await readFile(new URL("../src/features/easyworkout/domain/workoutImportPreview.ts", import.meta.url), "utf8");
+  assert.match(source, /const emptySet[\s\S]{0,250}completed: false/);
+  assert.match(source, /baseSets[\s\S]{0,500}completed: false/);
+  assert.match(source, /onAddSet=\{\(\) => updateExerciseLog\(exerciseIndex, \{ sets: \[\.\.\.exercise\.sets, emptySet\(0\)\] \}\)\}/);
+  assert.match(source, /fillSetsFromLastPerformance\(exercise\.sets, previous\)/);
+  assert.match(importSource, /function materializeRow[\s\S]{0,900}completed: false/);
+  assert.match(importSource, /applyWorkoutImportPreview[\s\S]*materializeRow/);
 });
 
 test("automatic workout duration excludes implausible overnight drafts and preserves explicit duration", () => {
