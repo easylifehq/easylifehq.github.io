@@ -30,6 +30,7 @@ export type AnalyticsExercise = {
 };
 export type AnalyticsSession = {
   id: string;
+  schemaVersion?: number;
   routineId?: string | null;
   routineName?: string;
   performedOn: string;
@@ -58,13 +59,47 @@ export type ExerciseObservation = {
   sessionVolume: number;
 };
 export type ExerciseRecord = {
-  type: "heaviest-weight" | "most-reps" | "estimated-1rm" | "set-volume" | "session-volume" | "rep-record";
+  type: "heaviest-weight" | "most-reps" | "estimated-1rm" | "set-volume" | "session-volume" | "rep-record" | "longest-duration" | "longest-distance";
   label: string;
   value: number;
   unit: string;
   sourceWorkoutId: string;
   performedOn: string;
   previousValue: number | null;
+};
+export const EXERCISE_HISTORY_RECENT_LIMIT = 5;
+export type ExerciseHistoryKind = WorkoutExerciseType | "mixed";
+export type ExerciseHistoryRow = {
+  sessionId: string;
+  performedOn: string;
+  setCount: number;
+  topWeight: number | null;
+  repsAtTopWeight: number | null;
+  estimatedOneRepMax: number | null;
+  e1rmConfidence: DataConfidence | null;
+  workload: number | null;
+  bestReps: number | null;
+  totalReps: number | null;
+  assistance: number | null;
+  bestDurationSeconds: number | null;
+  totalDurationSeconds: number | null;
+  bestDistanceMeters: number | null;
+  totalDistanceMeters: number | null;
+  holdsRecords: string[];
+};
+export type ExerciseHistoryComparison = {
+  state: "empty" | "single-session" | "comparable" | "not-comparable" | "mixed-types";
+  metricLabel: string | null;
+  unit: string | null;
+  latest: number | null;
+  previous: number | null;
+  delta: number | null;
+};
+export type ExerciseHistory = {
+  kind: ExerciseHistoryKind;
+  totalSessions: number;
+  rows: ExerciseHistoryRow[];
+  comparison: ExerciseHistoryComparison;
 };
 export type ExerciseSummary = {
   exerciseKey: string;
@@ -73,6 +108,7 @@ export type ExerciseSummary = {
   sessionCount: number;
   observations: ExerciseObservation[];
   records: ExerciseRecord[];
+  history: ExerciseHistory;
   trend: "improving" | "plateau" | "declining" | "insufficient";
   trendConfidence: DataConfidence;
   trendChangePercent: number | null;
@@ -101,8 +137,15 @@ const nonNegative = (value: unknown) => (finite(value) && (value as number) >= 0
 const getExerciseType = (exercise: AnalyticsExercise): WorkoutExerciseType => exercise.exerciseType || "weighted";
 const getSetType = (set: AnalyticsSet): WorkoutSetType => set.setType || "standard";
 
-export function isValidWorkingSet(set: AnalyticsSet, kind: WorkoutExerciseType = "weighted") {
-  if (set.deleted || set.completed === false || getSetType(set) === "warmup") return false;
+export type WorkingSetValidityOptions = { requiresExplicitCompletion?: boolean };
+
+export function isValidWorkingSet(
+  set: AnalyticsSet,
+  kind: WorkoutExerciseType = "weighted",
+  options: WorkingSetValidityOptions = {}
+) {
+  const completionIsValid = options.requiresExplicitCompletion ? set.completed === true : set.completed !== false;
+  if (set.deleted || !completionIsValid || getSetType(set) === "warmup") return false;
   if (kind === "duration") return (nonNegative(set.durationSeconds) ?? 0) > 0;
   if (kind === "distance") return (nonNegative(set.distanceMeters) ?? 0) > 0;
   if (kind === "bodyweight") return (nonNegative(set.reps) ?? 0) > 0;
@@ -110,8 +153,12 @@ export function isValidWorkingSet(set: AnalyticsSet, kind: WorkoutExerciseType =
   return (nonNegative(set.reps) ?? 0) > 0 && (nonNegative(set.weight) ?? 0) > 0;
 }
 
-export function weightedSetVolume(set: AnalyticsSet, kind: WorkoutExerciseType = "weighted") {
-  if (kind !== "weighted" || !isValidWorkingSet(set, kind)) return 0;
+export function weightedSetVolume(
+  set: AnalyticsSet,
+  kind: WorkoutExerciseType = "weighted",
+  options: WorkingSetValidityOptions = {}
+) {
+  if (kind !== "weighted" || !isValidWorkingSet(set, kind, options)) return 0;
   return (nonNegative(set.weight) || 0) * (nonNegative(set.reps) || 0);
 }
 
@@ -135,7 +182,11 @@ export function deriveRoutineComparisons(sessionsInput: AnalyticsSession[], opti
   const currentStart = shiftDateKey(options.nowDateKey, -(days - 1));
   const previousEnd = shiftDateKey(currentStart, -1);
   const previousStart = shiftDateKey(previousEnd, -(days - 1));
-  const sessions = sessionsInput.filter((session) => isValidLocalDateKey(session.performedOn) && session.performedOn <= options.nowDateKey);
+  const sessions = sessionsInput.filter((session) =>
+    isValidLocalDateKey(session.performedOn) &&
+    session.performedOn <= options.nowDateKey &&
+    isWorkoutSessionCredited(session)
+  );
   const prSessionIds = new Set<string>();
   const bestE1rm = new Map<string, number>();
   [...sessions].sort((a, b) => a.performedOn.localeCompare(b.performedOn) || a.id.localeCompare(b.id)).forEach((session) => {
@@ -143,7 +194,7 @@ export function deriveRoutineComparisons(sessionsInput: AnalyticsSession[], opti
     (session.exercises || []).forEach((exercise) => {
       if (getExerciseType(exercise) !== "weighted") return;
       const key = exerciseKey(exercise);
-      validSets(exercise).forEach((set) => {
+      validSets(exercise, session).forEach((set) => {
         const estimate = estimateOneRepMax(set.weight || 0, set.reps || 0);
         if (!estimate) return;
         const value = convertWeight(estimate.value, session.weightUnit || "lb", options.displayUnit);
@@ -168,8 +219,9 @@ export function deriveRoutineComparisons(sessionsInput: AnalyticsSession[], opti
       windowSessions.forEach((session) => {
         if (typeof session.durationMinutes === "number" && Number.isFinite(session.durationMinutes) && session.durationMinutes >= 0) durations.push(session.durationMinutes);
         (session.exercises || []).forEach((exercise) => {
-          const valid = validSets(exercise); sets += valid.length;
-          volume += convertWeight(valid.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise)), 0), session.weightUnit || "lb", options.displayUnit);
+          const valid = validSets(exercise, session); sets += valid.length;
+          const validity = { requiresExplicitCompletion: sessionRequiresExplicitCompletion(session) };
+          volume += convertWeight(valid.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise), validity), 0), session.weightUnit || "lb", options.displayUnit);
         });
       });
       return { sessions: windowSessions.length, sets, volume, duration: durations.length ? durations.reduce((sum, value) => sum + value, 0) / durations.length : null, durationSamples: durations.length, prs: windowSessions.filter((session) => prSessionIds.has(session.id)).length };
@@ -210,17 +262,91 @@ function confidenceForSamples(count: number): DataConfidence {
 function metric(current: number, previous: number, currentSamples: number, previousSamples: number): PeriodMetric {
   return { current, previous, delta: current - previous, percentDelta: previous > 0 && currentSamples > 0 && previousSamples > 0 ? ((current - previous) / previous) * 100 : null };
 }
-function validSets(exercise: AnalyticsExercise) {
+export function sessionRequiresExplicitCompletion(session: Pick<AnalyticsSession, "schemaVersion">) {
+  return typeof session.schemaVersion === "number" && session.schemaVersion >= 4;
+}
+
+function validSets(exercise: AnalyticsExercise, session?: Pick<AnalyticsSession, "schemaVersion">) {
   const kind = getExerciseType(exercise);
-  return (exercise.sets || []).filter((set) => isValidWorkingSet(set, kind));
+  return (exercise.sets || []).filter((set) => isValidWorkingSet(set, kind, {
+    requiresExplicitCompletion: session ? sessionRequiresExplicitCompletion(session) : false,
+  }));
+}
+
+export function isWorkoutSessionCredited(session: AnalyticsSession) {
+  if (!sessionRequiresExplicitCompletion(session)) return true;
+  return (session.exercises || []).some((exercise) => validSets(exercise, session).length > 0);
 }
 function exerciseKey(exercise: AnalyticsExercise) {
   return exercise.exerciseId?.trim() || `name:${(exercise.exerciseName || "Unknown exercise").trim().toLowerCase()}`;
 }
 
+const sumOf = (values: number[]) => values.reduce((sum, value) => sum + value, 0);
+const maxOf = (values: number[]) => (values.length ? Math.max(...values) : null);
+type HistoryBlocks = Array<{ session: AnalyticsSession; blocks: Array<{ kind: WorkoutExerciseType; sets: AnalyticsSet[] }> }>;
+
+function buildExerciseHistory(bySession: HistoryBlocks, records: ExerciseRecord[], unit: WorkoutDisplayUnit): ExerciseHistory {
+  const kinds = new Set(bySession.flatMap(({ blocks }) => blocks.map((block) => block.kind)));
+  const emptyComparison = (state: ExerciseHistoryComparison["state"]): ExerciseHistoryComparison => ({ state, metricLabel: null, unit: null, latest: null, previous: null, delta: null });
+  if (kinds.size > 1) return { kind: "mixed", totalSessions: bySession.length, rows: [], comparison: emptyComparison("mixed-types") };
+  const kind: ExerciseHistoryKind = [...kinds][0] ?? "weighted";
+  const ordered = [...bySession].sort((a, b) => b.session.performedOn.localeCompare(a.session.performedOn) || a.session.id.localeCompare(b.session.id));
+  const allRows = ordered.map(({ session, blocks }): ExerciseHistoryRow => {
+    const sourceUnit = session.weightUnit || "lb";
+    const sets = blocks.flatMap((block) => block.sets);
+    const row: ExerciseHistoryRow = {
+      sessionId: session.id, performedOn: session.performedOn, setCount: sets.length,
+      topWeight: null, repsAtTopWeight: null, estimatedOneRepMax: null, e1rmConfidence: null, workload: null,
+      bestReps: null, totalReps: null, assistance: null,
+      bestDurationSeconds: null, totalDurationSeconds: null, bestDistanceMeters: null, totalDistanceMeters: null,
+      holdsRecords: records.filter((record) => record.sourceWorkoutId === session.id).map((record) => record.label),
+    };
+    if (kind === "weighted") {
+      const top = Math.max(...sets.map((set) => set.weight || 0));
+      row.topWeight = convertWeight(top, sourceUnit, unit);
+      row.repsAtTopWeight = maxOf(sets.filter((set) => (set.weight || 0) === top).map((set) => set.reps || 0));
+      row.workload = convertWeight(sumOf(sets.map((set) => weightedSetVolume(set, "weighted"))), sourceUnit, unit);
+      const best = sets.map((set) => estimateOneRepMax(set.weight || 0, set.reps || 0)).filter((result): result is NonNullable<ReturnType<typeof estimateOneRepMax>> => Boolean(result)).sort((a, b) => b.value - a.value)[0];
+      if (best) { row.estimatedOneRepMax = convertWeight(best.value, sourceUnit, unit); row.e1rmConfidence = best.confidence; }
+    } else if (kind === "bodyweight") {
+      row.bestReps = maxOf(sets.map((set) => set.reps || 0));
+      row.totalReps = sumOf(sets.map((set) => set.reps || 0));
+    } else if (kind === "assisted") {
+      row.bestReps = maxOf(sets.map((set) => set.reps || 0));
+      const bestSet = [...sets].sort((a, b) => (b.reps || 0) - (a.reps || 0) || (a.weight || 0) - (b.weight || 0))[0];
+      row.assistance = convertWeight(bestSet.weight || 0, sourceUnit, unit);
+    } else if (kind === "duration") {
+      row.bestDurationSeconds = maxOf(sets.map((set) => set.durationSeconds || 0));
+      row.totalDurationSeconds = sumOf(sets.map((set) => set.durationSeconds || 0));
+    } else {
+      row.bestDistanceMeters = maxOf(sets.map((set) => set.distanceMeters || 0));
+      row.totalDistanceMeters = sumOf(sets.map((set) => set.distanceMeters || 0));
+    }
+    return row;
+  });
+  let comparison = emptyComparison(allRows.length === 0 ? "empty" : allRows.length === 1 ? "single-session" : "comparable");
+  if (allRows.length > 1) {
+    const pick = (row: ExerciseHistoryRow): { label: string; unit: string; value: number | null } | null =>
+      kind === "weighted" ? { label: "Estimated 1RM", unit, value: row.estimatedOneRepMax }
+      : kind === "bodyweight" ? { label: "Best set reps", unit: "reps", value: row.bestReps }
+      : kind === "duration" ? { label: "Longest set", unit: "s", value: row.bestDurationSeconds }
+      : kind === "distance" ? { label: "Longest set", unit: "m", value: row.bestDistanceMeters }
+      : null;
+    const latest = pick(allRows[0]);
+    const previous = pick(allRows[1]);
+    if (latest && previous && latest.value !== null && previous.value !== null && Number.isFinite(latest.value) && Number.isFinite(previous.value)) {
+      comparison = { state: "comparable", metricLabel: latest.label, unit: latest.unit, latest: latest.value, previous: previous.value, delta: latest.value - previous.value };
+    } else {
+      comparison = { ...emptyComparison("not-comparable"), metricLabel: latest?.label ?? null, unit: latest?.unit ?? null };
+    }
+  }
+  return { kind, totalSessions: allRows.length, rows: allRows.slice(0, EXERCISE_HISTORY_RECENT_LIMIT), comparison };
+}
+
 function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDisplayUnit): ExerciseSummary[] {
   const groups = new Map<string, { exerciseId: string | null; exerciseName: string; entries: Array<{ session: AnalyticsSession; exercise: AnalyticsExercise }> }>();
   sessions.forEach((session) => (session.exercises || []).forEach((exercise) => {
+    if (sessionRequiresExplicitCompletion(session) && !validSets(exercise, session).length) return;
     const key = exerciseKey(exercise);
     const current = groups.get(key) || { exerciseId: exercise.exerciseId || null, exerciseName: exercise.exerciseName?.trim() || "Unknown exercise", entries: [] };
     current.entries.push({ session, exercise });
@@ -237,13 +363,17 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
       current.exercises.push(exercise);
       entriesBySession.set(session.id, current);
     });
+    const historyBySession: HistoryBlocks = [];
     entriesBySession.forEach(({ session, exercises }) => {
+      const blocks = exercises.map((exercise) => ({ kind: getExerciseType(exercise), sets: validSets(exercise, session) })).filter((block) => block.sets.length > 0);
+      if (blocks.length) historyBySession.push({ session, blocks });
       const sourceUnit = session.weightUnit || "lb";
-      const weighted = exercises.flatMap((exercise) => getExerciseType(exercise) === "weighted" ? validSets(exercise) : []);
+      const weighted = exercises.flatMap((exercise) => getExerciseType(exercise) === "weighted" ? validSets(exercise, session) : []);
       const estimated = weighted.map((set) => ({ set, result: estimateOneRepMax(set.weight || 0, set.reps || 0) }))
         .filter((entry): entry is { set: AnalyticsSet; result: NonNullable<ReturnType<typeof estimateOneRepMax>> } => Boolean(entry.result))
         .sort((a, b) => b.result.value - a.result.value)[0];
-      const sessionVolume = convertWeight(weighted.reduce((sum, set) => sum + weightedSetVolume(set, "weighted"), 0), sourceUnit, unit);
+      const validity = { requiresExplicitCompletion: sessionRequiresExplicitCompletion(session) };
+      const sessionVolume = convertWeight(weighted.reduce((sum, set) => sum + weightedSetVolume(set, "weighted", validity), 0), sourceUnit, unit);
       if (estimated) observations.push({
         sessionId: session.id,
         performedOn: session.performedOn,
@@ -266,6 +396,11 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
         );
         if (e1rm) candidates.push({ type: "estimated-1rm", label: "Best estimated 1RM", value: convertWeight(e1rm.value, sourceUnit, unit), unit, sessionId: session.id, performedOn: session.performedOn });
       });
+      blocks.forEach(({ kind, sets }) => sets.forEach((set) => {
+        if (kind === "bodyweight") candidates.push({ type: "most-reps", label: "Most reps", value: set.reps || 0, unit: "reps", sessionId: session.id, performedOn: session.performedOn });
+        if (kind === "duration") candidates.push({ type: "longest-duration", label: "Longest duration", value: set.durationSeconds || 0, unit: "s", sessionId: session.id, performedOn: session.performedOn });
+        if (kind === "distance") candidates.push({ type: "longest-distance", label: "Longest distance", value: set.distanceMeters || 0, unit: "m", sessionId: session.id, performedOn: session.performedOn });
+      }));
       if (sessionVolume > 0) candidates.push({ type: "session-volume", label: "Best session workload", value: sessionVolume, unit: `${unit}·reps`, sessionId: session.id, performedOn: session.performedOn });
     });
     const records = [...new Set(candidates.map((candidate) => `${candidate.type}:${candidate.label}`))].map((recordKey) => {
@@ -281,13 +416,18 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
     const recentCenter = half ? median(observations.slice(-half).map((item) => item.estimatedOneRepMax)) : 0;
     const change = previousCenter > 0 ? ((recentCenter - previousCenter) / previousCenter) * 100 : null;
     const trend: ExerciseSummary["trend"] = confidence === "insufficient" || change === null ? "insufficient" : Math.abs(change) <= 2.5 ? "plateau" : change > 0 ? "improving" : "declining";
-    return { exerciseKey: key, exerciseId: group.exerciseId, exerciseName: group.exerciseName, sessionCount: new Set(entries.map((entry) => entry.session.id)).size, observations, records, trend, trendConfidence: confidence, trendChangePercent: change };
+    const history = buildExerciseHistory(historyBySession, records, unit);
+    return { exerciseKey: key, exerciseId: group.exerciseId, exerciseName: group.exerciseName, sessionCount: new Set(entries.map((entry) => entry.session.id)).size, observations, records, history, trend, trendConfidence: confidence, trendChangePercent: change };
   }).sort((a, b) => b.sessionCount - a.sessionCount || a.exerciseName.localeCompare(b.exerciseName));
 }
 
 export function deriveWorkoutStatistics(sessionsInput: AnalyticsSession[], options: { nowDateKey: string; periodDays?: number; displayUnit?: WorkoutDisplayUnit; draftStatus?: string }): WorkoutStatistics {
   const displayUnit = options.displayUnit || "lb";
-  const sessions = sessionsInput.filter((session) => isValidLocalDateKey(session.performedOn) && session.performedOn <= options.nowDateKey);
+  const sessions = sessionsInput.filter((session) =>
+    isValidLocalDateKey(session.performedOn) &&
+    session.performedOn <= options.nowDateKey &&
+    isWorkoutSessionCredited(session)
+  );
   const days = Math.max(1, Math.floor(options.periodDays || 28));
   const currentStart = shiftDateKey(options.nowDateKey, -(days - 1));
   const previousEnd = shiftDateKey(currentStart, -1);
@@ -299,9 +439,10 @@ export function deriveWorkoutStatistics(sessionsInput: AnalyticsSession[], optio
     windowSessions.forEach((session) => {
       durationMinutes += Math.max(0, finite(session.durationMinutes) ? (session.durationMinutes as number) : 0);
       (session.exercises || []).forEach((exercise) => {
-        const sets = validSets(exercise);
+        const sets = validSets(exercise, session);
         workingSets += sets.length;
-        const sourceWorkload = sets.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise)), 0);
+        const validity = { requiresExplicitCompletion: sessionRequiresExplicitCompletion(session) };
+        const sourceWorkload = sets.reduce((sum, set) => sum + weightedSetVolume(set, getExerciseType(exercise), validity), 0);
         workload += convertWeight(sourceWorkload, session.weightUnit || "lb", displayUnit);
       });
     });
@@ -311,7 +452,7 @@ export function deriveWorkoutStatistics(sessionsInput: AnalyticsSession[], optio
   const muscleMap = new Map<string, { directSets: number; secondarySets: number; sessions: Set<string> }>();
   let unmappedWorkingSets = 0;
   currentSessions.forEach((session) => (session.exercises || []).forEach((exercise) => {
-    const count = validSets(exercise).length;
+    const count = validSets(exercise, session).length;
     if (!count) return;
     const primary = [...new Set((exercise.primaryMuscles?.filter(Boolean).length ? exercise.primaryMuscles : exercise.muscleGroup ? [exercise.muscleGroup] : []).map((muscle) => muscle.trim()).filter(Boolean))];
     const primaryKeys = new Set(primary.map((muscle) => muscle.toLowerCase()));

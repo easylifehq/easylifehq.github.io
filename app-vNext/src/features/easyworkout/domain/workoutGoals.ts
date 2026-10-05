@@ -7,6 +7,8 @@ import {
   estimateOneRepMax,
   isValidLocalDateKey,
   isValidWorkingSet,
+  isWorkoutSessionCredited,
+  sessionRequiresExplicitCompletion,
   shiftDateKey,
   type AnalyticsSession,
   type WorkoutDisplayUnit,
@@ -57,7 +59,7 @@ export function deriveWorkoutGoalProgress(goals: WorkoutGoal[], sessions: Analyt
   const eligibleSessions = sessions.filter((session) => isValidLocalDateKey(session.performedOn) && session.performedOn <= nowDateKey);
   return goals.map((goal) => {
     if (goal.goalType === "weekly-workouts") {
-      const sources = eligibleSessions.filter((session) => session.performedOn >= weekStart);
+      const sources = eligibleSessions.filter((session) => session.performedOn >= weekStart && isWorkoutSessionCredited(session));
       return {
         goal,
         current: sources.length,
@@ -73,7 +75,9 @@ export function deriveWorkoutGoalProgress(goals: WorkoutGoal[], sessions: Analyt
     const candidates = eligibleSessions.flatMap((session) => (session.exercises || [])
       .filter((exercise) => exercise.exerciseId === goal.exerciseId)
       .flatMap((exercise) => (exercise.sets || [])
-        .filter((set) => isValidWorkingSet(set, exercise.exerciseType || "weighted"))
+        .filter((set) => isValidWorkingSet(set, exercise.exerciseType || "weighted", {
+          requiresExplicitCompletion: sessionRequiresExplicitCompletion(session),
+        }))
         .map((set) => ({ session, set, estimate: exercise.exerciseType === "weighted" ? estimateOneRepMax(set.weight || 0, set.reps || 0) : null }))))
       .filter((entry): entry is typeof entry & { estimate: NonNullable<typeof entry.estimate> } => Boolean(entry.estimate))
       .map((entry) => ({

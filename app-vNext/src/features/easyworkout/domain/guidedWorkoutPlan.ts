@@ -1,9 +1,10 @@
-import { convertWeight, isValidWorkingSet, type WorkoutDisplayUnit, type WorkoutExerciseType } from "./workoutStatistics.ts";
+import { convertWeight, isValidWorkingSet, isWorkoutSessionCredited, type WorkoutDisplayUnit, type WorkoutExerciseType } from "./workoutStatistics.ts";
+import type { WorkoutEquipmentSetup } from "../../../lib/workoutEquipmentSetup.ts";
 
 type RoutineExercise = { exerciseId: string | null; exerciseName: string; exerciseType?: WorkoutExerciseType; targetSets: number; targetReps: string; targetWeight: number | null };
 export type GuidedRoutine = { id: string; name: string; dayLabel: string; exercises: RoutineExercise[]; createdAt?: Date | null; updatedAt?: Date | null };
 type SessionSet = { reps?: number; weight?: number; durationSeconds?: number; distanceMeters?: number; completed?: boolean; deleted?: boolean; setType?: "warmup" | "standard" | "drop" | "failure" };
-type SessionExercise = { exerciseId?: string | null; exerciseName?: string; exerciseType?: WorkoutExerciseType; sets?: SessionSet[] };
+type SessionExercise = { exerciseId?: string | null; exerciseName?: string; exerciseType?: WorkoutExerciseType; setup?: WorkoutEquipmentSetup; sets?: SessionSet[] };
 export type GuidedSession = { id: string; clientDraftId?: string; schemaVersion?: number; routineId?: string | null; routineName?: string; performedOn: string; weightUnit?: WorkoutDisplayUnit; durationMinutes?: number | null; notes?: string; exercises?: SessionExercise[]; createdAt?: Date | null; updatedAt?: Date | null };
 export type GuidedExerciseSuggestion = { exerciseId: string | null; exerciseName: string; target: string; previous: string; suggestion: string; ruleId: "start-from-routine-v1" | "repeat-latest-effort-v1" | "optional-small-increase-v1"; sourceSessionId: string | null; sourceDate: string | null };
 export type GuidedWorkoutPlan = { formulaVersion: "guided-workout-v1"; routineId: string; routineName: string; reason: string; lastPerformedOn: string | null; suggestions: GuidedExerciseSuggestion[] };
@@ -14,9 +15,11 @@ const targetRepCeiling = (target: string) => { const values = target.match(/\d+/
 const formatNumber = (value: number) => Number.isInteger(value) ? String(value) : value.toFixed(1);
 const matchingExercise = (session: GuidedSession, routineExercise: RoutineExercise) => (session.exercises || []).find((exercise) => exerciseKey(exercise) === exerciseKey(routineExercise)) || null;
 
-function bestComparableSet(exercise: SessionExercise) {
+function bestComparableSet(exercise: SessionExercise, session: GuidedSession) {
   const kind = exercise.exerciseType || "weighted";
-  const valid = (exercise.sets || []).filter((set) => isValidWorkingSet(set, kind));
+  const valid = (exercise.sets || []).filter((set) => isValidWorkingSet(set, kind, {
+    requiresExplicitCompletion: typeof session.schemaVersion === "number" && session.schemaVersion >= 4,
+  }));
   if (!valid.length) return null;
   if (kind === "duration") return valid.sort((a, b) => (b.durationSeconds || 0) - (a.durationSeconds || 0))[0];
   if (kind === "distance") return valid.sort((a, b) => (b.distanceMeters || 0) - (a.distanceMeters || 0))[0];
@@ -32,9 +35,10 @@ function formatPrevious(set: SessionSet, kind: WorkoutExerciseType, sourceUnit: 
 }
 
 export function selectGuidedRoutine(routines: GuidedRoutine[], sessions: GuidedSession[]) {
+  const creditedSessions = sessions.filter(isWorkoutSessionCredited);
   return [...routines].sort((left, right) => {
-    const leftDates = sessions.filter((session) => session.routineId === left.id || session.routineName === left.name).map((session) => session.performedOn).sort();
-    const rightDates = sessions.filter((session) => session.routineId === right.id || session.routineName === right.name).map((session) => session.performedOn).sort();
+    const leftDates = creditedSessions.filter((session) => session.routineId === left.id || session.routineName === left.name).map((session) => session.performedOn).sort();
+    const rightDates = creditedSessions.filter((session) => session.routineId === right.id || session.routineName === right.name).map((session) => session.performedOn).sort();
     const lastLeft = leftDates[leftDates.length - 1] || "";
     const lastRight = rightDates[rightDates.length - 1] || "";
     return lastLeft.localeCompare(lastRight) || left.name.localeCompare(right.name);
@@ -56,12 +60,13 @@ export function getGuidedWorkoutAction(routineId: string, isDemoMode: boolean, h
 }
 
 export function deriveGuidedWorkoutPlan(routine: GuidedRoutine, sessions: GuidedSession[], displayUnit: WorkoutDisplayUnit): GuidedWorkoutPlan {
-  const routineSessions = sessions.filter((session) => session.routineId === routine.id || session.routineName === routine.name)
+  const creditedSessions = sessions.filter(isWorkoutSessionCredited);
+  const routineSessions = creditedSessions.filter((session) => session.routineId === routine.id || session.routineName === routine.name)
     .sort((left, right) => right.performedOn.localeCompare(left.performedOn) || right.id.localeCompare(left.id));
   const suggestions = routine.exercises.map((exercise): GuidedExerciseSuggestion => {
-    const history = sessions.map((session) => ({ session, exercise: matchingExercise(session, exercise) }))
+    const history = creditedSessions.map((session) => ({ session, exercise: matchingExercise(session, exercise) }))
       .filter((entry): entry is { session: GuidedSession; exercise: SessionExercise } => Boolean(entry.exercise))
-      .map((entry) => ({ ...entry, set: bestComparableSet(entry.exercise) }))
+      .map((entry) => ({ ...entry, set: bestComparableSet(entry.exercise, entry.session) }))
       .filter((entry): entry is typeof entry & { set: SessionSet } => Boolean(entry.set))
       .sort((left, right) => right.session.performedOn.localeCompare(left.session.performedOn) || right.session.id.localeCompare(left.session.id));
     const latest = history[0];

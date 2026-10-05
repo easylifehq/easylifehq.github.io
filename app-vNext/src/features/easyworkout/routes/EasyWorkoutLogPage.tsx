@@ -14,12 +14,60 @@ import {
   resolveWorkoutDurationMinutes,
   serializeWorkoutDraftForStorage,
   workoutDraftStatusCopy,
+  workoutDraftStatusDetailCopy,
   type StoredWorkoutDraft,
   type WorkoutDraftLifecycleStatus,
   type WorkoutExerciseLogDraft,
   type WorkoutSetDraft,
 } from "@/features/easyworkout/domain/workoutDraftLifecycle";
-import { convertWeight, isValidLocalDateKey, isValidWorkingSet } from "@/features/easyworkout/domain/workoutStatistics";
+import {
+  buildWorkoutExerciseOptions,
+  deriveExerciseHistory,
+  fillSetsFromLastPerformance,
+  findExerciseHistory,
+  resolveWorkoutExerciseOption,
+} from "@/features/easyworkout/domain/workoutLogAssist";
+import {
+  createPlannedExerciseFromSuggestion,
+  deriveNextExerciseSuggestions,
+  type WorkoutNextExerciseSuggestion,
+} from "@/features/easyworkout/domain/workoutNextExercise";
+import { emptyWorkoutPlanningContext } from "@/features/easyworkout/domain/workoutPlanning";
+import {
+  applyExerciseIdentityEdit,
+  applySetEdit,
+  completeExerciseAndAdvance,
+  deleteExerciseFromLogs,
+  findSaveBlock,
+  focusedStartingExercises,
+  isExerciseDone,
+  undoExerciseCompletion,
+} from "@/features/easyworkout/domain/workoutExerciseCompletion";
+import {
+  sanitizeDecimalInput,
+  sanitizeWholeNumberInput,
+  toDecimalDraft,
+  toWholeNumberDraft,
+} from "@/features/easyworkout/domain/workoutNumericInput";
+import { QuickWorkoutExerciseCard, quickFieldForSet, quickFieldId } from "@/features/easyworkout/components/QuickWorkoutExerciseCard";
+import { QuickWorkoutNextExercise } from "@/features/easyworkout/components/QuickWorkoutNextExercise";
+import { QuickWorkoutSessionStrip } from "@/features/easyworkout/components/QuickWorkoutSessionStrip";
+import {
+  applyWorkoutImportPreview,
+  parseWorkoutImportPreview,
+  workoutImportDraftFingerprint,
+  type WorkoutImportPreview,
+} from "@/features/easyworkout/domain/workoutImportPreview";
+import { isValidLocalDateKey, isValidWorkingSet, isWorkoutSessionCredited } from "@/features/easyworkout/domain/workoutStatistics";
+import { WORKOUT_SESSION_SCHEMA_VERSION } from "@/features/easyworkout/domain/workoutSessionContract";
+import {
+  WORKOUT_SETUP_OTHER_MAX_LENGTH,
+  WORKOUT_SETUP_SHORT_MAX_LENGTH,
+  formatWorkoutEquipmentSetup,
+  hasWorkoutEquipmentSetup,
+  normalizeWorkoutEquipmentSetup,
+  type WorkoutEquipmentSetup,
+} from "@/lib/workoutEquipmentSetup";
 type DeletedSetUndo = {
   exerciseLocalId: string;
   exerciseName: string;
@@ -32,10 +80,10 @@ const localDateKey = () => {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 };
-const emptySet = (): WorkoutSetDraft => ({
-  localId: createLocalId(), reps: 8, weight: 0, notes: "", setType: "standard", completed: true, deleted: false, rir: null,
+const emptySet = (reps = 8): WorkoutSetDraft => ({
+  localId: createLocalId(), reps, weight: 0, notes: "", setType: "standard", completed: false, deleted: false, rir: null,
 });
-const emptyExerciseLog = (setCount = 1): WorkoutExerciseLogDraft => ({
+const emptyExerciseLog = (setCount = 1, defaultReps = 8): WorkoutExerciseLogDraft => ({
   localId: createLocalId(),
   exerciseId: null,
   exerciseName: "",
@@ -43,33 +91,20 @@ const emptyExerciseLog = (setCount = 1): WorkoutExerciseLogDraft => ({
   primaryMuscles: [],
   secondaryMuscles: [],
   exerciseType: "weighted",
+  setup: {},
   notes: "",
-  sets: Array.from({ length: setCount }, () => emptySet()),
+  sets: Array.from({ length: setCount }, () => emptySet(defaultReps)),
 });
-const startingWorkoutLogs = (count: number, setCount: number) =>
-  Array.from({ length: count }, () => emptyExerciseLog(setCount));
-const sanitizeWholeNumberInput = (value: string) => value.replace(/\D/g, "");
-const sanitizeDecimalInput = (value: string) => {
-  const cleaned = value.replace(/[^\d.]/g, "");
-  const [whole = "", ...decimalParts] = cleaned.split(".");
-  const decimals = decimalParts.join("");
-  return decimalParts.length ? `${whole}.${decimals}` : whole;
-};
-const toWholeNumberDraft = (value: string) => {
-  if (!value) return 0;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : 0;
-};
-const toDecimalDraft = (value: string) => {
-  if (!value) return 0;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
-};
+// Focused rows start blank (reps 0) so an untouched row is distinguishable from a partial one.
+const focusedBlankExercise = (setCount: number) => emptyExerciseLog(setCount, 0);
+const freshWorkoutLogs = (focused: boolean, setCount: number) =>
+  focused ? focusedStartingExercises(() => focusedBlankExercise(setCount)) : [emptyExerciseLog(setCount)];
 const hasSetWork = (set: WorkoutSetDraft) => set.weight > 0 || Boolean(set.notes.trim());
 const hasExerciseWork = (exercise: WorkoutExerciseLogDraft) =>
   exercise.exerciseName.trim() ||
   exercise.muscleGroup.trim() ||
   exercise.notes.trim() ||
+  hasWorkoutEquipmentSetup(exercise.setup) ||
   (exercise.exerciseType !== "weighted" && exercise.sets.some((set) => set.reps > 0 || (set.durationSeconds || 0) > 0 || (set.distanceMeters || 0) > 0)) ||
   exercise.sets.some(hasSetWork);
 
@@ -85,53 +120,12 @@ function readStoredWorkoutDraft(storageKey: string, ownerId: string, defaultWeig
   }
 }
 
-type ExerciseHistorySummary = {
-  lastWeight: number;
-  lastReps: number;
-  performedOn: string;
-  bestWeight: number;
-  bestVolume: number;
-  sessionCount: number;
-};
-
-type WorkoutExerciseSuggestion = {
-  name: string;
-  muscleGroup: string;
-  reason: string;
-  detail: string;
-  target: string;
-};
-
-const exerciseSuggestionDetails: Record<string, string> = {
-  "Lat Pulldown": "Good when you still need vertical pulling. Keep your ribs down, pull elbows toward your pockets, and stop before it turns into a shrug.",
-  "Seated Row": "Good when your lats and mid-back need more work. Think chest tall, elbows back, and squeeze without yanking.",
-  "Bicep Curl": "Good after back work when biceps are warm. Keep the upper arm still and pick a weight you can control.",
-  "Hammer Curl": "Good for a more joint-friendly biceps/forearm finisher. Keep the wrists neutral and avoid swinging.",
-  "Romanian Deadlift": "Good when your workout needs posterior-chain work. Hinge back, keep the bar close, and stop when hamstrings are loaded.",
-  Squat: "Good when the day needs a main leg movement. Use a weight you can keep braced and repeatable.",
-  "Leg Press": "Good when you want leg volume without as much setup. Control the bottom and keep reps smooth.",
-  "Hip Thrust": "Good when glutes are under-hit. Pause at the top and keep the movement controlled.",
-  "Bench Press": "Good when chest needs a main press. Keep shoulders set and use a weight you can own.",
-  "Incline Dumbbell Press": "Good for upper chest and controlled pressing volume. Keep the range smooth and avoid rushing.",
-  "Shoulder Press": "Good when shoulders need the main work. Brace first, then press without over-arching.",
-  "Lateral Raise": "Good as a low-fatigue shoulder finisher. Lead with elbows and stop before momentum takes over.",
-};
-
-const groupPairs: Record<string, string[]> = {
-  Back: ["Back", "Biceps", "Hamstrings"],
-  Biceps: ["Back", "Biceps"],
-  Chest: ["Chest", "Shoulders"],
-  Shoulders: ["Shoulders", "Chest"],
-  Legs: ["Legs", "Hamstrings", "Glutes"],
-  Hamstrings: ["Hamstrings", "Glutes", "Back"],
-  Glutes: ["Glutes", "Hamstrings", "Legs"],
-};
-
 export function EasyWorkoutLogPage() {
   const firstExerciseInputRef = useRef<HTMLInputElement | null>(null);
   const saveCoordinatorRef = useRef(new WorkoutSaveCoordinator<string | null>());
   const skipDraftFlushRef = useRef(false);
   const latestDraftRef = useRef<StoredWorkoutDraft | null>(null);
+  const isApplyingImportRef = useRef(false);
   const elapsedTickRef = useRef(Date.now());
   const { settings } = useSettings();
   const { user, isDemoMode } = useAuth();
@@ -148,31 +142,46 @@ export function EasyWorkoutLogPage() {
   const routineId = searchParams.get("routineId");
   const gymMode = searchParams.get("gymMode") === "1";
   const workoutMode = searchParams.get("workoutMode") === "1" || searchParams.get("start") === "1";
-  const { routines, exercises, sessions, addSession, error } = useEasyWorkout();
+  const { routines, exercises, sessions, addSession, isLoading, error } = useEasyWorkout();
   const [draftId] = useState(restoredDraft?.draftId || createLocalId());
   const [startedAt] = useState(restoredDraft?.startedAt || new Date().toISOString());
   const [elapsedSeconds, setElapsedSeconds] = useState(restoredDraft?.elapsedSeconds || 0);
   const [selectedRoutineId, setSelectedRoutineId] = useState(restoredDraft?.selectedRoutineId ?? routineId ?? "");
   const [performedOn, setPerformedOn] = useState(restoredDraft?.performedOn ?? localDateKey());
   const [durationMinutes, setDurationMinutes] = useState(restoredDraft?.durationMinutes ?? "");
+  const [planningContext, setPlanningContext] = useState(
+    restoredDraft?.planningContext ?? emptyWorkoutPlanningContext()
+  );
+  const [planningDurationInput, setPlanningDurationInput] = useState(
+    restoredDraft?.planningContext.plannedDurationMinutes === null || restoredDraft?.planningContext.plannedDurationMinutes === undefined
+      ? ""
+      : String(restoredDraft.planningContext.plannedDurationMinutes)
+  );
   const [draftWeightUnit] = useState<"lb" | "kg">(restoredDraft?.weightUnit ?? settings.easyWorkout.weightUnit);
   const [sessionNotes, setSessionNotes] = useState(restoredDraft?.sessionNotes ?? "");
+  const [completionReviewRequired, setCompletionReviewRequired] = useState(restoredDraft?.completionReviewRequired ?? false);
   const [exerciseLogs, setExerciseLogs] = useState<WorkoutExerciseLogDraft[]>(
     restoredDraft?.exerciseLogs.length
       ? restoredDraft.exerciseLogs
-      : (workoutMode || gymMode)
-        ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
-        : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)]
+      : freshWorkoutLogs(workoutMode || gymMode, settings.easyWorkout.defaultSetCount)
   );
   const [activeExerciseId, setActiveExerciseId] = useState(restoredDraft?.activeExerciseId || restoredDraft?.exerciseLogs[0]?.localId || "");
   const [workoutPaste, setWorkoutPaste] = useState("");
+  const [workoutImportPreview, setWorkoutImportPreview] = useState<WorkoutImportPreview | null>(null);
+  const [workoutImportMode, setWorkoutImportMode] = useState<"append" | "replace" | null>(null);
+  const [applyWorkoutImportMetadata, setApplyWorkoutImportMetadata] = useState(false);
+  const [isApplyingImport, setIsApplyingImport] = useState(false);
+  const [workoutImportError, setWorkoutImportError] = useState("");
+  const [appliedImportOperationIds, setAppliedImportOperationIds] = useState(restoredDraft?.appliedImportOperationIds || []);
   const [saveMessage, setSaveMessage] = useState(restoredDraftRecovery?.message || "");
+  const [validationMessage, setValidationMessage] = useState("");
   const [draftStatus, setDraftStatus] = useState<WorkoutDraftLifecycleStatus>("saved-local");
   const [isSaving, setIsSaving] = useState(false);
   const [externalDraftConflict, setExternalDraftConflict] = useState(false);
   const [deletedSetUndo, setDeletedSetUndo] = useState<DeletedSetUndo | null>(null);
+  const [pendingFocus, setPendingFocus] = useState<{ id: string; scroll: boolean } | null>(null);
   const todayKey = localDateKey();
-  const todayLoggedCount = sessions.filter((session) => session.performedOn === todayKey).length;
+  const todayLoggedCount = sessions.filter((session) => session.performedOn === todayKey && isWorkoutSessionCredited(session)).length;
 
   latestDraftRef.current = {
     schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
@@ -185,15 +194,30 @@ export function EasyWorkoutLogPage() {
     startedAt,
     elapsedSeconds,
     durationMinutes,
+    planningContext,
     sessionNotes,
+    completionReviewRequired,
     activeExerciseId,
     exerciseLogs,
+    appliedImportOperationIds,
     updatedAt: new Date().toISOString(),
   };
 
   const selectedRoutine = useMemo(
     () => routines.find((routine) => routine.id === selectedRoutineId) || null,
     [routines, selectedRoutineId]
+  );
+  const previousByExercise = useMemo(
+    () => deriveExerciseHistory(sessions, draftWeightUnit),
+    [draftWeightUnit, sessions]
+  );
+  const exerciseOptions = useMemo(
+    () => buildWorkoutExerciseOptions(exercises, sessions, defaultWorkoutExercises),
+    [exercises, sessions]
+  );
+  const workoutImportPreviewIsStale = Boolean(
+    workoutImportPreview && latestDraftRef.current &&
+    workoutImportDraftFingerprint(latestDraftRef.current) !== workoutImportPreview.draftFingerprint
   );
 
   useEffect(() => {
@@ -205,17 +229,19 @@ export function EasyWorkoutLogPage() {
     const hasActiveDraftWork =
       sessionNotes.trim() ||
       durationMinutes ||
+      planningContext.focusGroups.length ||
+      planningContext.availableEquipment.length ||
+      planningContext.plannedDurationMinutes !== null ||
       exerciseLogs.some(hasExerciseWork);
 
     if (hasActiveDraftWork) {
       return;
     }
 
+    if (isLoading) return;
+
     if (!selectedRoutine) {
-      const nextLogs =
-        workoutMode || gymMode
-          ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
-          : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)];
+      const nextLogs = freshWorkoutLogs(workoutMode || gymMode, settings.easyWorkout.defaultSetCount);
       setExerciseLogs(nextLogs);
       setActiveExerciseId(nextLogs[0]?.localId ?? "");
       return;
@@ -223,130 +249,49 @@ export function EasyWorkoutLogPage() {
 
     const nextLogs =
       selectedRoutine.exercises.length
-        ? selectedRoutine.exercises.map((exercise) => ({
-            localId: createLocalId(),
-            exerciseId: exercise.exerciseId,
-            exerciseName: exercise.exerciseName,
-            muscleGroup: exercise.muscleGroup,
-            primaryMuscles: exercise.muscleGroup ? [exercise.muscleGroup] : [],
-            secondaryMuscles: [],
-            exerciseType: "weighted" as const,
-            notes: exercise.notes,
-            sets: Array.from({ length: Math.max(exercise.targetSets, 1) }, () => ({
+        ? selectedRoutine.exercises.map((exercise) => {
+            const baseSets = Array.from({ length: Math.max(exercise.targetSets, 1) }, () => ({
               reps: Number(exercise.targetReps.split("-")[0]) || 8,
               weight: exercise.targetWeight || 0,
               localId: createLocalId(),
               notes: "",
               setType: "standard" as const,
-              completed: true,
+              completed: false,
               deleted: false,
               rir: null,
-            })),
-          }))
-        : workoutMode || gymMode
-          ? startingWorkoutLogs(settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount)
-          : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)];
+            }));
+            const previous = findExerciseHistory(previousByExercise, exercise.exerciseName, exercise.exerciseId);
+            const sets = fillSetsFromLastPerformance(baseSets, previous).map((set) =>
+              exercise.targetWeight == null ? set : { ...set, weight: exercise.targetWeight }
+            );
+            return {
+              localId: createLocalId(),
+              exerciseId: exercise.exerciseId,
+              exerciseName: exercise.exerciseName,
+              muscleGroup: exercise.muscleGroup,
+              primaryMuscles: exercise.muscleGroup ? [exercise.muscleGroup] : [],
+              secondaryMuscles: [],
+              exerciseType: "weighted" as const,
+              setup: {},
+              notes: exercise.notes,
+              sets,
+            };
+          })
+        : freshWorkoutLogs(workoutMode || gymMode, settings.easyWorkout.defaultSetCount);
 
     setExerciseLogs(nextLogs);
     setActiveExerciseId(nextLogs[0]?.localId ?? "");
-  }, [selectedRoutine, workoutMode, gymMode, settings.easyWorkout.focusedExerciseCount, settings.easyWorkout.defaultSetCount]);
+  }, [isLoading, previousByExercise, selectedRoutine, workoutMode, gymMode, settings.easyWorkout.defaultSetCount]);
 
-  const previousByExercise = useMemo(() => {
-    const accumulator: Record<string, ExerciseHistorySummary> = {};
-
-    sessions.forEach((session) => {
-      session.exercises.forEach((exercise) => {
-        const key = exercise.exerciseName.trim();
-        if (!key) return;
-
-        const kind = exercise.exerciseType || "weighted";
-        const validSets = exercise.sets.filter((set) => isValidWorkingSet(set, kind));
-        const sourceUnit = session.weightUnit || "lb";
-        const bestSetSourceWeight = validSets.reduce((best, set) => Math.max(best, set.weight), 0);
-        const bestSet = validSets.find((set) => set.weight === bestSetSourceWeight);
-        const bestSetWeight = convertWeight(bestSetSourceWeight, sourceUnit, draftWeightUnit);
-        const exerciseVolume = convertWeight(validSets.reduce((sum, set) => sum + set.reps * set.weight, 0), sourceUnit, draftWeightUnit);
-        const current = accumulator[key];
-
-        if (!current) {
-          accumulator[key] = {
-            lastWeight: convertWeight(bestSet?.weight || 0, sourceUnit, draftWeightUnit),
-            lastReps: bestSet?.reps || 0,
-            performedOn: session.performedOn,
-            bestWeight: bestSetWeight,
-            bestVolume: exerciseVolume,
-            sessionCount: 1,
-          };
-          return;
-        }
-
-        accumulator[key] = {
-          lastWeight: current.lastWeight,
-          lastReps: current.lastReps,
-          performedOn: current.performedOn,
-          bestWeight: Math.max(current.bestWeight, bestSetWeight),
-          bestVolume: Math.max(current.bestVolume, exerciseVolume),
-          sessionCount: current.sessionCount + 1,
-        };
-      });
-    });
-
-    return accumulator;
-  }, [draftWeightUnit, sessions]);
-
-  const nextExerciseSuggestions = useMemo<WorkoutExerciseSuggestion[]>(() => {
-    const currentNames = new Set(
-      exerciseLogs.map((exercise) => exercise.exerciseName.trim().toLowerCase()).filter(Boolean)
-    );
-    const loggedGroups = exerciseLogs
-      .filter((exercise) => exercise.sets.some(hasSetWork))
-      .map((exercise) => exercise.muscleGroup || defaultWorkoutExercises.find((entry) => entry.name === exercise.exerciseName)?.muscleGroup || "")
-      .filter(Boolean);
-    const activeGroup =
-      exerciseLogs.find((exercise) => exercise.localId === activeExerciseId)?.muscleGroup ||
-      loggedGroups[loggedGroups.length - 1] ||
-      "";
-    const targetGroups = Array.from(new Set([...(groupPairs[activeGroup] || []), activeGroup, ...loggedGroups])).filter(Boolean);
-    const groupSetCounts = exerciseLogs.reduce<Record<string, number>>((accumulator, exercise) => {
-      const group = exercise.muscleGroup || defaultWorkoutExercises.find((entry) => entry.name === exercise.exerciseName)?.muscleGroup || "";
-      if (!group) return accumulator;
-      const setCount = exercise.sets.filter(hasSetWork).length;
-      accumulator[group] = (accumulator[group] || 0) + setCount;
-      return accumulator;
-    }, {});
-    const savedOptions = exercises.map((exercise) => ({ name: exercise.name, muscleGroup: exercise.muscleGroup }));
-    const options = [...defaultWorkoutExercises, ...savedOptions].filter(
-      (exercise, index, list) =>
-        exercise.name &&
-        !currentNames.has(exercise.name.toLowerCase()) &&
-        list.findIndex((candidate) => candidate.name.toLowerCase() === exercise.name.toLowerCase()) === index
-    );
-    const rankedGroups = targetGroups.length
-      ? targetGroups.sort((first, second) => (groupSetCounts[first] || 0) - (groupSetCounts[second] || 0))
-      : ["Back", "Chest", "Legs", "Shoulders", "Biceps"];
-
-    return options
-      .sort((first, second) => {
-        const firstRank = rankedGroups.indexOf(first.muscleGroup);
-        const secondRank = rankedGroups.indexOf(second.muscleGroup);
-        return (firstRank === -1 ? 99 : firstRank) - (secondRank === -1 ? 99 : secondRank);
-      })
-      .slice(0, 3)
-      .map((exercise) => {
-        const previous = previousByExercise[exercise.name];
-        return {
-          name: exercise.name,
-          muscleGroup: exercise.muscleGroup,
-          reason: targetGroups.includes(exercise.muscleGroup)
-            ? `${exercise.muscleGroup} is still in today's lane.`
-            : "Good general slot if you need one more lift.",
-          detail: exerciseSuggestionDetails[exercise.name] || `Use this when ${exercise.muscleGroup || "this area"} still needs controlled volume.`,
-          target: previous?.lastWeight
-            ? `Try ${previous.lastWeight.toFixed(1)} ${draftWeightUnit} x ${previous.lastReps || 8}, then adjust by feel.`
-            : "Start with a clean warm-up weight and log what moved well.",
-        };
-      });
-  }, [activeExerciseId, exerciseLogs, exercises, previousByExercise]);
+  const nextExerciseResult = useMemo(() => deriveNextExerciseSuggestions({
+    planningContext,
+    elapsedSeconds,
+    defaultSetCount: settings.easyWorkout.defaultSetCount,
+    exerciseOptions,
+    exerciseLogs,
+    history: previousByExercise,
+  }), [elapsedSeconds, exerciseLogs, exerciseOptions, planningContext, previousByExercise, settings.easyWorkout.defaultSetCount]);
+  const nextExerciseSuggestions = nextExerciseResult.suggestions;
 
   const isGymModeActive = gymMode;
   const isFocusedWorkoutMode = workoutMode || isGymModeActive;
@@ -356,6 +301,12 @@ export function EasyWorkoutLogPage() {
     const focusTimer = window.setTimeout(() => firstExerciseInputRef.current?.focus(), 0);
     return () => window.clearTimeout(focusTimer);
   }, [isFocusedWorkoutMode]);
+
+  useEffect(() => {
+    if (!pendingFocus) return;
+    document.getElementById(pendingFocus.id)?.focus({ preventScroll: !pendingFocus.scroll });
+    setPendingFocus(null);
+  }, [pendingFocus]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -455,7 +406,7 @@ export function EasyWorkoutLogPage() {
         // The visible status from the mounted page already explains local storage failures.
       }
     };
-  }, [activeExerciseId, draftId, draftStorageKey, draftWeightUnit, durationMinutes, elapsedSeconds, exerciseLogs, externalDraftConflict, ownerId, performedOn, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
+  }, [activeExerciseId, completionReviewRequired, draftId, draftStorageKey, draftWeightUnit, durationMinutes, elapsedSeconds, exerciseLogs, externalDraftConflict, ownerId, performedOn, planningContext, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
 
   function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogDraft>) {
     setExerciseLogs((current) =>
@@ -505,7 +456,7 @@ export function EasyWorkoutLogPage() {
           ? {
               ...exercise,
               sets: exercise.sets.length === 1
-                ? [emptySet()]
+                ? [emptySet(isFocusedWorkoutMode ? 0 : 8)]
                 : exercise.sets.filter((_, currentSetIndex) => currentSetIndex !== setIndex),
             }
           : exercise
@@ -537,16 +488,22 @@ export function EasyWorkoutLogPage() {
     setDeletedSetUndo(null);
   }
 
-  function fillFromLastTime(exerciseIndex: number) {
+  function fillFromLastTime(exerciseIndex: number, mode: "sets" | "setup" | "both") {
     const exercise = exerciseLogs[exerciseIndex];
-    const previous = previousByExercise[exercise.exerciseName];
+    const previous = findExerciseHistory(previousByExercise, exercise.exerciseName, exercise.exerciseId);
     if (!previous) return;
 
-    updateExerciseLog(exerciseIndex, {
-      sets: exercise.sets.map((set, index) =>
-        index === 0 ? { ...set, reps: previous.lastReps, weight: previous.lastWeight } : set
-      ),
-    });
+    const next: Partial<WorkoutExerciseLogDraft> = {};
+    if (mode === "sets" || mode === "both") next.sets = fillSetsFromLastPerformance(exercise.sets, previous);
+    if (mode === "setup" || mode === "both") next.setup = normalizeWorkoutEquipmentSetup(previous.lastSetup);
+    updateExerciseLog(exerciseIndex, next);
+    setSaveMessage(`${mode === "sets" ? "Last sets" : mode === "setup" ? "Last setup" : "Last sets and setup"} copied as editable draft values. No set was marked done.`);
+  }
+
+  function updateExerciseSetup(exerciseIndex: number, field: keyof WorkoutEquipmentSetup, value: string) {
+    const exercise = exerciseLogs[exerciseIndex];
+    const maximum = field === "other" ? WORKOUT_SETUP_OTHER_MAX_LENGTH : WORKOUT_SETUP_SHORT_MAX_LENGTH;
+    updateExerciseLog(exerciseIndex, { setup: { ...exercise.setup, [field]: value.slice(0, maximum) } });
   }
 
   function addExerciseBoxes(count = 1) {
@@ -555,108 +512,166 @@ export function EasyWorkoutLogPage() {
     setActiveExerciseId(nextBoxes[0]?.localId ?? "");
   }
 
-  function addSuggestedExercise(suggestion: WorkoutExerciseSuggestion) {
-    const previous = previousByExercise[suggestion.name];
-    const nextExercise: WorkoutExerciseLogDraft = {
-      ...emptyExerciseLog(settings.easyWorkout.defaultSetCount),
-      exerciseName: suggestion.name,
-      muscleGroup: suggestion.muscleGroup,
-      sets: [
-        {
-          ...emptySet(),
-          reps: previous?.lastReps || 8,
-          weight: previous?.lastWeight || 0,
-        },
-      ],
-    };
+  function addSuggestedExercise(suggestion: WorkoutNextExerciseSuggestion) {
+    const nextExercise = createPlannedExerciseFromSuggestion(suggestion, createLocalId);
     setExerciseLogs((current) => [...current, nextExercise]);
     setActiveExerciseId(nextExercise.localId);
-    setSaveMessage(`${suggestion.name} added as the next exercise. Nothing saved yet.`);
+    setSaveMessage(`${suggestion.name} added with ${suggestion.proposedSets} planned set${suggestion.proposedSets === 1 ? "" : "s"}, no load, and nothing marked done. Copy last sets or setup separately if you want them.`);
   }
 
-  function removeBlankExerciseBoxes() {
-    setExerciseLogs((current) => {
-      const filled = current.filter(
-        (exercise) =>
-          exercise.exerciseName.trim() ||
-          exercise.muscleGroup.trim() ||
-          exercise.notes.trim() ||
-          exercise.sets.some(hasSetWork)
-      );
+  function editSet(exerciseLocalId: string, setLocalId: string, patch: Partial<WorkoutSetDraft>) {
+    setDeletedSetUndo(null);
+    setExerciseLogs((current) =>
+      current.map((exercise) => (exercise.localId === exerciseLocalId ? applySetEdit(exercise, setLocalId, patch) : exercise))
+    );
+  }
 
-      const nextLogs = filled.length ? filled : [emptyExerciseLog(settings.easyWorkout.defaultSetCount)];
-      if (!nextLogs.some((exercise) => exercise.localId === activeExerciseId)) {
-        setActiveExerciseId(nextLogs[0]?.localId ?? "");
-      }
-      return nextLogs;
+  function editExerciseIdentity(exerciseLocalId: string, patch: Partial<WorkoutExerciseLogDraft>) {
+    setExerciseLogs((current) =>
+      current.map((exercise) => (exercise.localId === exerciseLocalId ? applyExerciseIdentityEdit(exercise, patch) : exercise))
+    );
+  }
+
+  function changeExerciseName(exercise: WorkoutExerciseLogDraft, nextName: string) {
+    const match = resolveWorkoutExerciseOption(exerciseOptions, nextName, exercise.exerciseId);
+    const currentOption = exercise.exerciseId ? exerciseOptions.find((entry) => entry.exerciseId === exercise.exerciseId) : undefined;
+    const normalizedNextName = nextName.trim().toLocaleLowerCase();
+    const normalizedCurrentName = currentOption?.name.trim().toLocaleLowerCase() || "";
+    const retainsCurrentIdentity = Boolean(normalizedNextName && currentOption && (
+      normalizedCurrentName.startsWith(normalizedNextName) || normalizedNextName.startsWith(normalizedCurrentName)
+    ));
+    editExerciseIdentity(exercise.localId, {
+      exerciseName: match?.name || nextName,
+      exerciseId: match?.exerciseId || (retainsCurrentIdentity ? exercise.exerciseId : null),
+      muscleGroup: match?.muscleGroup || exercise.muscleGroup,
+      primaryMuscles: match?.primaryMuscles.length ? match.primaryMuscles : exercise.primaryMuscles,
+      secondaryMuscles: match?.secondaryMuscles.length ? match.secondaryMuscles : exercise.secondaryMuscles,
+      exerciseType: match?.exerciseType || exercise.exerciseType,
     });
   }
 
-  function parseWorkoutPaste() {
-    const parsed = workoutPaste
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .map((line) => {
-        const cleaned = line.replace(/^\s*(?:[-*+]|[0-9]+[.)])\s*/, "");
-        const compactMatch = cleaned.match(/^(.+?)\s+(\d+)\s*(?:x|by|for|@)\s*(\d+(?:\.\d+)?)\s*(?:lb|lbs|pounds?)?$/i);
-        const wordsMatch = cleaned.match(/^(.+?)\s+(\d+)\s*(?:reps?)?\s*(?:at|@|x|with)?\s*(\d+(?:\.\d+)?)\s*(?:lb|lbs|pounds?)?$/i);
-        const match = compactMatch || wordsMatch;
-
-        if (!match) {
-          return {
-            ...emptyExerciseLog(settings.easyWorkout.defaultSetCount),
-            exerciseName: cleaned,
-          };
-        }
-
-        const exerciseName = match[1].trim();
-        const builtIn = defaultWorkoutExercises.find(
-          (exercise) => exercise.name.toLowerCase() === exerciseName.toLowerCase()
-        );
-        const saved = exercises.find(
-          (exercise) => exercise.name.toLowerCase() === exerciseName.toLowerCase()
-        );
-
-        return {
-          localId: createLocalId(),
-          exerciseId: saved?.id || null,
-          exerciseName,
-          muscleGroup: saved?.muscleGroup || builtIn?.muscleGroup || "",
-          primaryMuscles: saved?.muscleGroup || builtIn?.muscleGroup ? [saved?.muscleGroup || builtIn?.muscleGroup || ""] : [],
-          secondaryMuscles: [],
-          exerciseType: "weighted" as const,
-          notes: "",
-          sets: [
-            {
-              reps: Number(match[2]) || 0,
-              weight: Number(match[3]) || 0,
-              notes: "",
-              localId: createLocalId(),
-              setType: "standard" as const,
-              completed: true,
-              deleted: false,
-              rir: null,
-            },
-          ],
-        };
-      });
-
-    if (!parsed.length) {
-      setSaveMessage("Paste at least one exercise line first.");
+  function finishExerciseAndAdvance(exerciseLocalId: string) {
+    const result = completeExerciseAndAdvance(exerciseLogs, exerciseLocalId, () => focusedBlankExercise(settings.easyWorkout.defaultSetCount));
+    if (!result.ok) {
+      setValidationMessage(result.message);
+      const target = exerciseLogs.find((exercise) => exercise.localId === exerciseLocalId);
+      const row = target?.sets.find((set) => set.localId === result.setLocalId);
+      setPendingFocus({ id: target && row ? quickFieldForSet(target, row) : quickFieldId(exerciseLocalId, "name"), scroll: false });
       return;
     }
+    setValidationMessage("");
+    setDeletedSetUndo(null);
+    setExerciseLogs(result.logs);
+    setActiveExerciseId(result.activeExerciseId);
+    setSaveMessage("Exercise marked done. Only its completed working sets will be saved.");
+    setPendingFocus({ id: quickFieldId(result.activeExerciseId, "name"), scroll: true });
+  }
 
-    setExerciseLogs(parsed);
-    setWorkoutPaste("");
-    setSaveMessage("Workout notes turned into editable sets.");
+  function reopenExercise(exerciseLocalId: string) {
+    setActiveExerciseId(exerciseLocalId);
+    setPendingFocus({ id: quickFieldId(exerciseLocalId, "name"), scroll: true });
+  }
+
+  function undoExerciseDone(exerciseLocalId: string) {
+    setExerciseLogs((current) =>
+      current.map((exercise) => (exercise.localId === exerciseLocalId ? undoExerciseCompletion(exercise) : exercise))
+    );
+    setActiveExerciseId(exerciseLocalId);
+    setSaveMessage("Done was undone. Its sets are unperformed until you choose Done & next exercise again.");
+    setPendingFocus({ id: quickFieldId(exerciseLocalId, "name"), scroll: true });
+  }
+
+  function deleteExercise(exerciseLocalId: string) {
+    const result = deleteExerciseFromLogs(exerciseLogs, exerciseLocalId, () => focusedBlankExercise(settings.easyWorkout.defaultSetCount));
+    setDeletedSetUndo(null);
+    setExerciseLogs(result.logs);
+    setActiveExerciseId(result.focusExerciseId);
+    setSaveMessage("Exercise deleted from this draft.");
+    setPendingFocus({ id: quickFieldId(result.focusExerciseId, "name"), scroll: true });
+  }
+
+  function previewWorkoutImport() {
+    const currentDraft = latestDraftRef.current;
+    if (!currentDraft) return;
+    const nextPreview = parseWorkoutImportPreview({
+      sourceText: workoutPaste,
+      draft: currentDraft,
+      exerciseOptions,
+      today: localDateKey(),
+      operationId: createLocalId(),
+    });
+    setWorkoutImportPreview(nextPreview);
+    setWorkoutImportMode(null);
+    setApplyWorkoutImportMetadata(false);
+    setWorkoutImportError("");
+    setSaveMessage(nextPreview.canConfirm
+      ? "Preview ready. Choose Append or Replace; imported sets remain planned until you mark them done."
+      : "Import preview found errors. Your workout draft and source text are unchanged.");
+  }
+
+  function confirmWorkoutImport() {
+    if (isApplyingImportRef.current || !workoutImportPreview || !workoutImportMode) return;
+    const currentDraft = latestDraftRef.current;
+    if (!currentDraft) return;
+    if (externalDraftConflict) {
+      setWorkoutImportError("This workout changed in another tab. Reload before importing so this tab cannot overwrite it.");
+      return;
+    }
+    isApplyingImportRef.current = true;
+    setIsApplyingImport(true);
+    setWorkoutImportError("");
+    try {
+      const result = applyWorkoutImportPreview({
+        draft: currentDraft,
+        preview: workoutImportPreview,
+        mode: workoutImportMode,
+        applyMetadata: applyWorkoutImportMetadata,
+        createId: createLocalId,
+      });
+      if (!result.ok) {
+        setWorkoutImportError(result.error);
+        return;
+      }
+      if (!result.applied) {
+        setSaveMessage("This import was already applied; no sets were duplicated.");
+        setWorkoutImportPreview(null);
+        return;
+      }
+      setExerciseLogs(result.draft.exerciseLogs);
+      setActiveExerciseId(result.draft.activeExerciseId || result.draft.exerciseLogs[0]?.localId || "");
+      setAppliedImportOperationIds(result.draft.appliedImportOperationIds);
+      if (applyWorkoutImportMetadata) {
+        setPerformedOn(result.draft.performedOn);
+        setDurationMinutes(result.draft.durationMinutes);
+      }
+      setWorkoutImportPreview(null);
+      setWorkoutImportMode(null);
+      setApplyWorkoutImportMetadata(false);
+      setSaveMessage("Planned sets imported into this draft. Review them and mark only performed sets done.");
+    } finally {
+      isApplyingImportRef.current = false;
+      setIsApplyingImport(false);
+    }
   }
 
   async function handleSaveSession(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (externalDraftConflict) {
       setDraftStatus("sync-failed-draft-retained");
-      setSaveMessage("This workout changed in another tab. Reload before saving so one tab does not overwrite the other.");
+      setValidationMessage("This workout changed in another tab. Reload before saving so one tab does not overwrite the other.");
+      return;
+    }
+    if (completionReviewRequired) {
+      setValidationMessage("Review which sets you performed, then choose Review complete before saving.");
+      return;
+    }
+    const saveBlock = isFocusedWorkoutMode ? findSaveBlock(exerciseLogs) : null;
+    if (saveBlock) {
+      setValidationMessage(saveBlock.message);
+      setActiveExerciseId(saveBlock.exerciseLocalId);
+      const blocked = exerciseLogs.find((exercise) => exercise.localId === saveBlock.exerciseLocalId);
+      const blockedRow = blocked?.sets.find((set) => set.localId === saveBlock.setLocalId);
+      setPendingFocus({ id: blocked && blockedRow ? quickFieldForSet(blocked, blockedRow) : quickFieldId(saveBlock.exerciseLocalId, "name"), scroll: false });
       return;
     }
     const cleanedExercises = exerciseLogs
@@ -668,6 +683,7 @@ export function EasyWorkoutLogPage() {
         primaryMuscles: exercise.primaryMuscles,
         secondaryMuscles: exercise.secondaryMuscles,
         exerciseType: exercise.exerciseType,
+        setup: normalizeWorkoutEquipmentSetup(exercise.setup),
         notes: exercise.notes,
         sets: exercise.sets
           .filter((set) => isValidWorkingSet(set, exercise.exerciseType))
@@ -676,25 +692,26 @@ export function EasyWorkoutLogPage() {
       .filter((exercise) => exercise.sets.length);
 
     if (!cleanedExercises.length) {
-      setSaveMessage("Add at least one exercise with a complete working set first. Weighted sets need reps and a positive load.");
+      setValidationMessage(isFocusedWorkoutMode ? "Finish an exercise with Done & next exercise before saving. Weighted sets also need reps and a positive load." : "Mark at least one set done before saving. Weighted sets also need reps and a positive load.");
       return;
     }
 
     if (!isValidLocalDateKey(performedOn)) {
-      setSaveMessage("Choose a valid local workout date before saving.");
-      return;
-    }
-
-    if (typeof navigator !== "undefined" && !navigator.onLine) {
-      setDraftStatus("sync-failed-draft-retained");
-      setSaveMessage("Couldn't sync—draft retained. Reconnect, then retry Save workout.");
+      setValidationMessage("Choose a valid local workout date before saving.");
       return;
     }
 
     const resolvedDurationMinutes = resolveWorkoutDurationMinutes(durationMinutes, elapsedSeconds);
     if (resolvedDurationMinutes == null) {
       setDraftStatus("sync-failed-draft-retained");
-      setSaveMessage("This draft has been open too long to infer a truthful duration. Open Full log and enter the session duration before saving.");
+      setValidationMessage("This draft has been open too long to infer a truthful duration. Open Full log and enter the session duration before saving.");
+      return;
+    }
+
+    setValidationMessage("");
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      setDraftStatus("sync-failed-draft-retained");
+      setSaveMessage("Couldn't sync — draft retained. Reconnect, then retry Save workout.");
       return;
     }
 
@@ -704,7 +721,7 @@ export function EasyWorkoutLogPage() {
     try {
       const sessionId = await saveCoordinatorRef.current.save(draftId, () => addSession({
         clientDraftId: draftId,
-        schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
+        schemaVersion: WORKOUT_SESSION_SCHEMA_VERSION,
         routineId: selectedRoutine?.id || null,
         routineName: selectedRoutine?.name || "Workout",
         performedOn,
@@ -731,7 +748,7 @@ export function EasyWorkoutLogPage() {
       navigate({ pathname: `/app/easyworkout/session/${encodeURIComponent(sessionId)}`, search: isDemoMode ? "?demo=1" : "" });
     } catch {
       setDraftStatus("sync-failed-draft-retained");
-      setSaveMessage("Couldn't sync—draft retained. Retry when the connection is ready.");
+      setSaveMessage("Couldn't sync — draft retained. Retry when the connection is ready.");
     } finally {
       setIsSaving(false);
     }
@@ -740,34 +757,26 @@ export function EasyWorkoutLogPage() {
   return (
       <PageSection
         headingLevel={1}
-        eyebrow={isFocusedWorkoutMode ? "Active workout" : "Full log"}
+        eyebrow={isFocusedWorkoutMode ? undefined : "Full log"}
         title={isFocusedWorkoutMode ? "Workout" : "Log workout"}
-      description={
-        isFocusedWorkoutMode
-          ? "Lifts, sets, quick notes. Unsaved work is kept on this device while you train."
-          : "Use the full log when you want routine, duration, and import tools."
-      }
+      description={isFocusedWorkoutMode ? undefined : "Use the full log when you want routine, duration, and import tools."}
       >
-        <div className={`toolbar-row toolbar-row-compact deep-module-toolbar${isFocusedWorkoutMode ? " workout-focus-toolbar" : ""}`}>
-          <div>
-            <strong>{isFocusedWorkoutMode ? "Active workout" : "Full log"}</strong>
-            {!isFocusedWorkoutMode ? <p className="helper-copy">Log fast. Details stay tucked away.</p> : null}
-          </div>
-          <div className="pill-row">
-            {!isFocusedWorkoutMode ? (
+        {!isFocusedWorkoutMode ? (
+          <div className="toolbar-row toolbar-row-compact deep-module-toolbar">
+            <div>
+              <strong>Full log</strong>
+              <p className="helper-copy">Log fast. Details stay tucked away.</p>
+            </div>
+            <div className="pill-row">
               <Link className="primary-button compact-button" to="/app/easyworkout/log?gymMode=1">
                 Active workout
               </Link>
-            ) : null}
-            {isFocusedWorkoutMode ? (
-              <Link className="ghost-button compact-button" to="/app/easyworkout/log">
-                Full log
-              </Link>
-            ) : null}
+            </div>
           </div>
-        </div>
+        ) : null}
 
         {error ? <p className="error-copy">{error}</p> : null}
+        {!isFocusedWorkoutMode ? (
         <div className="workout-plan-bridge workout-log-plan-bridge" aria-label="Daily plan connection">
           <div className="workout-plan-bridge-copy">
             <span>Daily plan</span>
@@ -782,31 +791,165 @@ export function EasyWorkoutLogPage() {
             Today
           </Link>
         </div>
+        ) : null}
       <form className="task-composer" onSubmit={handleSaveSession}>
         {!isFocusedWorkoutMode ? (
         <details className="advanced-disclosure workout-advanced-tools">
-          <summary>Import old workout notes</summary>
+          <summary>Import planned workout sets</summary>
           <div className="workout-quick-paste">
             <label className="field-stack">
-              <span>Workout notes</span>
+              <span>Workout text</span>
               <textarea
-                rows={4}
+                rows={7}
                 value={workoutPaste}
-                onChange={(event) => setWorkoutPaste(event.target.value)}
-                placeholder={"Bench press 8x135\nLat pulldown 10x110\nSquat 5x185"}
+                onChange={(event) => {
+                  setWorkoutPaste(event.target.value);
+                  setWorkoutImportPreview(null);
+                  setWorkoutImportMode(null);
+                  setApplyWorkoutImportMetadata(false);
+                  setWorkoutImportError("");
+                }}
+                placeholder={"unit: lb\nBench Press: 3x8@135 lb\nLat Pulldown [id=machine-id]: 10@110 lb | seat=2"}
               />
             </label>
             <div className="task-composer-actions">
-              <button type="button" className="button-secondary" onClick={parseWorkoutPaste} disabled={!workoutPaste.trim()}>
-                Turn into sets
+              <button type="button" className="button-secondary" onClick={previewWorkoutImport} disabled={!workoutPaste.trim()}>
+                Preview planned sets
               </button>
-              <span className="helper-copy">One line per exercise, like 8x135 or 8 reps at 135.</span>
+              <span className="helper-copy">Use Exercise: 8@135 lb, 3x8@135 lb, or legacy 8x135 lb. This never imports completed history.</span>
             </div>
+            {workoutImportPreview ? (
+              <section className="workout-import-preview" aria-live="polite" aria-label="Workout import preview">
+                <div className="workout-section-heading">
+                  <div>
+                    <span>Review before changing the draft</span>
+                    <strong>{workoutImportPreview.rows.length} exercise line{workoutImportPreview.rows.length === 1 ? "" : "s"}</strong>
+                  </div>
+                  <button
+                    type="button"
+                    className="button-link"
+                    onClick={() => {
+                      setWorkoutImportPreview(null);
+                      setWorkoutImportMode(null);
+                      setApplyWorkoutImportMetadata(false);
+                      setWorkoutImportError("");
+                    }}
+                  >
+                    Cancel preview
+                  </button>
+                </div>
+                <p className="helper-copy">
+                  Source units: {workoutImportPreview.unitContext.unit} ({workoutImportPreview.unitContext.source === "draft" ? "current draft unit" : "unit directive"}).
+                  Every imported row starts unperformed.
+                </p>
+                {workoutImportPreview.errors.length ? (
+                  <ul className="error-copy" role="alert">
+                    {workoutImportPreview.errors.map((errorMessage) => <li key={errorMessage}>{errorMessage}</li>)}
+                  </ul>
+                ) : null}
+                {workoutImportPreview.appendErrors.length ? (
+                  <ul className="error-copy" role="alert">
+                    {workoutImportPreview.appendErrors.map((errorMessage) => <li key={errorMessage}>{errorMessage}</li>)}
+                  </ul>
+                ) : null}
+                <div className="workout-import-preview-list">
+                  {workoutImportPreview.rows.map((row) => (
+                    <article key={`${row.lineNumber}-${row.source}`} className="workout-import-preview-row">
+                      <div className="workout-section-heading">
+                        <div>
+                          <span>Line {row.lineNumber}</span>
+                          <strong>{row.exercise.exerciseName || "Unrecognized exercise"}</strong>
+                        </div>
+                        <span>{row.destinationAction}</span>
+                      </div>
+                      <p className="helper-copy">
+                        {row.sets.length
+                          ? row.sets.map((set) => set.sourceUnit
+                            ? `${set.reps}@${set.sourceWeight} ${set.sourceUnit} → ${set.weight.toFixed(2)} ${draftWeightUnit}`
+                            : `${set.reps} bodyweight reps`).join(" · ")
+                          : "No valid planned sets"}
+                      </p>
+                      {hasWorkoutEquipmentSetup(row.setup) ? <p className="helper-copy">Setup: {formatWorkoutEquipmentSetup(row.setup)}</p> : null}
+                      {row.warnings.map((warning) => <p key={warning} className="helper-copy">Warning: {warning}</p>)}
+                      {row.errors.length ? (
+                        <ul className="error-copy" role="alert">
+                          {row.errors.map((errorMessage) => <li key={errorMessage}>{errorMessage}</li>)}
+                        </ul>
+                      ) : null}
+                    </article>
+                  ))}
+                </div>
+                {workoutImportPreview.metadataChanges.length ? (
+                  <div className="workout-import-metadata">
+                    <p className="helper-copy">Imported metadata is separate from set completion and stays unchanged unless selected:</p>
+                    <ul>
+                      {workoutImportPreview.metadataChanges.map((change) => (
+                        <li key={change.field}>{change.field === "performedOn" ? "Date" : "Duration"}: {change.from || "blank"} → {change.to}</li>
+                      ))}
+                    </ul>
+                    <label className="workout-check-row">
+                      <input
+                        type="checkbox"
+                        checked={applyWorkoutImportMetadata}
+                        onChange={(event) => setApplyWorkoutImportMetadata(event.target.checked)}
+                      />
+                      <span>Apply imported date and duration</span>
+                    </label>
+                  </div>
+                ) : null}
+                <fieldset className="workout-import-mode">
+                  <legend>Choose how to change this active draft</legend>
+                  <label className="workout-check-row">
+                    <input
+                      type="radio"
+                      name="workout-import-mode"
+                      value="append"
+                      checked={workoutImportMode === "append"}
+                      disabled={Boolean(workoutImportPreview.appendErrors.length)}
+                      onChange={() => setWorkoutImportMode("append")}
+                    />
+                    <span>Append to matching stable exercise IDs; add all other exercises separately</span>
+                  </label>
+                  <label className="workout-check-row">
+                    <input
+                      type="radio"
+                      name="workout-import-mode"
+                      value="replace"
+                      checked={workoutImportMode === "replace"}
+                      onChange={() => setWorkoutImportMode("replace")}
+                    />
+                    <span>Replace {workoutImportPreview.replacementSummary.exerciseCount} exercise{workoutImportPreview.replacementSummary.exerciseCount === 1 ? "" : "s"} and {workoutImportPreview.replacementSummary.setCount} set{workoutImportPreview.replacementSummary.setCount === 1 ? "" : "s"}</span>
+                  </label>
+                </fieldset>
+                {workoutImportPreviewIsStale ? <p className="error-copy" role="alert">The active draft changed. Preview again before importing.</p> : null}
+                {workoutImportError ? <p className="error-copy" role="alert">{workoutImportError}</p> : null}
+                <button
+                  type="button"
+                  className="button-primary"
+                  onClick={confirmWorkoutImport}
+                  disabled={!workoutImportPreview.canConfirm || !workoutImportMode ||
+                    (workoutImportMode === "append" && Boolean(workoutImportPreview.appendErrors.length)) ||
+                    workoutImportPreviewIsStale || externalDraftConflict || isApplyingImport}
+                >
+                  {isApplyingImport ? "Importing..." : "Import as planned sets"}
+                </button>
+              </section>
+            ) : null}
           </div>
         </details>
         ) : null}
 
-        <div className={`task-composer-grid${isFocusedWorkoutMode ? " gym-mode-meta workout-mode-meta workout-session-strip" : ""}`}>
+        {isFocusedWorkoutMode ? (
+          <QuickWorkoutSessionStrip
+            performedOn={performedOn}
+            onPerformedOnChange={setPerformedOn}
+            focusGroups={planningContext.focusGroups}
+            onFocusGroupsChange={(focusGroups) => setPlanningContext((current) => ({ ...current, focusGroups }))}
+            sessionNotes={sessionNotes}
+            onSessionNotesChange={setSessionNotes}
+          />
+        ) : (
+        <div className="task-composer-grid">
           {!isFocusedWorkoutMode ? (
           <label className="field-stack">
             <span>Routine</span>
@@ -843,79 +986,99 @@ export function EasyWorkoutLogPage() {
             />
           </label>
           ) : null}
-          <label className={`field-stack${isFocusedWorkoutMode ? "" : " field-stack-wide"}`}>
+          <label className="field-stack field-stack-wide">
             <span>Session notes</span>
             <input value={sessionNotes} onChange={(event) => setSessionNotes(event.target.value)} placeholder="Energy, pump, machine setup, etc." />
           </label>
         </div>
+        )}
 
-        {isFocusedWorkoutMode ? (
-          <div className="workout-mode-quick-actions deep-module-compact-actions">
+
+        <datalist id="workout-log-exercise-options">
+          {exerciseOptions.map((option) => (
+            <option key={`${option.exerciseId || "free"}-${option.name}`} value={option.selectionLabel}>
+              {option.muscleGroup || "Saved exercise"}
+            </option>
+          ))}
+        </datalist>
+
+        {completionReviewRequired ? (
+          <div className="calendar-plan-undo-card workout-completion-review" role="status" aria-live="polite">
             <div>
-              <strong>{exerciseLogs.length} lifts ready</strong>
-              <p className="helper-copy">Type, log, move on.</p>
+              <strong>Review which sets you performed</strong>
+              <p>This restored draft could not distinguish planned rows from performed sets. Its values are intact, but every set starts unconfirmed. {isFocusedWorkoutMode ? "Choose Done & next exercise on each exercise you performed, then Review complete." : ""}</p>
             </div>
-            <div className="drawer-actions-right">
-              <button type="button" className="button-secondary compact-button" onClick={() => addExerciseBoxes(3)}>
-                Add 3 boxes
-              </button>
-              <button type="button" className="ghost-button compact-button" onClick={removeBlankExerciseBoxes}>
-                Clear blank boxes
+            <div className="pill-row">
+              {!isFocusedWorkoutMode ? (
+                <button
+                  type="button"
+                  className="button-secondary compact-button"
+                  onClick={() => {
+                    setExerciseLogs((current) => current.map((exercise) => ({
+                      ...exercise,
+                      sets: exercise.sets.map((set) => ({ ...set, completed: !set.deleted })),
+                    })));
+                    setCompletionReviewRequired(false);
+                    setSaveMessage("All shown sets were marked done. You can still undo any set before saving.");
+                  }}
+                >
+                  Mark all shown sets done
+                </button>
+              ) : null}
+              <button
+                type="button"
+                className="ghost-button compact-button"
+                onClick={() => {
+                  setCompletionReviewRequired(false);
+                  setSaveMessage("Review complete. Only sets marked done will be saved.");
+                }}
+              >
+                Review complete
               </button>
             </div>
           </div>
         ) : null}
 
-        {isFocusedWorkoutMode && nextExerciseSuggestions.length ? (
-          <section className="calendar-info-card workout-next-lift-card" aria-label="Next exercise suggestions">
-            <div className="workout-next-lift-header">
-              <div>
-                <span className="priority-pill-vnext">Need next lift?</span>
-                <strong>Pick one more exercise</strong>
-              </div>
-              <p>Local suggestions only. Nothing is saved until you save the workout.</p>
-            </div>
-            <div className="workout-next-lift-grid">
-              {nextExerciseSuggestions.map((suggestion) => (
-                <article key={suggestion.name} className="workout-next-lift-option">
-                  <div>
-                    <strong>{suggestion.name}</strong>
-                    <span>{suggestion.muscleGroup}</span>
-                    <p>{suggestion.reason}</p>
-                    <details>
-                      <summary>Read more</summary>
-                      <p>{suggestion.detail}</p>
-                      <p>{suggestion.target}</p>
-                    </details>
-                  </div>
-                  <button type="button" className="button-secondary compact-button" onClick={() => addSuggestedExercise(suggestion)}>
-                    Add
-                  </button>
-                </article>
-              ))}
-            </div>
-          </section>
-        ) : null}
-
         <div className="task-list-vnext workout-exercise-list">
           {exerciseLogs.map((exercise, exerciseIndex) => {
-            const previous = previousByExercise[exercise.exerciseName];
-            const loggedSetCount = exercise.sets.filter(hasSetWork).length;
-            const lastLoggedSet = [...exercise.sets].reverse().find(hasSetWork);
-            const isCollapsed = isFocusedWorkoutMode && activeExerciseId && activeExerciseId !== exercise.localId;
-
-            if (isCollapsed) {
+            const previous = findExerciseHistory(previousByExercise, exercise.exerciseName, exercise.exerciseId);
+            const previousSetupLabel = formatWorkoutEquipmentSetup(previous?.lastSetup);
+            const currentHasSetup = hasWorkoutEquipmentSetup(exercise.setup);
+            const previousSetsLabel = previous?.lastSets.map((set) => {
+              if (exercise.exerciseType === "bodyweight") return `${set.reps} reps`;
+              if (exercise.exerciseType === "duration") return `${set.durationSeconds || 0} sec`;
+              if (exercise.exerciseType === "distance") return `${set.distanceMeters || 0} m`;
+              return `${set.reps} × ${set.weight.toFixed(1)} ${draftWeightUnit}`;
+            }).join(" · ");
+            if (isFocusedWorkoutMode) {
               return (
-                <article key={exercise.localId} className="panel-section workout-exercise-card workout-mode-card workout-exercise-card-collapsed">
-                  <button type="button" className="workout-collapsed-exercise" onClick={() => setActiveExerciseId(exercise.localId)}>
-                    <span>Exercise {exerciseIndex + 1}</span>
-                    <strong>{exercise.exerciseName || "Empty lift"}</strong>
-                    <small>
-                      {loggedSetCount ? `${loggedSetCount} set${loggedSetCount === 1 ? "" : "s"}` : "No sets yet"}
-                      {lastLoggedSet ? ` - ${lastLoggedSet.weight || 0} ${draftWeightUnit} x ${lastLoggedSet.reps || 0}` : ""}
-                    </small>
-                  </button>
-                </article>
+                <QuickWorkoutExerciseCard
+                  key={exercise.localId}
+                  exercise={exercise}
+                  exerciseIndex={exerciseIndex}
+                  isActive={!activeExerciseId || activeExerciseId === exercise.localId}
+                  isDone={isExerciseDone(exercise)}
+                  weightUnit={draftWeightUnit}
+                  lastTime={settings.easyWorkout.showLastTimeHelper && previous ? {
+                    performedOn: previous.performedOn,
+                    setsLabel: previousSetsLabel || "",
+                    setupLabel: previousSetupLabel,
+                    bestWeight: previous.bestWeight,
+                    currentHasSetup,
+                  } : null}
+                  nameInputRef={exerciseIndex === 0 ? firstExerciseInputRef : undefined}
+                  onExerciseNameChange={(value) => changeExerciseName(exercise, value)}
+                  onExerciseNotesChange={(value) => updateExerciseLog(exerciseIndex, { notes: value })}
+                  onSetEdit={(setLocalId, patch) => editSet(exercise.localId, setLocalId, patch)}
+                  onSetupChange={(field, value) => updateExerciseSetup(exerciseIndex, field, value)}
+                  onAddSet={() => updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, emptySet(0)] })}
+                  onRemoveSet={(setIndex) => deleteSet(exerciseIndex, setIndex)}
+                  onUseLast={(mode) => fillFromLastTime(exerciseIndex, mode)}
+                  onDone={() => finishExerciseAndAdvance(exercise.localId)}
+                  onUndoDone={() => undoExerciseDone(exercise.localId)}
+                  onEdit={() => reopenExercise(exercise.localId)}
+                  onDelete={() => deleteExercise(exercise.localId)}
+                />
               );
             }
 
@@ -930,14 +1093,6 @@ export function EasyWorkoutLogPage() {
                       : "No logged history yet for this exercise."}
                   </p> : null}
                 </div>
-                {isFocusedWorkoutMode && settings.easyWorkout.showLastTimeHelper && previous ? (
-                  <div className="calendar-info-card gym-suggestion">
-                    <strong>{previous.lastWeight.toFixed(1)} {draftWeightUnit} x {previous.lastReps} last time</strong>
-                    <button type="button" className="primary-button compact-button" onClick={() => fillFromLastTime(exerciseIndex)}>
-                      Fill first set
-                    </button>
-                  </div>
-                ) : null}
                 {previous ? (
                   <div className="workout-history-strip">
                     <span>{previous.sessionCount} session{previous.sessionCount === 1 ? "" : "s"}</span>
@@ -951,14 +1106,25 @@ export function EasyWorkoutLogPage() {
                     <span>Exercise</span>
                     <input
                       ref={exerciseIndex === 0 ? firstExerciseInputRef : undefined}
+                      list="workout-log-exercise-options"
+                      autoComplete="off"
                       value={exercise.exerciseName}
                       onChange={(event) => {
-                        const match = exercises.find((entry) => entry.name === event.target.value);
-                        const builtIn = defaultWorkoutExercises.find((entry) => entry.name === event.target.value);
+                        const nextName = event.target.value;
+                        const match = resolveWorkoutExerciseOption(exerciseOptions, nextName, exercise.exerciseId);
+                        const currentOption = exercise.exerciseId ? exerciseOptions.find((entry) => entry.exerciseId === exercise.exerciseId) : undefined;
+                        const normalizedNextName = nextName.trim().toLocaleLowerCase();
+                        const normalizedCurrentName = currentOption?.name.trim().toLocaleLowerCase() || "";
+                        const retainsCurrentIdentity = Boolean(normalizedNextName && currentOption && (
+                          normalizedCurrentName.startsWith(normalizedNextName) || normalizedNextName.startsWith(normalizedCurrentName)
+                        ));
                         updateExerciseLog(exerciseIndex, {
-                          exerciseName: event.target.value,
-                          exerciseId: match?.id || null,
-                          muscleGroup: match?.muscleGroup || builtIn?.muscleGroup || exercise.muscleGroup,
+                          exerciseName: match?.name || nextName,
+                          exerciseId: match?.exerciseId || (retainsCurrentIdentity ? exercise.exerciseId : null),
+                          muscleGroup: match?.muscleGroup || exercise.muscleGroup,
+                          primaryMuscles: match?.primaryMuscles.length ? match.primaryMuscles : exercise.primaryMuscles,
+                          secondaryMuscles: match?.secondaryMuscles.length ? match.secondaryMuscles : exercise.secondaryMuscles,
+                          exerciseType: match?.exerciseType || exercise.exerciseType,
                         });
                       }}
                       placeholder="Lat pulldown"
@@ -974,6 +1140,37 @@ export function EasyWorkoutLogPage() {
                     <span>Exercise notes</span>
                     <input value={exercise.notes} onChange={(event) => updateExerciseLog(exerciseIndex, { notes: event.target.value })} placeholder="Vertical grip, slow eccentric, machine 4, etc." />
                   </label>
+                </div>
+
+                <div className="workout-setup-fields">
+                  <label className="field-stack">
+                    <span>Seat</span>
+                    <input
+                      aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} seat setting`}
+                      value={exercise.setup.seat || ""}
+                      maxLength={WORKOUT_SETUP_SHORT_MAX_LENGTH}
+                      onChange={(event) => updateExerciseSetup(exerciseIndex, "seat", event.target.value)}
+                      placeholder="2"
+                    />
+                  </label>
+                  <label className="field-stack">
+                    <span>Arm</span>
+                    <input
+                      aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} arm setting`}
+                      value={exercise.setup.arm || ""}
+                      maxLength={WORKOUT_SETUP_SHORT_MAX_LENGTH}
+                      onChange={(event) => updateExerciseSetup(exerciseIndex, "arm", event.target.value)}
+                      placeholder="4"
+                    />
+                  </label>
+                  <details className="workout-more-setup">
+                    <summary>More setup</summary>
+                    <div className="workout-more-setup-grid">
+                      <label className="field-stack"><span>Back</span><input aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} back setting`} value={exercise.setup.back || ""} maxLength={WORKOUT_SETUP_SHORT_MAX_LENGTH} onChange={(event) => updateExerciseSetup(exerciseIndex, "back", event.target.value)} /></label>
+                      <label className="field-stack"><span>Pad</span><input aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} pad setting`} value={exercise.setup.pad || ""} maxLength={WORKOUT_SETUP_SHORT_MAX_LENGTH} onChange={(event) => updateExerciseSetup(exerciseIndex, "pad", event.target.value)} /></label>
+                      <label className="field-stack workout-setup-other"><span>Other setup</span><input aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} other setup`} value={exercise.setup.other || ""} maxLength={WORKOUT_SETUP_OTHER_MAX_LENGTH} onChange={(event) => updateExerciseSetup(exerciseIndex, "other", event.target.value)} placeholder="Left tower, neutral handles" /></label>
+                    </div>
+                  </details>
                 </div>
 
                 <p className="helper-copy">
@@ -1048,6 +1245,15 @@ export function EasyWorkoutLogPage() {
                           {previous && set.weight > previous.bestWeight ? <span className="workout-pr-chip">PR</span> : null}
                           <button
                             type="button"
+                            className={`${set.completed ? "button-secondary is-complete" : "primary-button"} compact-button workout-completion-button`}
+                            aria-label={`${exercise.exerciseName || `Exercise ${exerciseIndex + 1}`} set ${setIndex + 1}: ${set.completed ? "Undo done" : "Mark done"}`}
+                            aria-pressed={set.completed}
+                            onClick={() => updateSet(exerciseIndex, setIndex, { completed: !set.completed })}
+                          >
+                            {set.completed ? "Undo done" : "Mark done"}
+                          </button>
+                          <button
+                            type="button"
                             className="danger-button compact-button workout-delete-button"
                             onClick={() => deleteSet(exerciseIndex, setIndex)}
                             aria-label={`Remove set ${setIndex + 1}`}
@@ -1065,37 +1271,6 @@ export function EasyWorkoutLogPage() {
                     <button type="button" className="button-secondary" onClick={() => updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, emptySet()] })}>
                       Add set
                     </button>
-                    {isFocusedWorkoutMode && exercise.sets.length ? (
-                      <button
-                        type="button"
-                        className="button-secondary"
-                        onClick={() => {
-                          const previousSet = exercise.sets[exercise.sets.length - 1];
-                          updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, { ...previousSet, localId: createLocalId() }] });
-                        }}
-                      >
-                        Copy previous set
-                      </button>
-                    ) : null}
-                    {isFocusedWorkoutMode ? (
-                      <button
-                        type="button"
-                        className="primary-button"
-                        onClick={() => {
-                          const nextExercise = exerciseLogs[exerciseIndex + 1];
-                          if (nextExercise) {
-                            setActiveExerciseId(nextExercise.localId);
-                            return;
-                          }
-
-                          const newExercise = emptyExerciseLog(settings.easyWorkout.defaultSetCount);
-                          setExerciseLogs((current) => [...current, newExercise]);
-                          setActiveExerciseId(newExercise.localId);
-                        }}
-                      >
-                        Done, next exercise
-                      </button>
-                    ) : null}
                   </div>
                   <div className="workout-exercise-delete-actions" aria-label="Exercise delete actions">
                     <button
@@ -1120,30 +1295,44 @@ export function EasyWorkoutLogPage() {
           })}
         </div>
 
+        {isFocusedWorkoutMode ? (
+          <QuickWorkoutNextExercise
+            planningContext={planningContext}
+            setPlanningContext={setPlanningContext}
+            planningDurationInput={planningDurationInput}
+            setPlanningDurationInput={setPlanningDurationInput}
+            nextExerciseResult={nextExerciseResult}
+            onAddSuggestion={addSuggestedExercise}
+          />
+        ) : null}
+
         <div className="task-composer-actions workout-log-actions">
-          <button type="button" className="button-secondary" onClick={() => addExerciseBoxes()}>
-            Add exercise
-          </button>
+          {!isFocusedWorkoutMode ? (
+            <button type="button" className="button-secondary" onClick={() => addExerciseBoxes()}>
+              Add exercise
+            </button>
+          ) : null}
           <button type="submit" className="primary-button" disabled={isSaving}>
             {isSaving ? "Syncing…" : "Save workout"}
           </button>
         </div>
-        {deletedSetUndo ? (
-          <div className="calendar-plan-undo-card">
-            <div>
-              <strong>Set removed.</strong>
-              <p>{deletedSetUndo.exerciseName} set {deletedSetUndo.setIndex + 1} can be restored before saving.</p>
-            </div>
-            <button type="button" className="ghost-button compact-button" onClick={undoDeletedSet}>
-              Undo remove
-            </button>
-          </div>
-        ) : null}
         <div className={`workout-save-status status-${draftStatus}`} role="status" aria-live="polite" aria-atomic="true">
           <strong>{workoutDraftStatusCopy[draftStatus]}</strong>
-          <span>{draftStatus === "saved-local" ? "Your latest edits can survive refresh, route changes, and a temporary interruption." : saveMessage}</span>
+          <span>{workoutDraftStatusDetailCopy[draftStatus]}</span>
         </div>
-        {saveMessage && draftStatus === "saved-local" ? <div className="calendar-info-card">{saveMessage}</div> : null}
+        <div className="workout-action-message" role="status" aria-live="polite" aria-atomic="true">
+          {saveMessage ? <div className="calendar-info-card workout-action-message-card">
+            {saveMessage}
+            {deletedSetUndo ? (
+              <button type="button" className="ghost-button compact-button" onClick={undoDeletedSet}>
+                Undo remove
+              </button>
+            ) : null}
+          </div> : null}
+        </div>
+        <div className="workout-validation-message" role="status" aria-live="polite" aria-atomic="true">
+          {validationMessage ? <span>{validationMessage}</span> : null}
+        </div>
       </form>
     </PageSection>
   );

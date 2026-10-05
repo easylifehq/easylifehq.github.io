@@ -1,4 +1,10 @@
-export const WORKOUT_DRAFT_SCHEMA_VERSION = 3 as const;
+import { normalizeWorkoutEquipmentSetup, type WorkoutEquipmentSetup } from "../../../lib/workoutEquipmentSetup.ts";
+import {
+  normalizeWorkoutPlanningContext,
+  type WorkoutPlanningContext,
+} from "./workoutPlanning.ts";
+
+export const WORKOUT_DRAFT_SCHEMA_VERSION = 7 as const;
 export const WORKOUT_DRAFT_MAX_SERIALIZED_CHARS = 500_000;
 export const WORKOUT_DRAFT_MAX_EXERCISES = 80;
 export const WORKOUT_DRAFT_MAX_SETS_PER_EXERCISE = 100;
@@ -22,7 +28,15 @@ export const workoutDraftStatusCopy: Record<WorkoutDraftLifecycleStatus, string>
   "saved-local": "Saved on this device",
   syncing: "Syncing",
   synced: "Workout saved",
-  "sync-failed-draft-retained": "Couldn't sync—draft retained",
+  "sync-failed-draft-retained": "Couldn't sync — draft retained",
+};
+
+export const workoutDraftStatusDetailCopy: Record<WorkoutDraftLifecycleStatus, string> = {
+  "saving-local": "Writing edits locally.",
+  "saved-local": "Latest edits saved locally.",
+  syncing: "Local draft kept until confirmed.",
+  synced: "Workout saved; local draft cleared.",
+  "sync-failed-draft-retained": "Review the message below.",
 };
 
 export type WorkoutDraftSetType = "warmup" | "standard" | "drop" | "failure";
@@ -49,6 +63,7 @@ export type WorkoutExerciseLogDraft = {
   primaryMuscles: string[];
   secondaryMuscles: string[];
   exerciseType: WorkoutDraftExerciseType;
+  setup: WorkoutEquipmentSetup;
   notes: string;
   sets: WorkoutSetDraft[];
 };
@@ -65,8 +80,11 @@ export type StoredWorkoutDraft = {
   elapsedSeconds: number;
   durationMinutes: string;
   sessionNotes: string;
+  completionReviewRequired: boolean;
   activeExerciseId?: string;
   exerciseLogs: WorkoutExerciseLogDraft[];
+  appliedImportOperationIds: string[];
+  planningContext: WorkoutPlanningContext;
   updatedAt: string;
 };
 
@@ -98,7 +116,7 @@ const text = (value: unknown, fallback = "") => (typeof value === "string" ? val
 const textList = (value: unknown) =>
   Array.isArray(value) ? value.filter((item): item is string => typeof item === "string" && Boolean(item.trim())) : [];
 
-function normalizeSet(value: unknown, createId: () => string): WorkoutSetDraft {
+function normalizeSet(value: unknown, createId: () => string, trustExplicitCompletion: boolean): WorkoutSetDraft {
   const set = isRecord(value) ? value : {};
   const setKind = ["warmup", "standard", "drop", "failure"].includes(String(set.setType))
     ? (set.setType as WorkoutDraftSetType)
@@ -109,7 +127,7 @@ function normalizeSet(value: unknown, createId: () => string): WorkoutSetDraft {
     weight: finiteNonNegative(set.weight),
     notes: text(set.notes),
     setType: setKind,
-    completed: set.completed !== false,
+    completed: trustExplicitCompletion && set.completed === true,
     deleted: set.deleted === true,
     rir: set.rir === null || set.rir === undefined ? null : Math.min(10, finiteNonNegative(set.rir)),
     durationSeconds: set.durationSeconds === undefined ? undefined : finiteNonNegative(set.durationSeconds),
@@ -117,7 +135,7 @@ function normalizeSet(value: unknown, createId: () => string): WorkoutSetDraft {
   };
 }
 
-function normalizeExercise(value: unknown, createId: () => string): WorkoutExerciseLogDraft | null {
+function normalizeExercise(value: unknown, createId: () => string, trustExplicitCompletion: boolean): WorkoutExerciseLogDraft | null {
   if (!isRecord(value)) return null;
   const rawSets = Array.isArray(value.sets) ? value.sets : [];
   const kind = ["weighted", "bodyweight", "assisted", "duration", "distance"].includes(String(value.exerciseType))
@@ -133,8 +151,11 @@ function normalizeExercise(value: unknown, createId: () => string): WorkoutExerc
     primaryMuscles: primaryMuscles.length ? primaryMuscles : muscleGroup ? [muscleGroup] : [],
     secondaryMuscles: textList(value.secondaryMuscles),
     exerciseType: kind,
+    setup: normalizeWorkoutEquipmentSetup(value.setup),
     notes: text(value.notes),
-    sets: rawSets.length ? rawSets.map((set) => normalizeSet(set, createId)) : [normalizeSet({}, createId)],
+    sets: rawSets.length
+      ? rawSets.map((set) => normalizeSet(set, createId, trustExplicitCompletion))
+      : [normalizeSet({}, createId, trustExplicitCompletion)],
   };
 }
 
@@ -145,6 +166,8 @@ export function recoverWorkoutDraft(
   if (!isRecord(value)) {
     return unreadableDraft();
   }
+  const isCurrentSchema = value.schemaVersion === WORKOUT_DRAFT_SCHEMA_VERSION;
+  const trustsExplicitCompletion = typeof value.schemaVersion === "number" && value.schemaVersion >= 4;
   const rawExerciseLogs = Array.isArray(value.exerciseLogs) ? value.exerciseLogs : [];
   if (
     rawExerciseLogs.length > WORKOUT_DRAFT_MAX_EXERCISES ||
@@ -153,7 +176,7 @@ export function recoverWorkoutDraft(
     return oversizedDraft();
   }
   const exerciseLogs = rawExerciseLogs
-    .map((exercise) => normalizeExercise(exercise, options.createId))
+    .map((exercise) => normalizeExercise(exercise, options.createId, trustsExplicitCompletion))
     .filter((exercise): exercise is WorkoutExerciseLogDraft => Boolean(exercise));
   if (!exerciseLogs.length) {
     return { draft: null, message: "The saved workout draft did not contain a recoverable exercise.", migrated: false };
@@ -164,6 +187,10 @@ export function recoverWorkoutDraft(
   const migrated = value.schemaVersion !== WORKOUT_DRAFT_SCHEMA_VERSION;
   const selectedRoutineId = text(value.selectedRoutineId);
   const recoveredDraftId = text(value.draftId);
+  const appliedImportOperationIds = textList(value.appliedImportOperationIds)
+    .map((operationId) => operationId.trim().slice(0, 256))
+    .filter(Boolean)
+    .slice(-20);
   return {
     draft: {
       schemaVersion: WORKOUT_DRAFT_SCHEMA_VERSION,
@@ -177,11 +204,18 @@ export function recoverWorkoutDraft(
       elapsedSeconds: finiteNonNegative(value.elapsedSeconds),
       durationMinutes: text(value.durationMinutes),
       sessionNotes: text(value.sessionNotes),
+      completionReviewRequired: trustsExplicitCompletion ? value.completionReviewRequired === true : true,
       activeExerciseId: text(value.activeExerciseId) || exerciseLogs[0]?.localId,
       exerciseLogs,
+      appliedImportOperationIds,
+      planningContext: normalizeWorkoutPlanningContext(value.planningContext),
       updatedAt: text(value.updatedAt) || options.nowIso,
     },
-    message: migrated ? "An older workout draft was upgraded and restored on this device." : "Workout draft restored on this device.",
+    message: migrated
+      ? trustsExplicitCompletion
+        ? "Workout draft updated safely. Your completed-set choices were preserved."
+        : "An older workout draft was restored. Review which sets you performed before saving."
+      : "Workout draft restored on this device.",
     migrated,
   };
 }
@@ -212,11 +246,16 @@ export function resolveWorkoutDurationMinutes(manualDuration: string, elapsedSec
   return automaticMinutes <= WORKOUT_MAX_AUTOMATIC_DURATION_MINUTES ? automaticMinutes : null;
 }
 
-export function hasWorkoutDraftWork(draft: Pick<StoredWorkoutDraft, "selectedRoutineId" | "durationMinutes" | "sessionNotes" | "exerciseLogs">) {
+export function hasWorkoutDraftWork(
+  draft: Pick<StoredWorkoutDraft, "selectedRoutineId" | "durationMinutes" | "sessionNotes" | "exerciseLogs"> &
+    { planningContext?: WorkoutPlanningContext }
+) {
+  const planningContext = draft.planningContext;
   return Boolean(
     draft.selectedRoutineId || draft.durationMinutes || draft.sessionNotes.trim() ||
+      planningContext?.focusGroups.length || planningContext?.availableEquipment.length || planningContext?.plannedDurationMinutes ||
       draft.exerciseLogs.some((exercise) =>
-        exercise.exerciseName.trim() || exercise.notes.trim() ||
+        exercise.exerciseName.trim() || exercise.notes.trim() || Object.values(exercise.setup || {}).some((entry) => Boolean(entry?.trim())) ||
         exercise.sets.some((set) => !set.deleted && (
           set.weight > 0 ||
           set.notes.trim() ||

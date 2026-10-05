@@ -5,6 +5,16 @@ import {
   defaultWorkoutExercises,
   useEasyWorkout,
 } from "@/features/easyworkout/EasyWorkoutContext";
+import type { WorkoutDraftExerciseType } from "@/features/easyworkout/domain/workoutDraftLifecycle";
+import {
+  WORKOUT_EQUIPMENT_KINDS,
+  WORKOUT_FOCUS_GROUPS,
+  WORKOUT_MOVEMENT_PATTERNS,
+  normalizeWorkoutExercisePlanningMetadata,
+  type WorkoutEquipmentKind,
+  type WorkoutFocusGroup,
+  type WorkoutMovementPattern,
+} from "@/features/easyworkout/domain/workoutPlanning";
 import type { RoutineExerciseDraft } from "@/lib/firestore/workoutRoutines";
 
 const emptyRoutineExercise = (): RoutineExerciseDraft => ({
@@ -17,6 +27,79 @@ const emptyRoutineExercise = (): RoutineExerciseDraft => ({
   restSeconds: 90,
   notes: "",
 });
+
+type ExercisePlanningFieldsProps = {
+  exerciseType: WorkoutDraftExerciseType;
+  focusGroups: WorkoutFocusGroup[];
+  movementPattern: WorkoutMovementPattern | "";
+  requiredEquipment: WorkoutEquipmentKind[];
+  onExerciseTypeChange: (value: WorkoutDraftExerciseType) => void;
+  onFocusGroupsChange: (value: WorkoutFocusGroup[]) => void;
+  onMovementPatternChange: (value: WorkoutMovementPattern | "") => void;
+  onRequiredEquipmentChange: (value: WorkoutEquipmentKind[]) => void;
+};
+
+function ExercisePlanningFields(props: ExercisePlanningFieldsProps) {
+  return (
+    <details className="field-stack-wide workout-catalog-planning">
+      <summary>Planning classification</summary>
+      <p className="helper-copy">Optional. Suggestions use this only when focus, movement, and equipment are all classified.</p>
+      <label className="field-stack">
+        <span>Exercise type</span>
+        <select value={props.exerciseType} onChange={(event) => props.onExerciseTypeChange(event.target.value as WorkoutDraftExerciseType)}>
+          <option value="weighted">Weighted</option>
+          <option value="bodyweight">Bodyweight</option>
+          <option value="assisted">Assisted</option>
+          <option value="duration">Duration (not suggested)</option>
+          <option value="distance">Distance (not suggested)</option>
+        </select>
+      </label>
+      <fieldset>
+        <legend>Planning focus</legend>
+        <div className="workout-planning-choices">
+          {WORKOUT_FOCUS_GROUPS.map((focusGroup) => (
+            <label key={focusGroup} className="workout-planning-choice">
+              <input
+                type="checkbox"
+                checked={props.focusGroups.includes(focusGroup)}
+                onChange={(event) => props.onFocusGroupsChange(event.target.checked
+                  ? [...props.focusGroups, focusGroup].slice(0, 4)
+                  : props.focusGroups.filter((entry) => entry !== focusGroup))}
+              />
+              <span>{focusGroup}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <label className="field-stack">
+        <span>Movement pattern</span>
+        <select value={props.movementPattern} onChange={(event) => props.onMovementPatternChange(event.target.value as WorkoutMovementPattern | "")}>
+          <option value="">Unclassified</option>
+          {WORKOUT_MOVEMENT_PATTERNS.map((pattern) => (
+            <option key={pattern} value={pattern}>{pattern.replace(/-/g, " ")}</option>
+          ))}
+        </select>
+      </label>
+      <fieldset>
+        <legend>Required equipment</legend>
+        <div className="workout-planning-choices">
+          {WORKOUT_EQUIPMENT_KINDS.map((equipment) => (
+            <label key={equipment} className="workout-planning-choice">
+              <input
+                type="checkbox"
+                checked={props.requiredEquipment.includes(equipment)}
+                onChange={(event) => props.onRequiredEquipmentChange(event.target.checked
+                  ? [...props.requiredEquipment, equipment]
+                  : props.requiredEquipment.filter((entry) => entry !== equipment))}
+              />
+              <span>{equipment.replace(/-/g, " ")}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    </details>
+  );
+}
 
 export function EasyWorkoutRoutinesPage() {
   const {
@@ -33,10 +116,18 @@ export function EasyWorkoutRoutinesPage() {
   const [exerciseName, setExerciseName] = useState("");
   const [exerciseGroup, setExerciseGroup] = useState("");
   const [exerciseNotes, setExerciseNotes] = useState("");
+  const [exerciseType, setExerciseType] = useState<WorkoutDraftExerciseType>("weighted");
+  const [exerciseFocusGroups, setExerciseFocusGroups] = useState<WorkoutFocusGroup[]>([]);
+  const [exerciseMovementPattern, setExerciseMovementPattern] = useState<WorkoutMovementPattern | "">("");
+  const [exerciseRequiredEquipment, setExerciseRequiredEquipment] = useState<WorkoutEquipmentKind[]>([]);
   const [editingExerciseId, setEditingExerciseId] = useState("");
   const [editingExerciseName, setEditingExerciseName] = useState("");
   const [editingExerciseGroup, setEditingExerciseGroup] = useState("");
   const [editingExerciseNotes, setEditingExerciseNotes] = useState("");
+  const [editingExerciseType, setEditingExerciseType] = useState<WorkoutDraftExerciseType>("weighted");
+  const [editingExerciseFocusGroups, setEditingExerciseFocusGroups] = useState<WorkoutFocusGroup[]>([]);
+  const [editingExerciseMovementPattern, setEditingExerciseMovementPattern] = useState<WorkoutMovementPattern | "">("");
+  const [editingExerciseRequiredEquipment, setEditingExerciseRequiredEquipment] = useState<WorkoutEquipmentKind[]>([]);
   const [routineName, setRoutineName] = useState("");
   const [dayLabel, setDayLabel] = useState("");
   const [routineNotes, setRoutineNotes] = useState("");
@@ -86,10 +177,20 @@ export function EasyWorkoutRoutinesPage() {
       name: exerciseName.trim(),
       muscleGroup: exerciseGroup.trim(),
       notes: exerciseNotes.trim(),
+      exerciseType,
+      planningMetadata: normalizeWorkoutExercisePlanningMetadata({
+        focusGroups: exerciseFocusGroups,
+        movementPattern: exerciseMovementPattern,
+        requiredEquipment: exerciseRequiredEquipment,
+      }),
     });
     setExerciseName("");
     setExerciseGroup("");
     setExerciseNotes("");
+    setExerciseType("weighted");
+    setExerciseFocusGroups([]);
+    setExerciseMovementPattern("");
+    setExerciseRequiredEquipment([]);
   }
 
   function startEditingExercise(exerciseId: string) {
@@ -99,6 +200,10 @@ export function EasyWorkoutRoutinesPage() {
     setEditingExerciseName(exercise.name);
     setEditingExerciseGroup(exercise.muscleGroup);
     setEditingExerciseNotes(exercise.notes);
+    setEditingExerciseType(exercise.exerciseType || "weighted");
+    setEditingExerciseFocusGroups(exercise.planningMetadata?.focusGroups || []);
+    setEditingExerciseMovementPattern(exercise.planningMetadata?.movementPattern || "");
+    setEditingExerciseRequiredEquipment(exercise.planningMetadata?.requiredEquipment || []);
   }
 
   async function handleSaveExercise(event: React.FormEvent<HTMLFormElement>) {
@@ -108,11 +213,21 @@ export function EasyWorkoutRoutinesPage() {
       name: editingExerciseName.trim(),
       muscleGroup: editingExerciseGroup.trim(),
       notes: editingExerciseNotes.trim(),
+      exerciseType: editingExerciseType,
+      planningMetadata: normalizeWorkoutExercisePlanningMetadata({
+        focusGroups: editingExerciseFocusGroups,
+        movementPattern: editingExerciseMovementPattern,
+        requiredEquipment: editingExerciseRequiredEquipment,
+      }),
     });
     setEditingExerciseId("");
     setEditingExerciseName("");
     setEditingExerciseGroup("");
     setEditingExerciseNotes("");
+    setEditingExerciseType("weighted");
+    setEditingExerciseFocusGroups([]);
+    setEditingExerciseMovementPattern("");
+    setEditingExerciseRequiredEquipment([]);
   }
 
   async function handleAddRoutine(event: React.FormEvent<HTMLFormElement>) {
@@ -181,6 +296,16 @@ export function EasyWorkoutRoutinesPage() {
                 <span>Notes</span>
                 <input value={exerciseNotes} onChange={(event) => setExerciseNotes(event.target.value)} placeholder="Machine setup, cue, range" />
               </label>
+              <ExercisePlanningFields
+                exerciseType={exerciseType}
+                focusGroups={exerciseFocusGroups}
+                movementPattern={exerciseMovementPattern}
+                requiredEquipment={exerciseRequiredEquipment}
+                onExerciseTypeChange={setExerciseType}
+                onFocusGroupsChange={setExerciseFocusGroups}
+                onMovementPatternChange={setExerciseMovementPattern}
+                onRequiredEquipmentChange={setExerciseRequiredEquipment}
+              />
             </div>
             <button type="submit" className="primary-button">Save exercise</button>
           </form>
@@ -426,6 +551,16 @@ export function EasyWorkoutRoutinesPage() {
                         <span>Notes</span>
                         <input value={editingExerciseNotes} onChange={(event) => setEditingExerciseNotes(event.target.value)} />
                       </label>
+                      <ExercisePlanningFields
+                        exerciseType={editingExerciseType}
+                        focusGroups={editingExerciseFocusGroups}
+                        movementPattern={editingExerciseMovementPattern}
+                        requiredEquipment={editingExerciseRequiredEquipment}
+                        onExerciseTypeChange={setEditingExerciseType}
+                        onFocusGroupsChange={setEditingExerciseFocusGroups}
+                        onMovementPatternChange={setEditingExerciseMovementPattern}
+                        onRequiredEquipmentChange={setEditingExerciseRequiredEquipment}
+                      />
                     </div>
                     <div className="task-composer-actions">
                       <button type="button" className="ghost-button" onClick={() => setEditingExerciseId("")}>
