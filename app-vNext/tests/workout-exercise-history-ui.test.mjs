@@ -42,3 +42,13 @@ test("panel and detail page share the recent-session table and keep demo-isolate
   assert.match(table, /table-scroll/);
   assert.doesNotMatch(table, /average|score/i);
 });
+
+test("panel search never falls back to the first exercise and announces no-match politely", async () => {
+  const panel = await read("features/easyworkout/components/WorkoutInsightsPanel.tsx");
+  assert.match(panel, /selectExerciseSummary/);
+  assert.doesNotMatch(panel, /\|\|\s*stats\.exerciseSummaries\[0\]/);
+  assert.match(panel, /data-search-state="no-match"/);
+  assert.match(panel, /id="workout-exercise-search-status"/);
+  assert.match(panel, /aria-live="polite"/);
+  assert.match(panel, /aria-describedby="workout-exercise-search-status"/);
+});

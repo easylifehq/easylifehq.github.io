@@ -29,6 +29,7 @@ import { subscribeToWorkoutExercises } from "@/lib/firestore/workoutExercises";
 import { subscribeToWorkoutRoutines } from "@/lib/firestore/workoutRoutines";
 import { subscribeToWorkoutSessions } from "@/lib/firestore/workoutSessions";
 import { subscribeToWorkoutGoals } from "@/lib/firestore/workoutGoals";
+import { subscribeToLegacyImportBatches, subscribeToLegacyImportObservations, subscribeToLegacyImportReceipts, subscribeToLegacyImportRollbacks } from "@/lib/firestore/legacyWorkoutImports";
 import { useMobileRuntime } from "@/lib/mobile/useMobileRuntime";
 import {
   getNotificationPermission,
@@ -659,6 +660,10 @@ export function SettingsPage() {
       subscribeToWorkoutRoutines(user.uid, setCollection("workoutRoutines"), handleError("workoutRoutines")),
       subscribeToWorkoutSessions(user.uid, setCollection("workoutSessions"), handleError("workoutSessions")),
       subscribeToWorkoutGoals(user.uid, setCollection("workoutGoals"), handleError("workoutGoals")),
+      subscribeToLegacyImportBatches(user.uid, setCollection("legacyWorkoutImportBatches"), handleError("legacyWorkoutImportBatches")),
+      subscribeToLegacyImportObservations(user.uid, setCollection("legacyWorkoutImportObservations"), handleError("legacyWorkoutImportObservations")),
+      subscribeToLegacyImportReceipts(user.uid, setCollection("legacyWorkoutImportReceipts"), handleError("legacyWorkoutImportReceipts")),
+      subscribeToLegacyImportRollbacks(user.uid, setCollection("legacyWorkoutImportRollbacks"), handleError("legacyWorkoutImportRollbacks")),
       subscribeToProjects(user.uid, setCollection("projects"), handleError("projects")),
       subscribeToProjectSections(user.uid, setCollection("projectSections"), handleError("projectSections")),
       subscribeToProjectTaskLinks(user.uid, setCollection("projectTaskLinks"), handleError("projectTaskLinks")),

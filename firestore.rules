@@ -32,6 +32,151 @@ service cloud.firestore {
           && goal.exerciseName is string && goal.exerciseName.size() > 0 && goal.exerciseName.size() <= 200));
     }
 
+    // ---- Legacy workout import (easyworkout-legacy-observations-v1) -------------------------------
+    // Create-only, owner-only provenance records. Rules cannot iterate list elements, so per-set validation is
+    // enforced by the client and re-verified on readback; rules bound the shape, size, enums and identity.
+    // A durable batch holds at most 450 observations so one client transaction (observations + batch + receipt +
+    // rollback slot = 453 mutations) stays under Firestore's 500-write cap.
+    // Boundary: rules cannot make one getAfter/existsAfter call per observation (20-call transaction budget), so
+    // observation creates make no access calls. The confirmation receipt checks the batch's count, ordinal list
+    // length and its first and last observation; the owner client writes the full deterministic set in one
+    // transaction and readback fails closed on any count, identity or content mismatch.
+    function legacyText(value, max) {
+      return value is string && value.size() > 0 && value.size() <= max && value.trim().size() > 0;
+    }
+
+    function legacyDay(value) {
+      return value is string && value.matches('^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$');
+    }
+
+    function legacyBatchIdShape(value) {
+      return value is string && value.matches('^lwb-[0-9a-f]{32}$');
+    }
+
+    function legacyHash(value) {
+      return value is string && value.matches('^sha256:[0-9a-f]{64}$');
+    }
+
+    function validLegacyTemporal(temporal) {
+      return temporal is map
+        && temporal.keys().hasAll(['precision', 'label'])
+        && legacyText(temporal.label, 160)
+        && ((temporal.precision == 'day'
+          && temporal.keys().hasOnly(['precision', 'label', 'date'])
+          && temporal.keys().hasAll(['date'])
+          && legacyDay(temporal.date))
+        || (temporal.precision == 'week'
+          && temporal.keys().hasOnly(['precision', 'label', 'startDate', 'endDate'])
+          && (!('startDate' in temporal) || legacyDay(temporal.startDate))
+          && (!('endDate' in temporal) || legacyDay(temporal.endDate)))
+        || (temporal.precision == 'month'
+          && temporal.keys().hasOnly(['precision', 'label', 'month'])
+          && temporal.keys().hasAll(['month'])
+          && temporal.month is string && temporal.month.matches('^\\d{4}-(0[1-9]|1[0-2])$'))
+        || (temporal.precision == 'unknown'
+          && temporal.keys().hasOnly(['precision', 'label'])));
+    }
+
+    function validLegacyExercise(exercise) {
+      return exercise is map
+        && exercise.keys().hasAll(['sourceName', 'equipment', 'loadConvention'])
+        && exercise.keys().hasOnly(['sourceName', 'equipment', 'loadConvention', 'reviewedMapping'])
+        && legacyText(exercise.sourceName, 160)
+        && exercise.equipment in ['barbell', 'dumbbell', 'machine', 'cable', 'bodyweight', 'assisted', 'other', 'unknown']
+        && exercise.loadConvention in ['per-hand', 'total', 'machine-stack', 'assistance', 'bodyweight', 'unknown']
+        && (!('reviewedMapping' in exercise)
+          || (exercise.reviewedMapping is map
+            && exercise.reviewedMapping.keys().hasAll(['seriesKey', 'seriesLabel', 'mappingBasis'])
+            && exercise.reviewedMapping.keys().hasOnly(['seriesKey', 'seriesLabel', 'mappingBasis'])
+            && legacyText(exercise.reviewedMapping.seriesKey, 160)
+            && legacyText(exercise.reviewedMapping.seriesLabel, 160)
+            && exercise.reviewedMapping.mappingBasis == 'owner-reviewed-alias-manifest'));
+    }
+
+    function validLegacyBatch(userId, batchId) {
+      let batch = request.resource.data;
+      return batch.keys().hasAll(['ownerId', 'schemaVersion', 'batchId', 'documentSchemaVersion', 'sourceKey', 'sourceLabel', 'sourceKind', 'unitPolicy', 'interpretationPolicyVersion', 'contentHash', 'observationCount', 'sourceOrdinals'])
+        && batch.keys().hasOnly(['ownerId', 'schemaVersion', 'batchId', 'documentSchemaVersion', 'sourceKey', 'sourceLabel', 'sourceKind', 'unitPolicy', 'interpretationPolicyVersion', 'contentHash', 'observationCount', 'sourceOrdinals'])
+        && batch.ownerId == userId
+        && batch.schemaVersion == 'easyworkout-legacy-import-batch-v1'
+        && batch.batchId == batchId && legacyBatchIdShape(batchId)
+        && batch.documentSchemaVersion == 'easyworkout-legacy-observations-v1'
+        && legacyText(batch.sourceKey, 160)
+        && legacyText(batch.sourceLabel, 160)
+        && batch.sourceKind in ['handwritten-transcription', 'generated-plan-export', 'other']
+        && batch.unitPolicy == 'lb-owner-confirmed'
+        && batch.interpretationPolicyVersion == 'legacy-evidence-v1'
+        && legacyHash(batch.contentHash)
+        && batch.observationCount is int && batch.observationCount >= 0 && batch.observationCount <= 450
+        && batch.sourceOrdinals is list && batch.sourceOrdinals.size() == batch.observationCount
+        && (batch.observationCount == 0
+          || (batch.sourceOrdinals[0] is int && batch.sourceOrdinals[0] >= 1
+            && batch.sourceOrdinals[batch.observationCount - 1] is int
+            && batch.sourceOrdinals[batch.observationCount - 1] <= 9007199254740991
+            && batch.sourceOrdinals[batch.observationCount - 1] >= batch.sourceOrdinals[0] + batch.observationCount - 1));
+    }
+
+    function validLegacyObservation(userId, observationId) {
+      let observation = request.resource.data;
+      return observation.keys().hasAll(['ownerId', 'schemaVersion', 'batchId', 'sourceOrdinal', 'sourceLocator', 'sourceHash', 'temporal', 'exercise', 'sets'])
+        && observation.keys().hasOnly(['ownerId', 'schemaVersion', 'batchId', 'sourceOrdinal', 'sourceLocator', 'sourceHash', 'sourceText', 'temporal', 'exercise', 'sets'])
+        && observation.ownerId == userId
+        && observation.schemaVersion == 'easyworkout-legacy-import-observation-v1'
+        && legacyBatchIdShape(observation.batchId)
+        && observation.sourceOrdinal is int && observation.sourceOrdinal >= 1
+        && observationId.matches('^lwb-[0-9a-f]{32}-o[1-9][0-9]*$')
+        && observationId.split('-o').size() == 2
+        && observationId.split('-o')[0] == observation.batchId
+        && int(observationId.split('-o')[1]) == observation.sourceOrdinal
+        && legacyText(observation.sourceLocator, 160)
+        && legacyHash(observation.sourceHash)
+        && (!('sourceText' in observation) || (observation.sourceText is string && observation.sourceText.size() <= 500))
+        && validLegacyTemporal(observation.temporal)
+        && validLegacyExercise(observation.exercise)
+        && observation.sets is list && observation.sets.size() <= 50;
+    }
+
+    function legacyObservationPath(userId, batchId, ordinal) {
+      return /databases/$(database)/documents/users/$(userId)/legacyWorkoutImportObservations/$(batchId + '-o' + string(ordinal));
+    }
+
+    function validLegacyConfirmation(userId, batchId) {
+      let receipt = request.resource.data;
+      let batchPath = /databases/$(database)/documents/users/$(userId)/legacyWorkoutImportBatches/$(batchId);
+      let batchAfter = getAfter(batchPath).data;
+      return receipt.keys().hasAll(['ownerId', 'schemaVersion', 'batchId', 'contentHash', 'observationCount'])
+        && receipt.keys().hasOnly(['ownerId', 'schemaVersion', 'batchId', 'contentHash', 'observationCount'])
+        && receipt.ownerId == userId
+        && receipt.schemaVersion == 'easyworkout-legacy-import-confirmation-v1'
+        && receipt.batchId == batchId && legacyBatchIdShape(batchId)
+        && legacyHash(receipt.contentHash)
+        && receipt.observationCount is int && receipt.observationCount >= 0 && receipt.observationCount <= 450
+        && existsAfter(batchPath)
+        && batchAfter.contentHash == receipt.contentHash
+        && batchAfter.observationCount == receipt.observationCount
+        && batchAfter.sourceOrdinals.size() == receipt.observationCount
+        && batchAfter.ownerId == userId
+        && (receipt.observationCount == 0
+          || (existsAfter(legacyObservationPath(userId, batchId, batchAfter.sourceOrdinals[0]))
+            && existsAfter(legacyObservationPath(userId, batchId, batchAfter.sourceOrdinals[receipt.observationCount - 1]))));
+    }
+
+    function validLegacyRollback(userId, batchId) {
+      let receipt = request.resource.data;
+      let confirmationPath = /databases/$(database)/documents/users/$(userId)/legacyWorkoutImportReceipts/$(batchId);
+      return receipt.keys().hasAll(['ownerId', 'schemaVersion', 'batchId', 'contentHash', 'observationCount', 'reason'])
+        && receipt.keys().hasOnly(['ownerId', 'schemaVersion', 'batchId', 'contentHash', 'observationCount', 'reason'])
+        && receipt.ownerId == userId
+        && receipt.schemaVersion == 'easyworkout-legacy-import-rollback-v1'
+        && receipt.batchId == batchId && legacyBatchIdShape(batchId)
+        && legacyHash(receipt.contentHash)
+        && receipt.observationCount is int && receipt.observationCount >= 0 && receipt.observationCount <= 450
+        && receipt.reason == 'owner-soft-rollback'
+        && exists(confirmationPath)
+        && get(confirmationPath).data.contentHash == receipt.contentHash
+        && get(confirmationPath).data.observationCount == receipt.observationCount;
+    }
+
     function isSupportedUserCollection(collectionId) {
       return collectionId in ['tasks', 'calendarEvents', 'calendarTaskBlocks', 'categories', 'projects', 'projectSections', 'projectTaskLinks', 'applications', 'generatedDrafts', 'notes', 'noteFolders', 'contacts', 'workoutExercises', 'workoutRoutines', 'workoutSessions', 'appPreferences'];
     }
@@ -74,6 +219,30 @@ service cloud.firestore {
           && resource.data.get('clientDraftId', null) == request.resource.data.get('clientDraftId', null)
           && resource.data.get('createdAt', null) == request.resource.data.get('createdAt', null);
         allow delete: if isOwner(userId);
+      }
+
+      match /legacyWorkoutImportBatches/{batchId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validLegacyBatch(userId, batchId);
+        allow update, delete: if false;
+      }
+
+      match /legacyWorkoutImportObservations/{observationId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validLegacyObservation(userId, observationId);
+        allow update, delete: if false;
+      }
+
+      match /legacyWorkoutImportReceipts/{batchId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validLegacyConfirmation(userId, batchId);
+        allow update, delete: if false;
+      }
+
+      match /legacyWorkoutImportRollbacks/{batchId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validLegacyRollback(userId, batchId);
+        allow update, delete: if false;
       }
 
       match /{collectionId}/{documentId} {

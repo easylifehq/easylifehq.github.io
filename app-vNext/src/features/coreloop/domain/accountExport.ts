@@ -12,6 +12,10 @@ export type AccountDataCollections = {
   workoutRoutines: unknown[];
   workoutSessions: unknown[];
   workoutGoals: unknown[];
+  legacyWorkoutImportBatches: unknown[];
+  legacyWorkoutImportObservations: unknown[];
+  legacyWorkoutImportReceipts: unknown[];
+  legacyWorkoutImportRollbacks: unknown[];
   projects: unknown[];
   projectSections: unknown[];
   projectTaskLinks: unknown[];
@@ -22,8 +26,9 @@ export type AccountDataCollections = {
 
 export const emptyAccountDataCollections: AccountDataCollections = {
   tasks: [], notes: [], noteFolders: [], calendarEvents: [], calendarTaskBlocks: [], calendarCategories: [],
-  workoutExercises: [], workoutRoutines: [], workoutSessions: [], workoutGoals: [], projects: [], projectSections: [],
-  projectTaskLinks: [], pipelineApplications: [], pipelineDrafts: [], contacts: [],
+  workoutExercises: [], workoutRoutines: [], workoutSessions: [], workoutGoals: [],
+  legacyWorkoutImportBatches: [], legacyWorkoutImportObservations: [], legacyWorkoutImportReceipts: [], legacyWorkoutImportRollbacks: [],
+  projects: [], projectSections: [], projectTaskLinks: [], pipelineApplications: [], pipelineDrafts: [], contacts: [],
 };
 
 export const accountExportGroups: Array<{ key: keyof AccountDataCollections; label: string; app: string; csv: boolean }> = [
@@ -37,6 +42,10 @@ export const accountExportGroups: Array<{ key: keyof AccountDataCollections; lab
   { key: "workoutRoutines", label: "Routines", app: "Workout", csv: false },
   { key: "workoutSessions", label: "Sessions", app: "Workout", csv: true },
   { key: "workoutGoals", label: "Goals", app: "Workout", csv: true },
+  { key: "legacyWorkoutImportBatches", label: "Legacy import batches", app: "Workout", csv: false },
+  { key: "legacyWorkoutImportObservations", label: "Legacy import observations", app: "Workout", csv: false },
+  { key: "legacyWorkoutImportReceipts", label: "Legacy import receipts", app: "Workout", csv: false },
+  { key: "legacyWorkoutImportRollbacks", label: "Legacy import rollbacks", app: "Workout", csv: false },
   { key: "projects", label: "Projects", app: "Projects", csv: true },
   { key: "projectSections", label: "Sections", app: "Projects", csv: false },
   { key: "projectTaskLinks", label: "Task links", app: "Projects", csv: false },

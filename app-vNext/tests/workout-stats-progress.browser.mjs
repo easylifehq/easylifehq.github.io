@@ -145,6 +145,12 @@ try {
 
 
   const route = "/app/easystatistics?tab=workout&demo=1";
+  const localPreviewJson = JSON.stringify({
+    schemaVersion: "easyworkout-legacy-observations-v1",
+    batch: { sourceKey: "synthetic-local-preview", sourceLabel: "Synthetic local file", sourceKind: "other", unitPolicy: "lb-owner-confirmed", interpretationPolicyVersion: "legacy-evidence-v1" },
+    observations: [{ sourceOrdinal: 1, sourceLocator: "synthetic-week-tab-1", sourceHash: `sha256:${"a".repeat(64)}`, temporal: { precision: "week", label: "Original week tab label" }, exercise: { sourceName: "Synthetic Pull-up", equipment: "bodyweight", loadConvention: "bodyweight" }, sets: [{ reps: 9, loadLb: null, evidence: "performed", evidenceBasis: "later-handwritten-policy" }] }],
+    syntheticExtra: true,
+  });
   const pick = async (name) => {
     await ev(`(() => { const i = document.querySelector(".workout-exercise-search input"); window.__acc.setValue(i, ${JSON.stringify(name)}); return true; })()`);
     await sleep(250);
@@ -153,6 +159,28 @@ try {
 
   await open(route);
   await waitFor(() => ev(`Boolean(document.querySelector(".workout-exercise-search input"))`), "workout stats tab");
+
+  await step("390px: legacy progress is readable, caveated, noninteractive and contained", async () => {
+    const legacy = await waitFor(() => ev(`(() => { const p = document.querySelector('[data-testid="legacy-progress"]'); const surface = p?.closest("section") || p; return p ? { text: surface.innerText, tables: p.querySelectorAll("table").length, controls: p.querySelectorAll("button,input,select,textarea").length } : null; })()`), "legacy progress panel");
+    assert.equal(await ev(`window.innerWidth`), 390);
+    assert.match(legacy.text, /Legacy progress/i);
+    assert.match(legacy.text, /Recorded load/i);
+    assert.match(legacy.text, /Equipment or load convention is unknown/i);
+    assert.ok(legacy.tables > 0);
+    assert.equal(legacy.controls, 0);
+    assert.equal(await A(`overflow()`), false);
+  });
+
+  await step("390px: local JSON stays in-browser and shows parser errors, warnings and original labels", async () => {
+    await ev(`(() => { const input = document.querySelector("#legacy-workout-json"); const transfer = new DataTransfer(); transfer.items.add(new File(["{"], "invalid.json", { type: "application/json" })); input.files = transfer.files; input.dispatchEvent(new Event("change", { bubbles: true })); return true; })()`);
+    await waitFor(() => ev(`document.querySelector(".legacy-import-errors")?.innerText.includes("json-syntax")`), "local JSON syntax error");
+    await ev(`(() => { const input = document.querySelector("#legacy-workout-json"); const transfer = new DataTransfer(); transfer.items.add(new File([${JSON.stringify(localPreviewJson)}], "synthetic-local.json", { type: "application/json" })); input.files = transfer.files; input.dispatchEvent(new Event("change", { bubbles: true })); return true; })()`);
+    await waitFor(() => ev(`document.body.innerText.includes("Ready: Synthetic local file") && document.body.innerText.includes("Original week tab label")`), "local valid preview");
+    assert.match(await ev(`document.querySelector(".legacy-import-warnings").innerText`), /syntheticExtra/);
+    assert.match(await ev(`document.querySelector('[data-testid="legacy-progress"]').innerText`), /Synthetic Pull-up/);
+    assert.match(await ev(`document.querySelector('[data-testid="legacy-progress"]').innerText`), /Not recorded/);
+    assert.equal(await A(`overflow()`), false);
+  });
 
   await step("390px: weighted recent sessions table with source links, demo isolation, no overflow", async () => {
     await pick("Bench Press");
@@ -196,6 +224,58 @@ try {
     await pick("Bench Press");
     await waitFor(table, "desktop table");
     assert.equal(await ev(`window.innerWidth`), 1280);
+    assert.ok(await ev(`Boolean(document.querySelector('[data-testid="legacy-progress"]'))`));
+    assert.match(await ev(`document.querySelector('[data-testid="legacy-progress"]').closest("section").innerText`), /Legacy progress/i);
+    assert.equal(await A(`overflow()`), false);
+  });
+
+  const searchNoMatchAndBlankJourney = async (label) => {
+    await pick("Bench Press");
+    const firstLabel = await waitFor(() => ev(`document.querySelector(".workout-recent-table")?.getAttribute("aria-label") || document.querySelector(".workout-recent-sessions h3, .workout-recent-sessions h4")?.textContent || null`), `${label} baseline table label`);
+
+    await pick("zzz-no-such-exercise");
+    await waitFor(() => ev(`Boolean(document.querySelector('[data-search-state="no-match"]'))`), `${label} no-match card`);
+    for (const selector of [".workout-exercise-detail", ".workout-recent-sessions", ".workout-recent-table"]) {
+      assert.equal(await ev(`Boolean(document.querySelector(${JSON.stringify(selector)}))`), false, `${label} still renders ${selector}`);
+    }
+    const body = await A(`text()`);
+    assert.ok(!body.includes("Open full exercise detail"), "stale detail link");
+    assert.ok(!/estimated 1RM history/i.test(body), "stale 1RM history");
+    assert.ok(!body.includes("Recent saved sessions"), "stale recent sessions heading");
+    assert.ok(!body.includes(firstLabel), `stale previous exercise ${firstLabel}`);
+    assert.match(await ev(`document.querySelector('[data-search-state="no-match"]').textContent`), /zzz-no-such-exercise/);
+    assert.match(await ev(`document.querySelector("#workout-exercise-search-status")?.textContent || ""`), /No exercise matches/);
+    assert.equal(await ev(`document.querySelector(".workout-exercise-search input").getAttribute("aria-describedby")`), "workout-exercise-search-status");
+
+    for (const blank of ["", "   "]) {
+      await pick(blank);
+      await waitFor(table, `${label} table after blank ${JSON.stringify(blank)}`);
+      assert.equal(await ev(`Boolean(document.querySelector('[data-search-state="no-match"]'))`), false);
+      assert.equal((await ev(`document.querySelector("#workout-exercise-search-status")?.textContent || ""`)).trim(), "");
+    }
+  };
+
+  await send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
+  await open(route);
+  await waitFor(() => ev(`Boolean(document.querySelector(".workout-exercise-search input"))`), "stats 390 for search truth");
+
+  await step("390px: unmatched search shows no stale exercise, announces politely, blank restores first exercise", async () => {
+    await searchNoMatchAndBlankJourney("390px");
+    await pick("zzz-no-such-exercise");
+    await waitFor(() => ev(`Boolean(document.querySelector('[data-search-state="no-match"]'))`), "390 no-match for overflow");
+    assert.equal(await A(`overflow()`), false);
+  });
+
+  await step("390px: lowercase search selects duration exercise", async () => {
+    await pick("plank");
+    await waitFor(() => ev(`document.querySelector(".workout-recent-sessions")?.dataset.historyKind === "duration"`), "plank duration history");
+  });
+
+  await step("desktop 1280x800: unmatched search shows no stale exercise, blank restores first exercise", async () => {
+    await send("Emulation.setDeviceMetricsOverride", { width: 1280, height: 800, deviceScaleFactor: 1, mobile: false });
+    await open(route);
+    await waitFor(() => ev(`Boolean(document.querySelector(".workout-exercise-search input"))`), "stats desktop for search truth");
+    await searchNoMatchAndBlankJourney("desktop");
     assert.equal(await A(`overflow()`), false);
   });
 

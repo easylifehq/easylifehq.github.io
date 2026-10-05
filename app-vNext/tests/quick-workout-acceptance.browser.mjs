@@ -308,7 +308,9 @@ try {
     await open("/app/easyworkout?demo=1");
     await sleep(1200);
     const dashboard = await A(`text()`);
-    assert.match(dashboard, /Bench Press 3 × 5 Previous: [^S]*Source 2026-10-03/, "saved Bench sets feed the guided plan");
+    assert.ok(new RegExp(`Bench Press 3 × 5 Previous: [^S]*Source ${state.saved.performedOn}`).test(dashboard), "saved Bench sets feed the guided plan");
+    const benchSourceHref = await ev(`(() => { const a = [...document.querySelectorAll("a")].find((link) => link.textContent.trim() === ${JSON.stringify(`Source ${state.saved.performedOn}`)}); return a ? a.getAttribute("href") : null; })()`);
+    assert.equal(benchSourceHref, `/app/easyworkout/session/${encodeURIComponent(state.saved.id)}?demo=1`, "Bench guidance source links to the just-saved session");
     assert.match(dashboard, /Seated Row 3 × 6-10 Previous: 137\.5 lb × 8[^S]*Source 2026-07-26/, "never-Done copied Seated Row sets did not become history");
     await open("/app/easyworkout/log?demo=1");
     await sleep(800);
