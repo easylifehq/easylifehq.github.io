@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { deriveRoutineComparisons, deriveWorkoutStatistics, ROUTINE_COMPARISON_FORMULA_VERSION, type AnalyticsSession, type PeriodMetric } from "@/features/easyworkout/domain/workoutStatistics";
+import { selectExerciseSummary } from "../domain/exerciseSelection";
 import { ExerciseRecentSessions } from "./ExerciseRecentSessions";
 import { WorkoutGoalsPanel } from "./WorkoutGoalsPanel";
 import type { WorkoutGoal, WorkoutGoalDraft, WorkoutGoalStatus } from "../domain/workoutGoals";
@@ -44,9 +45,8 @@ export function WorkoutInsightsPanel({ sessions, routines, exercises, goals, onC
     () => deriveWorkoutStatistics(sessions, { nowDateKey: localDateKey(), periodDays, displayUnit: settings.easyWorkout.weightUnit }),
     [periodDays, sessions, settings.easyWorkout.weightUnit]
   );
-  const selectedExercise = stats.exerciseSummaries.find((summary) =>
-    summary.exerciseName.toLowerCase().includes(exerciseQuery.trim().toLowerCase())
-  ) || stats.exerciseSummaries[0];
+  const selection = selectExerciseSummary(stats.exerciseSummaries, exerciseQuery);
+  const selectedExercise = selection.summary;
   const routineComparisons = useMemo(() => deriveRoutineComparisons(sessions, { nowDateKey: localDateKey(), periodDays, displayUnit: settings.easyWorkout.weightUnit, routineId }), [periodDays, routineId, sessions, settings.easyWorkout.weightUnit]);
   const routineOptions = useMemo(() => {
     const options = new Map(routines.map((routine) => [routine.id, routine.name]));
@@ -126,9 +126,16 @@ export function WorkoutInsightsPanel({ sessions, routines, exercises, goals, onC
       <PageSection eyebrow="Exercise detail" title="Progress by exercise" description="Each exercise is tracked on its own type-appropriate measurements and never combined with other exercises. Estimated 1RM (weighted only) uses Epley for 1–15 reps; 11–15 reps are low confidence.">
         <label className="field-stack workout-exercise-search">
           <span>Search or select exercise</span>
-          <input list="workout-exercise-options" value={exerciseQuery} onChange={(event) => setExerciseQuery(event.target.value)} placeholder={stats.exerciseSummaries[0]?.exerciseName || "Bench Press"} />
+          <input list="workout-exercise-options" value={exerciseQuery} onChange={(event) => setExerciseQuery(event.target.value)} placeholder={stats.exerciseSummaries[0]?.exerciseName || "Bench Press"} aria-describedby="workout-exercise-search-status" />
           <datalist id="workout-exercise-options">{stats.exerciseSummaries.map((exercise) => <option key={exercise.exerciseKey} value={exercise.exerciseName} />)}</datalist>
         </label>
+        <p className="helper-copy" id="workout-exercise-search-status" role="status" aria-live="polite">{selection.status === "no-match" ? `No exercise matches “${selection.query}”. Showing no exercise statistics.` : ""}</p>
+        {selection.status === "no-match" ? (
+          <div className="empty-card-vnext" data-search-state="no-match">
+            <strong>No exercise matches “{selection.query}”</strong>
+            <p>Clear the search or pick an exercise from the list to see its progress.</p>
+          </div>
+        ) : null}
         {selectedExercise ? (
           <div className="workout-exercise-detail">
             <div className="statistics-insight-grid">
@@ -142,7 +149,7 @@ export function WorkoutInsightsPanel({ sessions, routines, exercises, goals, onC
             </div> : null}
             <Link className="button-secondary compact-button" to={`/app/easyworkout/exercise/${encodeURIComponent(selectedExercise.exerciseId || selectedExercise.exerciseName)}${demoOnlySearch}`}>Open full exercise detail</Link>
           </div>
-        ) : <p className="empty-card-vnext">Log another comparable session to unlock exercise detail.</p>}
+        ) : selection.status === "empty" ? <p className="empty-card-vnext">Log another comparable session to unlock exercise detail.</p> : null}
       </PageSection>
     </div>
   );

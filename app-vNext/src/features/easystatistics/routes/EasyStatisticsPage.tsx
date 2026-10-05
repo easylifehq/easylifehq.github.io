@@ -17,6 +17,10 @@ import { deriveWorkoutGoalProgress } from "@/features/easyworkout/domain/workout
 import { WorkoutInsightsPanel } from "@/features/easyworkout/components/WorkoutInsightsPanel";
 import { workoutDemoExercises, workoutDemoRoutines, workoutDemoSessions } from "@/features/easyworkout/demo/workoutDemoFixtures";
 import { workoutGoalDemoFixtures } from "@/features/easyworkout/demo/workoutGoalDemoFixtures";
+import { WorkoutLegacyImportPreview, type LegacyConfirmHandler } from "@/features/easyworkout/components/WorkoutLegacyImportPreview";
+import type { LegacyRollbackHandler, LegacyStoredStatus } from "@/features/easyworkout/components/WorkoutLegacyStoredHistory";
+import { confirmLegacyWorkoutImport, rollbackLegacyWorkoutImport, subscribeToLegacyWorkoutImports, type StoredLegacyImportRecords } from "@/lib/firestore/legacyWorkoutImports";
+import { workoutLegacyDemoDocument } from "@/features/easyworkout/demo/workoutLegacyDemoFixtures";
 import { WeeklyReviewPanel } from "@/features/easystatistics/components/WeeklyReviewPanel";
 import { FocusedReviewQueue } from "@/features/coreloop/components/FocusedReviewQueue";
 import { deriveWeeklyReview } from "@/features/easystatistics/domain/weeklyReview";
@@ -69,6 +73,9 @@ export function EasyStatisticsPage() {
   const [projectLinks, setProjectLinks] = useState<ProjectTaskLinkRecord[]>([]);
   const [notes, setNotes] = useState<NoteRecord[]>([]);
   const [statsError, setStatsError] = useState("");
+  const [legacyStored, setLegacyStored] = useState<StoredLegacyImportRecords | null>(null);
+  const [legacyStatus, setLegacyStatus] = useState<LegacyStoredStatus>("idle");
+  const [legacyError, setLegacyError] = useState("");
   const [activeTab, setActiveTab] = useState<
     "overview" | "week" | "workout" | "list" | "pipeline" | "projects" | "notes"
   >(["week", "workout", "list", "pipeline", "projects", "notes"].includes(searchParams.get("tab") || "")
@@ -128,6 +135,39 @@ export function EasyStatisticsPage() {
       unsubscribeNotes();
     };
   }, [isDemoMode, user]);
+
+  // Stored legacy history is only read while the Workout tab is open, and never in demo or signed-out mode.
+  useEffect(() => {
+    if (!user || isDemoMode || activeTab !== "workout") {
+      setLegacyStored(null);
+      setLegacyStatus("idle");
+      setLegacyError("");
+      return;
+    }
+    setLegacyStatus("loading");
+    setLegacyError("");
+    return subscribeToLegacyWorkoutImports(
+      user.uid,
+      (stored) => {
+        setLegacyStored(stored);
+        setLegacyStatus("ready");
+        setLegacyError("");
+      },
+      (nextError) => {
+        setLegacyStatus("error");
+        setLegacyError(nextError.message);
+      },
+    );
+  }, [activeTab, isDemoMode, user]);
+
+  const handleConfirmLegacyImport: LegacyConfirmHandler = async (document) => {
+    if (isDemoMode || !user) throw new Error("Sign in to save legacy history.");
+    return confirmLegacyWorkoutImport(user.uid, document);
+  };
+  const handleRollbackLegacyImport: LegacyRollbackHandler = async (batchId) => {
+    if (isDemoMode || !user) throw new Error("Sign in to roll back legacy history.");
+    return rollbackLegacyWorkoutImport(user.uid, batchId);
+  };
 
   async function handleCreateGoal(draft: WorkoutGoalDraft) {
     if (isDemoMode) {
@@ -416,6 +456,7 @@ export function EasyStatisticsPage() {
       ) : null}
 
       {activeTab === "workout" ? <WorkoutInsightsPanel sessions={workoutSessions} routines={workoutRoutines} exercises={workoutExercises} goals={workoutGoals} onCreateGoal={handleCreateGoal} onEditGoal={handleEditGoal} onGoalStatus={handleGoalStatus} isLoading={isLoading} error={statsError} /> : null}
+      {activeTab === "workout" ? <WorkoutLegacyImportPreview initialDocument={isDemoMode ? workoutLegacyDemoDocument : undefined} ownerId={isDemoMode ? null : user?.uid ?? null} isDemoMode={isDemoMode} stored={legacyStored} storedStatus={legacyStatus} storedError={legacyError} onConfirmImport={handleConfirmLegacyImport} onRollbackImport={handleRollbackLegacyImport} /> : null}
 
       {/* Retained only as historical markup; the canonical, unit-aware WorkoutInsightsPanel above is the sole rendered workout statistics surface.
         <div className="statistics-tab-panel">
