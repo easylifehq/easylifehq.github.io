@@ -41,7 +41,9 @@ import {
   findSaveBlock,
   addBlankSetIfNeeded,
   focusedStartingExercises,
+  isEmptySetRow,
   isExerciseDone,
+  removeSetAt,
   undoExerciseCompletion,
 } from "@/features/easyworkout/domain/workoutExerciseCompletion";
 import {
@@ -455,14 +457,13 @@ export function EasyWorkoutLogPage() {
 
     setExerciseLogs((current) =>
       current.map((exercise, currentExerciseIndex) =>
-        currentExerciseIndex === exerciseIndex
-          ? {
-              ...exercise,
-              sets: exercise.sets.length === 1
-                ? [emptySet(isFocusedWorkoutMode ? 0 : 8)]
-                : exercise.sets.filter((_, currentSetIndex) => currentSetIndex !== setIndex),
-            }
-          : exercise
+        currentExerciseIndex !== exerciseIndex
+          ? exercise
+          : isFocusedWorkoutMode
+            ? removeSetAt(exercise, setIndex, blankFocusedSet)
+            : exercise.sets.length === 1
+              ? { ...exercise, sets: [emptySet(8)] }
+              : removeSetAt(exercise, setIndex)
       )
     );
   }
@@ -473,6 +474,10 @@ export function EasyWorkoutLogPage() {
     setExerciseLogs((current) =>
       current.map((exercise) => {
         if (exercise.localId !== deletedSetUndo.exerciseLocalId) return exercise;
+        // Deleting a blank focused row already re-added one; restoring it must not stack a second blank.
+        if (isFocusedWorkoutMode && isEmptySetRow(deletedSetUndo.set)) {
+          return addBlankSetIfNeeded(exercise, () => deletedSetUndo.set);
+        }
 
         const restoredSets = [...exercise.sets];
         const insertIndex = Math.min(deletedSetUndo.setIndex, restoredSets.length);

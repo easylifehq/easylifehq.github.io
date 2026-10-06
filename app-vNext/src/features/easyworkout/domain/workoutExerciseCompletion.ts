@@ -107,6 +107,19 @@ export function ensureTrailingBlankSet(
   return { ...exercise, sets: [...exercise.sets, createSet()] };
 }
 
+/**
+ * Removes one row; with createSet, restores the single trailing blank row when the removal leaves
+ * the last live row completed (or no live rows), so deleting the trailing blank never strands the exercise.
+ */
+export function removeSetAt(
+  exercise: WorkoutExerciseLogDraft,
+  setIndex: number,
+  createSet?: () => WorkoutSetDraft
+): WorkoutExerciseLogDraft {
+  const remaining = { ...exercise, sets: exercise.sets.filter((_, index) => index !== setIndex) };
+  return createSet ? ensureTrailingBlankSet(remaining, createSet) : remaining;
+}
+
 export function completeExercise(
   exercise: WorkoutExerciseLogDraft
 ): { ok: true; exercise: WorkoutExerciseLogDraft } | WorkoutCompletionBlock {

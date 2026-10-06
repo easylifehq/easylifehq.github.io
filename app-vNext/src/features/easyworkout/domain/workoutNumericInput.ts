@@ -27,3 +27,6 @@ const formatDecimalValue = (value: number) => (value > 0 ? String(value) : "");
  */
 export const reconcileDecimalText = (text: string, value: number) =>
   toDecimalDraft(sanitizeDecimalInput(text)) === value ? text : formatDecimalValue(value);
+
+/** On blur, in-progress text ("." or "7.") settles to the stored number's display ("" or "7"). */
+export const settleDecimalText = (value: number) => formatDecimalValue(value);

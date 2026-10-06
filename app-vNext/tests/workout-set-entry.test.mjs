@@ -7,13 +7,14 @@ import {
   completeExercise,
   ensureTrailingBlankSet,
   isEmptySetRow,
+  removeSetAt,
   trimTrailingEmptySets,
 } from "../src/features/easyworkout/domain/workoutExerciseCompletion.ts";
 import {
   recoverWorkoutDraftFromStorage,
   serializeWorkoutDraftForStorage,
 } from "../src/features/easyworkout/domain/workoutDraftLifecycle.ts";
-import { reconcileDecimalText, sanitizeDecimalInput, toDecimalDraft } from "../src/features/easyworkout/domain/workoutNumericInput.ts";
+import { reconcileDecimalText, sanitizeDecimalInput, settleDecimalText, toDecimalDraft } from "../src/features/easyworkout/domain/workoutNumericInput.ts";
 import { isValidWorkingSet, weightedSetVolume } from "../src/features/easyworkout/domain/workoutStatistics.ts";
 
 let counter = 0;
@@ -123,6 +124,47 @@ test("new focused exercises start with one blank row and the UI uses the shared 
   assert.match(card, /<DecimalLoadInput/);
   assert.match(card, /aria-invalid=\{invalidFieldId === quickFieldId\(set\.localId, "load"\)/);
   assert.doesNotMatch(card, /weight: toDecimalDraft/);
+});
+
+test("deleting the trailing blank row re-adds exactly one blank row; other deletions never stack blanks", async () => {
+  const blank = () => set();
+  const ex = exercise([set({ reps: 8, weight: 7.5 }), set()]);
+  const afterBlankDelete = removeSetAt(ex, 1, blank);
+  assert.equal(afterBlankDelete.sets.length, 2);
+  assert.equal(afterBlankDelete.sets[0], ex.sets[0]);
+  assert.equal(isEmptySetRow(afterBlankDelete.sets[1]), true);
+  // deleting the re-added blank again still leaves exactly one
+  assert.equal(removeSetAt(afterBlankDelete, 1, blank).sets.length, 2);
+  // deleting a completed interior row keeps the single existing trailing blank
+  const two = exercise([set({ reps: 8, weight: 7.5 }), set({ reps: 6, weight: 10 }), set()]);
+  const interior = removeSetAt(two, 0, blank);
+  assert.equal(interior.sets.length, 2);
+  assert.equal(interior.sets.filter(isEmptySetRow).length, 1);
+  // deleting the only row leaves one blank row
+  const only = removeSetAt(exercise([set()]), 0, blank);
+  assert.equal(only.sets.length, 1);
+  assert.equal(isEmptySetRow(only.sets[0]), true);
+  // without a blank factory (non-focused mode) removal is a plain filter
+  assert.equal(removeSetAt(ex, 1).sets.length, 1);
+  // undoing a blank-row delete cannot stack a second blank
+  assert.equal(addBlankSetIfNeeded(afterBlankDelete, () => ex.sets[1]), afterBlankDelete);
+
+  const page = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
+  assert.match(page, /removeSetAt\(exercise, setIndex, blankFocusedSet\)/);
+});
+
+test("a lone decimal point or trailing dot settles on blur instead of staying visible", async () => {
+  assert.equal(sanitizeDecimalInput("."), ".");
+  assert.equal(toDecimalDraft("."), 0);
+  // while focused "." is kept so "7.5" can be typed via ".5"
+  assert.equal(reconcileDecimalText(".", 0), ".");
+  assert.equal(settleDecimalText(0), "", "a lone '.' settles to an empty field");
+  assert.equal(settleDecimalText(7), "7", "'7.' settles to 7");
+  assert.equal(settleDecimalText(7.5), "7.5");
+  assert.equal(reconcileDecimalText(settleDecimalText(0), 0), "");
+
+  const input = await readFile(new URL("../src/features/easyworkout/components/DecimalLoadInput.tsx", import.meta.url), "utf8");
+  assert.match(input, /onBlur=\{\(event\) => \{\s*setText\(settleDecimalText\(value\)\);\s*onBlur\?\.\(event\);/);
 });
 
 test("manual + Set never stacks a second blank row and new rows are unperformed", () => {
