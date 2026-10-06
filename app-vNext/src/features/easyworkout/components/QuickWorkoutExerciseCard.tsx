@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type MutableRefObject } from "react";
+import { DecimalLoadInput } from "@/features/easyworkout/components/DecimalLoadInput";
 import type { WorkoutExerciseLogDraft, WorkoutSetDraft } from "@/features/easyworkout/domain/workoutDraftLifecycle";
 import {
   sanitizeDecimalInput,
@@ -37,6 +38,8 @@ type QuickWorkoutExerciseCardProps = {
   isDone: boolean;
   weightUnit: "lb" | "kg";
   lastTime: QuickWorkoutLastTime | null;
+  /** DOM id of the field a blocked Done/save needs the user to fix. */
+  invalidFieldId?: string;
   nameInputRef?: MutableRefObject<HTMLInputElement | null>;
   onExerciseNameChange: (value: string) => void;
   onExerciseNotesChange: (value: string) => void;
@@ -67,6 +70,7 @@ export function QuickWorkoutExerciseCard({
   isDone,
   weightUnit,
   lastTime,
+  invalidFieldId,
   nameInputRef,
   onExerciseNameChange,
   onExerciseNotesChange,
@@ -209,6 +213,7 @@ export function QuickWorkoutExerciseCard({
                 enterKeyHint="next"
                 autoComplete="off"
                 aria-label={`${label} set ${setIndex + 1} reps`}
+                aria-invalid={invalidFieldId === quickFieldId(set.localId, "reps") || undefined}
                 value={set.reps || ""}
                 placeholder="8"
                 onFocus={(event) => selectInput(event.currentTarget)}
@@ -224,6 +229,7 @@ export function QuickWorkoutExerciseCard({
                 pattern="[0-9]*"
                 autoComplete="off"
                 aria-label={`${label} set ${setIndex + 1} duration in seconds`}
+                aria-invalid={invalidFieldId === quickFieldId(set.localId, "duration") || undefined}
                 value={set.durationSeconds || ""}
                 placeholder="60"
                 onFocus={(event) => selectInput(event.currentTarget)}
@@ -237,6 +243,7 @@ export function QuickWorkoutExerciseCard({
                 pattern="[0-9]*[.]?[0-9]*"
                 autoComplete="off"
                 aria-label={`${label} set ${setIndex + 1} distance in meters`}
+                aria-invalid={invalidFieldId === quickFieldId(set.localId, "distance") || undefined}
                 value={set.distanceMeters || ""}
                 placeholder="400"
                 onFocus={(event) => selectInput(event.currentTarget)}
@@ -244,20 +251,18 @@ export function QuickWorkoutExerciseCard({
               />
             )}
             {showLoad ? (
-              <input
+              <DecimalLoadInput
                 id={quickFieldId(set.localId, "load")}
-                type="text"
-                inputMode="decimal"
-                pattern="[0-9]*[.]?[0-9]*"
                 enterKeyHint="next"
                 autoComplete="off"
                 aria-label={`${label} set ${setIndex + 1} ${type === "assisted" ? "assistance" : "load"} in ${weightUnit}`}
-                value={set.weight || ""}
+                aria-invalid={invalidFieldId === quickFieldId(set.localId, "load") || undefined}
+                value={set.weight}
                 placeholder="135"
                 onFocus={(event) => selectInput(event.currentTarget)}
                 onClick={(event) => selectInput(event.currentTarget)}
                 onMouseUp={(event) => event.preventDefault()}
-                onChange={(event) => onSetEdit(set.localId, { weight: toDecimalDraft(sanitizeDecimalInput(event.target.value)) })}
+                onValueChange={(weight) => onSetEdit(set.localId, { weight })}
               />
             ) : (
               <span />

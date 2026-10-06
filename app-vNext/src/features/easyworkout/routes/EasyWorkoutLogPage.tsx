@@ -39,14 +39,13 @@ import {
   completeExerciseAndAdvance,
   deleteExerciseFromLogs,
   findSaveBlock,
+  addBlankSetIfNeeded,
   focusedStartingExercises,
   isExerciseDone,
   undoExerciseCompletion,
 } from "@/features/easyworkout/domain/workoutExerciseCompletion";
 import {
-  sanitizeDecimalInput,
   sanitizeWholeNumberInput,
-  toDecimalDraft,
   toWholeNumberDraft,
 } from "@/features/easyworkout/domain/workoutNumericInput";
 import { QuickWorkoutExerciseCard, quickFieldForSet, quickFieldId } from "@/features/easyworkout/components/QuickWorkoutExerciseCard";
@@ -58,6 +57,7 @@ import {
   workoutImportDraftFingerprint,
   type WorkoutImportPreview,
 } from "@/features/easyworkout/domain/workoutImportPreview";
+import { DecimalLoadInput } from "@/features/easyworkout/components/DecimalLoadInput";
 import { isValidLocalDateKey, isValidWorkingSet, isWorkoutSessionCredited } from "@/features/easyworkout/domain/workoutStatistics";
 import { WORKOUT_SESSION_SCHEMA_VERSION } from "@/features/easyworkout/domain/workoutSessionContract";
 import {
@@ -96,7 +96,9 @@ const emptyExerciseLog = (setCount = 1, defaultReps = 8): WorkoutExerciseLogDraf
   sets: Array.from({ length: setCount }, () => emptySet(defaultReps)),
 });
 // Focused rows start blank (reps 0) so an untouched row is distinguishable from a partial one.
-const focusedBlankExercise = (setCount: number) => emptyExerciseLog(setCount, 0);
+// Every new focused exercise starts with exactly one blank row; further rows grow as each row is completed.
+const focusedBlankExercise = (_setCount?: number) => emptyExerciseLog(1, 0);
+const blankFocusedSet = () => emptySet(0);
 const freshWorkoutLogs = (focused: boolean, setCount: number) =>
   focused ? focusedStartingExercises(() => focusedBlankExercise(setCount)) : [emptyExerciseLog(setCount)];
 const hasSetWork = (set: WorkoutSetDraft) => set.weight > 0 || Boolean(set.notes.trim());
@@ -175,6 +177,7 @@ export function EasyWorkoutLogPage() {
   const [appliedImportOperationIds, setAppliedImportOperationIds] = useState(restoredDraft?.appliedImportOperationIds || []);
   const [saveMessage, setSaveMessage] = useState(restoredDraftRecovery?.message || "");
   const [validationMessage, setValidationMessage] = useState("");
+  const [invalidFieldId, setInvalidFieldId] = useState("");
   const [draftStatus, setDraftStatus] = useState<WorkoutDraftLifecycleStatus>("saved-local");
   const [isSaving, setIsSaving] = useState(false);
   const [externalDraftConflict, setExternalDraftConflict] = useState(false);
@@ -521,8 +524,9 @@ export function EasyWorkoutLogPage() {
 
   function editSet(exerciseLocalId: string, setLocalId: string, patch: Partial<WorkoutSetDraft>) {
     setDeletedSetUndo(null);
+    setInvalidFieldId("");
     setExerciseLogs((current) =>
-      current.map((exercise) => (exercise.localId === exerciseLocalId ? applySetEdit(exercise, setLocalId, patch) : exercise))
+      current.map((exercise) => (exercise.localId === exerciseLocalId ? applySetEdit(exercise, setLocalId, patch, isFocusedWorkoutMode ? blankFocusedSet : undefined) : exercise))
     );
   }
 
@@ -556,10 +560,15 @@ export function EasyWorkoutLogPage() {
       setValidationMessage(result.message);
       const target = exerciseLogs.find((exercise) => exercise.localId === exerciseLocalId);
       const row = target?.sets.find((set) => set.localId === result.setLocalId);
-      setPendingFocus({ id: target && row ? quickFieldForSet(target, row) : quickFieldId(exerciseLocalId, "name"), scroll: false });
+      const fieldId = target && row
+        ? (result.field ? quickFieldId(row.localId, result.field === "load" ? "load" : result.field) : quickFieldForSet(target, row))
+        : quickFieldId(exerciseLocalId, "name");
+      setInvalidFieldId(row ? fieldId : "");
+      setPendingFocus({ id: fieldId, scroll: false });
       return;
     }
     setValidationMessage("");
+    setInvalidFieldId("");
     setDeletedSetUndo(null);
     setExerciseLogs(result.logs);
     setActiveExerciseId(result.activeExerciseId);
@@ -1059,6 +1068,7 @@ export function EasyWorkoutLogPage() {
                   isActive={!activeExerciseId || activeExerciseId === exercise.localId}
                   isDone={isExerciseDone(exercise)}
                   weightUnit={draftWeightUnit}
+                  invalidFieldId={invalidFieldId}
                   lastTime={settings.easyWorkout.showLastTimeHelper && previous ? {
                     performedOn: previous.performedOn,
                     setsLabel: previousSetsLabel || "",
@@ -1071,7 +1081,7 @@ export function EasyWorkoutLogPage() {
                   onExerciseNotesChange={(value) => updateExerciseLog(exerciseIndex, { notes: value })}
                   onSetEdit={(setLocalId, patch) => editSet(exercise.localId, setLocalId, patch)}
                   onSetupChange={(field, value) => updateExerciseSetup(exerciseIndex, field, value)}
-                  onAddSet={() => updateExerciseLog(exerciseIndex, { sets: [...exercise.sets, emptySet(0)] })}
+                  onAddSet={() => setExerciseLogs((current) => current.map((entry) => (entry.localId === exercise.localId ? addBlankSetIfNeeded(entry, () => emptySet(0)) : entry)))}
                   onRemoveSet={(setIndex) => deleteSet(exerciseIndex, setIndex)}
                   onUseLast={(mode) => fillFromLastTime(exerciseIndex, mode)}
                   onDone={() => finishExerciseAndAdvance(exercise.localId)}
@@ -1207,21 +1217,15 @@ export function EasyWorkoutLogPage() {
                         </label>
                         <label className="field-stack task-row-field">
                           <span>Weight ({draftWeightUnit})</span>
-                          <input
-                            type="text"
-                            inputMode="decimal"
-                            pattern="[0-9]*[.]?[0-9]*"
+                          <DecimalLoadInput
                             enterKeyHint="next"
                             autoComplete="off"
-                            value={set.weight || ""}
+                            value={set.weight}
                             placeholder="135"
                             onFocus={(event) => selectNumericInput(event.currentTarget)}
                             onClick={(event) => selectNumericInput(event.currentTarget)}
                             onMouseUp={(event) => event.preventDefault()}
-                            onChange={(event) => {
-                              const nextValue = sanitizeDecimalInput(event.target.value);
-                              updateSet(exerciseIndex, setIndex, { weight: toDecimalDraft(nextValue) });
-                            }}
+                            onValueChange={(weight) => updateSet(exerciseIndex, setIndex, { weight })}
                           />
                         </label>
                         <label className="field-stack task-row-field">
