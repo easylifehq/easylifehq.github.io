@@ -12,7 +12,11 @@ export type WorkoutCompletionBlock = {
   reason: "name" | "no-valid-row" | "partial-row";
   message: string;
   setLocalId?: string;
+  /** Which input of the partial row needs attention. */
+  field?: WorkoutSetField;
 };
+
+export type WorkoutSetField = "reps" | "load" | "duration" | "distance";
 
 const positive = (value: number | undefined) => typeof value === "number" && Number.isFinite(value) && value > 0;
 
@@ -21,6 +25,23 @@ function hasTypeRelevantValue(set: WorkoutSetDraft, type: WorkoutDraftExerciseTy
   if (type === "distance") return positive(set.distanceMeters);
   if (type === "bodyweight") return positive(set.reps);
   return positive(set.reps) || positive(set.weight);
+}
+
+/** True when a row carries no entered value at all, regardless of exercise type or set type. */
+export const isEmptySetRow = (set: WorkoutSetDraft) =>
+  !positive(set.reps) &&
+  !positive(set.weight) &&
+  !positive(set.durationSeconds) &&
+  !positive(set.distanceMeters) &&
+  !set.notes.trim() &&
+  !positive(set.rir ?? undefined);
+
+/** The input a partial row still needs, by exercise type. */
+export function missingFieldForSet(set: WorkoutSetDraft, type: WorkoutDraftExerciseType): WorkoutSetField {
+  if (type === "duration") return "duration";
+  if (type === "distance") return "distance";
+  if (type === "bodyweight" || !positive(set.reps)) return "reps";
+  return "load";
 }
 
 /** Classifies a row by exercise-type validity; completed:false is not an input error. */
@@ -47,6 +68,58 @@ const typeHint: Record<WorkoutDraftExerciseType, string> = {
   distance: "a positive distance",
 };
 
+const fieldHint: Record<WorkoutSetField, string> = {
+  reps: "reps greater than 0",
+  load: "a load greater than 0 lb",
+  duration: "a duration greater than 0 seconds",
+  distance: "a distance greater than 0 meters",
+};
+
+/** Drops contiguous fully empty rows at the end; deleted rows are left as they are. */
+export function trimTrailingEmptySets(exercise: WorkoutExerciseLogDraft): WorkoutExerciseLogDraft {
+  const sets = [...exercise.sets];
+  for (let index = sets.length - 1; index >= 0; index -= 1) {
+    if (sets[index].deleted) continue;
+    if (!isEmptySetRow(sets[index])) break;
+    sets.splice(index, 1);
+  }
+  return sets.length === exercise.sets.length ? exercise : { ...exercise, sets };
+}
+
+/** Manual "+ Set": adds a blank row unless the last live row is already blank. */
+export function addBlankSetIfNeeded(exercise: WorkoutExerciseLogDraft, createSet: () => WorkoutSetDraft): WorkoutExerciseLogDraft {
+  const last = [...exercise.sets].reverse().find((set) => !set.deleted);
+  return last && isEmptySetRow(last) ? exercise : { ...exercise, sets: [...exercise.sets, createSet()] };
+}
+
+/**
+ * Appends one blank row only when the last live row is a completed entry.
+ * Pure function of the exercise state, so repeated or replayed calls cannot add a second row.
+ */
+export function ensureTrailingBlankSet(
+  exercise: WorkoutExerciseLogDraft,
+  createSet: () => WorkoutSetDraft
+): WorkoutExerciseLogDraft {
+  const live = exercise.sets.filter((set) => !set.deleted);
+  const last = live[live.length - 1];
+  if (last && isEmptySetRow(last)) return exercise;
+  if (last && !isValidWorkingSet({ ...last, setType: "standard", completed: true }, exercise.exerciseType)) return exercise;
+  return { ...exercise, sets: [...exercise.sets, createSet()] };
+}
+
+/**
+ * Removes one row; with createSet, restores the single trailing blank row when the removal leaves
+ * the last live row completed (or no live rows), so deleting the trailing blank never strands the exercise.
+ */
+export function removeSetAt(
+  exercise: WorkoutExerciseLogDraft,
+  setIndex: number,
+  createSet?: () => WorkoutSetDraft
+): WorkoutExerciseLogDraft {
+  const remaining = { ...exercise, sets: exercise.sets.filter((_, index) => index !== setIndex) };
+  return createSet ? ensureTrailingBlankSet(remaining, createSet) : remaining;
+}
+
 export function completeExercise(
   exercise: WorkoutExerciseLogDraft
 ): { ok: true; exercise: WorkoutExerciseLogDraft } | WorkoutCompletionBlock {
@@ -56,23 +129,26 @@ export function completeExercise(
   const rows = rowsOf(exercise);
   const partial = rows.find((row) => row.kind === "partial");
   if (partial) {
+    const field = missingFieldForSet(partial.set, exercise.exerciseType);
     return {
       ok: false,
       reason: "partial-row",
       setLocalId: partial.set.localId,
-      message: `Finish or remove set ${exercise.sets.indexOf(partial.set) + 1}: working sets need ${typeHint[exercise.exerciseType]}.`,
+      field,
+      message: `Set ${exercise.sets.indexOf(partial.set) + 1} needs ${fieldHint[field]}. Finish it or clear it; nothing you entered was changed.`,
     };
   }
   if (!rows.some((row) => row.kind === "valid")) {
     return { ok: false, reason: "no-valid-row", message: `Enter at least one working set with ${typeHint[exercise.exerciseType]} first.` };
   }
+  const trimmed = trimTrailingEmptySets(exercise);
   return {
     ok: true,
     exercise: {
-      ...exercise,
-      sets: exercise.sets.map((set) => {
+      ...trimmed,
+      sets: trimmed.sets.map((set) => {
         if (set.deleted) return set;
-        const completed = classifyWorkoutRow(set, exercise.exerciseType) === "valid";
+        const completed = classifyWorkoutRow(set, trimmed.exerciseType) === "valid";
         return set.completed === completed ? set : { ...set, completed };
       }),
     },
@@ -88,9 +164,10 @@ const PERFORMANCE_FIELDS = ["reps", "weight", "durationSeconds", "distanceMeters
 export function applySetEdit(
   exercise: WorkoutExerciseLogDraft,
   setLocalId: string,
-  patch: Partial<WorkoutSetDraft>
+  patch: Partial<WorkoutSetDraft>,
+  createSet?: () => WorkoutSetDraft
 ): WorkoutExerciseLogDraft {
-  return {
+  const edited: WorkoutExerciseLogDraft = {
     ...exercise,
     sets: exercise.sets.map((set) => {
       if (set.localId !== setLocalId) return set;
@@ -98,6 +175,7 @@ export function applySetEdit(
       return { ...set, ...patch, ...(changesPerformance && set.completed ? { completed: false } : {}) };
     }),
   };
+  return createSet ? ensureTrailingBlankSet(edited, createSet) : edited;
 }
 
 export function applyExerciseIdentityEdit(

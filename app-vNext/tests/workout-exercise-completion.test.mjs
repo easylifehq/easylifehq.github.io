@@ -53,7 +53,7 @@ test("typing positive values never completes a set", () => {
   assert.ok(typed.sets.every((row) => !row.completed));
 });
 
-test("Done completes all and only valid entered rows atomically, leaving blank and warm-up rows unperformed", () => {
+test("Done completes all and only valid entered rows atomically, leaving warm-up rows unperformed and dropping trailing blank rows", () => {
   const ex = exercise({}, [
     set({ reps: 8, weight: 100, setType: "warmup" }),
     set({ reps: 8, weight: 100 }),
@@ -62,7 +62,7 @@ test("Done completes all and only valid entered rows atomically, leaving blank a
   ]);
   const result = completeExercise(ex);
   assert.equal(result.ok, true);
-  assert.deepEqual(result.exercise.sets.map((row) => row.completed), [false, true, true, false]);
+  assert.deepEqual(result.exercise.sets.map((row) => row.completed), [false, true, true]);
   assert.ok(result.exercise.sets.filter((row) => row.completed).every((row) => isValidWorkingSet(row, "weighted", { requiresExplicitCompletion: true })));
   assert.equal(isExerciseDone(result.exercise), true);
 });

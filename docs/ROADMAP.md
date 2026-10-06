@@ -973,6 +973,64 @@ Goal: Expand EasyLife beyond productivity into lightweight lifestyle and fun app
 - Move workout mode defaults and exercise box count into Settings in `3.17.0`.
 - Include workout export in `3.18.0`.
 
+#### Owner field-test acceptance backlog (2026-10-05)
+
+Status: Accepted product direction; implementation not started.
+
+- Preserve the clean layout and current date behavior. Preserve the existing
+  clear presentation of reps, load, warmups, and working sets.
+- Offer Push, Pull, and Legs as workout focus options. Cardio and abs remain
+  optional additions that can be included in any session rather than exclusive
+  session types.
+- Refine each exercise card without adding clutter: put the delete `X` on the
+  `Exercise 1` header row, use the left half of the next row for the exercise
+  name, and use the right half for a short quick note such as `low-to-high`.
+  Rename the disclosure to `Exercise details`; keep longer notes and machine
+  configuration inside it.
+- Accept fractional pound loads such as `7.5` everywhere a performed or planned
+  load is entered, validated, saved, restored, or charted. Keep pounds as the
+  only user-facing unit preference for this product direction.
+- Make the load basis explicit but lightweight. For example, two 25 lb
+  dumbbells represent `25 lb each`, while a 50 lb barbell represents `50 lb
+  total`. Inference may suggest a basis, but the user can correct it. Persist
+  enough equipment/load-basis identity that history and charts never silently
+  combine unlike bases.
+- Start an exercise with exactly one blank set row. Completing that row appends
+  exactly one additional blank row. Repeated typing, clicks, rerenders, or event
+  delivery must not create duplicates.
+- `Done`/next accepts any positive number of valid performed sets, removes or
+  ignores trailing empty rows, and preserves every entered value when a row is
+  partially filled or invalid. Invalid partial rows receive clear, stable,
+  field-relevant feedback and are never silently discarded.
+- Remove the bottom status cards `Saved on this device` / `latest edit saved
+  locally` and `Exercise marked done` / `only completed working sets saved`.
+  Keep draft persistence working underneath and surface only concise errors
+  that require user action.
+- Replace `Need another exercise` with `Plan the rest of my workout`, an obvious
+  `Generate` button, and `minutes remaining` rather than target session minutes.
+  Assume a full gym by default and tuck the limited-equipment override away.
+  Generation must return multiple exercises with realistic sets and rest that
+  fit the remaining time, never one exercise consuming an entire 45-minute
+  window.
+- Use only prior verified performed workouts to suggest exercises, sets, reps,
+  and load. Present suggestions sequentially for accept-or-replace review before
+  adding them. One rejection is not a permanent dislike unless the user makes
+  that preference explicit; the illustrative abdominal-crunch rejection must
+  not be stored as a dislike.
+- Keep planned/prefilled sets separate from performed sets in persistence,
+  progress, personal records, and statistics. A suggestion or prefilled row is
+  never evidence of completed training.
+- Privacy boundary: use synthetic fixtures for implementation and verification.
+  Do not transmit real workout history or account records to Claude or another
+  provider.
+
+Recommended first bounded slice: set-entry correctness only. Add decimal-pound
+coverage and implement the single-trailing-blank-row lifecycle, idempotent row
+creation, positive-valid-set completion, trailing-empty cleanup, and stable
+partial-row validation with focused unit/browser tests. Defer card rearrangement,
+equipment/load-basis history, workout generation, and history-driven suggestions
+to separately reviewed slices.
+
 ### EasyStatistics
 
 - Add more useful per-app drilldowns over time.

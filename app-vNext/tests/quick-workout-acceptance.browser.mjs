@@ -149,11 +149,11 @@ try {
   await ev(`sessionStorage.clear(); Object.keys(localStorage).forEach((k) => localStorage.removeItem(k)); true`);
   await open(startUrl);
 
-  await step("start: one blank focused exercise, three rows, no horizontal overflow at 390px", async () => {
+  await step("start: one blank focused exercise, one blank row, no horizontal overflow at 390px", async () => {
     await waitFor(() => ev(`Boolean(window.__acc.q("Exercise 1 name"))`), "exercise name input");
     const cards = await A(`articles()`);
     assert.equal(cards.length, 1, "fresh focused start shows exactly one exercise");
-    assert.equal(await ev(`document.querySelectorAll('[role=group][aria-label^="Exercise 1 set"]').length`), 3);
+    assert.equal(await ev(`document.querySelectorAll('[role=group][aria-label^="Exercise 1 set"]').length`), 1, "a new exercise starts with exactly one blank set row");
     assert.equal(await A(`overflow()`), false, "no horizontal overflow");
     assert.equal(await ev(`window.innerWidth`), 390);
   });
@@ -237,8 +237,13 @@ try {
   });
 
   await step("partial row blocks Save without a scroll jump", async () => {
-    // Keep set 1 weighted-valid, make set 2 partial (reps, no load).
-    await A(`type("Bench Press set 2 load in lb", "")`);
+    // Copied rows start as one row. Re-entering set 1 completes it, which grows exactly one blank row;
+    // typing reps only into that row then makes set 2 partial (reps, no load).
+    await A(`type("Bench Press set 1 reps", "9")`);
+    await sleep(150);
+    assert.equal(await ev(`document.querySelectorAll('[role=group][aria-label^="Bench Press set"]').length`), 2, "completing the trailing row appends exactly one blank row");
+    await A(`type("Bench Press set 1 reps", "10")`);
+    await A(`type("Bench Press set 2 reps", "8")`);
     await sleep(200);
     await ev(`window.scrollTo(0, 120); true`);
     await sleep(100);
@@ -335,6 +340,132 @@ try {
     await A(`click("Save workout")`);
     await sleep(400);
     assert.equal((await A(`sessions()`)).length, before, "ambiguous draft cannot be saved before review");
+  });
+
+  // ---- Set-entry dogfood gaps (synthetic data, fresh draft per step) ----
+  const freshLog = async () => {
+    await open("/app/easyworkout?demo=1"); // leave the log route so its draft flush cannot rewrite storage
+    await ev(`sessionStorage.clear(); Object.keys(localStorage).forEach((k) => localStorage.removeItem(k)); true`);
+    await open(startUrl);
+    await waitFor(() => ev(`Boolean(window.__acc.q("Exercise 1 name"))`), "exercise name input");
+  };
+  const setRows = (name) => ev(`document.querySelectorAll('[role=group][aria-label^="${name} set"]').length`);
+  const draftSets = async (index = 0) => (await A(`draft()`)).value.exerciseLogs[index].sets.filter((set) => !set.deleted);
+  const isBlank = (set) => !(set.reps > 0) && !(set.weight > 0) && !(set.durationSeconds > 0) && !(set.distanceMeters > 0);
+  const enterSet = async (name, n, reps, load) => {
+    await A(`type("${name} set ${n} reps", "${reps}")`);
+    await A(`type("${name} set ${n} load in lb", "${load}")`);
+    await sleep(120);
+  };
+  const saveAndRead = async () => {
+    await A(`click("Save workout")`);
+    await waitFor(() => ev(`location.pathname.includes("/easyworkout/session/")`), "session page");
+    await sleep(400);
+    return A(`sessions()`);
+  };
+
+  await step("typing 7, ., 5 keeps 7.5 shown and stored, and it survives draft reload", async () => {
+    await freshLog();
+    await A(`type("Exercise 1 name", "Dumbbell Curl")`);
+    await sleep(150);
+    await A(`type("Dumbbell Curl set 1 reps", "10")`);
+    const load = `window.__acc.q("Dumbbell Curl set 1 load in lb")`;
+    for (const [typed, shown] of [["7", "7"], ["7.", "7."], ["7.5", "7.5"]]) {
+      await A(`type("Dumbbell Curl set 1 load in lb", "${typed}")`);
+      await sleep(120);
+      assert.equal(await ev(`${load}.value`), shown, `field shows ${shown} after typing ${typed}`);
+    }
+    await sleep(300);
+    assert.equal((await draftSets())[0].weight, 7.5, "stored weight is 7.5");
+    await open(startUrl);
+    await waitFor(() => ev(`Boolean(window.__acc.q("Dumbbell Curl set 1 load in lb"))`), "restored load field");
+    assert.equal(await ev(`${load}.value`), "7.5", "restored field shows 7.5");
+    assert.equal((await draftSets())[0].weight, 7.5, "restored stored weight is 7.5");
+  });
+
+  await step("repeated type/click/blur on a completed row leaves exactly one trailing blank row", async () => {
+    await freshLog();
+    await A(`type("Exercise 1 name", "Cable Fly")`);
+    await sleep(150);
+    for (let i = 0; i < 5; i++) {
+      await enterSet("Cable Fly", 1, 8 + (i % 2), 50 + 5 * (i % 2));
+      await ev(`(() => { const el = window.__acc.q("Cable Fly set 1 load in lb"); el.focus(); el.click(); el.blur(); return true; })()`);
+      await sleep(120);
+      assert.equal(await setRows("Cable Fly"), 2, `iteration ${i + 1}: one completed row plus one blank row in the DOM`);
+    }
+    await sleep(300);
+    const sets = await draftSets();
+    assert.equal(sets.length, 2, "draft holds exactly two rows");
+    assert.equal(sets.filter(isBlank).length, 1, "exactly one blank row");
+    assert.equal(isBlank(sets[sets.length - 1]), true, "the blank row is trailing");
+  });
+
+  await step("Done with one valid set plus its trailing blank succeeds and saves exactly one set", async () => {
+    await freshLog();
+    await A(`type("Exercise 1 name", "Leg Press")`);
+    await sleep(150);
+    await enterSet("Leg Press", 1, 10, 200);
+    assert.equal(await setRows("Leg Press"), 2, "valid set plus its trailing blank");
+    await A(`click("Done & next exercise")`);
+    await sleep(400);
+    const cards = await A(`articles()`);
+    assert.equal(cards[0].done, "true", "Done succeeded");
+    assert.match(cards[0].text, /1 set done/);
+    const sessions = await saveAndRead();
+    assert.equal(sessions.length, 1);
+    assert.deepEqual(sessions[0].exercises.map((exercise) => exercise.sets.length), [1], "exactly one set saved");
+  });
+
+  await step("Done with three valid sets succeeds and saves exactly three sets, no empty rows", async () => {
+    await freshLog();
+    await A(`type("Exercise 1 name", "Shoulder Press")`);
+    await sleep(150);
+    await enterSet("Shoulder Press", 1, 10, 40);
+    await enterSet("Shoulder Press", 2, 8, 45);
+    await enterSet("Shoulder Press", 3, 6, 50);
+    await A(`click("Done & next exercise")`);
+    await sleep(400);
+    const cards = await A(`articles()`);
+    assert.equal(cards[0].done, "true", "Done succeeded");
+    assert.match(cards[0].text, /3 sets done/);
+    const sessions = await saveAndRead();
+    assert.equal(sessions.length, 1);
+    const saved = sessions[0].exercises.map((exercise) => exercise.sets);
+    assert.deepEqual(saved.map((sets) => sets.length), [3], "exactly three sets saved");
+    assert.ok(saved[0].every((set) => set.reps > 0 && set.weight > 0), "no empty rows saved");
+  });
+
+  await step("partial row (reps, no load) blocks Done with a stable message, aria-invalid, then load fixes it", async () => {
+    await freshLog();
+    await A(`type("Exercise 1 name", "Row Machine")`);
+    await sleep(150);
+    await enterSet("Row Machine", 1, 10, 80);
+    await A(`type("Row Machine set 2 reps", "8")`);
+    await sleep(200);
+    const messageRe = /Set 2 needs [^.]*\. Finish it or clear it; nothing you entered was changed\./g;
+    const messages = [];
+    for (let i = 0; i < 3; i++) {
+      await A(`click("Done & next exercise")`);
+      await sleep(300);
+      const found = (await A(`text()`)).match(messageRe) || [];
+      assert.equal(found.length, 1, `click ${i + 1}: exactly one blocking message, got ${JSON.stringify(found)}`);
+      messages.push(found[0]);
+      const cards = await A(`articles()`);
+      assert.equal(cards.length, 1, "no exercise added while blocked");
+      assert.equal(cards[0].done, "false", "exercise not marked done");
+      assert.equal(await ev(`window.__acc.q("Row Machine set 2 load in lb").getAttribute("aria-invalid")`), "true", "load field marked aria-invalid");
+      assert.equal(await ev(`window.__acc.q("Row Machine set 2 reps").value`), "8", "entered reps preserved");
+      assert.equal(await ev(`window.__acc.q("Row Machine set 1 load in lb").value`), "80", "entered load preserved");
+    }
+    assert.ok(messages.every((message) => message === messages[0]), `identical message text: ${JSON.stringify(messages)}`);
+    await A(`type("Row Machine set 2 load in lb", "85")`);
+    await sleep(200);
+    assert.equal(await ev(`window.__acc.q("Row Machine set 2 load in lb").getAttribute("aria-invalid")`), null, "aria-invalid clears on edit");
+    await A(`click("Done & next exercise")`);
+    await sleep(400);
+    const cards = await A(`articles()`);
+    assert.equal(cards[0].done, "true", "Done succeeds once the load is entered");
+    assert.match(cards[0].text, /2 sets done/);
   });
 
   // @@END@@
