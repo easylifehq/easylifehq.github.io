@@ -254,7 +254,7 @@ test("all new, copied, imported, and prefilled workout rows remain unperformed",
   const importSource = await readFile(new URL("../src/features/easyworkout/domain/workoutImportPreview.ts", import.meta.url), "utf8");
   assert.match(source, /const emptySet[\s\S]{0,250}completed: false/);
   assert.match(source, /baseSets[\s\S]{0,500}completed: false/);
-  assert.match(source, /onAddSet=\{\(\) => updateExerciseLog\(exerciseIndex, \{ sets: \[\.\.\.exercise\.sets, emptySet\(0\)\] \}\)\}/);
+  assert.match(source, /onAddSet=\{\(\) => setExerciseLogs\(\(current\) => current\.map\(\(entry\) => \(entry\.localId === exercise\.localId \? addBlankSetIfNeeded\(entry, \(\) => emptySet\(0\)\)/);
   assert.match(source, /fillSetsFromLastPerformance\(exercise\.sets, previous\)/);
   assert.match(importSource, /function materializeRow[\s\S]{0,900}completed: false/);
   assert.match(importSource, /applyWorkoutImportPreview[\s\S]*materializeRow/);
