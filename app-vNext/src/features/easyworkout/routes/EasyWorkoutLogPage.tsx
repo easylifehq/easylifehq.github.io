@@ -30,6 +30,7 @@ import {
 import {
   createPlannedExerciseFromSuggestion,
   deriveNextExerciseSuggestions,
+  workoutRecommendationSetBudget,
   type WorkoutNextExerciseSuggestion,
 } from "@/features/easyworkout/domain/workoutNextExercise";
 import { emptyWorkoutPlanningContext } from "@/features/easyworkout/domain/workoutPlanning";
@@ -70,6 +71,8 @@ import {
   normalizeWorkoutEquipmentSetup,
   type WorkoutEquipmentSetup,
 } from "@/lib/workoutEquipmentSetup";
+import { WorkoutActiveClock } from "@/features/easyworkout/domain/workoutActiveClock";
+
 type DeletedSetUndo = {
   exerciseLocalId: string;
   exerciseName: string;
@@ -130,7 +133,6 @@ export function EasyWorkoutLogPage() {
   const skipDraftFlushRef = useRef(false);
   const latestDraftRef = useRef<StoredWorkoutDraft | null>(null);
   const isApplyingImportRef = useRef(false);
-  const elapsedTickRef = useRef(Date.now());
   const { settings } = useSettings();
   const { user, isDemoMode } = useAuth();
   const ownerId = user?.uid || "unavailable";
@@ -150,6 +152,11 @@ export function EasyWorkoutLogPage() {
   const [draftId] = useState(restoredDraft?.draftId || createLocalId());
   const [startedAt] = useState(restoredDraft?.startedAt || new Date().toISOString());
   const [elapsedSeconds, setElapsedSeconds] = useState(restoredDraft?.elapsedSeconds || 0);
+  const elapsedClockRef = useRef<WorkoutActiveClock | null>(null);
+  if (!elapsedClockRef.current) {
+    elapsedClockRef.current = new WorkoutActiveClock(restoredDraft?.elapsedSeconds || 0, Date.now(), typeof document !== "undefined" && document.visibilityState === "visible");
+  }
+  const snapshotElapsedSeconds = () => elapsedClockRef.current!.snapshot(Date.now());
   const [selectedRoutineId, setSelectedRoutineId] = useState(restoredDraft?.selectedRoutineId ?? routineId ?? "");
   const [performedOn, setPerformedOn] = useState(restoredDraft?.performedOn ?? localDateKey());
   const [durationMinutes, setDurationMinutes] = useState(restoredDraft?.durationMinutes ?? "");
@@ -288,14 +295,21 @@ export function EasyWorkoutLogPage() {
     setActiveExerciseId(nextLogs[0]?.localId ?? "");
   }, [isLoading, previousByExercise, selectedRoutine, workoutMode, gymMode, settings.easyWorkout.defaultSetCount]);
 
-  const nextExerciseResult = useMemo(() => deriveNextExerciseSuggestions({
+  const remainingMinutes = planningContext.plannedDurationMinutes === null ? null
+    : Math.max(0, planningContext.plannedDurationMinutes - elapsedSeconds / 60);
+  const recommendationBudget = remainingMinutes === null ? null
+    : workoutRecommendationSetBudget(remainingMinutes, settings.easyWorkout.defaultSetCount);
+  // Elapsed time affects suggestions only when the fitting set budget changes.
+  const cachedNextExerciseResult = useMemo(() => deriveNextExerciseSuggestions({
     planningContext,
     elapsedSeconds,
     defaultSetCount: settings.easyWorkout.defaultSetCount,
     exerciseOptions,
     exerciseLogs,
     history: previousByExercise,
-  }), [elapsedSeconds, exerciseLogs, exerciseOptions, planningContext, previousByExercise, settings.easyWorkout.defaultSetCount]);
+  }), [recommendationBudget, exerciseLogs, exerciseOptions, planningContext, previousByExercise, settings.easyWorkout.defaultSetCount]);
+  const nextExerciseResult = { ...cachedNextExerciseResult,
+    remainingMinutes: cachedNextExerciseResult.remainingMinutes === null ? null : remainingMinutes };
   const nextExerciseSuggestions = nextExerciseResult.suggestions;
 
   const isGymModeActive = gymMode;
@@ -331,48 +345,41 @@ export function EasyWorkoutLogPage() {
     const persistLatestDraft = () => {
       if (skipDraftFlushRef.current || externalDraftConflict) return;
       const draft = latestDraftRef.current;
-      if (!draft || !hasWorkoutDraftWork(draft)) return;
+      if (!draft || draft.ownerId !== ownerId || !hasWorkoutDraftWork(draft)) return;
       try {
-        const serialized = serializeWorkoutDraftForStorage({ ...draft, updatedAt: new Date().toISOString() });
+        const serialized = serializeWorkoutDraftForStorage({ ...draft, elapsedSeconds: snapshotElapsedSeconds(), updatedAt: new Date().toISOString() });
         if (serialized) window.localStorage.setItem(draftStorageKey, serialized);
       } catch {
         // The mounted page already exposes a recovery warning when local storage is unavailable.
       }
     };
     const handleVisibilityChange = () => {
+      elapsedClockRef.current!.setVisible(Date.now(), document.visibilityState === "visible");
       if (document.visibilityState === "hidden") persistLatestDraft();
     };
-    window.addEventListener("pagehide", persistLatestDraft);
+    const handlePageHide = () => {
+      elapsedClockRef.current!.setVisible(Date.now(), false);
+      persistLatestDraft();
+    };
+    const handlePageShow = () => {
+      setElapsedSeconds(elapsedClockRef.current!.setVisible(Date.now(), document.visibilityState === "visible"));
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    window.addEventListener("pagehide", handlePageHide);
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => {
-      window.removeEventListener("pagehide", persistLatestDraft);
+      persistLatestDraft();
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener("pagehide", handlePageHide);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [draftStorageKey, externalDraftConflict]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const updateElapsed = () => {
-      const now = Date.now();
-      const previousTick = elapsedTickRef.current;
-      elapsedTickRef.current = now;
-      if (document.visibilityState !== "visible") return;
-      const activeSeconds = Math.max(0, Math.min(30, Math.floor((now - previousTick) / 1000)));
-      if (activeSeconds) setElapsedSeconds((current) => current + activeSeconds);
-    };
+    const updateElapsed = () => setElapsedSeconds(snapshotElapsedSeconds());
     const timer = window.setInterval(updateElapsed, 1000);
-    const handleVisibility = () => {
-      if (document.visibilityState === "hidden") updateElapsed();
-      else elapsedTickRef.current = Date.now();
-    };
-    window.addEventListener("pagehide", handleVisibility);
-    document.addEventListener("visibilitychange", handleVisibility);
-    return () => {
-      updateElapsed();
-      window.clearInterval(timer);
-      window.removeEventListener("pagehide", handleVisibility);
-      document.removeEventListener("visibilitychange", handleVisibility);
-    };
+    return () => window.clearInterval(timer);
   }, [startedAt]);
 
   useEffect(() => {
@@ -384,7 +391,7 @@ export function EasyWorkoutLogPage() {
       return;
     }
     if (externalDraftConflict) return;
-    const serialized = serializeWorkoutDraftForStorage(draft);
+    const serialized = serializeWorkoutDraftForStorage({ ...draft, elapsedSeconds: snapshotElapsedSeconds() });
     if (!serialized) {
       setDraftStatus("sync-failed-draft-retained");
       setSaveMessage("This draft is too large to retain safely on this device. Remove extra sets or long notes before leaving.");
@@ -394,7 +401,11 @@ export function EasyWorkoutLogPage() {
     const saveTimer = window.setTimeout(() => {
       if (skipDraftFlushRef.current) return;
       try {
-        window.localStorage.setItem(draftStorageKey, serialized);
+        const currentDraft = latestDraftRef.current;
+        if (!currentDraft || currentDraft.ownerId !== ownerId) return;
+        const currentSerialized = serializeWorkoutDraftForStorage({ ...currentDraft, elapsedSeconds: snapshotElapsedSeconds(), updatedAt: new Date().toISOString() });
+        if (!currentSerialized) return;
+        window.localStorage.setItem(draftStorageKey, currentSerialized);
         setDraftStatus("saved-local");
       } catch {
         setDraftStatus("sync-failed-draft-retained");
@@ -403,15 +414,8 @@ export function EasyWorkoutLogPage() {
     }, 250);
     return () => {
       window.clearTimeout(saveTimer);
-      if (skipDraftFlushRef.current) return;
-      try {
-        const finalSerialized = serializeWorkoutDraftForStorage({ ...draft, updatedAt: new Date().toISOString() });
-        if (finalSerialized) window.localStorage.setItem(draftStorageKey, finalSerialized);
-      } catch {
-        // The visible status from the mounted page already explains local storage failures.
-      }
     };
-  }, [activeExerciseId, completionReviewRequired, draftId, draftStorageKey, draftWeightUnit, durationMinutes, elapsedSeconds, exerciseLogs, externalDraftConflict, ownerId, performedOn, planningContext, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
+  }, [activeExerciseId, completionReviewRequired, draftId, draftStorageKey, draftWeightUnit, durationMinutes, exerciseLogs, externalDraftConflict, ownerId, performedOn, planningContext, restoredDraft?.routineOriginId, selectedRoutineId, sessionNotes, startedAt]);
 
   function updateExerciseLog(index: number, next: Partial<WorkoutExerciseLogDraft>) {
     setExerciseLogs((current) =>
@@ -577,7 +581,8 @@ export function EasyWorkoutLogPage() {
     setDeletedSetUndo(null);
     setExerciseLogs(result.logs);
     setActiveExerciseId(result.activeExerciseId);
-    setSaveMessage("Exercise marked done. Only its completed working sets will be saved.");
+    // No success card: only a retained-draft error message stays visible.
+    if (draftStatus !== "sync-failed-draft-retained") setSaveMessage("");
     setPendingFocus({ id: quickFieldId(result.activeExerciseId, "name"), scroll: true });
   }
 
@@ -715,7 +720,7 @@ export function EasyWorkoutLogPage() {
       return;
     }
 
-    const resolvedDurationMinutes = resolveWorkoutDurationMinutes(durationMinutes, elapsedSeconds);
+    const resolvedDurationMinutes = resolveWorkoutDurationMinutes(durationMinutes, snapshotElapsedSeconds());
     if (resolvedDurationMinutes == null) {
       setDraftStatus("sync-failed-draft-retained");
       setValidationMessage("This draft has been open too long to infer a truthful duration. Open Full log and enter the session duration before saving.");
@@ -1077,6 +1082,7 @@ export function EasyWorkoutLogPage() {
                   lastTime={settings.easyWorkout.showLastTimeHelper && previous ? {
                     performedOn: previous.performedOn,
                     setsLabel: previousSetsLabel || "",
+                    sets: previous.lastSets,
                     setupLabel: previousSetupLabel,
                     bestWeight: previous.bestWeight,
                     currentHasSetup,
@@ -1325,10 +1331,12 @@ export function EasyWorkoutLogPage() {
             {isSaving ? "Syncing…" : "Save workout"}
           </button>
         </div>
+        {draftStatus === "syncing" || draftStatus === "synced" || draftStatus === "sync-failed-draft-retained" ? (
         <div className={`workout-save-status status-${draftStatus}`} role="status" aria-live="polite" aria-atomic="true">
           <strong>{workoutDraftStatusCopy[draftStatus]}</strong>
           <span>{workoutDraftStatusDetailCopy[draftStatus]}</span>
         </div>
+        ) : null}
         <div className="workout-action-message" role="status" aria-live="polite" aria-atomic="true">
           {saveMessage ? <div className="calendar-info-card workout-action-message-card">
             {saveMessage}
