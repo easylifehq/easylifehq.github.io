@@ -116,6 +116,13 @@ function compareDate(left: string | null, right: string | null) {
   return left.localeCompare(right);
 }
 
+export function workoutRecommendationSetBudget(remainingMinutes: number, defaultSetCount: number) {
+  return Math.min(
+    Math.max(1, Math.floor(defaultSetCount) || 1),
+    Math.max(0, Math.floor(((remainingMinutes - TRANSITION_MINUTES) / MINUTES_PER_SET) + 1e-9))
+  );
+}
+
 export function deriveNextExerciseSuggestions(input: DeriveInput): WorkoutNextExerciseResult {
   const planningContext = normalizeWorkoutPlanningContext(input.planningContext);
   const missingContext: WorkoutNextExerciseResult["missingContext"] = [];
@@ -128,11 +135,7 @@ export function deriveNextExerciseSuggestions(input: DeriveInput): WorkoutNextEx
     0,
     planningContext.plannedDurationMinutes! - Math.max(0, input.elapsedSeconds) / 60
   );
-  const requestedSetCount = Math.max(1, Math.floor(input.defaultSetCount) || 1);
-  const proposedSets = Math.min(
-    requestedSetCount,
-    Math.max(0, Math.floor(((remainingMinutes - TRANSITION_MINUTES) / MINUTES_PER_SET) + 1e-9))
-  );
+  const proposedSets = workoutRecommendationSetBudget(remainingMinutes, input.defaultSetCount);
   if (proposedSets < 1) return emptyResult("no-fit", [], remainingMinutes);
 
   const focus = new Set(planningContext.focusGroups);

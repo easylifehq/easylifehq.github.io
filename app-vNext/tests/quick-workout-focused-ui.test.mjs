@@ -54,17 +54,17 @@ test("exercise card replaces per-row Mark done with exercise-level Done, Edit an
   assert.match(source, /onUndoDone/);
 });
 
-test("compact rows have accessible removal, and notes plus machine setup live behind More setup", async () => {
+test("compact rows have accessible removal, and machine setup and full notes live behind Exercise details", async () => {
   const source = await card();
   assert.match(source, /aria-label=\{`Remove set \$\{setIndex \+ 1\}`\}/);
   assert.match(source, /aria-label=\{`Delete exercise/);
-  assert.match(source, /More setup/);
-  const moreStart = source.indexOf("More setup");
+  assert.match(source, /Exercise details<\/summary>/);
+  assert.doesNotMatch(source, /More setup/);
+  const moreStart = source.indexOf("Exercise details</summary>");
   const after = source.slice(moreStart);
   for (const needle of ["Exercise notes", "SETUP_FIELDS.map", "other setup", "notes</span>"]) {
-    assert.ok(after.includes(needle), `${needle} must be inside More setup`);
+    assert.ok(after.includes(needle), `${needle} must be inside Exercise details`);
   }
-  assert.doesNotMatch(source.slice(0, moreStart), /Exercise notes/);
   for (const label of ["seat setting", "arm setting", "back setting", "pad setting"]) assert.ok(source.includes(label));
   assert.match(source, /\+ Set/);
 });
