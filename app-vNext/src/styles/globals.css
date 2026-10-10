@@ -11521,14 +11521,43 @@ button.calendar-detail-card:disabled {
 
 .quick-workout-header {
   display: flex;
-  align-items: end;
+  align-items: center;
   gap: 0.45rem;
   min-width: 0;
 }
 
-.quick-workout-name {
+.quick-workout-header .quick-workout-index {
   flex: 1 1 auto;
+}
+
+.quick-workout-identity {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: 0.45rem;
   min-width: 0;
+}
+
+.quick-workout-name,
+.quick-workout-quick-note {
+  min-width: 0;
+}
+
+.quick-workout-set-hint {
+  grid-column: 2 / -1;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--ui-text-muted, var(--shell-muted-text));
+  overflow-wrap: anywhere;
+}
+
+.quick-workout-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.9rem;
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ui-text-muted, var(--shell-muted-text));
 }
 
 .quick-workout-index {
@@ -11626,7 +11655,10 @@ button.calendar-detail-card:disabled {
   min-width: 0;
 }
 
-.quick-workout-more-grid input {
+.quick-workout-more-grid input,
+.quick-workout-more-grid textarea {
+  width: 100%;
+  box-sizing: border-box;
   min-height: 44px;
 }
 

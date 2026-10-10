@@ -184,9 +184,9 @@ test("draft serialization fails closed before local-storage quota pressure", () 
 test("workout log flushes its latest controlled draft before page suspension or unload", async () => {
   const source = await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8");
   assert.match(source, /latestDraftRef\.current = \{/);
-  assert.match(source, /addEventListener\("pagehide", persistLatestDraft\)/);
+  assert.match(source, /addEventListener\("pagehide", handlePageHide\)/);
   assert.match(source, /visibilityState === "hidden"/);
-  assert.match(source, /serializeWorkoutDraftForStorage\(\{ \.\.\.draft, updatedAt:/);
+  assert.match(source, /serializeWorkoutDraftForStorage\(\{ \.\.\.draft, elapsedSeconds: snapshotElapsedSeconds\(\), updatedAt:/);
 });
 
 test("workout log exposes one-tap set completion, undo, and legacy-draft review", async () => {

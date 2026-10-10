@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type MutableRefObject } from "react";
 import { DecimalLoadInput } from "@/features/easyworkout/components/DecimalLoadInput";
 import type { WorkoutExerciseLogDraft, WorkoutSetDraft } from "@/features/easyworkout/domain/workoutDraftLifecycle";
+import { isEmptySetRow } from "@/features/easyworkout/domain/workoutExerciseCompletion";
+import { isValidWorkingSet } from "@/features/easyworkout/domain/workoutStatistics";
 import {
   sanitizeDecimalInput,
   sanitizeWholeNumberInput,
@@ -23,9 +25,19 @@ export function quickFieldForSet(exercise: WorkoutExerciseLogDraft, set: Workout
   return quickFieldId(set.localId, "load");
 }
 
+/** Verified prior performed working sets, already in the draft's weight unit. Reference only. */
+export type QuickWorkoutPreviousSet = {
+  reps: number;
+  weight: number;
+  durationSeconds?: number;
+  distanceMeters?: number;
+};
+
 export type QuickWorkoutLastTime = {
   performedOn: string;
   setsLabel: string;
+  /** Prior working sets used only for the per-row reference hints. */
+  sets?: QuickWorkoutPreviousSet[];
   setupLabel: string;
   bestWeight: number;
   currentHasSetup: boolean;
@@ -61,6 +73,33 @@ const SETUP_FIELDS = [
   { field: "pad", title: "Pad", aria: "pad setting" },
 ] as const;
 
+/**
+ * Counts rows distinctly: valid working sets, valid warm-ups, and incomplete rows that still hold
+ * a value. Blank (including trailing blank) and deleted rows are excluded. Nothing is discarded.
+ */
+export function countQuickWorkoutSets(exercise: WorkoutExerciseLogDraft) {
+  let working = 0;
+  let warmups = 0;
+  let incomplete = 0;
+  for (const set of exercise.sets) {
+    if (set.deleted || isEmptySetRow(set)) continue;
+    if (isValidWorkingSet({ ...set, setType: "standard", completed: true }, exercise.exerciseType)) {
+      if (set.setType === "warmup") warmups += 1;
+      else working += 1;
+    } else {
+      incomplete += 1;
+    }
+  }
+  return { working, warmups, incomplete };
+}
+
+function previousSetHint(set: QuickWorkoutPreviousSet, type: WorkoutExerciseLogDraft["exerciseType"], weightUnit: "lb" | "kg") {
+  if (type === "bodyweight") return `${set.reps} reps`;
+  if (type === "duration") return `${set.durationSeconds || 0} sec`;
+  if (type === "distance") return `${set.distanceMeters || 0} m`;
+  return `${set.reps} × ${set.weight.toFixed(1)} ${weightUnit}`;
+}
+
 const selectInput = (input: HTMLInputElement) => window.requestAnimationFrame(() => input.select());
 
 export function QuickWorkoutExerciseCard({
@@ -91,6 +130,7 @@ export function QuickWorkoutExerciseCard({
   const type = exercise.exerciseType;
   const showReps = type !== "duration" && type !== "distance";
   const showLoad = type === "weighted" || type === "assisted";
+  const counts = countQuickWorkoutSets(exercise);
 
   useEffect(() => {
     if (confirmingDelete) cancelButtonRef.current?.focus();
@@ -141,19 +181,7 @@ export function QuickWorkoutExerciseCard({
   return (
     <article className="panel-section quick-workout-card" data-done={isDone ? "true" : "false"}>
       <div className="quick-workout-header">
-        <label className="field-stack quick-workout-name">
-          <span className="quick-workout-index">Exercise {exerciseIndex + 1}</span>
-          <input
-            id={quickFieldId(exercise.localId, "name")}
-            ref={nameInputRef}
-            list="workout-log-exercise-options"
-            autoComplete="off"
-            aria-label={`Exercise ${exerciseIndex + 1} name`}
-            value={exercise.exerciseName}
-            onChange={(event) => onExerciseNameChange(event.target.value)}
-            placeholder="Lat pulldown"
-          />
-        </label>
+        <span className="quick-workout-index">Exercise {exerciseIndex + 1}</span>
         {lastTime ? (
           <button
             type="button"
@@ -174,6 +202,32 @@ export function QuickWorkoutExerciseCard({
         >
           <span aria-hidden="true">×</span>
         </button>
+      </div>
+
+      <div className="quick-workout-identity">
+        <label className="field-stack quick-workout-name">
+          <span>Exercise</span>
+          <input
+            id={quickFieldId(exercise.localId, "name")}
+            ref={nameInputRef}
+            list="workout-log-exercise-options"
+            autoComplete="off"
+            aria-label={`Exercise ${exerciseIndex + 1} name`}
+            value={exercise.exerciseName}
+            onChange={(event) => onExerciseNameChange(event.target.value)}
+            placeholder="Lat pulldown"
+          />
+        </label>
+        <label className="field-stack quick-workout-quick-note">
+          <span>Quick note</span>
+          <input
+            aria-label={`Exercise ${exerciseIndex + 1} quick note`}
+            autoComplete="off"
+            value={exercise.notes}
+            onChange={(event) => onExerciseNotesChange(event.target.value)}
+            placeholder="Grip, tempo, machine"
+          />
+        </label>
       </div>
 
       {confirmingDelete ? (
@@ -198,7 +252,10 @@ export function QuickWorkoutExerciseCard({
         <span />
       </div>
       <div className="quick-workout-sets">
-        {exercise.sets.map((set, setIndex) => (
+        {exercise.sets.map((set, setIndex) => {
+          const workingOrdinal = exercise.sets.slice(0, setIndex).filter((entry) => !entry.deleted && entry.setType !== "warmup").length;
+          const previousSet = set.setType === "warmup" ? undefined : lastTime?.sets?.[workingOrdinal];
+          return (
           <div key={set.localId} className="quick-workout-set-row" role="group" aria-label={`${label} set ${setIndex + 1}`}>
             <span className="quick-workout-set-number">
               {setIndex + 1}
@@ -285,16 +342,36 @@ export function QuickWorkoutExerciseCard({
             >
               <span aria-hidden="true">×</span>
             </button>
+            {previousSet ? (
+              <span className="quick-workout-set-hint" data-reference-only="true">
+                Previous: {previousSetHint(previousSet, type, weightUnit)}
+              </span>
+            ) : null}
           </div>
-        ))}
+          );
+        })}
       </div>
 
+      <p
+        className="quick-workout-counts"
+        title="Only valid working sets count as working sets. Warm-ups are counted separately; incomplete rows keep their values but are not counted."
+      >
+        <span>Working sets: {counts.working}</span>
+        <span>Warm-ups: {counts.warmups}</span>
+        {counts.incomplete ? <span>Incomplete: {counts.incomplete}</span> : null}
+      </p>
+
       <details className="quick-workout-more">
-        <summary>More setup</summary>
+        <summary>Exercise details</summary>
         <div className="quick-workout-more-grid">
           <label className="field-stack quick-workout-wide">
             <span>Exercise notes</span>
-            <input value={exercise.notes} onChange={(event) => onExerciseNotesChange(event.target.value)} placeholder="Vertical grip, slow eccentric, machine 4, etc." />
+            <textarea
+              rows={2}
+              value={exercise.notes}
+              onChange={(event) => onExerciseNotesChange(event.target.value)}
+              placeholder="Vertical grip, slow eccentric, machine 4, etc."
+            />
           </label>
           {SETUP_FIELDS.map(({ field, title, aria }) => (
             <label key={field} className="field-stack">

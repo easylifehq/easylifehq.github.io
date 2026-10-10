@@ -468,6 +468,103 @@ try {
     assert.match(cards[0].text, /2 sets done/);
   });
 
+  // ---- Rendered-interaction coverage: working vs warm-up counts, Quick note persistence, reference-only hints ----
+  const countSpans = () => ev(`[...document.querySelectorAll(".quick-workout-card .quick-workout-counts span")].map((span) => span.textContent.trim())`);
+  const hints = () => ev(`[...document.querySelectorAll(".quick-workout-set-hint")].map((hint) => ({ text: hint.textContent.trim(), referenceOnly: hint.dataset.referenceOnly, row: hint.closest("[role=group]").getAttribute("aria-label") }))`);
+  const setSnapshot = async (index = 0) => (await A(`draft()`)).value.exerciseLogs[index].sets.filter((set) => !set.deleted).map((set) => ({ reps: set.reps, weight: set.weight, completed: Boolean(set.completed), setType: set.setType }));
+
+  await step("counts: valid working vs warm-up counted separately; blank excluded, partial row preserved and not counted", async () => {
+    await freshLog();
+    await A(`type("Exercise 1 name", "Count Check Curl")`);
+    await sleep(150);
+    assert.deepEqual(await countSpans(), ["Working sets: 0", "Warm-ups: 0"], "a new blank row counts as nothing");
+    await enterSet("Count Check Curl", 1, 10, 100);
+    assert.deepEqual(await countSpans(), ["Working sets: 1", "Warm-ups: 0"], "one valid working set; trailing blank excluded");
+    await A(`type("Count Check Curl set 2 type", "warmup")`);
+    await enterSet("Count Check Curl", 2, 5, 40);
+    assert.deepEqual(await countSpans(), ["Working sets: 1", "Warm-ups: 1"], "valid warm-up is counted separately, not as working");
+    assert.equal(await setRows("Count Check Curl"), 3, "trailing blank row present");
+    await A(`type("Count Check Curl set 3 reps", "6")`);
+    await sleep(200);
+    assert.deepEqual(await countSpans(), ["Working sets: 1", "Warm-ups: 1", "Incomplete: 1"], "partial row is reported but not counted as working or warm-up");
+    await sleep(300);
+    const sets = await setSnapshot();
+    assert.deepEqual(sets.slice(0, 3).map((set) => [set.reps, set.weight, set.setType]), [[10, 100, "standard"], [5, 40, "warmup"], [6, 0, "standard"]], "partial row values preserved in the draft");
+    await A(`type("Count Check Curl set 3 reps", "")`);
+    await sleep(200);
+    assert.deepEqual(await countSpans(), ["Working sets: 1", "Warm-ups: 1"], "clearing the partial row returns it to excluded-blank");
+  });
+
+  await step("Quick note: long note edits, mirrors Exercise details notes, persists after reload, no truncation", async () => {
+    await freshLog();
+    await A(`type("Exercise 1 name", "Note Check Press")`);
+    await sleep(150);
+    const note = `Neutral grip, 3-1-1 tempo, seat 4. ${"Pause at the bottom. ".repeat(14)}End.`;
+    assert.ok(note.length > 300, "note is long enough to expose truncation");
+    await A(`type("Exercise 1 quick note", ${JSON.stringify(note)})`);
+    await sleep(400);
+    assert.equal(await ev(`window.__acc.q("Exercise 1 quick note").value`), note, "field shows the full note");
+    assert.equal(await ev(`document.querySelector(".quick-workout-more textarea").value`), note, "Exercise details notes is the same field, not a separate store");
+    const draft = (await A(`draft()`)).value;
+    assert.equal(draft.exerciseLogs[0].notes, note, "stored in the existing exercise notes field untruncated");
+    await open(startUrl);
+    await waitFor(() => ev(`Boolean(window.__acc.q("Exercise 1 quick note"))`), "restored quick note");
+    assert.equal(await ev(`window.__acc.q("Exercise 1 quick note").value`), note, "note restored after reload");
+    assert.equal((await A(`draft()`)).value.exerciseLogs[0].notes, note, "restored stored note untruncated");
+    await enterSet("Note Check Press", 1, 8, 60);
+    await A(`click("Done & next exercise")`);
+    await sleep(400);
+    const sessions = await saveAndRead();
+    assert.equal(sessions[0].exercises[0].notes, note, "saved session keeps the full note");
+  });
+
+  await step("prior-set hints are reference-only: no draft, completion or count change until explicit entry, Use last, Done", async () => {
+    await freshLog();
+    await A(`type("Exercise 1 name", "Seated Row")`);
+    await waitFor(() => hints().then((list) => list.length > 0), "prior-set hints");
+    await sleep(300);
+    const shown = await hints();
+    assert.ok(shown.every((hint) => hint.referenceOnly === "true" && /^Previous: \d+ × \d+(\.\d)? lb$/.test(hint.text)), `reference-only hint text: ${JSON.stringify(shown)}`);
+    assert.equal(shown[0].row, "Seated Row set 1");
+    const hintText = shown[0].text;
+    assert.deepEqual(await setSnapshot(), [{ reps: 0, weight: 0, completed: false, setType: "standard" }], "showing a hint left the blank draft row untouched");
+    assert.equal(await ev(`window.__acc.q("Seated Row set 1 reps").value`), "", "hint is not written into the reps field");
+    assert.equal(await ev(`window.__acc.q("Seated Row set 1 load in lb").value`), "", "hint is not written into the load field");
+    assert.deepEqual(await countSpans(), ["Working sets: 0", "Warm-ups: 0"], "hints do not count as working sets or warm-ups");
+    assert.equal((await A(`articles()`))[0].done, "false", "hints do not mark the exercise performed");
+    // Explicit entry counts; the hint stays the same reference text.
+    await enterSet("Seated Row", 1, 5, 100);
+    await sleep(300);
+    assert.deepEqual((await setSnapshot())[0], { reps: 5, weight: 100, completed: false, setType: "standard" }, "explicit entry is what the draft holds");
+    assert.equal((await hints())[0].text, hintText, "hint text does not follow what was typed");
+    assert.deepEqual(await countSpans(), ["Working sets: 1", "Warm-ups: 0"], "only the explicit row counts");
+    // A warm-up row carries no working-set hint and counts do not move because of hints.
+    await A(`type("Seated Row set 2 type", "warmup")`);
+    await sleep(200);
+    assert.equal((await hints()).some((hint) => hint.row === "Seated Row set 2"), false, "warm-up rows show no working-set hint");
+    assert.deepEqual(await countSpans(), ["Working sets: 1", "Warm-ups: 0"], "an empty warm-up row with a nearby hint is not counted");
+    // Use last is an explicit copy into editable, unperformed draft rows.
+    await A(`click("Use last sets")`);
+    await sleep(400);
+    const copied = await setSnapshot();
+    assert.ok(copied.some((set) => set.reps > 0 && set.weight > 0), "Use last copied values into the draft");
+    assert.ok(copied.every((set) => !set.completed), "copied rows are not completed");
+    assert.equal((await A(`articles()`))[0].done, "false", "Use last does not mark the exercise done");
+    const validCopied = copied.filter((set) => set.reps > 0 && set.weight > 0);
+    const spans = await countSpans();
+    assert.equal(spans[0], `Working sets: ${validCopied.filter((set) => set.setType !== "warmup").length}`, "counts follow draft rows, not hints");
+    // Done is the explicit completion.
+    await A(`click("Done & next exercise")`);
+    await sleep(400);
+    const cards = await A(`articles()`);
+    assert.equal(cards[0].done, "true", "Done explicitly completes");
+    const workingCopied = validCopied.filter((set) => set.setType !== "warmup").length;
+    assert.match(cards[0].text, new RegExp(`^.*${workingCopied} sets? done`), "Done completes the working sets only");
+    const finalSets = await setSnapshot();
+    assert.equal(finalSets.filter((set) => set.completed).length, workingCopied, "no warm-up or hint-only row was marked performed");
+    assert.equal(finalSets.some((set) => set.setType === "warmup" && set.reps > 0), true, "warm-up row values stay preserved, not discarded");
+  });
+
   // @@END@@
 } catch (error) {
   results.push({ name: "harness", ok: false, error });
