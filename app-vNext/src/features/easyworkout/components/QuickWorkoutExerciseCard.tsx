@@ -1,3 +1,6 @@
+import { PEC_FLY_VARIANTS, workoutLoadLabel, type WorkoutLoadMode } from "@/features/easyworkout/domain/workoutLoadMode";
+import { formatWorkoutExerciseName } from "@/features/easyworkout/domain/workoutEntryHelpers";
+import { completedWorkoutRows } from "@/features/easyworkout/domain/workoutCompletedRows";
 import { useEffect, useRef, useState, type KeyboardEvent, type MutableRefObject } from "react";
 import { DecimalLoadInput } from "@/features/easyworkout/components/DecimalLoadInput";
 import type { WorkoutExerciseLogDraft, WorkoutSetDraft } from "@/features/easyworkout/domain/workoutDraftLifecycle";
@@ -50,10 +53,14 @@ type QuickWorkoutExerciseCardProps = {
   isDone: boolean;
   weightUnit: "lb" | "kg";
   lastTime: QuickWorkoutLastTime | null;
+  quickNoteChoices?: string[];
   /** DOM id of the field a blocked Done/save needs the user to fix. */
   invalidFieldId?: string;
   nameInputRef?: MutableRefObject<HTMLInputElement | null>;
+  onExerciseTypeChange: (type: WorkoutExerciseLogDraft["exerciseType"]) => void;
+  onLoadModeChange: (mode: WorkoutLoadMode | undefined) => void;
   onExerciseNameChange: (value: string) => void;
+  onExerciseNameBlur: (value: string) => void;
   onExerciseNotesChange: (value: string) => void;
   onSetEdit: (setLocalId: string, patch: Partial<WorkoutSetDraft>) => void;
   onSetupChange: (field: keyof WorkoutEquipmentSetup, value: string) => void;
@@ -94,7 +101,7 @@ export function countQuickWorkoutSets(exercise: WorkoutExerciseLogDraft) {
 }
 
 function previousSetHint(set: QuickWorkoutPreviousSet, type: WorkoutExerciseLogDraft["exerciseType"], weightUnit: "lb" | "kg") {
-  if (type === "bodyweight") return `${set.reps} reps`;
+  if (type === "bodyweight") return `${set.reps} reps${set.weight > 0 ? ` + ${set.weight} ${weightUnit} added` : ""}`;
   if (type === "duration") return `${set.durationSeconds || 0} sec`;
   if (type === "distance") return `${set.distanceMeters || 0} m`;
   return `${set.reps} × ${set.weight.toFixed(1)} ${weightUnit}`;
@@ -109,9 +116,13 @@ export function QuickWorkoutExerciseCard({
   isDone,
   weightUnit,
   lastTime,
+  quickNoteChoices = [],
   invalidFieldId,
   nameInputRef,
+  onExerciseTypeChange,
+  onLoadModeChange,
   onExerciseNameChange,
+  onExerciseNameBlur,
   onExerciseNotesChange,
   onSetEdit,
   onSetupChange,
@@ -124,24 +135,26 @@ export function QuickWorkoutExerciseCard({
   onDelete,
 }: QuickWorkoutExerciseCardProps) {
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const confirmDialogRef = useRef<HTMLDialogElement | null>(null);
   const cancelButtonRef = useRef<HTMLButtonElement | null>(null);
   const deleteTriggerRef = useRef<HTMLButtonElement | null>(null);
   const label = exercise.exerciseName.trim() || `Exercise ${exerciseIndex + 1}`;
   const type = exercise.exerciseType;
   const showReps = type !== "duration" && type !== "distance";
-  const showLoad = type === "weighted" || type === "assisted";
+  const showLoad = type === "weighted" || type === "assisted" || type === "bodyweight";
   const counts = countQuickWorkoutSets(exercise);
 
   useEffect(() => {
-    if (confirmingDelete) cancelButtonRef.current?.focus();
+    if (confirmingDelete) { confirmDialogRef.current?.showModal(); cancelButtonRef.current?.focus(); }
   }, [confirmingDelete]);
 
   function cancelDelete() {
+    confirmDialogRef.current?.close();
     setConfirmingDelete(false);
     deleteTriggerRef.current?.focus();
   }
 
-  function handleConfirmKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+  function handleConfirmKeyDown(event: KeyboardEvent<HTMLDialogElement>) {
     if (event.key !== "Escape") return;
     event.preventDefault();
     event.stopPropagation();
@@ -149,7 +162,9 @@ export function QuickWorkoutExerciseCard({
   }
 
   if (!isActive) {
-    const doneRows = exercise.sets.filter((set) => set.completed && !set.deleted);
+    const doneRows = completedWorkoutRows(exercise);
+    const completedWarmups = doneRows.filter(set => set.setType === "warmup").length;
+    const enteredWarmups = Math.max(0, counts.warmups - completedWarmups);
     const lastRow = doneRows[doneRows.length - 1];
     return (
       <article className="panel-section quick-workout-card quick-workout-card-collapsed" data-done={isDone ? "true" : "false"}>
@@ -159,7 +174,7 @@ export function QuickWorkoutExerciseCard({
             <strong>{exercise.exerciseName.trim() || "Empty exercise"}</strong>
             <small>
               {isDone
-                ? `${doneRows.length} set${doneRows.length === 1 ? "" : "s"} done${lastRow && showLoad ? ` · ${lastRow.weight} ${weightUnit} × ${lastRow.reps}` : ""}`
+                ? `${doneRows.length} set${doneRows.length === 1 ? "" : "s"} done${completedWarmups ? ` (including ${completedWarmups} completed warm-ups)` : ""}${enteredWarmups ? ` + ${enteredWarmups} warm-ups entered (not marked done)` : ""}${lastRow && showReps ? `; Last set: ${lastRow.reps} reps${showLoad ? ` x ${lastRow.weight} ${weightUnit}${type === "bodyweight" ? " added" : exercise.loadMode ? ` ${workoutLoadLabel(exercise.loadMode)}` : ""}` : ""}` : ""}`
                 : "Not done yet"}
             </small>
           </div>
@@ -182,16 +197,6 @@ export function QuickWorkoutExerciseCard({
     <article className="panel-section quick-workout-card" data-done={isDone ? "true" : "false"}>
       <div className="quick-workout-header">
         <span className="quick-workout-index">Exercise {exerciseIndex + 1}</span>
-        {lastTime ? (
-          <button
-            type="button"
-            className="ghost-button compact-button quick-workout-last"
-            title={`Last completed on ${lastTime.performedOn}: ${lastTime.setsLabel}${lastTime.setupLabel ? ` · ${lastTime.setupLabel}` : ""}`}
-            onClick={() => onUseLast(lastTime.setupLabel && !lastTime.currentHasSetup ? "both" : "sets")}
-          >
-            {lastTime.setupLabel && !lastTime.currentHasSetup ? "Use last sets & setup" : "Use last sets"}
-          </button>
-        ) : null}
         <button
           ref={deleteTriggerRef}
           type="button"
@@ -202,6 +207,17 @@ export function QuickWorkoutExerciseCard({
         >
           <span aria-hidden="true">×</span>
         </button>
+        {lastTime ? (
+          <button
+            type="button"
+            className="ghost-button compact-button quick-workout-last"
+            title={`Last completed on ${lastTime.performedOn}: ${lastTime.setsLabel}${lastTime.setupLabel ? ` · ${lastTime.setupLabel}` : ""}`}
+            onClick={() => onUseLast(lastTime.setupLabel && !lastTime.currentHasSetup ? "both" : "sets")}
+          >
+            {lastTime.setupLabel && !lastTime.currentHasSetup ? "Use last sets & setup" : "Use last sets"}
+          </button>
+        ) : null}
+
       </div>
 
       <div className="quick-workout-identity">
@@ -215,12 +231,14 @@ export function QuickWorkoutExerciseCard({
             aria-label={`Exercise ${exerciseIndex + 1} name`}
             value={exercise.exerciseName}
             onChange={(event) => onExerciseNameChange(event.target.value)}
+            onBlur={(event) => { const formatted = formatWorkoutExerciseName(event.currentTarget.value); if (formatted !== event.currentTarget.value) onExerciseNameBlur(formatted); }}
             placeholder="Lat pulldown"
           />
         </label>
         <label className="field-stack quick-workout-quick-note">
           <span>Quick note</span>
           <input
+            list={"quick-workout-notes-" + exercise.localId}
             aria-label={`Exercise ${exerciseIndex + 1} quick note`}
             autoComplete="off"
             value={exercise.notes}
@@ -230,8 +248,10 @@ export function QuickWorkoutExerciseCard({
         </label>
       </div>
 
+      <datalist id={"quick-workout-notes-" + exercise.localId}>{quickNoteChoices.map(note => <option key={note} value={note} />)}</datalist>
+
       {confirmingDelete ? (
-        <div className="quick-workout-confirm" role="group" aria-label={`Confirm deleting ${label}`} onKeyDown={handleConfirmKeyDown}>
+        <dialog ref={confirmDialogRef} className="quick-workout-confirm" aria-label={`Confirm deleting ${label}`} onCancel={event => { event.preventDefault(); cancelDelete(); }} onKeyDown={handleConfirmKeyDown}>
           <p>Delete {label} and its sets?</p>
           <div className="pill-row">
             <button ref={cancelButtonRef} type="button" className="ghost-button compact-button" onClick={cancelDelete}>
@@ -241,13 +261,15 @@ export function QuickWorkoutExerciseCard({
               Delete exercise
             </button>
           </div>
-        </div>
+        </dialog>
       ) : null}
 
+      {(type === "weighted" && /pull.?ups?|chin.?ups?|push.?ups?|dips?/i.test(exercise.exerciseName)) ? <button type="button" className="ghost-button compact-button quick-workout-bodyweight-choice" onClick={() => onExerciseTypeChange("bodyweight")}>Bodyweight (no load)</button> : null}
+      {type === "bodyweight" ? <small className="quick-workout-bodyweight-label">Bodyweight · added load optional</small> : null}
       <div className="quick-workout-set-head" aria-hidden="true">
         <span>#</span>
         <span>{showReps ? "Reps" : type === "duration" ? "Sec" : "Meters"}</span>
-        <span>{showLoad ? (type === "assisted" ? `Assist ${weightUnit}` : weightUnit) : ""}</span>
+        <span>{showLoad ? (type === "assisted" ? `Assist ${weightUnit}` : weightUnit + (exercise.loadMode ? " " + workoutLoadLabel(exercise.loadMode) : "")) : ""}</span>
         <span>Type</span>
         <span />
       </div>
@@ -259,7 +281,7 @@ export function QuickWorkoutExerciseCard({
           <div key={set.localId} className="quick-workout-set-row" role="group" aria-label={`${label} set ${setIndex + 1}`}>
             <span className="quick-workout-set-number">
               {setIndex + 1}
-              {lastTime && showLoad && set.weight > lastTime.bestWeight ? <span className="workout-pr-chip">PR</span> : null}
+              {lastTime && showLoad && type !== "bodyweight" && set.weight > lastTime.bestWeight ? <span className="workout-pr-chip">PR</span> : null}
             </span>
             {showReps ? (
               <input
@@ -312,10 +334,10 @@ export function QuickWorkoutExerciseCard({
                 id={quickFieldId(set.localId, "load")}
                 enterKeyHint="next"
                 autoComplete="off"
-                aria-label={`${label} set ${setIndex + 1} ${type === "assisted" ? "assistance" : "load"} in ${weightUnit}`}
+                aria-label={`${label} set ${setIndex + 1} ${type === "assisted" ? "assistance" : type === "bodyweight" ? "optional added load" : "load"} in ${weightUnit}`}
                 aria-invalid={invalidFieldId === quickFieldId(set.localId, "load") || undefined}
                 value={set.weight}
-                placeholder="135"
+                placeholder={type === "bodyweight" ? "0 optional" : "135"}
                 onFocus={(event) => selectInput(event.currentTarget)}
                 onClick={(event) => selectInput(event.currentTarget)}
                 onMouseUp={(event) => event.preventDefault()}
@@ -361,9 +383,30 @@ export function QuickWorkoutExerciseCard({
         {counts.incomplete ? <span>Incomplete: {counts.incomplete}</span> : null}
       </p>
 
+      <div className="quick-workout-detail-controls">
+      {showLoad && type !== "bodyweight" ? <label className="quick-workout-each-hand" title={exercise.loadMode ? "Off: total weight. On: weight in each hand." : "Original load convention is unspecified. Choose a mode explicitly; stored numbers will not be converted."}>
+        <input type="checkbox" aria-label={label + " each hand"} aria-checked={!exercise.loadMode ? "mixed" : exercise.loadMode === "per-hand"} checked={exercise.loadMode === "per-hand"} ref={input => { if (input) input.indeterminate = !exercise.loadMode; }} onChange={event => onLoadModeChange(event.target.checked ? "per-hand" : "total")} />
+        <span>Each hand</span>
+      </label> : null}
       <details className="quick-workout-more">
-        <summary>Exercise details</summary>
+        <summary title="Machine setup, full exercise notes and individual set notes">Exercise details</summary>
         <div className="quick-workout-more-grid">
+      <label className="field-stack"><span>Exercise type</span><select aria-label={label + " exercise type"} value={type} onChange={event => onExerciseTypeChange(event.target.value as WorkoutExerciseLogDraft["exerciseType"])}>
+        <option value="weighted">Weight + reps</option><option value="bodyweight">Bodyweight (+ optional added weight)</option><option value="assisted">Assisted</option><option value="duration">Timed</option><option value="distance">Distance</option>
+      </select></label>
+      {/pec.*fl[yi]|pec deck/i.test(exercise.exerciseName) ? (
+        <label className="field-stack">
+          <span>Pec fly variant</span>
+          <select aria-label={label + " variant"} value={PEC_FLY_VARIANTS.find((name) => name.toLowerCase() === exercise.exerciseName.trim().toLowerCase()) || ""} onChange={(event) => { if (event.target.value) onExerciseNameChange(event.target.value); }}>
+            <option value="">Choose variant</option>
+            {PEC_FLY_VARIANTS.map((name) => <option key={name} value={name}>{name}</option>)}
+          </select>
+        </label>
+      ) : null}
+
+
+          {!exercise.loadMode && showLoad && type !== "bodyweight" ? <small>Original load convention is unspecified. Changing Each hand selects an explicit mode without converting the stored numbers.</small> : null}
+
           <label className="field-stack quick-workout-wide">
             <span>Exercise notes</span>
             <textarea
@@ -407,6 +450,7 @@ export function QuickWorkoutExerciseCard({
           ))}
         </div>
       </details>
+      </div>
 
       <div className="quick-workout-actions">
         <button type="button" className="button-secondary compact-button" onClick={onAddSet}>

@@ -1,3 +1,4 @@
+import { normalizeWorkoutLoadMode, type WorkoutLoadMode } from "./workoutLoadMode.ts";
 import { normalizeWorkoutEquipmentSetup, type WorkoutEquipmentSetup } from "../../../lib/workoutEquipmentSetup.ts";
 import {
   normalizeWorkoutPlanningContext,
@@ -56,6 +57,7 @@ export type WorkoutSetDraft = {
 };
 
 export type WorkoutExerciseLogDraft = {
+  loadMode?: WorkoutLoadMode;
   localId: string;
   exerciseId: string | null;
   exerciseName: string;
@@ -151,6 +153,7 @@ function normalizeExercise(value: unknown, createId: () => string, trustExplicit
     primaryMuscles: primaryMuscles.length ? primaryMuscles : muscleGroup ? [muscleGroup] : [],
     secondaryMuscles: textList(value.secondaryMuscles),
     exerciseType: kind,
+    ...(normalizeWorkoutLoadMode(value.loadMode) ? { loadMode: normalizeWorkoutLoadMode(value.loadMode) } : {}),
     setup: normalizeWorkoutEquipmentSetup(value.setup),
     notes: text(value.notes),
     sets: rawSets.length
@@ -253,7 +256,8 @@ export function hasWorkoutDraftWork(
   const planningContext = draft.planningContext;
   return Boolean(
     draft.selectedRoutineId || draft.durationMinutes || draft.sessionNotes.trim() ||
-      planningContext?.focusGroups.length || planningContext?.availableEquipment.length || planningContext?.plannedDurationMinutes ||
+      planningContext?.avoidedExerciseKeys?.length || planningContext?.recoveryDays ||
+      planningContext?.focusGroups.length || (planningContext?.equipmentMode !== "full-gym" && planningContext?.availableEquipment.length) || planningContext?.equipmentMode === "limited" || planningContext?.remainingBudget || planningContext?.plannedDurationMinutes ||
       draft.exerciseLogs.some((exercise) =>
         exercise.exerciseName.trim() || exercise.notes.trim() || Object.values(exercise.setup || {}).some((entry) => Boolean(entry?.trim())) ||
         exercise.sets.some((set) => !set.deleted && (

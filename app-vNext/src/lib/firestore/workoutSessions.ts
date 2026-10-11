@@ -1,3 +1,4 @@
+import type { WorkoutLoadMode } from "../../features/easyworkout/domain/workoutLoadMode";
 import {
   addDoc,
   collection,
@@ -38,6 +39,7 @@ export type WorkoutSetRecord = {
 };
 
 export type WorkoutExerciseLogRecord = {
+  loadMode?: WorkoutLoadMode;
   exerciseId: string | null;
   exerciseName: string;
   muscleGroup: string;
