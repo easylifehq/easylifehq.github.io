@@ -1,3 +1,4 @@
+import type { WorkoutLoadMode } from "@/features/easyworkout/domain/workoutLoadMode";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
@@ -29,11 +30,9 @@ import {
 } from "@/features/easyworkout/domain/workoutLogAssist";
 import {
   createPlannedExerciseFromSuggestion,
-  deriveNextExerciseSuggestions,
-  workoutRecommendationSetBudget,
   type WorkoutNextExerciseSuggestion,
 } from "@/features/easyworkout/domain/workoutNextExercise";
-import { emptyWorkoutPlanningContext } from "@/features/easyworkout/domain/workoutPlanning";
+import { emptyWorkoutPlanningContext, defaultWorkoutPlanningContext } from "@/features/easyworkout/domain/workoutPlanning";
 import {
   applyExerciseIdentityEdit,
   applySetEdit,
@@ -89,6 +88,7 @@ const emptySet = (reps = 8): WorkoutSetDraft => ({
   localId: createLocalId(), reps, weight: 0, notes: "", setType: "standard", completed: false, deleted: false, rir: null,
 });
 const emptyExerciseLog = (setCount = 1, defaultReps = 8): WorkoutExerciseLogDraft => ({
+  loadMode: "total",
   localId: createLocalId(),
   exerciseId: null,
   exerciseName: "",
@@ -127,6 +127,9 @@ function readStoredWorkoutDraft(storageKey: string, ownerId: string, defaultWeig
   }
 }
 
+import { workoutSaveFailureMessage } from "@/features/easyworkout/domain/workoutSaveFailure";
+import { workoutQuickNoteChoices } from "@/features/easyworkout/domain/workoutEntryHelpers";
+
 export function EasyWorkoutLogPage() {
   const firstExerciseInputRef = useRef<HTMLInputElement | null>(null);
   const saveCoordinatorRef = useRef(new WorkoutSaveCoordinator<string | null>());
@@ -161,12 +164,11 @@ export function EasyWorkoutLogPage() {
   const [performedOn, setPerformedOn] = useState(restoredDraft?.performedOn ?? localDateKey());
   const [durationMinutes, setDurationMinutes] = useState(restoredDraft?.durationMinutes ?? "");
   const [planningContext, setPlanningContext] = useState(
-    restoredDraft?.planningContext ?? emptyWorkoutPlanningContext()
+    restoredDraft?.planningContext ?? defaultWorkoutPlanningContext()
   );
   const [planningDurationInput, setPlanningDurationInput] = useState(
-    restoredDraft?.planningContext.plannedDurationMinutes === null || restoredDraft?.planningContext.plannedDurationMinutes === undefined
-      ? ""
-      : String(restoredDraft.planningContext.plannedDurationMinutes)
+    restoredDraft?.planningContext.remainingBudget?.kind === "time" ? String(restoredDraft.planningContext.remainingBudget.amount) :
+    ""
   );
   const [draftWeightUnit] = useState<"lb" | "kg">(restoredDraft?.weightUnit ?? settings.easyWorkout.weightUnit);
   const [sessionNotes, setSessionNotes] = useState(restoredDraft?.sessionNotes ?? "");
@@ -242,7 +244,8 @@ export function EasyWorkoutLogPage() {
       sessionNotes.trim() ||
       durationMinutes ||
       planningContext.focusGroups.length ||
-      planningContext.availableEquipment.length ||
+      (planningContext.equipmentMode !== "full-gym" && planningContext.availableEquipment.length) ||
+      planningContext.remainingBudget ||
       planningContext.plannedDurationMinutes !== null ||
       exerciseLogs.some(hasExerciseWork);
 
@@ -294,23 +297,6 @@ export function EasyWorkoutLogPage() {
     setExerciseLogs(nextLogs);
     setActiveExerciseId(nextLogs[0]?.localId ?? "");
   }, [isLoading, previousByExercise, selectedRoutine, workoutMode, gymMode, settings.easyWorkout.defaultSetCount]);
-
-  const remainingMinutes = planningContext.plannedDurationMinutes === null ? null
-    : Math.max(0, planningContext.plannedDurationMinutes - elapsedSeconds / 60);
-  const recommendationBudget = remainingMinutes === null ? null
-    : workoutRecommendationSetBudget(remainingMinutes, settings.easyWorkout.defaultSetCount);
-  // Elapsed time affects suggestions only when the fitting set budget changes.
-  const cachedNextExerciseResult = useMemo(() => deriveNextExerciseSuggestions({
-    planningContext,
-    elapsedSeconds,
-    defaultSetCount: settings.easyWorkout.defaultSetCount,
-    exerciseOptions,
-    exerciseLogs,
-    history: previousByExercise,
-  }), [recommendationBudget, exerciseLogs, exerciseOptions, planningContext, previousByExercise, settings.easyWorkout.defaultSetCount]);
-  const nextExerciseResult = { ...cachedNextExerciseResult,
-    remainingMinutes: cachedNextExerciseResult.remainingMinutes === null ? null : remainingMinutes };
-  const nextExerciseSuggestions = nextExerciseResult.suggestions;
 
   const isGymModeActive = gymMode;
   const isFocusedWorkoutMode = workoutMode || isGymModeActive;
@@ -502,7 +488,7 @@ export function EasyWorkoutLogPage() {
 
   function fillFromLastTime(exerciseIndex: number, mode: "sets" | "setup" | "both") {
     const exercise = exerciseLogs[exerciseIndex];
-    const previous = findExerciseHistory(previousByExercise, exercise.exerciseName, exercise.exerciseId);
+    const previous = findExerciseHistory(previousByExercise, exercise.exerciseName, exercise.exerciseId, exercise.loadMode);
     if (!previous) return;
 
     const next: Partial<WorkoutExerciseLogDraft> = {};
@@ -524,11 +510,38 @@ export function EasyWorkoutLogPage() {
     setActiveExerciseId(nextBoxes[0]?.localId ?? "");
   }
 
+  function addSuggestedWorkout(suggestions: WorkoutNextExerciseSuggestion[]) {
+    const additions = suggestions.map(suggestion => {
+      const planned = createPlannedExerciseFromSuggestion(suggestion, createLocalId);
+      return { ...planned, loadMode: planned.loadMode ?? "total" as const, sets: planned.sets.map(set => ({ ...set, reps: 0, completed: false })) };
+    });
+    if (!additions.length) return;
+    setExerciseLogs(current => {
+      const seen = new Set(current.filter(e => e.exerciseName.trim()).map(e => e.exerciseId ? "id:" + e.exerciseId : "name:" + e.exerciseName.trim().toLowerCase()));
+      const next = [...current];
+      for (const addition of additions) {
+        const key = addition.exerciseId ? "id:" + addition.exerciseId : "name:" + addition.exerciseName.trim().toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const blank = next.findIndex(e => !hasExerciseWork(e));
+        if (blank < 0) next.push(addition); else next[blank] = addition;
+      }
+      return next;
+    });
+    const active = exerciseLogs.find(e => e.localId === activeExerciseId);
+    if (!active || isExerciseDone(active) || !hasExerciseWork(active)) setActiveExerciseId(additions[0].localId);
+    setSaveMessage("");
+  }
+
   function addSuggestedExercise(suggestion: WorkoutNextExerciseSuggestion) {
-    const nextExercise = createPlannedExerciseFromSuggestion(suggestion, createLocalId);
-    setExerciseLogs((current) => [...current, nextExercise]);
+    const planned = createPlannedExerciseFromSuggestion(suggestion, createLocalId);
+    const nextExercise = { ...planned, loadMode: planned.loadMode ?? "total" as const, sets: planned.sets.map(set => ({ ...set, reps: 0 })) };
+    setExerciseLogs((current) => {
+      const blankIndex = current.findIndex(exercise => !hasExerciseWork(exercise));
+      return blankIndex < 0 ? [...current, nextExercise] : current.map((exercise, index) => index === blankIndex ? nextExercise : exercise);
+    });
     setActiveExerciseId(nextExercise.localId);
-    setSaveMessage(`${suggestion.name} added with ${suggestion.proposedSets} planned set${suggestion.proposedSets === 1 ? "" : "s"}, no load, and nothing marked done. Copy last sets or setup separately if you want them.`);
+    setSaveMessage("");
   }
 
   function editSet(exerciseLocalId: string, setLocalId: string, patch: Partial<WorkoutSetDraft>) {
@@ -560,6 +573,7 @@ export function EasyWorkoutLogPage() {
       primaryMuscles: match?.primaryMuscles.length ? match.primaryMuscles : exercise.primaryMuscles,
       secondaryMuscles: match?.secondaryMuscles.length ? match.secondaryMuscles : exercise.secondaryMuscles,
       exerciseType: match?.exerciseType || exercise.exerciseType,
+      ...(match?.loadMode ? { loadMode: match.loadMode } : {}),
     });
   }
 
@@ -702,6 +716,7 @@ export function EasyWorkoutLogPage() {
         primaryMuscles: exercise.primaryMuscles,
         secondaryMuscles: exercise.secondaryMuscles,
         exerciseType: exercise.exerciseType,
+        ...(exercise.loadMode ? { loadMode: exercise.loadMode } : {}),
         setup: normalizeWorkoutEquipmentSetup(exercise.setup),
         notes: exercise.notes,
         sets: exercise.sets
@@ -749,28 +764,37 @@ export function EasyWorkoutLogPage() {
         notes: sessionNotes.trim(),
         exercises: cleanedExercises,
       }));
-      if (!sessionId) throw new Error("Workout persistence did not confirm a session id.");
+      if (!sessionId) throw { code: "unauthenticated" };
 
       skipDraftFlushRef.current = true;
-      const rawStored = window.localStorage.getItem(draftStorageKey);
       let storedDraftId: string | null = null;
       try {
+        const rawStored = window.localStorage.getItem(draftStorageKey);
         storedDraftId = rawStored ? String((JSON.parse(rawStored) as { draftId?: string }).draftId || "") : null;
       } catch {
         storedDraftId = null;
       }
-      if (canClearMatchingWorkoutDraft(storedDraftId, draftId)) {
-        window.localStorage.removeItem(draftStorageKey);
-      }
+      try { if (canClearMatchingWorkoutDraft(storedDraftId, draftId)) window.localStorage.removeItem(draftStorageKey); } catch { /* Remote save already confirmed. */ }
       setDraftStatus("synced");
       setSaveMessage("Workout saved.");
       navigate({ pathname: `/app/easyworkout/session/${encodeURIComponent(sessionId)}`, search: isDemoMode ? "?demo=1" : "" });
-    } catch {
+    } catch (error) {
       setDraftStatus("sync-failed-draft-retained");
-      setSaveMessage("Couldn't sync — draft retained. Retry when the connection is ready.");
+      setSaveMessage(workoutSaveFailureMessage(error));
     } finally {
       setIsSaving(false);
     }
+  }
+
+  function downloadDraftBackup() {
+    const draft = latestDraftRef.current;
+    if (!draft) return;
+    const serialized = serializeWorkoutDraftForStorage({ ...draft, elapsedSeconds: snapshotElapsedSeconds(), updatedAt: new Date().toISOString() });
+    if (!serialized) return;
+    const url = URL.createObjectURL(new Blob([serialized], { type: "application/json" }));
+    const link = document.createElement("a");
+    link.href = url; link.download = "EasyWorkout-draft-" + performedOn + ".json"; link.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   return (
@@ -962,8 +986,9 @@ export function EasyWorkoutLogPage() {
           <QuickWorkoutSessionStrip
             performedOn={performedOn}
             onPerformedOnChange={setPerformedOn}
+            focusPreset={planningContext.focusPreset}
             focusGroups={planningContext.focusGroups}
-            onFocusGroupsChange={(focusGroups) => setPlanningContext((current) => ({ ...current, focusGroups }))}
+            onFocusGroupsChange={(focusGroups, focusPreset) => setPlanningContext((current) => ({ ...current, focusGroups, focusPreset }))}
             sessionNotes={sessionNotes}
             onSessionNotesChange={setSessionNotes}
           />
@@ -1058,9 +1083,28 @@ export function EasyWorkoutLogPage() {
           </div>
         ) : null}
 
+        {isFocusedWorkoutMode ? (
+          <QuickWorkoutNextExercise
+            sessions={sessions}
+            performedOn={performedOn}
+            currentDraftId={draftId}
+            historyLoading={isLoading}
+            onAddPlan={addSuggestedWorkout}
+            planningContext={planningContext}
+            setPlanningContext={setPlanningContext}
+            planningDurationInput={planningDurationInput}
+            setPlanningDurationInput={setPlanningDurationInput}
+            exerciseOptions={exerciseOptions}
+            exerciseLogs={exerciseLogs}
+            history={previousByExercise}
+            defaultSetCount={settings.easyWorkout.defaultSetCount}
+            onAddSuggestion={addSuggestedExercise}
+          />
+        ) : null}
+
         <div className="task-list-vnext workout-exercise-list">
           {exerciseLogs.map((exercise, exerciseIndex) => {
-            const previous = findExerciseHistory(previousByExercise, exercise.exerciseName, exercise.exerciseId);
+            const previous = findExerciseHistory(previousByExercise, exercise.exerciseName, exercise.exerciseId, exercise.loadMode);
             const previousSetupLabel = formatWorkoutEquipmentSetup(previous?.lastSetup);
             const currentHasSetup = hasWorkoutEquipmentSetup(exercise.setup);
             const previousSetsLabel = previous?.lastSets.map((set) => {
@@ -1078,6 +1122,7 @@ export function EasyWorkoutLogPage() {
                   isActive={!activeExerciseId || activeExerciseId === exercise.localId}
                   isDone={isExerciseDone(exercise)}
                   weightUnit={draftWeightUnit}
+                  quickNoteChoices={workoutQuickNoteChoices(sessions, exercise)}
                   invalidFieldId={invalidFieldId}
                   lastTime={settings.easyWorkout.showLastTimeHelper && previous ? {
                     performedOn: previous.performedOn,
@@ -1088,7 +1133,10 @@ export function EasyWorkoutLogPage() {
                     currentHasSetup,
                   } : null}
                   nameInputRef={exerciseIndex === 0 ? firstExerciseInputRef : undefined}
+                  onExerciseTypeChange={(exerciseType) => editExerciseIdentity(exercise.localId, { exerciseType })}
+                  onLoadModeChange={(loadMode) => editExerciseIdentity(exercise.localId, { loadMode })}
                   onExerciseNameChange={(value) => changeExerciseName(exercise, value)}
+                  onExerciseNameBlur={(exerciseName) => editExerciseIdentity(exercise.localId, { exerciseName })}
                   onExerciseNotesChange={(value) => updateExerciseLog(exerciseIndex, { notes: value })}
                   onSetEdit={(setLocalId, patch) => editSet(exercise.localId, setLocalId, patch)}
                   onSetupChange={(field, value) => updateExerciseSetup(exerciseIndex, field, value)}
@@ -1146,11 +1194,20 @@ export function EasyWorkoutLogPage() {
                           primaryMuscles: match?.primaryMuscles.length ? match.primaryMuscles : exercise.primaryMuscles,
                           secondaryMuscles: match?.secondaryMuscles.length ? match.secondaryMuscles : exercise.secondaryMuscles,
                           exerciseType: match?.exerciseType || exercise.exerciseType,
+                          ...(match ? { loadMode: match.loadMode } : {}),
                         });
                       }}
                       placeholder="Lat pulldown"
                     />
                   </label>
+                  {(exercise.exerciseType === "weighted" || exercise.exerciseType === "assisted") ? (
+                    <label className="field-stack">
+                      <span>Weight entry</span>
+                      <select aria-label={(exercise.exerciseName || "Exercise") + " weight mode"} value={exercise.loadMode || ""} onChange={(event) => editExerciseIdentity(exercise.localId, { loadMode: event.target.value ? event.target.value as WorkoutLoadMode : undefined })}>
+                        <option value="">Unspecified (original convention)</option><option value="total">Total weight</option><option value="per-hand">Weight per hand</option>
+                      </select>
+                    </label>
+                  ) : null}
                   {!isFocusedWorkoutMode ? (
                   <label className="field-stack">
                     <span>Muscle group</span>
@@ -1310,16 +1367,7 @@ export function EasyWorkoutLogPage() {
           })}
         </div>
 
-        {isFocusedWorkoutMode ? (
-          <QuickWorkoutNextExercise
-            planningContext={planningContext}
-            setPlanningContext={setPlanningContext}
-            planningDurationInput={planningDurationInput}
-            setPlanningDurationInput={setPlanningDurationInput}
-            nextExerciseResult={nextExerciseResult}
-            onAddSuggestion={addSuggestedExercise}
-          />
-        ) : null}
+
 
         <div className="task-composer-actions workout-log-actions">
           {!isFocusedWorkoutMode ? (
@@ -1330,8 +1378,9 @@ export function EasyWorkoutLogPage() {
           <button type="submit" className="primary-button" disabled={isSaving}>
             {isSaving ? "Syncing…" : "Save workout"}
           </button>
+          <button type="button" className="ghost-button" onClick={downloadDraftBackup}>Download draft backup</button>
         </div>
-        {draftStatus === "syncing" || draftStatus === "synced" || draftStatus === "sync-failed-draft-retained" ? (
+        {draftStatus === "sync-failed-draft-retained" ? (
         <div className={`workout-save-status status-${draftStatus}`} role="status" aria-live="polite" aria-atomic="true">
           <strong>{workoutDraftStatusCopy[draftStatus]}</strong>
           <span>{workoutDraftStatusDetailCopy[draftStatus]}</span>

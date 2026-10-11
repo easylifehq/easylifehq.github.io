@@ -12,7 +12,10 @@
     "test:quick-workout-acceptance": "node tests/quick-workout-acceptance.browser.mjs",
     "test:workout-stats-progress": "node tests/workout-stats-progress.browser.mjs",
     "test:emulator": "npx --yes firebase-tools@15.25.1 emulators:exec --project demo-easylife-wave2 --config ../firebase.json --only firestore \"node --experimental-strip-types --test tests/firebase-emulator.integration.mjs\"",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:workout-planner": "node tests/workout-planner-ui.browser.mjs",
+    "test:workout-focus": "node tests/workout-focus-ui.browser.mjs",
+    "test:workout-load-modes": "node tests/workout-logging-modes.browser.mjs"
   },
   "dependencies": {
     "firebase": "^11.6.0",

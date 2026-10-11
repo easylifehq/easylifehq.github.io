@@ -16153,3 +16153,70 @@ button.calendar-detail-card:disabled {
     display: none;
   }
 }
+
+/* Keep the active logging surface compact while preserving 44px touch targets. */
+.quick-workout-card .quick-workout-identity { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+.quick-workout-load-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); gap: .45rem; min-width: 0; }
+.quick-workout-load-controls select { min-width: 0; width: 100%; min-height: 44px; }
+.quick-workout-header .quick-workout-index { flex: 0 1 auto; }
+.quick-workout-header .quick-workout-last { margin-left: auto; }
+.quick-workout-more summary::before { content: "+"; margin-right: .35rem; }
+.quick-workout-more[open] summary::before { content: "−"; }
+@media (min-width: 360px) and (max-width: 600px) {
+  .workout-session-strip { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .workout-strip-focus { margin-top: 1.65rem; }
+}
+@media (max-width: 359px) {
+  .quick-workout-card .quick-workout-identity { grid-template-columns: minmax(0, 1fr); }
+}
+.workout-planning-disclosure summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-size: .8rem; }
+.workout-strip-focus > details > summary { white-space: normal; overflow: visible; padding: .3rem 0; border: 0; background: transparent; }
+.workout-remaining-plan-option { min-width: 0; }
+.workout-remaining-plan-option strong, .workout-remaining-plan-option p { overflow-wrap: anywhere; }
+.workout-remaining-plan-option .pill-row button { min-height: 44px; }
+dialog.quick-workout-confirm {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(90vw, 28rem);
+  max-height: 80vh;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: var(--ui-bg-card, var(--shell-card-bg, #fff));
+  color: var(--ui-text-primary, #233033);
+  border: 1px solid #526174;
+  z-index: 100;
+}
+dialog.quick-workout-confirm::backdrop { background: rgba(0, 0, 0, .7); }
+/* Clean workout logging: keep inputs primary and optional controls compact. */
+.workout-session-strip-clean { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.workout-session-strip-clean .workout-strip-date,
+.workout-session-strip-clean .workout-strip-focus { min-width: 0; }
+.workout-session-strip-clean .workout-strip-notes,
+.workout-session-strip-clean .workout-muscles-picker { grid-column: 1 / -1; }
+.workout-muscles-picker > summary { width: 100%; justify-content: center; }
+.workout-supplement-choices { display: flex; flex-wrap: wrap; gap: 1rem; padding: .5rem 0; }
+.workout-supplement-choices label { display: inline-flex; align-items: center; gap: .35rem; min-height: 44px; }
+.quick-workout-header .quick-workout-index { order: 1; }
+.quick-workout-header .quick-workout-last { order: 2; }
+.quick-workout-header .quick-workout-icon-button { order: 3; margin-left: auto; }
+.quick-workout-detail-controls { display: flex; flex-wrap: wrap; align-items: start; gap: .5rem; }
+.quick-workout-detail-controls .quick-workout-more { flex: 1 1 auto; min-width: 130px; }
+.quick-workout-detail-controls .quick-workout-more[open] { flex-basis: 100%; }
+.quick-workout-each-hand { display: inline-flex; align-items: center; gap: .35rem; min-height: 44px; padding: 0 .25rem; font-size: .82rem; white-space: nowrap; }
+.quick-workout-each-hand input { width: 18px; height: 18px; min-height: 18px; padding: 0; }
+.quick-workout-bodyweight-label { color: var(--ui-text-secondary, #526362); }
+.workout-planner { margin: .4rem 0 .8rem; }
+.workout-planner > summary { display: inline-flex; min-height: 44px; }
+.workout-planner[open] { padding: .7rem; border: 1px solid var(--shell-card-border); border-radius: .7rem; }
+.workout-planning-advanced { margin: .65rem 0; }
+.workout-planning-advanced > summary { min-height: 44px; }
+.workout-plan-evidence { padding-left: 1.2rem; font-size: .85rem; }
+.workout-plan-evidence li { margin: .35rem 0; }
+.workout-whole-plan { padding: 0; list-style: none; display: grid; gap: .5rem; }
+.workout-whole-plan > li { display: grid; gap: .35rem; padding: .6rem; border: 1px solid var(--shell-card-border); border-radius: .55rem; }
+.workout-whole-plan small { display: block; }
+@media (max-width: 359px) {
+  .workout-session-strip-clean { grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); }
+  .workout-session-strip-clean input, .workout-session-strip-clean select { min-width: 0; padding-left: .45rem; padding-right: .45rem; }
+}

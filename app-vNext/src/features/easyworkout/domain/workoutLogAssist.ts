@@ -1,3 +1,4 @@
+import { workoutLoadIdentitySuffix, type WorkoutLoadMode } from "./workoutLoadMode.ts";
 import type { WorkoutExerciseRecord } from "../../../lib/firestore/workoutExercises.ts";
 import type { WorkoutSessionRecord, WorkoutSetRecord } from "../../../lib/firestore/workoutSessions.ts";
 import type { WorkoutSetDraft } from "./workoutDraftLifecycle.ts";
@@ -6,6 +7,7 @@ import { normalizeWorkoutEquipmentSetup, type WorkoutEquipmentSetup } from "../.
 import type { WorkoutExercisePlanningMetadata } from "./workoutPlanning.ts";
 
 export type WorkoutExerciseOption = {
+  loadMode?: WorkoutLoadMode;
   exerciseId: string | null;
   name: string;
   selectionLabel: string;
@@ -19,6 +21,7 @@ export type WorkoutExerciseOption = {
 export type ExerciseHistorySummary = {
   sourceSessionId: string;
   sourceExerciseId: string | null;
+  loadMode?: WorkoutLoadMode;
   lastWeight: number;
   lastReps: number;
   lastSets: Array<Pick<WorkoutSetRecord, "reps" | "weight" | "durationSeconds" | "distanceMeters">>;
@@ -78,6 +81,7 @@ export function buildWorkoutExerciseOptions(
     const current = options.get(key) || legacy;
     if (stableId && legacy) options.delete(`name:${normalizedName}`);
     options.set(key, {
+      loadMode: current ? current.loadMode : entry.loadMode,
       exerciseId: stableId || current?.exerciseId || null,
       name: preferEntryName ? name : current?.name || name,
       selectionLabel: current?.selectionLabel || name,
@@ -100,6 +104,7 @@ export function buildWorkoutExerciseOptions(
     session.exercises.forEach((exercise) => add({
       exerciseId: exercise.exerciseId,
       name: exercise.exerciseName,
+      loadMode: exercise.loadMode,
       muscleGroup: exercise.muscleGroup,
       primaryMuscles: exercise.primaryMuscles,
       secondaryMuscles: exercise.secondaryMuscles,
@@ -148,7 +153,7 @@ export function deriveExerciseHistory(
     session.exercises.forEach((exercise) => {
       const normalizedName = exerciseKey(exercise.exerciseName);
       if (!normalizedName) return;
-      const key = exercise.exerciseId ? stableHistoryKey(exercise.exerciseId) : legacyHistoryKey(exercise.exerciseName);
+      const key = (exercise.exerciseId ? stableHistoryKey(exercise.exerciseId) : legacyHistoryKey(exercise.exerciseName)) + workoutLoadIdentitySuffix(exercise.loadMode);
       const kind = exercise.exerciseType || "weighted";
       const validSets = exercise.sets.filter((set) => isValidWorkingSet(set, kind, {
         requiresExplicitCompletion: typeof session.schemaVersion === "number" && session.schemaVersion >= 4,
@@ -170,6 +175,7 @@ export function deriveExerciseHistory(
         summaries[key] = {
           sourceSessionId: session.id,
           sourceExerciseId: exercise.exerciseId,
+          ...(exercise.loadMode ? { loadMode: exercise.loadMode } : {}),
           lastWeight: bestSet.weight,
           lastReps: bestSet.reps,
           lastSets: convertedSets,
@@ -197,12 +203,13 @@ export function deriveExerciseHistory(
 export function findExerciseHistory(
   history: Record<string, ExerciseHistorySummary>,
   exerciseName: string,
-  exerciseId?: string | null
+  exerciseId?: string | null,
+  loadMode?: WorkoutLoadMode
 ) {
   if (exerciseId) {
-    return history[stableHistoryKey(exerciseId)] || history[legacyHistoryKey(exerciseName)];
+    return history[stableHistoryKey(exerciseId) + workoutLoadIdentitySuffix(loadMode)] || history[legacyHistoryKey(exerciseName) + workoutLoadIdentitySuffix(loadMode)];
   }
-  return history[legacyHistoryKey(exerciseName)];
+  return history[legacyHistoryKey(exerciseName) + workoutLoadIdentitySuffix(loadMode)];
 }
 
 export function fillSetsFromLastPerformance(

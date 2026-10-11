@@ -1,3 +1,4 @@
+import { PEC_FLY_VARIANTS } from "@/features/easyworkout/domain/workoutLoadMode";
 import {
   createContext,
   useContext,
@@ -78,6 +79,11 @@ function writeDemoAddedSessions(sessions: WorkoutSessionRecord[]) {
 }
 
 export const defaultWorkoutExercises: Array<Pick<WorkoutExerciseDraft, "name" | "muscleGroup" | "exerciseType" | "planningMetadata">> = [
+  { name: "Abdominal Crunch", muscleGroup: "Core", exerciseType: "bodyweight", planningMetadata: { focusGroups: ["Core"], movementPattern: "trunk", requiredEquipment: ["bodyweight"] } },
+  { name: "Plank", muscleGroup: "Core", exerciseType: "duration", planningMetadata: { focusGroups: ["Core"], movementPattern: "trunk", requiredEquipment: ["bodyweight"] } },
+  { name: "Treadmill", muscleGroup: "Conditioning", exerciseType: "duration", planningMetadata: { focusGroups: ["Conditioning"], movementPattern: "conditioning", requiredEquipment: ["cardio-machine"] } },
+  { name: "Stationary Bike", muscleGroup: "Conditioning", exerciseType: "duration", planningMetadata: { focusGroups: ["Conditioning"], movementPattern: "conditioning", requiredEquipment: ["cardio-machine"] } },
+  ...PEC_FLY_VARIANTS.map((name) => ({ name, muscleGroup: "Chest", exerciseType: "weighted" as const, planningMetadata: { focusGroups: ["Chest"] as ["Chest"], movementPattern: "horizontal-push" as const, requiredEquipment: [name.startsWith("Machine") ? "selectorized-machine" as const : "cable" as const] } })),
   { name: "Bench Press", muscleGroup: "Chest", exerciseType: "weighted", planningMetadata: { focusGroups: ["Chest"], movementPattern: "horizontal-push", requiredEquipment: ["barbell", "bench"] } },
   { name: "Incline Dumbbell Press", muscleGroup: "Chest", exerciseType: "weighted", planningMetadata: { focusGroups: ["Chest"], movementPattern: "horizontal-push", requiredEquipment: ["dumbbell", "bench"] } },
   { name: "Lat Pulldown", muscleGroup: "Back", exerciseType: "weighted", planningMetadata: { focusGroups: ["Back"], movementPattern: "vertical-pull", requiredEquipment: ["selectorized-machine"] } },

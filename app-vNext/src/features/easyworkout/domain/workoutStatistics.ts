@@ -1,3 +1,4 @@
+import { workoutLoadIdentitySuffix, workoutLoadLabel, type WorkoutLoadMode } from "./workoutLoadMode.ts";
 export const WORKOUT_STATISTICS_FORMULA_VERSION = "easyworkout-stats-v1";
 export const E1RM_FORMULA_VERSION = "epley-v1";
 export const SECONDARY_MUSCLE_EXPOSURE_COEFFICIENT = 0.5;
@@ -20,6 +21,7 @@ export type AnalyticsSet = {
   distanceMeters?: number;
 };
 export type AnalyticsExercise = {
+  loadMode?: WorkoutLoadMode;
   exerciseId?: string | null;
   exerciseName?: string;
   muscleGroup?: string;
@@ -102,6 +104,7 @@ export type ExerciseHistory = {
   comparison: ExerciseHistoryComparison;
 };
 export type ExerciseSummary = {
+  loadMode?: WorkoutLoadMode;
   exerciseKey: string;
   exerciseId: string | null;
   exerciseName: string;
@@ -278,7 +281,7 @@ export function isWorkoutSessionCredited(session: AnalyticsSession) {
   return (session.exercises || []).some((exercise) => validSets(exercise, session).length > 0);
 }
 function exerciseKey(exercise: AnalyticsExercise) {
-  return exercise.exerciseId?.trim() || `name:${(exercise.exerciseName || "Unknown exercise").trim().toLowerCase()}`;
+  return (exercise.exerciseId?.trim() || `name:${(exercise.exerciseName || "Unknown exercise").trim().toLowerCase()}`) + workoutLoadIdentitySuffix(exercise.loadMode);
 }
 
 const sumOf = (values: number[]) => values.reduce((sum, value) => sum + value, 0);
@@ -348,7 +351,7 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
   sessions.forEach((session) => (session.exercises || []).forEach((exercise) => {
     if (sessionRequiresExplicitCompletion(session) && !validSets(exercise, session).length) return;
     const key = exerciseKey(exercise);
-    const current = groups.get(key) || { exerciseId: exercise.exerciseId || null, exerciseName: exercise.exerciseName?.trim() || "Unknown exercise", entries: [] };
+    const current = groups.get(key) || { exerciseId: exercise.exerciseId || null, exerciseName: (exercise.exerciseName?.trim() || "Unknown exercise") + (exercise.loadMode ? ` (${workoutLoadLabel(exercise.loadMode)})` : ""), entries: [] };
     current.entries.push({ session, exercise });
     groups.set(key, current);
   }));
@@ -417,7 +420,7 @@ function buildExerciseSummaries(sessions: AnalyticsSession[], unit: WorkoutDispl
     const change = previousCenter > 0 ? ((recentCenter - previousCenter) / previousCenter) * 100 : null;
     const trend: ExerciseSummary["trend"] = confidence === "insufficient" || change === null ? "insufficient" : Math.abs(change) <= 2.5 ? "plateau" : change > 0 ? "improving" : "declining";
     const history = buildExerciseHistory(historyBySession, records, unit);
-    return { exerciseKey: key, exerciseId: group.exerciseId, exerciseName: group.exerciseName, sessionCount: new Set(entries.map((entry) => entry.session.id)).size, observations, records, history, trend, trendConfidence: confidence, trendChangePercent: change };
+    return { ...(entries[0]?.exercise.loadMode ? { loadMode: entries[0].exercise.loadMode } : {}), exerciseKey: key, exerciseId: group.exerciseId, exerciseName: group.exerciseName, sessionCount: new Set(entries.map((entry) => entry.session.id)).size, observations, records, history, trend, trendConfidence: confidence, trendChangePercent: change };
   }).sort((a, b) => b.sessionCount - a.sessionCount || a.exerciseName.localeCompare(b.exerciseName));
 }
 
