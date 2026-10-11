@@ -12,7 +12,7 @@ for (const match of source.matchAll(/from "(@\/[^\"]+)"/g)) {
 }
 const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.React, esModuleInterop: true } }).outputText;
 
-function mount({ restoredSeconds = 0, owner = 'owner-a', storageFails = false, plannedMinutes = null } = {}) {
+function mount({ restoredSeconds = 0, owner = 'owner-a', storageFails = false, plannedMinutes = null, remainingBudget } = {}) {
   let now = 0, cursor = 0, dirty = true, tree, recommendations = 0, savedSession = null, writes = [], removed = [], timers = new Map(), nextTimer = 0;
   const hooks = [], pendingEffects = [], listeners = new Map();
   const listen = (target) => ({ addEventListener(name, fn) { const key = `${target}:${name}`; const set = listeners.get(key) || new Set(); set.add(fn); listeners.set(key, set); }, removeEventListener(name, fn) { listeners.get(`${target}:${name}`)?.delete(fn); } });
@@ -30,7 +30,7 @@ function mount({ restoredSeconds = 0, owner = 'owner-a', storageFails = false, p
   recovery.elapsedSeconds = restoredSeconds;
   recovery.completionReviewRequired = false;
   recovery.exerciseLogs[0].sets[0].completed = true;
-  recovery.planningContext = { focusGroups: ['Chest'], availableEquipment: ['barbell'], plannedDurationMinutes: plannedMinutes };
+  recovery.planningContext = { focusGroups: ['Chest'], availableEquipment: ['barbell'], plannedDurationMinutes: plannedMinutes, ...(remainingBudget ? {remainingBudget} : {}) };
   storage.set(lifecycle.getWorkoutDraftStorageKey(owner), JSON.stringify(recovery));
   const require = (path) => {
     if (path === 'react') return { ...react, default: react, __esModule: true };
@@ -50,7 +50,7 @@ function mount({ restoredSeconds = 0, owner = 'owner-a', storageFails = false, p
   function event(target, name, event = {}) { for (const fn of listeners.get(`${target}:${name}`) || []) fn(event); render(); }
   function nodes(node = tree) { return node && typeof node === 'object' ? [node, ...((node.props?.children || []).flat(Infinity).flatMap(nodes))] : []; }
   render(); advance(250); writes = []; recommendations = 0;
-  return { advance, elapseWithoutTimers(ms) { now += ms; }, event, document, window, render, nodes, get writes() { return writes; }, get recommendations() { return recommendations; }, get savedSession() { return savedSession; }, get nextResult() { return nodes().find((node) => node.props?.nextExerciseResult).props.nextExerciseResult; }, get removed() { return removed; }, unmount() { hooks.forEach((hook) => hook?.cleanup?.()); }, editNotes(value) { nodes().find((node) => node.props?.onSessionNotesChange).props.onSessionNotesChange(value); render(); }, async save() { await nodes().find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} }); render(); } };
+  return { advance, elapseWithoutTimers(ms) { now += ms; }, event, document, window, render, nodes, get writes() { return writes; }, get recommendations() { return recommendations; }, get savedSession() { return savedSession; }, get plannerProps() { return nodes().find((node) => node.type === "QuickWorkoutNextExercise").props; }, get removed() { return removed; }, unmount() { hooks.forEach((hook) => hook?.cleanup?.()); }, editNotes(value) { nodes().find((node) => node.props?.onSessionNotesChange).props.onSessionNotesChange(value); render(); }, async save() { await nodes().find((node) => node.type === 'form').props.onSubmit({ preventDefault() {} }); render(); } };
 }
 
 test('60 idle visible seconds cause zero storage writes and no unchanged recommendation recomputation', () => {
@@ -86,18 +86,16 @@ test('storage failure reports recovery status and lifecycle flush does not throw
 });
 
 
-test('recommendation thresholds stay exact while displayed remaining time advances each second', () => {
-  const page = mount({ plannedMinutes: 9 });
-  page.advance(30_000);
-  assert.equal(page.recommendations, 0);
-  assert.equal(page.nextResult.remainingMinutes, 8.5);
-  page.advance(1000);
-  assert.equal(page.recommendations, 1);
-  assert.equal(page.nextResult.remainingMinutes, 9 - 31 / 60);
-  page.advance(29_000);
-  assert.equal(page.recommendations, 1);
-  assert.equal(page.nextResult.remainingMinutes, 8);
-  assert.equal(page.writes.length, 0);
+test('remaining planning budget stays a snapshot while the actual clock advances without draft writes', () => {
+  const page = mount({ remainingBudget: {kind:'time',amount:9} });
+  page.advance(60_000);
+  assert.equal(page.recommendations,0);
+  assert.equal(page.plannerProps.planningContext.remainingBudget.amount,9);
+  assert.equal(page.plannerProps.planningDurationInput,'9');
+  assert.equal(page.writes.length,0);
+  page.event('window','pagehide');
+  assert.equal(page.writes.at(-1).value.elapsedSeconds,60);
+  assert.equal(page.writes.at(-1).value.planningContext.remainingBudget.amount,9);
 });
 
 test('explicit save snapshots active seconds between ticks and suppresses subsequent lifecycle writes', async () => {

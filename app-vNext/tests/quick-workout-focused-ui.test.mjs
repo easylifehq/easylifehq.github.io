@@ -36,8 +36,8 @@ test("session strip owns date, focus and notes and writes the single planning fo
   assert.match(source, /Session notes/);
   assert.match(source, /WORKOUT_FOCUS_GROUPS/);
   assert.match(source, /focusGroups/);
-  assert.match(source, /\.slice\(0, 4\)/);
-  assert.match(source, /Focus:/);
+  assert.match(source, /Choose individual muscles/);
+  assert.match(source, /Session focus/);
   const pageSource = await page();
   assert.match(pageSource, /<QuickWorkoutSessionStrip/);
   assert.match(pageSource, /isFocusedWorkoutMode \? \(\s*<QuickWorkoutSessionStrip/);
@@ -81,17 +81,17 @@ test("exercise delete uses inline confirmation with Escape cancel and focus plac
   assert.match(pageSource, /deleteExerciseFromLogs/);
 });
 
-test("next exercise suggestions sit below the exercise list, reuse top-level focus, and ask only for equipment and budget", async () => {
+test("compact workout planning sits above the exercise list and connects complete or continued plans", async () => {
   const source = await next();
-  assert.match(source, /Need another exercise\?/);
+  assert.match(source, /Plan workout/);
   assert.doesNotMatch(source, /Session focus/);
   assert.doesNotMatch(source, /WORKOUT_FOCUS_GROUPS/);
-  for (const text of ["Available equipment", "Planning budget", "Planning estimate only", "Add as planned"]) assert.ok(source.includes(text));
+  for (const text of ["Limited equipment", "Remaining budget type", "Planning estimates", "Add workout to this session"]) assert.ok(source.includes(text));
   const pageSource = await page();
   const listEnd = pageSource.indexOf("</QuickWorkoutExerciseCard>") >= 0 ? pageSource.indexOf("</QuickWorkoutExerciseCard>") : pageSource.indexOf("<QuickWorkoutExerciseCard");
   const nextAt = pageSource.indexOf("<QuickWorkoutNextExercise");
   const saveRow = pageSource.indexOf('className="task-composer-actions workout-log-actions"');
-  assert.ok(listEnd >= 0 && nextAt > listEnd && saveRow > nextAt, "suggestions render after the cards and before the save row");
+  assert.ok(listEnd >= 0 && nextAt < listEnd && saveRow > nextAt, "compact planner precedes the cards and save row");
 });
 
 test("page wires completion, save protection and stable regions without regressing 98c9", async () => {

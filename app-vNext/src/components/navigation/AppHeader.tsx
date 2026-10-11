@@ -45,15 +45,7 @@ export function AppHeader() {
             </Link>
           </div>
         </div>
-        <button
-          type="button"
-          className="app-search-command"
-          onClick={() => window.dispatchEvent(new Event("easylife:open-command-palette"))}
-          aria-label="Search EasyLife and open commands"
-        >
-          <span>Search</span>
-          <kbd>Ctrl K</kbd>
-        </button>
+
       </div>
     </header>
   );

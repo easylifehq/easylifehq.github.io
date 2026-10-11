@@ -24,7 +24,7 @@ test("header row holds Exercise N and delete; name and Quick note share the next
 
 test("Quick note reuses the existing notes field with no new schema", async () => {
   const source = await card();
-  assert.doesNotMatch(source, /quickNote|exercise\.note\b/);
+  assert.doesNotMatch(source, /exercise\.quickNote\b|exercise\.note\b/);
   assert.match(source, /Exercise details<\/summary>[\s\S]*<textarea[\s\S]*value=\{exercise\.notes\}/);
   assert.doesNotMatch(source, /More setup/);
 });
@@ -33,7 +33,8 @@ test("redundant success cards are gone but errors and actionable states remain",
   const source = await page();
   assert.doesNotMatch(source, /Exercise marked done/);
   assert.doesNotMatch(source, /Only its completed working sets will be saved/);
-  assert.match(source, /draftStatus === "syncing" \|\| draftStatus === "synced" \|\| draftStatus === "sync-failed-draft-retained"/);
+  assert.match(source, /draftStatus === "sync-failed-draft-retained"/);
+  assert.doesNotMatch(source, /draftStatus === "syncing" \|\| draftStatus === "synced"/);
   for (const kept of ["Local storage is unavailable", "changed in another tab", "too large to retain", "Couldn't sync", "No set was marked done", "Undo remove"]) {
     assert.ok(source.includes(kept), `${kept} must remain`);
   }

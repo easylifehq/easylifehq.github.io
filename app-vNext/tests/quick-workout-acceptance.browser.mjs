@@ -227,11 +227,11 @@ try {
   await step("exercise delete: confirmation, Escape cancels, focus returns to trigger", async () => {
     await A(`click("Delete exercise Bench Press")`);
     await sleep(200);
-    assert.equal(await ev(`Boolean(document.querySelector('[role=group][aria-label="Confirm deleting Bench Press"]'))`), true);
+    assert.equal(await ev(`Boolean(document.querySelector('dialog:modal[aria-label="Confirm deleting Bench Press"]'))`), true);
     assert.equal(await active(), "Cancel", "focus moves to Cancel");
     await key("Escape");
     await sleep(200);
-    assert.equal(await ev(`Boolean(document.querySelector('[role=group][aria-label="Confirm deleting Bench Press"]'))`), false);
+    assert.equal(await ev(`Boolean(document.querySelector('dialog[aria-label="Confirm deleting Bench Press"]'))`), false);
     assert.equal(await active(), "Delete exercise Bench Press", "focus returns to the delete trigger");
     assert.equal((await A(`articles()`)).length, 2, "Escape deletes nothing");
   });

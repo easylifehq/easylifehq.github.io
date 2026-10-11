@@ -211,16 +211,16 @@ test("workout log exposes explicit setup recall without conflating it with compl
 
 test("next-exercise UI uses explicit planning context and adds only pure planned rows", async () => {
   const source = (await readFile(new URL("../src/features/easyworkout/routes/EasyWorkoutLogPage.tsx", import.meta.url), "utf8")) + (await readFile(new URL("../src/features/easyworkout/components/QuickWorkoutSessionStrip.tsx", import.meta.url), "utf8")) + (await readFile(new URL("../src/features/easyworkout/components/QuickWorkoutNextExercise.tsx", import.meta.url), "utf8"));
-  assert.match(source, /deriveNextExerciseSuggestions/);
+  assert.match(source, /deriveSessionWorkoutPlan/);
   assert.match(source, /createPlannedExerciseFromSuggestion/);
   assert.match(source, /planningContext/);
   assert.match(source, /Session focus/);
-  assert.match(source, /Available equipment/);
-  assert.match(source, /Planning budget/);
-  assert.match(source, /Planning estimate only/);
-  assert.match(source, /Add as planned/);
-  assert.match(source, /key=\{suggestion\.exerciseId \|\| suggestion\.name\}/);
-  assert.match(source, /<strong>\{suggestion\.selectionLabel\}<\/strong>/);
+  assert.match(source, /Limited equipment/);
+  assert.match(source, /Remaining budget type/);
+  assert.match(source, /Planning estimates/);
+  assert.match(source, /Add workout to this session/);
+  assert.match(source, /key=\{key\(s\)\}/);
+  assert.match(source, /<strong>\{s\.selectionLabel\}<\/strong>/);
   assert.doesNotMatch(source, /exerciseSuggestionDetails/);
   assert.doesNotMatch(source, /const groupPairs/);
   const addStart = source.indexOf("function addSuggestedExercise");
