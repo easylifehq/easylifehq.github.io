@@ -49,7 +49,9 @@ export type WorkoutNextExerciseResult = {
   };
 };
 
-type DeriveInput = {
+export type WorkoutNextExerciseInput = {
+  includeTimedExercises?: boolean;
+  candidateLimit?: number;
   planningContext: WorkoutPlanningContext;
   elapsedSeconds: number;
   defaultSetCount: number;
@@ -123,7 +125,7 @@ export function workoutRecommendationSetBudget(remainingMinutes: number, default
   );
 }
 
-export function deriveNextExerciseSuggestions(input: DeriveInput): WorkoutNextExerciseResult {
+export function deriveNextExerciseSuggestions(input: WorkoutNextExerciseInput): WorkoutNextExerciseResult {
   const planningContext = normalizeWorkoutPlanningContext(input.planningContext);
   const missingContext: WorkoutNextExerciseResult["missingContext"] = [];
   if (!planningContext.focusGroups.length) missingContext.push("focus");
@@ -195,7 +197,7 @@ export function deriveNextExerciseSuggestions(input: DeriveInput): WorkoutNextEx
     const metadata = exercise?.planningMetadata || null;
     if (!exercise || !metadata || currentIdentityKeys.has(identityKey)) continue;
     if (currentLegacyNames.has(normalizeName(exercise.name))) continue;
-    if (!SUPPORTED_TYPES.has(exercise.exerciseType)) continue;
+    if (!SUPPORTED_TYPES.has(exercise.exerciseType) && !(input.includeTimedExercises && (exercise.exerciseType === "duration" || exercise.exerciseType === "distance"))) continue;
     if (!planningIntersectsFocus(metadata, focus)) continue;
     if (!metadata.requiredEquipment.every((equipment) => availableEquipment.has(equipment))) continue;
     const comparableFocusGroups = metadata.focusGroups.filter((groupName) => focus.has(groupName));
@@ -203,7 +205,7 @@ export function deriveNextExerciseSuggestions(input: DeriveInput): WorkoutNextEx
       ? Math.min(...comparableFocusGroups.map((groupName) => completedSetsByFocus[groupName] || 0))
       : 0;
     const patternCompletedSets = completedSetsByPattern[metadata.movementPattern] || 0;
-    const previous = findExerciseHistory(input.history, exercise.name, exercise.exerciseId);
+    const previous = findExerciseHistory(input.history, exercise.name, exercise.exerciseId, exercise.loadMode);
     candidates.push({
       ...exercise,
       movementPattern: metadata.movementPattern,
@@ -233,7 +235,7 @@ export function deriveNextExerciseSuggestions(input: DeriveInput): WorkoutNextEx
   return {
     state: "ready",
     missingContext: [],
-    suggestions: candidates.slice(0, 3),
+    suggestions: candidates.slice(0, Math.max(1, Math.min(80, input.candidateLimit || 3))),
     unclassifiedCompletedExercises: [],
     remainingMinutes,
     coverage,
@@ -252,6 +254,7 @@ export function createPlannedExerciseFromSuggestion(
     primaryMuscles: [...suggestion.primaryMuscles],
     secondaryMuscles: [...suggestion.secondaryMuscles],
     exerciseType: suggestion.exerciseType,
+    ...(suggestion.loadMode ? { loadMode: suggestion.loadMode } : {}),
     setup: {},
     notes: "",
     sets: Array.from({ length: suggestion.proposedSets }, () => ({

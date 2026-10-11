@@ -1,3 +1,5 @@
+import { workoutLoadLabel } from "@/features/easyworkout/domain/workoutLoadMode";
+import { workoutHistoryScore } from "@/features/easyworkout/domain/workoutHistoryScore";
 import { Link, useParams } from "react-router-dom";
 import { PageSection } from "@/components/ui/PageSection";
 import { useEasyWorkout } from "@/features/easyworkout/EasyWorkoutContext";
@@ -22,6 +24,7 @@ export function WorkoutSessionReviewPage() {
   if (!session) return <PageSection headingLevel={1} eyebrow="Workout review" title="Workout not found" description="The source session is unavailable in this data state."><Link className="button-secondary" to="/app/easyworkout/dashboard">Workout dashboard</Link></PageSection>;
 
   const stats = deriveWorkoutStatistics(sessions, { nowDateKey: today(), periodDays: 90, displayUnit: settings.easyWorkout.weightUnit });
+  const historyScore = workoutHistoryScore(session, sessions);
   let workingSets = 0;
   let workload = 0;
   const muscles = new Set<string>();
@@ -40,7 +43,7 @@ export function WorkoutSessionReviewPage() {
     }
   });
   const records = stats.exerciseSummaries.flatMap((summary) => summary.records.map((record) => ({ summary, record }))).filter(({ record }) => record.sourceWorkoutId === session.id);
-  const comparable = stats.exerciseSummaries.find((summary) => session.exercises.some((exercise) => (exercise.exerciseId && exercise.exerciseId === summary.exerciseId) || exercise.exerciseName === summary.exerciseName));
+  const comparable = stats.exerciseSummaries.find((summary) => session.exercises.some((exercise) => exercise.loadMode === summary.loadMode && ((exercise.exerciseId && exercise.exerciseId === summary.exerciseId) || exercise.exerciseName + (exercise.loadMode ? ` (${workoutLoadLabel(exercise.loadMode)})` : "") === summary.exerciseName)));
   const nextObservation = comparable && comparable.trend !== "insufficient"
     ? `${comparable.exerciseName}: ${comparable.trend} across ${comparable.sessionCount} comparable sessions (${comparable.trendConfidence} confidence).`
     : "Log another comparable session before changing the plan.";
@@ -53,6 +56,7 @@ export function WorkoutSessionReviewPage() {
         <article><span>Weighted workload</span><strong>{workload.toLocaleString()} {settings.easyWorkout.weightUnit}·reps</strong></article>
         <article><span>Muscles trained</span><strong>{[...muscles].join(", ") || "Unmapped"}</strong></article>
       </div>
+      <details className="panel-section"><summary>Optional workout score against your history</summary><p>{historyScore.score === null ? "No score yet" : `Workload index: ${historyScore.score} (your median = 100)`}</p><small>{historyScore.explanation}</small></details>
       {session.exercises.some((exercise) => formatWorkoutEquipmentSetup(exercise.setup)) ? (
         <div className="statistics-app-grid workout-review-setup-grid">
           {session.exercises.map((exercise) => {

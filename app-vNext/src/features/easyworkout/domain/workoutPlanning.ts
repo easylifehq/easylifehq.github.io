@@ -51,6 +51,11 @@ export type WorkoutExercisePlanningMetadata = {
 };
 
 export type WorkoutPlanningContext = {
+  focusPreset?: WorkoutFocusPreset | "Custom";
+  avoidedExerciseKeys?: string[];
+  recoveryDays?: number;
+  equipmentMode?: "full-gym" | "limited";
+  remainingBudget?: { kind: "time" | "sets"; amount: number };
   focusGroups: WorkoutFocusGroup[];
   availableEquipment: WorkoutEquipmentKind[];
   plannedDurationMinutes: number | null;
@@ -88,8 +93,16 @@ function normalizeEnumList<const Values extends readonly string[]>(value: unknow
 export function normalizeWorkoutPlanningContext(value: unknown): WorkoutPlanningContext {
   if (!isRecord(value)) return emptyWorkoutPlanningContext();
   const duration = Number(value.plannedDurationMinutes);
+  const budget = isRecord(value.remainingBudget) ? value.remainingBudget : {};
+  const amount = Number(budget.amount);
+  const validBudget = Number.isInteger(amount) && (budget.kind === "time" ? amount >= 5 && amount <= 360 : budget.kind === "sets" && amount >= 1 && amount <= 80);
   return {
-    focusGroups: normalizeEnumList(value.focusGroups, WORKOUT_FOCUS_GROUPS, 4),
+    ...(typeof value.focusPreset === "string" && (WORKOUT_FOCUS_PRESETS.includes(value.focusPreset as WorkoutFocusPreset) || value.focusPreset === "Custom") ? { focusPreset: value.focusPreset as WorkoutFocusPreset | "Custom" } : {}),
+    ...(Array.isArray(value.avoidedExerciseKeys) ? { avoidedExerciseKeys: [...new Set(value.avoidedExerciseKeys.filter((key): key is string => typeof key === "string" && key.length > 0 && key.length <= 240))].slice(0, 80) } : {}),
+    ...(Number.isInteger(value.recoveryDays) && Number(value.recoveryDays) >= 0 && Number(value.recoveryDays) <= 7 ? { recoveryDays: Number(value.recoveryDays) } : {}),
+    ...(value.equipmentMode === "full-gym" || value.equipmentMode === "limited" ? { equipmentMode: value.equipmentMode } : {}),
+    ...(validBudget ? { remainingBudget: { kind: budget.kind as "time" | "sets", amount } } : {}),
+    focusGroups: normalizeEnumList(value.focusGroups, WORKOUT_FOCUS_GROUPS, 5),
     availableEquipment: normalizeEnumList(value.availableEquipment, WORKOUT_EQUIPMENT_KINDS, WORKOUT_EQUIPMENT_KINDS.length),
     plannedDurationMinutes: Number.isInteger(duration) && duration >= 5 && duration <= 360 ? duration : null,
   };
@@ -113,4 +126,23 @@ export function workoutPlanningMetadataKey(value: WorkoutExercisePlanningMetadat
     movementPattern: value.movementPattern,
     requiredEquipment: [...value.requiredEquipment].sort(),
   });
+}
+
+
+export const WORKOUT_FOCUS_PRESETS = ["Any", "Push", "Pull", "Legs", "Cardio"] as const;
+export type WorkoutFocusPreset = typeof WORKOUT_FOCUS_PRESETS[number];
+const presetGroups: Record<WorkoutFocusPreset, WorkoutFocusGroup[]> = {
+  Any: [], Push: ["Chest", "Shoulders", "Triceps"], Pull: ["Back", "Biceps"],
+  Legs: ["Legs", "Hamstrings", "Glutes"], Cardio: ["Conditioning"],
+};
+export function focusGroupsForPreset(preset: WorkoutFocusPreset, supplementalAbs = false): WorkoutFocusGroup[] {
+  return [...presetGroups[preset], ...(supplementalAbs ? ["Core" as const] : [])];
+}
+export function focusPresetForGroups(groups: WorkoutFocusGroup[]): WorkoutFocusPreset | "Custom" {
+  const hasStrength = groups.some(group => group !== "Core" && group !== "Conditioning");
+  const main: WorkoutFocusGroup[] = groups.filter(group => group !== "Core" && (!hasStrength || group !== "Conditioning"));
+  return WORKOUT_FOCUS_PRESETS.find(preset => presetGroups[preset].length === main.length && presetGroups[preset].every(group => main.includes(group))) || "Custom";
+}
+export function defaultWorkoutPlanningContext(): WorkoutPlanningContext {
+  return { ...emptyWorkoutPlanningContext(), focusPreset: "Any", equipmentMode: "full-gym", availableEquipment: [...WORKOUT_EQUIPMENT_KINDS] };
 }

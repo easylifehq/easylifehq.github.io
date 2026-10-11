@@ -27,6 +27,30 @@ const emulatorAddress = process.env.FIRESTORE_EMULATOR_HOST || "";
 const [emulatorHost, emulatorPortText] = emulatorAddress.split(":");
 let rulesEnvironment;
 
+test("workout schema4 round-trips bodyweight zero, per-hand decimals and named cable variants under owner rules", async () => {
+  const ownerDb = rulesEnvironment.authenticatedContext(ownerId).firestore();
+  const row = (reps, weight) => ({ reps, weight, notes: "", setType: "standard", completed: true, deleted: false, rir: null });
+  const base = { exerciseId: null, muscleGroup: "", primaryMuscles: [], secondaryMuscles: [], setup: {}, notes: "" };
+  const payload = {
+    clientDraftId: "logging-compat-draft-20261010", schemaVersion: WORKOUT_SESSION_SCHEMA_VERSION,
+    routineId: null, routineName: "Synthetic compatibility", performedOn: "2026-10-10", weightUnit: "lb", durationMinutes: null, notes: "synthetic only",
+    exercises: [
+      { ...base, exerciseName: "Pull-ups", exerciseType: "bodyweight", sets: [row(2, 0)] },
+      { ...base, exerciseName: "DB Lateral Raise", exerciseType: "weighted", loadMode: "per-hand", sets: [row(12, 7.5)] },
+      ...["Machine Pec Fly", "Cable Pec Fly (low to high)", "Cable Pec Fly (middle)", "Cable Pec Fly (high to low)"].map(exerciseName => ({ ...base, exerciseName, exerciseType: "weighted", loadMode: "total", sets: [row(10, 30)] })),
+    ], createdAt: new Date("2026-10-10T20:00:00Z"), updatedAt: new Date("2026-10-10T20:00:00Z"),
+  };
+  const reference = doc(ownerDb, ownerPath("workoutSessions", "logging-compat"));
+  await assertSucceeds(setDoc(reference, payload));
+  assert.deepEqual((await getDoc(reference)).data().exercises, payload.exercises);
+  const added = { ...payload, exercises: payload.exercises.map((e,i) => i === 0 ? { ...e, sets: [row(2, 5)] } : e) };
+  await assertSucceeds(setDoc(reference, added));
+  assert.equal((await getDoc(reference)).data().exercises[0].sets[0].weight, 5);
+  await assertFails(getDoc(doc(rulesEnvironment.authenticatedContext(otherId).firestore(), ownerPath("workoutSessions", "logging-compat"))));
+  await assertFails(setDoc(doc(rulesEnvironment.unauthenticatedContext().firestore(), ownerPath("workoutSessions", "unauth-compat")), payload));
+  await assertFails(setDoc(doc(ownerDb, ownerPath("workoutSessions", "bad-top-level-mode")), { ...payload, loadMode: "per-hand" }));
+});
+
 setLogLevel("silent");
 
 const ownerPath = (collectionName, documentId) => `users/${ownerId}/${collectionName}/${documentId}`;

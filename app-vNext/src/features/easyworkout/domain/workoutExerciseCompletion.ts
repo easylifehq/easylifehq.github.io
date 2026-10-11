@@ -185,7 +185,8 @@ export function applyExerciseIdentityEdit(
   const changesIdentity =
     ("exerciseName" in patch && patch.exerciseName !== exercise.exerciseName) ||
     ("exerciseId" in patch && patch.exerciseId !== exercise.exerciseId) ||
-    ("exerciseType" in patch && patch.exerciseType !== exercise.exerciseType);
+    ("exerciseType" in patch && patch.exerciseType !== exercise.exerciseType) ||
+    ("loadMode" in patch && patch.loadMode !== exercise.loadMode);
   const next = { ...exercise, ...patch };
   return changesIdentity ? undoExerciseCompletion(next) : next;
 }
